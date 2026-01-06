@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@game/*": [
+        "src/slots/olympus/*"
+      ],
+      "@assets/*": [
+        "../feg_games_assets/olympus/*"
+      ],
+      "@common/*": [
+        "../feg_games_assets/common/*"
+      ],
+      "@core/*": [
+        "src/corelib/*"
+      ],
+      "@slots/*": [
+        "src/slots/*"
+      ],
+      "@types/*": [
+        "src/types/*"
+      ],
+      "@commonAssets/*": [
+        "commonAssets/*"
+      ],
+    },
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
+    "strict": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "preserveSymlinks": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "src",
+    "../feg_games_src/src"
+  ],
+  "exclude": [
+    "node_modules/**"
+  ]
+}

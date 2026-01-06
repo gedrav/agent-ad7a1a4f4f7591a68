@@ -1,0 +1,43 @@
+import { STATES } from '@core/states/StateConstants';
+import { CheckUnfinishedState } from '@core/commands/states/CheckUnfinishedState';
+import { GameIdleState } from '@core/commands/states/GameIdleState';
+import { SpinStartState } from '@core/commands/states/SpinStartState';
+import { SpinResponseReceivedState } from '@core/commands/states/SpinResponseReceivedState';
+import { SpinStoppedState } from '@core/commands/states/SpinStoppedState';
+import { ShowSpinWinState } from '@core/commands/states/ShowSpinWinState';
+import { CheckFeatureState } from '@core/commands/states/CheckFeatureState';
+import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
+import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
+import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
+import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
+import { CheckFSState } from '@core/commands/states/CheckFSState';
+import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
+import { CheckIsTumblePendingState } from '@core/commands/states/CheckIsTumblePendingState';
+import { ShowTumbleState } from '@core/commands/states/ShowTumbleState';
+import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
+
+export const STATES_CONFIG: any = [
+  { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
+
+  { name: STATES.IDLE_STATE, state: GameIdleState },
+  { name: STATES.SPIN_START_STATE, state: SpinStartState },
+  { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
+  { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
+  { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
+  { name: STATES.CHECK_IS_TUMBLE_PENDING, state: CheckIsTumblePendingState },
+  { name: STATES.SHOW_TUMBLE_STATE, state: ShowTumbleState },
+
+  { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
+
+  { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
+  { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
+
+  { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
+  { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
+  { name: STATES.CHECK_FS_STATE, state: CheckFSState },
+  { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
+
+  { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
+
+
+];

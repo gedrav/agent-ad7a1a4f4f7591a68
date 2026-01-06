@@ -1,0 +1,16 @@
+export const AppEvents: { [key: string]: string } = {
+  PRIMARY_ASSETS_LOADED: 'PRIMARY_ASSETS_LOADED',
+  SOUNDS_LOADING_PREGRESS: 'SoundLoadingProgress',
+  SOUNDS_LOADING_COMPLETE: 'SoundLoadingComplete',
+  ASSET_LOADING_PROGRESS: 'AssetLoadingProgress',
+  ASSET_LOADING_COMPLETE: 'AssetLoadingProgress',
+  ON_FOCUS_CHANGE: 'OnFocusChange',
+  RESIZE_START: 'ResizeStart',
+  RESIZE_COMPS: 'ResizeComps',
+  RESIZE_END: 'ResizeEnd',
+  ON_UPDATE: 'OnUpdate',
+  SECONDARY_ASSETS_LOADED: 'SECONDARY_ASSETS_LOADED',
+  LOAD_PROGRESS: 'LOAD_PROGRESS',
+  APP_RESIZE: 'APP_RESIZE',
+  ON_FRAME_UPDATE: 'ON_FRAME_UPDATE',
+};
