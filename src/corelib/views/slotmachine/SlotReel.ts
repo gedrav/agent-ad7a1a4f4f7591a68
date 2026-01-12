@@ -123,18 +123,10 @@ export default class SlotReel extends ResponsesiveChildrenView {
 
   protected renderUnfinishedReel(): void {
     const reelsview = appModel.getUnfinishedReel();
-    console.log('reels -- ', reelsview);
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      if (this.reelsData.isFixedSymbol) {
-        for (let j = 0; j < this.reelsData.noOfRows; j++) {
-          const symb = reelsview[k][j];
-          this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j]], k);
-        }
-      } else {
-        for (let j = 1; j <= this.reelsData.noOfRows; j++) {
-          const symb = reelsview[k][j - 1];
-          this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
-        }
+      for (let j = 1; j <= this.reelsData.noOfRows; j++) {
+        const symb = reelsview[k][j - 1];
+        this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
       }
     }
     this.showIdleAnim(false);
@@ -167,6 +159,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
   }
 
   protected onIdleStateEntry(): void {
+    this.showHideExtraSymbols(false);
     this.setSymbolsClickable(true);
   }
 
@@ -193,6 +186,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     this.quickSpinStarted = false;
     this.numberOfStoppedReels = 0;
     this.spinStarted = true;
+    this.showHideExtraSymbols(true);
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       setTimeout(
         this.startReelStripSpin.bind(this, k),
@@ -207,7 +201,6 @@ export default class SlotReel extends ResponsesiveChildrenView {
       return;
     }
     this.reelSpinningState[reelno] = 1;
-    this.showHideExtraSymbols(true);
   }
 
   protected spinReel(ticker: Ticker): void {
@@ -445,6 +438,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     if (this.currentPayoutSymbol) {
       this.symbolsContainer.addChild(this.currentPayoutSymbol);
     }
+    console.log('aaa == ', symb.configData);
     UIUtil.setClickable(this.modalRect, true);
     this.modalRect.visible = true;
     this.symbolPayoutComp.visible = true;
