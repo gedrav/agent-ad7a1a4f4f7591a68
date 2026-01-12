@@ -8,11 +8,9 @@ export default class ReelSymbol extends StandardView {
   protected symbol: PixSprite;
   protected spine: PixSpine;
   protected isBlurred: boolean;
-  protected _symbolName: string;
 
   constructor(configData: any) {
     super(configData);
-    this._symbolName = configData.data.name;
   }
 
   public showIdle(): void {
@@ -28,7 +26,7 @@ export default class ReelSymbol extends StandardView {
       this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
     }
   }
-
+  public showLanding(): void {}
   public setBlurredTexture(): void {}
   public setNormalTexture(): void {}
   public setNewSymbol(symbol: any, reelno: number): void {}
@@ -40,15 +38,11 @@ export default class ReelSymbol extends StandardView {
   public showFeatureTriggerAnimation(): void {}
 
   public swapSymbolTexture(name: string) {
-    this._symbolName = name;
-    this.symbol.texture = UIUtil.getTexture(name);
-  }
-
-  get symbolName(): string {
-    return this._symbolName;
-  }
-
-  set symbolName(value: string) {
-    this._symbolName = value;
+    this.configData.data.name = name;
+    if (this.isBlurred) {
+      this.symbol.texture = UIUtil.getTexture(this.configData.data.name + '_blur');
+    } else {
+      this.symbol.texture = UIUtil.getTexture(this.configData.data.name);
+    }
   }
 }

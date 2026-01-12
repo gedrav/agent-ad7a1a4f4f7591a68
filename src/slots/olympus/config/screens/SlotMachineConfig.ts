@@ -1,5 +1,4 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
-import SlotReel from '@core/views/slotmachine/SlotReel';
 import WinController from '@core/views/slotmachine/WinController';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { ReelsConfig } from '@game/config/ReelsConfig';
@@ -9,10 +8,10 @@ import SlotReelTumble from '@core/views/slotmachine/SlotReelTumble';
 import { MultiplierComp } from '@game/views/comps/MultiplierComp';
 import { MultiComp } from '@game/views/comps/MultiComp';
 import { MULTIPLIER_CONFIG } from '@game/config/screens/MultiplierCompConfig';
-import { ReelTickerComp } from '@core/views/comps/ReelTickerComp';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
-import { SymbolPayoutComp } from '@core/views/comps/SymbolPayoutComp';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
+import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
+import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -38,6 +37,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         symbolClass: ReelSymbolSprite,
         noOfReels: 6,
         noOfRows: 5,
+        isFixedSymbol: true,
         reelHeight: 1200,
         reelsConfig: ReelsConfig,
         deviceLayout: {

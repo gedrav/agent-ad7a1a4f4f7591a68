@@ -16,6 +16,7 @@ class EnterFreespinsStateCommand extends StateCommand {
     super.doNextStep(data);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startFreeSpinsSession(true);
+    appModel.setFeatureTriggered();
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
 

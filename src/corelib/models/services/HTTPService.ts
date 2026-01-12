@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MessageServiceProxy } from '@core/models/MessageServiceProxy';
+import { MessageServiceProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 
 export class HTTPService {

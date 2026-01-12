@@ -1,8 +1,7 @@
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
-import { WrapperProxy } from '@core/models/WrapperServiceProxy';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
-import { i, k } from 'vite/dist/node/types.d-aGj9QkWt';
 
 class AppModelService {
   get isErrorOccurred(): boolean {
@@ -126,6 +125,10 @@ class AppModelService {
   }
   set tumbleIndex(value: number) {
     this._tumbleIndex = value;
+  }
+
+  get rewardValues(): any[] {
+    return this._gameResult?.rewardValues || [];
   }
 
   public storeGameInitData(data: any): void {
@@ -413,10 +416,6 @@ class AppModelService {
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
 
-    // Check if this is the first free spin completion and onBonusWin is enabled
-    if (this._autoPlaySession && this._autoPlayObj?.onBonusWin && this.fsInfo.currentFreespin === 1) {
-      this._autoPlayObj.featureTriggered = true;
-    }
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
   }
 
@@ -487,8 +486,12 @@ class AppModelService {
     }
     return this.gameResult.spinWin;
   }
+
   public getTotalBaseWin(): number {
-    return this.gameResult?.baseWin;
+    if (this.isCascadeGame()) {
+      return this.getTotalCascadeWin();
+    }
+    return this.gameResult?.totalWin;
   }
 
   public getIsUnfinishedFreespins(): boolean {
@@ -504,6 +507,9 @@ class AppModelService {
   }
 
   public getUnfinishedReel(): any {
+    if (this.unfinishedData.cascadeData?.length > 0) {
+      return this.getUnfinishedCascadeReel();
+    }
     return this.unfinishedData.reelView;
   }
 
@@ -612,12 +618,9 @@ class AppModelService {
       this._autoPlayObj.currentAutoSpin++;
     }
   }
-
-  // WHEN: Called at the start of each autoplay spin
-  // WHY: Resets per-spin tracking flags
-  public resetAutoSpinFlags(): void {
-    if (this._autoPlaySession) {
-      this._autoPlayObj.featureTriggered = false;
+  public setFeatureTriggered(): void {
+    if (this._autoPlayObj) {
+      this._autoPlayObj.featureTriggered = true;
     }
   }
 
@@ -629,7 +632,7 @@ class AppModelService {
     if (!this._autoPlaySession) return 0;
     const obj = this._autoPlayObj;
     // Check stop conditions in priority order
-    if (obj.selectedSpins !== -1 && obj.currentAutoSpin >= obj.selectedSpins) return 2;
+    if (obj.selectedSpins !== -1 && obj.currentAutoSpin > obj.selectedSpins) return 2;
     if (obj.onAnyWin && obj.totalAutoWin > 0) return 3;
     if (obj.onBonusWin && obj.featureTriggered) return 4;
     if (obj.onSingleWinExceeds > 0 && obj.maxSingleWin > obj.onSingleWinExceeds) return 5;
@@ -789,7 +792,7 @@ class AppModelService {
     return this.gameResult.cascadeData[this.tumbleIndex].spinWin;
   }
   public isTumbleRemaining(): boolean {
-    return this.tumbleIndex < this.gameResult.cascadeData.length - 1;
+    return this.tumbleIndex < this.gameResult?.cascadeData?.length - 1;
   }
   public getSpinBlastData(): any {
     return Util.cloneArray(this.gameResult?.cascadeData[this.tumbleIndex]?.blustSymbols);

@@ -1,7 +1,7 @@
 import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
-import { SplashItemComp } from '@core/views/splash/SplashItemComp';
+import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { DualSprite } from '@core/pixiwrapper/DualSprite';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
@@ -86,8 +86,6 @@ export class SplashView extends ResponsesiveChildrenView {
       this.startBtn.visible = true;
       this.loadingBtnContainer.removeChild(this.maskRect);
     }
-    const command= SplashStartCommand;
-    command.execute(this.startBtn);
   }
   protected positionElements(): void {
     this.guideRect.y = this.gameTitle.y + this.gameTitle.height + UIUtil.getGameHeight() * 0.02;

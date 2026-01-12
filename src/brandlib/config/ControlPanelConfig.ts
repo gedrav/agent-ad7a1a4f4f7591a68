@@ -1,8 +1,8 @@
-import { ControlPanelView } from '@core/views/containers/ControlPanelView';
+import { ControlPanelView } from '@brand/views/containers/ControlPanelView';
 import { BalanceComp } from '@core/views/comps/BalanceComp';
 import { BetComp } from '@core/views/comps/BetComp';
 import { SpinClickCommand } from '@core/commands/action/SpinClickCommand';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
+import { CoreUIConfig } from './CoreUIConfig';
 import { StopClickCommand } from '@core/commands/action/StopClickCommand';
 import { AutoplayClickCommand } from '@core/commands/action/AutoplayClickCommand';
 import { AutoStopSpinCommand } from '@core/commands/action/AutoStopSpinCommand';
@@ -11,15 +11,16 @@ import { TurboStateChangeCommand } from '@core/commands/action/TurboStateChangeC
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { MenuClickCommand } from '@core/commands/action/MenuClickCommand';
 import { ShowCheatPanelCommand } from '@core/commands/action/ShowCheatPanelCommand';
-import { MenuComp } from '@core/views/comps/MenuComp';
+import { MenuComp } from '@brand/views/comps/MenuComp';
 import { MenuCompAmbientSoundToggleCommand } from '@core/commands/action/MenuCompAmbientSoundToggleCommand';
 import { MenuCompSfxSoundToggleCommand } from '@core/commands/action/MenuCompSfxSoundToggleCommand';
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand';
-import { TIMER_CONFIG } from '@core/config/TimerConfig';
-import { BRANDNAME_CONFIG } from '@core/config/BrandNameConfig';
+import { TIMER_CONFIG } from './TimerConfig';
+import { BRANDNAME_CONFIG } from './BrandNameConfig';
 import { Point } from 'pixi.js';
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
+import { ShowLightningSpinViewCommand } from '@brand/commands/action/ShowLightningSpinViewCommand';
 
 export const CONTROL_PANEL_CONFIG = {
   name: 'controlPanelView',
@@ -507,6 +508,54 @@ export const CONTROL_PANEL_CONFIG = {
         },
       },
     },
+    /*{
+      name: 'lightningBtn',
+      type: 'Button',
+      action: {
+        press: ShowLightningSpinViewCommand,
+      },
+      data: true,
+      options: {
+        defaultView: 'lightningBtn_up',
+        hoverView: 'lightningBtn_up',
+        pressedView: 'lightningBtn_up',
+        disabledView: 'lightningBtn_up',
+        animations: CoreUIConfig.buttonStates,
+      },
+      layoutData: {
+        Desktop: {
+          refComponent: 'turboBtn',
+          widthPerc: 1,
+          heightPerc: 1,
+          hAlign: 'left',
+          hPaddingPerc: -1.2,
+          vAlign: 'middle',
+          vPaddingPerc: 0,
+          maxScale: 1,
+        },
+        Landscape: {
+          refComponent: 'turboBtn',
+          widthPerc: 1,
+          heightPerc: 1,
+          hAlign: 'left',
+          hPaddingPerc: -1.1,
+          vAlign: 'middle',
+          vPaddingPerc: 0,
+          maxScale: 1,
+        },
+        Portrait: {
+          refComponent: 'spinBtn',
+          posRefComponent: 'bgRect',
+          widthPerc: 0.5,
+          heightPerc: 0.5,
+          hAlign: 'left',
+          hPaddingPerc: 0.02,
+          vAlign: 'bottom',
+          vPaddingPerc: -1.2,
+          maxScale: 1,
+        },
+      },
+    },*/
     {
       name: 'menuBtn',
       type: 'Button',

@@ -1,5 +1,5 @@
-import { MessagePopupView } from '@core/views/popups/MessagePopupView';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
+import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
+import { CoreUIConfig } from './CoreUIConfig';
 import { ErrorMessageCloseCommand } from '@core/commands/action/ErrorMessageCloseCommand';
 
 export const MESSAGE_POPUP_CONFIG = {

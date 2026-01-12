@@ -1,6 +1,6 @@
-import { BetPanelView } from '@core/views/popups/BetPanelView';
+import { BetPanelView } from '@brand/views/popups/BetPanelView';
 import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
+import { CoreUIConfig } from './CoreUIConfig';
 import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDecrementBetCommand';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 

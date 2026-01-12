@@ -2,12 +2,12 @@ import { SlotGameApp } from '@core/app/SlotGameApp';
 import { GAME_CONFIG } from '@game/config/GameConfig';
 import { ASSET_CONFIG } from '@game/config/AssetConfig';
 import { STATES_CONFIG } from '@game/config/StatesConfig';
-import { SplashView } from '@core/views/splash/SplashView';
 import { SPLASH_CONFIG } from '@game/config/screens/SplashConfig';
 import { GameAppScreen } from '@game/views/containers/GameAppView';
 import { SLOT_GAME_APP_CONFIG } from '@game/config/screens/SlotGameAppConfig';
 import { GAME_SOUND_CONFIG } from '@game/config/SoundLoadConfig';
 import { GameSoundManager } from '@game/app/GameSoundManager';
+import { SplashView } from '@brand/views/splash/SplashView';
 
 export class gameApp extends SlotGameApp {
   constructor() {

@@ -31,8 +31,13 @@ export default class WinController {
       const len = positions.length;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);
-        this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-        this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation();
+        if (this.reelsData.isFixedSymbol) {
+          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+          this.symbolsArray[pos.reel][pos.row].showFeatureTriggerAnimation();
+        } else {
+          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation();
+        }
       }
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(this.notifyFeatureTriggerAnimDone.bind(this), 2000);
@@ -49,9 +54,9 @@ export default class WinController {
         this.fadeOutAllSymbols();
         blastSymbols.forEach((blastSymbol: any) => {
           blastSymbol.forEach((position: number[]) => {
-            const pos = { reel: position[0], row: position[1] };
-            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-            this.symbolsArray[pos.reel][pos.row + 1].showWinning();
+            const pos = { reel: position[0], row: this.reelsData.isFixedSymbol ? position[1] : position[1] + 1 };
+            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+            this.symbolsArray[pos.reel][pos.row].showWinning();
           });
         });
       }

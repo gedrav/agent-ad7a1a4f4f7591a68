@@ -1,6 +1,6 @@
-import { AutoplayView } from '@core/views/popups/AutoplayView';
+import { AutoplayView } from '@brand/views/popups/AutoplayView';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
+import { CoreUIConfig } from './CoreUIConfig';
 import { AutoPlayChangeToggleBtnCommand } from '@core/commands/action/AutoPlayChangeToggleBtnCommand';
 import { AutoPlaySliderChangeCommand } from '@core/commands/action/AutoPlaySliderChangeCommand';
 import { AutoPlayCancelBtnCommand } from '@core/commands/action/AutoPlayCancelBtnCommand';

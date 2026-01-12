@@ -1,5 +1,5 @@
 import { AppEvents } from '@core/events/AppEvents';
-import { UIUtil } from '../utils/UIUtilService';
+import { UIUtil } from '@core/utils/UIUtilService';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 

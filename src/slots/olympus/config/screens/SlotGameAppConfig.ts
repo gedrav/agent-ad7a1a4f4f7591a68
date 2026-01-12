@@ -1,12 +1,12 @@
 import { GAME_BG_CONFIG } from '@game/config/screens/GameBGConfig';
 import { SLOT_MACHINE_CONFIG } from '@game/config/screens/SlotMachineConfig';
-import { CONTROL_PANEL_CONFIG } from '@core/config/ControlPanelConfig';
-import { MODAL_VIEW_CONFIG } from '@core/config/ModalConfig';
-import { BET_PANEL_CONFIG } from '@core/config/BetPanelConfig';
-import { AUTOPLAY_CONFIG } from '@core/config/AutoPlayConfig';
-import { BUY_BONUS_CONFIG } from '@core/config/BuyBonusConfig';
 import { FS_POPUP_CONFIG } from '@game/config/screens/FSPopupConfig';
-import { MESSAGE_POPUP_CONFIG } from '@core/config/MessagePopupConfig';
+import { CONTROL_PANEL_CONFIG } from '@brand/config/ControlPanelConfig';
+import { MODAL_VIEW_CONFIG } from '@brand/config/ModalConfig';
+import { BET_PANEL_CONFIG } from '@brand/config/BetPanelConfig';
+import { BUY_BONUS_CONFIG } from '@brand/config/BuyBonusConfig';
+import { AUTOPLAY_CONFIG } from '@brand/config/AutoPlayConfig';
+import { MESSAGE_POPUP_CONFIG } from '@brand/config/MessagePopupConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',

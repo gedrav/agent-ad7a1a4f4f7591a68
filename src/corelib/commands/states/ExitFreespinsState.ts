@@ -9,7 +9,10 @@ import { StateManager } from '@core/states/StateManagerService';
 class ExitFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
+    if (!appModel.getIsAutoSession()) {
+      EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
+    }
+
     const fswin = appModel.getTotalFreespinWinAmount();
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
@@ -30,9 +33,8 @@ class ExitFreespinsStateCommand extends StateCommand {
   protected async exitFreespin() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins
-    EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     appModel.endFreeSpinsSession();
-    StateManager.goToState(STATES.IDLE_STATE);
+    StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
   }
 }
 

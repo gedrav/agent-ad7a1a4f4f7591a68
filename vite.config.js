@@ -52,6 +52,7 @@ export default defineConfig(({ mode }) => {
 
         // your other aliases
         '@core': path.resolve(__dirname, 'src/corelib'),
+        '@brand': path.resolve(__dirname, 'src/brandlib'),
         '@slots': path.resolve(__dirname, 'src/slots'),
         '@types': path.resolve(__dirname, 'src/types'),
       },

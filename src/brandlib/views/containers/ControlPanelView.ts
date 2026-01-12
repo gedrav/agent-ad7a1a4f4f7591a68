@@ -1,7 +1,7 @@
 import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
 import { BalanceComp } from '@core/views/comps/BalanceComp';
 import { BetComp } from '@core/views/comps/BetComp';
-import { MenuComp } from '@core/views/comps/MenuComp';
+import { MenuComp } from '@brand/views/comps/MenuComp';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
@@ -37,6 +37,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   private bbButtonsArray: PixFancyButton[];
   private gameNameTxt: PixText;
   private gameLogo: PixSprite | PixSpine;
+  private lightningBtn: PixFancyButton;
   constructor(config: any) {
     super(config);
 
@@ -57,6 +58,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.autoCounterBG = this.elementsList['autoCounter'].elementsList['autoCounterBG'];
     this.autoCounterText = this.elementsList['autoCounter'].elementsList['autoCounterText'];
     this.gameNameTxt = this.elementsList['gameNameTxt'];
+    this.lightningBtn = this.elementsList['lightningBtn'];
     this.menuComp.visible = false;
     this.autoCounterText.visible = false;
     this.autoCounterBG.visible = false;
@@ -215,6 +217,9 @@ export class ControlPanelView extends ResponsesiveChildrenView {
 
   protected enablePanel(): void {
     this.spinBtn.enabled = true;
+    if (this.lightningBtn) {
+      this.lightningBtn.enabled = true;
+    }
     this.autoSpinBtn.enabled = true;
     this.betBtn.enabled = true;
     this.menuBtn.enabled = true;
@@ -226,6 +231,9 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   }
   protected disablePanel(): void {
     this.spinBtn.enabled = false;
+    if (this.lightningBtn) {
+      this.lightningBtn.enabled = false;
+    }
     this.autoSpinBtn.enabled = false;
     this.betBtn.enabled = false;
 
@@ -295,7 +303,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.autoSpinBtn.visible = true;
     this.autoCounterBG.visible = false;
     this.autoCounterText.visible = false;
-    this.updateBalance();
     this.enablePanel();
   }
 

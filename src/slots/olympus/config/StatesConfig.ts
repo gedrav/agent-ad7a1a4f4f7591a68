@@ -15,6 +15,8 @@ import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { CheckIsTumblePendingState } from '@core/commands/states/CheckIsTumblePendingState';
 import { ShowTumbleState } from '@core/commands/states/ShowTumbleState';
 import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
+import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
+import { ShowCascadeState } from '@core/commands/states/ShowCascadeState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -26,8 +28,10 @@ export const STATES_CONFIG: any = [
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
   { name: STATES.CHECK_IS_TUMBLE_PENDING, state: CheckIsTumblePendingState },
   { name: STATES.SHOW_TUMBLE_STATE, state: ShowTumbleState },
+  { name: STATES.SHOW_CASCADE_STATE, state: ShowCascadeState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
+  { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
@@ -38,6 +42,4 @@ export const STATES_CONFIG: any = [
   { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
 
   { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
-
-
 ];

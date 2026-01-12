@@ -1,5 +1,5 @@
-import { BigWinsComp } from '@core/views/comps/BigWinsComp';
 import { WinTicker } from '@core/views/comps/WinTicker';
+import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
 
 export const BIG_WIN_CONFIG = {
   name: 'bigWinsComp',

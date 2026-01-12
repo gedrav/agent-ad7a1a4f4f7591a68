@@ -106,6 +106,7 @@ export class AutoplayView extends ResponsesiveChildrenView {
   protected showAutoPlayPanel(): void {
     this.resetAutoplayView();
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    this.onBonusWin.setSelected(true);
     this.resizeView();
     AnimationProxy.fadeIn(this, 0.5);
   }

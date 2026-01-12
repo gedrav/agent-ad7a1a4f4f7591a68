@@ -1,4 +1,4 @@
-import { AbstractProxy } from './AbstractProxy';
+import { AbstractProxy } from '@core/models/AbstractProxy';
 declare class WrapperServiceProxy extends AbstractProxy {
   protected playerData: any;
   readURLParams(): void;

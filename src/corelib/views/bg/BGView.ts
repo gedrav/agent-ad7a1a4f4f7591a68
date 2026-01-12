@@ -22,16 +22,12 @@ export class BGView extends ResponsesiveChildrenView {
   }
   protected showMainGameBG() {
     this.currentBG = 'main';
-    if (this.freegameBG) {
-      this.freegameBG.visible = false;
-    }
+    this.freegameBG.visible = false;
     this.maingameBG.visible = true;
   }
   protected showFreeGameBG() {
     this.currentBG = 'free';
-    if (this.freegameBG) {
-      this.freegameBG.visible = true;
-      this.maingameBG.visible = false;
-    }
+    this.freegameBG.visible = true;
+    this.maingameBG.visible = false;
   }
 }

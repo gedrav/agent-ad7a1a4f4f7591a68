@@ -1,5 +1,5 @@
 import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
-import { BigWinsComp } from '@core/views/comps/BigWinsComp';
+import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
 import SlotReel from '@core/views/slotmachine/SlotReel';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';

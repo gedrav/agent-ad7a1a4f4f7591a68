@@ -1,8 +1,8 @@
 import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
+import { CoreUIConfig } from './CoreUIConfig';
 import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDecrementBetCommand';
 import { CloseBuyBonusCommand } from '@core/commands/action/CloseBuyBonusCommand';
-import { BuyBonusView } from '@core/views/popups/BuyBonusView';
+import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { BuyBonusConfirmedCommand } from '@core/commands/action/BuyBonusConfirmedCommand';
 
 export const BUY_BONUS_CONFIG = {

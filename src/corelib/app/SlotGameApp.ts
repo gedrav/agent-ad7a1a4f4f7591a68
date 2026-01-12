@@ -1,23 +1,23 @@
 import { Application, Container, Renderer, Sprite } from 'pixi.js';
 import { WindowUtil } from '@core/utils/WindowUtil';
-import { InitErrorPopup } from '@core/views/popups/InitErrorPopup';
+import { InitErrorPopup } from '@brand/views/popups/InitErrorPopup';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { WrapperProxy } from '@core/models/WrapperServiceProxy';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { AssetLoader } from '@core/models/services/AssetLoader';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { ContentProxy } from '@core/models/ContentServiceProxy';
 import { PixView } from '@core/pixiwrapper/PixView';
-import { MessageProxy } from '@core/models/MessageServiceProxy';
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { AppEvents } from '@core/events/AppEvents';
-import { INIT_ERROR_POPUP_CONFIG } from '@core/config/InitErrorPopupConfig';
 import Stats from 'stats.js';
 import { Util } from '@core/utils/UtilService';
 import { Logger } from '@core/utils/LoggerService';
-import { PreloaderScreen } from '@core/views/preloader/PreloaderScreen';
-import { PRELOADER_CONFIG } from '@core/config/PreloaderConfig';
+import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
+import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
+import { INIT_ERROR_POPUP_CONFIG } from '@brand/config/InitErrorPopupConfig';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -92,7 +92,15 @@ export class SlotGameApp {
 
     GameProxy.updateConfigFromCommon();
 
-    console.log('FEG Games :: C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion);
+    console.log(
+      `%c ⡷⣸ ⡎⢱ ⡇⢸ ⣎⣱ ⡎⠑ ⣏⡱ ⣏⡉ ⢎⡑ ⢹⠁   ⡎⠑ ⣎⣱ ⡷⢾ ⡇ ⡷⣸ ⡎⠑
+ ⠇⠹ ⠣⠜ ⠸⠃ ⠇⠸ ⠣⠔ ⠇⠱ ⠧⠤ ⠢⠜ ⠸    ⠣⠝ ⠇⠸ ⠇⠸ ⠇ ⠇⠹ ⠣⠝
+                                                              
+%cNOVACREST Game Engine %c${' :: C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion}`,
+      'color: #6169f5ff; font-size: 10px; font-weight: 700; font-family: monospace;',
+      'color: #CCCCCC; font-size: 12px; font-weight: 400;',
+      'color: #CCCCCC; font-size: 12px; font-weight: 700;',
+    );
 
     WrapperProxy.sendCanvasReady();
     await this.initiateApp();
@@ -214,6 +222,10 @@ export class SlotGameApp {
   }
 
   protected resize(): void {
+    this.resizeNow();
+    setTimeout(this.resizeNow.bind(this), 100);
+  }
+  protected resizeNow(): void {
     DeviceProxy.readDevice();
 
     const canvaswid = DeviceProxy.config.windowWidth * DeviceProxy.config.appResolution;

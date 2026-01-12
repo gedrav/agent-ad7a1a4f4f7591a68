@@ -19,7 +19,9 @@ export default class ReelSymbolSprite extends ReelSymbol {
     this.symbol.label = 'SYMBOL';
     this.symbol.anchor.set(0.5, 0.5);
     this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
+    this.handleGameProp();
   }
+  protected handleGameProp(): void {}
 
   public getSymbolName(): string {
     return this.configData.data.name;
@@ -115,6 +117,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
     } else {
       this.symbol.texture = UIUtil.getTexture(this.configData.data.name);
     }
+    this.handleGameProp();
   }
   public setBlurredTexture(): void {
     if (this.symbol) {
@@ -204,6 +207,11 @@ export default class ReelSymbolSprite extends ReelSymbol {
         onComplete?.();
       },
     });
+  }
+  public showLanding(): void {}
+
+  public resetScale(): void {
+    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
   }
 
   public replaceSymbol(symb: string, onComplete?: () => void) {

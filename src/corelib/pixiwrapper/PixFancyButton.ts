@@ -1,5 +1,5 @@
 import { FancyButton } from '@pixi/ui';
-import { TooltipComp } from '@core/views/comps/TooltipComp';
+import { TooltipComp } from '@brand/views/comps/TooltipComp';
 import { ActionCommand } from '@core/commands/core/ActionCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { ColorMatrixFilter } from 'pixi.js';

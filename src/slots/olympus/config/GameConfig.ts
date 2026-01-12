@@ -1,7 +1,7 @@
 import { MenuClickCommand } from '@core/commands/action/MenuClickCommand';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
 import { Point } from 'pixi.js';
+import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 
 export const GAME_CONFIG = {
   gameHDWidth: 1284,
@@ -81,7 +81,7 @@ export const GAME_CONFIG = {
             hoverView: 'buybonusBtn_up',
             pressedView: 'buybonusBtn_up',
             disabledView: 'buybonusBtn_up',
-            textOffset: new Point(0, 16),
+            textOffset: new Point(0, 2),
             animations: CoreUIConfig.spinButtonStates,
           },
           textConfig: {
@@ -90,7 +90,7 @@ export const GAME_CONFIG = {
             content: 'BuyText',
             style: {
               fontFamily: 'gameFont1',
-              fill: [0xfeff8e, 0xffe94e, 0xfcb610, 0xfdaf06, 0xe69e09],
+              fill: 0xffffff,
               fontSize: 180,
               lineHeight: 88,
               wordWrap: true,

@@ -1,8 +1,8 @@
-import { StandardView } from '../../pixiwrapper/StandardView';
-import { UIUtil } from '../../utils/UIUtilService';
-import { PixSprite } from '../../pixiwrapper/PixSprite';
-import { PixText } from '../../pixiwrapper/PixText';
-import { Util } from '../../utils/UtilService';
+import { StandardView } from '@core/pixiwrapper/StandardView';
+import { UIUtil } from '@core/utils/UIUtilService';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixText } from '@core/pixiwrapper/PixText';
+import { Util } from '@core/utils/UtilService';
 
 export class SplashItemComp extends StandardView {
   private splashImage: PixSprite;

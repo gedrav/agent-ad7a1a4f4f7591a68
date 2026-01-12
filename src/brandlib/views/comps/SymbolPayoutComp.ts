@@ -4,6 +4,7 @@ import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
 import { i } from 'vite/dist/node/types.d-aGj9QkWt';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export class SymbolPayoutComp extends StandardView {
   private infoText: PixText;
@@ -12,10 +13,12 @@ export class SymbolPayoutComp extends StandardView {
     super(config);
     this.infoText = this.elementsList['infoText'];
     this.bg = this.elementsList['bg'];
+    UIUtil.setModalState(this.bg);
     this.visible = false;
   }
 
   public showComp(symbol: string, symbolAtLeft: boolean): void {
+    this.infoText.text = '';
     const pays = appModel.getPaytableData();
     const data = pays[symbol];
     if (data) {
@@ -36,7 +39,7 @@ export class SymbolPayoutComp extends StandardView {
     if (symbolAtLeft) {
       this.infoText.x = this.bg.width - this.infoText.width - this.bg.width * this.configData.textXPadding;
     } else {
-      this.infoText.x = this.bg.width * this.configData.textXPadding;
+      this.infoText.x = this.bg.width * this.configData.textXPadding * 1.15;
     }
     this.infoText.y = (this.bg.height - this.infoText.height) / 2;
   }

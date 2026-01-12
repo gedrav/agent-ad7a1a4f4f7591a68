@@ -5,7 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
-import { WrapperProxy } from '@core/models/WrapperServiceProxy';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 export class MessageServiceProxy extends AbstractProxy {
   private isClientsSet: boolean = false;
   private communicationService: HTTPService;

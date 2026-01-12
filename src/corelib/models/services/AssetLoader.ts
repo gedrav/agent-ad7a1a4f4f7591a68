@@ -249,7 +249,6 @@ class AssetLoaderClass {
           }
         }
       });
-
       manifest.bundles.push(splash);
     }
   }

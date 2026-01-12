@@ -1,7 +1,7 @@
-import { SplashView } from '@core/views/splash/SplashView';
 import { SplashStartCommand } from '@core/commands/action/SplashStartCommand';
 import { UIConfig } from '@game/config/UIConfig';
-import { SplashItemComp } from '@core/views/splash/SplashItemComp';
+import { SplashView } from '@brand/views/splash/SplashView';
+import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',

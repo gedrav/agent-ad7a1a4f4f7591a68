@@ -14,10 +14,6 @@ class ShowSpinWinStateCommand extends StateCommand {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
       } else {
-        // Update balance for free spins even with no wins
-        if (appModel.getIsFreeSpinsSession()) {
-          EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
-        }
         StateManager.next();
       }
     } else {

@@ -4,7 +4,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { appModel } from '@core/models/services/AppModelService';
-import { MessageProxy } from '@core/models/MessageServiceProxy';
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { ShowLowBalanceErrorCommand } from '@core/commands/action/ShowLowBalanceErrorCommand';
 import { ShowBBLowBalanceErrorCommand } from '@core/commands/action/ShowBBLowBalanceErrorCommand';

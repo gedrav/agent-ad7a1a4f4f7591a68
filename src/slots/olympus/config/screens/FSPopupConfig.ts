@@ -1,5 +1,5 @@
-import { FSPopupComp } from '@core/views/popups/FSPopupComp';
-import { CoreUIConfig } from '@core/config/CoreUIConfig';
+import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
+import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',

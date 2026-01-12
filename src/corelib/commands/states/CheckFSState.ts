@@ -10,18 +10,7 @@ class CheckFSStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
 
-    // Check if autoplay should stop due to onBonusWin after first free spin
-    if (
-      appModel.getIsAutoSession() &&
-      appModel.getAutoSpinObj()?.onBonusWin &&
-      appModel.getAutoSpinObj()?.featureTriggered
-    ) {
-      appModel.resetAutoplayData();
-    }
-
     if (appModel.getIsNextFSPossible()) {
-      // Update balance for each free spin before next spin
-      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
       if (appModel.isFSRetriggered()) {
         const obj: any = {};
         obj.title = Util.getContent('CongratTitle');

@@ -9,15 +9,12 @@ class CheckAutoSpinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.getIsAutoSession()) {
-      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE_FOR_SPIN);
       appModel.incrementAutoSpin();
-      appModel.setAutoPlayWin(appModel.getSpinWin());
+      appModel.setAutoPlayWin(appModel.getTotalBaseWin());
       const status = appModel.getNextAutoPossible();
       if (status === 1 && appModel.getIsSpinStartPossible()) {
-        // Reset flags for next spin before continuing
-        appModel.resetAutoSpinFlags();
         EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
-        setTimeout(() => StateManager.goToState('SPIN_START_STATE'), 50);
+        setTimeout(() => StateManager.goToState('SPIN_START_STATE'), 250);
       } else {
         appModel.resetAutoplayData();
         EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_ENDED);

@@ -144,7 +144,7 @@ export default class SlotReelTumble extends SlotReel {
       symbol.scale.set(initialScaleX, initialScaleY);
       symbol.visible = false;
     });
-    this.multiplierComp?.setMultiplierLvl(appModel.tumbleIndex + 2); // +2 since lvl starts from 1 and aft blast the win multiplier increases by 1
+    this.multiplierComp.setMultiplierLvl(appModel.tumbleIndex + 2); // +2 since lvl starts from 1 and aft blast the win multiplier increases by 1
     this.introduceNewSymbols(blastSymbols);
   }
 
