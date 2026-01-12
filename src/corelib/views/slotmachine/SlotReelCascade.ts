@@ -60,6 +60,7 @@ export default class SlotReelCascade extends SlotReel {
     this.resetSpinParams();
     this.hidePayout();
     this.isStopSpinButtonClick = true;
+    this.quickSpinStarted = false;
     this.fallingCounter = 0;
     this.explodedSymbolsIndexes = [];
     let arr: Array<any>;
