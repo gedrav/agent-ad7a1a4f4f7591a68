@@ -414,7 +414,7 @@ export default class SlotReelCascade extends SlotReel {
           this.symbolsArray[k][i].resetScale();
           this.symbolsArray[k][i].setNormalTexture();
           this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
-          this.symbolsArray[k][i].y = -(i + 2) * this.configData.data.symbolHeight;
+          this.symbolsArray[k][i].y = -(len - i + 1) * this.configData.data.symbolHeight;
           const delay = k * 0.06 + (len - i) * 0.05;
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
