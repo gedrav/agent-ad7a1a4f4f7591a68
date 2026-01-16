@@ -60,6 +60,7 @@ export default class SlotReelCascade extends SlotReel {
     this.resetSpinParams();
     this.hidePayout();
     this.isStopSpinButtonClick = true;
+    this.quickSpinStarted = false;
     this.fallingCounter = 0;
     this.explodedSymbolsIndexes = [];
     let arr: Array<any>;
@@ -80,7 +81,46 @@ export default class SlotReelCascade extends SlotReel {
       this.stopSpinQuick();
       return;
     }
-    const reelsview = appModel.getCascadeReelsView();
+  }
+
+  protected stopSpinQuick(): void {
+    this.quickSpinStarted = true;
+
+    if (this.isStopSpinButtonClick) {
+      this.isStopSpinButtonClick = false;
+      EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
+      let symb: ReelSymbol;
+      const reelsview = appModel.getCascadeReelsView();
+      for (let k = 0; k < this.configData.data.noOfReels; k++) {
+        for (let i = 0; i < this.configData.data.noOfRows; i++) {
+          symb = this.symbolsArray[k][i];
+          symb.swapSymbolTexture(reelsview[k][i]);
+          this.symbolsContainer.addChild(symb);
+          symb.x = this.configData.data.reelPositionX[k];
+          symb.y = -(this.configData.data.noOfRows - i) * this.configData.data.symbolHeight * 2;
+        }
+      }
+      this.symbolFallingIndex = 0;
+      let finalY: number, delay: number;
+      for (let k = 0; k < this.configData.data.noOfReels; k++) {
+        for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
+          finalY = i * this.configData.data.symbolHeight;
+          delay = 0.1;
+          AnimationProxy.animateTween(
+            this.symbolsArray[k][i],
+            {
+              duration: this.fallingInDuration / 4,
+              delay: delay,
+              y: finalY,
+              ease: this.symbEase,
+              rotation: Util.getRadians(Util.getRandomRange(-this.fallRotation, this.fallRotation)),
+              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
+            },
+            true,
+          );
+        }
+      }
+    }
   }
 
   protected fallSymbolsOut(): void {
@@ -374,7 +414,7 @@ export default class SlotReelCascade extends SlotReel {
           this.symbolsArray[k][i].resetScale();
           this.symbolsArray[k][i].setNormalTexture();
           this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
-          this.symbolsArray[k][i].y = -(i + 2) * this.configData.data.symbolHeight;
+          this.symbolsArray[k][i].y = -(len - i + 1) * this.configData.data.symbolHeight;
           const delay = k * 0.06 + (len - i) * 0.05;
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
