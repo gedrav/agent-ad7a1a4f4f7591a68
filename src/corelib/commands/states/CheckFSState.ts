@@ -9,23 +9,26 @@ import { Clock } from '@core/utils/Clock';
 class CheckFSStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     if (appModel.getIsNextFSPossible()) {
       if (appModel.isFSRetriggered()) {
-        const obj: any = {};
-        obj.title = Util.getContent('CongratTitle');
-        obj.message1 = Util.parseMessage(Util.getContent('FSRetriggerText'), [appModel.getFSRetriggerCount()]);
-        obj.callbackFunction = this.doNextStep.bind(this);
-        EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
       } else {
         await Clock.wait(500);
-        this.doNextStep();
+        this.exitState();
       }
     } else {
       StateManager.goToState(STATES.EXIT_FREESPINS_STATE);
     }
   }
   public doNextStep(): void {
+    const obj: any = {};
+    obj.title = Util.getContent('CongratTitle');
+    obj.message1 = Util.parseMessage(Util.getContent('FSRetriggerText'), [appModel.getFSRetriggerCount()]);
+    obj.callbackFunction = this.exitState.bind(this);
+    EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
+  }
+  public exitState(): void {
     StateManager.goToState(STATES.FS_SPIN_START_STATE);
   }
 }

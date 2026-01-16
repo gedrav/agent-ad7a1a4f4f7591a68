@@ -4,15 +4,19 @@ import { Util } from '@core/utils/UtilService';
 
 export class WinTicker extends StandardView {
   private valueText: PixText;
+  private titleText: PixText;
   private currentValue: number;
   private targetValue: number;
   private duration: number;
   private startTime: number;
   private startValue: number;
   private tickerActive: boolean;
+  private showCurrency: boolean;
   constructor(config) {
     super(config);
     this.valueText = this.elementsList['valueText'];
+    this.titleText = this.elementsList['titleText'];
+
     this.currentValue = 0;
     this.targetValue = this.currentValue;
 
@@ -27,12 +31,20 @@ export class WinTicker extends StandardView {
     this.valueText.text = '';
     this.currentValue = 0;
   }
-  public showSpinValue(newValue: number): void {
+  public showSpinValue(newValue: number, showCurrency: boolean = false): void {
+    this.visible = true;
+    this.showCurrency = showCurrency;
     this.currentValue = newValue;
-    this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
+    if (this.showCurrency) {
+      this.valueText.text = Util.formatCurrency(this.currentValue);
+    } else {
+      this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
+    }
   }
 
-  public countUpValue(newValue: number, duration: number = 2000): void {
+  public countUpValue(newValue: number, duration: number = 2000, showCurrency: boolean = false): void {
+    this.visible = true;
+    this.showCurrency = showCurrency;
     this.targetValue = newValue;
     this.duration = duration;
     this.startTime = null;
@@ -42,6 +54,15 @@ export class WinTicker extends StandardView {
       this.tickerActive = true;
       requestAnimationFrame(this.update.bind(this));
     }
+  }
+
+  public skipToFinalValue(): void {
+    if (this.showCurrency) {
+      this.valueText.text = Util.formatCurrency(this.targetValue);
+    } else {
+      this.valueText.text = Util.formatCurrencyNoSymbol(this.targetValue);
+    }
+    this.tickerActive = false;
   }
 
   protected update(timestamp) {
@@ -56,7 +77,11 @@ export class WinTicker extends StandardView {
     this.currentValue = this.startValue + (this.targetValue - this.startValue) * clamped;
 
     // update text display
-    this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
+    if (this.showCurrency) {
+      this.valueText.text = Util.formatCurrency(this.currentValue);
+    } else {
+      this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
+    }
 
     if (clamped < 1) {
       if (this.tickerActive) {

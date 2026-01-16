@@ -20,7 +20,6 @@ class SpinStartStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
     await MessageProxy.requestSpinResult(false);
-    GameProxy.config.cheatObject = null;
     if (!appModel.isErrorOccurred) {
       StateManager.next();
     } else {

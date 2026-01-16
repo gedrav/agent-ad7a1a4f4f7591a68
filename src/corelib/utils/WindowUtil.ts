@@ -31,6 +31,7 @@ declare global {
     getGameRulesPath: () => string;
     getCommonHistoryPath: () => string;
     getCheatPath: () => string;
+    setExternalPageClosed: () => void;
   }
 }
 
@@ -65,5 +66,7 @@ export class WindowUtil {
     window.getGameRulesPath = () => `assets/panel/gamerules.html`;
     window.getCommonHistoryPath = () => 'assets/history/historyV2.html';
     window.getCheatPath = () => `assets/panel/cheat.json`;
+
+    window.setExternalPageClosed = () => (GameProxy.config.exterPageOpened = false);
   }
 }

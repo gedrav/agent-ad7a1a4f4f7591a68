@@ -14,6 +14,7 @@ class EnterFreespinsStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();

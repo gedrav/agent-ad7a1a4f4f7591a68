@@ -33,16 +33,6 @@ export default class SlotReelTumble extends SlotReel {
     EventHandler.addEventListener(SlotEvents.BLAST_SYMBOLS, this.showBlastAnim.bind(this));
   }
 
-  protected renderUnfinishedReel(): void {
-    const reelsview = appModel.getUnfinishedCascadeReel();
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      for (let j = 1; j <= this.reelsData.noOfRows; j++) {
-        this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
-      }
-    }
-    this.showIdleAnim(false);
-  }
-
   public resetReelForError(): void {
     gsap.globalTimeline.clear();
     this.ticker.stop();

@@ -9,6 +9,7 @@ import { STATES } from '@core/states/StateConstants';
 class CompleteGameRoundStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     StateManager.goToState(STATES.CHECK_AUTOSPIN_STATE);
   }

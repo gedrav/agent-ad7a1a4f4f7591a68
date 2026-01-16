@@ -1366,7 +1366,7 @@ class UIUtilService {
             element,
             refElement.y +
               refElement.getHeight() -
-              element.getHeight() * element.configData.anchor.y +
+              element.getHeight() * (1 - element.configData.anchor.y) +
               Util.getDefaultValue(layout.vPadding, 0),
           );
         } else {

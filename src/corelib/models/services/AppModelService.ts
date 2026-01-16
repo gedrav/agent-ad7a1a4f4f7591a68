@@ -157,6 +157,7 @@ class AppModelService {
     return this.gameInfo.paytable;
   }
   public setUnfinishedInfo(): void {
+    this.gameResult = this.unfinishedData;
     this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet / this.gameInfo.creditValue);
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
@@ -410,12 +411,13 @@ class AppModelService {
         data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
       ];
     this.featureResult = data.result.featureResults[data.result.featureResults.length - 1];
+    this.featureResult.featureTriggerPositions =
+      this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
     this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
     this.fsInfo.totalFreespins = data.result.featureResults[data.result.featureResults.length - 1].totalCount;
     this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
-
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
   }
 
@@ -507,9 +509,6 @@ class AppModelService {
   }
 
   public getUnfinishedReel(): any {
-    if (this.unfinishedData.cascadeData?.length > 0) {
-      return this.getUnfinishedCascadeReel();
-    }
     return this.unfinishedData.reelView;
   }
 

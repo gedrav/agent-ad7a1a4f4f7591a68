@@ -4,6 +4,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class ModalView extends ResponsesiveChildrenView {
   private modalRect: PixGraphics;
@@ -12,16 +13,18 @@ export class ModalView extends ResponsesiveChildrenView {
     this.visible = false;
     this.modalRect = this.elementsList['modalRect'];
     UIUtil.addInteraction(this.modalRect, this.onModalClicked.bind(this));
-
+    GameProxy.config.isModalOpened = false;
     EventHandler.addEventListener(SlotEvents.SHOW_MODAL_VIEW, this.showModalView.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_MODAL_VIEW, this.hideModalView.bind(this));
   }
   protected showModalView() {
+    GameProxy.config.isModalOpened = true;
     this.alpha = 0;
     this.visible = true;
     AnimationProxy.fadeIn(this, 0.5);
   }
   protected hideModalView(): void {
+    GameProxy.config.isModalOpened = false;
     AnimationProxy.fadeOut(this, 0.2, this.onFadedOut.bind(this));
   }
   protected onModalClicked(): void {

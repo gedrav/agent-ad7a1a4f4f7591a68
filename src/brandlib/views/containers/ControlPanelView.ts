@@ -86,6 +86,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
+    this.addKeyboardEvents();
     this.createBBButtons();
     this.createGameTitle();
     this.addChild(this.menuComp);
@@ -93,6 +94,21 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.updateBalance();
     this.updateTotalbet();
     this.disablePanel();
+  }
+  protected addKeyboardEvents(): void {
+    window.addEventListener('keyup', this.handleKeyUp.bind(this));
+  }
+  protected handleKeyUp(e: any): void {
+    if (e.code === 'Space' && e.keyCode === 32) {
+      if (GameProxy.config.isModalOpened || appModel.getIsFreeSpinsSession() || GameProxy.config.exterPageOpened) {
+        return;
+      }
+      if (this.spinBtn.enabled) {
+        this.spinBtn.click();
+      } else if (this.stopSpinBtn.enabled && this.stopSpinBtn.visible && !this.spinBtn.visible) {
+        this.stopSpinBtn.click();
+      }
+    }
   }
   protected createGameTitle() {
     if (GameProxy.config.gameLogo) {
@@ -211,6 +227,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   private removeClickOutsideListener() {
     if (this.clickOutsideHandler && this.parent) {
       this.parent.off('pointerdown', this.clickOutsideHandler);
+      (this.parent as any).eventMode = 'auto';
       this.clickOutsideHandler = null;
     }
   }
@@ -284,21 +301,24 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   protected updateUIForFreeSpinsStart(): void {
     this.spinBtn.renderable = false;
     this.stopSpinBtn.renderable = false;
-    this.autoCounterBG.visible = true;
-    this.autoCounterText.visible = true;
-    this.autoSpinBtn.visible = true;
-    this.autoStopBtn.visible = false;
-    this.betBtn.enabled = false;
+    this.autoSpinBtn.renderable = false;
+    this.autoStopBtn.renderable = false;
+    this.betBtn.renderable = false;
+    this.autoCounterBG.visible = false;
+    this.autoCounterText.visible = false;
     this.resizeView();
   }
 
   protected updateUIFreeSpinsCount(): void {
-    this.autoCounterText.text = appModel.getCurrentFreeSpin() + '/' + appModel.getTotalFreespins();
+    //this.autoCounterText.text = appModel.getCurrentFreeSpin() + '/' + appModel.getTotalFreespins();
   }
 
   protected onFreeSpinsEnded(): void {
     this.spinBtn.renderable = true;
     this.stopSpinBtn.renderable = true;
+    this.autoSpinBtn.renderable = true;
+    this.autoStopBtn.renderable = true;
+    this.betBtn.renderable = true;
     this.showSpinButton();
     this.autoSpinBtn.visible = true;
     this.autoCounterBG.visible = false;

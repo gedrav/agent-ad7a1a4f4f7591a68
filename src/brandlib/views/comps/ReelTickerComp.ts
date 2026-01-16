@@ -1,62 +1,53 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { Util } from '@core/utils/UtilService';
-import { Clock } from '@core/utils/Clock';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { appModel } from '@core/models/services/AppModelService';
+import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 
 export class ReelTickerComp extends StandardView {
   private tickerText1: PixText;
   private tickerText2: PixText;
-  private winText: PixText;
   protected tickerIndex: number;
   private bg: any;
   private timeoutId: any;
   private textIndex: number;
   private delayDuration: number;
   private totalWin: number;
+  protected reelWinTicker: ReelWinTicker;
+
   constructor(config) {
     super(config);
     this.bg = this.elementsList['bg'];
     this.elementsList['textCont'].mask = this.elementsList['maskRect'];
     this.tickerText1 = this.elementsList['textCont'].elementsList['tickerText1'];
     this.tickerText2 = this.elementsList['textCont'].elementsList['tickerText2'];
-    this.winText = this.elementsList['textCont'].elementsList['winText'];
     this.tickerIndex = 0;
+    this.reelWinTicker = this.elementsList['reelWinTicker'];
     this.delayDuration = this.configData.tickerDelay ? this.configData.tickerDelay : 8000;
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onSpinEnd.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.showSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
+
     this.tickerText1.x = this.bg.width / 2;
     this.tickerText2.x = this.bg.width / 2;
-    this.winText.x = this.bg.width / 2;
-    this.winText.y = this.bg.height / 2 + Util.getDefaultValue(this.configData.contentYPadding, 0);
     this.showFirstTicker();
   }
-  protected showSpinWin(): void {
-    this.tickerText1.visible = this.tickerText2.visible = false;
-    this.totalWin += appModel.getSpinWin();
-    this.winText.text = Util.getContent('totalWin') + ': ' + Util.formatCurrency(this.totalWin);
-    this.winText.visible = true;
-    AnimationProxy.animateTween(this.winText, {
-      duration: 0.25,
-      scaleX: 1.1,
-      scaleY: 1.1,
-      ease: 'easeInOut',
-      repeat: 3,
-      yoyo: true,
-    });
+
+  protected showSpinWin(data: any): void {
+    if (this.reelWinTicker) {
+      this.tickerText1.visible = this.tickerText2.visible = false;
+    }
+    this.totalWin += data.value;
   }
+  protected showSpinWinCountup(): void {}
   protected clearSpinWin(): void {
     clearTimeout(this.timeoutId);
-    this.tickerText1.visible = this.tickerText2.visible = true;
-    this.winText.visible = false;
-    AnimationProxy.killTweensOf(this.winText);
-    this.winText.scale.set(1, 1);
     this.totalWin = 0;
+    this.tickerText1.visible = this.tickerText2.visible = true;
   }
   protected onSpinStart(): void {
     clearTimeout(this.timeoutId);

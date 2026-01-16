@@ -9,8 +9,10 @@ import { StateManager } from '@core/states/StateManagerService';
 class ExitFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (!appModel.getIsAutoSession()) {
-      EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
+    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
+    if (appModel.getIsAutoSession()) {
+      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_START);
+      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
 
     const fswin = appModel.getTotalFreespinWinAmount();

@@ -15,6 +15,7 @@ export const BIG_WIN_CONFIG = {
   },
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
+    { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
     {
       name: 'bigWinAnim',
       type: 'Spine',

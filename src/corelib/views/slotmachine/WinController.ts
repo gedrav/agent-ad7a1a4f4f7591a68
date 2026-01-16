@@ -27,6 +27,7 @@ export default class WinController {
 
   public showScatterTrigger(): void {
     const positions: number[] = appModel.getFeatureTriggerPositions();
+    console.log(positions);
     if (positions && positions.length > 0) {
       const len = positions.length;
       for (let j = 0; j < len; j++) {
@@ -116,6 +117,7 @@ export default class WinController {
     }
   }
   public clearSpinWin(): void {
+    clearTimeout(this.timeoutId);
     this.lineWinAmountComp.reset();
     const len1 = this.symbolsArray.length;
     for (let i = 0; i < len1; i++) {

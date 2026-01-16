@@ -12,6 +12,7 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
 import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
+import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -99,57 +100,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        {
-          name: 'tickerComp',
-          type: 'Comp',
-          class: ReelTickerComp,
-          tickerDelay: 8000,
-          x: 0,
-          y: 0,
-          content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
-          contentYPadding: -2,
-          Elements: [
-            { name: 'fsbg', type: 'Sprite', image: 'tickerBGFS' },
-            { name: 'bg', type: 'Sprite', image: 'tickerBG' },
-            {
-              name: 'textCont',
-              type: 'Container',
-              Elements: [
-                {
-                  name: 'tickerText1',
-                  type: 'Text',
-                  anchor: { x: 0.5, y: 0.5 },
-                  style: {
-                    fontFamily: 'gameFont1',
-                    fontSize: 44,
-                    fill: 0xffffff,
-                  },
-                },
-                {
-                  name: 'tickerText2',
-                  type: 'Text',
-                  anchor: { x: 0.5, y: 0.5 },
-                  style: {
-                    fontFamily: 'gameFont1',
-                    fontSize: 44,
-                    fill: 0xffffff,
-                  },
-                },
-                {
-                  name: 'winText',
-                  type: 'Text',
-                  anchor: { x: 0.5, y: 0.5 },
-                  style: {
-                    fontFamily: 'gameFont1',
-                    fontSize: 80,
-                    fill: 0xffff00,
-                  },
-                },
-              ],
-            },
-            { name: 'maskRect', type: 'Graphics', width: 1800, height: 88, x: 0, y: 12 },
-          ],
-        },
+        TICKER_COMP_CONFIG,
         { name: 'symbolsContainer', type: 'Container' },
         { name: 'maskRect', type: 'Graphics', width: 1430, height: 1168, x: 16, y: 154, color: 0xffff00 },
         {

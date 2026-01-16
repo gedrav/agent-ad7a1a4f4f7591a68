@@ -29,6 +29,10 @@ export class PixFancyButton extends FancyButton {
     }
   }
 
+  public click(): void {
+    this.onButtonPress();
+  }
+
   public addActionCommand(actionCommand: ActionCommand): void {
     if (!this.configData.action) {
       this.configData.action = {};

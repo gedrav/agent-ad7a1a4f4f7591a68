@@ -142,7 +142,6 @@ export class MessageServiceProxy extends AbstractProxy {
       finalObj.betPerLine = appModel.getBetPerLine();
     } else {
     }
-
     return this.encryptObject(finalObj);
   }
 

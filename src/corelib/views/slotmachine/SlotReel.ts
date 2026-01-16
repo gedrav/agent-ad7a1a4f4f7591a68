@@ -122,13 +122,30 @@ export default class SlotReel extends ResponsesiveChildrenView {
   }
 
   protected renderUnfinishedReel(): void {
-    const reelsview = appModel.getUnfinishedReel();
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      for (let j = 1; j <= this.reelsData.noOfRows; j++) {
-        const symb = reelsview[k][j - 1];
-        this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
+    if (appModel.isCascadeGame()) {
+      const reelsview = appModel.getUnfinishedCascadeReel();
+      for (let k = 0; k < this.reelsData.noOfReels; k++) {
+        if (this.reelsData.isFixedSymbol) {
+          for (let j = 0; j < this.reelsData.noOfRows; j++) {
+            this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j]], k);
+          }
+        } else {
+          for (let j = 1; j <= this.reelsData.noOfRows; j++) {
+            this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
+          }
+        }
+      }
+      this.showIdleAnim(false);
+    } else {
+      const reelsview = appModel.getUnfinishedReel();
+      for (let k = 0; k < this.reelsData.noOfReels; k++) {
+        for (let j = 1; j <= this.reelsData.noOfRows; j++) {
+          const symb = reelsview[k][j - 1];
+          this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
+        }
       }
     }
+
     this.showIdleAnim(false);
   }
   protected createReel() {
@@ -438,7 +455,6 @@ export default class SlotReel extends ResponsesiveChildrenView {
     if (this.currentPayoutSymbol) {
       this.symbolsContainer.addChild(this.currentPayoutSymbol);
     }
-    console.log('aaa == ', symb.configData);
     UIUtil.setClickable(this.modalRect, true);
     this.modalRect.visible = true;
     this.symbolPayoutComp.visible = true;

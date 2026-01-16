@@ -36,6 +36,7 @@ export class SlotGameApp {
   private isViewCreated: boolean = false;
   protected appContainer: any;
   private errorPopup: InitErrorPopup;
+  private isFirstTime: boolean;
 
   constructor() {}
 
@@ -44,7 +45,7 @@ export class SlotGameApp {
 
     this.windowUtil = new WindowUtil();
     this.windowUtil.initWindowFunctions();
-
+    this.isFirstTime = true;
     this.assetsLoaded = false;
     this.gameInitReceived = false;
     GameProxy.setGameConfig(gameConfig);
@@ -223,21 +224,31 @@ export class SlotGameApp {
 
   protected resize(): void {
     this.resizeNow();
-    setTimeout(this.resizeNow.bind(this), 100);
+    setTimeout(this.resizeNow.bind(this), 250);
+    setTimeout(this.resizeNow.bind(this), 500);
+    setTimeout(this.resizeNow.bind(this), 1000);
   }
   protected resizeNow(): void {
+    const tempWidth = DeviceProxy.config.windowWidth;
+    const tempHeight = DeviceProxy.config.windowHeight;
     DeviceProxy.readDevice();
+    if (
+      this.isFirstTime ||
+      tempWidth != DeviceProxy.config.windowWidth ||
+      tempHeight != DeviceProxy.config.windowHeight
+    ) {
+      this.isFirstTime = false;
+      const canvaswid = DeviceProxy.config.windowWidth * DeviceProxy.config.appResolution;
+      const canvasht = DeviceProxy.config.windowHeight * DeviceProxy.config.appResolution;
 
-    const canvaswid = DeviceProxy.config.windowWidth * DeviceProxy.config.appResolution;
-    const canvasht = DeviceProxy.config.windowHeight * DeviceProxy.config.appResolution;
+      // Update canvas style dimensions and scroll window up to avoid issues on mobile resize
+      this.app.renderer.canvas.style.width = `${DeviceProxy.config.windowWidth}px`;
+      this.app.renderer.canvas.style.height = `${DeviceProxy.config.windowHeight}px`;
+      window.scrollTo(0, 0);
+      this.app.renderer.resize(canvaswid, canvasht);
 
-    // Update canvas style dimensions and scroll window up to avoid issues on mobile resize
-    this.app.renderer.canvas.style.width = `${DeviceProxy.config.windowWidth}px`;
-    this.app.renderer.canvas.style.height = `${DeviceProxy.config.windowHeight}px`;
-    window.scrollTo(0, 0);
-    this.app.renderer.resize(canvaswid, canvasht);
-
-    EventHandler.dispatchEvent(AppEvents.APP_RESIZE);
+      EventHandler.dispatchEvent(AppEvents.APP_RESIZE);
+    }
   }
 
   protected visibilityChange(): void {
