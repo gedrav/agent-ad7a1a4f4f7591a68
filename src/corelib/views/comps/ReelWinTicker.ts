@@ -15,7 +15,6 @@ export class ReelWinTicker extends StandardView {
     EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.SKIP_REELTICKER_WIN, this.skipCountUp.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
-    //this.visible = false;
   }
   protected skipCountUp(): void {
     this.winTicker.skipToFinalValue();

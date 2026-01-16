@@ -26,7 +26,7 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 56,
+            fontSize: 54,
             fill: 0x201300,
           },
         },
@@ -36,13 +36,13 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 56,
+            fontSize: 54,
             fill: 0x201300,
           },
         },
       ],
     },
-    { name: 'maskRect1', type: 'Graphics', width: 1420, height: 88, x: 0, y: 12 },
+    { name: 'maskRect', type: 'Graphics', width: 1390, height: 88, x: 32, y: 28 },
     REEL_WIN_TICKER_CONFIG,
   ],
 };
