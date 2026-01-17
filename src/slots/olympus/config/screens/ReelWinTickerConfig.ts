@@ -9,9 +9,9 @@ export const REEL_WIN_TICKER_CONFIG: any = {
   name: 'reelWinTicker',
   type: 'Comp',
   class: ReelWinTicker,
-  y: 24,
+  y: 36,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1800, height: 80, color: 0xff0000, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1460, height: 80, color: 0xff0000, alpha: 0 },
     {
       name: 'winTicker',
       type: 'Comp',
@@ -22,14 +22,14 @@ export const REEL_WIN_TICKER_CONFIG: any = {
           type: 'Text',
           content: 'totalWin',
           anchor: { x: 1, y: 0 },
-          x: 890,
+          x: 720,
           style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0x501c00 },
         },
         {
           name: 'valueText',
           type: 'Text',
           anchor: { x: 0, y: 0 },
-          x: 910,
+          x: 740,
           style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0x501c00 },
         },
       ],

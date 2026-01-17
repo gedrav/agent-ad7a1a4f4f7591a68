@@ -280,7 +280,7 @@ export default class SlotReelCascade extends SlotReel {
   protected enterCascadeExistingSymbols(): void {
     this.moveArray = [];
     for (let p = 0; p < this.reelsData.noOfReels; p++) {
-      const marr = [0, 0, 0, 0, 0, 0, 0];
+      const marr = [0, 0, 0, 0, 0];
       this.moveArray.push(marr);
     }
     let len = this.explodedSymbolsIndexes.length;
@@ -348,9 +348,34 @@ export default class SlotReelCascade extends SlotReel {
       }
 
       this.cascadeIndex = -1;
-      this.onCascadeFallFinalComplete();
+    }
+    this.getNewExploadedSymbolIndexes();
+    this.allBlastsCompleted();
+  }
+
+  protected getNewExploadedSymbolIndexes(): void {
+    this.newExploadedSymbolIndexes = [];
+    const tempSymbols: Array<Array<ReelSymbolSprite>> = [];
+    const outerlen = this.explodedSymbolsIndexes.length;
+    for (let k = 0; k < outerlen; k++) {
+      this.newExploadedSymbolIndexes[k] = [];
+      tempSymbols[k] = [];
+      const len = this.explodedSymbolsIndexes[k].length;
+      for (let i = len - 1; i >= 0; i--) {
+        const symb = this.symbolsArray[k][this.explodedSymbolsIndexes[k][i]];
+        tempSymbols[k].push(symb);
+        this.symbolsArray[k].splice(this.explodedSymbolsIndexes[k][i], 1);
+        this.newExploadedSymbolIndexes[k].push(i);
+      }
+      const len2 = tempSymbols[k].length;
+      if (len2 > 0) {
+        for (let i = 0; i < len2; i++) {
+          this.symbolsArray[k].unshift(tempSymbols[k][i]);
+        }
+      }
     }
   }
+
   protected onCascadeFallStepComplete(symb: ReelSymbolSprite): void {
     symb.showLanding();
     const originalScale: number = symb.scale.y;
@@ -367,35 +392,9 @@ export default class SlotReelCascade extends SlotReel {
     AnimationProxy.animateTween(symb, {
       duration: 0.1,
       scaleY: originalScale,
-      onComplete: this.onCascadeFallFinalComplete.bind(this),
     });
   }
-  protected onCascadeFallFinalComplete(): void {
-    this.cascadeIndex++;
-    if (this.cascadeIndex == this.totalCascades) {
-      this.newExploadedSymbolIndexes = [];
-      const tempSymbols: Array<Array<ReelSymbolSprite>> = [];
-      const outerlen = this.explodedSymbolsIndexes.length;
-      for (let k = 0; k < outerlen; k++) {
-        this.newExploadedSymbolIndexes[k] = [];
-        tempSymbols[k] = [];
-        const len = this.explodedSymbolsIndexes[k].length;
-        for (let i = len - 1; i >= 0; i--) {
-          const symb = this.symbolsArray[k][this.explodedSymbolsIndexes[k][i]];
-          tempSymbols[k].push(symb);
-          this.symbolsArray[k].splice(this.explodedSymbolsIndexes[k][i], 1);
-          this.newExploadedSymbolIndexes[k].push(i);
-        }
-        const len2 = tempSymbols[k].length;
-        if (len2 > 0) {
-          for (let i = 0; i < len2; i++) {
-            this.symbolsArray[k].unshift(tempSymbols[k][i]);
-          }
-        }
-      }
-      this.allBlastsCompleted();
-    }
-  }
+
   protected allBlastsCompleted(): void {
     StateManager.next();
   }
