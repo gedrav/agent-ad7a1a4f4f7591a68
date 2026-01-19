@@ -113,7 +113,6 @@ export default class SlotReelCascade extends SlotReel {
               delay: delay,
               y: finalY,
               ease: this.symbEase,
-              rotation: Util.getRadians(Util.getRandomRange(-this.fallRotation, this.fallRotation)),
               onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
             },
             true,
@@ -204,7 +203,6 @@ export default class SlotReelCascade extends SlotReel {
               delay: delay * 0.15,
               y: finalY,
               ease: this.symbEase,
-              rotation: Util.getRadians(Util.getRandomRange(-this.fallRotation, this.fallRotation)),
               onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
             });
           } else {
@@ -213,7 +211,6 @@ export default class SlotReelCascade extends SlotReel {
               delay: delay,
               y: finalY,
               ease: this.symbEase,
-              rotation: Util.getRadians(Util.getRandomRange(-this.fallRotation, this.fallRotation)),
               onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
             });
           }
@@ -227,7 +224,6 @@ export default class SlotReelCascade extends SlotReel {
     const value = symb.scale.y * 0.94 + (Math.random() * 4) / 100;
     AnimationProxy.animateTween(symb, {
       duration: 0.05,
-      rotation: 0,
       scaleY: value,
       onComplete: this.onSymbolCameInCompleted.bind(this, symb, originalScale),
     });
@@ -382,7 +378,6 @@ export default class SlotReelCascade extends SlotReel {
     const value = symb.scale.y * 0.94 + (Math.random() * 6) / 100;
     AnimationProxy.animateTween(symb, {
       duration: 0.1,
-      rotation: 0,
       scaleY: value,
       onComplete: this.onSymbolCascadeCameInCompleted.bind(this, symb, originalScale),
     });
@@ -445,7 +440,6 @@ export default class SlotReelCascade extends SlotReel {
     const value = symb.scale.y * 0.94 + (Math.random() * 6) / 100;
     AnimationProxy.animateTween(symb, {
       duration: 0.1,
-      rotation: 0,
       scaleY: value,
       onComplete: this.onSymbolNewSymbolCameInCompleted.bind(this, symb, originalYScale),
     });
