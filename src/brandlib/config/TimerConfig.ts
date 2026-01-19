@@ -4,14 +4,23 @@ export const TIMER_CONFIG = {
   type: 'Comp',
   class: TimerView,
   Elements: [
-    { name: 'bg', type: 'RoundedRectangle', width: 240, height: 60, color: 0x000000, alpha: 0.9, radius: 20 },
+    { name: 'bg', type: 'RoundedRectangle', width: 240, height: 90, color: 0x000000, alpha: 0.9, radius: 20 },
+    {
+      name: 'brandTxt',
+      type: 'Text',
+      contentText: 'FORTUNA',
+      style: { fontFamily: 'commonFont', fontSize: 24, fill: 0xffffff },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 120,
+      y: 26,
+    },
     {
       name: 'clockTxt',
       type: 'Text',
       style: { fontFamily: 'commonFont', fontSize: 30, fill: 0xffffff },
       anchor: { x: 0.5, y: 0.5 },
       x: 120,
-      y: 30,
+      y: 60,
     },
   ],
   layoutData: {
