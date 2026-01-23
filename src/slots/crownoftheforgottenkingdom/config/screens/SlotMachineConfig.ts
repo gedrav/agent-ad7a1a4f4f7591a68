@@ -8,6 +8,7 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
+import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -69,6 +70,10 @@ export const SLOT_MACHINE_CONFIG: any = {
           L4: { name: 'L4' },
           L5: { name: 'L5' },
           BN: { name: 'L5' },
+          BN_1: { name: 'BN_1' },
+          BN_2: { name: 'BN_2' },
+          BN_3: { name: 'BN_3' },
+          BN_4: { name: 'BN_4' },
           SC: { name: 'SC' },
           S_SC: { name: 'SC' },
         },
@@ -134,6 +139,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
+    WIN_COLLECTOR_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {
