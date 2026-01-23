@@ -10,7 +10,7 @@ const projectRoot = path.resolve(__dirname, '..');
 const slotsDir = path.resolve(projectRoot, 'src', 'slots');
 
 const CONFIGURED_GAME_IDS = [
-  'olympus',
+  'crownoftheforgottenkingdom',
 ];
 
 const parseList = (value = '') =>

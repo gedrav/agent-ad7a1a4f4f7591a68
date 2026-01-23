@@ -16,7 +16,6 @@ const SPLASH: any[] = [
 ];
 
 const PRIMARY: any[] = [
-
   { TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' },
   { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
   { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },

@@ -4,13 +4,8 @@ import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { ReelsConfig } from '@game/config/ReelsConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
-import SlotReelTumble from '@core/views/slotmachine/SlotReelTumble';
-import { MultiplierComp } from '@game/views/comps/MultiplierComp';
-import { MultiComp } from '@game/views/comps/MultiComp';
-import { MULTIPLIER_CONFIG } from '@game/config/screens/MultiplierCompConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
-import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 

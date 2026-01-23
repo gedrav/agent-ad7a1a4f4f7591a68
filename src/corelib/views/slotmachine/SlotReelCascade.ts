@@ -30,9 +30,7 @@ export default class SlotReelCascade extends SlotReel {
   protected fallRotation = 5;
   protected totalNewSymbolsToCascade = 0;
   protected newSymbolCascadeIndex = 0;
-  //protected symbEase = Elastic.easeOut.config(0.25, 0.4);
   protected symbEase = Cubic.easeIn;
-  //protected symbEase = "elastic.out(1, 1)";
   protected symbolFallingIndex = 0;
   protected moveArray: Array<Array<number>>;
   protected newExploadedSymbolIndexes: Array<Array<number>>;

@@ -16,7 +16,7 @@ export const GAME_CONFIG = {
   gameVersion: '0.05',
   gameId: 'olympusscatterrealms',
   sendTotalBetInRequest: true,
-  gameName: 'Olympus',
+  gameName: 'Crown of the Forgotten Kingdom',
   gameAssetVersion: '0.01',
   creditValue: 20,
   totalLines: 1,

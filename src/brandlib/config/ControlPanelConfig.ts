@@ -651,7 +651,6 @@ export const CONTROL_PANEL_CONFIG = {
           vAlign: 'bottom',
           vPaddingPerc: -1.2,
           maxScale: 1,
-          maxScale: 1,
         },
       },
     },
