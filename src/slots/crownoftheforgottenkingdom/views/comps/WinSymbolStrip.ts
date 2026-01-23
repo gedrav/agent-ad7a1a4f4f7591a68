@@ -5,7 +5,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import { DestroyOptions } from 'pixi.js';
 
-export class TumbleWinStrip extends StandardView {
+export class WinSymbolStrip extends StandardView {
   protected stripBg: PixSprite;
   protected symbolCountText: PixText;
   protected winvalueText: PixText;

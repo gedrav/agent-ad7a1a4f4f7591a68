@@ -174,219 +174,686 @@ class AppModelService {
   public storeSpinResult(data: any): void {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
+    //dual cascade dummy data
+    //     const data = {
+    //     "gameId": "olympusscatterrealms",
+    //     "playerId": "8133042",
+    //     "roundId": "tsGYmlVvtsWU-uhWhGgYC",
+    //     "closed": true,
+    //     "betAmount": "20",
+    //     "result": {
+    //         "cascadeData": [
+    //             {
+    //                 "reelView": [
+    //                     [
+    //                         "L5",
+    //                         "L4",
+    //                         "L4",
+    //                         "L4",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "L5",
+    //                         "H4",
+    //                         "H4",
+    //                         "L1",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "L4",
+    //                         "L3",
+    //                         "L3",
+    //                         "L3",
+    //                         "L3"
+    //                     ],
+    //                     [
+    //                         "L4",
+    //                         "L3",
+    //                         "L3",
+    //                         "H3",
+    //                         "H3"
+    //                     ],
+    //                     [
+    //                         "H1",
+    //                         "H1",
+    //                         "L1",
+    //                         "L1",
+    //                         "L4"
+    //                     ],
+    //                     [
+    //                         "L1",
+    //                         "L3",
+    //                         "L3",
+    //                         "H4",
+    //                         "H4"
+    //                     ]
+    //                 ],
+    //                 "scatterCount": 0,
+    //                 "blustSymbols": [
+    //                     {
+    //                         "symbol": "L3",
+    //                         "positions": [
+    //                             [
+    //                                 2,
+    //                                 1
+    //                             ],
+    //                             [
+    //                                 2,
+    //                                 2
+    //                             ],
+    //                             [
+    //                                 2,
+    //                                 3
+    //                             ],
+    //                             [
+    //                                 2,
+    //                                 4
+    //                             ],
+    //                             [
+    //                                 3,
+    //                                 1
+    //                             ],
+    //                             [
+    //                                 3,
+    //                                 2
+    //                             ],
+    //                             [
+    //                                 5,
+    //                                 1
+    //                             ],
+    //                             [
+    //                                 5,
+    //                                 2
+    //                             ]
+    //                         ],
+    //                         "size": 8,
+    //                         "winAmount": 10
+    //                     }
+    //                 ],
+    //                 "scatterPositions": [],
+    //                 "spinWin": 10,
+    //                 "multiplierPositions": [],
+    //                 "superScPositions": []
+    //             },
+    //             {
+    //                 "reelView": [
+    //                     [
+    //                         "L5",
+    //                         "L4",
+    //                         "L4",
+    //                         "L4",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "L5",
+    //                         "H4",
+    //                         "H4",
+    //                         "L1",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "H3",
+    //                         "L3",
+    //                         "L5",
+    //                         "L4",
+    //                         "L4"
+    //                     ],
+    //                     [
+    //                         "L4",
+    //                         "H2",
+    //                         "L4",
+    //                         "H3",
+    //                         "H3"
+    //                     ],
+    //                     [
+    //                         "H1",
+    //                         "H1",
+    //                         "L1",
+    //                         "L1",
+    //                         "L4"
+    //                     ],
+    //                     [
+    //                         "L5",
+    //                         "L2",
+    //                         "L1",
+    //                         "H4",
+    //                         "H4"
+    //                     ]
+    //                 ],
+    //                 "scatterCount": 0,
+    //                 "blustSymbols": [
+    //                     {
+    //                         "symbol": "L4",
+    //                         "positions": [
+    //                             [
+    //                                 0,
+    //                                 1
+    //                             ],
+    //                             [
+    //                                 0,
+    //                                 2
+    //                             ],
+    //                             [
+    //                                 0,
+    //                                 3
+    //                             ],
+    //                             [
+    //                                 2,
+    //                                 3
+    //                             ],
+    //                             [
+    //                                 2,
+    //                                 4
+    //                             ],
+    //                             [
+    //                                 3,
+    //                                 0
+    //                             ],
+    //                             [
+    //                                 3,
+    //                                 2
+    //                             ],
+    //                             [
+    //                                 4,
+    //                                 4
+    //                             ]
+    //                         ],
+    //                         "size": 8,
+    //                         "winAmount": 8
+    //                     }
+    //                 ],
+    //                 "scatterPositions": [],
+    //                 "spinWin": 8,
+    //                 "multiplierPositions": [],
+    //                 "superScPositions": []
+    //             },
+    //             {
+    //                 "reelView": [
+    //                     [
+    //                         "L2",
+    //                         "L2",
+    //                         "L3",
+    //                         "L5",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "L5",
+    //                         "H4",
+    //                         "H4",
+    //                         "L1",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "H3",
+    //                         "L2",
+    //                         "H3",
+    //                         "L3",
+    //                         "L5"
+    //                     ],
+    //                     [
+    //                         "H2",
+    //                         "L4",
+    //                         "H2",
+    //                         "H3",
+    //                         "H3"
+    //                     ],
+    //                     [
+    //                         "L3",
+    //                         "H1",
+    //                         "H1",
+    //                         "L1",
+    //                         "L1"
+    //                     ],
+    //                     [
+    //                         "L5",
+    //                         "L2",
+    //                         "L1",
+    //                         "H4",
+    //                         "H4"
+    //                     ]
+    //                 ],
+    //                 "scatterCount": 0,
+    //                 "blustSymbols": [],
+    //                 "scatterPositions": [],
+    //                 "spinWin": 0,
+    //                 "multiplierPositions": [],
+    //                 "superScPositions": [],
+    //                 "scatterPay": 0
+    //             }
+    //         ],
+    //         "bet": "20",
+    //         "totalWin": 18,
+    //         "baseWin": 18,
+    //         "nextFeature": null,
+    //         "pendingFeature": 0,
+    //         "featureResults": [],
+    //         "multiplier": 0,
+    //         "firstReelMultiplierValue": 0,
+    //         "newCascadeMultiplierValue": 0,
+    //         "freeSpinMultiplier": null,
+    //         "multiplierPositions": [],
+    //         "superScPositions": [],
+    //         "maxWin": 1000000,
+    //         "scatterPay": 0,
+    //         "lineWin": 18,
+    //         "maxCapReached": false,
+    //         "ante": false
+    //     },
+    //     "id": "tsGYmlVvtsWU-uhWhGgYC",
+    //     "playerInfo": {
+    //         "balance": 2741936.939999904,
+    //         "endTime": "2026-01-23T10:00:54.922Z"
+    //     }
+    // }
+    // triple cascade dummy data
     // const data = {
-    //   gameId: 'megaace',
-    //   playerId: '1507320',
-    //   roundId: '7AIaLQUM4jm5E_bJZ92n3',
-    //   closed: true,
-    //   result: {
-    //     cascadeData: [
+    //   "gameId": "olympusscatterrealms",
+    //   "playerId": "3713122",
+    //   "closed": false,
+    //   "playerInfo": {
+    //     "balance": 2741400.939999904,
+    //     "maxPayout": 1000000
+    //   },
+    //   "result": {
+    //     "cascadeData": [
     //       {
-    //         reelView: [
-    //           ['H4', 'L2', 'L4', 'H3'],
-    //           ['L1', 'L2_G', 'H2', 'L4'],
-    //           ['L4', 'H2', 'L2_G', 'L1'],
-    //           ['L2', 'H3', 'L3_G', 'H1'],
-    //           ['L3', 'H4', 'L2', 'H1'],
+    //         "reelView": [
+    //           [
+    //             "H4",
+    //             "L5",
+    //             "L5",
+    //             "H1",
+    //             "L3"
+    //           ],
+    //           [
+    //             "H3",
+    //             "L3",
+    //             "L3",
+    //             "L4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "H4",
+    //             "L5",
+    //             "L1",
+    //             "L1",
+    //             "L1"
+    //           ],
+    //           [
+    //             "H4",
+    //             "L4",
+    //             "L5",
+    //             "L1",
+    //             "L5"
+    //           ],
+    //           [
+    //             "L3",
+    //             "BN_2",
+    //             "L5",
+    //             "H4",
+    //             "L3"
+    //           ],
+    //           [
+    //             "L5",
+    //             "L5",
+    //             "L5",
+    //             "H2",
+    //             "L3"
+    //           ]
     //         ],
-    //         scatterCount: 0,
-    //         blustSymbols: [
+    //         "scatterCount": 0,
+    //         "blustSymbols": [
     //           {
-    //             symbol: 'L2',
-    //             noOfWays: 1,
-    //             positions: [
-    //               [0, 1],
-    //               [1, 1],
-    //               [2, 2],
-    //               [3, 0],
-    //               [4, 2],
+    //             "symbol": "L5",
+    //             "positions": [
+    //               [
+    //                 0,
+    //                 1
+    //               ],
+    //               [
+    //                 0,
+    //                 2
+    //               ],
+    //               [
+    //                 2,
+    //                 1
+    //               ],
+    //               [
+    //                 3,
+    //                 2
+    //               ],
+    //               [
+    //                 3,
+    //                 4
+    //               ],
+    //               [
+    //                 4,
+    //                 2
+    //               ],
+    //               [
+    //                 5,
+    //                 0
+    //               ],
+    //               [
+    //                 5,
+    //                 1
+    //               ],
+    //               [
+    //                 5,
+    //                 2
+    //               ]
     //             ],
-    //             symbolPay: 10,
-    //             winAmount: 10,
-    //             scatterMultiplier: 0,
-    //           },
+    //             "size": 9,
+    //             "winAmount": 5
+    //           }
+    //         ],
+    //         "scatterPositions": [],
+    //         "spinWin": 5,
+    //         "multiplierPositions": [
     //           {
-    //             symbol: 'L4',
-    //             noOfWays: 1,
-    //             positions: [
-    //               [0, 2],
-    //               [1, 3],
-    //               [2, 0],
+    //             "position": [
+    //               4,
+    //               1
     //             ],
-    //             symbolPay: 1,
-    //             winAmount: 1,
-    //             scatterMultiplier: 0,
-    //           },
+    //             "multiplier": 2,
+    //             "triggered": true
+    //           }
     //         ],
-    //         willConvertToWildPositions: [
-    //           {
-    //             symbol: 'L2_G',
-    //             positions: [1, 1],
-    //             wildType: 'WD',
-    //           },
-    //           {
-    //             symbol: 'L2_G',
-    //             positions: [2, 2],
-    //             wildType: 'JWD',
-    //           },
-    //         ],
-    //         spinWin: 11,
-    //         scatterPositions: [],
+    //         "superScPositions": []
     //       },
     //       {
-    //         reelView: [
-    //           ['H4', 'L4', 'H4', 'H3'],
-    //           ['L1', 'WD', 'H2', 'L1'],
-    //           ['H2_G', 'H2', 'JWD', 'L1'],
-    //           ['L1', 'H3', 'JWD', 'H1'],
-    //           ['L3', 'H4', 'L3', 'H1'],
+    //         "reelView": [
+    //           [
+    //             "L3",
+    //             "L3",
+    //             "H4",
+    //             "H1",
+    //             "L3"
+    //           ],
+    //           [
+    //             "H3",
+    //             "L3",
+    //             "L3",
+    //             "L4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "L1",
+    //             "H4",
+    //             "L1",
+    //             "L1",
+    //             "L1"
+    //           ],
+    //           [
+    //             "H4",
+    //             "H4",
+    //             "H4",
+    //             "L4",
+    //             "L1"
+    //           ],
+    //           [
+    //             "L2",
+    //             "L3",
+    //             "BN_2",
+    //             "H4",
+    //             "L3"
+    //           ],
+    //           [
+    //             "L4",
+    //             "L1",
+    //             "L3",
+    //             "H2",
+    //             "L3"
+    //           ]
     //         ],
-    //         convertedWildPositions: [
+    //         "scatterCount": 0,
+    //         "blustSymbols": [
     //           {
-    //             position: [1, 1],
-    //             prevSymbol: 'L2_G',
-    //           },
-    //         ],
-    //         firstJWildPosition: [
-    //           {
-    //             position: [2, 2],
-    //             prevSymbol: 'L2_G',
-    //           },
-    //         ],
-    //         convertedJWildPositions: [
-    //           {
-    //             position: [3, 2],
-    //             prevSymbol: 'L3_G',
-    //           },
-    //         ],
-    //         scatterCount: 0,
-    //         blustSymbols: [
-    //           {
-    //             symbol: 'H4',
-    //             noOfWays: 2,
-    //             positions: [
-    //               [0, 0],
-    //               [0, 2],
-    //               [1, 1],
-    //               [2, 2],
-    //               [3, 2],
-    //               [4, 1],
+    //             "symbol": "L3",
+    //             "positions": [
+    //               [
+    //                 0,
+    //                 0
+    //               ],
+    //               [
+    //                 0,
+    //                 1
+    //               ],
+    //               [
+    //                 0,
+    //                 4
+    //               ],
+    //               [
+    //                 1,
+    //                 1
+    //               ],
+    //               [
+    //                 1,
+    //                 2
+    //               ],
+    //               [
+    //                 4,
+    //                 1
+    //               ],
+    //               [
+    //                 4,
+    //                 4
+    //               ],
+    //               [
+    //                 5,
+    //                 2
+    //               ],
+    //               [
+    //                 5,
+    //                 4
+    //               ]
     //             ],
-    //             symbolPay: 40,
-    //             winAmount: 80,
-    //             scatterMultiplier: 0,
-    //           },
-    //           {
-    //             symbol: 'L4',
-    //             noOfWays: 1,
-    //             positions: [
-    //               [0, 1],
-    //               [1, 1],
-    //               [2, 2],
-    //               [3, 2],
-    //             ],
-    //             symbolPay: 6,
-    //             winAmount: 6,
-    //             scatterMultiplier: 0,
-    //           },
-    //           {
-    //             symbol: 'H3',
-    //             noOfWays: 2,
-    //             positions: [
-    //               [0, 3],
-    //               [1, 1],
-    //               [2, 2],
-    //               [3, 1],
-    //               [3, 2],
-    //             ],
-    //             symbolPay: 36,
-    //             winAmount: 72,
-    //             scatterMultiplier: 0,
-    //           },
+    //             "size": 9,
+    //             "winAmount": 10
+    //           }
     //         ],
-    //         willConvertToWildPositions: [],
-    //         spinWin: 158,
-    //         scatterPositions: [],
+    //         "scatterPositions": [],
+    //         "spinWin": 10,
+    //         "multiplierPositions": [
+    //           {
+    //             "position": [
+    //               4,
+    //               2
+    //             ],
+    //             "multiplier": 2,
+    //             "triggered": true
+    //           }
+    //         ],
+    //         "superScPositions": []
     //       },
     //       {
-    //         reelView: [
-    //           ['L2', 'H3', 'H2', 'H3'],
-    //           ['L1', 'H4_G', 'H2', 'L1'],
-    //           ['H2_G', 'H2', 'H1', 'L1'],
-    //           ['L1', 'L1', 'L1', 'H1'],
-    //           ['L3', 'L1', 'L3', 'H1'],
+    //         "reelView": [
+    //           [
+    //             "L4",
+    //             "L2",
+    //             "H4",
+    //             "H4",
+    //             "H1"
+    //           ],
+    //           [
+    //             "H2",
+    //             "H1",
+    //             "H3",
+    //             "L4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "L1",
+    //             "H4",
+    //             "L1",
+    //             "L1",
+    //             "L1"
+    //           ],
+    //           [
+    //             "H4",
+    //             "H4",
+    //             "H4",
+    //             "L4",
+    //             "L1"
+    //           ],
+    //           [
+    //             "L4",
+    //             "H4",
+    //             "L2",
+    //             "BN_2",
+    //             "H4"
+    //           ],
+    //           [
+    //             "L3",
+    //             "L5",
+    //             "L4",
+    //             "L1",
+    //             "H2"
+    //           ]
     //         ],
-    //         convertedWildPositions: [],
-    //         firstJWildPosition: [],
-    //         convertedJWildPositions: [],
-    //         scatterCount: 0,
-    //         blustSymbols: [
+    //         "scatterCount": 0,
+    //         "blustSymbols": [
     //           {
-    //             symbol: 'H2',
-    //             noOfWays: 2,
-    //             positions: [
-    //               [0, 2],
-    //               [1, 2],
-    //               [2, 0],
-    //               [2, 1],
+    //             "symbol": "H4",
+    //             "positions": [
+    //               [
+    //                 0,
+    //                 2
+    //               ],
+    //               [
+    //                 0,
+    //                 3
+    //               ],
+    //               [
+    //                 2,
+    //                 1
+    //               ],
+    //               [
+    //                 3,
+    //                 0
+    //               ],
+    //               [
+    //                 3,
+    //                 1
+    //               ],
+    //               [
+    //                 3,
+    //                 2
+    //               ],
+    //               [
+    //                 4,
+    //                 1
+    //               ],
+    //               [
+    //                 4,
+    //                 4
+    //               ]
     //             ],
-    //             symbolPay: 24,
-    //             winAmount: 48,
-    //             scatterMultiplier: 0,
-    //           },
+    //             "size": 8,
+    //             "winAmount": 30
+    //           }
     //         ],
-    //         willConvertToWildPositions: [
+    //         "scatterPositions": [],
+    //         "spinWin": 30,
+    //         "multiplierPositions": [
     //           {
-    //             symbol: 'H2_G',
-    //             positions: [2, 0],
-    //             wildType: 'WD',
-    //           },
+    //             "position": [
+    //               4,
+    //               3
+    //             ],
+    //             "multiplier": 2,
+    //             "triggered": true
+    //           }
     //         ],
-    //         spinWin: 48,
-    //         scatterPositions: [],
+    //         "superScPositions": []
     //       },
     //       {
-    //         reelView: [
-    //           ['L2', 'H3', 'L3', 'H3'],
-    //           ['L1', 'H4_G', 'L1', 'L1'],
-    //           ['WD', 'H2', 'H1', 'L1'],
-    //           ['L1', 'L1', 'L1', 'H1'],
-    //           ['L3', 'L1', 'L3', 'H1'],
+    //         "reelView": [
+    //           [
+    //             "H3",
+    //             "L2",
+    //             "L4",
+    //             "L2",
+    //             "H1"
+    //           ],
+    //           [
+    //             "H2",
+    //             "H1",
+    //             "H3",
+    //             "L4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "H3",
+    //             "L1",
+    //             "L1",
+    //             "L1",
+    //             "L1"
+    //           ],
+    //           [
+    //             "L2",
+    //             "SC",
+    //             "H1",
+    //             "L4",
+    //             "L1"
+    //           ],
+    //           [
+    //             "H1",
+    //             "L5",
+    //             "L4",
+    //             "L2",
+    //             "BN_2"
+    //           ],
+    //           [
+    //             "L3",
+    //             "L5",
+    //             "L4",
+    //             "L1",
+    //             "H2"
+    //           ]
     //         ],
-    //         convertedWildPositions: [
+    //         "scatterCount": 1,
+    //         "blustSymbols": [],
+    //         "scatterPositions": [
+    //           9
+    //         ],
+    //         "spinWin": 0,
+    //         "multiplierPositions": [
     //           {
-    //             position: [2, 0],
-    //             prevSymbol: 'H2_G',
-    //           },
+    //             "position": [
+    //               4,
+    //               4
+    //             ],
+    //             "multiplier": 2,
+    //             "triggered": true
+    //           }
     //         ],
-    //         firstJWildPosition: [],
-    //         convertedJWildPositions: [],
-    //         scatterCount: 0,
-    //         blustSymbols: [],
-    //         willConvertToWildPositions: [],
-    //         spinWin: 0,
-    //         scatterPositions: [],
-    //       },
+    //         "superScPositions": [],
+    //         "scatterPay": 0
+    //       }
     //     ],
-    //     bet: '20',
-    //     totalWin: 217,
-    //     baseWin: 217,
-    //     nextFeature: null,
-    //     pendingFeature: 0,
-    //     featureResults: [],
-    //     winMultiplier: 5,
-    //     active: false,
-    //     JWildAwarded: true,
-    //     JWildRewarded: true,
-    //     maxWin: 1000,
-    //     maxCapReached: false,
+    //     "bet": "20",
+    //     "totalWin": 633,
+    //     "baseWin": 60,
+    //     "nextFeature": "freespins",
+    //     "pendingFeature": 0,
+    //     "featureResults": [],
+    //     "multiplier": 0,
+    //     "firstReelMultiplierValue": 0,
+    //     "newCascadeMultiplierValue": 0,
+    //     "freeSpinMultiplier": null,
+    //     "multiplierPositions": [],
+    //     "superScPositions": [],
+    //     "maxWin": 1000000,
+    //     "scatterPay": 60,
+    //     "lineWin": 5,
+    //     "superScWinMultiplier": 0,
+    //     "maxCapReached": false,
+    //     "ante": false
     //   },
-    //   id: '7AIaLQUM4jm5E_bJZ92n3',
-    //   playerInfo: {
-    //     balance: 612025.7990000001,
-    //     endTime: '2025-12-16T12:30:19.998Z',
-    //   },
-    // };
+    //   "id": "kapoitq26zWTX_2e2WmC_",
+    //   "betType": "bet"
+    // }
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameResult = data.result;
     this.featureResult = null;
