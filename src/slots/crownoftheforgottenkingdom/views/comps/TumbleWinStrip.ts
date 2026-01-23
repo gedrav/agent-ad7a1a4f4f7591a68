@@ -14,7 +14,7 @@ export class TumbleWinStrip extends StandardView {
   constructor(config) {
     super(config);
     this.stripBg = UIUtil.getSprite('winShownDayBg');
-    this.stripBg.scale.set(1, 0.78);
+    this.stripBg.scale.set(1, 0.79);
     const tConfig = {
       name: 'symbolCountText',
       type: 'Text',

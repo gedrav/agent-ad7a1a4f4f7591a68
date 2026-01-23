@@ -30,19 +30,21 @@ export class WinCollectorComp extends StandardView {
 
   protected onCollectWinSymbols(): void {
     const tumbleData = appModel.getSpinBlastData();
-    // let tumbleData = [...tumbleDataT, ...tumbleDataT, ...tumbleDataT];
+    // let tumbleData = [...tumbleDataT, ...tumbleDataT, ...tumbleDataT, ...tumbleDataT];
+    const decValue = this.winStripArray.length < 5 ? maxVisibleSymbInBox : this.winStripArray.length;
     if (this.winStripArray.length + tumbleData.length > maxVisibleSymbInBox) {
+      const yPosMultiplier = this.winStripArray.length + tumbleData.length - decValue; // to calc multi that how much winBoox will move down
       this.collectorFilled = true;
-      const hiddenStrips = this.winStripArray.length + tumbleData.length - maxVisibleSymbInBox;
       AnimationProxy.animateTween(this.winBoxContainer, {
-        y: this.winBoxContainer.y + hiddenStrips * (this.maskRect.height / maxVisibleSymbInBox),
+        y: this.winBoxContainer.y + yPosMultiplier * (this.maskRect.height / maxVisibleSymbInBox),
         duration: 0.25,
+        onComplete: this.checkToEnableButtons.bind(this),
       });
     }
-    this.onWinBoxContainerAnimDone(tumbleData);
+    this.collectNewWinstrips(tumbleData);
   }
 
-  protected onWinBoxContainerAnimDone(tumbleData) {
+  protected collectNewWinstrips(tumbleData) {
     tumbleData.forEach((element: any, index: number) => {
       const winStrip = new TumbleWinStrip(element);
       this.winBoxContainer.addChild(winStrip);
@@ -62,6 +64,8 @@ export class WinCollectorComp extends StandardView {
     });
   }
 
+  protected checkToEnableButtons() {}
+
   protected onResetWinCollector(): void {
     this.collectorFilled = false;
     this.winBoxContainer.y = this.winBoxContainer.configData.y;
@@ -70,5 +74,6 @@ export class WinCollectorComp extends StandardView {
       strip.destroy();
     });
     this.winStripArray = [];
+    this.collectorFilled = false;
   }
 }
