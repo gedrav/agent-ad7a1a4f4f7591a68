@@ -329,7 +329,7 @@ class AssetLoaderClass {
   }
 
   private loadBMPFont(fontName: string, fontUrl: string) {
-    const font = new FontFace(fontName, `url(${fontUrl})`);
+    const font = new FontFace(fontName, `url("${fontUrl}")`);
     font
       .load()
       .then((loadedFont) => {
@@ -342,7 +342,7 @@ class AssetLoaderClass {
   }
 
   private loadFont(fontName: string, fontUrl: string) {
-    const font = new FontFace(fontName, `url(${fontUrl})`);
+    const font = new FontFace(fontName, `url("${fontUrl}")`);
     font
       .load()
       .then((loadedFont) => {
