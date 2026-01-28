@@ -5,16 +5,16 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { STATES } from '@core/states/StateConstants';
 import { StateManager } from '@core/states/StateManagerService';
 
-class CheckISTumblePendingStateCommand extends StateCommand {
+class CheckIsTumblePendingStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     const isTumblePending = appModel.isTumbleRemaining();
     if (!isTumblePending) {
-      StateManager.goToState(STATES.CHECK_FEATURE_STATE);
+      StateManager.goToState(STATES.CHECK_TO_COLLECT_MULTIPLIER);
     } else {
       StateManager.next();
     }
   }
 }
 
-export const CheckIsTumblePendingState = new CheckISTumblePendingStateCommand();
+export const CheckIsTumblePendingState = new CheckIsTumblePendingStateCommand();

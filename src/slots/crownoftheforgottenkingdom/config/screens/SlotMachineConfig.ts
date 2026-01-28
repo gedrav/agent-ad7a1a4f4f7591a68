@@ -1,14 +1,14 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 import WinController from '@core/views/slotmachine/WinController';
-import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { ReelsConfig } from '@game/config/ReelsConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
-import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
+import RewardSymbol from '@brand/views/slot/RewardSymbol';
+import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -26,12 +26,12 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: SlotReelCascade,
+      class: MultiplierSlotReelCascade,
       winController: WinController,
       x: 0,
       y: 0,
       data: {
-        symbolClass: ReelSymbolSprite,
+        symbolClass: RewardSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,
@@ -59,23 +59,23 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
 
         symbolsData: {
-          WD: { name: 'WD' },
-          H1: { name: 'H1' },
-          H2: { name: 'H2' },
-          H3: { name: 'H3' },
-          H4: { name: 'H4' },
-          L1: { name: 'L1' },
-          L2: { name: 'L2' },
-          L3: { name: 'L3' },
-          L4: { name: 'L4' },
-          L5: { name: 'L5' },
-          BN: { name: 'L5' },
-          BN_1: { name: 'BN_1' },
-          BN_2: { name: 'BN_2' },
-          BN_3: { name: 'BN_3' },
-          BN_4: { name: 'BN_4' },
-          SC: { name: 'SC' },
-          S_SC: { name: 'SC' },
+          WD: { name: 'WD', isBonusSymbol: false },
+          H1: { name: 'H1', isBonusSymbol: false },
+          H2: { name: 'H2', isBonusSymbol: false },
+          H3: { name: 'H3', isBonusSymbol: false },
+          H4: { name: 'H4', isBonusSymbol: false },
+          L1: { name: 'L1', isBonusSymbol: false },
+          L2: { name: 'L2', isBonusSymbol: false },
+          L3: { name: 'L3', isBonusSymbol: false },
+          L4: { name: 'L4', isBonusSymbol: false },
+          L5: { name: 'L5', isBonusSymbol: false },
+          BN: { name: 'L5', isBonusSymbol: false },
+          BN_1: { name: 'BN_1', isBonusSymbol: true },
+          BN_2: { name: 'BN_2', isBonusSymbol: true },
+          BN_3: { name: 'BN_3', isBonusSymbol: true },
+          BN_4: { name: 'BN_4', isBonusSymbol: true },
+          SC: { name: 'SC', isBonusSymbol: false },
+          S_SC: { name: 'SC', isBonusSymbol: false },
         },
       },
       Elements: [
