@@ -4,6 +4,25 @@ import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 class AppModelService {
+  private unfinishedData: any;
+  private featureName: string;
+  private _featureResult: any;
+  private _playerInfo: any;
+  private _gameResult: any;
+  private _language: string = 'en';
+  private _currency: string = 'INR';
+  private _funMode: boolean = false;
+  private _gameInfo: any;
+  private _fsInfo: any;
+  private _turboMode: boolean = false;
+  private _gameInitData: any;
+  private _lineWinIndex: number = 0;
+  private _autoPlayObj: any;
+  private _autoPlaySession: boolean = false;
+  private _freeSpinsSession: boolean;
+  private _tumbleIndex: number;
+  private _lightningStopOnBonus: boolean;
+
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
   }
@@ -28,24 +47,6 @@ class AppModelService {
   set lightningStopOnBonus(value: boolean) {
     this._lightningStopOnBonus = value;
   }
-  private unfinishedData: any;
-  private featureName: string;
-  private _featureResult: any;
-  private _playerInfo: any;
-  private _gameResult: any;
-  private _language: string = 'en';
-  private _currency: string = 'INR';
-  private _funMode: boolean = false;
-  private _gameInfo: any;
-  private _fsInfo: any;
-  private _turboMode: boolean = false;
-  private _gameInitData: any;
-  private _lineWinIndex: number = 0;
-  private _autoPlayObj: any;
-  private _autoPlaySession: boolean = false;
-  private _freeSpinsSession: boolean;
-  private _tumbleIndex: number;
-  private _lightningStopOnBonus: boolean;
 
   get playerInfo(): any {
     return this._playerInfo;
@@ -445,6 +446,7 @@ class AppModelService {
     //         "endTime": "2026-01-23T10:00:54.922Z"
     //     }
     // }
+
     // triple cascade dummy data
     // const data = {
     //   "gameId": "olympusscatterrealms",
@@ -854,6 +856,218 @@ class AppModelService {
     //   "id": "kapoitq26zWTX_2e2WmC_",
     //   "betType": "bet"
     // }
+
+    // multiplier in basegame
+    // const data = {
+    //   "gameId": "olympusscatterrealms",
+    //   "playerId": "1520295",
+    //   "roundId": "g3hTwb6gVXaYCRPY6SYBM",
+    //   "closed": true,
+    //   "betAmount": "20",
+    //   "result": {
+    //     "cascadeData": [
+    //       {
+    //         "reelView": [
+    //           [
+    //             "L5",
+    //             "H1",
+    //             "SC",
+    //             "L1",
+    //             "L1"
+    //           ],
+    //           [
+    //             "H1",
+    //             "H1",
+    //             "L4",
+    //             "L4",
+    //             "H4"
+    //           ],
+    //           [
+    //             "L2",
+    //             "L5",
+    //             "L5",
+    //             "SC",
+    //             "H4"
+    //           ],
+    //           [
+    //             "L5",
+    //             "L5",
+    //             "H4",
+    //             "H4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "H3",
+    //             "L5",
+    //             "L5",
+    //             "L4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "H4",
+    //             "H4",
+    //             "L5",
+    //             "L5",
+    //             "L5"
+    //           ]
+    //         ],
+    //         "scatterCount": 2,
+    //         "blustSymbols": [
+    //           {
+    //             "symbol": "L5",
+    //             "positions": [
+    //               [
+    //                 0,
+    //                 0
+    //               ],
+    //               [
+    //                 2,
+    //                 1
+    //               ],
+    //               [
+    //                 2,
+    //                 2
+    //               ],
+    //               [
+    //                 3,
+    //                 0
+    //               ],
+    //               [
+    //                 3,
+    //                 1
+    //               ],
+    //               [
+    //                 4,
+    //                 1
+    //               ],
+    //               [
+    //                 4,
+    //                 2
+    //               ],
+    //               [
+    //                 5,
+    //                 2
+    //               ],
+    //               [
+    //                 5,
+    //                 3
+    //               ],
+    //               [
+    //                 5,
+    //                 4
+    //               ]
+    //             ],
+    //             "size": 10,
+    //             "winAmount": 15
+    //           }
+    //         ],
+    //         "scatterPositions": [
+    //           12,
+    //           20
+    //         ],
+    //         "spinWin": 15,
+    //         "multiplierPositions": [],
+    //         "superScPositions": []
+    //       },
+    //       {
+    //         "reelView": [
+    //           [
+    //             "H3",
+    //             "H1",
+    //             "SC",
+    //             "L1",
+    //             "L1"
+    //           ],
+    //           [
+    //             "H1",
+    //             "H1",
+    //             "L4",
+    //             "L4",
+    //             "H4"
+    //           ],
+    //           [
+    //             "H3",
+    //             "L5",
+    //             "L2",
+    //             "SC",
+    //             "H4"
+    //           ],
+    //           [
+    //             "H1",
+    //             "BN_3",
+    //             "H4",
+    //             "H4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "H2",
+    //             "H3",
+    //             "H3",
+    //             "L4",
+    //             "L4"
+    //           ],
+    //           [
+    //             "L5",
+    //             "H3",
+    //             "L1",
+    //             "H4",
+    //             "H4"
+    //           ]
+    //         ],
+    //         "scatterCount": 2,
+    //         "blustSymbols": [],
+    //         "scatterPositions": [
+    //           12,
+    //           20
+    //         ],
+    //         "spinWin": 0,
+    //         "multiplierPositions": [
+    //           {
+    //             "position": [
+    //               3,
+    //               1
+    //             ],
+    //             "multiplier": 3,
+    //             "triggered": true
+    //           }
+    //         ],
+    //         "superScPositions": [],
+    //         "scatterPay": 0
+    //       }
+    //     ],
+    //     "bet": "20",
+    //     "totalWin": 45,
+    //     "baseWin": 45,
+    //     "nextFeature": null,
+    //     "pendingFeature": 0,
+    //     "featureResults": [],
+    //     "multiplier": 3,
+    //     "firstReelMultiplierValue": 0,
+    //     "newCascadeMultiplierValue": 3,
+    //     "freeSpinMultiplier": null,
+    //     "multiplierPositions": [
+    //       {
+    //         "position": [
+    //           3,
+    //           1
+    //         ],
+    //         "multiplier": 3,
+    //         "triggered": true
+    //       }
+    //     ],
+    //     "superScPositions": [],
+    //     "maxWin": 1000000,
+    //     "scatterPay": 0,
+    //     "lineWin": 15,
+    //     "maxCapReached": false,
+    //     "ante": false
+    //   },
+    //   "id": "g3hTwb6gVXaYCRPY6SYBM",
+    //   "playerInfo": {
+    //     "balance": 2436554.94000001,
+    //     "endTime": "2026-01-27T05:49:44.120Z"
+    //   }
+    // }
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameResult = data.result;
     this.featureResult = null;
@@ -1251,6 +1465,13 @@ class AppModelService {
   public isCascadeGame(): boolean {
     return this.gameResult?.cascadeData && this.gameResult.cascadeData.length > 0;
   }
+  public toCollectMultiplier(): boolean {
+    if (this.getIsFreeSpinsSession()) {
+      return this.gameResult?.freeSpinMultiplier !== this.gameResult?.prevFreeSpinMultiplier;
+    }
+    return this.gameResult?.firstReelMultiplierValue !== this.gameResult?.newCascadeMultiplierValue;
+  }
+
   public getTotalCascadeWin(): number {
     return this.gameResult.totalWin;
   }
@@ -1298,6 +1519,12 @@ class AppModelService {
   }
   public getSymbolPayoutValue(multi: number): number {
     return (this.getTotalBet() / this.gameInfo.creditValue) * multi;
+  }
+  public getSymbMultiplierValue(reel: number, row: number) {
+    const multiplierPositions = this.gameResult.cascadeData[this.tumbleIndex]?.multiplierPositions;
+    return (
+      multiplierPositions.find((item) => item.position[0] === reel && item.position[1] === row)?.multiplier ?? null
+    );
   }
 }
 

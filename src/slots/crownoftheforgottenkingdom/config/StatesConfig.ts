@@ -17,6 +17,8 @@ import { ShowTumbleState } from '@core/commands/states/ShowTumbleState';
 import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
 import { ShowCascadeState } from '@core/commands/states/ShowCascadeState';
+import { ShowMultiplierCollectAnimState } from '@core/commands/states/ShowMultiplierCollectAnimState';
+import { CheckToCollectMultiplierState } from '@core/commands/states/CheckToCollectMultiplierState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -29,6 +31,9 @@ export const STATES_CONFIG: any = [
   { name: STATES.CHECK_IS_TUMBLE_PENDING, state: CheckIsTumblePendingState },
   { name: STATES.SHOW_TUMBLE_STATE, state: ShowTumbleState },
   { name: STATES.SHOW_CASCADE_STATE, state: ShowCascadeState },
+
+  { name: STATES.CHECK_TO_COLLECT_MULTIPLIER, state: CheckToCollectMultiplierState },
+  { name: STATES.SHOW_MULTIPLIER_COLLECT_ANIM_STATE, state: ShowMultiplierCollectAnimState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
