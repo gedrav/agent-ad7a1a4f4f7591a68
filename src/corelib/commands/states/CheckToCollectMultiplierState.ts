@@ -6,7 +6,7 @@ import { StateManager } from '@core/states/StateManagerService';
 class CheckToCollectMultiplierStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    const toCollectMultiplier = false; //appModel.toCollectMultiplier();   // WIP
+    const toCollectMultiplier = appModel.toCollectMultiplier();
     if (!toCollectMultiplier) {
       StateManager.goToState(STATES.CHECK_FEATURE_STATE);
     } else {

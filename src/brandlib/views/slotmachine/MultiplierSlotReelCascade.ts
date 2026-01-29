@@ -4,10 +4,22 @@ import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import RewardSymbol from '@brand/views/slot/RewardSymbol';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
+import { PixText } from '@core/pixiwrapper/PixText';
+import { UIUtil } from '@core/utils/UIUtilService';
+import { CascadeReelWinTicker } from '../comps/CascadeReelWinTicker';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
+  private multiplierTextArr: PixText[];
+  private cascadeReelWinTicker: CascadeReelWinTicker;
+  private multiplierAnimCount: number = 0;
+  private totalMultiplierCount: number = 0;
   constructor(configData: any) {
     super(configData);
+    this.multiplierTextArr = [];
+    this.cascadeReelWinTicker = this.elementsList['tickerComp'].elementsList['reelWinTicker'];
+    EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
+    EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));
   }
 
   protected stopSpinQuick(): void {
@@ -156,5 +168,72 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         }
       }
     }
+  }
+
+  protected showMultiplierCollection(): void {
+    this.createMultipliers();
+  }
+
+  protected createMultipliers() {
+    const multiplierPos = appModel.getMultiplierPositionData();
+    this.totalMultiplierCount = multiplierPos.length;
+    multiplierPos.forEach((data) => {
+      const pos = {
+        reel: data.position[0],
+        row: this.reelsData.isFixedSymbol ? data.position[1] : data.position[1] + 1,
+      };
+      const symb = this.symbolsArray[pos.reel][pos.row] as RewardSymbol;
+      symb.clearRewardData();
+      const textElemet = symb.getTextElement();
+      const tconfig: any = {
+        name: 'multiplierVal',
+        type: 'Text',
+        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 200 },
+        anchor: { x: 0.5, y: 0.5 },
+      };
+      const multiText = UIUtil.getElement(tconfig);
+      multiText.text = `x${data.multiplier}`;
+      multiText.style.fontSize = textElemet.style.fontSize * symb.scale.x;
+      multiText.x = this.symbolsContainer.x + symb.x;
+      multiText.y = this.symbolsContainer.y + symb.y;
+      this.addChild(multiText);
+      this.multiplierTextArr.push(multiText);
+    });
+    this.cascadeReelWinTicker.setupForAnimation();
+    this.animateMultiplier();
+  }
+
+  protected animateMultiplier() {
+    const multiplierPos = GameProxy.config.reelWintickerMultiplier.toGlobal(this);
+    const multiplierPosLocal = this.toLocal(multiplierPos);
+    const multiText = this.multiplierTextArr[this.multiplierAnimCount];
+    AnimationProxy.animateTween(multiText, {
+      x: multiplierPosLocal.x,
+      y: multiplierPosLocal.y,
+      duration: 0.6,
+      ease: 'Linear.easeOut',
+      onComplete: this.onMultiplierWentUp.bind(this),
+    });
+  }
+
+  protected onMultiplierWentUp() {
+    const multiplierPos = appModel.getMultiplierPositionData();
+    this.removeChild(this.multiplierTextArr[this.multiplierAnimCount]);
+    this.cascadeReelWinTicker.updateMultiplier(multiplierPos[this.multiplierAnimCount].multiplier);
+    this.multiplierAnimCount++;
+    if (this.multiplierAnimCount < this.totalMultiplierCount) {
+      this.animateMultiplier();
+    } else {
+      this.cascadeReelWinTicker.animateToShowTotalWin();
+    }
+  }
+
+  protected resetSlotReelVal() {
+    this.multiplierAnimCount = 0;
+    this.totalMultiplierCount = 0;
+    this.multiplierTextArr.forEach((elem) => {
+      elem.destroy();
+    });
+    this.multiplierTextArr = [];
   }
 }

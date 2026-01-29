@@ -5,8 +5,6 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
 import { Sine } from 'gsap';
 import { GlowFilter } from 'pixi-filters';
-import { gsap } from 'gsap';
-import { PixSprite } from '@core/pixiwrapper/PixSprite';
 export default class ReelSymbolSprite extends ReelSymbol {
   constructor(configData: any) {
     super(configData);

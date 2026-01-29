@@ -4,7 +4,6 @@ import { Util } from '@core/utils/UtilService';
 
 export class WinTicker extends StandardView {
   private valueText: PixText;
-  private titleText: PixText;
   private currentValue: number;
   private targetValue: number;
   private duration: number;
@@ -15,8 +14,6 @@ export class WinTicker extends StandardView {
   constructor(config) {
     super(config);
     this.valueText = this.elementsList['valueText'];
-    this.titleText = this.elementsList['titleText'];
-
     this.currentValue = 0;
     this.targetValue = this.currentValue;
 

@@ -2,6 +2,7 @@ import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { appModel } from '@core/models/services/AppModelService';
+import { ColorMatrixFilter } from 'pixi.js';
 
 export default class RewardSymbol extends ReelSymbolSprite {
   private multiplierVal: PixText;
@@ -44,5 +45,21 @@ export default class RewardSymbol extends ReelSymbolSprite {
 
   public clearRewardData(): void {
     this.multiplierVal.text = '';
+  }
+
+  public showFaded(): void {
+    super.showFaded();
+    const colorMatrixFilter = new ColorMatrixFilter();
+    colorMatrixFilter.brightness(0.4, false);
+    this.multiplierVal.filters = [colorMatrixFilter];
+  }
+
+  public cleanUpSymbolWin(): void {
+    super.cleanUpSymbolWin();
+    this.multiplierVal.filters = null;
+  }
+
+  public getTextElement() {
+    return this.multiplierVal;
   }
 }

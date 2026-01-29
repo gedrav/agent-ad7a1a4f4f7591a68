@@ -5,8 +5,8 @@ import { WinTicker } from '@core/views/comps/WinTicker';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 export class ReelWinTicker extends StandardView {
-  private winTicker: WinTicker;
-  private totalWin: number;
+  protected winTicker: WinTicker;
+  protected totalWin: number;
 
   constructor(config) {
     super(config);
