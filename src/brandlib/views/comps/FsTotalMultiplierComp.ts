@@ -9,7 +9,7 @@ export class FsTotalMultiplierComp extends ResponsesiveChildrenView {
 
   constructor(config) {
     super(config);
-    // this.visible = false;
+    this.visible = false;
     this.multiplierVal = this.elementsList['multiplierVal'];
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
