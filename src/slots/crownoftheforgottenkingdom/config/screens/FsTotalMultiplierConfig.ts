@@ -1,7 +1,7 @@
 import { FsTotalMultiplierComp } from '@brand/views/comps/FsTotalMultiplierComp';
 
 export const FS_TOTAL_MULTI_CONFIG: any = {
-  name: 'tickerComp',
+  name: 'fstotalMultiComp',
   type: 'Comp',
   class: FsTotalMultiplierComp,
   Elements: [
@@ -10,9 +10,8 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
       name: 'multiBg',
       type: 'Sprite',
       image: 'stone_ocean',
-      scale: 0.4,
       layoutData: {
-        Desktop: { posRefComponent: 'guideRect', widthPerc: 1, hAlign: 'center', vAlign: 'middle' },
+        Desktop: { refComponent: 'guideRect', widthPerc: 1, hAlign: 'center', vAlign: 'middle' },
       },
     },
     {

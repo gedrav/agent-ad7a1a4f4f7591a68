@@ -65,7 +65,7 @@ export const WIN_COLLECTOR_CONFIG: any = {
       heightPerc: 0.34,
       hAlign: 'left',
       vAlign: 'middle',
-      hPaddingPerc: -0.265,
+      hPaddingPerc: 0,
     },
   },
 };
