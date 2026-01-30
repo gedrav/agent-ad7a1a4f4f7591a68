@@ -192,7 +192,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         anchor: { x: 0.5, y: 0.5 },
       };
       const multiText = UIUtil.getElement(tconfig);
-      multiText.text = `x${data.multiplier}`;
+      multiText.text = `${data.multiplier}x`;
       multiText.style.fontSize = textElemet.style.fontSize * symb.scale.x;
       multiText.x = this.symbolsContainer.x + symb.x;
       multiText.y = this.symbolsContainer.y + symb.y;

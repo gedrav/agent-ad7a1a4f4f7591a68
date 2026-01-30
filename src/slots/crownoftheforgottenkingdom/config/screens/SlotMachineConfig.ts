@@ -9,6 +9,7 @@ import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
 import RewardSymbol from '@brand/views/slot/RewardSymbol';
 import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
+import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -137,6 +138,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
+        FS_TOTAL_MULTI_CONFIG,
       ],
     },
     WIN_COLLECTOR_CONFIG,
