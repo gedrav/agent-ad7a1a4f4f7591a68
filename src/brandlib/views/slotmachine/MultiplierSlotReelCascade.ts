@@ -8,18 +8,23 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { CascadeReelWinTicker } from '../comps/CascadeReelWinTicker';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { FsTotalMultiplierComp } from '../comps/FsTotalMultiplierComp';
 
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
   private multiplierTextArr: PixText[];
   private cascadeReelWinTicker: CascadeReelWinTicker;
   private multiplierAnimCount: number = 0;
   private totalMultiplierCount: number = 0;
+  private fsTotalMultiComp: FsTotalMultiplierComp;
   constructor(configData: any) {
     super(configData);
     this.multiplierTextArr = [];
     this.cascadeReelWinTicker = this.elementsList['tickerComp'].elementsList['reelWinTicker'];
+    this.fsTotalMultiComp = this.elementsList['fsTotalMultiComp'];
     EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));
+
+    this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
   }
 
   protected stopSpinQuick(): void {
@@ -208,7 +213,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     const multiplierPosLocal = this.toLocal(multiplierPos);
     const multiText = this.multiplierTextArr[this.multiplierAnimCount];
     AnimationProxy.animateTween(multiText, {
-      x: multiplierPosLocal.x,
+      x: multiplierPosLocal.x - this.x,
       y: multiplierPosLocal.y,
       duration: 0.6,
       ease: 'Linear.easeOut',
@@ -226,6 +231,10 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     } else {
       this.cascadeReelWinTicker.animateToShowTotalWin();
     }
+  }
+
+  protected onUpdateFsTotalMulti() {
+    this.fsTotalMultiComp.updateMultiplier();
   }
 
   protected resetSlotReelVal() {

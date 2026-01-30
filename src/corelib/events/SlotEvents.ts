@@ -102,6 +102,7 @@ export const SlotEvents = {
   SET_FS_MULTIPLIERS_VISIBLITY: 'SET_FS_MULTIPLIERS_VISIBLITY',
 
   COLLECT_MULTIPLIER: 'COLLECT_MULTIPLIER',
+  UPDATE_TOTAL_MULTIPLIER: 'UPDATE_TOTAL_MULTIPLIER',
 } as const;
 
 export type SlotEvent = keyof typeof SlotEvents;

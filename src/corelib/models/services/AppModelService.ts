@@ -636,6 +636,15 @@ class AppModelService {
   public getMultiplierPositionData() {
     return this.gameResult.cascadeData[this.tumbleIndex]?.multiplierPositions;
   }
+  public getFreeSpinMultiplier() {
+    return this.gameResult?.freeSpinMultiplier;
+  }
+  public getInitialFreeSpinMultiplier() {
+    // have to change once get the new BE as currently the values are pretty nested
+    return this.gameResult?.featureResults[this.gameResult?.featureResults.length - 1].currentCount
+      ? this.gameResult?.featureResults[this.gameResult?.featureResults.length - 1].spinResults[0].freeSpinMultiplier
+      : 0;
+  }
 }
 
 export const appModel = new AppModelService();

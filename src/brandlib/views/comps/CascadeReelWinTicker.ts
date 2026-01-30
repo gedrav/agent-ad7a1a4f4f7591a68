@@ -1,9 +1,9 @@
+import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { StateManager } from '@core/states/StateManagerService';
-import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 
@@ -81,7 +81,9 @@ export class CascadeReelWinTicker extends ReelWinTicker {
   }
 
   protected onTextMoveDone() {
-    this.winTicker.showSpinValue(appModel.getTotalCascadeWin(), true);
+    this.emit(SlotEvents.UPDATE_TOTAL_MULTIPLIER);
+    const value = appModel.getTotalCascadeWin();
+    this.winTicker.showSpinValue(value, true);
     this.multiplierText.text = '';
     this.multiplierText.alpha = 0;
   }

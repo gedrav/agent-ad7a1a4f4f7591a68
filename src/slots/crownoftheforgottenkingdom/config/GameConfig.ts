@@ -38,7 +38,7 @@ export const GAME_CONFIG = {
         widthPerc: 0.5,
         heightPerc: 0.03,
         hAlign: 'center',
-        hPaddingPerc: 0,
+        hPaddingPerc: 0.09,
         vAlign: 'topUp',
         vPaddingPerc: 0,
         maxScale: 1,
