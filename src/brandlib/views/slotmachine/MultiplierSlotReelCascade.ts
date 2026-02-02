@@ -11,11 +11,11 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { FsTotalMultiplierComp } from '../comps/FsTotalMultiplierComp';
 
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
-  private multiplierTextArr: PixText[];
   private cascadeReelWinTicker: CascadeReelWinTicker;
+  private fsTotalMultiComp: FsTotalMultiplierComp;
+  private multiplierTextArr: PixText[];
   private multiplierAnimCount: number = 0;
   private totalMultiplierCount: number = 0;
-  private fsTotalMultiComp: FsTotalMultiplierComp;
   constructor(configData: any) {
     super(configData);
     this.multiplierTextArr = [];
@@ -176,10 +176,40 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   }
 
   protected showMultiplierCollection(): void {
-    this.createMultipliers();
+    if (appModel.getIsFreeSpinsSession()) {
+      this.createFsTotalMultiplier();
+    } else {
+      this.createMultipliersToAnimate();
+    }
   }
 
-  protected createMultipliers() {
+  protected createFsTotalMultiplier() {
+    const totalMultValue = this.fsTotalMultiComp.getCurrentTotalMultiplierVal();
+    if (totalMultValue) {
+      const tconfig: any = {
+        name: 'multiplierVal',
+        type: 'Text',
+        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 200 },
+        anchor: { x: 0.5, y: 0.5 },
+      };
+      const totalMultiText = UIUtil.getElement(tconfig);
+      const totalMultiComp = this.fsTotalMultiComp.getTotalMultiTextComp();
+      totalMultiText.style.fontSize = totalMultiComp.style.fontSize;
+      const multiplierPos = GameProxy.config.FsTotalMultiplierComp.toGlobal(this);
+      const multiplierPosLocal = this.toLocal(multiplierPos);
+      totalMultiText.text = `${totalMultValue}x`;
+      totalMultiText.x = multiplierPosLocal.x - this.x;
+      totalMultiText.y = multiplierPosLocal.y - this.y;
+      this.addChild(totalMultiText);
+      this.cascadeReelWinTicker.setupForAnimation();
+      this.animateFsTotalMultiplier(totalMultiText);
+    } else {
+      this.cascadeReelWinTicker.setupForAnimation();
+      this.createMultipliersToAnimate();
+    }
+  }
+
+  protected createMultipliersToAnimate() {
     const multiplierPos = appModel.getMultiplierPositionData();
     this.totalMultiplierCount = multiplierPos.length;
     multiplierPos.forEach((data) => {
@@ -204,8 +234,19 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       this.addChild(multiText);
       this.multiplierTextArr.push(multiText);
     });
-    this.cascadeReelWinTicker.setupForAnimation();
     this.animateMultiplier();
+  }
+
+  protected animateFsTotalMultiplier(totalMultiText: PixText) {
+    const multiplierPos = GameProxy.config.reelWintickerMultiplier.toGlobal(this);
+    const multiplierPosLocal = this.toLocal(multiplierPos);
+    AnimationProxy.animateTween(totalMultiText, {
+      x: multiplierPosLocal.x - this.x,
+      y: multiplierPosLocal.y - this.y,
+      duration: 0.6,
+      ease: 'Linear.easeOut',
+      onComplete: this.fsTotalMultiplierWentUp.bind(this, totalMultiText),
+    });
   }
 
   protected animateMultiplier() {
@@ -214,7 +255,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     const multiText = this.multiplierTextArr[this.multiplierAnimCount];
     AnimationProxy.animateTween(multiText, {
       x: multiplierPosLocal.x - this.x,
-      y: multiplierPosLocal.y,
+      y: multiplierPosLocal.y - this.y,
       duration: 0.6,
       ease: 'Linear.easeOut',
       onComplete: this.onMultiplierWentUp.bind(this),
@@ -231,6 +272,14 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     } else {
       this.cascadeReelWinTicker.animateToShowTotalWin();
     }
+  }
+
+  protected fsTotalMultiplierWentUp(totalMultiText: PixText) {
+    this.removeChild(totalMultiText);
+    totalMultiText.destroy();
+    console.log('aaaaaaaa', this.fsTotalMultiComp.getCurrentTotalMultiplierVal());
+    this.cascadeReelWinTicker.updateMultiplier(this.fsTotalMultiComp.getCurrentTotalMultiplierVal());
+    this.createMultipliersToAnimate();
   }
 
   protected onUpdateFsTotalMulti() {

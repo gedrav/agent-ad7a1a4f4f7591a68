@@ -8,7 +8,7 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', color: '0xffff00', width: 360, height: 420, alpha: 0 },
     {
-      name: 'toatMultiText',
+      name: 'totalMulText',
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
       content: 'totalMultiplier',
@@ -33,7 +33,7 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
       },
     },
     {
-      name: 'multiplierVal',
+      name: 'multiplierValText',
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
       style: {
