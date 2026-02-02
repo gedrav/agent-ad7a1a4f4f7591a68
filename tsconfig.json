@@ -3,10 +3,10 @@
     "baseUrl": "./",
     "paths": {
       "@game/*": [
-        "src/slots/crownoftheforgottenkingdom/*"
+        "src/slots/empireofgold/*"
       ],
       "@assets/*": [
-        "../feg_games_assets/crownoftheforgottenkingdom/*"
+        "../feg_games_assets/empireofgold/*"
       ],
       "@common/*": [
         "../feg_games_assets/common/*"

@@ -1,4 +1,3 @@
-import { MenuClickCommand } from '@core/commands/action/MenuClickCommand';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 import { Point } from 'pixi.js';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
@@ -16,7 +15,7 @@ export const GAME_CONFIG = {
   gameVersion: '0.05',
   gameId: 'olympusscatterrealms',
   sendTotalBetInRequest: true,
-  gameName: 'Crown of the Forgotten Kingdom',
+  gameName: 'Empire of Gold',
   gameAssetVersion: '0.01',
   creditValue: 20,
   totalLines: 1,

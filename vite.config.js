@@ -4,7 +4,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'node:path';
 
 // SINGLE CONTROL POINT (with env override)
-const GAME_ID = process.env.GAME_ID || 'crownoftheforgottenkingdom';
+const GAME_ID = process.env.GAME_ID || 'empireofgold';
 const BUILD_OUTPUT_ROOT = process.env.BUILD_OUTPUT_ROOT
   ? path.resolve(__dirname, process.env.BUILD_OUTPUT_ROOT)
   : path.resolve(__dirname, '../feg_games_build');
