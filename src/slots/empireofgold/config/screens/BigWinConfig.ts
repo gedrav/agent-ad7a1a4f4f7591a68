@@ -22,7 +22,7 @@ export const BIG_WIN_CONFIG = {
       spineName: 'Lepg_Wins',
       defaultState: 'bigWin_idle',
       loop: true,
-      x: 755,
+      x: 968,
       y: 500,
     },
     {
@@ -34,7 +34,7 @@ export const BIG_WIN_CONFIG = {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          x: 770,
+          x: 968,
           y: 465,
           style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffff00 },
         },
