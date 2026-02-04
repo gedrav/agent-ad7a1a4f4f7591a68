@@ -1,6 +1,7 @@
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 import { Point } from 'pixi.js';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { UIConfig } from '@game/config/UIConfig';
 
 export const GAME_CONFIG = {
   gameHDWidth: 1284,
@@ -16,6 +17,7 @@ export const GAME_CONFIG = {
   gameId: 'olympusscatterrealms',
   sendTotalBetInRequest: true,
   gameName: 'Empire of Gold',
+  uiConfig: UIConfig,
   gameAssetVersion: '0.01',
   creditValue: 20,
   totalLines: 1,
