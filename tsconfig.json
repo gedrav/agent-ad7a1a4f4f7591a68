@@ -3,7 +3,8 @@
     "baseUrl": "./",
     "paths": {
       "@game/*": [
-        "src/slots/empireofgold/*"
+        "src/slots/empireofgold/*",
+        "src/slots/royal81/*"
       ],
       "@assets/*": [
         "../feg_games_assets/empireofgold/*"

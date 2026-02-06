@@ -1,9 +1,6 @@
 import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
-import { GameProxy } from '@core/models/GameConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { CoreUIConfig } from './CoreUIConfig';
-
-const getButtonStates = () => GameProxy.config?.uiConfig?.buttonStates ?? CoreUIConfig.buttonStates;
 
 export const getInitErrorPopupConfig = () => ({
   name: 'errorPopupView',
@@ -64,7 +61,7 @@ export const getInitErrorPopupConfig = () => ({
             hoverView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x555555 }),
             pressedView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x333333 }),
             disabledView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0xcccccc }),
-            animations: getButtonStates(),
+            animations: CoreUIConfig.buttonStates,
           },
         },
       ],
