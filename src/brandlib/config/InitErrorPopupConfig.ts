@@ -2,7 +2,7 @@ import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { CoreUIConfig } from './CoreUIConfig';
 
-export const getInitErrorPopupConfig = () => ({
+export const INIT_ERROR_POPUP_CONFIG = {
   name: 'errorPopupView',
   type: 'Comp',
   class: 'ErrorPopupView',
@@ -72,4 +72,4 @@ export const getInitErrorPopupConfig = () => ({
       },
     },
   ],
-});
+};

@@ -17,7 +17,7 @@ import { Util } from '@core/utils/UtilService';
 import { Logger } from '@core/utils/LoggerService';
 import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
 import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
-import { getInitErrorPopupConfig } from '@brand/config/InitErrorPopupConfig';
+import { INIT_ERROR_POPUP_CONFIG } from '@brand/config/InitErrorPopupConfig';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -182,7 +182,7 @@ export class SlotGameApp {
         this.splashComp.removeSplash();
       }
       this.initErrorOccured = true;
-      this.errorPopup = new InitErrorPopup(getInitErrorPopupConfig());
+      this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
       this.appContainer.addChild(this.errorPopup);
       this.errorPopup.showMessage(obj.data?.response?.statusText);
       this.removePreloader();
