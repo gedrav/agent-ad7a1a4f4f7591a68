@@ -1,6 +1,7 @@
 // vite.config.js
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { compression } from 'vite-plugin-compression2';
 import path from 'node:path';
 
 // SINGLE CONTROL POINT (with env override)
@@ -23,9 +24,37 @@ const COMMON_ASSETS_ROOT = path.resolve(ASSETS_ROOT, 'common');
 const COMMON_ASSETS_PATTERN = `${toPosix(COMMON_ASSETS_ROOT)}/**/*`;
 const COMMON_ASSETS_IGNORE = `!${toPosix(COMMON_ASSETS_ROOT)}/**/.DS_Store`;
 const SHOW_STATS_OVERLAY = false; // toggle FPS stats overlay
+const PIXI_VENDOR_PACKAGES = new Set(['pixi.js', 'pixi-filters']);
+const VENDOR_ANIMATION_PACKAGES = new Set([
+  'gsap',
+  'socket.io-client',
+  'stats.js',
+  'howler',
+  'axios',
+  'crypto',
+  'crypto-js',
+  'i18next',
+  'query-string',
+]);
+
+const getPackageName = (id) => {
+  const parts = id.split('/node_modules/');
+  if (parts.length < 2) return null;
+  const pkgPart = parts[parts.length - 1];
+  const segments = pkgPart.split('/');
+  if (!segments.length) return null;
+  if (segments[0].startsWith('@')) {
+    return segments.length > 1 ? `${segments[0]}/${segments[1]}` : segments[0];
+  }
+  return segments[0];
+};
 
 export default defineConfig(({ mode }) => {
   const isDevBuild = mode === 'development';
+  const CORELIB_ROOT = toPosix(path.resolve(__dirname, 'src/corelib'));
+  const BRANDLIB_ROOT = toPosix(path.resolve(__dirname, 'src/brandlib'));
+  const GAME_ROOT = toPosix(path.resolve(__dirname, `src/slots/${GAME_ID}`));
+  const NODE_MODULES_SEGMENT = '/node_modules/';
 
   return {
     base: './',
@@ -74,6 +103,12 @@ export default defineConfig(({ mode }) => {
         ],
         watch: isDevBuild,
       }),
+      compression({
+        algorithms: ['gzip', 'brotliCompress'],
+        deleteOriginalAssets: false,
+        skipIfLargerOrEqual: true,
+        disable: isDevBuild,
+      }),
     ],
     build: {
       minify: !isDevBuild,
@@ -82,6 +117,38 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           entryFileNames: 'assets/index-canvas.js',
+          manualChunks(id) {
+            const normalizedId = toPosix(id);
+
+            if (normalizedId.includes(NODE_MODULES_SEGMENT)) {
+              const pkgName = getPackageName(normalizedId);
+              if (!pkgName) {
+                return undefined;
+              }
+
+              if (
+                pkgName.startsWith('@pixi/') ||
+                pkgName.startsWith('@esotericsoftware/') ||
+                PIXI_VENDOR_PACKAGES.has(pkgName)
+              ) {
+                return 'vendor-pixi';
+              }
+
+              if (VENDOR_ANIMATION_PACKAGES.has(pkgName)) {
+                return 'vendor-animation';
+              }
+            }
+
+            if (normalizedId.startsWith(CORELIB_ROOT) || normalizedId.startsWith(BRANDLIB_ROOT)) {
+              return 'core-engine';
+            }
+
+            if (normalizedId.startsWith(GAME_ROOT)) {
+              return `game-${GAME_ID}`;
+            }
+
+            return undefined;
+          },
         },
       },
     },

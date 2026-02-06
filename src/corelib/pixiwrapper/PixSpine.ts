@@ -1,5 +1,5 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
-import { Spine } from '@pixi/spine-pixi';
+import { Spine } from '@esotericsoftware/spine-pixi-v8';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 

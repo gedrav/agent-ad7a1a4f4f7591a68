@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "node ./scripts/build-all.js",
@@ -24,7 +27,7 @@
     "@pixi/mesh-extras": "^7.4.2",
     "@pixi/particle-emitter": "^5.0.8",
     "@pixi/sound": "^5.2.2",
-    "@pixi/spine-pixi": "^2.1.1",
+    "@esotericsoftware/spine-pixi-v8": "^4.2.90",
     "@pixi/sprite": "^7.4.2",
     "@pixi/ui": "^2.2.2",
     "axios": "^0.27.2",
@@ -33,7 +36,7 @@
     "gsap": "^3.12.5",
     "howler": "^2.2.3",
     "i18next": "^24.2.2",
-    "node": "^18.20.5",
+    "node": "^20.19.0",
     "pixi-filters": "^6.0.5",
     "pixi.js": "^8.14.0",
     "query-string": "^8.2.0",
@@ -64,8 +67,9 @@
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "^5.5.3",
-    "vite": "^5.3.1",
-    "vite-plugin-static-copy": "^1.0.1"
+    "vite": "^7.2.0",
+    "vite-plugin-compression2": "^2.4.0",
+    "vite-plugin-static-copy": "^3.1.2"
   },
   "lint-staged": {
     "src/**/*{.ts,.json}": [

@@ -82,5 +82,5 @@ for (const gameId of targetGames) {
 }
 
 const buildRoot =
-  process.env.BUILD_OUTPUT_ROOT || path.resolve(projectRoot, '../slotv2_game_builds');
+  process.env.BUILD_OUTPUT_ROOT || path.resolve(projectRoot, '../feg_games_build');
 console.log(`\nBuilds complete. Output root: ${buildRoot}`);

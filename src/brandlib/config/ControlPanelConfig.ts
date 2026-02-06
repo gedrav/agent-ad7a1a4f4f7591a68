@@ -20,9 +20,8 @@ import { TIMER_CONFIG } from './TimerConfig';
 import { BRANDNAME_CONFIG } from './BrandNameConfig';
 import { Point } from 'pixi.js';
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
-import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoCompConfig';
 
-export const CONTROL_PANEL_CONFIG = {
+export const createControlPanelConfig = (freespinInfoCompConfig?: any) => ({
   name: 'controlPanelView',
   type: 'Comp',
   class: ControlPanelView,
@@ -799,7 +798,7 @@ export const CONTROL_PANEL_CONFIG = {
         },
       },
     },
-    FREESPIN_INFO_COMP_CONFIG,
+    ...(freespinInfoCompConfig ? [freespinInfoCompConfig] : []),
     {
       name: 'menuComp',
       type: 'Comp',
@@ -1007,4 +1006,4 @@ export const CONTROL_PANEL_CONFIG = {
     Portrait: {},
     Landscape: {},
   },
-};
+});
