@@ -30,9 +30,12 @@ export class BigWinsComp extends ResponsesiveView {
     this.winTicker.reset();
     this.winTicker.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.bigWinAnim = this.elementsList['bigWinAnim'];
-    this.bigWinAnim.stopAnimation();
-    this.bigWinAnim.visible = false;
-    this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
+    if (this.bigWinAnim) {
+      this.bigWinAnim.stopAnimation();
+      this.bigWinAnim.visible = false;
+      this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
+    }
+
     this.skipRect = this.elementsList['skipRect'];
     UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
     UIUtil.setClickable(this.skipRect, true);
@@ -48,8 +51,11 @@ export class BigWinsComp extends ResponsesiveView {
       this.isSkipping = true;
       this.playNextWinAnimation();
       this.playEndAnimation();
-      this.bigWinAnim.stopAnimation();
-      this.winTicker.skipToFinalValue();
+      if (this.bigWinAnim) {
+        this.bigWinAnim.stopAnimation();
+        this.winTicker.skipToFinalValue();
+      }
+
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
       const duration = 2000;
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
@@ -93,7 +99,10 @@ export class BigWinsComp extends ResponsesiveView {
           break;
       }
       if (this.targetLevel > this.currentLevel) {
-        this.bigWinAnim.visible = true;
+        if (this.bigWinAnim) {
+          this.bigWinAnim.visible = true;
+        }
+
         this.winTicker.countUpValue(appModel.getSpinWin(), this.totalDuration);
         this.playNextWinAnimation();
         this.intervalDelay = (this.totalDuration - 2000) / this.targetLevel;
@@ -119,13 +128,17 @@ export class BigWinsComp extends ResponsesiveView {
     clearTimeout(this.winTimerId);
     this.winTicker.reset();
     clearTimeout(this.timeoutId);
-    this.bigWinAnim.stopAnimation();
-    this.bigWinAnim.visible = false;
+    if (this.bigWinAnim) {
+      this.bigWinAnim.stopAnimation();
+      this.bigWinAnim.visible = false;
+    }
   }
   public showLineWin(): void {}
 
   protected playNextWinAnimation(): void {
-    this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].start, loop: false });
+    if (this.bigWinAnim) {
+      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].start, loop: false });
+    }
   }
   protected onAnimComplete(data: any): void {
     if (this.isSkipping) {
@@ -144,7 +157,9 @@ export class BigWinsComp extends ResponsesiveView {
     this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
   }
   protected playEndAnimation(): void {
-    this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
+    if (this.bigWinAnim) {
+      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
+    }
   }
   protected checkForNextAnim() {
     this.currentLevel++;

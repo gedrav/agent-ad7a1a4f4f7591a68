@@ -10,7 +10,7 @@ export const TICKER_COMP_CONFIG: any = {
   class: ReelTickerComp,
   tickerDelay: 8000,
   y: 0,
-  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
+  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4'],
   contentYPadding: -2,
   Elements: [
     { name: 'bg', type: 'Graphics', width: 1460, height: 120, alpha: 0 },

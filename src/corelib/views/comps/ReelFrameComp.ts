@@ -19,11 +19,15 @@ export class ReelFrameComp extends StandardView {
   }
   protected showMainGameReel(): void {
     this.reelFrame.visible = true;
-    this.reelFrameFS.visible = false;
+    if (this.reelFrameFS) {
+      this.reelFrameFS.visible = false;
+    }
   }
   protected showFreeGameReel(): void {
-    this.reelFrame.visible = false;
-    this.reelFrameFS.visible = true;
+    if (this.reelFrameFS) {
+      this.reelFrame.visible = false;
+      this.reelFrameFS.visible = true;
+    }
   }
 
   public showWin(): void {}

@@ -85,6 +85,7 @@ export class SplashView extends ResponsesiveChildrenView {
       this.loaderfill.visible = false;
       this.startBtn.visible = true;
       this.loadingBtnContainer.removeChild(this.maskRect);
+      //this.startBtn.click();
     }
   }
   protected positionElements(): void {
