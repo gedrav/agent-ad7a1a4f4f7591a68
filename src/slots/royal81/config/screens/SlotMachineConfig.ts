@@ -109,7 +109,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        //TICKER_COMP_CONFIG,
+        TICKER_COMP_CONFIG,
         { name: 'symbolsContainer', type: 'Container' },
         { name: 'maskRect', type: 'Graphics', width: 1280, height: 654, x: 160, y: 212, color: 0xffff00 },
         {
@@ -152,7 +152,7 @@ export const SLOT_MACHINE_CONFIG: any = {
   ],
   layoutData: {
     Desktop: {
-      widthPerc: 0.76,
+      widthPerc: 0.84,
       heightPerc: 0.84,
       hAlign: 'center',
       vAlign: 'middle',

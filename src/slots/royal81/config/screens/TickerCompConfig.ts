@@ -8,14 +8,13 @@ export const TICKER_COMP_CONFIG: any = {
   name: 'tickerComp',
   type: 'Comp',
   class: ReelTickerComp,
-  tickerDelay: 8000,
-  y: 0,
-  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
-  contentYPadding: -2,
+  tickerDelay: 3000,
+  x: 250,
+  y: 910,
+  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4'],
+  contentYPadding: 0,
   Elements: [
-    { name: 'bg', type: 'Graphics', width: 1460, height: 120, alpha: 0 },
-    { name: 'fsbg', type: 'Sprite', image: 'tickerBGFS' },
-    { name: 'bg', type: 'Sprite', image: 'tickerBG' },
+    { name: 'bg', type: 'Graphics', width: 1100, height: 50, alpha: 0 },
     {
       name: 'textCont',
       type: 'Container',
@@ -26,8 +25,8 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 44,
-            fill: 0xfde35c,
+            fontSize: 36,
+            fill: 0x9bedff,
           },
         },
         {
@@ -36,13 +35,13 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 44,
-            fill: 0xfde35c,
+            fontSize: 36,
+            fill: 0x9bedff,
           },
         },
       ],
     },
-    { name: 'maskRect', type: 'Graphics', width: 1390, height: 88, x: 32, y: 28 },
+    { name: 'maskRect', type: 'Graphics', color: 0xff0000, width: 1100, height: 50, x: 0, y: 0 },
     REEL_WIN_TICKER_CONFIG,
   ],
 };
