@@ -3,6 +3,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
+import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 class ShowSpinWinStateCommand extends StateCommand {
   private timeoutId: any;
@@ -10,7 +11,12 @@ class ShowSpinWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.isCascadeGame()) {
-      if (appModel.getTumbleSpinWin() > 0) {
+      const winType = appModel.getWinType();
+      if (
+        appModel.getTotalCascadeWin() > 0 &&
+        winType !== CONSTANTS.BELOW_TOTALBET_WIN &&
+        winType !== CONSTANTS.STANDARD_WIN
+      ) {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
       } else {
@@ -27,7 +33,7 @@ class ShowSpinWinStateCommand extends StateCommand {
   }
   public doNextStep(): void {
     this.completedIndex++;
-    if (this.completedIndex === 2) {
+    if (this.completedIndex === 1) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       StateManager.next();
     }

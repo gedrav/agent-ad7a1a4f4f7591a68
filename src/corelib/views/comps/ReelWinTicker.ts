@@ -13,12 +13,9 @@ export class ReelWinTicker extends StandardView {
     this.visible = false;
     this.winTicker = this.elementsList['winTicker'];
     EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
-    EventHandler.addEventListener(SlotEvents.SKIP_REELTICKER_WIN, this.skipCountUp.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
   }
-  protected skipCountUp(): void {
-    this.winTicker.skipToFinalValue();
-  }
+  //removed skip event listener, if needed then exrend the class}
   protected showSpinWin(data: any): void {
     if (this.totalWin == 0) {
       AnimationProxy.fadeIn(this.winTicker, 0.25);

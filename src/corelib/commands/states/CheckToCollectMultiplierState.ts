@@ -8,7 +8,7 @@ class CheckToCollectMultiplierStateCommand extends StateCommand {
     super.execute(data);
     const toCollectMultiplier = appModel.toCollectMultiplier();
     if (!toCollectMultiplier) {
-      StateManager.goToState(STATES.CHECK_FEATURE_STATE);
+      StateManager.goToState(STATES.SHOW_SPIN_WIN_STATE);
     } else {
       StateManager.next();
     }

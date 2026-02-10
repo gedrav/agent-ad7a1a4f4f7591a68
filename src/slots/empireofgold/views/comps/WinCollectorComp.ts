@@ -33,7 +33,7 @@ export class WinCollectorComp extends StandardView {
     this.winStripArray = [];
     this.collectorFilled = false;
     this.winBoxContainer.mask = this.maskRect;
-    EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.onCollectWinSymbols.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.onCollectWinSymbols.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.onResetWinCollector.bind(this));
 
     this.upBtn.onPress.connect(this.onUpBtnClicked.bind(this));

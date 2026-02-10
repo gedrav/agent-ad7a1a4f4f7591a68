@@ -453,7 +453,7 @@ export default class SlotReelCascade extends SlotReel {
   protected onVallCCNewSymbolFinalStepComplete(symb: ReelSymbolSprite): void {
     this.newSymbolCascadeIndex++;
     if (this.newSymbolCascadeIndex == this.totalNewSymbolsToCascade) {
-      StateManager.goToState(STATES.SHOW_SPIN_WIN_STATE);
+      StateManager.goToState(STATES.SHOW_TUMBLE_WIN_STATE);
     }
   }
 }

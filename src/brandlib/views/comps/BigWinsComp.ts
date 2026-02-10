@@ -62,16 +62,25 @@ export class BigWinsComp extends ResponsesiveView {
     }
   }
 
+  public async showTumbleWin() {
+    EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+      value: appModel.getTumbleSpinWin(),
+      duration: 0,
+    });
+  }
+
   public async showSpinWin() {
     const winType = appModel.getWinType();
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);
       this.winTicker.showSpinValue(appModel.getSpinWin());
-      EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
-        value: appModel.getSpinWin(),
-        duration: 0,
-      });
+      if (!appModel.isCascadeGame()) {
+        EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+          value: appModel.getSpinWin(),
+          duration: 0,
+        });
+      }
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
     } else {
       this.winState = true;
@@ -106,10 +115,12 @@ export class BigWinsComp extends ResponsesiveView {
         this.winTicker.countUpValue(appModel.getSpinWin(), this.totalDuration);
         this.playNextWinAnimation();
         this.intervalDelay = (this.totalDuration - 2000) / this.targetLevel;
-        EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
-          value: appModel.getSpinWin(),
-          duration: this.totalDuration,
-        });
+        if (!appModel.isCascadeGame()) {
+          EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+            value: appModel.getSpinWin(),
+            duration: this.totalDuration,
+          });
+        }
         if (this.currentLevel < this.targetLevel - 1) {
           this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
         }
