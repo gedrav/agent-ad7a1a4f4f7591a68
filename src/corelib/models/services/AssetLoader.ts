@@ -79,8 +79,12 @@ class AssetLoaderClass {
     await this.loadBundles('PRIMARY');
   }
   public async loadSecondary() {
+    await this.loadBundles('SECONDARY');
+  }
+  public async loadFeatures() {
+    await this.loadBundles('FEATURES');
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
-    await Assets.backgroundLoadBundle(allBundles);
+    //await Assets.backgroundLoadBundle(allBundles);
   }
 
   private createAssetsManifest() {
@@ -312,12 +316,36 @@ class AssetLoaderClass {
       const len2 = result[key].length;
       if (len2 > 0) {
         for (let k = 0; k < len2; k++) {
-          const { TYPE, NAME, ASSETTYPE, SPRITESHEETS, file } = result[key][k]; // Added SPRITESHEETS here
+          const { TYPE, NAME, ASSETTYPE, SPRITESHEETS, file, TEXTURES } = result[key][k]; // Added SPRITESHEETS here
           if (ASSETTYPE === 'sequence') {
             const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, SPRITESHEETS, pathMap);
             bundle.assets.push({ alias: NAME, src: assetSrc });
           } else if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
             bundle.assets.push({ alias: NAME, src: [GameProxy.config.appAssetPath + NAME + '.' + ASSETTYPE] });
+          } else if (ASSETTYPE === 'spine') {
+            bundle.assets.push({
+              alias: NAME + 'Data',
+              src: this.spinePath + NAME + '.json',
+            });
+
+            bundle.assets.push({
+              alias: NAME + 'Atlas',
+              src: this.spinePath + NAME + '.atlas',
+            });
+
+            if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
+              TEXTURES.forEach((textureIndex: string) => {
+                bundle.assets.push({
+                  alias: textureIndex,
+                  src: this.spinePath + textureIndex + '.png',
+                });
+              });
+            } else {
+              bundle.assets.push({
+                alias: NAME + 'Texture',
+                src: this.spinePath + NAME + '.png',
+              });
+            }
           } else {
             const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
             bundle.assets.push({ alias: NAME, src: [assetSrc] });
@@ -357,7 +385,8 @@ class AssetLoaderClass {
     if (typeof bundles === 'string') bundles = [bundles];
     for (const bundle of bundles) {
       if (!this.checkBundleExists(bundle)) {
-        throw new Error(`[Assets] Invalid bundle: ${bundle}`);
+        //throw new Error(`[Assets] Invalid bundle: ${bundle}`);
+        return;
       }
     }
 
