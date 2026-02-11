@@ -33,9 +33,17 @@ class ShowSpinWinStateCommand extends StateCommand {
   }
   public doNextStep(): void {
     this.completedIndex++;
-    if (this.completedIndex === 1) {
-      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-      StateManager.next();
+    if (appModel.isCascadeGame()) {
+      if (this.completedIndex === 1) {
+        //stopping at 1 as there will be not any symbol anim while spin ends
+        EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+        StateManager.next();
+      }
+    } else {
+      if (this.completedIndex === 2) {
+        EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+        StateManager.next();
+      }
     }
   }
 
