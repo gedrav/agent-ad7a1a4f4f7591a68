@@ -526,6 +526,10 @@ export default class SlotReel extends ResponsesiveChildrenView {
   }
 
   public resetReelForError(): void {}
+  public showTumbleWin(): void {
+    this.winController.showTumbleWin();
+    this.reelFrame?.showWin();
+  }
   public showSpinWin(): void {
     this.winController.showSpinWin();
     this.reelFrame?.showWin();

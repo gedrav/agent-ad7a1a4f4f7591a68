@@ -292,7 +292,7 @@ class AppModelService {
   }
   public getSpinWin(): number {
     if (this.isCascadeGame()) {
-      return this.getTumbleSpinWin();
+      return this.getTotalCascadeWin();
     }
     return this.gameResult.spinWin;
   }

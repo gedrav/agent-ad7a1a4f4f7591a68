@@ -19,6 +19,7 @@ import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundS
 import { ShowCascadeState } from '@core/commands/states/ShowCascadeState';
 import { ShowMultiplierCollectAnimState } from '@core/commands/states/ShowMultiplierCollectAnimState';
 import { CheckToCollectMultiplierState } from '@core/commands/states/CheckToCollectMultiplierState';
+import { ShowTumbleWinState } from '@core/commands/states/ShowTumbleWinState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -27,13 +28,15 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
-  { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
+  { name: STATES.SHOW_TUMBLE_WIN_STATE, state: ShowTumbleWinState },
   { name: STATES.CHECK_IS_TUMBLE_PENDING, state: CheckIsTumblePendingState },
   { name: STATES.SHOW_TUMBLE_STATE, state: ShowTumbleState },
   { name: STATES.SHOW_CASCADE_STATE, state: ShowCascadeState },
 
   { name: STATES.CHECK_TO_COLLECT_MULTIPLIER, state: CheckToCollectMultiplierState },
   { name: STATES.SHOW_MULTIPLIER_COLLECT_ANIM_STATE, state: ShowMultiplierCollectAnimState },
+
+  { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },

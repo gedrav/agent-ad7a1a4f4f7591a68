@@ -14,7 +14,7 @@ class ShowTumbleStateCommand extends StateCommand {
   public doNextStep(data?: any): void {
     super.doNextStep(data);
     appModel.tumbleIndex++;
-    StateManager.goToState(STATES.SHOW_SPIN_WIN_STATE);
+    StateManager.goToState(STATES.SHOW_TUMBLE_WIN_STATE);
   }
 }
 

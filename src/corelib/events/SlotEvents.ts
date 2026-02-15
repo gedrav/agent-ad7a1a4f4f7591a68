@@ -103,6 +103,7 @@ export const SlotEvents = {
 
   COLLECT_MULTIPLIER: 'COLLECT_MULTIPLIER',
   UPDATE_TOTAL_MULTIPLIER: 'UPDATE_TOTAL_MULTIPLIER',
+  SHOW_TUMBLE_WIN: 'SHOW_TUMBLE_WIN',
 } as const;
 
 export type SlotEvent = keyof typeof SlotEvents;

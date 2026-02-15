@@ -362,8 +362,7 @@ class AssetLoaderClass {
     if (typeof bundles === 'string') bundles = [bundles];
     for (const bundle of bundles) {
       if (!this.checkBundleExists(bundle)) {
-        //throw new Error(`[Assets] Invalid bundle: ${bundle}`);
-        return;
+        throw new Error(`[Assets] Invalid bundle: ${bundle}`);
       }
     }
 

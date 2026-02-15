@@ -1,7 +1,10 @@
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
-
+import { PixText } from '@core/pixiwrapper/PixText';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { UIUtil } from '@core/utils/UIUtilService';
+import { Util } from '@core/utils/UtilService';
 export default class WinController {
   private noOfRows: number;
   private noOfReels: number;
@@ -10,6 +13,7 @@ export default class WinController {
   public lineWinAmountComp;
   public reelsData;
   private timeoutId: any;
+  private tumbleWinAmountTexts: PixText[] = [];
 
   get symbolsArray(): ReelSymbolSprite[][] {
     return this._symbolsArray;
@@ -27,7 +31,6 @@ export default class WinController {
 
   public showScatterTrigger(): void {
     const positions: number[] = appModel.getFeatureTriggerPositions();
-    console.log(positions);
     if (positions && positions.length > 0) {
       const len = positions.length;
       for (let j = 0; j < len; j++) {
@@ -48,6 +51,62 @@ export default class WinController {
     clearTimeout(this.timeoutId);
     StateManager.doNextStep();
   }
+  public showTumbleWin(): void {
+    if (appModel.isCascadeGame()) {
+      this.clearTumbleWinTexts();
+      const tumbleData = appModel.getSpinBlastData();
+      const blastSymbols = appModel.getSpinBlastSymbols();
+      if (blastSymbols) {
+        this.fadeOutAllSymbols();
+        blastSymbols.forEach((blastSymbol: any, index: number) => {
+          const symbWinAmount = tumbleData[index].winAmount;
+          blastSymbol.forEach((position: number[], index: number) => {
+            const pos = { reel: position[0], row: this.reelsData.isFixedSymbol ? position[1] : position[1] + 1 };
+            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+            this.symbolsArray[pos.reel][pos.row].showWinning();
+            if (index === 2 && symbWinAmount > 0) {
+              const tConfig = {
+                name: 'symbWinAmount',
+                type: 'Text',
+                anchor: { x: 0.5, y: 0.5 },
+                style: {
+                  fontFamily: 'gameFont1',
+                  fill: 0xffffff,
+                  fontSize: 80,
+                  stroke: 0x000000,
+                  strokeThickness: 4,
+                },
+              };
+              let winAmountText = UIUtil.getElement(tConfig) as PixText;
+              winAmountText.text = Util.formatCurrency(symbWinAmount);
+              winAmountText.x = this.symbolsArray[pos.reel][pos.row].x;
+              winAmountText.y =
+                this.symbolsArray[pos.reel][pos.row].y +
+                this.symbolsArray[pos.reel][pos.row].height / 2 -
+                winAmountText.height / 2;
+              this.winSymbolsContainer.addChild(winAmountText);
+              this.tumbleWinAmountTexts.push(winAmountText);
+              AnimationProxy.animateTween(winAmountText, {
+                delay: 0.5,
+                y: winAmountText.y - this.symbolsArray[pos.reel][pos.row].height * 0.7,
+                scaleX: 0.9,
+                scaleY: 0.9,
+                alpha: 0.25,
+                duration: 1,
+                onComplete: () => {
+                  this.removeTumbleWinText(winAmountText);
+                  winAmountText = null;
+                },
+              });
+            }
+          });
+        });
+      }
+    }
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
+  }
+
   public showSpinWin(): void {
     if (appModel.isCascadeGame()) {
       const blastSymbols = appModel.getSpinBlastSymbols();
@@ -119,6 +178,7 @@ export default class WinController {
   public clearSpinWin(): void {
     clearTimeout(this.timeoutId);
     this.lineWinAmountComp.reset();
+    this.clearTumbleWinTexts();
     const len1 = this.symbolsArray.length;
     for (let i = 0; i < len1; i++) {
       const len2 = this.symbolsArray[i].length;
@@ -144,5 +204,35 @@ export default class WinController {
     const reel = value % this.noOfReels; // which column
     const row = Math.floor(value / this.noOfReels); // which row
     return { reel: reel, row: row };
+  }
+
+  private clearTumbleWinTexts(): void {
+    if (this.tumbleWinAmountTexts.length === 0) {
+      return;
+    }
+    while (this.tumbleWinAmountTexts.length > 0) {
+      const text = this.tumbleWinAmountTexts.pop();
+      if (!text) {
+        continue;
+      }
+      AnimationProxy.killTweensOf(text);
+      if (text.parent) {
+        text.parent.removeChild(text);
+      }
+      text?.destroy({ children: true, texture: true });
+    }
+  }
+
+  private removeTumbleWinText(text: PixText): void {
+    const index = this.tumbleWinAmountTexts.indexOf(text);
+    if (index === -1) {
+      return;
+    }
+    this.tumbleWinAmountTexts.splice(index, 1);
+    AnimationProxy.killTweensOf(text);
+    if (text.parent) {
+      text.parent.removeChild(text);
+    }
+    text.destroy({ children: true, texture: true });
   }
 }

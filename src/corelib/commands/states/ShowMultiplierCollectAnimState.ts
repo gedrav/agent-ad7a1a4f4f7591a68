@@ -12,7 +12,7 @@ class ShowMultiplierCollectAnimStateCommand extends StateCommand {
 
   public doNextStep(data?: any): void {
     super.doNextStep(data);
-    StateManager.goToState(STATES.CHECK_FEATURE_STATE);
+    StateManager.goToState(STATES.SHOW_SPIN_WIN_STATE);
   }
 }
 
