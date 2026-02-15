@@ -84,7 +84,6 @@ class AssetLoaderClass {
   public async loadFeatures() {
     await this.loadBundles('FEATURES');
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
-    console.log('allBundles', allBundles);
     //await Assets.backgroundLoadBundle(allBundles);
   }
 
