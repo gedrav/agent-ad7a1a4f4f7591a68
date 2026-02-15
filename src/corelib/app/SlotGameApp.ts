@@ -18,6 +18,7 @@ import { Logger } from '@core/utils/LoggerService';
 import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
 import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
 import { INIT_ERROR_POPUP_CONFIG } from '@brand/config/InitErrorPopupConfig';
+import { appModel } from '@core/models/services/AppModelService';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -161,6 +162,16 @@ export class SlotGameApp {
     await this.createView();
     this.isViewCreated = true;
     EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
+    this.loadSecondaryAssets();
+  }
+  async loadSecondaryAssets() {
+    console.log('secondary assets loading');
+    await AssetLoader.loadSecondary();
+    console.log('secondary assets loaded');
+    appModel.secondaryAssetsLoaded = true;
+    await AssetLoader.loadFeatures();
+    console.log('features assets loaded');
+    appModel.featureAssetsLoaded = true;
   }
   async createSplash() {}
   async createView() {}

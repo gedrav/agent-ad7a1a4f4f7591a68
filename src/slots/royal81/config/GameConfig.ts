@@ -14,7 +14,7 @@ export const GAME_CONFIG = {
   configPath: '/',
   gamePath: '/',
   gameVersion: '0.05',
-  gameId: 'goldencatch',
+  gameId: 'royal81',
   sendTotalBetInRequest: true,
   gameName: 'Royal 81',
   uiConfig: UIConfig,
@@ -25,7 +25,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Roboto Regular',
     commonFontBold: 'Roboto Bold',
-    gameFont1: 'GermaniaOne Regular',
+    gameFont1: 'Wakerobin Bold',
   },
   bigWinValues: [5, 25, 50, 100],
   buyBonusData: {

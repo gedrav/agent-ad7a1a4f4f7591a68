@@ -23,24 +23,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 1600,
-      height: 1030,
-      alpha: 0,
+      height: 1020,
+      alpha: 1,
     },
-    {
-      name: 'gameTitle',
-      type: 'Sprite',
-      image: 'gamelogo_splash',
-      anchor: { x: 0.5, y: 0 },
-      layoutData: {
-        Desktop: {
-          scale: 0.4,
-          x: 800,
-          y: -20,
-        },
-        Landscape: {},
-        Portrait: {},
-      },
-    },
+
     {
       name: 'slotReel',
       type: 'Comp',
@@ -56,9 +42,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelsConfig: ReelsConfig,
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 350, y: 324 },
-            reelPositionX: [0, 300, 590, 890],
-            symbolHeight: 212,
+            reelContainerPos: { x: 324, y: 280 },
+            reelPositionX: [0, 320, 640, 950],
+            symbolHeight: 222,
             symbolScale: 0.65,
           },
           Portrait: {
@@ -96,8 +82,23 @@ export const SLOT_MACHINE_CONFIG: any = {
           type: 'Comp',
           class: ReelFrameComp,
           x: 0,
-          y: 130,
+          y: 60,
           Elements: [{ name: 'reelFrame', type: 'Sprite', image: 'reelFrame', x: 0, y: 0 }],
+        },
+        {
+          name: 'gameTitle',
+          type: 'Sprite',
+          image: 'gamelogo_splash',
+          anchor: { x: 0.5, y: 0 },
+          layoutData: {
+            Desktop: {
+              scale: 0.4,
+              x: 800,
+              y: -20,
+            },
+            Landscape: {},
+            Portrait: {},
+          },
         },
         {
           name: 'modalRect',
@@ -111,7 +112,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         TICKER_COMP_CONFIG,
         { name: 'symbolsContainer', type: 'Container' },
-        { name: 'maskRect', type: 'Graphics', width: 1280, height: 654, x: 160, y: 212, color: 0xffff00 },
+        { name: 'maskRect', type: 'Graphics', width: 1300, height: 692, x: 132, y: 160, color: 0xffff00 },
         {
           name: 'winSymbolsContainer',
           type: 'Container',
@@ -137,6 +138,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'lineWinAmountComp',
           type: 'Comp',
           class: LineWinAmountComp,
+          y: 200,
           Elements: [
             {
               name: 'valueText',

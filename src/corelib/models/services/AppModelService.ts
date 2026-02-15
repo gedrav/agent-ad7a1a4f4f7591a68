@@ -2,8 +2,26 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
+import { settings } from '@pixi/core';
+import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
+import { type } from 'node:os';
 
 class AppModelService {
+  get featureAssetsLoaded(): boolean {
+    return this._featureAssetsLoaded;
+  }
+
+  set featureAssetsLoaded(value: boolean) {
+    this._featureAssetsLoaded = value;
+  }
+
+  get secondaryAssetsLoaded(): boolean {
+    return this._secondaryAssetsLoaded;
+  }
+
+  set secondaryAssetsLoaded(value: boolean) {
+    this._secondaryAssetsLoaded = value;
+  }
   private unfinishedData: any;
   private featureName: string;
   private _featureResult: any;
@@ -22,6 +40,8 @@ class AppModelService {
   private _freeSpinsSession: boolean;
   private _tumbleIndex: number;
   private _lightningStopOnBonus: boolean;
+  private _secondaryAssetsLoaded: boolean;
+  private _featureAssetsLoaded: boolean;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;

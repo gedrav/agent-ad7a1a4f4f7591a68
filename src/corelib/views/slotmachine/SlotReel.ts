@@ -330,7 +330,6 @@ export default class SlotReel extends ResponsesiveChildrenView {
       } else {
         const symb = this.finalSymbols[reelno].pop();
         const newSymbolType = this.reelsData.symbolsData[symb];
-        console.log('symb -- ', symb, 'newSymbolType -- ', newSymbolType);
         if (newSymbolType == null) {
           throw new Error('There is no new symbol to spin on the queue.');
         }

@@ -8,7 +8,7 @@ const PRELOADER: Array<any> = [
 ];
 const COMMON: any[] = [
   { TYPE: 'common', NAME: 'Roboto-Bold.ttf', ASSETTYPE: 'font' },
-  { TYPE: 'game', NAME: 'GermaniaOne-Regular.ttf', ASSETTYPE: 'font' },
+  { TYPE: 'game', NAME: 'wakerobin-bold.otf', ASSETTYPE: 'font' },
 ];
 const SPLASH: any[] = [
   { TYPE: 'game', NAME: 'gamebg', ASSETTYPE: 'sprite' },

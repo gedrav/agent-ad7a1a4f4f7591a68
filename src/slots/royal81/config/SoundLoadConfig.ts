@@ -8,7 +8,7 @@ export const GAME_SOUND_CONFIG = {
   },
   soundFiles: [
     // --- Base game / feature BGM (mutually exclusive via stop events) ---
-    {
+    /* {
       name: 'musMainBGM',
       type: 'game',
       soundType: 'ambient',
@@ -517,7 +517,7 @@ export const GAME_SOUND_CONFIG = {
       playEvents: ['PLAY_SYMB_DROP_AFTER_SCATTER_ANTICIPATION'],
       volume: 0.6,
       fadeOutDuration: 1000,
-    },
+    },*/
 
     // --- Betting ---
     {

@@ -18,7 +18,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'gameFont1', fill: 0x010336, fontSize: 100, anchor: { x: 0, y: 0.5 } },
+        style: { fontFamily: 'gameFont1', fill: 0x010336, fontSize: 90, anchor: { x: 0, y: 0.5 } },
       },
     },
     {
@@ -27,12 +27,12 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 500,
+      textY: 480,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'gameFont1', fill: 0x010336, fontSize: 100, anchor: { x: 0, y: 0.5 } },
+        style: { fontFamily: 'gameFont1', fill: 0x010336, fontSize: 90, anchor: { x: 0, y: 0.5 } },
       },
     },
   ],
