@@ -118,7 +118,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'gameTitle',
           type: 'Sprite',
-          image: 'gamelogo_splash',
+          image: 'gamelogo',
           anchor: { x: 0.5, y: 0 },
           layoutData: {
             Desktop: {

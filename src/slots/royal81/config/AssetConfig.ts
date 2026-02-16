@@ -11,6 +11,7 @@ const COMMON: any[] = [
   { TYPE: 'game', NAME: 'wakerobin-bold.otf', ASSETTYPE: 'font' },
 ];
 const SPLASH: any[] = [
+  { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
   { TYPE: 'game', NAME: 'gamebg', ASSETTYPE: 'sprite' },
   { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
 ];

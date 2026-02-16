@@ -183,12 +183,40 @@ class AssetLoaderClass {
     if (data.COMMON.length > 0) {
       const pathMap = this.createPathMap();
       data.COMMON.forEach((item: any) => {
-        const { TYPE, NAME, ASSETTYPE, file } = item;
+        const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
         if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
           if (TYPE == 'common') {
             common.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
           } else {
             common.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
+          }
+        } else if (ASSETTYPE === 'spine') {
+          // Load spine JSON data
+          common.assets.push({
+            alias: NAME + 'Data',
+            src: this.spinePath + NAME + '.json',
+          });
+
+          // Load single atlas file
+          common.assets.push({
+            alias: NAME + 'Atlas',
+            src: this.spinePath + NAME + '.atlas',
+          });
+          // Handle multiple texture images
+          if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
+            // Load multiple PNG texture files
+            TEXTURES.forEach((textureIndex: string) => {
+              common.assets.push({
+                alias: textureIndex,
+                src: this.spinePath + textureIndex + '.png',
+              });
+            });
+          } else {
+            // Single texture file (default behavior)
+            common.assets.push({
+              alias: NAME + 'Texture',
+              src: this.spinePath + NAME + '.png',
+            });
           }
         } else {
           const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);

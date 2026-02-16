@@ -51,7 +51,7 @@ export const SPLASH_CONFIG: any = {
     {
       name: 'gameTitle',
       type: 'Sprite',
-      image: 'gamelogo_splash',
+      image: 'gamelogo',
       layoutData: {
         Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
         Landscape: {
