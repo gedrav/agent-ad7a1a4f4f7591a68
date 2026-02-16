@@ -2,7 +2,6 @@ import { StandardView } from '@core/pixiwrapper/StandardView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
-import { i } from 'vite/dist/node/types.d-aGj9QkWt';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 
@@ -34,6 +33,7 @@ export class SymbolPayoutComp extends StandardView {
         this.infoText.text = result;
       }
     } else {
+      console.log(symbol);
       this.infoText.text = Util.getContent(symbol + 'payoutContent');
     }
     if (symbolAtLeft) {

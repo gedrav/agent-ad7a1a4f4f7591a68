@@ -79,11 +79,14 @@ class AssetLoaderClass {
     await this.loadBundles('PRIMARY');
   }
   public async loadSecondary() {
+    console.log('Loading secondary assets');
+    const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
     await this.loadBundles('SECONDARY');
+    console.log('Finished loading secondary assets');
   }
   public async loadFeatures() {
     await this.loadBundles('FEATURES');
-    const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
+
     //await Assets.backgroundLoadBundle(allBundles);
   }
 
@@ -361,7 +364,7 @@ class AssetLoaderClass {
     if (typeof bundles === 'string') bundles = [bundles];
     for (const bundle of bundles) {
       if (!this.checkBundleExists(bundle)) {
-        throw new Error(`[Assets] Invalid bundle: ${bundle}`);
+        //throw new Error(`[Assets] Invalid bundle: ${bundle}`);
       }
     }
 

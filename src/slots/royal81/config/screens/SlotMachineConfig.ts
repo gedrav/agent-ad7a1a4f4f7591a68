@@ -12,6 +12,8 @@ import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotRe
 import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
+import { Container } from 'pixi.js';
+import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -22,9 +24,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 1600,
-      height: 1020,
-      alpha: 1,
+      width: 1300,
+      height: 1050,
+      alpha: 0,
     },
 
     {
@@ -32,7 +34,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: SlotReelStandard,
       winController: WinController,
-      x: 0,
+      x: -150,
       y: 10,
       data: {
         symbolClass: ReelSymbolSprite,
@@ -42,21 +44,21 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelsConfig: ReelsConfig,
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 324, y: 280 },
+            reelContainerPos: { x: 324, y: 290 },
             reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 222,
+            symbolHeight: 226,
             symbolScale: 0.65,
           },
           Portrait: {
-            reelContainerPos: { x: 350, y: 320 },
-            reelPositionX: [0, 300, 590, 890],
-            symbolHeight: 216,
+            reelContainerPos: { x: 324, y: 290 },
+            reelPositionX: [0, 320, 640, 950],
+            symbolHeight: 226,
             symbolScale: 0.65,
           },
           Landscape: {
-            reelContainerPos: { x: 350, y: 320 },
-            reelPositionX: [0, 300, 590, 890],
-            symbolHeight: 216,
+            reelContainerPos: { x: 324, y: 290 },
+            reelPositionX: [0, 320, 640, 950],
+            symbolHeight: 226,
             symbolScale: 0.65,
           },
         },
@@ -78,6 +80,21 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
       Elements: [
         {
+          name: 'reelstripBG',
+          type: 'Comp',
+          class: ReelStripBG,
+          x: 168,
+          y: 148,
+          Elements: [
+            { name: 'bg1', type: 'Sprite', image: 'reelstripbg', x: 0, y: 0 },
+            { name: 'bg2', type: 'Sprite', image: 'reelstripbg', x: 320, y: 0 },
+            { name: 'bg3', type: 'Sprite', image: 'reelstripbg', x: 640, y: 0 },
+            { name: 'bg4', type: 'Sprite', image: 'reelstripbg', x: 960, y: 0 },
+          ],
+        },
+
+        { name: 'symbolsContainer', type: 'Container' },
+        {
           name: 'reelFrame',
           type: 'Comp',
           class: ReelFrameComp,
@@ -85,21 +102,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           y: 60,
           Elements: [{ name: 'reelFrame', type: 'Sprite', image: 'reelFrame', x: 0, y: 0 }],
         },
-        {
-          name: 'gameTitle',
-          type: 'Sprite',
-          image: 'gamelogo_splash',
-          anchor: { x: 0.5, y: 0 },
-          layoutData: {
-            Desktop: {
-              scale: 0.4,
-              x: 800,
-              y: -20,
-            },
-            Landscape: {},
-            Portrait: {},
-          },
-        },
+        { name: '81waysLeft', type: 'Sprite', image: '81ways', x: 274, y: 70 },
+        { name: '81waysRight', type: 'Sprite', image: '81ways', x: 1234, y: 70 },
         {
           name: 'modalRect',
           type: 'Graphics',
@@ -111,7 +115,21 @@ export const SLOT_MACHINE_CONFIG: any = {
           visible: false,
         },
         TICKER_COMP_CONFIG,
-        { name: 'symbolsContainer', type: 'Container' },
+        {
+          name: 'gameTitle',
+          type: 'Sprite',
+          image: 'gamelogo_splash',
+          anchor: { x: 0.5, y: 0 },
+          layoutData: {
+            Desktop: {
+              scale: 0.4,
+              x: 800,
+              y: -20,
+            },
+            Landscape: { scale: 0.4, x: 800, y: -20 },
+            Portrait: { scale: 0.6, x: 800, y: -90 },
+          },
+        },
         { name: 'maskRect', type: 'Graphics', width: 1300, height: 692, x: 132, y: 160, color: 0xffff00 },
         {
           name: 'winSymbolsContainer',
@@ -121,14 +139,14 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'symbolPayoutComp',
               type: 'Comp',
               class: SymbolPayoutComp,
-              xPadding: 0.06,
+              xPadding: 0.02,
               textXPadding: 0.08,
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
                   name: 'infoText',
                   type: 'Text',
-                  style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0x201300, wordWrap: true, wordWrapWidth: 400 },
+                  style: { fontFamily: 'gameFont1', fontSize: 30, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 400 },
                 },
               ],
             },
@@ -159,7 +177,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       hAlign: 'center',
       vAlign: 'middle',
       vPaddingPerc: -0.02,
-      hPaddingPerc: -0.04,
+      hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },
     Landscape: { widthPerc: 0.9, heightPerc: 0.9, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.002 },

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { FillGradient, PointData, Text, TextStyle, Texture } from 'pixi.js';
+import { Assets, FillGradient, PointData, Text, TextStyle, Texture } from 'pixi.js';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { ContentProxy } from '@core/models/ContentServiceProxy';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
@@ -1968,6 +1968,16 @@ class UIUtilService {
     } catch (error) {
       console.error('Screenshot failed:', error);
       return null;
+    }
+  }
+  public async unloadInitialAssets() {
+    if (GameProxy.config.unloadAssets && GameProxy.config.unloadAssets.length > 0) {
+      const len = GameProxy.config.unloadAssets.length;
+      for (let k = 0; k < len; k++) {
+        if (Assets.cache.has(GameProxy.config.unloadAssets[k])) {
+          await Assets.unload(GameProxy.config.unloadAssets[k]);
+        }
+      }
     }
   }
 }

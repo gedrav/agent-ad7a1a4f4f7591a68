@@ -55,7 +55,7 @@ export class ReelTickerComp extends StandardView {
     if (this.textIndex == 1) {
       AnimationProxy.animateTween(this.tickerText1, {
         duration: duration,
-        y: this.bg.height + this.tickerText1.height,
+        y: this.bg.height * 1.1 + this.tickerText1.height,
       });
       const index = Util.getRandomRange(1, 2);
       this.tickerText2.text = Util.getContent('SpinTimeTicker' + index);
@@ -68,7 +68,7 @@ export class ReelTickerComp extends StandardView {
     } else {
       AnimationProxy.animateTween(this.tickerText2, {
         duration: duration,
-        y: this.bg.height + this.tickerText2.height,
+        y: this.bg.height * 1.1 + this.tickerText2.height,
       });
       const index = Util.getRandomRange(1, 2);
       this.tickerText1.text = Util.getContent('SpinTimeTicker' + index);
@@ -104,7 +104,7 @@ export class ReelTickerComp extends StandardView {
     if (this.textIndex == 1) {
       AnimationProxy.animateTween(this.tickerText1, {
         duration: duration,
-        y: this.bg.height + this.tickerText1.height * 0.25,
+        y: this.bg.height * 1.1 + this.tickerText1.height,
       });
 
       this.tickerText2.text = Util.getContent(this.configData.content[this.tickerIndex]);
@@ -117,7 +117,7 @@ export class ReelTickerComp extends StandardView {
     } else {
       AnimationProxy.animateTween(this.tickerText2, {
         duration: duration,
-        y: this.bg.height + this.tickerText2.height * 0.25,
+        y: this.bg.height * 1.1 + this.tickerText2.height,
       });
       this.tickerText1.text = Util.getContent(this.configData.content[this.tickerIndex]);
       this.tickerText1.y = -this.tickerText2.height;

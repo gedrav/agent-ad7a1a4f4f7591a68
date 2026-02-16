@@ -164,18 +164,18 @@ export default class ReelSymbolSprite extends ReelSymbol {
     this.symbol.filters = null;
     this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
     const glowFilter = new GlowFilter({
-      distance: 2,
-      outerStrength: 1,
-      innerStrength: 1,
+      distance: 1,
+      outerStrength: 0.4,
+      innerStrength: 0.2,
       color: 0xffc600,
       quality: 0.5,
     });
     this.symbol.filters = [glowFilter];
     AnimationProxy.animateTween(glowFilter, {
       duration: 0.5,
-      distance: 50,
-      outerStrength: 20,
-      innerStrength: 2,
+      distance: 4,
+      outerStrength: 1,
+      innerStrength: 0.5,
       repeat: -1,
       yoyo: true,
     });

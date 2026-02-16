@@ -165,12 +165,9 @@ export class SlotGameApp {
     this.loadSecondaryAssets();
   }
   async loadSecondaryAssets() {
-    console.log('secondary assets loading');
     await AssetLoader.loadSecondary();
-    console.log('secondary assets loaded');
     appModel.secondaryAssetsLoaded = true;
     await AssetLoader.loadFeatures();
-    console.log('features assets loaded');
     appModel.featureAssetsLoaded = true;
   }
   async createSplash() {}

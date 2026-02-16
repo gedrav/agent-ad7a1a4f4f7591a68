@@ -458,6 +458,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     UIUtil.setClickable(this.modalRect, true);
     this.modalRect.visible = true;
     this.symbolPayoutComp.visible = true;
+    this.winSymbolsContainer.addChild(this.symbolPayoutComp);
     this.winSymbolsContainer.addChild(symb);
     const reelno = symb.getReelNumber();
     this.symbolPayoutComp.showComp(symb.getSymbolNameForPayout(), reelno < this.reelsData.noOfReels - 2);
