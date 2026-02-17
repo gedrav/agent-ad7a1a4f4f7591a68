@@ -5,6 +5,7 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { AppEvents } from '@core/events/AppEvents';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 class AssetLoaderClass {
   private commonFontPath: string;
@@ -254,11 +255,11 @@ class AssetLoaderClass {
 
   private async onLoadProgress(loadList: string, data: any) {
     let progress;
-    if (loadList[0].toLowerCase().includes('common')) {
+    if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.COMMON)) {
       progress = Math.round(data * 0.05 * 100);
-    } else if (loadList[0].toLowerCase().includes('splash')) {
+    } else if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.SPLASH)) {
       progress = Math.round(data * 0.1 * 100);
-    } else if (loadList[0].toLowerCase().includes('primary')) {
+    } else if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.PRIMARY)) {
       progress = Math.round(data * 0.8 * 100);
     }
     EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
