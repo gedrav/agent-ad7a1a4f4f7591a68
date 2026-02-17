@@ -1970,16 +1970,6 @@ class UIUtilService {
       return null;
     }
   }
-  public async unloadInitialAssets() {
-    if (GameProxy.config.unloadAssets && GameProxy.config.unloadAssets.length > 0) {
-      const len = GameProxy.config.unloadAssets.length;
-      for (let k = 0; k < len; k++) {
-        if (Assets.cache.has(GameProxy.config.unloadAssets[k])) {
-          await Assets.unload(GameProxy.config.unloadAssets[k]);
-        }
-      }
-    }
-  }
 }
 
 export const UIUtil = new UIUtilService();

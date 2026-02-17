@@ -20,6 +20,7 @@ import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
 import { INIT_ERROR_POPUP_CONFIG } from '@brand/config/InitErrorPopupConfig';
 import { appModel } from '@core/models/services/AppModelService';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -177,7 +178,7 @@ export class SlotGameApp {
     //EventHandler.dispatchEvent(StateEvents.EXIT_STATE);
     this.splashComp.removeSplash();
     this.splashComp = null;
-    await UIUtil.unloadInitialAssets();
+    await AssetLoader.unloadBundle(LOAD_CONSTANTS.SPLASH);
   }
   protected async onSplashDestroyed() {
     /*UIUtil.cleanUpGPU();

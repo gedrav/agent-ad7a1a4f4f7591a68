@@ -19,8 +19,9 @@ export const GAME_BG_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
-    {
+    /*{
       name: 'freegameBG',
+      assetName: 'bg_night',
       type: 'Spine',
       spineName: 'bg_night',
       defaultSkin: 'default',
@@ -32,6 +33,6 @@ export const GAME_BG_CONFIG: any = {
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
-    },
+    },*/
   ],
 };

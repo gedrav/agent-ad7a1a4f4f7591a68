@@ -1,40 +1,48 @@
-const PRELOADER: Array<any> = [
-  { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
-  { TYPE: 'content', NAME: 'gameContent.json' },
-  { TYPE: 'content', NAME: 'rules.json' },
-  { TYPE: 'commoncontent', NAME: 'commonContent.json' },
-  { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
-  { TYPE: 'common', NAME: 'Roboto-Regular.ttf', ASSETTYPE: 'font' },
-];
-const COMMON: any[] = [
-  { TYPE: 'common', NAME: 'Roboto-Bold.ttf', ASSETTYPE: 'font' },
-  { TYPE: 'game', NAME: 'GermaniaOne-Regular.ttf', ASSETTYPE: 'font' },
-];
-const SPLASH: any[] = [
-  { TYPE: 'game', NAME: 'bg_day', ASSETTYPE: 'spine' },
-  { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
-];
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
-const PRIMARY: any[] = [
-  { TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' },
-  { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
-  { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
-  { TYPE: 'common', NAME: 'popups', ASSETTYPE: 'sprite' },
-  { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
-  { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-  { TYPE: 'game', NAME: 'Lepg_Wins', ASSETTYPE: 'spine' },
-];
+const PRELOADER: any = {
+  name: LOAD_CONSTANTS.PRELOADER,
+  assets: [
+    { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
+    { TYPE: 'content', NAME: 'gameContent.json' },
+    { TYPE: 'content', NAME: 'rules.json' },
+    { TYPE: 'commoncontent', NAME: 'commonContent.json' },
+    { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
+    { TYPE: 'common', NAME: 'Roboto-Regular.ttf', ASSETTYPE: 'font' },
+  ],
+};
+
+const COMMON: any = {
+  name: LOAD_CONSTANTS.COMMON,
+  assets: [
+    { TYPE: 'common', NAME: 'Roboto-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'GermaniaOne-Regular.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'bg_day', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
+  ],
+};
+
+const SPLASH: any = {
+  name: LOAD_CONSTANTS.SPLASH,
+  assets: [{ TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' }],
+};
+
+const PRIMARY: any = {
+  name: LOAD_CONSTANTS.PRIMARY,
+  assets: [
+    { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
+    { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'common', NAME: 'popups', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'Lepg_Wins', ASSETTYPE: 'spine' },
+  ],
+};
 
 const SECONDARY: any = [];
-const FEATURE: any = [];
-
-export const ASSET_CONFIG = {
-  PRELOADER: PRELOADER,
-  COMMON: COMMON,
-  SPLASH: SPLASH,
-  PRIMARY: PRIMARY,
-  BUNDLES: {
-    SECONDARY: SECONDARY,
-    FEATURE: FEATURE,
-  },
+const FREESPIN: any = {
+  name: LOAD_CONSTANTS.FREESPIN,
+  assets: [{ TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' }],
 };
+
+export const ASSET_CONFIG = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY, FREESPIN];

@@ -3,6 +3,8 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { UIUtil } from '@core/utils/UIUtilService';
+import { AssetLoader } from '@core/models/services/AssetLoader';
 
 export class BGView extends ResponsesiveChildrenView {
   protected maingameBG: PixSprite | PixSpine;
@@ -21,6 +23,9 @@ export class BGView extends ResponsesiveChildrenView {
     this.showMainGameBG();
   }
   protected showMainGameBG() {
+    if (this.currentBG === 'free') {
+      this.unloadFSBG();
+    }
     this.currentBG = 'main';
     if (this.freegameBG) {
       this.freegameBG.visible = false;
@@ -29,9 +34,21 @@ export class BGView extends ResponsesiveChildrenView {
   }
   protected showFreeGameBG() {
     this.currentBG = 'free';
+    this.loadFSBG();
     if (this.freegameBG) {
       this.freegameBG.visible = true;
     }
     this.maingameBG.visible = false;
+  }
+  protected async unloadFSBG() {
+    if (this.freegameBG) {
+      if (this.freegameBG.configData.assetName) {
+        await AssetLoader.unloadAsset(this.freegameBG.configData.assetName);
+      }
+    }
+  }
+  async loadFSBG() {
+    await UIUtil.loadAsset(this.freegameBG.configData.assetName);
+    this.freegameBG = this.elementsList['freegameBG'];
   }
 }

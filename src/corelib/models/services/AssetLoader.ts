@@ -23,8 +23,6 @@ class AssetLoaderClass {
   private envPath: string = '';
   private assetsManifest: any;
   private loadedBundles: string[] = [];
-  private secondaryList: any;
-  private manifest: any;
   private soundPath: string;
   private bmpFontPath: string;
   private assetConfig: any;
@@ -54,16 +52,12 @@ class AssetLoaderClass {
   public async initAssets(config: any, soundConfig: any) {
     this.assetConfig = config;
     this.soundConfig = soundConfig;
-    this.bundles = config.BUNDLES;
+    this.bundles = config;
     this.createPaths();
     this.assetsManifest = this.createAssetsManifest();
+    console.log('Assets manifest', this.assetsManifest);
 
     await Assets.init({ manifest: this.assetsManifest });
-    // Load assets for the preloader
-
-    // Load all bundles
-    //const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
-    //await Assets.backgroundLoadBundle(allBundles);
   }
 
   public async loadPreloader() {
@@ -85,46 +79,71 @@ class AssetLoaderClass {
     console.log('Finished loading secondary assets');
   }
   public async loadFeatures() {
-    await this.loadBundles('FEATURES');
-
-    //await Assets.backgroundLoadBundle(allBundles);
+    const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
+    console.log('Loading features assets ==== ', allBundles);
+    await Assets.backgroundLoadBundle(allBundles);
   }
 
   private createAssetsManifest() {
-    const manifest: any = { bundles: [{ name: 'default', assets: [] }] };
-    const preload: any = { name: 'PRELOADER', assets: [] };
-    const data: any = this.assetConfig;
+    const manifest: any = { bundles: [] };
+    console.log('Creating manifest', this.assetConfig);
+    const pathMap = this.createPathMap();
+    const len = this.assetConfig.length;
+    if (len > 0) {
+      for (let i = 0; i < len; i++) {
+        const data: any = { name: this.assetConfig[i].name, assets: [] };
+        if (this.assetConfig[i]?.assets?.length > 0) {
+          this.assetConfig[i].assets.forEach((item: any) => {
+            const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
+            if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
+              if (TYPE == 'common') {
+                data.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
+              } else {
+                data.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
+              }
+            } else if (ASSETTYPE === 'spine') {
+              // Load spine JSON data
+              data.assets.push({
+                alias: NAME + 'Data',
+                src: this.spinePath + NAME + '.json',
+              });
 
-    if (data.PRELOADER.length > 0) {
-      const pathMap = this.createPathMap();
-      data.PRELOADER.forEach((item: any) => {
-        const { TYPE, NAME, ASSETTYPE, file } = item;
-        if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
-          if (TYPE == 'common') {
-            preload.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
-          } else {
-            preload.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
-          }
-        } else {
-          const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
-          preload.assets.push({
-            alias: NAME,
-            src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
+              // Load single atlas file
+              data.assets.push({
+                alias: NAME + 'Atlas',
+                src: this.spinePath + NAME + '.atlas',
+              });
+              // Handle multiple texture images
+              if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
+                // Load multiple PNG texture files
+                TEXTURES.forEach((textureIndex: string) => {
+                  data.assets.push({
+                    alias: textureIndex,
+                    src: this.spinePath + textureIndex + '.png',
+                  });
+                });
+              } else {
+                // Single texture file (default behavior)
+                data.assets.push({
+                  alias: NAME + 'Texture',
+                  src: this.spinePath + NAME + '.png',
+                });
+              }
+            } else {
+              const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
+              data.assets.push({
+                alias: NAME,
+                src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
+              });
+              if (item.ASSETTYPE === 'font') {
+                this.loadFont(NAME, assetSrc);
+              }
+            }
           });
-          if (item.ASSETTYPE === 'font') {
-            this.loadFont(NAME, assetSrc);
-          }
-          if (item.ASSETTYPE === 'bmpfont') {
-            this.loadBMPFont(NAME, assetSrc);
-          }
+          manifest.bundles.push(data);
         }
-      });
-
-      manifest.bundles.push(preload);
-      this.addSplashAssetsToManifest(manifest, data, pathMap);
-      this.addPrimaryAssetsToManifest(manifest, data, pathMap);
+      }
     }
-    this.manifest = manifest;
     return manifest;
   }
 
@@ -175,192 +194,6 @@ class AssetLoaderClass {
     }
 
     return getPath(NAME, ASSETTYPE);
-  }
-
-  private addSplashAssetsToManifest(manifest: any, data: any, pathMap: Record<string, any>) {
-    const common: any = { name: 'COMMON', assets: [] };
-
-    if (data.COMMON.length > 0) {
-      const pathMap = this.createPathMap();
-      data.COMMON.forEach((item: any) => {
-        const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
-        if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
-          if (TYPE == 'common') {
-            common.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
-          } else {
-            common.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
-          }
-        } else if (ASSETTYPE === 'spine') {
-          // Load spine JSON data
-          common.assets.push({
-            alias: NAME + 'Data',
-            src: this.spinePath + NAME + '.json',
-          });
-
-          // Load single atlas file
-          common.assets.push({
-            alias: NAME + 'Atlas',
-            src: this.spinePath + NAME + '.atlas',
-          });
-          // Handle multiple texture images
-          if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
-            // Load multiple PNG texture files
-            TEXTURES.forEach((textureIndex: string) => {
-              common.assets.push({
-                alias: textureIndex,
-                src: this.spinePath + textureIndex + '.png',
-              });
-            });
-          } else {
-            // Single texture file (default behavior)
-            common.assets.push({
-              alias: NAME + 'Texture',
-              src: this.spinePath + NAME + '.png',
-            });
-          }
-        } else {
-          const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
-          common.assets.push({
-            alias: NAME,
-            src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
-          });
-          if (item.ASSETTYPE === 'font') {
-            this.loadFont(NAME, assetSrc);
-          }
-        }
-      });
-
-      manifest.bundles.push(common);
-    }
-
-    const splash: any = { name: 'SPLASH', assets: [] };
-
-    if (data.SPLASH.length > 0) {
-      const pathMap = this.createPathMap();
-      data.SPLASH.forEach((item: any) => {
-        const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
-        if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
-          if (TYPE == 'common') {
-            splash.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
-          } else {
-            splash.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
-          }
-        } else if (ASSETTYPE === 'spine') {
-          // Load spine JSON data
-          splash.assets.push({
-            alias: NAME + 'Data',
-            src: this.spinePath + NAME + '.json',
-          });
-
-          // Load single atlas file
-          splash.assets.push({
-            alias: NAME + 'Atlas',
-            src: this.spinePath + NAME + '.atlas',
-          });
-          // Handle multiple texture images
-          if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
-            // Load multiple PNG texture files
-            TEXTURES.forEach((textureIndex: string) => {
-              splash.assets.push({
-                alias: textureIndex,
-                src: this.spinePath + textureIndex + '.png',
-              });
-            });
-          } else {
-            // Single texture file (default behavior)
-            splash.assets.push({
-              alias: NAME + 'Texture',
-              src: this.spinePath + NAME + '.png',
-            });
-          }
-        } else {
-          const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
-          splash.assets.push({
-            alias: NAME,
-            src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
-          });
-          if (item.ASSETTYPE === 'font') {
-            this.loadFont(NAME, assetSrc);
-          }
-        }
-      });
-      manifest.bundles.push(splash);
-    }
-  }
-
-  private addPrimaryAssetsToManifest(manifest: any, data: any, pathMap: Record<string, any>) {
-    const primary: any = { name: 'PRIMARY', assets: [] };
-    if (data.PRIMARY.length > 0) {
-      const pathMap = this.createPathMap();
-      data.PRIMARY.forEach((item: any) => {
-        const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
-        if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
-          if (TYPE == 'common') {
-            primary.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
-          } else {
-            primary.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
-          }
-        } else if (ASSETTYPE === 'spine') {
-          // Load spine JSON data
-          primary.assets.push({
-            alias: NAME + 'Data',
-            src: this.spinePath + NAME + '.json',
-          });
-
-          // Load single atlas file
-          primary.assets.push({
-            alias: NAME + 'Atlas',
-            src: this.spinePath + NAME + '.atlas',
-          });
-          // Handle multiple texture images
-          if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
-            // Load multiple PNG texture files
-            TEXTURES.forEach((textureIndex: string) => {
-              primary.assets.push({
-                alias: textureIndex,
-                src: this.spinePath + textureIndex + '.png',
-              });
-            });
-          } else {
-            // Single texture file (default behavior)
-            primary.assets.push({
-              alias: NAME + 'Texture',
-              src: this.spinePath + NAME + '.png',
-            });
-          }
-        } else {
-          const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
-          primary.assets.push({
-            alias: NAME,
-            src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
-          });
-          if (item.ASSETTYPE === 'font') {
-            this.loadFont(NAME, assetSrc);
-          }
-        }
-      });
-      manifest.bundles.push(primary);
-    }
-    const result = data.BUNDLES;
-    for (const key in result) {
-      const bundle: any = { name: key, assets: [] };
-      const len2 = result[key].length;
-      if (len2 > 0) {
-        for (let k = 0; k < len2; k++) {
-          const { TYPE, NAME, ASSETTYPE, SPRITESHEETS, file } = result[key][k]; // Added SPRITESHEETS here
-          if (ASSETTYPE === 'sequence') {
-            const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, SPRITESHEETS, pathMap);
-            bundle.assets.push({ alias: NAME, src: assetSrc });
-          } else if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
-            bundle.assets.push({ alias: NAME, src: [GameProxy.config.appAssetPath + NAME + '.' + ASSETTYPE] });
-          } else {
-            const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
-            bundle.assets.push({ alias: NAME, src: [assetSrc] });
-          }
-        }
-        manifest.bundles.push(bundle);
-      }
-    }
   }
 
   private loadBMPFont(fontName: string, fontUrl: string) {
@@ -437,6 +270,15 @@ class AssetLoaderClass {
 
   async loadSounds() {
     await SoundFactory.loadSounds(this.soundConfig.soundFiles, this.soundPath);
+  }
+
+  public async unloadAsset(assetName: string) {
+    if (Assets.cache.has(assetName)) {
+      await Assets.unload(assetName);
+    }
+  }
+  public async unloadBundle(bundle: string) {
+    await Assets.unloadBundle(bundle);
   }
 }
 
