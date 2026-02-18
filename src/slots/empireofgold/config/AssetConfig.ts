@@ -1,6 +1,7 @@
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { AssetBundle } from '@brand/types/types';
 
-const PRELOADER: any = {
+const PRELOADER: AssetBundle = {
   name: LOAD_CONSTANTS.PRELOADER,
   assets: [
     { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
@@ -12,7 +13,7 @@ const PRELOADER: any = {
   ],
 };
 
-const COMMON: any = {
+const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
     { TYPE: 'common', NAME: 'Roboto-Bold.ttf', ASSETTYPE: 'font' },
@@ -22,12 +23,12 @@ const COMMON: any = {
   ],
 };
 
-const SPLASH: any = {
+const SPLASH: AssetBundle = {
   name: LOAD_CONSTANTS.SPLASH,
   assets: [{ TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' }],
 };
 
-const PRIMARY: any = {
+const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
@@ -39,8 +40,11 @@ const PRIMARY: any = {
   ],
 };
 
-const SECONDARY: any = [];
-const FREESPIN: any = {
+const SECONDARY: AssetBundle = {
+  name: LOAD_CONSTANTS.SECONDARY,
+  assets: [],
+};
+const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FREESPIN,
   assets: [{ TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' }],
 };
