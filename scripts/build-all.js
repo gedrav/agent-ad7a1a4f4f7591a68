@@ -9,9 +9,7 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
 const slotsDir = path.resolve(projectRoot, 'src', 'slots');
 
-const CONFIGURED_GAME_IDS = [
-  'empireofgold',
-];
+const CONFIGURED_GAME_IDS = ['empireofgold'];
 
 const parseList = (value = '') =>
   value
@@ -49,12 +47,7 @@ if (requestedGameIds.length) {
 
 const targetGames = requestedGameIds.length ? requestedGameIds : availableGameIds;
 
-const viteBin = path.resolve(
-  projectRoot,
-  'node_modules',
-  '.bin',
-  process.platform === 'win32' ? 'vite.cmd' : 'vite',
-);
+const viteBin = path.resolve(projectRoot, 'node_modules', '.bin', process.platform === 'win32' ? 'vite.cmd' : 'vite');
 
 const runBuild = (gameId) =>
   new Promise((resolve, reject) => {
@@ -81,6 +74,44 @@ for (const gameId of targetGames) {
   await runBuild(gameId);
 }
 
-const buildRoot =
-  process.env.BUILD_OUTPUT_ROOT || path.resolve(projectRoot, '../feg_games_build');
+const buildRoot = process.env.BUILD_OUTPUT_ROOT || path.resolve(projectRoot, '../feg_games_build');
 console.log(`\nBuilds complete. Output root: ${buildRoot}`);
+
+// ── Generate root index.html ───────────────────────────────────
+// Azure Static Web Apps (and the SWA CLI) require an index.html
+// at the root of the upload folder. Each game lives in its own
+// sub-folder, so we generate a minimal root index that redirects
+// to the first game (or shows a list when there are multiple).
+const defaultGame = targetGames[0];
+const gameLinks = targetGames.map((id) => `<li><a href="./${id}/">${id}</a></li>`).join('\n    ');
+
+const rootIndex =
+  targetGames.length === 1
+    ? `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=./${defaultGame}/" />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href="./${defaultGame}/">${defaultGame}</a>…</p>
+  </body>
+</html>`
+    : `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FEG Games</title>
+    <style>body{font-family:sans-serif;padding:2rem;}ul{list-style:none;padding:0;}li{margin:0.5rem 0;}a{font-size:1.2rem;}</style>
+  </head>
+  <body>
+    <h1>FEG Games</h1>
+    <ul>
+    ${gameLinks}
+    </ul>
+  </body>
+</html>`;
+
+fs.writeFileSync(path.resolve(buildRoot, 'index.html'), rootIndex);
+console.log(`Root index.html generated → ${defaultGame} (${targetGames.length} game(s))`);
