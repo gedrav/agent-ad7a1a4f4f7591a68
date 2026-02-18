@@ -30,7 +30,7 @@ const VENDOR_ANIMATION_PACKAGES = new Set([
   'socket.io-client',
   'stats.js',
   'howler',
-  'axios',
+  'ky',
   'crypto',
   'crypto-js',
   'i18next',
