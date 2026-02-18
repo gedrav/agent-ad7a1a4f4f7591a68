@@ -1,4 +1,5 @@
 import { GameBGView } from '@game/views/containers/GameBGView';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const GAME_BG_CONFIG: any = {
   name: 'gameBGView',
@@ -23,6 +24,7 @@ export const GAME_BG_CONFIG: any = {
       name: 'freegameBG',
       assetName: 'bg_night',
       type: 'Spine',
+      toCreate: false,
       spineName: 'bg_night',
       defaultSkin: 'default',
       defaultState: 'animation',

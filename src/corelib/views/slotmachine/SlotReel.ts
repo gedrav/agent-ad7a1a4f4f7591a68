@@ -297,7 +297,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     const reels = appModel.getReelsView();
     this.finalSymbols = [];
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.finalSymbols[k] = Util.cloneArray(reels[k]);
+      this.finalSymbols[k] = reels[k];
       this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
       this.finalSymbols[k].push(this.getRandomSymbolName(k));
       setTimeout(
@@ -392,7 +392,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     const reels = appModel.getReelsView();
     this.finalSymbols = [];
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.finalSymbols[k] = Util.cloneArray(reels[k]);
+      this.finalSymbols[k] = reels[k];
       this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
       this.finalSymbols[k].push(this.getRandomSymbolName(k));
     }

@@ -178,7 +178,7 @@ export class SlotGameApp {
     //EventHandler.dispatchEvent(StateEvents.EXIT_STATE);
     this.splashComp.removeSplash();
     this.splashComp = null;
-    await AssetLoader.unloadBundle(LOAD_CONSTANTS.SPLASH);
+    //await AssetLoader.unloadBundle(LOAD_CONSTANTS.SPLASH);
   }
   protected async onSplashDestroyed() {
     /*UIUtil.cleanUpGPU();

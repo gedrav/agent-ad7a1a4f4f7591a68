@@ -237,10 +237,10 @@ class AppModelService {
     return '';
   }
   public getReelsView(): any {
-    return Util.cloneArray(this.gameResult.reelView);
+    return this.gameResult.reelView;
   }
   public getCascadeReelsView(): any {
-    return Util.cloneArray(this.gameResult.cascadeData[this.tumbleIndex].reelView);
+    return this.gameResult.cascadeData[this.tumbleIndex].reelView;
   }
   public getIsDevMode(): boolean {
     return this.gameInfo.devMode;
@@ -609,7 +609,7 @@ class AppModelService {
     return this.tumbleIndex < this.gameResult?.cascadeData?.length - 1;
   }
   public getSpinBlastData(): any {
-    return Util.cloneArray(this.gameResult?.cascadeData[this.tumbleIndex]?.blustSymbols);
+    return this.gameResult?.cascadeData[this.tumbleIndex]?.blustSymbols;
   }
   public getSpinBlastSymbols(): any {
     const blastSymbols = this.getWinData();
@@ -636,13 +636,13 @@ class AppModelService {
     return Util.combineBlastPoisitions(this.gameResult.cascadeData[this.tumbleIndex]?.blustSymbols);
   }
   public getNextCascadeReelsView(): any {
-    return Util.cloneArray(this.gameResult.cascadeData[this.tumbleIndex + 1].reelView);
+    return this.gameResult.cascadeData[this.tumbleIndex + 1].reelView;
   }
   public getConvertedJWildPositions(): any {
-    return Util.cloneArray(this.gameResult.cascadeData[this.tumbleIndex + 1]?.convertedJWildPositions || []);
+    return this.gameResult.cascadeData[this.tumbleIndex + 1]?.convertedJWildPositions || [];
   }
   public getLandedJWildPositions(): any {
-    return Util.cloneArray(this.gameResult.cascadeData[this.tumbleIndex + 1]?.firstJWildPosition || []);
+    return this.gameResult.cascadeData[this.tumbleIndex + 1]?.firstJWildPosition || [];
   }
   public getSymbolPayoutValue(multi: number): number {
     return (this.getTotalBet() / this.gameInfo.creditValue) * multi;
