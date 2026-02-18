@@ -21,24 +21,6 @@ definitions:
     # No runtime patching required.
     # ─────────────────────────────────────────────────────────────
 
-    - step: &clone-and-install
-        name: Clone assets & install
-        caches:
-          - node
-        script:
-          - >
-            git clone --depth 1
-            https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
-            -b main
-            ../feg_games_assets
-          - npm ci
-
-    - step: &deploy
-        name: Deploy to SWA
-        script:
-          - cp staticwebapp.config.json ../feg_slot_build/
-          - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
-
 # ─────────────────────────────────────────────────────────────────
 # Pipelines
 # ─────────────────────────────────────────────────────────────────
@@ -47,8 +29,9 @@ pipelines:
   branches:
     main:
       - step:
-          <<: *clone-and-install
-          name: Build (development)
+          name: Build & deploy to dev
+          caches:
+            - node
           deployment: dev
           script:
             - >
@@ -58,10 +41,8 @@ pipelines:
               ../feg_games_assets
             - npm ci
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:development
-      - step:
-          <<: *deploy
-          name: Deploy to dev
-          deployment: dev
+            - cp staticwebapp.config.json ../feg_slot_build/
+            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
 
   # ── Manual triggers ──────────────────────────────────────────
   custom:
