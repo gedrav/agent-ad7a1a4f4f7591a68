@@ -14,7 +14,7 @@ export const GAME_CONFIG = {
   configPath: '/',
   gamePath: '/',
   gameVersion: '0.05',
-  gameId: 'olympusscatterrealms',
+  gameId: 'empireofgold',
   sendTotalBetInRequest: true,
   gameName: 'Empire of Gold',
   uiConfig: UIConfig,
