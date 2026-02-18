@@ -1,0 +1,110 @@
+image: node:22-bullseye
+
+clone:
+  depth: 1
+
+definitions:
+  steps:
+    # ─────────────────────────────────────────────────────────────
+    # Build & Deploy to a specific environment.
+    # Required pipeline variables (per deployment environment):
+    #   SWA_DEPLOYMENT_TOKEN  — Azure SWA deployment token
+    #                           (pulumi stack output feSlotDeploymentToken)
+    #   SWA_NAME              — Azure Static Web App name
+    #                           (e.g. feg-slot-fe-dev)
+    #   AZURE_RESOURCE_GROUP  — Resource group (e.g. feg-slot-rg-dev)
+    #   BASE_URL              — RGS/slot backend base URL for commonConfig
+    #   HISTORY_URL           — History service URL
+    #   HISTORY_API_URL       — History API URL
+    #   EXTERNAL_HISTORY_API_URL
+    #
+    # Required repo-level variables:
+    #   ASSETS_REPO_ACCESS_TOKEN — Bitbucket token with read access to feg_games_assets
+    # ─────────────────────────────────────────────────────────────
+    - step: &build-and-deploy
+        name: Clone assets, patch config, build & deploy to SWA
+        caches:
+          - node
+        script:
+          # ── Clone sibling assets repo ─────────────────────────
+          - >
+            git clone --depth 1
+            https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
+            -b main
+            ../feg_games_assets
+
+          # ── Patch commonConfig.json URLs ─────────────────────
+          # Only the `urls` array is replaced; gameConfig is preserved.
+          - apt-get update -qq && apt-get install -y -qq jq
+          - |
+            jq --arg baseURL "$BASE_URL" \
+               --arg historyURL "$HISTORY_URL" \
+               --arg historyAPIURL "$HISTORY_API_URL" \
+               --arg externalHistoryAPIURL "$EXTERNAL_HISTORY_API_URL" \
+               '.urls = [{
+                  "name": ["localhost", "pixentech.com"],
+                  "config": {
+                    "baseURL": $baseURL,
+                    "socketURL": "",
+                    "historyURL": $historyURL,
+                    "historyAPIURL": $historyAPIURL,
+                    "externalHistoryAPIURL": $externalHistoryAPIURL
+                  }
+                }]' ../feg_games_assets/common/env/commonConfig.json \
+            > /tmp/commonConfig_patched.json \
+            && mv /tmp/commonConfig_patched.json ../feg_games_assets/common/env/commonConfig.json
+
+          # ── Install & build all configured games ─────────────
+          - npm ci
+          - BUILD_OUTPUT_ROOT=../feg_slot_build CI=false npm run build
+
+          # Copy the SWA routing config into the build output root so
+          # it is deployed alongside the game files.
+          - cp staticwebapp.config.json ../feg_slot_build/
+
+          # ── Deploy to Azure Static Web Apps ──────────────────
+          # Uses Node-based SWA CLI — avoids the heavy azure-cli docker image.
+          # `--env production` targets the production slot on Standard SKU;
+          # it is silently ignored on Free SKU.
+          - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build
+              --deployment-token "$SWA_DEPLOYMENT_TOKEN"
+              --env production
+              --verbose
+
+# ─────────────────────────────────────────────────────────────────
+# Pipelines
+# ─────────────────────────────────────────────────────────────────
+pipelines:
+  # ── Auto-trigger: push to main → deploy to dev ───────────────
+  branches:
+    main:
+      - step:
+          <<: *build-and-deploy
+          name: Build & deploy to dev
+          deployment: dev
+
+  # ── Manual triggers ──────────────────────────────────────────
+  custom:
+    # Manually re-deploy the current main branch to dev
+    deploy-dev:
+      - step:
+          <<: *build-and-deploy
+          name: Deploy to dev
+          deployment: dev
+
+    # Promote to staging: re-runs a full build (no container image
+    # to re-tag — static files are always rebuilt from source).
+    # Set SWA_DEPLOYMENT_TOKEN, SWA_NAME, AZURE_RESOURCE_GROUP,
+    # and all URL vars in the staging deployment environment.
+    deploy-staging:
+      - step:
+          <<: *build-and-deploy
+          name: Build & deploy to staging
+          deployment: staging
+
+    # Promote to production
+    deploy-prod:
+      - step:
+          <<: *build-and-deploy
+          name: Build & deploy to production
+          deployment: production
