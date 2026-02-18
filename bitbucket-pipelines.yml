@@ -13,61 +13,30 @@ definitions:
     #   SWA_NAME              — Azure Static Web App name
     #                           (e.g. feg-slot-fe-dev)
     #   AZURE_RESOURCE_GROUP  — Resource group (e.g. feg-slot-rg-dev)
-    #   BASE_URL              — RGS/slot backend base URL for commonConfig
-    #   HISTORY_URL           — History service URL
-    #   HISTORY_API_URL       — History API URL
-    #   EXTERNAL_HISTORY_API_URL
     #
     # Required repo-level variables:
     #   ASSETS_REPO_ACCESS_TOKEN — Bitbucket token with read access to feg_games_assets
+    #
+    # URLs are sourced from the committed .env.* files in the repo.
+    # No runtime patching required.
     # ─────────────────────────────────────────────────────────────
-    - step: &build-and-deploy
-        name: Clone assets, patch config, build & deploy to SWA
+
+    - step: &clone-and-install
+        name: Clone assets & install
         caches:
           - node
         script:
-          # ── Clone sibling assets repo ─────────────────────────
           - >
             git clone --depth 1
             https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
             -b main
             ../feg_games_assets
-
-          # ── Patch commonConfig.json URLs ─────────────────────
-          # Only the `urls` array is replaced; gameConfig is preserved.
-          - apt-get update -qq && apt-get install -y -qq jq
-          - |
-            jq --arg baseURL "$BASE_URL" \
-               --arg historyURL "$HISTORY_URL" \
-               --arg historyAPIURL "$HISTORY_API_URL" \
-               --arg externalHistoryAPIURL "$EXTERNAL_HISTORY_API_URL" \
-               '.urls = [{
-                  "name": ["localhost", "pixentech.com"],
-                  "config": {
-                    "baseURL": $baseURL,
-                    "socketURL": "",
-                    "historyURL": $historyURL,
-                    "historyAPIURL": $historyAPIURL,
-                    "externalHistoryAPIURL": $externalHistoryAPIURL
-                  }
-                }]' ../feg_games_assets/common/env/commonConfig.json \
-            > /tmp/commonConfig_patched.json \
-            && mv /tmp/commonConfig_patched.json ../feg_games_assets/common/env/commonConfig.json
-
-          # ── Install & build all configured games ─────────────
           - npm ci
-          - BUILD_OUTPUT_ROOT=../feg_slot_build CI=false npm run build
 
-          # Copy the SWA routing config into the build output root so
-          # it is deployed alongside the game files.
+    - step: &deploy
+        name: Deploy to SWA
+        script:
           - cp staticwebapp.config.json ../feg_slot_build/
-
-          # ── Deploy to Azure Static Web Apps ──────────────────
-          # Uses Node-based SWA CLI — avoids the heavy azure-cli docker image.
-          # `--env production` targets the production slot on Standard SKU;
-          # it is silently ignored on Free SKU.
-          # Explicit `|| exit 1` ensures the step is marked failed if the
-          # SWA CLI exits with code 0 despite a deployment error.
           - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
 
 # ─────────────────────────────────────────────────────────────────
@@ -78,32 +47,71 @@ pipelines:
   branches:
     main:
       - step:
-          <<: *build-and-deploy
-          name: Build & deploy to dev
+          <<: *clone-and-install
+          name: Build (development)
+          deployment: dev
+          script:
+            - >
+              git clone --depth 1
+              https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
+              -b main
+              ../feg_games_assets
+            - npm ci
+            - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:development
+      - step:
+          <<: *deploy
+          name: Deploy to dev
           deployment: dev
 
   # ── Manual triggers ──────────────────────────────────────────
   custom:
-    # Manually re-deploy the current main branch to dev
     deploy-dev:
       - step:
-          <<: *build-and-deploy
-          name: Deploy to dev
+          name: Build & deploy to dev
+          caches:
+            - node
           deployment: dev
+          script:
+            - >
+              git clone --depth 1
+              https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
+              -b main
+              ../feg_games_assets
+            - npm ci
+            - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:development
+            - cp staticwebapp.config.json ../feg_slot_build/
+            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
 
-    # Promote to staging: re-runs a full build (no container image
-    # to re-tag — static files are always rebuilt from source).
-    # Set SWA_DEPLOYMENT_TOKEN, SWA_NAME, AZURE_RESOURCE_GROUP,
-    # and all URL vars in the staging deployment environment.
     deploy-staging:
       - step:
-          <<: *build-and-deploy
           name: Build & deploy to staging
+          caches:
+            - node
           deployment: staging
+          script:
+            - >
+              git clone --depth 1
+              https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
+              -b main
+              ../feg_games_assets
+            - npm ci
+            - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:staging
+            - cp staticwebapp.config.json ../feg_slot_build/
+            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
 
-    # Promote to production
     deploy-prod:
       - step:
-          <<: *build-and-deploy
           name: Build & deploy to production
+          caches:
+            - node
           deployment: production
+          script:
+            - >
+              git clone --depth 1
+              https://x-token-auth:$ASSETS_REPO_ACCESS_TOKEN@bitbucket.org/$BITBUCKET_WORKSPACE/feg_games_assets.git
+              -b main
+              ../feg_games_assets
+            - npm ci
+            - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build
+            - cp staticwebapp.config.json ../feg_slot_build/
+            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
