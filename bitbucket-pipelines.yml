@@ -66,10 +66,9 @@ definitions:
           # Uses Node-based SWA CLI — avoids the heavy azure-cli docker image.
           # `--env production` targets the production slot on Standard SKU;
           # it is silently ignored on Free SKU.
-          - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build
-              --deployment-token "$SWA_DEPLOYMENT_TOKEN"
-              --env production
-              --verbose
+          # Explicit `|| exit 1` ensures the step is marked failed if the
+          # SWA CLI exits with code 0 despite a deployment error.
+          - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
 
 # ─────────────────────────────────────────────────────────────────
 # Pipelines
