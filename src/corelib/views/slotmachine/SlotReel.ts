@@ -502,28 +502,27 @@ export default class SlotReel extends ResponsesiveChildrenView {
   }
   protected getRandomSymbol(reelno: number) {
     const symbols = this.reelsData.reelsConfig.maingame[reelno];
-    const data: any = this.reelsData.symbolsData[symbols[Util.getRandomRange(0, symbols.length - 1)]];
-    data.reelNumber = reelno;
+    const symbol = symbols[Util.getRandomRange(0, symbols.length - 1)];
+    const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
-  protected getNextSymbol(reelno: number) {
-    const symbol = this.reelsData.reelsConfig.maingame[reelno][this.reelsIndexes[reelno]++];
-    //reset to 0 once reaches end
-    if (this.reelsIndexes[reelno] > this.reelsData.reelsConfig.maingame[reelno].length - 1) {
+  protected getNextSymbolName(reelno: number): string {
+    const reelSymbols: string[] = this.reelsData.reelsConfig.maingame[reelno];
+    const symbol = reelSymbols[this.reelsIndexes[reelno]++];
+    // reset to 0 once reaches end
+    if (this.reelsIndexes[reelno] > reelSymbols.length - 1) {
       this.reelsIndexes[reelno] = 0;
     }
-    const data: any = Util.cloneArray(this.reelsData.symbolsData[symbol]);
-    data.reelNumber = reelno;
+    return symbol;
+  }
+  protected getNextSymbol(reelno: number) {
+    const symbol = this.getNextSymbolName(reelno);
+    const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
   protected getNextSymbolData(reelno: number) {
-    const symbol = this.reelsData.reelsConfig.maingame[reelno][this.reelsIndexes[reelno]++];
-    //reset to 0 once reaches end
-    if (this.reelsIndexes[reelno] > this.reelsData.reelsConfig.maingame[reelno].length - 1) {
-      this.reelsIndexes[reelno] = 0;
-    }
-    const data: any = Util.cloneArray(this.reelsData.symbolsData[symbol]);
-    return data;
+    const symbol = this.getNextSymbolName(reelno);
+    return this.reelsData.symbolsData[symbol];
   }
 
   public resetReelForError(): void {}
