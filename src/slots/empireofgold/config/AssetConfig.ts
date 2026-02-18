@@ -49,4 +49,4 @@ const FREESPIN: AssetBundle = {
   assets: [{ TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' }],
 };
 
-export const ASSET_CONFIG = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY, FREESPIN];
+export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY, FREESPIN];
