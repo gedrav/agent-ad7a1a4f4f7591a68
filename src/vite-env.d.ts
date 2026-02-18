@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_SOCKET_URL: string;
   readonly VITE_IS_STANDALONE: string;
   readonly VITE_EXTERNAL_URL: string;
+  readonly VITE_HISTORY_URL: string;
+  readonly VITE_HISTORY_API_URL: string;
 }
 
 interface ImportMeta {

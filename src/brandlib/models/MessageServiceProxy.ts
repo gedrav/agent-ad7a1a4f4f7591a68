@@ -21,8 +21,6 @@ export class MessageServiceProxy extends AbstractProxy {
 
   public connectToServer(): void {}
 
-  private subscribeToSocketEvents() {}
-
   protected checkForServerError(msgName: string, data: any): boolean {
     if ((data && data.errorCode == 0) || data.errorCode == null) {
       return false;
@@ -59,19 +57,15 @@ export class MessageServiceProxy extends AbstractProxy {
 
   async requestGameInit() {
     const gameinitObj = this.getGameInitRequestObject();
-    const url = GameProxy.config.baseURL + GameProxy.config.initURL; //crash.live
-    //const url = GameProxy.config.baseURL + GameProxy.config.gameId + '/' + GameProxy.config.initURL; //crash.live
-    await this.communicationService.getServerResponse('gameinit', gameinitObj, url, 'POST');
+    await this.communicationService.getServerResponse('gameinit', gameinitObj, GameProxy.config.initURL, 'POST');
   }
   async requestSpinResult(isBuyBonus = false) {
     const spinRequest = this.getSpinRequestObject(isBuyBonus);
-    const url = GameProxy.config.baseURL + GameProxy.config.spinURL;
-    await this.communicationService.getServerResponse('spinresult', spinRequest, url, 'POST');
+    await this.communicationService.getServerResponse('spinresult', spinRequest, GameProxy.config.spinURL, 'POST');
   }
   async requestBonusData(name, selection = '') {
     const bonusRequest = this.getBonusRequestObject(name, selection);
-    const url = GameProxy.config.baseURL + GameProxy.config.bonusURL;
-    await this.communicationService.getServerResponse('featureResult', bonusRequest, url, 'POST');
+    await this.communicationService.getServerResponse('featureResult', bonusRequest, GameProxy.config.bonusURL, 'POST');
   }
 
   getGameInitRequestObject() {

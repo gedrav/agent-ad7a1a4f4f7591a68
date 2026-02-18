@@ -11,6 +11,10 @@ const slotsDir = path.resolve(projectRoot, 'src', 'slots');
 
 const CONFIGURED_GAME_IDS = ['empireofgold'];
 
+// Resolve build mode: --mode <value> CLI arg > NODE_ENV > fallback 'production'
+const modeArgIndex = process.argv.indexOf('--mode');
+const BUILD_MODE = modeArgIndex !== -1 ? process.argv[modeArgIndex + 1] : process.env.NODE_ENV || 'production';
+
 const parseList = (value = '') =>
   value
     .toString()
@@ -52,7 +56,7 @@ const viteBin = path.resolve(projectRoot, 'node_modules', '.bin', process.platfo
 const runBuild = (gameId) =>
   new Promise((resolve, reject) => {
     console.log(`\n=== Building ${gameId} ===`);
-    const child = spawn(viteBin, ['build', '--mode', 'production'], {
+    const child = spawn(viteBin, ['build', '--mode', BUILD_MODE], {
       cwd: projectRoot,
       stdio: 'inherit',
       env: { ...process.env, GAME_ID: gameId },

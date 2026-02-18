@@ -12,27 +12,21 @@ class GameConfigProxy extends AbstractProxy {
   }
 
   public updateConfigFromCommon(): void {
-    this.config.environment = window.location.hostname;
     const cache = (Cache as any)._cache;
     const obj = cache.get('commonConfig.json');
     if (obj.gameConfig) {
       this.updateConfig(obj.gameConfig);
     }
-    const data = obj.urls;
-    const len = data.length;
-    data.gameConfig = data['localhost'];
-    if (len > 0) {
-      for (let k = 0; k < len; k++) {
-        const obj = data[k];
-        if (data[k].name.indexOf(this.config.environment) > -1) {
-          data.gameConfig = data[k].config;
-          break;
-        }
-      }
-    }
-    if (data.gameConfig) {
-      this.updateConfig(data.gameConfig);
-    }
+    // URL config is driven by env vars (VITE_API_URL etc.) set at build time.
+    // commonConfig.json no longer owns URL values.
+    const urlConfig = {
+      baseURL: import.meta.env.VITE_API_URL,
+      socketURL: import.meta.env.VITE_SOCKET_URL,
+      externalURL: import.meta.env.VITE_EXTERNAL_URL,
+      historyURL: import.meta.env.VITE_HISTORY_URL,
+      historyAPIURL: import.meta.env.VITE_HISTORY_API_URL,
+    };
+    this.updateConfig(urlConfig);
   }
   public updateConfig(data: any): void {
     for (const p in data) {

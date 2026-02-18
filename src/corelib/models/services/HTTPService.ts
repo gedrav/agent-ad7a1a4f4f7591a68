@@ -1,6 +1,15 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { MessageServiceProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
+
+// Shared axios instance — baseURL is set from the env var baked in at build time.
+// All requests only need to pass the endpoint path (e.g. 'init', 'spin').
+const httpClient: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 export class HTTPService {
   protected app: any;
@@ -9,36 +18,18 @@ export class HTTPService {
     this.app = ref;
   }
 
-  async getServerResponse(messageName: string, request: any, url: string, methodType = 'POST'): Promise<void> {
+  async getServerResponse(messageName: string, request: any, endpoint: string, methodType = 'POST'): Promise<void> {
     appModel.isErrorOccurred = false;
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const refObj = this;
-    if (methodType === 'GET') {
-      await axios
-        .get(url, { params: { ID: 1 } })
-        .then(function (response) {
-          refObj.callBackFunction(messageName, response.data.data);
-        })
-        .catch(function (error) {
-          console.log('error == ', error);
-        })
-        .then(function () {
-          // always executed
-        });
-    } else if (methodType === 'POST') {
-      await axios
-        .post(url, request)
-        .then(function (response) {
-          refObj.callBackFunction(messageName, response.data.data);
-        })
-        .catch(function (error) {
-          // refObj.showErrorPopUp(error);
-          refObj.onServerError(messageName, error);
-          //console.log('error == ', error);
-        })
-        .then(function () {
-          // always executed
-        });
+    try {
+      let response;
+      if (methodType === 'GET') {
+        response = await httpClient.get(endpoint);
+      } else {
+        response = await httpClient.post(endpoint, request);
+      }
+      this.callBackFunction(messageName, response.data.data);
+    } catch (error) {
+      this.onServerError(messageName, error);
     }
   }
   protected showErrorPopUp(error) {

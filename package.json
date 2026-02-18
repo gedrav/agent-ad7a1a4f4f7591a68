@@ -9,13 +9,12 @@
   "scripts": {
     "dev": "vite",
     "build": "node ./scripts/build-all.js",
-    "build:dev": "tsc --noEmit && vite build --mode development",
-    "build:staging": "tsc --noEmit && vite build --mode staging",
+    "build:staging": "node ./scripts/build-all.js --mode staging",
+    "build:development": "node ./scripts/build-all.js --mode development",
     "preview": "vite preview",
     "lint": "NODE_OPTIONS=\"--max_old_space_size=6096\" eslint src/**",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "prepare": "husky"
   },
   "dependencies": {
     "@pixi/assets": "^7.4.2",
@@ -40,7 +39,6 @@
     "pixi-filters": "^6.0.5",
     "pixi.js": "^8.14.0",
     "query-string": "^8.2.0",
-    "socket.io-client": "^4.8.1",
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
@@ -52,10 +50,6 @@
     "@assetpack/plugin-mipmap": "^0.7.0",
     "@assetpack/plugin-texture-packer": "^0.7.0",
     "@assetpack/plugin-webfont": "^0.7.0",
-    "@graphql-codegen/cli": "^5.0.2",
-    "@graphql-codegen/typescript": "^4.0.9",
-    "@graphql-codegen/typescript-graphql-request": "^6.2.0",
-    "@graphql-codegen/typescript-operations": "^4.2.3",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
     "eslint": "^9.13.0",
