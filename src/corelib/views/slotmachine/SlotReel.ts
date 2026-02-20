@@ -78,6 +78,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedReel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, this.restartIdleAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onIdleStateEntry.bind(this));
+    EventHandler.addEventListener(SlotEvents.CREATE_FINAL_REEL_SYMBOLS, this.createFinalReelSymbols.bind(this));
 
     this.winController = new this.configData.winController({
       reels: this.reelsData.noOfReels,
@@ -92,6 +93,18 @@ export default class SlotReel extends ResponsesiveChildrenView {
     //this.ticker.stop();
     //this.ticker.start();
     this.ticker.add(this.spinReel.bind(this));
+  }
+  createFinalReelSymbols(): void {
+    if (this.reelsData.isFixedSymbol) {
+      return;
+    }
+    const reels = appModel.getReelsView();
+    this.finalSymbols = [];
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      this.finalSymbols[k] = reels[k];
+      this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
+      this.finalSymbols[k].push(this.getRandomSymbolName(k));
+    }
   }
 
   public restartIdleAnim(): void {
@@ -295,11 +308,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
       return;
     }
     const reels = appModel.getReelsView();
-    this.finalSymbols = [];
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.finalSymbols[k] = reels[k];
-      this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
-      this.finalSymbols[k].push(this.getRandomSymbolName(k));
       setTimeout(
         this.stopReelStrip.bind(this, k),
         appModel.turboMode ? this.reelStopGap * k * 0.25 : this.reelStopGap * k,
@@ -388,16 +397,6 @@ export default class SlotReel extends ResponsesiveChildrenView {
     this.ticker.stop();
     this.quickSpinStarted = true;
 
-    // Get final symbols from server response
-    const reels = appModel.getReelsView();
-    this.finalSymbols = [];
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.finalSymbols[k] = reels[k];
-      this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
-      this.finalSymbols[k].push(this.getRandomSymbolName(k));
-    }
-
-    // Stop all reels immediately
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       this.stopReelQuick(k);
     }

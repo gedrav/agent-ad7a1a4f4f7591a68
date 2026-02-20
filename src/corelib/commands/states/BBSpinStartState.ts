@@ -6,6 +6,7 @@ import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { Clock } from '@core/utils/Clock';
 
 class BBSpinStartStateCommand extends StateCommand {
   private timeoutId: any;
@@ -20,6 +21,8 @@ class BBSpinStartStateCommand extends StateCommand {
     GameProxy.config.buyBonusFeatureId = GameProxy.config.selectedBB;
     GameProxy.config.buyBonusBetMultiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     await MessageProxy.requestSpinResult(true);
+    EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
+    await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.goToState(STATES.SPIN_RESPONSE_RECEIVED_STATE);
     } else {

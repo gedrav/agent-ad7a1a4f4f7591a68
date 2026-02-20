@@ -17,6 +17,8 @@ class FSSpinStartStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_COUNT);
 
     await MessageProxy.requestBonusData(appModel.getFeatureName());
+    EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
+    await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.goToState(STATES.SPIN_RESPONSE_RECEIVED_STATE);
     } else {

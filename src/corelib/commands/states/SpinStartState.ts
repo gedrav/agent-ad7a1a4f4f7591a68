@@ -5,6 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { Clock } from '@core/utils/Clock';
 
 class SpinStartStateCommand extends StateCommand {
   private timeoutId: any;
@@ -20,6 +21,8 @@ class SpinStartStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
     await MessageProxy.requestSpinResult(false);
+    EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
+    await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.next();
     } else {

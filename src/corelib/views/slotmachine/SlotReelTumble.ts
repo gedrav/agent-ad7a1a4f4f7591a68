@@ -53,15 +53,6 @@ export default class SlotReelTumble extends SlotReel {
     this.ticker.stop();
     this.quickSpinStarted = true;
 
-    // Get final symbols from server response
-    const reels = appModel.getCascadeReelsView();
-    this.finalSymbols = [];
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.finalSymbols[k] = Util.cloneArray(reels[k]);
-      this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
-      this.finalSymbols[k].push(this.getRandomSymbolName(k));
-    }
-
     // Stop all reels immediately
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       this.stopReelQuick(k);
@@ -79,13 +70,6 @@ export default class SlotReelTumble extends SlotReel {
       console.error('CASCADE: ReelsView is undefined!');
       return;
     }
-
-    this.finalSymbols = reels.map((reel: string[], reelIndex: number) => {
-      const symbols = Util.cloneArray(reel);
-      symbols.unshift(this.getRandomSymbolName(reelIndex));
-      symbols.push(this.getRandomSymbolName(reelIndex));
-      return symbols;
-    });
 
     const stopGap = appModel.turboMode ? this.reelStopGap * 0.25 : this.reelStopGap;
     this.finalSymbols.forEach((_, reelIndex) =>
