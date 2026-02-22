@@ -66,6 +66,7 @@ class AssetLoaderClass {
     const len = PRIMARY_ASSET_LENGTH;
     if (len > 0) {
       for (let k = 0; k < len; k++) {
+        console.log('LOAD ASSETS == ', this.assetConfig[k].name);
         await this.loadBundles(this.bundles[k]);
         EventHandler.dispatchEvent(AppEvents.BUNDLE_LOADED, this.bundles[k]);
       }

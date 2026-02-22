@@ -66,7 +66,7 @@ export class SplashView extends ResponsesiveChildrenView {
       }
     }
     this.resizeView();
-    this.onLoadProgress(0);
+    this.onLoadProgress(1);
     EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
     if (appModel.primaryAssetsLoaded) {
@@ -75,6 +75,7 @@ export class SplashView extends ResponsesiveChildrenView {
   }
 
   protected onLoadProgress(loaded: number): void {
+    console.log('onLoadProgress', loaded);
     if (loaded) {
       if (this.loadingText && this.loadingText.text !== undefined) {
         this.loadingText.text = Util.getContent('loadingText', [loaded]);
