@@ -30,14 +30,7 @@ export class PixView extends PIXI.Container {
     this.label = this.configData.label ? this.configData.label : this.configData.name;
 
     if (this.configData.requiredBundle) {
-      console.log(
-        'requiredBundle',
-        this.configData.name,
-        this.configData.requiredBundle,
-        appModel.isBundleLoaded(this.configData.requiredBundle),
-      );
       if (appModel.isBundleLoaded(this.configData.requiredBundle)) {
-        console.trace('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX == ', this.configData.name);
         this.createView();
       } else {
       }

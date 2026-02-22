@@ -51,7 +51,7 @@ class SoundServiceProxy {
     }
   }
 
-  public async loadSounds(list: any, gamePath: string) {
+  public loadSounds(list: any, gamePath: string) {
     // EventHandler.dispatchEvent(AppEvents.SOUNDS_LOADING_COMPLETE);
     // return;
     this.soundLibrary = {};

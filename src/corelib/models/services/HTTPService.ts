@@ -15,7 +15,12 @@ export class HTTPService {
     this.app = ref;
   }
 
-  async getServerResponse(messageName: string, request: any, endpoint: string, methodType = 'POST'): Promise<void> {
+  public async getServerResponse(
+    messageName: string,
+    request: any,
+    endpoint: string,
+    methodType = 'POST',
+  ): Promise<void> {
     appModel.isErrorOccurred = false;
     // ky's prefixUrl requires the endpoint must NOT start with '/'
     const path = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;

@@ -24,13 +24,12 @@ export class gameApp extends SlotGameApp {
     await this.initiateCoreApp();
   }
 
-  async createSplash() {
+  protected createSplash() {
     const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
     this.splashComp = new SplashView(SPLASH_CONFIG);
     this.appContainer.addChild(this.splashComp, this.preloader);
-    console.log('splash created');
   }
-  async createView() {
+  protected createView() {
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
     this.appContainer.addChild(this.gameAppScreen, this.splashComp);
   }

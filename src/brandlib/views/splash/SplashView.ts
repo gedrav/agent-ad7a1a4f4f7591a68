@@ -66,6 +66,7 @@ export class SplashView extends ResponsesiveChildrenView {
       }
     }
     this.resizeView();
+    this.onLoadProgress(0);
     EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
     if (appModel.primaryAssetsLoaded) {
