@@ -2,10 +2,13 @@ import { SplashStartCommand } from '@core/commands/action/SplashStartCommand';
 import { UIConfig } from '@game/config/UIConfig';
 import { SplashView } from '@brand/views/splash/SplashView';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
   class: SplashView,
+  requiredBundle: LOAD_CONSTANTS.SPLASH,
+  unloadAssets: true,
   contents: [
     {
       name: 'item1',
@@ -51,10 +54,11 @@ export const SPLASH_CONFIG: any = {
     },
   ],
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 1 },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0x000000, alpha: 1 },
     {
       name: 'splashBG',
       type: 'Spine',
+      dontDestroyOnHide: true,
       spineName: 'bg_day',
       defaultSkin: 'default',
       defaultState: 'animation',

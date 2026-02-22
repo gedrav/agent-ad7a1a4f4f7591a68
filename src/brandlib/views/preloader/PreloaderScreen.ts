@@ -12,7 +12,6 @@ export class PreloaderScreen extends ResponsesiveView {
 
   constructor(config: any) {
     super(config);
-    this.preloader = this.elementsList['preloader'];
     this.loadingText = this.elementsList['loadingText'];
     EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
   }

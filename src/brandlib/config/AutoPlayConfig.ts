@@ -5,11 +5,13 @@ import { AutoPlayChangeToggleBtnCommand } from '@core/commands/action/AutoPlayCh
 import { AutoPlaySliderChangeCommand } from '@core/commands/action/AutoPlaySliderChangeCommand';
 import { AutoPlayCancelBtnCommand } from '@core/commands/action/AutoPlayCancelBtnCommand';
 import { AutoPlayConfirmBtnCommand } from '@core/commands/action/AutoPlayConfirmBtnCommand';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const AUTOPLAY_CONFIG = {
-  name: 'AutoplayView',
+  name: 'autoplayView',
   type: 'Comp',
   class: AutoplayView,
+  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'autoCont',

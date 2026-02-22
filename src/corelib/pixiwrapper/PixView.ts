@@ -4,12 +4,15 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { AppEvents } from '@core/events/AppEvents';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { appModel } from '@core/models/services/AppModelService';
+import { AssetLoader } from '@core/models/services/AssetLoader';
 export class PixView extends PIXI.Container {
   protected isDestroyed = false;
   private _configData: any;
   private _configDataBackup: any;
   public elementsList: { [key: string]: any };
   public guideRect: PixGraphics;
+  protected viewCreated: boolean;
 
   constructor(configData: any = null) {
     super();
@@ -26,7 +29,18 @@ export class PixView extends PIXI.Container {
     }
     this.label = this.configData.label ? this.configData.label : this.configData.name;
 
-    this.createView();
+    if (this.configData.requiredBundle) {
+      if (appModel.isBundleLoaded(this.configData.requiredBundle)) {
+        this.createView();
+      } else {
+      }
+    } else {
+      if (this.configData.dontCreateView) {
+        return;
+      }
+      this.createView();
+    }
+
     EventHandler.addEventListener(AppEvents.ON_UPDATE, this.onUpdate.bind(this));
   }
 
@@ -35,12 +49,28 @@ export class PixView extends PIXI.Container {
     this.interactiveChildren = flag;
   }
 
-  createView() {
+  async unloadBundle() {
+    if (this.configData.requiredBundle && this.configData.unloadAssets) {
+      await AssetLoader.unloadBundle(this.configData.requiredBundle);
+    }
+  }
+
+  async createLazyView() {
+    if (this.configData.requiredBundle) {
+      await AssetLoader.loadBundles(this.configData.requiredBundle);
+    }
+    this.createView();
+  }
+
+  protected createView() {
     this.elementsList = [];
     if (this.configData.Elements) {
       this.createElements(this.configData.Elements);
     }
+    this.onViewCreated();
+    this.viewCreated = true;
   }
+  protected onViewCreated() {}
 
   protected onUpdate(delta: number) {}
 
@@ -68,14 +98,14 @@ export class PixView extends PIXI.Container {
   }
 
   public getWidth(): number {
-    if (this.elementsList['guideRect']) {
+    if (this.elementsList && this.elementsList['guideRect']) {
       return this.elementsList['guideRect'].width * this.scale.x;
     } else {
       return this.width;
     }
   }
   public getHeight(): number {
-    if (this.elementsList['guideRect']) {
+    if (this.elementsList && this.elementsList['guideRect']) {
       return this.elementsList['guideRect'].height * this.scale.y;
     } else {
       return this.height;
@@ -95,15 +125,26 @@ export class PixView extends PIXI.Container {
   set configData(value: any) {
     this._configData = value;
   }
+  public async destroyElements(): Promise<void> {
+    this?.removeChildren().forEach((child: PixView) => {
+      AnimationProxy.killTweensOf(child);
+      child?.destroy(!!child.configData.dontDestroyOnHide);
+    });
+    AnimationProxy.killTweensOf(this);
+    this.isDestroyed = true;
+    if (this.configData.unloadAssets) {
+      await this.unloadBundle();
+      this.destroy();
+    }
+  }
 
   public destroyView(): void {
     this?.removeChildren().forEach((child) => {
       AnimationProxy.killTweensOf(child);
       child?.destroy();
     });
-    this?.destroy();
     AnimationProxy.killTweensOf(this);
     this.isDestroyed = true;
-    this.configData = null;
+    this?.destroy();
   }
 }

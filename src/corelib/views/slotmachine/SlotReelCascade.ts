@@ -75,9 +75,12 @@ export default class SlotReelCascade extends SlotReel {
       return;
     }
     this.spinResponseReceived = true;
+
     if (appModel.turboMode) {
       this.stopSpinQuick();
       return;
+    } else {
+      this.checkToGetNewSymbols();
     }
   }
 

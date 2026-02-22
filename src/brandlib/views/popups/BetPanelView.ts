@@ -15,7 +15,13 @@ export class BetPanelView extends ResponsesiveChildrenView {
 
   constructor(config: any) {
     super(config);
-
+    EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideBetPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBetPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBetPanel.bind(this));
+  }
+  protected onViewCreated() {
+    super.onViewCreated();
     this.closeBtn = this.elementsList['closeBtn'];
     this.upStakeBtn = this.elementsList['upStakeBtn'];
     this.downStakeBtn = this.elementsList['downStakeBtn'];
@@ -47,25 +53,25 @@ export class BetPanelView extends ResponsesiveChildrenView {
     this.visible = false;
 
     UIUtil.stopPropagation(this);
-
-    EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideBetPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBetPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBetPanel.bind(this));
   }
-  protected hideBetPanel(): void {
+  protected async hideBetPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      this.visible = false;
+      await this.destroyElements();
+      this.parent.removeChild(this);
     }
   }
-  protected showBetPanel(): void {
+  protected async showBetPanel() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    await this.createLazyView();
     this.updateBetPanel();
     this.resizeView();
     this.visible = true;
   }
   protected updateBetPanel(data: any = null): void {
+    if (!this.viewCreated) {
+      return;
+    }
     this.stakeText.text = Util.formatCurrency(appModel.getTotalBet());
     const len = this.betBtnsArray.length;
     for (let i = 0; i < len; i++) {

@@ -1,5 +1,6 @@
 export const AppEvents: { [key: string]: string } = {
   PRIMARY_ASSETS_LOADED: 'PRIMARY_ASSETS_LOADED',
+  BUNDLE_LOADED: 'BUNDLE_LOADED',
   SOUNDS_LOADING_PREGRESS: 'SoundLoadingProgress',
   SOUNDS_LOADING_COMPLETE: 'SoundLoadingComplete',
   ASSET_LOADING_PROGRESS: 'AssetLoadingProgress',

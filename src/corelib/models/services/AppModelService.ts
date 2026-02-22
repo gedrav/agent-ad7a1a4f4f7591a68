@@ -22,6 +22,19 @@ class AppModelService {
   set secondaryAssetsLoaded(value: boolean) {
     this._secondaryAssetsLoaded = value;
   }
+  private _primaryAssetsLoaded: boolean;
+  get primaryAssetsLoaded(): boolean {
+    return this._primaryAssetsLoaded;
+  }
+  set primaryAssetsLoaded(value: boolean) {
+    this._primaryAssetsLoaded = value;
+  }
+  public isBundleLoaded(bundle: string): boolean {
+    if (GameProxy.config.bundlesLoaded.indexOf(bundle) > -1) {
+      return true;
+    }
+    return false;
+  }
   private unfinishedData: any;
   private featureName: string;
   private _featureResult: any;
@@ -166,9 +179,12 @@ class AppModelService {
     this.gameInfo.betsArray = data.playerInfo.possibleBets;
     this.gameInfo.minBet = data.playerInfo.minBet;
     this.gameInfo.maxBet = data.playerInfo.maxBet;
-    this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet);
+    this.gameInfo.betPos =
+      this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet) > -1
+        ? this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet)
+        : 0;
     this.gameInfo.selectedLines = GameProxy.config.totalLines;
-    this.gameInfo.paytable = data.gameInfo.paytable;
+    this.gameInfo.paytable = data.gameInfo.payTable;
     this.unfinishedData = data.unfinishedInfo;
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
@@ -253,18 +269,18 @@ class AppModelService {
   }
 
   public getTotalBet(): number {
-    return this.gameInfo.betsArray[this.gameInfo.betPos] * this.gameInfo.creditValue;
+    return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue;
   }
   public getAllBets(): number[] {
     const bets: number[] = [];
     const len = this.gameInfo.betsArray.length;
     for (let k = 0; k < len; k++) {
-      bets.push(this.gameInfo.betsArray[k] * this.gameInfo.creditValue);
+      bets.push(this.gameInfo?.betsArray[k] * this.gameInfo?.creditValue);
     }
     return bets;
   }
   public getBalance(): number {
-    return this.gameInfo.balance;
+    return this.gameInfo?.balance;
   }
   public getBetPos(): number {
     return this.gameInfo.betPos;

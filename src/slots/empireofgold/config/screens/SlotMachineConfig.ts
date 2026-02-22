@@ -19,7 +19,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'guideRect',
       type: 'Graphics',
-      color: 0xff0000,
+      color: 0xffff00,
       width: 1860,
       height: 1350,
       alpha: 0,

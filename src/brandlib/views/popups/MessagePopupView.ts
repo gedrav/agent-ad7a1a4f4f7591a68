@@ -13,6 +13,10 @@ export class MessagePopupView extends ResponsesiveChildrenView {
 
   constructor(config: any) {
     super(config);
+    EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
+    EventHandler.addEventListener(SlotEvents.CLOSE_MESSAGE_POPUP, this.closeMessagePopup.bind(this));
+  }
+  protected onViewCreated() {
     this.closeBtn = this.elementsList['closeBtn'];
     this.titleText = this.elementsList['titleText'];
     this.messageText = this.elementsList['messageText'];
@@ -21,19 +25,19 @@ export class MessagePopupView extends ResponsesiveChildrenView {
     this.messageText.y = this.panelBG.height / 2;
     UIUtil.updateWordWrapWidth(this.messageText, this.panelBG.width * 0.8);
     this.visible = false;
-    EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
-    EventHandler.addEventListener(SlotEvents.CLOSE_MESSAGE_POPUP, this.closeMessagePopup.bind(this));
   }
 
-  protected showMessagePopup(data: any): void {
+  protected async showMessagePopup(data: any) {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    await this.createLazyView();
     this.visible = true;
     this.titleText.text = data.title;
     this.messageText.text = data.message;
   }
 
-  protected closeMessagePopup(): void {
+  protected async closeMessagePopup() {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-    this.visible = false;
+    await this.destroyElements();
+    this.parent.removeChild(this);
   }
 }

@@ -19,6 +19,7 @@ export class SymbolPayoutComp extends StandardView {
   public showComp(symbol: string, symbolAtLeft: boolean): void {
     this.infoText.text = '';
     const pays = appModel.getPaytableData();
+    console.log(pays);
     const data = pays[symbol];
     if (data) {
       let result: string = '';

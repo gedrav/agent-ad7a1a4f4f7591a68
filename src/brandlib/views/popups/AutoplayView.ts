@@ -35,6 +35,17 @@ export class AutoplayView extends ResponsesiveChildrenView {
 
   constructor(config: any) {
     super(config);
+    EventHandler.addEventListener(SlotEvents.SHOW_AUTO_PLAY_PANEL, this.showAutoPlayPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_NO_OF_SPIN_BTN_CLICKED, this.updateSelectedBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_TOGGLE_STATE, this.onToggleStateUpdate.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_CANCEL_CLICKED, this.hideAutoPlayPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAutoPlayPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED, this.onOkClicked.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.resetAutoplayView.bind(this));
+    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.resizeView.bind(this));
+  }
+  protected onViewCreated() {
+    super.onViewCreated();
     this.autoCont = this.elementsList['autoCont'];
     this.autoPanelBg = this.autoCont.elementsList['autoPanelBg'];
     this.titleText1 = this.autoCont.elementsList['titleText1'];
@@ -72,21 +83,13 @@ export class AutoplayView extends ResponsesiveChildrenView {
     this.visible = false;
 
     UIUtil.stopPropagation(this.autoCont);
-
-    EventHandler.addEventListener(SlotEvents.SHOW_AUTO_PLAY_PANEL, this.showAutoPlayPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_NO_OF_SPIN_BTN_CLICKED, this.updateSelectedBtn.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_TOGGLE_STATE, this.onToggleStateUpdate.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_CANCEL_CLICKED, this.hideAutoPlayPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAutoPlayPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED, this.onOkClicked.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.resetAutoplayView.bind(this));
-    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.resizeView.bind(this));
   }
 
-  protected hideAutoPlayPanel(): void {
+  protected async hideAutoPlayPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      this.visible = false;
+      await this.destroyElements();
+      this.parent.removeChild(this);
     }
   }
 
@@ -103,12 +106,13 @@ export class AutoplayView extends ResponsesiveChildrenView {
   }
 
   // Reset to defaults and show autoplay panel
-  protected showAutoPlayPanel(): void {
-    this.resetAutoplayView();
+  protected async showAutoPlayPanel() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    await this.createLazyView();
+    this.resetAutoplayView();
     this.onBonusWin.setSelected(true);
     this.resizeView();
-    AnimationProxy.fadeIn(this, 0.5);
+    this.visible = true;
   }
 
   protected updateSelectedBtn(value: number): void {
@@ -139,6 +143,7 @@ export class AutoplayView extends ResponsesiveChildrenView {
   }
 
   protected resizeView(): void {
+    if (!this.viewCreated) return;
     super.resizeView();
 
     UIUtil.adjustForMobile(this.autoCont);

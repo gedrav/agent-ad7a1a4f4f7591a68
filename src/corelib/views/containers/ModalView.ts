@@ -21,11 +21,11 @@ export class ModalView extends ResponsesiveChildrenView {
     GameProxy.config.isModalOpened = true;
     this.alpha = 0;
     this.visible = true;
-    AnimationProxy.fadeIn(this, 0.5);
+    AnimationProxy.fadeIn(this, 0.1);
   }
   protected hideModalView(): void {
     GameProxy.config.isModalOpened = false;
-    AnimationProxy.fadeOut(this, 0.2, this.onFadedOut.bind(this));
+    AnimationProxy.fadeOut(this, 0.1, this.onFadedOut.bind(this));
   }
   protected onModalClicked(): void {
     EventHandler.dispatchEvent(SlotEvents.MODAL_VIEW_CLICKED);

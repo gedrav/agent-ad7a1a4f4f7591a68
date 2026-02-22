@@ -13,6 +13,7 @@ import { SplashStartCommand } from '@core/commands/action/SplashStartCommand';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { SlotEvents } from '@core/events/SlotEvents';
 import * as PIXI from 'pixi.js';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class SplashView extends ResponsesiveChildrenView {
   private gameTitle: PixSprite | PixSpine;
@@ -67,19 +68,24 @@ export class SplashView extends ResponsesiveChildrenView {
     this.resizeView();
     EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
+    if (appModel.primaryAssetsLoaded) {
+      this.onPrimaryAssetsLoaded();
+    }
   }
 
   protected onLoadProgress(loaded: number): void {
-    if (this.loadingText && this.loadingText.text !== undefined) {
-      this.loadingText.text = Util.getContent('loadingText', [loaded]);
-    }
-    if (this.maskRect) {
-      this.maskRect.scale.x = loaded / 100;
+    if (loaded) {
+      if (this.loadingText && this.loadingText.text !== undefined) {
+        this.loadingText.text = Util.getContent('loadingText', [loaded]);
+      }
+      if (this.maskRect) {
+        this.maskRect.scale.x = loaded / 100;
+      }
     }
   }
 
   protected onPrimaryAssetsLoaded(): void {
-    if (this.loadingText && this.loadingText.text !== undefined) {
+    if (this.loadingText) {
       this.loadingText.text = Util.getContent('startGameText');
       this.loaderbg.visible = false;
       this.loaderfill.visible = false;
@@ -89,7 +95,7 @@ export class SplashView extends ResponsesiveChildrenView {
     }
   }
   protected positionElements(): void {
-    this.guideRect.y = this.gameTitle.y + this.gameTitle.height + UIUtil.getGameHeight() * 0.02;
+    this.guideRect.y = this.gameTitle?.y + this.gameTitle?.height + UIUtil.getGameHeight() * 0.02;
     this.loadingBtnContainer.x = UIUtil.getGameWidth() / 2;
     this.loadingBtnContainer.y = UIUtil.getGameHeight() * 0.93;
 
@@ -183,7 +189,9 @@ export class SplashView extends ResponsesiveChildrenView {
       this.itemContainer.scale.set(Math.min(sc, hsc, 1));
       this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
       this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
-      this.gameTitle.y = this.itemContainer.y - this.gameTitle.height * 1.06;
+      if (this.gameTitle) {
+        this.gameTitle.y = this.itemContainer.y - this.gameTitle?.height * 1.06;
+      }
     }
   }
 
@@ -199,9 +207,8 @@ export class SplashView extends ResponsesiveChildrenView {
     //AnimationProxy.animateTween(this, 0.5, {alpha: 0, onComplete: this.onFadedOut.bind(this)});
     this.onFadedOut();
   }
-  protected onFadedOut(): void {
-    this.splashBG.destroy();
-    this.destroyView();
+  protected async onFadedOut() {
+    await this.destroyElements();
     EventHandler.dispatchEvent(SlotEvents.SPLASH_DESTROYED);
   }
 }

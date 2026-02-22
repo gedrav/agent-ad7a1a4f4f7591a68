@@ -1,11 +1,13 @@
 import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { CoreUIConfig } from './CoreUIConfig';
 import { ErrorMessageCloseCommand } from '@core/commands/action/ErrorMessageCloseCommand';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const MESSAGE_POPUP_CONFIG = {
   name: 'messagePopupView',
   type: 'Comp',
   class: MessagePopupView,
+  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'panelBG',

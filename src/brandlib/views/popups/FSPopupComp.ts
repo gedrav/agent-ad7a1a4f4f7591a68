@@ -16,6 +16,10 @@ export class FSPopupComp extends ResponsesiveChildrenView {
 
   constructor(config: any) {
     super(config);
+    EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
+  }
+
+  protected onViewCreated() {
     this.okBtn = this.elementsList['okBtn'];
     this.titleText = this.elementsList['titleText'];
     this.messageText1 = this.elementsList['messageText1'];
@@ -24,10 +28,10 @@ export class FSPopupComp extends ResponsesiveChildrenView {
     this.panelBG = this.elementsList['popupbg'];
     this.okBtn.onPress.connect(this.onCloseClicked.bind(this));
     this.visible = false;
-    EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
   }
 
-  protected showFSPopup(data: any): void {
+  protected async showFSPopup(data: any) {
+    await this.createLazyView();
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.visible = true;
     this.titleText.text = data.title;
@@ -48,7 +52,7 @@ export class FSPopupComp extends ResponsesiveChildrenView {
     this.onCloseClicked();
   }
 
-  protected onCloseClicked(): void {
+  protected async onCloseClicked() {
     if (!appModel.getIsLightningSession()) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     }
@@ -61,5 +65,6 @@ export class FSPopupComp extends ResponsesiveChildrenView {
     if (this.callbackFunction) {
       this.callbackFunction();
     }
+    await this.destroyElements();
   }
 }

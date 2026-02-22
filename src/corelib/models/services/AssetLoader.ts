@@ -6,10 +6,12 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { AppEvents } from '@core/events/AppEvents';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { PRIMARY_ASSET_LENGTH } from '@game/config/AssetConfig';
 
 class AssetLoaderClass {
   private commonFontPath: string;
   private soundConfig: any;
+  private postAssetConfig: any;
   get bundles(): any[] {
     return this._bundles;
   }
@@ -53,48 +55,95 @@ class AssetLoaderClass {
   public async initAssets(config: any, soundConfig: any) {
     this.assetConfig = config;
     this.soundConfig = soundConfig;
-    this.bundles = config;
+    this.bundles = [];
     this.createPaths();
-    this.assetsManifest = this.createAssetsManifest();
-    console.log('Assets manifest', this.assetsManifest);
+    this.assetsManifest = this.createAssetsManifest(this.assetConfig);
 
     await Assets.init({ manifest: this.assetsManifest });
+    await this.loadPrimaryAssets();
   }
-
-  public async loadPreloader() {
-    await this.loadBundles('PRELOADER');
+  protected async loadPrimaryAssets() {
+    const len = PRIMARY_ASSET_LENGTH;
+    if (len > 0) {
+      for (let k = 0; k < len; k++) {
+        await this.loadBundles(this.bundles[k]);
+        EventHandler.dispatchEvent(AppEvents.BUNDLE_LOADED, this.bundles[k]);
+      }
+    }
   }
-
-  public async loadSplash() {
-    await this.loadBundles('COMMON');
-    await this.loadBundles('SPLASH');
-  }
-
-  public async loadPrimary() {
-    await this.loadBundles('PRIMARY');
-  }
-  public async loadSecondary() {
-    console.log('Loading secondary assets');
-    const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
-    await this.loadBundles('SECONDARY');
-    console.log('Finished loading secondary assets');
-  }
-  public async loadFeatures() {
-    const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
-    console.log('Loading features assets ==== ', allBundles);
-    await Assets.backgroundLoadBundle(allBundles);
-  }
-
-  private createAssetsManifest() {
-    const manifest: any = { bundles: [] };
-    console.log('Creating manifest', this.assetConfig);
-    const pathMap = this.createPathMap();
+  public loadSecondaryAssets() {
     const len = this.assetConfig.length;
     if (len > 0) {
+      for (let k = PRIMARY_ASSET_LENGTH - 1; k < len; k++) {
+        this.loadBundles(this.bundles[k]);
+        EventHandler.dispatchEvent(AppEvents.BUNDLE_LOADED, this.bundles[k]);
+      }
+    }
+  }
+
+  public async loadBundles(bundles: string | string[]) {
+    if (typeof bundles === 'string') bundles = [bundles];
+    for (const bundle of bundles) {
+      if (!this.checkBundleExists(bundle)) {
+        //throw new Error(`[Assets] Invalid bundle: ${bundle}`);
+      }
+    }
+    // Filter out bundles that have already been loaded
+    const loadList = bundles.filter((bundle) => !this.loadedBundles.includes(bundle));
+    console.log('loadList', loadList);
+    if (!loadList.length) return; // No new bundles to load
+
+    try {
+      await Assets.loadBundle(loadList, this.onLoadProgress.bind(this, loadList));
+      // Check if 'primary' bundle is part of the loaded list
+    } catch (error) {
+      console.error('Error loading bundles:', error);
+    }
+
+    this.loadedBundles.push(...loadList); // Append loaded bundles to the list
+  }
+
+  private async onLoadProgress(loadList: string, data: any) {
+    let progress;
+    if (loadList[0].toLowerCase().includes('common')) {
+      progress = Math.round(data * 0.05 * 100);
+    } else if (loadList[0].toLowerCase().includes('splash')) {
+      progress = Math.round(data * 0.1 * 100);
+    } else if (loadList[0].toLowerCase().includes('primary')) {
+      progress = Math.round(data * 0.8 * 100);
+    }
+    EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
+  }
+
+  private checkBundleExists(bundle: string) {
+    return this.assetsManifest.bundles.some((b: any) => b.name === bundle);
+  }
+
+  async loadSounds() {
+    await SoundFactory.loadSounds(this.soundConfig.soundFiles, this.soundPath);
+  }
+
+  public async unloadAsset(assetName: string) {
+    if (Assets.cache.has(assetName)) {
+      await Assets.unload(assetName);
+    }
+  }
+  public async unloadBundle(bundle: string) {
+    if (this.loadedBundles.includes(bundle)) {
+      this.loadedBundles.splice(this.loadedBundles.indexOf(bundle), 1);
+    }
+    await Assets.unloadBundle(bundle);
+  }
+
+  private createAssetsManifest(config: any) {
+    const manifest: any = { bundles: [] };
+    const pathMap = this.createPathMap();
+    const len = config.length;
+    if (len > 0) {
       for (let i = 0; i < len; i++) {
-        const data: any = { name: this.assetConfig[i].name, assets: [] };
-        if (this.assetConfig[i]?.assets?.length > 0) {
-          this.assetConfig[i].assets.forEach((item: any) => {
+        const data: any = { name: config[i].name, assets: [] };
+        if (config[i]?.assets?.length > 0) {
+          config[i].assets.forEach((item: any) => {
             const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
             if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
               if (TYPE == 'common') {
@@ -136,11 +185,13 @@ class AssetLoaderClass {
                 alias: NAME,
                 src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
               });
+
               if (item.ASSETTYPE === 'font') {
                 this.loadFont(NAME, assetSrc);
               }
             }
           });
+          this.bundles.push(data.name);
           manifest.bundles.push(data);
         }
       }
@@ -158,6 +209,7 @@ class AssetLoaderClass {
           spine: `assets/spines/${DeviceProxy.config.assetResolution}/${name}.json`,
           atlas: `assets/spines/${DeviceProxy.config.assetResolution}/${name}.atlas`,
           sprite: `assets/images/${DeviceProxy.config.assetResolution}/${name}.json`,
+          sequence: `assets/images/${DeviceProxy.config.assetResolution}/${name}.json`,
           sound: `assets/sounds/${name}`,
           font: `${this.commonFontPath}${name}`,
           bmpfont: `assets/fonts/bmp/}`, // Handle fonts in the common path
@@ -169,6 +221,7 @@ class AssetLoaderClass {
           spine: `${this.spinePath}${name}.json`,
           atlas: `${this.spinePath}${name}.atlas`,
           sprite: `${this.spritePath}${name}.json`,
+          sequence: `${this.spritePath}${name}.json`,
           sound: `canvas/assets/sounds/${name}`,
           font: `${this.fontPath}${name}`, // Handle fonts in the game path
           bmpfont: `${this.bmpFontPath}${name}`, // Handle fonts in the game path
@@ -191,7 +244,7 @@ class AssetLoaderClass {
     if (ASSETTYPE === 'sequence') {
       const resolution = DeviceProxy.config.assetResolution;
       const numSheets = resolution === '@1x' ? file[0] : file[1];
-      return Array.from({ length: numSheets }, (_, i) => getPath(`${NAME}${i}.json`, ASSETTYPE));
+      return Array.from({ length: numSheets }, (_, i) => getPath(`${NAME}${i}`, ASSETTYPE));
     }
 
     return getPath(NAME, ASSETTYPE);
@@ -221,65 +274,6 @@ class AssetLoaderClass {
       .catch((error) => {
         console.error(`Error loading font ${fontName}:`, error);
       });
-  }
-  private async loadBundles(bundles: string | string[]) {
-    if (typeof bundles === 'string') bundles = [bundles];
-    for (const bundle of bundles) {
-      if (!this.checkBundleExists(bundle)) {
-        //throw new Error(`[Assets] Invalid bundle: ${bundle}`);
-      }
-    }
-
-    // Filter out bundles that have already been loaded
-    const loadList = bundles.filter((bundle) => !this.loadedBundles.includes(bundle));
-
-    if (!loadList.length) return; // No new bundles to load
-
-    try {
-      await Assets.loadBundle(loadList, this.onLoadProgress.bind(this, loadList));
-
-      // Check if 'primary' bundle is part of the loaded list
-      if (loadList.includes('primary')) {
-        // Dispatch event when primary assets are loaded
-        EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
-      } else if (loadList.includes('secondary')) {
-        GameProxy.config.secondaryAssetsLoaded = true;
-        EventHandler.dispatchEvent(AppEvents.SECONDARY_ASSETS_LOADED);
-      }
-    } catch (error) {
-      console.error('Error loading bundles:', error);
-    }
-
-    this.loadedBundles.push(...loadList); // Append loaded bundles to the list
-  }
-
-  private async onLoadProgress(loadList: string, data: any) {
-    let progress;
-    if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.COMMON)) {
-      progress = Math.round(data * 0.05 * 100);
-    } else if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.SPLASH)) {
-      progress = Math.round(data * 0.1 * 100);
-    } else if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.PRIMARY)) {
-      progress = Math.round(data * 0.8 * 100);
-    }
-    EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
-  }
-
-  private checkBundleExists(bundle: string) {
-    return this.assetsManifest.bundles.some((b: any) => b.name === bundle);
-  }
-
-  async loadSounds() {
-    await SoundFactory.loadSounds(this.soundConfig.soundFiles, this.soundPath);
-  }
-
-  public async unloadAsset(assetName: string) {
-    if (Assets.cache.has(assetName)) {
-      await Assets.unload(assetName);
-    }
-  }
-  public async unloadBundle(bundle: string) {
-    await Assets.unloadBundle(bundle);
   }
 }
 

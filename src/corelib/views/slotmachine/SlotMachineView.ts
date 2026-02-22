@@ -20,11 +20,11 @@ export class SlotMachineView extends ResponsesiveChildrenView {
 
   protected showSpinWin(): void {
     this.slotReel.showSpinWin();
-    this.bigWinsComp.showSpinWin();
+    this.bigWinsComp?.showSpinWin();
   }
   protected clearSpinWin(): void {
     this.slotReel.clearSpinWin();
-    this.bigWinsComp.clearSpinWin();
+    this.bigWinsComp?.clearSpinWin();
   }
   protected showLineWin(): void {
     this.slotReel.showLineWin();

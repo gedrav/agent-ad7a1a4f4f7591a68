@@ -3,11 +3,13 @@ import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetComma
 import { CoreUIConfig } from './CoreUIConfig';
 import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDecrementBetCommand';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const BET_PANEL_CONFIG = {
   name: 'betPanelView',
   type: 'Comp',
   class: BetPanelView,
+  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'betPanelBg',

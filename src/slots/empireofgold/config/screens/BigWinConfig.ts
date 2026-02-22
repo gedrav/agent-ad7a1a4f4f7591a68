@@ -1,10 +1,12 @@
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const BIG_WIN_CONFIG = {
   name: 'bigWinsComp',
   type: 'Comp',
   class: BigWinsComp,
+  requiredBundle: LOAD_CONSTANTS.SECONDARY,
   data: {
     animations: {
       BIG_WIN: { start: 'bigWin_Start', idle: 'bigWin_idle', end: 'bigWin_End' },

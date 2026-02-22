@@ -1,4 +1,4 @@
-import { SlotGameApp } from '@core/app/SlotGameApp';
+import SlotGameApp from '@core/app/SlotGameApp';
 import { GAME_CONFIG } from '@game/config/GameConfig';
 import { ASSET_CONFIG } from '@game/config/AssetConfig';
 import { STATES_CONFIG } from '@game/config/StatesConfig';

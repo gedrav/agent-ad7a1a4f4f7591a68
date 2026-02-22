@@ -24,7 +24,7 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 declare const __SHOW_STATS__: boolean;
 
-export class SlotGameApp {
+class SlotGameApp {
   protected app: Application<Renderer>;
   private windowUtil: WindowUtil;
 
@@ -91,11 +91,37 @@ export class SlotGameApp {
     EventHandler.setScope(this.app.stage);
     this.addEvents();
     requestAnimationFrame(this.animate.bind(this));
+    WrapperProxy.sendCanvasReady();
+    GameProxy.config.bundlesLoaded = [];
     await AssetLoader.initAssets(assetConfig, soundConfig);
-    await AssetLoader.loadPreloader();
-
+  }
+  protected async onBundleLoaded(bundleName: string) {
+    GameProxy.config.bundlesLoaded.push(bundleName);
+    console.log('bundle loaded === ', bundleName);
+    switch (bundleName) {
+      case LOAD_CONSTANTS.PRELOADER:
+        this.initApp();
+        break;
+      case LOAD_CONSTANTS.COMMON:
+        break;
+      case LOAD_CONSTANTS.SPLASH:
+        this.onSplashAssetsLoaded();
+        break;
+      case LOAD_CONSTANTS.PRIMARY:
+        this.onPrimaryAssetsLoaded();
+        break;
+      case LOAD_CONSTANTS.SECONDARY:
+        this.onSecondaryAssetsLoaded();
+        break;
+      case LOAD_CONSTANTS.FREESPIN:
+        this.onFeatureAssetsLoaded();
+        break;
+      default:
+        break;
+    }
+  }
+  protected async initApp() {
     GameProxy.updateConfigFromCommon();
-
     console.log(
       `%c ⡷⣸ ⡎⢱ ⡇⢸ ⣎⣱ ⡎⠑ ⣏⡱ ⣏⡉ ⢎⡑ ⢹⠁   ⡎⠑ ⣎⣱ ⡷⢾ ⡇ ⡷⣸ ⡎⠑
  ⠇⠹ ⠣⠜ ⠸⠃ ⠇⠸ ⠣⠔ ⠇⠱ ⠧⠤ ⠢⠜ ⠸    ⠣⠝ ⠇⠸ ⠇⠸ ⠇ ⠇⠹ ⠣⠝
@@ -106,11 +132,11 @@ export class SlotGameApp {
       'color: #CCCCCC; font-size: 12px; font-weight: 700;',
     );
 
-    WrapperProxy.sendCanvasReady();
     await this.initiateApp();
   }
 
   protected addEvents(): void {
+    EventHandler.addEventListener(AppEvents.BUNDLE_LOADED, this.onBundleLoaded.bind(this));
     EventHandler.addEventListener(SlotEvents.SPLASH_START_CLICKED, this.onSplashStartClicked.bind(this));
     EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
     EventHandler.addEventListener(SlotEvents.SPLASH_DESTROYED, this.onSplashDestroyed.bind(this));
@@ -130,28 +156,26 @@ export class SlotGameApp {
   }
   async requestGameInit() {
     await MessageProxy.requestGameInit();
-    await this.loadSplashAssets();
     this.gameInitReceived = true;
+    await this.checkToCreateView();
+  }
+  protected async onSplashAssetsLoaded() {
+    this.splashAssetsLoaded = true;
     await this.checkToCreateSplash();
   }
-  async loadSplashAssets() {
-    await AssetLoader.loadSplash();
-    this.splashAssetsLoaded = true;
-    this.checkToCreateSplash();
-  }
+
   async checkToCreateSplash() {
     if (this.initErrorOccured) {
       return;
     }
-    if (this.splashAssetsLoaded && this.gameInitReceived) {
+    if (this.splashAssetsLoaded) {
       await this.createSplash();
       this.removePreloader();
-      this.loadPrimaryAssets();
     }
   }
-  async loadPrimaryAssets() {
-    await AssetLoader.loadPrimary();
+  async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
+    appModel.primaryAssetsLoaded = true;
     this.checkToCreateView();
   }
 
@@ -161,29 +185,25 @@ export class SlotGameApp {
     }
   }
   async onSoundsLoaded() {
-    await this.createView();
-    this.isViewCreated = true;
-    EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
-    this.loadSecondaryAssets();
+    if (!appModel.isErrorOccurred) {
+      await this.createView();
+      this.isViewCreated = true;
+      EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
+      AssetLoader.loadSecondaryAssets();
+    }
   }
-  async loadSecondaryAssets() {
-    await AssetLoader.loadSecondary();
+  async onSecondaryAssetsLoaded() {
     appModel.secondaryAssetsLoaded = true;
-    await AssetLoader.loadFeatures();
+  }
+  async onFeatureAssetsLoaded() {
     appModel.featureAssetsLoaded = true;
   }
   async createSplash() {}
   async createView() {}
   protected async onSplashStartClicked() {
-    //EventHandler.dispatchEvent(StateEvents.EXIT_STATE);
     this.splashComp.removeSplash();
-    this.splashComp = null;
-    //await AssetLoader.unloadBundle(LOAD_CONSTANTS.SPLASH);
   }
   protected async onSplashDestroyed() {
-    /*UIUtil.cleanUpGPU();
-    await Assets.unloadBundle(this.splashComp.assetBundles)*/
-    this.splashComp = null;
     StateManager.initiate();
   }
 
@@ -350,3 +370,5 @@ export class SlotGameApp {
     });
   }
 }
+
+export default SlotGameApp;

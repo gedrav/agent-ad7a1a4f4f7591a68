@@ -1,5 +1,16 @@
 import * as PIXI from 'pixi.js';
-import { Assets, FillGradient, PointData, Text, TextStyle, Texture } from 'pixi.js';
+import {
+  AnimatedSprite,
+  Assets,
+  Container,
+  FillGradient,
+  Mesh,
+  PointData,
+  Sprite,
+  Text,
+  TextStyle,
+  Texture,
+} from 'pixi.js';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { ContentProxy } from '@core/models/ContentServiceProxy';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';

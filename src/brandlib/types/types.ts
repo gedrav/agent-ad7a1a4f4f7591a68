@@ -3,7 +3,7 @@ export type AssetEntry = {
   NAME: string;
   ASSETTYPE?: string;
   file?: [number, number];
-  TEXTURES?: string[];
+  TEXTURES?: number[];
 };
 
 export type AssetBundle = {

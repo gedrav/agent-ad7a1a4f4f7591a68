@@ -14,7 +14,13 @@ export class BuyBonusView extends ResponsesiveChildrenView {
 
   constructor(config: any) {
     super(config);
-
+    EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBuyBonusView.bind(this));
+  }
+  protected onViewCreated() {
+    super.onViewCreated();
     this.closeBtn = this.elementsList['closeBtn'];
     this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
     this.stakeText = this.elementsList['stakeText'];
@@ -22,16 +28,12 @@ export class BuyBonusView extends ResponsesiveChildrenView {
     this.visible = false;
 
     UIUtil.stopPropagation(this);
-
-    EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
-    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBuyBonusView.bind(this));
   }
-  protected hideBuyBonusView(): void {
+  protected async hideBuyBonusView() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      this.visible = false;
+      await this.destroyElements();
+      this.parent.removeChild(this);
     }
   }
 
@@ -43,13 +45,14 @@ export class BuyBonusView extends ResponsesiveChildrenView {
     }
   }
 
-  protected showBuyBonusView(bbId: any): void {
+  protected async showBuyBonusView(bbId: any) {
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    await this.createLazyView();
     GameProxy.config.selectedBB = bbId;
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
     this.stakeText.text = Util.formatCurrency(appModel.getTotalBet());
     this.visible = true;
     this.resizeView();
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
   }
 }

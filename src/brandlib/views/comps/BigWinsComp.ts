@@ -26,6 +26,9 @@ export class BigWinsComp extends ResponsesiveView {
 
   constructor(config) {
     super(config);
+  }
+  protected onViewCreated() {
+    super.onViewCreated();
     this.winTicker = this.elementsList['winTicker'];
     this.winTicker.reset();
     this.winTicker.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
@@ -137,11 +140,13 @@ export class BigWinsComp extends ResponsesiveView {
   }
   public clearSpinWin(): void {
     clearTimeout(this.winTimerId);
-    this.winTicker.reset();
+    this.winTicker?.reset();
     clearTimeout(this.timeoutId);
     if (this.bigWinAnim) {
-      this.bigWinAnim.stopAnimation();
-      this.bigWinAnim.visible = false;
+      this.bigWinAnim?.stopAnimation();
+      if (this.bigWinAnim) {
+        this.bigWinAnim.visible = false;
+      }
     }
   }
   public showLineWin(): void {}
