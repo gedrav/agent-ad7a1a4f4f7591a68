@@ -13,7 +13,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.06',
+  gameVersion: '0.07',
   gameId: 'empireofgold',
   sendTotalBetInRequest: true,
   gameName: 'Empire of Gold',
