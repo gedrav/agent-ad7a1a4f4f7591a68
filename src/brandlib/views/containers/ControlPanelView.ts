@@ -162,7 +162,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.balanceComp.updateValue(value == undefined ? appModel.getBalance() : value);
   }
   protected updateTotalbet(value: number = null) {
-    console.log('updateTotalbet', value, appModel.getTotalBet());
     this.betComp.updateValue(value == undefined ? appModel.getTotalBet() : value);
   }
   protected onSoundStateChanged(flag: boolean): void {

@@ -185,16 +185,27 @@ class SlotGameApp {
   }
   async onSoundsLoaded() {
     if (!appModel.isErrorOccurred) {
-      await this.createView();
-      this.isViewCreated = true;
-      EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
-      AssetLoader.loadSecondaryAssets();
+      if (!this.isViewCreated) {
+        await this.createView();
+        this.isViewCreated = true;
+        EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
+        this.loadLazyFiles();
+      }
     }
   }
+  protected async loadLazyFiles() {
+    console.log('loading lazy files');
+    await AssetLoader.loadSecondarySounds();
+    console.log('lazy sounds files loaded');
+    await AssetLoader.loadSecondaryAssets();
+    console.log('lazy assets files loaded');
+  }
   async onSecondaryAssetsLoaded() {
+    console.log('secondary assets loaded');
     appModel.secondaryAssetsLoaded = true;
   }
   async onFeatureAssetsLoaded() {
+    console.log('feature assets loaded');
     appModel.featureAssetsLoaded = true;
   }
   async createSplash() {}

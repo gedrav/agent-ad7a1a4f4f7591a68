@@ -55,7 +55,8 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.4,
       fadeOutDuration: 1000,
     },
-
+  ],
+  lazySoundFiles: [
     // --- Buttons ---
     {
       name: 'genericButtonSound',

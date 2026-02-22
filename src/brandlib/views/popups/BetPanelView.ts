@@ -14,6 +14,7 @@ export class BetPanelView extends ResponsesiveChildrenView {
   private stakeText: any;
 
   constructor(config: any) {
+    console.log('BetPanelView constructor');
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideBetPanel.bind(this));

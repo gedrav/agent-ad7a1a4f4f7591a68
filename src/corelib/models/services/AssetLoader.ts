@@ -71,7 +71,7 @@ class AssetLoaderClass {
       }
     }
   }
-  public loadSecondaryAssets() {
+  public async loadSecondaryAssets() {
     const len = this.assetConfig.length;
     if (len > 0) {
       for (let k = PRIMARY_ASSET_LENGTH - 1; k < len; k++) {
@@ -120,6 +120,11 @@ class AssetLoaderClass {
 
   async loadSounds() {
     await SoundFactory.loadSounds(this.soundConfig.soundFiles, this.soundPath);
+  }
+  async loadSecondarySounds() {
+    if (this.soundConfig.lazySoundFiles && this.soundConfig.lazySoundFiles.length > 0) {
+      await SoundFactory.loadSounds(this.soundConfig.lazySoundFiles, this.soundPath);
+    }
   }
 
   public async unloadAsset(assetName: string) {

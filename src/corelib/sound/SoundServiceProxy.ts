@@ -113,13 +113,17 @@ class SoundServiceProxy {
   }
 
   protected handleSoundsLoaded(file: string, index: string): void {
-    const loaded = Math.round(((this.loadingIndex + 1) / this.totalFiles) * 100);
-    const progress = 80 + Math.round(loaded * 0.2);
-    EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
+    if (!this.isSoundPresent) {
+      const loaded = Math.round(((this.loadingIndex + 1) / this.totalFiles) * 100);
+      const progress = 80 + Math.round(loaded * 0.2);
+      EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
+    }
+
     if (this.loadingIndex >= this.totalFiles - 1) {
-      this.isSoundPresent = true;
-      //console.log('sounds loaded');
-      EventHandler.dispatchEvent(AppEvents.SOUNDS_LOADING_COMPLETE);
+      if (!this.isSoundPresent) {
+        EventHandler.dispatchEvent(AppEvents.SOUNDS_LOADING_COMPLETE);
+        this.isSoundPresent = true;
+      }
     } else {
       this.loadingIndex++;
     }
