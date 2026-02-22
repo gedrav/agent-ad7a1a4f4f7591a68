@@ -90,7 +90,6 @@ class AssetLoaderClass {
     }
     // Filter out bundles that have already been loaded
     const loadList = bundles.filter((bundle) => !this.loadedBundles.includes(bundle));
-    console.log('loadList', loadList);
     if (!loadList.length) return; // No new bundles to load
 
     try {

@@ -97,7 +97,6 @@ class SlotGameApp {
   }
   protected async onBundleLoaded(bundleName: string) {
     GameProxy.config.bundlesLoaded.push(bundleName);
-    console.log('bundle loaded === ', bundleName);
     switch (bundleName) {
       case LOAD_CONSTANTS.PRELOADER:
         this.initApp();
