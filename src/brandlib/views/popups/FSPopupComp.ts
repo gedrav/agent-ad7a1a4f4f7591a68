@@ -31,7 +31,6 @@ export class FSPopupComp extends ResponsesiveChildrenView {
   }
 
   protected async showFSPopup(data: any) {
-    await this.createLazyView();
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.visible = true;
     this.titleText.text = data.title;
@@ -65,6 +64,6 @@ export class FSPopupComp extends ResponsesiveChildrenView {
     if (this.callbackFunction) {
       this.callbackFunction();
     }
-    await this.destroyElements();
+    this.parent.removeChild(this);
   }
 }

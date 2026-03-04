@@ -75,7 +75,6 @@ export class SplashView extends ResponsesiveChildrenView {
   }
 
   protected onLoadProgress(loaded: number): void {
-    console.log('onLoadProgress', loaded);
     if (loaded) {
       if (this.loadingText && this.loadingText.text !== undefined) {
         this.loadingText.text = Util.getContent('loadingText', [loaded]);

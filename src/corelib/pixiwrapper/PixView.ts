@@ -6,6 +6,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { AssetLoader } from '@core/models/services/AssetLoader';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 export class PixView extends PIXI.Container {
   protected isDestroyed = false;
   private _configData: any;
@@ -41,9 +42,27 @@ export class PixView extends PIXI.Container {
       this.createView();
     }
 
+    EventHandler.addEventListener(AppEvents.POPUP_ASSETS_LOADED, this.onPopupAssetsLoaded.bind(this));
+    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.onSecondaryAssetsLoaded.bind(this));
+    EventHandler.addEventListener(AppEvents.FEATURE_ASSETS_LOADED, this.onFeatureAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.ON_UPDATE, this.onUpdate.bind(this));
   }
 
+  protected onPopupAssetsLoaded(): void {
+    if (this.configData.requiredBundle === LOAD_CONSTANTS.POPUPS) {
+      this.createLazyView();
+    }
+  }
+  protected onSecondaryAssetsLoaded(): void {
+    if (this.configData.requiredBundle === LOAD_CONSTANTS.SECONDARY) {
+      this.createLazyView();
+    }
+  }
+  protected onFeatureAssetsLoaded(): void {
+    if (this.configData.requiredBundle === LOAD_CONSTANTS.FREESPIN) {
+      this.createLazyView();
+    }
+  }
   public setViewState(flag: boolean): void {
     this.interactive = flag;
     this.interactiveChildren = flag;

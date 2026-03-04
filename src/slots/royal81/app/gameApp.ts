@@ -1,4 +1,3 @@
-import SlotGameApp from '@core/app/SlotGameApp';
 import { GAME_CONFIG } from '@game/config/GameConfig';
 import { ASSET_CONFIG } from '@game/config/AssetConfig';
 import { STATES_CONFIG } from '@game/config/StatesConfig';
@@ -8,6 +7,7 @@ import { SLOT_GAME_APP_CONFIG } from '@game/config/screens/SlotGameAppConfig';
 import { GAME_SOUND_CONFIG } from '@game/config/SoundLoadConfig';
 import { GameSoundManager } from '@game/app/GameSoundManager';
 import { SplashView } from '@brand/views/splash/SplashView';
+import { SlotGameApp } from '@core/app/SlotGameApp';
 
 export class gameApp extends SlotGameApp {
   constructor() {

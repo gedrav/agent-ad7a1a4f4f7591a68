@@ -5,6 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { AssetLoader } from '@core/models/services/AssetLoader';
 
 export class BetPanelView extends ResponsesiveChildrenView {
   private closeBtn: any;
@@ -57,13 +58,11 @@ export class BetPanelView extends ResponsesiveChildrenView {
   protected async hideBetPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      await this.destroyElements();
       this.parent.removeChild(this);
     }
   }
   protected async showBetPanel() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    await this.createLazyView();
     this.updateBetPanel();
     this.resizeView();
     this.visible = true;

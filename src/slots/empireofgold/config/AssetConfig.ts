@@ -33,7 +33,7 @@ const PRIMARY: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sequence', file: [3, 1] },
+    { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
   ],
 };
@@ -50,7 +50,10 @@ const SECONDARY: AssetBundle = {
 };
 const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FREESPIN,
-  assets: [{ TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' }],
+  assets: [
+    { TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'freespinAssets', ASSETTYPE: 'sprite' },
+  ],
 };
 
 export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, POPUPS, SECONDARY, FREESPIN];

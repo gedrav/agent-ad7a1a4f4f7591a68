@@ -43,6 +43,10 @@ export class SlotAppView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_AUTO_PLAY_PANEL, this.showAutoPlayPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
+  }
+  protected showFSPopup(): void {
+    this.addChild(this.popupComp);
   }
   protected showBetPanel(): void {
     this.addChild(this.betPanelView);

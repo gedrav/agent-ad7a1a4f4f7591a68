@@ -53,6 +53,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
   private payoutTimeoutId: any;
   private modalRect: PixGraphics;
   protected spinResponseReceived: boolean;
+  protected defaultReel: any[];
 
   constructor(configData: any) {
     super(configData);
@@ -79,6 +80,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, this.restartIdleAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onIdleStateEntry.bind(this));
     EventHandler.addEventListener(SlotEvents.CREATE_FINAL_REEL_SYMBOLS, this.createFinalReelSymbols.bind(this));
+    EventHandler.addEventListener(SlotEvents.STOP_REEL_FOR_ERROR, this.stopReelForError.bind(this));
 
     this.winController = new this.configData.winController({
       reels: this.reelsData.noOfReels,
@@ -94,16 +96,26 @@ export default class SlotReel extends ResponsesiveChildrenView {
     //this.ticker.start();
     this.ticker.add(this.spinReel.bind(this));
   }
+  protected stopReelForError(): void {
+    setTimeout(this.stopSpinQuick.bind(this), 200);
+  }
   createFinalReelSymbols(): void {
     if (this.reelsData.isFixedSymbol) {
       return;
     }
-    const reels = appModel.getReelsView();
+    let reels = appModel.getReelsView();
     this.finalSymbols = [];
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.finalSymbols[k] = reels[k];
-      this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
-      this.finalSymbols[k].push(this.getRandomSymbolName(k));
+    if (reels) {
+      for (let k = 0; k < this.reelsData.noOfReels; k++) {
+        this.finalSymbols[k] = reels[k];
+        this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
+        this.finalSymbols[k].push(this.getRandomSymbolName(k));
+      }
+    } else {
+      reels = this.defaultReel;
+      for (let k = 0; k < this.reelsData.noOfReels; k++) {
+        this.finalSymbols[k] = reels[k];
+      }
     }
   }
 
@@ -164,6 +176,7 @@ export default class SlotReel extends ResponsesiveChildrenView {
   protected createReel() {
     // Keep for backward compatibility, but recommend using setReels instead
     this.reelsIndexes = [];
+    this.defaultReel = [];
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       if (this.reelsData.initialReelStop && this.reelsData.initialReelStop.length > 0) {
         this.reelsIndexes.push(this.reelsData.initialReelStop[k]);
@@ -172,11 +185,13 @@ export default class SlotReel extends ResponsesiveChildrenView {
       }
     }
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      this.defaultReel[k] = [];
       this.symbolsArray[k] = [];
       this.reelSpinningState.push(0);
       const rows: number = this.reelsData.isFixedSymbol ? this.reelsData.noOfRows : this.reelsData.noOfRows + 2;
       for (let j = 0; j < rows; j++) {
         const symb = this.getNextSymbol(k);
+        this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
         UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));

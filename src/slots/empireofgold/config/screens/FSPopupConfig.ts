@@ -1,11 +1,13 @@
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
   class: FSPopupComp,
   dontCreateView: true,
+  requiredBundle: LOAD_CONSTANTS.FREESPIN,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
     { name: 'popupbg', type: 'Sprite', image: 'popupBG' },

@@ -13,7 +13,9 @@ class GameConfigProxy extends AbstractProxy {
 
   public updateConfigFromCommon(): void {
     const cache = (Cache as any)._cache;
-    const obj = cache.get('commonConfig.json');
+    const obj = cache.get(GameProxy.config.envURL);
+    console.log('cache', cache);
+    console.log('obj', obj);
     if (obj.gameConfig) {
       this.updateConfig(obj.gameConfig);
     }

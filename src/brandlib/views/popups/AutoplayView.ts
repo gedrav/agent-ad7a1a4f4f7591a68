@@ -88,7 +88,6 @@ export class AutoplayView extends ResponsesiveChildrenView {
   protected async hideAutoPlayPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      await this.destroyElements();
       this.parent.removeChild(this);
     }
   }
@@ -108,7 +107,6 @@ export class AutoplayView extends ResponsesiveChildrenView {
   // Reset to defaults and show autoplay panel
   protected async showAutoPlayPanel() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    await this.createLazyView();
     this.resetAutoplayView();
     this.onBonusWin.setSelected(true);
     this.resizeView();

@@ -29,7 +29,6 @@ export class MessagePopupView extends ResponsesiveChildrenView {
 
   protected async showMessagePopup(data: any) {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    await this.createLazyView();
     this.visible = true;
     this.titleText.text = data.title;
     this.messageText.text = data.message;
@@ -37,7 +36,6 @@ export class MessagePopupView extends ResponsesiveChildrenView {
 
   protected async closeMessagePopup() {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-    await this.destroyElements();
     this.parent.removeChild(this);
   }
 }

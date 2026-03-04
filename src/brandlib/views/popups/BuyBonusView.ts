@@ -32,7 +32,6 @@ export class BuyBonusView extends ResponsesiveChildrenView {
   protected async hideBuyBonusView() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      await this.destroyElements();
       this.parent.removeChild(this);
     }
   }
@@ -47,7 +46,6 @@ export class BuyBonusView extends ResponsesiveChildrenView {
 
   protected async showBuyBonusView(bbId: any) {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    await this.createLazyView();
     GameProxy.config.selectedBB = bbId;
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
