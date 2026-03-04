@@ -19,40 +19,11 @@ export class SplashView extends ResponsesiveChildrenView {
   private gameTitle: PixSprite | PixSpine;
   private itemsArray: SplashItemComp[];
   private itemContainer: PixView;
-  public assetBundles = ['SPLASH'];
-  private splashBG: DualSprite;
-  private loadingBtnContainer: PixView;
-  private loaderbg: PixSprite;
-  private loadingText: any;
-  private maskRect: any;
   private startBtn: PixFancyButton;
-  private loaderfill: PixSprite;
   constructor(config: any) {
     super(config);
     this.gameTitle = this.elementsList['gameTitle'];
-    this.splashBG = this.elementsList['splashBG'];
-    this.loadingBtnContainer = this.elementsList['loadingBtnContainer'];
-    this.loaderbg = this.loadingBtnContainer?.elementsList?.['loaderbg'];
-    this.loaderfill = this.loadingBtnContainer?.elementsList?.['loaderfill'];
-    this.loadingText = this.loadingBtnContainer?.elementsList?.['loadingText'];
-    this.maskRect = this.loadingBtnContainer?.elementsList?.['maskRect'];
-
-    if (this.loaderbg) {
-      const flt = new PIXI.ColorMatrixFilter();
-      flt.greyscale(0.4, true);
-      this.loaderbg.filters = [flt];
-    }
-
-    this.startBtn = this.loadingBtnContainer?.elementsList?.['startBtn'];
-    if (this.startBtn) {
-      this.startBtn.visible = false;
-    }
-
-    if (this.maskRect) {
-      this.loaderfill.mask = this.maskRect;
-      this.maskRect.scale.x = 0;
-    }
-
+    this.startBtn = this.elementsList?.['startBtn'];
     this.itemsArray = [];
     this.itemContainer = UIUtil.getContainer();
     this.addChild(this.itemContainer);
@@ -66,50 +37,19 @@ export class SplashView extends ResponsesiveChildrenView {
       }
     }
     this.resizeView();
-    this.onLoadProgress(1);
-    EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryAssetsLoaded.bind(this));
-    EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
-    if (appModel.primaryAssetsLoaded) {
-      this.onPrimaryAssetsLoaded();
-    }
   }
 
-  protected onLoadProgress(loaded: number): void {
-    if (loaded) {
-      if (this.loadingText && this.loadingText.text !== undefined) {
-        this.loadingText.text = Util.getContent('loadingText', [loaded]);
-      }
-      if (this.maskRect) {
-        this.maskRect.scale.x = loaded / 100;
-      }
-    }
-  }
-
-  protected onPrimaryAssetsLoaded(): void {
-    if (this.loadingText) {
-      this.loadingText.text = Util.getContent('startGameText');
-      this.loaderbg.visible = false;
-      this.loaderfill.visible = false;
-      this.startBtn.visible = true;
-      this.loadingBtnContainer.removeChild(this.maskRect);
-      //this.startBtn.click();
-    }
-  }
   protected positionElements(): void {
-    this.guideRect.y = this.gameTitle?.y + this.gameTitle?.height + UIUtil.getGameHeight() * 0.02;
-    this.loadingBtnContainer.x = UIUtil.getGameWidth() / 2;
-    this.loadingBtnContainer.y = UIUtil.getGameHeight() * 0.93;
-
     if (DeviceProxy.config.isPortrait) {
       this.guideRect.width = UIUtil.getGameWidth() * 0.96;
       this.guideRect.height =
         UIUtil.getGameHeight() - this.guideRect.y - UIUtil.getGameHeight() * 0.1 - UIUtil.getGameHeight() * 0.02;
     } else {
       this.guideRect.width = UIUtil.getGameWidth() * 0.96;
-      this.guideRect.height =
-        UIUtil.getGameHeight() - this.guideRect.y - UIUtil.getGameHeight() * 0.16 - UIUtil.getGameHeight() * 0.02;
+      this.guideRect.height = UIUtil.getGameHeight() * 0.4;
     }
     this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
+    this.guideRect.y = UIUtil.getGameHeight() * 0.45 - this.guideRect.height / 2;
     if (DeviceProxy.config.isPortrait) {
       this.alignForPortrait();
     } else {
@@ -171,7 +111,6 @@ export class SplashView extends ResponsesiveChildrenView {
 
       this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
       this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
-      this.gameTitle.y = this.itemContainer.y - this.gameTitle.height * 1.2;
     }
   }
 
@@ -190,9 +129,6 @@ export class SplashView extends ResponsesiveChildrenView {
       this.itemContainer.scale.set(Math.min(sc, hsc, 1));
       this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
       this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
-      if (this.gameTitle) {
-        this.gameTitle.y = this.itemContainer.y - this.gameTitle?.height * 1.06;
-      }
     }
   }
 

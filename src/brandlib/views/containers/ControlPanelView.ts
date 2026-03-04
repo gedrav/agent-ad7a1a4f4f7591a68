@@ -28,12 +28,10 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   private menuBtn: PixFancyButton;
   private spinBtn: PixFancyButton;
   private stopSpinBtn: PixFancyButton;
-  private autoSpinBtn: PixFancyButton;
   private betBtn: PixFancyButton;
   private clickOutsideHandler: any;
   private autoCounterBG: PixSprite;
   private autoCounterText: PixText;
-  private autoStopBtn: PixFancyButton;
   private bbButtonsArray: PixFancyButton[];
   private gameNameTxt: PixText;
   private gameLogo: PixSprite | PixSpine;
@@ -52,8 +50,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.menuBtn = this.elementsList['menuBtn'];
     this.spinBtn = this.elementsList['spinBtn'];
     this.stopSpinBtn = this.elementsList['stopSpinBtn'];
-    this.autoSpinBtn = this.elementsList['autoSpinBtn'];
-    this.autoStopBtn = this.elementsList['autoStopBtn'];
     this.betBtn = this.elementsList['betBtn'];
     this.autoCounterBG = this.elementsList['autoCounter'].elementsList['autoCounterBG'];
     this.autoCounterText = this.elementsList['autoCounter'].elementsList['autoCounterText'];
@@ -88,6 +84,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
     this.addKeyboardEvents();
     this.createBBButtons();
+    this.onTurboStateChanged();
     this.createGameTitle();
     this.addChild(this.menuComp);
     this.resizeView();
@@ -237,7 +234,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     if (this.lightningBtn) {
       this.lightningBtn.enabled = true;
     }
-    this.autoSpinBtn.enabled = true;
     this.betBtn.enabled = true;
     this.menuBtn.enabled = true;
 
@@ -251,7 +247,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     if (this.lightningBtn) {
       this.lightningBtn.enabled = false;
     }
-    this.autoSpinBtn.enabled = false;
     this.betBtn.enabled = false;
 
     // Disable buy bonus buttons during spins
@@ -278,8 +273,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.stopSpinBtn.renderable = false;
     this.autoCounterBG.visible = true;
     this.autoCounterText.visible = true;
-    this.autoSpinBtn.visible = false;
-    this.autoStopBtn.visible = true;
     this.resizeView();
   }
 
@@ -292,8 +285,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
     this.spinBtn.renderable = true;
     this.stopSpinBtn.renderable = true;
     this.showSpinButton();
-    this.autoSpinBtn.visible = true;
-    this.autoStopBtn.visible = false;
     this.autoCounterBG.visible = false;
     this.autoCounterText.visible = false;
   }
@@ -301,8 +292,6 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   protected updateUIForFreeSpinsStart(): void {
     this.spinBtn.renderable = false;
     this.stopSpinBtn.renderable = false;
-    this.autoSpinBtn.renderable = false;
-    this.autoStopBtn.renderable = false;
     this.betBtn.renderable = false;
     this.autoCounterBG.visible = false;
     this.autoCounterText.visible = false;
@@ -316,11 +305,8 @@ export class ControlPanelView extends ResponsesiveChildrenView {
   protected onFreeSpinsEnded(): void {
     this.spinBtn.renderable = true;
     this.stopSpinBtn.renderable = true;
-    this.autoSpinBtn.renderable = true;
-    this.autoStopBtn.renderable = true;
     this.betBtn.renderable = true;
     this.showSpinButton();
-    this.autoSpinBtn.visible = true;
     this.autoCounterBG.visible = false;
     this.autoCounterText.visible = false;
     this.enablePanel();
@@ -345,7 +331,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
           if (DeviceProxy.config.isPortrait) {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.2, 0.1, 1);
             this.bbButtonsArray[k].y =
-              this.autoSpinBtn.y - (k + 1) * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
+              this.turboBtn.y - (k + 1) * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
           } else {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.14, 0.14, 1);
             this.bbButtonsArray[k].y =

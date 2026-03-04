@@ -38,7 +38,14 @@ export const INIT_ERROR_POPUP_CONFIG = {
         {
           name: 'errorText',
           type: 'Text',
-          style: { fontFamily: 'commonFont', fontSize: 50, fill: 0xffffff },
+          style: {
+            fontFamily: 'commonFont',
+            fontSize: 30,
+            fill: 0xffffff,
+            wordWrap: true,
+            wordWrapWidth: 800,
+            lineHeight: 30,
+          },
           anchor: { x: 0.5, y: 0.5 },
           x: 500,
           y: 400,
@@ -53,7 +60,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
           },
           textConfig: {
             contentText: 'Refresh',
-            style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff },
+            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
           },
           options: {

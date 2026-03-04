@@ -23,10 +23,10 @@ export const BET_PANEL_CONFIG = {
       y: 100,
       content: 'betPanelTitle',
       toUpperCase: true,
-      style: { fontFamily: 'commonFontBold', fontSize: 60, fill: 0xffffff },
+      style: { fontFamily: 'commonFont', fontSize: 60, fill: 0xffffff },
     },
 
-    {
+    /*{
       name: 'btn1',
       type: 'PixToggleButton',
       scale: 1,
@@ -51,7 +51,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -85,7 +85,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -119,7 +119,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -153,7 +153,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -187,7 +187,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -221,7 +221,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -255,7 +255,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -289,7 +289,7 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         contentText: '',
         style: {
-          fontFamily: 'commonFontBold',
+          fontFamily: 'commonFont',
           fontSize: 50,
           nonSelectedStateColor: 0xffffff,
           selectedStateColor: 0x8af5fa,
@@ -297,7 +297,7 @@ export const BET_PANEL_CONFIG = {
       },
       x: 1000,
       y: 400,
-    },
+    },*/
     {
       name: 'stakeDisplay',
       type: 'Sprite',
@@ -307,12 +307,12 @@ export const BET_PANEL_CONFIG = {
       anchor: { x: 0.5, y: 0.5 },
     },
 
-    {
+    /*{
       name: 'stakeText',
       type: 'Text',
       contentText: '',
       anchor: { x: 0.5, y: 0.5 },
-      style: { fontFamily: 'commonFontBold', fill: 0xffffff, fontSize: 50 },
+      style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 50 },
       x: 600,
       y: 536,
     },
@@ -352,9 +352,9 @@ export const BET_PANEL_CONFIG = {
       },
       x: 950,
       y: 540,
-    },
+    },*/
 
-    {
+    /*    {
       name: 'closeBtn',
       type: 'Button',
       scale: 1,
@@ -372,12 +372,12 @@ export const BET_PANEL_CONFIG = {
         name: 'closeBtn1Text',
         type: 'Text',
         content: 'closeBtnText',
-        style: { fontFamily: 'commonFontBold', fill: 0xffffff, fontSize: 40 },
+        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 40 },
         toUpperCase: true,
       },
       x: 600,
       y: 680,
-    },
+    },*/
   ],
   layoutData: {
     Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },

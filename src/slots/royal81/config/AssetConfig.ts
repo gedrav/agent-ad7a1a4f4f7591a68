@@ -9,13 +9,13 @@ const PRELOADER: AssetBundle = {
     { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
-    { TYPE: 'common', NAME: 'Roboto-Regular.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
   ],
 };
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'common', NAME: 'Roboto-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'common', NAME: 'Roboto.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'wakerobin-bold.otf', ASSETTYPE: 'font' },
   ],
 };
@@ -36,21 +36,14 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    //{ TYPE: 'game', NAME: 'Lepg_Wins', ASSETTYPE: 'spine' },
-  ],
-};
-const POPUPS: AssetBundle = {
-  name: LOAD_CONSTANTS.POPUPS,
-  assets: [
     { TYPE: 'common', NAME: 'popups1', ASSETTYPE: 'sprite' },
     { TYPE: 'common', NAME: 'popups2', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = { name: LOAD_CONSTANTS.SECONDARY, assets: [] };
 const FREESPIN: AssetBundle = {
-  name: LOAD_CONSTANTS.FREESPIN,
+  name: LOAD_CONSTANTS.FEATURES,
   assets: [],
 };
 
-export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, POPUPS];
-export const PRIMARY_ASSET_LENGTH: number = 4;
+export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY];

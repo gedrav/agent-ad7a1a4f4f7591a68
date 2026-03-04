@@ -4,11 +4,9 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { UIConfig } from '@game/config/UIConfig';
 
 export const GAME_CONFIG = {
-  gameHDWidth: 1284,
-  gameHDHeight: 2200,
   gameDesktopWidth: 1080,
   gameDesktopHeight: 1920,
-  gameBGColor: 0x000000,
+  gameBGColor: 0xffffff,
   globalAnimSpeed: 0.5,
   debugMode: false,
   configPath: '/',
@@ -25,8 +23,8 @@ export const GAME_CONFIG = {
   isConsoleActive: true,
   unloadAssets: ['splashAssets'],
   FontFaces: {
-    commonFont: 'Roboto Regular',
-    commonFontBold: 'Roboto Bold',
+    commonFont: 'Mulish',
+    commonFontR: 'Roboto',
     gameFont1: 'Wakerobin Bold',
   },
   bigWinValues: [5, 25, 50, 100],
@@ -41,10 +39,10 @@ export const GAME_CONFIG = {
           },
           data: { id: 'FG1' },
           options: {
-            defaultView: 'buybonusBtn_up',
-            hoverView: 'buybonusBtn_up',
-            pressedView: 'buybonusBtn_up',
-            disabledView: 'buybonusBtn_up',
+            defaultView: 'buyBonusBtn',
+            hoverView: 'buyBonusBtn',
+            pressedView: 'buyBonusBtn',
+            disabledView: 'buyBonusBtn',
             textOffset: new Point(0, 2),
             animations: CoreUIConfig.spinButtonStates,
           },

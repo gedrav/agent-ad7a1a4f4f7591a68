@@ -1,10 +1,11 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { Util } from '@core/utils/UtilService';
 
 export class TooltipComp extends StandardView {
   constructor(config: any) {
     super(config);
-    const bg = UIUtil.getSprite('tooltipbg');
+    const bg = UIUtil.getSprite('tooltipBG');
     bg.anchor.set(0.5);
     this.addChild(bg);
     this.setTooltipText();
@@ -15,7 +16,7 @@ export class TooltipComp extends StandardView {
       type: 'Text',
       toUpperCase: true,
       content: this.configData.tooltipText,
-      style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 30 },
+      style: { fontFamily: 'commonFontR', fill: 0xffffff, fontSize: 44, fontWeight: 'bold' },
     };
     const tooltipText = UIUtil.getElement(config);
     tooltipText.anchor.set(0.5);

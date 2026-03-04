@@ -13,7 +13,7 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
       anchor: { x: 0.5, y: 0.5 },
       content: 'totalMultiplier',
       style: {
-        fontFamily: 'commonFontBold',
+        fontFamily: 'commonFont',
         fontSize: 60,
         fill: 0x00f30f,
         wordWrap: true,

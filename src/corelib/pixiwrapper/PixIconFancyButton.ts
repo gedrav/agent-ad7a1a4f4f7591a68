@@ -3,9 +3,11 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { ActionCommand } from '@core/commands/core/ActionCommand';
+import { TooltipComp } from '@brand/views/comps/TooltipComp';
 
 export class PixIconFancyButton extends FancyButton {
   private icon: PixSprite;
+  private toolTip: TooltipComp;
   set configData(value: any) {
     this._configData = value;
   }
@@ -56,6 +58,15 @@ export class PixIconFancyButton extends FancyButton {
       this.onUp.connect(() => this.onCustomUp());
       this.onHover.connect(() => this.onCustomHover());
       this.onOut.connect(() => this.onCustomOut());
+    }
+    if (this.configData.tooltipText) {
+      this.toolTip = new TooltipComp({ tooltipText: this.configData.tooltipText });
+      this.addChild(this.toolTip);
+      if (this.toolTip.width > this.width) {
+        this.toolTip.scale.set((this.width / this.toolTip.width) * 0.9);
+      }
+      this.toolTip.x = 0;
+      this.toolTip.y = this.height * 0.4;
     }
   }
 

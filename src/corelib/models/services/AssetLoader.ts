@@ -12,6 +12,7 @@ class AssetLoaderClass {
   private commonFontPath: string;
   private soundConfig: any;
   private langFontPath: string;
+  private progressPercentage: number;
   get bundles(): any[] {
     return this._bundles;
   }
@@ -65,6 +66,7 @@ class AssetLoaderClass {
 
   public async activateLoader() {
     this.createPaths();
+    this.progressPercentage = 0;
     this.assetsManifest = this.createAssetsManifest();
     const len: number = this.assetsManifest.bundles.length;
     if (len > 0) {
@@ -260,14 +262,16 @@ class AssetLoaderClass {
 
   private async onLoadProgress(loadList: string, data: any) {
     let progress;
-    if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.COMMON)) {
+    if (loadList[0].indexOf(LOAD_CONSTANTS.COMMON) > -1) {
       progress = Math.round(data * 0.05 * 100);
-    } else if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.SPLASH)) {
-      progress = Math.round(data * 0.2 * 100);
-    } else if (loadList[0].toLowerCase().includes(LOAD_CONSTANTS.PRIMARY)) {
-      progress = Math.round(data * 0.8 * 100);
+    } else if (loadList[0].indexOf(LOAD_CONSTANTS.SPLASH) > -1) {
+      progress = 5 + Math.round(data * 0.15 * 100);
+    } else if (loadList[0].indexOf(LOAD_CONSTANTS.PRIMARY) > -1) {
+      progress = 20 + Math.round(data * 0.6 * 100);
     }
+
     if (progress) {
+      this.progressPercentage += progress;
       EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
     }
   }

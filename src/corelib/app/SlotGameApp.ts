@@ -67,7 +67,8 @@ class SlotGameApp {
       resolution: 1,
       backgroundColor: GameProxy.config.gameBGColor,
       hello: true,
-      antialias: false,
+      antialias: true, // IMPORTANT
+      //autoDensity: true,
     });
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
     if (__SHOW_STATS__) {
@@ -125,7 +126,7 @@ class SlotGameApp {
   }
   protected async onBundleLoaded(bundleName: string) {
     GameProxy.config.bundlesLoaded.push(bundleName);
-    console.log('bundle loaded == ', bundleName);
+    //console.log('bundle loaded == ', bundleName);
     switch (bundleName) {
       case LOAD_CONSTANTS.PRELOADER:
         await this.onPreloaderLoaded();
@@ -166,38 +167,22 @@ class SlotGameApp {
       await AssetLoader.loadSplash();
     }
   }
-  protected initiateApp() {}
-
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
-    await this.checkToCreateSplash();
-  }
-
-  protected async checkToCreateSplash() {
-    if (this.initErrorOccured) {
-      return;
-    }
-    if (this.splashAssetsLoaded) {
-      this.createSplash();
-      this.removePreloader();
-      await AssetLoader.loadPrimary();
-    }
+    await AssetLoader.loadPrimary();
   }
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
     appModel.primaryAssetsLoaded = true;
-    await this.checkToCreateView();
-  }
-
-  protected async checkToCreateView() {
-    console.log('checking to create view == ', this.gameInitReceived, this.assetsLoaded, this.isViewCreated);
-    if (this.gameInitReceived && this.assetsLoaded && !this.isViewCreated) {
+    if (this.gameInitReceived && this.assetsLoaded) {
       await AssetLoader.loadSounds();
     }
   }
   protected onSoundsLoaded() {
     if (!appModel.isErrorOccurred) {
       if (!this.isViewCreated) {
+        this.createSplash();
+        this.removePreloader();
         this.createView();
         this.isViewCreated = true;
         EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
@@ -205,6 +190,9 @@ class SlotGameApp {
       }
     }
   }
+
+  protected createSplash() {}
+
   protected loadLazyFiles() {
     console.log('loading lazy files');
     AssetLoader.loadSecondarySounds();
@@ -219,11 +207,13 @@ class SlotGameApp {
     console.log('feature assets loaded');
     appModel.featureAssetsLoaded = true;
   }
-  protected createSplash() {}
+
   protected createView() {}
   protected async onSplashStartClicked() {
     this.splashComp.removeSplash();
+    this.makeGameVisible();
   }
+  protected makeGameVisible() {}
   protected async onSplashDestroyed() {
     StateManager.initiate();
   }

@@ -34,6 +34,7 @@ import { PixSlider } from '@core/pixiwrapper/PixSlider';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { ResponsesiveView } from '@core/pixiwrapper/ResponsesiveView';
 import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
+import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 
 class UIUtilService {
   public getElement(obj: any): any {
@@ -53,7 +54,7 @@ class UIUtilService {
         element.configData = obj;
         break;
       case 'Circle':
-        element = this.getCircle(obj.fill, obj.radius);
+        element = this.getCircle(obj.color, obj.radius);
         element.configData = obj;
         break;
       case 'Arc':
@@ -125,8 +126,11 @@ class UIUtilService {
       case 'Button':
         element = this.getFancyButton(obj);
         break;
-      case 'IconFancyButton':
+      case 'IconButton':
         element = this.getIconFancyButton(obj);
+        break;
+      case 'GraphicsButton':
+        element = this.getGraphicsButton(obj);
         break;
       case 'Slider':
         element = this.getSlider(obj);
@@ -228,6 +232,45 @@ class UIUtilService {
     return btn;
   }
 
+  public getGraphicsButton(obj: any): PixFancyButton {
+    const options: any = {};
+    if (obj.textConfig) {
+      options.text = this.getText(Util.deepClone(obj.textConfig));
+    }
+    options.defaultView = UIUtil.getRoundedRectangle({
+      width: obj.graphics.width,
+      height: obj.graphics.height,
+      radius: obj.graphics.radius,
+      color: obj.graphics.color,
+    });
+    options.hoverView = UIUtil.getRoundedRectangle({
+      width: obj.graphics.width,
+      height: obj.graphics.height,
+      radius: obj.graphics.radius,
+      color: obj.graphics.hoverColor ? obj.graphics.hoverColor : obj.graphics.color,
+    });
+    options.pressedView = UIUtil.getRoundedRectangle({
+      width: obj.graphics.width,
+      height: obj.graphics.height,
+      radius: obj.graphics.radius,
+      color: obj.graphics.pressedColor ? obj.graphics.pressedColor : obj.graphics.color,
+    });
+    options.disabledView = UIUtil.getRoundedRectangle({
+      width: obj.graphics.width,
+      height: obj.graphics.height,
+      radius: obj.graphics.radius,
+      color: obj.graphics.disabledColor ? obj.graphics.disabledColor : obj.graphics.color,
+    });
+    options.animations = obj.animations;
+
+    const btn: PixFancyButton = new PixFancyButton(options, obj);
+    btn.anchor.set(0.5);
+    btn.enabled = true;
+    btn.updateTextPos();
+
+    return btn;
+  }
+
   public getFancyButton(obj: any): PixFancyButton {
     const options: any = obj.options;
     if (obj.textConfig) {
@@ -267,7 +310,6 @@ class UIUtilService {
   }
   public getText(obj: any): PixText {
     const cloneData = JSON.parse(JSON.stringify(obj));
-
     let label = Util.getContent(cloneData.content);
     if (cloneData.contentText) {
       label = cloneData.contentText;
