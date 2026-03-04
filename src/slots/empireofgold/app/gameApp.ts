@@ -20,10 +20,6 @@ export class gameApp extends SlotGameApp {
     await this.setupApp(GAME_CONFIG, ASSET_CONFIG, GAME_SOUND_CONFIG, STATES_CONFIG);
   }
 
-  async initiateApp() {
-    await this.initiateCoreApp();
-  }
-
   protected createSplash() {
     const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
     this.splashComp = new SplashView(SPLASH_CONFIG);

@@ -18,9 +18,7 @@ export class BuyBonusView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBuyBonusView.bind(this));
-  }
-  protected onViewCreated() {
-    super.onViewCreated();
+
     this.closeBtn = this.elementsList['closeBtn'];
     this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
     this.stakeText = this.elementsList['stakeText'];
@@ -29,6 +27,7 @@ export class BuyBonusView extends ResponsesiveChildrenView {
 
     UIUtil.stopPropagation(this);
   }
+
   protected async hideBuyBonusView() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);

@@ -35,11 +35,6 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-  ],
-};
-const POPUPS: AssetBundle = {
-  name: LOAD_CONSTANTS.POPUPS,
-  assets: [
     { TYPE: 'common', NAME: 'popups1', ASSETTYPE: 'sprite' },
     { TYPE: 'common', NAME: 'popups2', ASSETTYPE: 'sprite' },
   ],
@@ -48,13 +43,13 @@ const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [{ TYPE: 'game', NAME: 'Lepg_Wins', ASSETTYPE: 'spine' }],
 };
-const FREESPIN: AssetBundle = {
-  name: LOAD_CONSTANTS.FREESPIN,
+const FEATURES: AssetBundle = {
+  name: LOAD_CONSTANTS.FEATURES,
   assets: [
     { TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'freespinAssets', ASSETTYPE: 'sprite' },
   ],
 };
 
-export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, POPUPS, SECONDARY, FREESPIN];
+export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY, FEATURES];
 export const PRIMARY_ASSET_LENGTH: number = 4;

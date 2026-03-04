@@ -9,7 +9,6 @@ export const BET_PANEL_CONFIG = {
   name: 'betPanelView',
   type: 'Comp',
   class: BetPanelView,
-  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'betPanelBg',

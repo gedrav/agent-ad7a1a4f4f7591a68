@@ -20,9 +20,7 @@ export class BetPanelView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBetPanel.bind(this));
-  }
-  protected onViewCreated() {
-    super.onViewCreated();
+
     this.closeBtn = this.elementsList['closeBtn'];
     this.upStakeBtn = this.elementsList['upStakeBtn'];
     this.downStakeBtn = this.elementsList['downStakeBtn'];
@@ -55,6 +53,7 @@ export class BetPanelView extends ResponsesiveChildrenView {
 
     UIUtil.stopPropagation(this);
   }
+
   protected async hideBetPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);

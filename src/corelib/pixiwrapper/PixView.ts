@@ -42,24 +42,18 @@ export class PixView extends PIXI.Container {
       this.createView();
     }
 
-    EventHandler.addEventListener(AppEvents.POPUP_ASSETS_LOADED, this.onPopupAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.onSecondaryAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.FEATURE_ASSETS_LOADED, this.onFeatureAssetsLoaded.bind(this));
     EventHandler.addEventListener(AppEvents.ON_UPDATE, this.onUpdate.bind(this));
   }
 
-  protected onPopupAssetsLoaded(): void {
-    if (this.configData.requiredBundle === LOAD_CONSTANTS.POPUPS) {
-      this.createLazyView();
-    }
-  }
   protected onSecondaryAssetsLoaded(): void {
     if (this.configData.requiredBundle === LOAD_CONSTANTS.SECONDARY) {
       this.createLazyView();
     }
   }
   protected onFeatureAssetsLoaded(): void {
-    if (this.configData.requiredBundle === LOAD_CONSTANTS.FREESPIN) {
+    if (this.configData.requiredBundle === LOAD_CONSTANTS.FEATURES) {
       this.createLazyView();
     }
   }

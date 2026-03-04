@@ -1,4 +1,4 @@
-import { Application, Container, Renderer, Sprite } from 'pixi.js';
+import { Application, Container, Renderer, Sprite, TextStyle } from 'pixi.js';
 import { WindowUtil } from '@core/utils/WindowUtil';
 import { InitErrorPopup } from '@brand/views/popups/InitErrorPopup';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -69,7 +69,7 @@ class SlotGameApp {
       hello: true,
       antialias: false,
     });
-
+    TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
     if (__SHOW_STATS__) {
       // show FPS monitoring panel when enabled via config
       const stats = new Stats();
@@ -91,37 +91,28 @@ class SlotGameApp {
     EventHandler.setScope(this.app.stage);
     this.addEvents();
     requestAnimationFrame(this.animate.bind(this));
+
+    this.appContainer = new PixView({ label: 'appContainer' });
+    this.app.stage.addChild(this.appContainer);
+    this.addViewToDom();
+    this.resize();
+
     WrapperProxy.sendCanvasReady();
     GameProxy.config.bundlesLoaded = [];
-    AssetLoader.initAssets(assetConfig, soundConfig);
+    GameProxy.createAPIPath();
+    console.log('C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion);
+    await MessageProxy.requestGameInit();
+    this.gameInitReceived = true;
+    await AssetLoader.initAssets(assetConfig, soundConfig);
+    await this.initiateCoreApp();
   }
-  protected async onBundleLoaded(bundleName: string) {
-    GameProxy.config.bundlesLoaded.push(bundleName);
-    console.log('bundle loaded == ', bundleName);
-    switch (bundleName) {
-      case LOAD_CONSTANTS.PRELOADER:
-        this.initApp();
-        break;
-      case LOAD_CONSTANTS.COMMON:
-        break;
-      case LOAD_CONSTANTS.SPLASH:
-        this.onSplashAssetsLoaded();
-        break;
-      case LOAD_CONSTANTS.PRIMARY:
-        this.onPrimaryAssetsLoaded();
-        break;
-      case LOAD_CONSTANTS.SECONDARY:
-        this.onSecondaryAssetsLoaded();
-        break;
-      case LOAD_CONSTANTS.FREESPIN:
-        this.onFeatureAssetsLoaded();
-        break;
-      default:
-        break;
-    }
+
+  async initiateCoreApp() {
+    await AssetLoader.activateLoader();
+    await AssetLoader.loadPreloader();
   }
-  protected async initApp() {
-    GameProxy.updateConfigFromCommon();
+
+  protected printConsole(): void {
     console.log(
       `%c ⡷⣸ ⡎⢱ ⡇⢸ ⣎⣱ ⡎⠑ ⣏⡱ ⣏⡉ ⢎⡑ ⢹⠁   ⡎⠑ ⣎⣱ ⡷⢾ ⡇ ⡷⣸ ⡎⠑
  ⠇⠹ ⠣⠜ ⠸⠃ ⠇⠸ ⠣⠔ ⠇⠱ ⠧⠤ ⠢⠜ ⠸    ⠣⠝ ⠇⠸ ⠇⠸ ⠇ ⠇⠹ ⠣⠝
@@ -131,8 +122,31 @@ class SlotGameApp {
       'color: #CCCCCC; font-size: 12px; font-weight: 400;',
       'color: #CCCCCC; font-size: 12px; font-weight: 700;',
     );
-
-    await this.initiateApp();
+  }
+  protected async onBundleLoaded(bundleName: string) {
+    GameProxy.config.bundlesLoaded.push(bundleName);
+    console.log('bundle loaded == ', bundleName);
+    switch (bundleName) {
+      case LOAD_CONSTANTS.PRELOADER:
+        await this.onPreloaderLoaded();
+        break;
+      case LOAD_CONSTANTS.COMMON:
+        break;
+      case LOAD_CONSTANTS.SPLASH:
+        await this.onSplashAssetsLoaded();
+        break;
+      case LOAD_CONSTANTS.PRIMARY:
+        this.onPrimaryAssetsLoaded();
+        break;
+      case LOAD_CONSTANTS.SECONDARY:
+        this.onSecondaryAssetsLoaded();
+        break;
+      case LOAD_CONSTANTS.FEATURES:
+        this.onFeatureAssetsLoaded();
+        break;
+      default:
+        break;
+    }
   }
 
   protected addEvents(): void {
@@ -141,53 +155,44 @@ class SlotGameApp {
     EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
     EventHandler.addEventListener(SlotEvents.SPLASH_DESTROYED, this.onSplashDestroyed.bind(this));
     EventHandler.addEventListener(AppEvents.SOUNDS_LOADING_COMPLETE, this.onSoundsLoaded.bind(this));
-    EventHandler.addEventListener(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit.bind(this));
   }
-
-  async initiateApp() {}
-  async initiateCoreApp() {
+  protected async onPreloaderLoaded() {
+    GameProxy.updateCommonConfig();
     ContentProxy.initiate();
-    this.appContainer = new PixView({ label: 'appContainer' });
-    this.app.stage.addChild(this.appContainer);
-    this.preloader = new PreloaderScreen(PRELOADER_CONFIG);
-    this.appContainer.addChild(this.preloader);
-    this.resize();
-    this.addViewToDom();
-    this.requestGameInit();
+    if (!this.initErrorOccured) {
+      this.preloader = new PreloaderScreen(PRELOADER_CONFIG);
+      this.appContainer.addChild(this.preloader);
+      this.resize();
+      await AssetLoader.loadSplash();
+    }
   }
-  protected requestGameInit() {
-    MessageProxy.requestGameInit();
-  }
-  protected onGameInit(): void {
-    console.log('game init received');
-    this.gameInitReceived = true;
-    this.checkToCreateView();
-  }
+  protected initiateApp() {}
+
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
-    this.checkToCreateSplash();
+    await this.checkToCreateSplash();
   }
 
-  protected checkToCreateSplash() {
+  protected async checkToCreateSplash() {
     if (this.initErrorOccured) {
       return;
     }
     if (this.splashAssetsLoaded) {
       this.createSplash();
       this.removePreloader();
-      this.checkToCreateView();
+      await AssetLoader.loadPrimary();
     }
   }
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
     appModel.primaryAssetsLoaded = true;
-    this.checkToCreateView();
+    await this.checkToCreateView();
   }
 
-  protected checkToCreateView() {
+  protected async checkToCreateView() {
     console.log('checking to create view == ', this.gameInitReceived, this.assetsLoaded, this.isViewCreated);
     if (this.gameInitReceived && this.assetsLoaded && !this.isViewCreated) {
-      AssetLoader.loadSounds();
+      await AssetLoader.loadSounds();
     }
   }
   protected onSoundsLoaded() {
@@ -203,11 +208,12 @@ class SlotGameApp {
   protected loadLazyFiles() {
     console.log('loading lazy files');
     AssetLoader.loadSecondarySounds();
-    AssetLoader.loadSecondaryAssets();
+    AssetLoader.loadSecondary();
   }
   async onSecondaryAssetsLoaded() {
     console.log('secondary assets loaded');
     appModel.secondaryAssetsLoaded = true;
+    await AssetLoader.loadFeatures();
   }
   async onFeatureAssetsLoaded() {
     console.log('feature assets loaded');
@@ -223,15 +229,13 @@ class SlotGameApp {
   }
 
   protected onServerError(obj: any): void {
-    Logger.logObj(obj, 'server error');
+    //Logger.logObj(obj, 'server error');
+    console.log('server error newwwwwwwwwwwww == ', obj);
     if (obj.msgName == 'gameinit') {
-      if (this.splashComp) {
-        this.splashComp.removeSplash();
-      }
       this.initErrorOccured = true;
       this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
       this.appContainer.addChild(this.errorPopup);
-      this.errorPopup.showMessage(obj.data?.response?.statusText);
+      this.errorPopup.showMessage(obj.data?.message);
       this.removePreloader();
     } else {
       const data: any = {};

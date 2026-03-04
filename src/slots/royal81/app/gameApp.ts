@@ -7,7 +7,7 @@ import { SLOT_GAME_APP_CONFIG } from '@game/config/screens/SlotGameAppConfig';
 import { GAME_SOUND_CONFIG } from '@game/config/SoundLoadConfig';
 import { GameSoundManager } from '@game/app/GameSoundManager';
 import { SplashView } from '@brand/views/splash/SplashView';
-import { SlotGameApp } from '@core/app/SlotGameApp';
+import SlotGameApp from '@core/app/SlotGameApp';
 
 export class gameApp extends SlotGameApp {
   constructor() {
@@ -17,10 +17,6 @@ export class gameApp extends SlotGameApp {
 
   protected async init() {
     await this.setupApp(GAME_CONFIG, ASSET_CONFIG, GAME_SOUND_CONFIG, STATES_CONFIG);
-  }
-
-  async initiateApp() {
-    await this.initiateCoreApp();
   }
 
   async createSplash() {

@@ -10,7 +10,6 @@ export const BUY_BONUS_CONFIG = {
   name: 'buyBonusView',
   type: 'Comp',
   class: BuyBonusView,
-  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'betPanelBg',

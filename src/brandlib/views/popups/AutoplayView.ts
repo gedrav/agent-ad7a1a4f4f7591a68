@@ -43,9 +43,7 @@ export class AutoplayView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED, this.onOkClicked.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.resetAutoplayView.bind(this));
     EventHandler.addEventListener(AppEvents.APP_RESIZE, this.resizeView.bind(this));
-  }
-  protected onViewCreated() {
-    super.onViewCreated();
+
     this.autoCont = this.elementsList['autoCont'];
     this.autoPanelBg = this.autoCont.elementsList['autoPanelBg'];
     this.titleText1 = this.autoCont.elementsList['titleText1'];
@@ -68,6 +66,7 @@ export class AutoplayView extends ResponsesiveChildrenView {
 
     this.valuesArray = [5, 10, 25, 50, 100];
 
+    this.spinBtnsArray = [];
     const betContainer = this.autoCont.elementsList['betSelectionContainer'];
     for (let i = 0; i < this.valuesArray.length; i++) {
       const btn = betContainer?.elementsList?.[`btn${i + 1}`];
@@ -143,7 +142,6 @@ export class AutoplayView extends ResponsesiveChildrenView {
   protected resizeView(): void {
     if (!this.viewCreated) return;
     super.resizeView();
-
     UIUtil.adjustForMobile(this.autoCont);
     UIUtil.adjustForMobile(this.autoPanelBg);
     UIUtil.adjustForMobile(this.titleText1);

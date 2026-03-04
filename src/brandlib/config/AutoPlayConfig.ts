@@ -11,7 +11,6 @@ export const AUTOPLAY_CONFIG = {
   name: 'autoplayView',
   type: 'Comp',
   class: AutoplayView,
-  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'autoCont',

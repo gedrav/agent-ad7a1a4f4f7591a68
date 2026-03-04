@@ -1,4 +1,4 @@
-export const AppEvents: { [key: string]: string } = {
+export const AppEvents = {
   PRIMARY_ASSETS_LOADED: 'PRIMARY_ASSETS_LOADED',
   BUNDLE_LOADED: 'BUNDLE_LOADED',
   SOUNDS_LOADING_PREGRESS: 'SoundLoadingProgress',

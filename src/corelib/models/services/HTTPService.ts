@@ -39,11 +39,9 @@ export class HTTPService {
         //   obj.data?.response?.data?.message — used for other errors
         try {
           const errorBody = await error.response.json();
-          this.onServerError(messageName, {
-            response: { statusText: error.response.statusText, data: errorBody },
-          });
+          this.onServerError(messageName, errorBody);
         } catch {
-          this.onServerError(messageName, { response: { statusText: error.response.statusText, data: {} } });
+          this.onServerError(messageName, error);
         }
       } else {
         this.onServerError(messageName, error);

@@ -11,14 +11,7 @@ class GameConfigProxy extends AbstractProxy {
     this.config.isTurboOn = false;
   }
 
-  public updateConfigFromCommon(): void {
-    const cache = (Cache as any)._cache;
-    const obj = cache.get(GameProxy.config.envURL);
-    console.log('cache', cache);
-    console.log('obj', obj);
-    if (obj.gameConfig) {
-      this.updateConfig(obj.gameConfig);
-    }
+  public createAPIPath(): void {
     // URL config is driven by env vars (VITE_API_URL etc.) set at build time.
     // commonConfig.json no longer owns URL values.
     const urlConfig = {
@@ -29,6 +22,10 @@ class GameConfigProxy extends AbstractProxy {
       historyAPIURL: import.meta.env.VITE_HISTORY_API_URL,
     };
     this.updateConfig(urlConfig);
+  }
+  public updateCommonConfig(): void {
+    const data = (Cache as any)._cache;
+    this.updateConfig(data.get('commonConfig.json').gameConfig);
   }
   public updateConfig(data: any): void {
     for (const p in data) {
