@@ -320,7 +320,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
         if (DeviceProxy.config.isDesktop) {
           UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.15, 1);
           this.bbButtonsArray[k].y =
-            this.soundOnBtn.y - (k + 1) * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
+            this.soundOnBtn.y - (k + 1) * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.1);
 
           if (DeviceProxy.config.isPortrait) {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.1, 1);
@@ -339,7 +339,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
           }
         }
 
-        this.bbButtonsArray[k].x = this.menuBtn.x + (this.bbButtonsArray[k].width - this.soundOnBtn.width) / 2;
+        this.bbButtonsArray[k].x = this.soundOnBtn.x + (this.bbButtonsArray[k].width - this.soundOnBtn.width) / 2;
       }
     }
   }
