@@ -318,7 +318,6 @@ class UIUtilService {
       label = label.toUpperCase();
     }
     cloneData.style.fontFamily = GameProxy.config.FontFaces[cloneData.style.fontFamily];
-
     if (cloneData.style.mFontSize != undefined && DeviceProxy.config.isDevice) {
       cloneData.style.fontSize = cloneData.style.mFontSize;
     }
