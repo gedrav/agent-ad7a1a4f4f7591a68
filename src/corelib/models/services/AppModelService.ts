@@ -277,6 +277,7 @@ class AppModelService {
     for (let k = 0; k < len; k++) {
       bets.push(this.gameInfo?.betsArray[k] * this.gameInfo?.creditValue);
     }
+
     return bets;
   }
   public getBalance(): number {

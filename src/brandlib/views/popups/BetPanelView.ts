@@ -6,13 +6,52 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { AssetLoader } from '@core/models/services/AssetLoader';
+import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
+import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { PixView } from '@core/pixiwrapper/PixView';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
+const btnConfig: any = {
+  name: 'btn1',
+  type: 'PixToggleButton',
+  scale: 1,
+  action: {
+    press: ChangeTotalBetCommand,
+  },
+  options: {
+    defaultView: 'betSelectionBtn',
+    hoverView: 'betSelectionBtn',
+    pressedView: 'betSelectionBtn',
+    disabledView: 'betSelectionBtn',
+    animations: CoreUIConfig.buttonStates,
+  },
+  selectedOptions: {
+    defaultView: 'betSelectionSelectedBtn',
+    hoverView: 'betSelectionSelectedBtn',
+    pressedView: 'betSelectionSelectedBtn',
+    disabledView: 'betSelectionSelectedBtn',
+  },
+  textConfig: {
+    name: 'btn1Text',
+    type: 'Text',
+    contentText: '',
+    style: {
+      fontFamily: 'commonFont',
+      fontSize: 50,
+      nonSelectedStateColor: 0x000000,
+      selectedStateColor: 0xffffff,
+    },
+  },
+};
 export class BetPanelView extends ResponsesiveChildrenView {
   private closeBtn: any;
   private betBtnsArray: PixToggleButton[] = [];
   private upStakeBtn: any;
   private downStakeBtn: any;
   private stakeText: any;
+  private btnContainer: PixView;
+  private betPanelBg: PixGraphics;
+  private stakeChangeContainer: PixView;
 
   constructor(config: any) {
     super(config);
@@ -21,33 +60,49 @@ export class BetPanelView extends ResponsesiveChildrenView {
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBetPanel.bind(this));
 
+    this.stakeChangeContainer = this.elementsList['stakeChangeContainer'];
+    this.betPanelBg = this.elementsList['betPanelBg'];
+    this.btnContainer = this.elementsList['btnContainer'];
     this.closeBtn = this.elementsList['closeBtn'];
-    this.upStakeBtn = this.elementsList['upStakeBtn'];
-    this.downStakeBtn = this.elementsList['downStakeBtn'];
-    this.stakeText = this.elementsList['stakeText'];
+    this.upStakeBtn = this.stakeChangeContainer.elementsList['upStakeBtn'];
+    this.downStakeBtn = this.stakeChangeContainer.elementsList['downStakeBtn'];
+    this.stakeText = this.stakeChangeContainer.elementsList['stakeText'];
 
     const totalBetsArray = Util.cloneArray(appModel.getAllBets());
 
     this.betBtnsArray = [];
-    let buttonCount = 0;
-    while (this.elementsList[`btn${buttonCount + 1}`]) {
-      buttonCount++;
-    }
-
-    if (totalBetsArray && totalBetsArray.length >= buttonCount) {
-      const lastBets = totalBetsArray.slice(-buttonCount);
-      for (let i = 0; i < lastBets.length; i++) {
-        const btn = this.elementsList[`btn${i + 1}`];
+    const len = totalBetsArray.length;
+    if (len > 0) {
+      for (let i = 0; i < len; i++) {
+        const btn = UIUtil.getElement(btnConfig);
         if (btn) {
           if (btn.textView) {
-            btn.updateText(Util.formatCurrencyNoSymbol(lastBets[i]));
-            btn.setData(lastBets[i]);
+            btn.updateText(Util.formatCurrencyNoSymbol(totalBetsArray[i]));
+            btn.setData(totalBetsArray[i]);
             btn.textView.anchor.set(0.5, 0.5);
           }
           this.betBtnsArray.push(btn);
+          this.btnContainer.addChild(btn);
+          btn.setSelected(false);
         }
       }
     }
+    const columns: number = 4;
+    let rowIndex: number = 0;
+    let colIndex: number = 0;
+    for (let i = 0; i < len; i++) {
+      this.betBtnsArray[i].x = rowIndex++ * 300;
+      this.betBtnsArray[i].y = colIndex * 150;
+      if (rowIndex == columns) {
+        colIndex++;
+        rowIndex = 0;
+      }
+    }
+
+    this.btnContainer.x = (this.betPanelBg.width - this.btnContainer.width) / 2 + this.betBtnsArray[0].width / 2;
+    this.stakeChangeContainer.x =
+      (this.betPanelBg.width - this.stakeChangeContainer.width) / 2 + this.upStakeBtn.width / 2;
+    this.stakeChangeContainer.y = this.btnContainer.y + this.btnContainer.height * 1.05;
 
     this.visible = false;
 

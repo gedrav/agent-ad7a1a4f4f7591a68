@@ -26,14 +26,12 @@ export const INIT_ERROR_POPUP_CONFIG = {
       Elements: [
         {
           name: 'bg',
-          type: 'BorderRoundedRectangle',
+          type: 'RoundedRectangle',
           width: 1000,
           height: 800,
-          backgroundColor: 0x000000,
-          borderColor: 0x7b8285,
+          color: 0xdae9f7,
           borderWidth: 10,
           radius: 24,
-          alpha: 0.7,
         },
         {
           name: 'errorText',
@@ -41,7 +39,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
           style: {
             fontFamily: 'commonFont',
             fontSize: 30,
-            fill: 0xffffff,
+            fill: 0x000000,
             wordWrap: true,
             wordWrapWidth: 800,
             lineHeight: 30,
