@@ -82,12 +82,7 @@ export class MessageServiceProxy extends AbstractProxy {
     const finalObj: any = {};
     finalObj.gameId = GameProxy.config.gameId;
     finalObj.playerId = WrapperProxy.playerData.playerId;
-    if (GameProxy.config.sendTotalBetInRequest) {
-      finalObj.betAmount = appModel.getTotalBet();
-    } else {
-      finalObj.betPerLine = appModel.getBetPerLine();
-      finalObj.lineSelected = appModel.getSelectedLines();
-    }
+    finalObj.betAmount = appModel.getTotalBet();
     finalObj.token = WrapperProxy.playerData.newToken;
 
     if (GameProxy.config.dontSendBBRequest) {

@@ -353,11 +353,11 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: any) => ({
       tooltipText: 'turboText',
       data: false,
       options: {
-        defaultView: 'betTurboBtn',
-        hoverView: 'betTurboBtn',
-        pressedView: 'betTurboBtn',
-        disabledView: 'betTurboBtn',
-        icon: 'turboSelectedIcon',
+        defaultView: 'betTurboSelectedBtn',
+        hoverView: 'betTurboSelectedBtn',
+        pressedView: 'betTurboSelectedBtn',
+        disabledView: 'betTurboSelectedBtn',
+        icon: 'turboIcon',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {

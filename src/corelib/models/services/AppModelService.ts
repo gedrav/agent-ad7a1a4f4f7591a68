@@ -268,14 +268,21 @@ class AppModelService {
     return this.gameInfo.betsArray[this.gameInfo.betPos];
   }
 
+  public getMaxBet(): number {
+    return (
+      this.gameInfo?.betsArray[this.gameInfo.betsArray.length - 1] *
+      this.gameInfo?.creditValue *
+      this.getSelectedLines()
+    );
+  }
   public getTotalBet(): number {
-    return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue;
+    return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
   }
   public getAllBets(): number[] {
     const bets: number[] = [];
     const len = this.gameInfo.betsArray.length;
     for (let k = 0; k < len; k++) {
-      bets.push(this.gameInfo?.betsArray[k] * this.gameInfo?.creditValue);
+      bets.push(this.gameInfo?.betsArray[k] * this.gameInfo?.creditValue * this.getSelectedLines());
     }
 
     return bets;

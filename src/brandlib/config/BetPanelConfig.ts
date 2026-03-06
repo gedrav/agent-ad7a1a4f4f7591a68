@@ -4,6 +4,7 @@ import { CoreUIConfig } from './CoreUIConfig';
 import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDecrementBetCommand';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { AutoPlayChangeToggleBtnCommand } from '@core/commands/action/AutoPlayChangeToggleBtnCommand';
 
 export const BET_PANEL_CONFIG = {
   name: 'betPanelView',
@@ -24,15 +25,16 @@ export const BET_PANEL_CONFIG = {
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
       x: 712,
-      y: 80,
+      y: 150,
       content: 'betPanelTitle',
       toUpperCase: true,
       style: { fontFamily: 'commonFont', fontSize: 60, fill: 0x000000, fontWeight: 700 },
     },
-    { name: 'btnContainer', type: 'Container', x: 0, y: 220 },
     {
-      name: 'stakeChangeContainer',
+      name: 'btnContainer',
       type: 'Container',
+      x: 0,
+      y: 350,
       Elements: [
         {
           name: 'stakeText',
@@ -84,34 +86,59 @@ export const BET_PANEL_CONFIG = {
         },
       ],
     },
-
     {
-      name: 'closeBtn',
+      name: 'cancelBtn',
       type: 'Button',
       scale: 1,
       action: {
         press: CloseBetPanelCommand,
       },
+      data: false,
       options: {
-        defaultView: 'cancelBtn_up',
-        hoverView: 'cancelBtn_up',
-        pressedView: 'cancelBtn_up',
-        disabledView: 'cancelBtn_up',
+        defaultView: 'cancelBtn',
+        hoverView: 'cancelBtn',
+        pressedView: 'cancelBtn',
+        disabledView: 'cancelBtn',
         animations: CoreUIConfig.buttonStates,
       },
       textConfig: {
         name: 'closeBtn1Text',
         type: 'Text',
-        content: 'closeBtnText',
-        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 40 },
+        content: 'cancelText',
+        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
         toUpperCase: true,
       },
-      x: 600,
-      y: 680,
+      x: 520,
+      y: 1540,
+    },
+    {
+      name: 'startBtn',
+      type: 'Button',
+      scale: 1,
+      action: {
+        press: CloseBetPanelCommand,
+      },
+      data: true,
+      options: {
+        defaultView: 'okBtn',
+        hoverView: 'okBtn',
+        pressedView: 'okBtn',
+        disabledView: 'okBtn',
+        animations: CoreUIConfig.buttonStates,
+      },
+      textConfig: {
+        name: 'closeBtn1Text',
+        type: 'Text',
+        content: 'setText',
+        style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 44, fontWeight: 700 },
+        toUpperCase: true,
+      },
+      x: 880,
+      y: 1540,
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.5, heightPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Landscape: { widthPerc: 0.7, heightPerc: 0.65, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Portrait: { widthPerc: 0.9, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },
