@@ -1,9 +1,9 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 
-export class MenuComp extends ResponsesiveChildrenView {
+export class MenuComp extends ResponsiveChildrenView {
   // private guideRect: any;
   private homeBtn: any;
   private ambientSoundOn: any;

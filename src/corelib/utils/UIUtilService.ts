@@ -21,7 +21,7 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { Util } from './UtilService';
 import { PixAnimatedSprite } from '@core/pixiwrapper/PixAnimatedSprite';
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { GlowFilter, GrayscaleFilter } from 'pixi-filters';
@@ -32,9 +32,10 @@ import { PixIconFancyButton } from '@core/pixiwrapper/PixIconFancyButton';
 import { PixDynamicSprite } from '@core/pixiwrapper/PixDynamicSprite';
 import { PixSlider } from '@core/pixiwrapper/PixSlider';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
-import { ResponsesiveView } from '@core/pixiwrapper/ResponsesiveView';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 
 class UIUtilService {
   public getElement(obj: any): any {
@@ -52,6 +53,9 @@ class UIUtilService {
       case 'RoundedRectangle':
         element = this.getRoundedRectangle(obj);
         element.configData = obj;
+        break;
+      case 'ResponsiveGraphics':
+        element = this.getResponsiveGraphics(obj);
         break;
       case 'Circle':
         element = this.getCircle(obj.color, obj.radius);
@@ -91,10 +95,10 @@ class UIUtilService {
         element = this.getContainer(obj);
         break;
       case 'ResponsiveContainer':
-        element = new ResponsesiveView(obj);
+        element = new ResponsiveView(obj);
         break;
       case 'ResponsiveChildrenContainer':
-        element = new ResponsesiveChildrenView(obj);
+        element = new ResponsiveChildrenView(obj);
         break;
       case 'Text':
         element = this.getText(obj);
@@ -403,6 +407,9 @@ class UIUtilService {
     //graphics.configData = { name: name, width: width, height: height, x: x, y: y, color: color };
   }
 
+  public getResponsiveGraphics(obj: any): PixResponsiveGraphics {
+    return new PixResponsiveGraphics(obj);
+  }
   public getRoundedRectangle(obj: any): PixGraphics {
     return new PixGraphics().roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
   }

@@ -13,8 +13,10 @@ export const BET_PANEL_CONFIG = {
   Elements: [
     {
       name: 'betPanelBg',
-      type: 'RoundedRectangle',
+      type: 'ResponsiveGraphics',
       image: 'shortPanelBG',
+      lWidth: 2800,
+      lHeight: 1424,
       width: 1424,
       height: 1728,
       radius: 32,
@@ -139,7 +141,7 @@ export const BET_PANEL_CONFIG = {
   ],
   layoutData: {
     Desktop: { widthPerc: 0.5, heightPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Landscape: { widthPerc: 0.7, heightPerc: 0.65, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Portrait: { widthPerc: 0.9, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Landscape: { widthPerc: 0.8, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },
 };

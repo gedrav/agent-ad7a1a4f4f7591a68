@@ -54,7 +54,7 @@ export const GAME_CONFIG = {
               fontFamily: 'commonFont',
               fill: 0xffffff,
               fontSize: 74,
-              lineHeight: 36,
+              lineHeight: 60,
               fontWeight: 'bold',
               wordWrap: true,
               wordWrapWidth: 200,

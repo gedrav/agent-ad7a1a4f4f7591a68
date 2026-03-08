@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { BGView } from '@core/views/bg/BGView';
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { ControlPanelView } from '@brand/views/containers/ControlPanelView';
@@ -11,7 +11,7 @@ import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 
-export class SlotAppView extends ResponsesiveChildrenView {
+export class SlotAppView extends ResponsiveChildrenView {
   protected gameBGView: BGView;
   protected slotMachineView: SlotMachineView;
   protected controlPanelView: ControlPanelView;

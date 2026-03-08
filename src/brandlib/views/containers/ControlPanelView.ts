@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { BalanceComp } from '@core/views/comps/BalanceComp';
 import { BetComp } from '@core/views/comps/BetComp';
 import { MenuComp } from '@brand/views/comps/MenuComp';
@@ -16,7 +16,7 @@ import { Sine } from 'gsap';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
-export class ControlPanelView extends ResponsesiveChildrenView {
+export class ControlPanelView extends ResponsiveChildrenView {
   private balanceComp: BalanceComp;
   private betComp: BetComp;
   private menuComp: MenuComp;
@@ -334,8 +334,7 @@ export class ControlPanelView extends ResponsesiveChildrenView {
               this.turboBtn.y - (k + 1) * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
           } else {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.14, 0.14, 1);
-            this.bbButtonsArray[k].y =
-              this.soundOnBtn.y - (k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
+            this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
           }
         }
 

@@ -1,10 +1,10 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
 import SlotReel from '@core/views/slotmachine/SlotReel';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
-export class SlotMachineView extends ResponsesiveChildrenView {
+export class SlotMachineView extends ResponsiveChildrenView {
   protected bigWinsComp: BigWinsComp;
   private slotReel: SlotReel;
   constructor(config: any) {

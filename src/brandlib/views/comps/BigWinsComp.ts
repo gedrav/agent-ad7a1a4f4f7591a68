@@ -1,5 +1,5 @@
 import { CONSTANTS } from '@core/utils/CONSTANTS';
-import { ResponsesiveView } from '@core/pixiwrapper/ResponsesiveView';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { appModel } from '@core/models/services/AppModelService';
@@ -10,7 +10,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { UIUtil } from '@core/utils/UIUtilService';
 
 const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.GIGANTIC_WIN, CONSTANTS.UNBELIEVABLE_WIN];
-export class BigWinsComp extends ResponsesiveView {
+export class BigWinsComp extends ResponsiveView {
   protected winTicker: WinTicker;
   protected bigWinAnim: PixSpine;
   protected winTimerId: any;

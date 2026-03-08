@@ -1,9 +1,9 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 
-export class InitErrorPopup extends ResponsesiveChildrenView {
+export class InitErrorPopup extends ResponsiveChildrenView {
   private refreshBtn: PixFancyButton;
   private errorText: PixText;
   private bg: any;

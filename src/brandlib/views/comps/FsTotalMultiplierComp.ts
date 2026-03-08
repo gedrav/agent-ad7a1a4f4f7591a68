@@ -1,11 +1,11 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
-export class FsTotalMultiplierComp extends ResponsesiveChildrenView {
+export class FsTotalMultiplierComp extends ResponsiveChildrenView {
   private multiplierValText: PixText;
   private totalmultiplierVal: number = 0;
 

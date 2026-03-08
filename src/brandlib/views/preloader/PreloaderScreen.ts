@@ -1,4 +1,4 @@
-import { ResponsesiveView } from '@core/pixiwrapper/ResponsesiveView';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -7,8 +7,9 @@ import { Util } from '@core/utils/UtilService';
 import { PixAnimatedSprite } from '@core/pixiwrapper/PixAnimatedSprite';
 import { Graphics } from 'pixi.js';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 
-export class PreloaderScreen extends ResponsesiveView {
+export class PreloaderScreen extends ResponsiveChildrenView {
   private loadingText: PixText;
   private preloader: PixAnimatedSprite;
   private bar: PixGraphics;

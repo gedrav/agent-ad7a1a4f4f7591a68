@@ -1,11 +1,11 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 
-export class FSPopupComp extends ResponsesiveChildrenView {
+export class FSPopupComp extends ResponsiveChildrenView {
   private okBtn: any;
   private titleText: PixText;
   private messageText1: PixText;

@@ -7,9 +7,9 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { FSCountComp } from '@brand/views/comps/FSCountComp';
 import { WinTicker } from '@core/views/comps/WinTicker';
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 
-export class FSInfoComp extends ResponsesiveChildrenView {
+export class FSInfoComp extends ResponsiveChildrenView {
   private fsCountComp: FSCountComp;
   private fsWinComp: WinTicker;
 

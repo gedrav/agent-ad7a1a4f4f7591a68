@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -6,7 +6,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
-export class ModalView extends ResponsesiveChildrenView {
+export class ModalView extends ResponsiveChildrenView {
   private modalRect: PixGraphics;
   constructor(config: any) {
     super(config);

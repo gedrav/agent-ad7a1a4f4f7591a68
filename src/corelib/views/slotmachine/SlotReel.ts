@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
@@ -21,7 +21,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 const reelSpinStartGap = 100;
 const customEase = Elastic.easeOut.config(1.4, 0.6);
 
-export default class SlotReel extends ResponsesiveChildrenView {
+export default class SlotReel extends ResponsiveChildrenView {
   protected symbolsArray: ReelSymbolSprite[][] = [];
   protected reelSpinningState: number[];
   protected spinStarted: boolean = false;

@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 
 import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
@@ -7,7 +7,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
-export class BuyBonusView extends ResponsesiveChildrenView {
+export class BuyBonusView extends ResponsiveChildrenView {
   private closeBtn: any;
   private buyFreeSpinsValueText: any;
   private stakeText: any;

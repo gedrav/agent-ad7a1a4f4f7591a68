@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -6,7 +6,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AssetLoader } from '@core/models/services/AssetLoader';
 
-export class BGView extends ResponsesiveChildrenView {
+export class BGView extends ResponsiveChildrenView {
   protected maingameBG: PixSprite | PixSpine;
   protected freegameBG: PixSprite | PixSpine;
   protected currentBG: string;

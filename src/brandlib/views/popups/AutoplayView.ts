@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -9,7 +9,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 
-export class AutoplayView extends ResponsesiveChildrenView {
+export class AutoplayView extends ResponsiveChildrenView {
   private valuesArray: number[];
   private spinBtnsArray: any[] = [];
   private autoPanelBg: any;

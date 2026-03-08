@@ -1,8 +1,8 @@
 import { PixText } from '@core/pixiwrapper/PixText';
-import { ResponsesiveView } from '@core/pixiwrapper/ResponsesiveView';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
-export class FSCountComp extends ResponsesiveView {
+export class FSCountComp extends ResponsiveView {
   private valueText: PixText;
   constructor(config) {
     super(config);

@@ -1,11 +1,11 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
-export class MessagePopupView extends ResponsesiveChildrenView {
+export class MessagePopupView extends ResponsiveChildrenView {
   private closeBtn: any;
   private titleText: PixText;
   private messageText: PixText;

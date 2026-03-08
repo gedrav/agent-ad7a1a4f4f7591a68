@@ -1,4 +1,4 @@
-import { ResponsesiveChildrenView } from '@core/pixiwrapper/ResponsesiveChildrenView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
@@ -15,7 +15,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import * as PIXI from 'pixi.js';
 import { appModel } from '@core/models/services/AppModelService';
 
-export class SplashView extends ResponsesiveChildrenView {
+export class SplashView extends ResponsiveChildrenView {
   private gameTitle: PixSprite | PixSpine;
   private itemsArray: SplashItemComp[];
   private itemContainer: PixView;
@@ -37,13 +37,15 @@ export class SplashView extends ResponsesiveChildrenView {
       }
     }
     this.resizeView();
+    setTimeout(() => {
+      this.startBtn.click();
+    }, 500);
   }
 
   protected positionElements(): void {
     if (DeviceProxy.config.isPortrait) {
       this.guideRect.width = UIUtil.getGameWidth() * 0.96;
-      this.guideRect.height =
-        UIUtil.getGameHeight() - this.guideRect.y - UIUtil.getGameHeight() * 0.1 - UIUtil.getGameHeight() * 0.02;
+      this.guideRect.height = UIUtil.getGameHeight() * 0.6;
     } else {
       this.guideRect.width = UIUtil.getGameWidth() * 0.96;
       this.guideRect.height = UIUtil.getGameHeight() * 0.4;
@@ -55,6 +57,10 @@ export class SplashView extends ResponsesiveChildrenView {
     } else {
       this.alignForLandscape();
     }
+    this.startBtn.x = UIUtil.getGameWidth() * 0.5;
+    this.startBtn.y = this.itemContainer.y + this.itemContainer.height + UIUtil.getGameHeight() * 0.1;
+    this.gameTitle.x = UIUtil.getGameWidth() * 0.5;
+    this.gameTitle.y = UIUtil.getGameHeight() * 0.1;
   }
 
   protected alignForPortrait(): void {

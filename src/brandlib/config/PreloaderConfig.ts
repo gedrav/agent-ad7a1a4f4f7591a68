@@ -11,7 +11,19 @@ export const PRELOADER_CONFIG: any = {
       color: 0xff0000,
       alpha: 0,
     },
-    { name: 'brandLogo', type: 'Sprite', image: 'brandLogo', x: 240, y: 120, anchor: { x: 0.5, y: 0.5 } },
+    {
+      name: 'brandLogo',
+      type: 'Sprite',
+      image: 'brandLogo',
+      x: 240,
+      y: 120,
+      anchor: { x: 0.5, y: 0.5 },
+      layoutData: {
+        Desktop: { scale: 1 },
+        Portrait: { scale: 0.5 },
+        Landscape: { scale: 0.5 },
+      },
+    },
     {
       name: 'progressBar',
       type: 'Container',
@@ -40,8 +52,8 @@ export const PRELOADER_CONFIG: any = {
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5 },
-    Portrait: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.4 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.25 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.5 },
+    Portrait: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.5 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.5 },
   },
 };
