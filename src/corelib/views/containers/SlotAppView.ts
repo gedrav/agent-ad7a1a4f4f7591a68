@@ -10,6 +10,9 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
+import { MenuComp } from '@brand/views/comps/MenuComp';
+import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class SlotAppView extends ResponsiveChildrenView {
   protected gameBGView: BGView;
@@ -21,6 +24,8 @@ export class SlotAppView extends ResponsiveChildrenView {
   private buyBonusView: BuyBonusView;
   private messagePopupView: MessagePopupView;
   private popupComp: FSPopupComp;
+  private menuComp: MenuComp;
+  private menuCompM: MenuCompMobile;
 
   constructor(config) {
     super(config);
@@ -38,12 +43,34 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.messagePopupView);
     this.popupComp = this.elementsList['popupComp'];
     this.removeChild(this.popupComp);
+    this.menuComp = this.elementsList['menuComp'];
+    this.removeChild(this.menuComp);
+    this.menuCompM = this.elementsList['menuCompM'];
+    this.removeChild(this.menuCompM);
 
     EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_AUTO_PLAY_PANEL, this.showAutoPlayPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
+    EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
+  }
+  protected hideMenu(): void {
+    setTimeout(() => {
+      if (DeviceProxy.config.isMobile) {
+        this.removeChild(this.menuCompM);
+      } else {
+        this.removeChild(this.menuComp);
+      }
+    }, 200);
+  }
+  protected onMenuClicked(): void {
+    if (DeviceProxy.config.isMobile) {
+      this.addChild(this.menuCompM);
+    } else {
+      this.addChild(this.menuComp);
+    }
   }
   protected showFSPopup(): void {
     this.addChild(this.popupComp);

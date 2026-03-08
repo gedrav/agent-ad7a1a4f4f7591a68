@@ -2,6 +2,7 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 export class MenuComp extends ResponsiveChildrenView {
   // private guideRect: any;
@@ -16,7 +17,6 @@ export class MenuComp extends ResponsiveChildrenView {
 
   constructor(config: any) {
     super(config);
-    console.log('MenuComp created');
     this.guideRect = this.elementsList['guideRect'];
     this.menuBg = this.elementsList['menubg'];
 
@@ -39,14 +39,20 @@ export class MenuComp extends ResponsiveChildrenView {
     this.infoBtn.enabled = true;
     this.repositionButtons();*/
 
+    this.visible = false;
     EventHandler.addEventListener(SlotEvents.MENU_COMP_AMBIENT_SOUND_TOGGLED, this.onAmbientToggled.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_COMP_SFX_SOUND_TOGGLED, this.onSfxToggled.bind(this));
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
   }
-  protected hideMenu(): void {}
-  protected onMenuClicked(event: any): void {}
+  protected hideMenu(): void {
+    AnimationProxy.fadeOut(this, 0.1, this.onMenuHidden.bind(this));
+  }
+  protected onMenuHidden(): void {}
+  protected onMenuClicked(event: any): void {
+    AnimationProxy.fadeIn(this, 0.1);
+  }
 
   private onAmbientToggled(isOn: boolean): void {
     this.ambientSoundOn.visible = isOn;

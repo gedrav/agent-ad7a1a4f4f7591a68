@@ -39,7 +39,7 @@ export const SPLASH_CONFIG: any = {
     },
   ],
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 1 },
     {
       name: 'gameTitle',
       type: 'Sprite',

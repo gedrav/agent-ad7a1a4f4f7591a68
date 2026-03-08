@@ -2,12 +2,18 @@ import { MenuComp } from '@brand/views/comps/MenuComp';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
+  private closeBtn: PixFancyButton;
   constructor(config: any) {
     super(config);
     this.topbar = this.elementsList['topbar'];
+    this.closeBtn = this.elementsList['closeBtn'];
+    if (this.closeBtn) {
+      this.closeBtn.onPress.connect(this.hideMenu.bind(this));
+    }
   }
 
   protected resizeView() {

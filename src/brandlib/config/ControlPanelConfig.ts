@@ -389,7 +389,7 @@ export const CONTROL_PANEL_CONFIG = {
           heightPerc: 0.65,
           hAlign: 'left',
           vAlign: 'middle',
-          hPaddingPerc: -0.7,
+          hPaddingPerc: -0.8,
           maxScale: 1,
         },
         Landscape: {
@@ -398,7 +398,7 @@ export const CONTROL_PANEL_CONFIG = {
           heightPerc: 0.7,
           vAlign: 'bottomDown',
           hAlign: 'center',
-          vPaddingPerc: 0.05,
+          vPaddingPerc: 0.25,
           hPaddingPerc: 0,
           maxScale: 1,
         },

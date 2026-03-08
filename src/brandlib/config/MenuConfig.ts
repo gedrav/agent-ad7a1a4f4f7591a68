@@ -242,13 +242,12 @@ export const MENU_CONFIG: any = {
   ],
   layoutData: {
     Desktop: {
-      posRefComponent: 'menuBtn',
       widthPerc: 0.4,
       maxScale: 1,
       hAlign: 'right',
-      vAlign: 'bottomDown',
-      vPaddingPerc: 0.02,
-      hPaddingPerc: -0.8,
+      vAlign: 'top',
+      vPaddingPerc: 0.06,
+      hPaddingPerc: -0.016,
     },
     Landscape: {
       widthPerc: 0.4,
