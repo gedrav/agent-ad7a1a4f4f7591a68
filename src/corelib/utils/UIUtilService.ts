@@ -411,7 +411,11 @@ class UIUtilService {
     return new PixResponsiveGraphics(obj);
   }
   public getRoundedRectangle(obj: any): PixGraphics {
-    return new PixGraphics().roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
+    const rect = new PixGraphics().roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
+    if (obj.alpha != undefined) {
+      rect.alpha = obj.alpha;
+    }
+    return rect;
   }
 
   public getRoundedRectangleWithBorder(obj: any): PixGraphics {

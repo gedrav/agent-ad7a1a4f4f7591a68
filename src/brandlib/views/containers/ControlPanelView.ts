@@ -1,7 +1,6 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { BalanceComp } from '@core/views/comps/BalanceComp';
 import { BetComp } from '@core/views/comps/BetComp';
-import { MenuComp } from '@brand/views/comps/MenuComp';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
@@ -19,7 +18,6 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 export class ControlPanelView extends ResponsiveChildrenView {
   private balanceComp: BalanceComp;
   private betComp: BetComp;
-  private menuComp: MenuComp;
   private soundOnBtn: PixFancyButton;
   private soundOffBtn: PixFancyButton;
   private turboSelectedBtn: PixFancyButton;
@@ -41,7 +39,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     this.balanceComp = this.elementsList['balanceComp'];
     this.betComp = this.elementsList['betComp'];
-    this.menuComp = this.elementsList['menuComp'];
     this.soundOnBtn = this.elementsList['soundOnBtn'];
     this.soundOffBtn = this.elementsList['soundOffBtn'];
     this.turboBtn = this.elementsList['turboBtn'];
@@ -55,7 +52,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.autoCounterText = this.elementsList['autoCounter'].elementsList['autoCounterText'];
     this.gameNameTxt = this.elementsList['gameNameTxt'];
     this.lightningBtn = this.elementsList['lightningBtn'];
-    this.menuComp.visible = false;
     this.autoCounterText.visible = false;
     this.autoCounterBG.visible = false;
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
@@ -64,9 +60,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateTotalbet.bind(this));
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
     EventHandler.addEventListener(SlotEvents.TURBO_STATE_CHANGED, this.onTurboStateChanged.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
-
-    EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
 
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enablePanel.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disablePanel.bind(this));
@@ -86,7 +79,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.createBBButtons();
     this.onTurboStateChanged();
     this.createGameTitle();
-    this.addChild(this.menuComp);
     this.resizeView();
     this.updateBalance();
     this.updateTotalbet();
@@ -168,57 +160,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
   protected onTurboStateChanged(): void {
     this.turboBtn.visible = !appModel.turboMode;
     this.turboSelectedBtn.visible = appModel.turboMode;
-  }
-  hideMenu(): void {
-    AnimationProxy.animateTween(this.menuComp, {
-      duration: 0.25,
-      x: -this.menuComp.width * 1.2,
-      ease: Sine.easeOut,
-      onComplete: this.onMenuCompHidden.bind(this),
-    });
-    this.removeClickOutsideListener();
-  }
-  onMenuClicked() {
-    AnimationProxy.killTweensOf(this.menuComp);
-    if (this.menuComp.visible) {
-      AnimationProxy.animateTween(this.menuComp, {
-        duration: 0.25,
-        x: -this.menuComp.width * 1.2,
-        ease: Sine.easeOut,
-        onComplete: this.onMenuCompHidden.bind(this),
-      });
-      this.removeClickOutsideListener();
-    } else {
-      this.menuComp.visible = true;
-      this.menuComp.x = -this.menuComp.width;
-      AnimationProxy.animateTween(this.menuComp, { duration: 0.25, x: 0, ease: Sine.easeOut });
-      this.addClickOutsideListener();
-    }
-  }
-  protected onMenuCompHidden(): void {
-    this.menuComp.visible = false;
-  }
-
-  private addClickOutsideListener() {
-    setTimeout(() => {
-      this.clickOutsideHandler = (e: any) => {
-        const bounds = this.menuComp.getBounds();
-        const { x, y } = e.global;
-        if (x < bounds.x || x > bounds.x + bounds.width || y < bounds.y || y > bounds.y + bounds.height) {
-          AnimationProxy.animateTween(this.menuComp, {
-            duration: 0.25,
-            x: -this.menuComp.width * 1.2,
-            ease: Sine.easeOut,
-            onComplete: this.onMenuCompHidden.bind(this),
-          });
-          this.removeClickOutsideListener();
-        }
-      };
-      if (this.parent) {
-        (this.parent as any).eventMode = 'static';
-        this.parent.on('pointerdown', this.clickOutsideHandler);
-      }
-    }, 100);
   }
 
   private removeClickOutsideListener() {

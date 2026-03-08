@@ -194,17 +194,14 @@ class SlotGameApp {
   protected createSplash() {}
 
   protected loadLazyFiles() {
-    console.log('loading lazy files');
     AssetLoader.loadSecondarySounds();
     AssetLoader.loadSecondary();
   }
   async onSecondaryAssetsLoaded() {
-    console.log('secondary assets loaded');
     appModel.secondaryAssetsLoaded = true;
     await AssetLoader.loadFeatures();
   }
   async onFeatureAssetsLoaded() {
-    console.log('feature assets loaded');
     appModel.featureAssetsLoaded = true;
   }
 

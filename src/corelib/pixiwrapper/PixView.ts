@@ -7,6 +7,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { AssetLoader } from '@core/models/services/AssetLoader';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 export class PixView extends PIXI.Container {
   protected isDestroyed = false;
   private _configData: any;
@@ -29,6 +30,21 @@ export class PixView extends PIXI.Container {
       }
     }
     this.label = this.configData.label ? this.configData.label : this.configData.name;
+
+    if (DeviceProxy.config.isMobile) {
+      if (this.configData.isDesktopOnly) {
+        this.elementsList = [];
+        console.log('REturning as only desktop view -- ', this.configData.name);
+        return;
+      }
+    }
+    if (DeviceProxy.config.isDesktop) {
+      if (this.configData.isMobileOnly) {
+        this.elementsList = [];
+        console.log('REturning as only mobile view -- ', this.configData.name);
+        return;
+      }
+    }
 
     if (this.configData.requiredBundle) {
       if (appModel.isBundleLoaded(this.configData.requiredBundle)) {

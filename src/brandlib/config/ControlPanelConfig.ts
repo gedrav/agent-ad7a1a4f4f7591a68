@@ -19,6 +19,8 @@ import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand
 import { Point } from 'pixi.js';
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoCompConfig';
+import { MENU_CONFIG } from '@brand/config/MenuConfig';
+import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 
 export const CONTROL_PANEL_CONFIG = {
   name: 'controlPanelView',
@@ -258,7 +260,7 @@ export const CONTROL_PANEL_CONFIG = {
           heightPerc: 0.6,
           hAlign: 'center',
           vAlign: 'topUp',
-          vPaddingPerc: -0.1,
+          vPaddingPerc: -0.2,
           maxScale: 1,
         },
         DesktopPortrait: {
@@ -313,7 +315,7 @@ export const CONTROL_PANEL_CONFIG = {
           heightPerc: 0.6,
           hAlign: 'center',
           vAlign: 'bottomDown',
-          vPaddingPerc: 0.1,
+          vPaddingPerc: 0.2,
           maxScale: 1,
         },
         DesktopPortrait: {
@@ -369,7 +371,7 @@ export const CONTROL_PANEL_CONFIG = {
           heightPerc: 0.6,
           hAlign: 'center',
           vAlign: 'bottomDown',
-          vPaddingPerc: 0.1,
+          vPaddingPerc: 0.2,
           maxScale: 1,
         },
         DesktopPortrait: {
@@ -743,207 +745,6 @@ export const CONTROL_PANEL_CONFIG = {
       },
     },
     FREESPIN_INFO_COMP_CONFIG,
-    {
-      name: 'menuComp',
-      type: 'Comp',
-      class: MenuComp,
-      Elements: [
-        {
-          name: 'menubg',
-          type: 'Sprite',
-          image: 'menubg',
-        },
-        {
-          name: 'homeBtn',
-          type: 'Button',
-          action: {
-            press: HomeClickedCommand,
-          },
-          x: 136,
-          y: 88,
-          options: {
-            defaultView: 'home_up',
-            hoverView: 'home_up',
-            pressedView: 'home_up',
-            disabledView: 'home_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'homeText',
-            type: 'Text',
-            content: 'home',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: '0xdfbd80' },
-          },
-        },
-        {
-          name: 'ambientSoundOn',
-          type: 'Button',
-          action: {
-            press: MenuCompAmbientSoundToggleCommand,
-          },
-          x: 300,
-          y: 88,
-          options: {
-            defaultView: 'bgmMusicOn_up',
-            hoverView: 'bgmMusicOn_up',
-            pressedView: 'bgmMusicOn_up',
-            disabledView: 'bgmMusicOn_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'ambientText',
-            type: 'Text',
-            content: 'ambientSoundOnText',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xdfbd80 },
-          },
-        },
-        {
-          name: 'ambientSoundOff',
-          type: 'Button',
-          action: {
-            press: MenuCompAmbientSoundToggleCommand,
-          },
-          x: 300,
-          y: 88,
-          options: {
-            defaultView: 'bgmMusicOff_up',
-            hoverView: 'bgmMusicOff_up',
-            pressedView: 'bgmMusicOff_up',
-            disabledView: 'bgmMusicOff_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'ambientText',
-            type: 'Text',
-            content: 'ambientSoundOffText',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xdfbd80 },
-          },
-        },
-        {
-          name: 'sfxSoundOn',
-          type: 'Button',
-          action: {
-            press: MenuCompSfxSoundToggleCommand,
-          },
-          x: 460,
-          y: 88,
-          options: {
-            defaultView: 'sfxMusicOn_up',
-            hoverView: 'sfxMusicOn_up',
-            pressedView: 'sfxMusicOn_up',
-            disabledView: 'sfxMusicOn_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'sfxText',
-            type: 'Text',
-            content: 'sfxSoundOnText',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xdfbd80 },
-          },
-        },
-        {
-          name: 'sfxSoundOff',
-          type: 'Button',
-          action: {
-            press: MenuCompSfxSoundToggleCommand,
-          },
-          x: 460,
-          y: 88,
-          options: {
-            defaultView: 'sfxMusicOff_up',
-            hoverView: 'sfxMusicOff_up',
-            pressedView: 'sfxMusicOff_up',
-            disabledView: 'sfxMusicOff_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'sfxText',
-            type: 'Text',
-            content: 'sfxSoundOffText',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xdfbd80 },
-          },
-        },
-        {
-          name: 'infoBtn',
-          type: 'Button',
-          action: {
-            press: ShowGameRulesCommand,
-          },
-          data: { defaultTab: 'rules' },
-          x: 740,
-          y: 88,
-          options: {
-            defaultView: 'info_up',
-            hoverView: 'info_up',
-            pressedView: 'info_up',
-            disabledView: 'info_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'infoText',
-            type: 'Text',
-            content: 'infoText',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xdfbd80 },
-          },
-        },
-        {
-          name: 'historyBtn',
-          type: 'Button',
-          action: {
-            press: ShowHistoryCommand,
-          },
-          data: { defaultTab: 'history' },
-          x: 600,
-          y: 88,
-          options: {
-            defaultView: 'history_up',
-            hoverView: 'history_up',
-            pressedView: 'history_up',
-            disabledView: 'history_up',
-            animations: CoreUIConfig.buttonStates,
-            textOffset: new Point(0, 70),
-          },
-          textConfig: {
-            name: 'historyText',
-            type: 'Text',
-            content: 'history',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xdfbd80 },
-          },
-        },
-      ],
-      layoutData: {
-        Desktop: {
-          widthPerc: 0.4,
-          maxScale: 1,
-          hAlign: 'left',
-          vAlign: 'bottomUp',
-          vPaddingPerc: -0.09,
-          hPaddingPerc: 0.01,
-        },
-        Landscape: {
-          widthPerc: 0.4,
-          maxScale: 1,
-          hAlign: 'left',
-          vAlign: 'bottomUp',
-          vPaddingPerc: -0.03,
-          hPaddingPerc: 0.01,
-        },
-        Portrait: {
-          widthPerc: 0.8,
-          maxScale: 1,
-          hAlign: 'left',
-          vAlign: 'top',
-          vPaddingPerc: 0.025,
-          hPaddingPerc: 0.01,
-        },
-      },
-    },
   ],
   layoutData: {
     Desktop: {},

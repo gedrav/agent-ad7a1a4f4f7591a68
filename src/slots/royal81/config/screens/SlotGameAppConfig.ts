@@ -8,6 +8,8 @@ import { BUY_BONUS_CONFIG } from '@brand/config/BuyBonusConfig';
 import { AUTOPLAY_CONFIG } from '@brand/config/AutoPlayConfig';
 import { MESSAGE_POPUP_CONFIG } from '@brand/config/MessagePopupConfig';
 import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoCompConfig';
+import { MENU_CONFIG } from '@brand/config/MenuConfig';
+import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -16,6 +18,8 @@ export const SLOT_GAME_APP_CONFIG: any = {
     SLOT_MACHINE_CONFIG,
     CONTROL_PANEL_CONFIG,
     MODAL_VIEW_CONFIG,
+    MENU_CONFIG,
+    MENU_CONFIG_MOBILE,
     BET_PANEL_CONFIG,
     BUY_BONUS_CONFIG,
     AUTOPLAY_CONFIG,

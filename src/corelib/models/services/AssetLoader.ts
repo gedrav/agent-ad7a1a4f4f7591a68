@@ -237,7 +237,7 @@ class AssetLoaderClass {
         console.error(`Error loading font ${fontName}:`, error);
       });
   }
-  private async loadBundles(bundles: string | string[]) {
+  public async loadBundles(bundles: string | string[]) {
     if (typeof bundles === 'string') bundles = [bundles];
     for (const bundle of bundles) {
       if (!this.checkBundleExists(bundle)) {

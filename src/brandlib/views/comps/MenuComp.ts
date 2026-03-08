@@ -16,31 +16,37 @@ export class MenuComp extends ResponsiveChildrenView {
 
   constructor(config: any) {
     super(config);
+    console.log('MenuComp created');
     this.guideRect = this.elementsList['guideRect'];
     this.menuBg = this.elementsList['menubg'];
 
     this.homeBtn = this.elementsList['homeBtn'];
     this.ambientSoundOn = this.elementsList['ambientSoundOn'];
     this.ambientSoundOff = this.elementsList['ambientSoundOff'];
-    this.ambientSoundOff.visible = false;
+    //this.ambientSoundOff.visible = false;
     this.sfxSoundOn = this.elementsList['sfxSoundOn'];
     this.sfxSoundOff = this.elementsList['sfxSoundOff'];
-    this.sfxSoundOff.visible = false;
+    //this.sfxSoundOff.visible = false;
     this.historyBtn = this.elementsList['historyBtn'];
     this.infoBtn = this.elementsList['infoBtn'];
 
-    this.homeBtn.enabled = true;
+    /*this.homeBtn.enabled = true;
     this.ambientSoundOn.enabled = true;
     this.ambientSoundOff.enabled = true;
     this.sfxSoundOn.enabled = true;
     this.sfxSoundOff.enabled = true;
     this.historyBtn.enabled = true;
     this.infoBtn.enabled = true;
-    this.repositionButtons();
+    this.repositionButtons();*/
 
     EventHandler.addEventListener(SlotEvents.MENU_COMP_AMBIENT_SOUND_TOGGLED, this.onAmbientToggled.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_COMP_SFX_SOUND_TOGGLED, this.onSfxToggled.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
+    EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
   }
+  protected hideMenu(): void {}
+  protected onMenuClicked(event: any): void {}
 
   private onAmbientToggled(isOn: boolean): void {
     this.ambientSoundOn.visible = isOn;
