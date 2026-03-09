@@ -2,17 +2,22 @@ import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { CoreUIConfig } from './CoreUIConfig';
 import { ErrorMessageCloseCommand } from '@core/commands/action/ErrorMessageCloseCommand';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export const MESSAGE_POPUP_CONFIG = {
   name: 'messagePopupView',
   type: 'Comp',
   class: MessagePopupView,
-  requiredBundle: LOAD_CONSTANTS.POPUPS,
   Elements: [
     {
       name: 'panelBG',
-      type: 'Sprite',
+      type: 'ResponsiveGraphics',
       image: 'shortPanelBG',
+      width: 1424,
+      height: 1512,
+      radius: 96,
+      color: 0xdae9f7,
     },
     {
       name: 'titleText',
@@ -38,24 +43,24 @@ export const MESSAGE_POPUP_CONFIG = {
       type: 'Button',
       scale: 1,
       action: {
-        press: ErrorMessageCloseCommand,
+        press: CloseBetPanelCommand,
       },
+      data: false,
       options: {
-        defaultView: 'cancelBtn_up',
-        hoverView: 'cancelBtn_up',
-        pressedView: 'cancelBtn_up',
-        disabledView: 'cancelBtn_up',
+        defaultView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        hoverView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        pressedView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        disabledView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
         animations: CoreUIConfig.buttonStates,
       },
       textConfig: {
-        name: 'closeBtnTxt',
+        name: 'closeBtn1Text',
         type: 'Text',
-        content: 'closeBtnText',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 40 },
-        toUpperCase: true,
+        content: 'closeText',
+        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
       },
-      x: 610,
-      y: 650,
+      x: 712,
+      y: 1320,
     },
   ],
   layoutData: {

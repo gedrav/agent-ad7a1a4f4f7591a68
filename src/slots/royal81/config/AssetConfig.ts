@@ -38,10 +38,23 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
   ],
 };
-const SECONDARY: AssetBundle = { name: LOAD_CONSTANTS.SECONDARY, assets: [] };
+const SECONDARY: AssetBundle = {
+  name: LOAD_CONSTANTS.SECONDARY,
+  assets: [
+    { TYPE: 'game', NAME: '777_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'bar_spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'bells_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'watermelon_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'plum_spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'lemon_Spine_pro', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'orange_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'cherry_spine_cuts', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'wild_Spine', ASSETTYPE: 'spine' },
+  ],
+};
 const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FEATURES,
   assets: [],
 };
 
-export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY];
+export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY];

@@ -199,6 +199,9 @@ class SlotGameApp {
   }
   async onSecondaryAssetsLoaded() {
     appModel.secondaryAssetsLoaded = true;
+    setTimeout(() => {
+      EventHandler.dispatchEvent(AppEvents.SECONDARY_ASSETS_LOADED);
+    }, 100);
     await AssetLoader.loadFeatures();
   }
   async onFeatureAssetsLoaded() {

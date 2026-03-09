@@ -20,14 +20,14 @@ class SpinStartStateCommand extends StateCommand {
     if (appModel.getIsAutoSession()) {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
-    await MessageProxy.requestSpinResult(false);
+    /*await MessageProxy.requestSpinResult(false);
     EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
     await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.next();
     } else {
       EventHandler.dispatchEvent(SlotEvents.RESET_REEL_FOR_ERROR);
-    }
+    }*/
   }
 }
 

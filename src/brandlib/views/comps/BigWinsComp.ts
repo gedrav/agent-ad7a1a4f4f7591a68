@@ -26,9 +26,6 @@ export class BigWinsComp extends ResponsiveView {
 
   constructor(config) {
     super(config);
-  }
-  protected onViewCreated() {
-    super.onViewCreated();
     this.winTicker = this.elementsList['winTicker'];
     this.winTicker.reset();
     this.winTicker.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));

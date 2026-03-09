@@ -15,8 +15,6 @@ export class MessagePopupView extends ResponsiveChildrenView {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
     EventHandler.addEventListener(SlotEvents.CLOSE_MESSAGE_POPUP, this.closeMessagePopup.bind(this));
-  }
-  protected onViewCreated() {
     this.closeBtn = this.elementsList['closeBtn'];
     this.titleText = this.elementsList['titleText'];
     this.messageText = this.elementsList['messageText'];
@@ -24,7 +22,6 @@ export class MessagePopupView extends ResponsiveChildrenView {
     this.panelBG = this.elementsList['panelBG'];
     this.messageText.y = this.panelBG.height / 2;
     UIUtil.updateWordWrapWidth(this.messageText, this.panelBG.width * 0.8);
-    this.visible = false;
   }
 
   protected async showMessagePopup(data: any) {

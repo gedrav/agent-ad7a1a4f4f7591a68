@@ -521,11 +521,13 @@ export const CONTROL_PANEL_CONFIG = {
       visible: false,
       layoutData: {
         Desktop: {
+          refComponent: 'turboBtn',
+          posRefComponent: 'balanceComp',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'left',
-          hPaddingPerc: 0.01,
-          vAlign: 'bottom',
+          hPaddingPerc: 0,
+          vAlign: 'topUp',
           vPaddingPerc: -0.075,
           maxScale: 1,
         },

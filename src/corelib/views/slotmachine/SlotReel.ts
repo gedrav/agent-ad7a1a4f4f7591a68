@@ -17,6 +17,7 @@ import { Elastic } from 'gsap/gsap-core';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { AppEvents } from '@core/events/AppEvents';
 
 const reelSpinStartGap = 100;
 const customEase = Elastic.easeOut.config(1.4, 0.6);
@@ -81,6 +82,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onIdleStateEntry.bind(this));
     EventHandler.addEventListener(SlotEvents.CREATE_FINAL_REEL_SYMBOLS, this.createFinalReelSymbols.bind(this));
     EventHandler.addEventListener(SlotEvents.STOP_REEL_FOR_ERROR, this.stopReelForError.bind(this));
+    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.onSecondaryAssetsLoaded.bind(this));
 
     this.winController = new this.configData.winController({
       reels: this.reelsData.noOfReels,
@@ -95,6 +97,9 @@ export default class SlotReel extends ResponsiveChildrenView {
     //this.ticker.stop();
     //this.ticker.start();
     this.ticker.add(this.spinReel.bind(this));
+  }
+  protected onSecondaryAssetsLoaded(): void {
+    this.recreateAnimations();
   }
   protected stopReelForError(): void {
     setTimeout(this.stopSpinQuick.bind(this), 200);
@@ -199,7 +204,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     this.winController.symbolsArray = this.symbolsArray;
     this.createReelMask();
-    this.recreateAnimations();
+
     this.repositionView();
     this.showHideExtraSymbols();
   }

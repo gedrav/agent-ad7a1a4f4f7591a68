@@ -23,9 +23,11 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   protected createExtraElements(): void {
     this.destroySpine();
     if (!this.configData.data.spineName) return;
-
     this.spine = this.pool.acquire(this.configData.data);
     this.spine.stopAnimation();
+    if (this.configData.data.animScale) {
+      this.spine.scale.set(this.configData.data.animScale);
+    }
     this.animCompleteListener = {
       complete: (entry) => this.onAnimComplete(entry),
     };
@@ -35,6 +37,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   protected destroySpine(): void {
+    this.symbol.visible = true;
     if (!this.spine) return;
 
     if (this.animCompleteListener) {
@@ -97,7 +100,9 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
 
     this.animState = state;
     this.setSpineVisible(true);
-    this.spine.setSkin(this.configData.data.skin);
+    if (this.configData.data.skin) {
+      this.spine.setSkin(this.configData.data.skin);
+    }
     this.spine.playAnimation({ state, loop });
   }
 
