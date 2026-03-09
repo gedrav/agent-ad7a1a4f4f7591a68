@@ -19,8 +19,8 @@ export const AUTOPLAY_CONFIG = {
       type: 'ResponsiveGraphics',
       image: 'shortPanelBG',
       width: 1424,
-      height: 1500,
-      radius: 60,
+      height: 1512,
+      radius: 96,
       color: 0xdae9f7,
     },
     {
@@ -37,7 +37,7 @@ export const AUTOPLAY_CONFIG = {
     {
       name: 'numberSelectionContainer',
       type: 'ResponsiveChildrenContainer',
-      y: 390,
+      y: 400,
       Elements: [
         {
           name: 'numberOfSpinsText',
@@ -81,7 +81,7 @@ export const AUTOPLAY_CONFIG = {
             },
           },
           x: 180,
-          y: 150,
+          y: 160,
         },
         {
           name: 'btn2',
@@ -118,7 +118,7 @@ export const AUTOPLAY_CONFIG = {
             },
           },
           x: 444,
-          y: 150,
+          y: 160,
         },
         {
           name: 'btn3',
@@ -156,7 +156,7 @@ export const AUTOPLAY_CONFIG = {
             },
           },
           x: 708,
-          y: 150,
+          y: 160,
         },
 
         {
@@ -195,7 +195,7 @@ export const AUTOPLAY_CONFIG = {
             },
           },
           x: 980,
-          y: 150,
+          y: 160,
         },
 
         {
@@ -234,7 +234,7 @@ export const AUTOPLAY_CONFIG = {
             },
           },
           x: 1230,
-          y: 150,
+          y: 160,
         },
       ],
     },
@@ -252,7 +252,7 @@ export const AUTOPLAY_CONFIG = {
           x: 712,
           y: 0,
           content: 'spendingLimitText',
-          style: { fontFamily: 'commonFont', fontSize: 70, fill: 0x000000, fontWeight: 500 },
+          style: { fontFamily: 'commonFont', fontSize: 60, fill: 0x000000, fontWeight: 500 },
         },
         {
           name: 'singleWinSlider',
@@ -273,8 +273,8 @@ export const AUTOPLAY_CONFIG = {
           },
           valueTextOffset: { y: -47 },
           valueTextAnchor: { x: 1, y: 0.5 },
-          x: 30,
-          y: 200,
+          x: 90,
+          y: 280,
           bgWidth: 940,
           bgHeight: 32,
           Elements: [
@@ -320,7 +320,7 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
       },
       x: 520,
-      y: 1340,
+      y: 1320,
     },
     {
       name: 'startBtn',
@@ -344,11 +344,11 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 44, fontWeight: 700 },
       },
       x: 880,
-      y: 1340,
+      y: 1320,
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.5, heightPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.48, heightPerc: 0.48, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Landscape: { widthPerc: 0.8, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },

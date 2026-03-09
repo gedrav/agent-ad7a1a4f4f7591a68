@@ -85,7 +85,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     const lowbets = 8;
     const highbets = 8;
     if (len > 0) {
-      const noOfBtns: number = 16;
+      const noOfBtns: number = 11;
       for (let i = 0; i < noOfBtns; i++) {
         const btn = UIUtil.getElement(btnConfig);
         if (btn) {
@@ -199,11 +199,11 @@ export class BetPanelView extends ResponsiveChildrenView {
     }
 
     this.titleText.x = this.betPanelBg.width / 2;
-    this.maxBetBtn.x = this.betBtnsArray[columns / 2 - 1].x + gap / 2;
-    this.maxBetBtn.y = this.betBtnsArray[this.betBtnsArray.length - 1].y + this.betBtnsArray[0].height * 1.25;
+    this.maxBetBtn.x = this.betBtnsArray[this.betBtnsArray.length - 1].x + gap;
+    this.maxBetBtn.y = this.betBtnsArray[this.betBtnsArray.length - 1].y;
 
     this.downStakeBtn.x = this.betBtnsArray[columns / 2 - 1].x - (this.betBtnsArray[1].width - this.downStakeBtn.width);
-    this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height;
+    this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.5;
 
     this.upStakeBtn.x =
       this.betBtnsArray[columns / 2].x + (this.betBtnsArray[columns - 1].width - this.upStakeBtn.width);

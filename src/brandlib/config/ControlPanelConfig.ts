@@ -471,11 +471,13 @@ export const CONTROL_PANEL_CONFIG = {
       },
       layoutData: {
         Desktop: {
+          refComponent: 'turboBtn',
+          posRefComponent: 'balanceComp',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'left',
-          hPaddingPerc: 0.01,
-          vAlign: 'bottom',
+          hPaddingPerc: 0,
+          vAlign: 'topUp',
           vPaddingPerc: -0.075,
           maxScale: 1,
         },
@@ -614,12 +616,14 @@ export const CONTROL_PANEL_CONFIG = {
       },
       layoutData: {
         Desktop: {
+          refComponent: 'turboBtn',
+          posRefComponent: 'window',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'left',
           hPaddingPerc: 0.01,
           vAlign: 'top',
-          vPaddingPerc: 0.01,
+          vPaddingPerc: 0.005,
           maxScale: 1,
         },
         Landscape: {

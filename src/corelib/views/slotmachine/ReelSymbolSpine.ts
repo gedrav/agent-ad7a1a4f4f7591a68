@@ -1,59 +1,114 @@
-import ReelSymbol from '@core/views/slotmachine/ReelSymbol';
-import { UIUtil } from '@core/utils/UIUtilService';
-import { Util } from '@core/utils/UtilService';
+import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
+import { SymbolConfig } from './ReelSymbol';
+import { SpinePool } from './SpinePool';
+import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
 
-export default class ReelSymbolSpine extends ReelSymbol {
-  constructor(configData: any) {
+export default class ReelSymbolSpine extends ReelSymbolSprite {
+  private animState: string;
+  private readonly pool: SpinePool = SpinePool.getInstance();
+  private animCompleteListener: AnimationStateListener | null = null;
+
+  constructor(configData: SymbolConfig) {
     super(configData);
   }
 
-  protected createSymbol(): void {
-    this.spine = UIUtil.getSpineAnim(this.configData.data.spineName, this.configData.data);
+  // -------------------------
+  // Setup & teardown
+  // -------------------------
+  public setNewSymbol(data: any, reelno: number): void {
+    super.setNewSymbol(data, reelno);
+    this.destroySpine();
+  }
+
+  protected createExtraElements(): void {
+    this.destroySpine();
+    if (!this.configData.data.spineName) return;
+
+    this.spine = this.pool.acquire(this.configData.data);
+    this.spine.stopAnimation();
+    this.animCompleteListener = {
+      complete: (entry) => this.onAnimComplete(entry),
+    };
+    this.spine.onSpineEvent(this.animCompleteListener);
     this.addChild(this.spine);
-    this.spine.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
+    this.setSpineVisible(false);
   }
 
-  public setBlurredTexture(): void {
-    if (!this.isBlurred) {
-      this.isBlurred = true;
-      // this.alpha = 0.5;
+  protected destroySpine(): void {
+    if (!this.spine) return;
+
+    if (this.animCompleteListener) {
+      this.spine.removeSpineEvent(this.animCompleteListener);
+      this.animCompleteListener = null;
     }
+
+    this.removeChild(this.spine);
+    this.pool.release(this.configData.data, this.spine);
+    this.spine = null;
   }
 
-  public setNormalTexture(): void {
-    if (this.isBlurred) {
-      this.isBlurred = false;
-      this.alpha = 1;
-    }
+  public recreateAnimation(): void {
+    this.destroySpine();
+    this.createExtraElements();
   }
+
+  public resetSymbol(): void {
+    super.resetSymbol();
+    this.destroySpine();
+  }
+
+  // -------------------------
+  // Animations
+  // -------------------------
 
   public showIdle(): void {
-    if (this.spine && this.configData.data.idleAnimation) {
-      this.spine.playAnimation({ state: this.configData.data.idleAnimation, loop: false });
+    if (this.configData.data.idleAnim) {
+      this.playSpineAnimation(this.configData.data.idleAnim, false);
+    } else {
+      super.showIdle();
     }
   }
 
-  public stopIdleAnim(): void {
-    if (this.spine && this.configData.data.defaultState) {
-      this.spine.playAnimation({ state: this.configData.data.defaultState, loop: true });
+  public showFeatureTriggerAnimation(): void {
+    this.showWinning();
+  }
+
+  public showWinning(): void {
+    if (this.configData.data.winAnim) {
+      this.playSpineAnimation(this.configData.data.winAnim, true);
+    } else {
+      super.showWinning();
     }
   }
 
-  public showWin(): void {
-    this.alpha = 1;
-    if (this.spine && this.configData.data.winAnimation) {
-      this.spine.playAnimation({ state: this.configData.data.winAnimation, loop: true });
-    }
+  public cleanUpSymbolWin(): void {
+    super.cleanUpSymbolWin();
+    this.destroySpine();
   }
 
-  public showDimmed(): void {
-    this.alpha = 0.5;
+  // -------------------------
+  // Helpers
+  // -------------------------
+
+  private playSpineAnimation(state: string, loop: boolean): void {
+    if (!this.spine) {
+      this.createExtraElements();
+    }
+
+    this.animState = state;
+    this.setSpineVisible(true);
+    this.spine.setSkin(this.configData.data.skin);
+    this.spine.playAnimation({ state, loop });
   }
 
-  public clearAllWin(): void {
-    this.alpha = 1;
-    if (this.spine && this.configData.data.defaultState) {
-      this.spine.playAnimation({ state: this.configData.data.defaultState, loop: true });
-    }
+  protected onAnimComplete(data: { animation: { name: string } }): void {
+    const isCurrentAnim = data.animation.name === this.animState;
+    const isWinAnim = this.animState?.toLowerCase().includes('win');
+
+    if (!isCurrentAnim || isWinAnim || !this.spine) return;
+
+    this.spine.stopAnimation();
+    this.setSpineVisible(false);
+    this.destroySpine();
   }
 }

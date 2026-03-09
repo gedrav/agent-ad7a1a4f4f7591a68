@@ -199,6 +199,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     this.winController.symbolsArray = this.symbolsArray;
     this.createReelMask();
+    this.recreateAnimations();
     this.repositionView();
     this.showHideExtraSymbols();
   }
@@ -211,6 +212,15 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected createReelMask(): void {
     this.maskRect = this.elementsList['maskRect'];
     this.symbolsContainer.mask = this.maskRect;
+  }
+  protected recreateAnimations(): void {
+    const len1: number = this.symbolsArray.length;
+    for (let i = 0; i < len1; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        this.symbolsArray[i][j].recreateAnimation();
+      }
+    }
   }
 
   protected showHideExtraSymbols(flag: boolean = false): void {

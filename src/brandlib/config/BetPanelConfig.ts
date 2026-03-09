@@ -19,8 +19,8 @@ export const BET_PANEL_CONFIG = {
       lWidth: 2800,
       lHeight: 1424,
       width: 1424,
-      height: 1728,
-      radius: 32,
+      height: 1512,
+      radius: 96,
       color: 0xdae9f7,
     },
     {
@@ -28,16 +28,16 @@ export const BET_PANEL_CONFIG = {
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
       x: 712,
-      y: 150,
+      y: 180,
       toUpperCase: true,
       content: 'betPanelTitle',
-      style: { fontFamily: 'commonFont', fontSize: 60, fill: 0x000000, fontWeight: 700 },
+      style: { fontFamily: 'commonFont', fontSize: 80, fill: 0x000000, fontWeight: 700 },
     },
     {
       name: 'btnContainer',
       type: 'Container',
       x: 0,
-      y: 350,
+      y: 420,
       Elements: [
         {
           name: 'stakeText',
@@ -111,7 +111,7 @@ export const BET_PANEL_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
       },
       x: 520,
-      y: 1540,
+      y: 1320,
     },
     {
       name: 'startBtn',
@@ -135,7 +135,7 @@ export const BET_PANEL_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 44, fontWeight: 700 },
       },
       x: 880,
-      y: 1540,
+      y: 1320,
     },
   ],
   layoutData: {

@@ -14,6 +14,7 @@ import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 import { Container } from 'pixi.js';
 import { ReelStripBG } from '@game/views/comps/ReelStripBG';
+import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -37,7 +38,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       x: -150,
       y: 10,
       data: {
-        symbolClass: ReelSymbolSprite,
+        symbolClass: ReelSymbolSpine,
         noOfReels: 4,
         noOfRows: 3,
         reelHeight: 660,

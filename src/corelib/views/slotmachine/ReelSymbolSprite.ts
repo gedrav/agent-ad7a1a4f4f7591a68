@@ -1,184 +1,140 @@
 import { ColorMatrixFilter } from 'pixi.js';
-import ReelSymbol from '@core/views/slotmachine/ReelSymbol';
+import ReelSymbol, { SymbolConfig } from '@core/views/slotmachine/ReelSymbol';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
 import { Sine } from 'gsap';
 import { GlowFilter } from 'pixi-filters';
+interface GlowConfig {
+  distance: number;
+  outerStrength: number;
+  innerStrength: number;
+  color: number;
+  quality: number;
+}
+
+const DEFAULT_GLOW_CONFIG: GlowConfig = {
+  distance: 2,
+  outerStrength: 1,
+  innerStrength: 1,
+  color: 0xffc600,
+  quality: 0.5,
+};
+
+const ANIMATED_GLOW_TARGET = {
+  duration: 0.5,
+  distance: 50,
+  outerStrength: 20,
+  yoyo: true,
+  repeat: -1,
+};
+
 export default class ReelSymbolSprite extends ReelSymbol {
-  constructor(configData: any) {
+  constructor(configData: SymbolConfig) {
     super(configData);
     this.createSymbol();
   }
+
+  // -------------------------
+  // Setup
+  // -------------------------
+
   protected createSymbol(): void {
     this.destroySymbol();
+
     this.symbol = UIUtil.getSprite(this.configData.data.name);
-    this.addChild(this.symbol);
     this.symbol.label = 'SYMBOL';
     this.symbol.anchor.set(0.5, 0.5);
-    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
+    this.symbol.scale.set(this.getDefaultScale());
+    this.addChild(this.symbol);
+
     this.handleGameProp();
   }
+
   protected handleGameProp(): void {}
+
+  public destroySymbol(): void {
+    this.symbol?.destroy();
+  }
+
+  // -------------------------
+  // Symbol identity
+  // -------------------------
 
   public getSymbolName(): string {
     return this.configData.data.name;
   }
+
   public getSymbolNameForPayout(): string {
-    if (this.getSymbolName().indexOf('_') > -1) {
-      const arr: string[] = this.getSymbolName().split('_');
-      return arr[0];
-    }
-    return this.getSymbolName();
+    const name = this.getSymbolName();
+    return name.includes('_') ? name.split('_')[0] : name;
   }
+
   public getReelNumber(): number {
     return this.configData.data.reelNumber;
   }
 
+  // -------------------------
+  // Texture management
+  // -------------------------
+
+  public setNewSymbol(data: any, reelno: number): void {
+    this.configData.data = { ...this.configData.data, ...data };
+    this.symbol.texture = this.resolveTexture();
+    this.handleGameProp();
+  }
+
+  public setBlurredTexture(): void {
+    if (this.symbol && !this.isBlurred) {
+      this.isBlurred = true;
+      this.symbol.texture = this.resolveTexture();
+    }
+  }
+
+  public setNormalTexture(): void {
+    if (this.symbol && this.isBlurred) {
+      this.isBlurred = false;
+      this.symbol.texture = this.resolveTexture();
+    }
+  }
+
+  private resolveTexture() {
+    const name = this.isBlurred ? `${this.configData.data.name}_blur` : this.configData.data.name;
+    return UIUtil.getTexture(name);
+  }
+
+  // -------------------------
+  // Animations
+  // -------------------------
+
   public showIdle(): void {
     AnimationProxy.killTweensOf(this.symbol);
-
-    // --------- Tilt
     AnimationProxy.animateTween(this.symbol, {
       duration: 0.45,
-      rotation: Util.getRadians(Util.getRandomRange(0, 1) == 0 ? -10 : 10),
+      rotation: Util.getRadians(Util.getRandomRange(0, 1) === 0 ? -10 : 10),
       ease: 'sine.inOut',
       yoyo: true,
       repeat: 1,
     });
-
-    // //-------Hover Vibration
-    // AnimationProxy.animateTween(this.symbol, 0.06, {
-    //   x: '+=4',
-    //   duration: 0.06,
-    //   ease: 'sine.inOut',
-    //   yoyo: true,
-    //   repeat: 5,
-    // });
-
-    //-------Hover Bob
-    //AnimationProxy.animateTween(this.symbol, 0.8, {y: '-=10', duration: 0.8, ease: 'sine.inOut', yoyo: true, repeat: 2});
-
-    //-------Breathing Pulse (Scale In/Out)
-    //gsap.to(this.symbol.scale, { x: 1.1, y: 1.1, duration: 1.2, ease: 'sine.inOut', yoyo: true, repeat: 1 });
-
-    //--------Shake
-    /*gsap.fromTo(this.symbol,{ rotation: Util.getRadians(-3) },
-    { rotation: Util.getRadians(3), duration: 0.18, ease: 'sine.inOut', yoyo: true, repeat: 2,
-         onComplete: () => {
-           gsap.to(this.symbol, {
-             rotation: 0,
-             duration: 0.25,
-             ease: 'power2.out',
-           });
-         },
-       },
-    );*/
-
-    //--------Wiggle Rotation Loop
-    // const originalRot = this.symbol.rotation;
-    // gsap.to(this.symbol, {
-    //   rotation: originalRot + Util.getRadians(3),
-    //   duration: 0.2,
-    //   ease: 'sine.inOut',
-    //   yoyo: true,
-    //   repeat: 2,
-    //   onComplete: () => {
-    //     gsap.to(this.symbol, {
-    //       rotation: originalRot,
-    //       duration: 0.25,
-    //       ease: 'sine.out',
-    //     });
-    //   },
-    // });
-
-    //----------Breathing Glow
-    /*gsap.to(this.symbol, {
-      alpha: 0.55,
-      duration: 0.6,
-      yoyo: true,
-      repeat: 1,
-      ease: 'sine.inOut',
-    });*/
   }
+
   public stopIdleAnim(): void {
     AnimationProxy.killTweensOf(this.symbol);
     this.resetSymbol();
   }
 
-  public setNewSymbol(data: any, reelno): void {
-    for (const p in data) {
-      this.configData.data[p] = data[p];
-    }
-    if (this.isBlurred) {
-      this.symbol.texture = UIUtil.getTexture(this.configData.data.name + '_blur');
-    } else {
-      this.symbol.texture = UIUtil.getTexture(this.configData.data.name);
-    }
-    this.handleGameProp();
-  }
-  public setBlurredTexture(): void {
-    if (this.symbol) {
-      if (!this.isBlurred) {
-        this.isBlurred = true;
-        this.symbol.texture = UIUtil.getTexture(this.configData.data.name + '_blur');
-      }
-    }
-  }
-  public setNormalTexture() {
-    if (this.symbol) {
-      if (this.isBlurred) {
-        this.isBlurred = false;
-        this.symbol.texture = UIUtil.getTexture(this.configData.data.name);
-      }
-    }
-  }
-
   public showFaded(): void {
-    const colorMatrixFilter = new ColorMatrixFilter();
-    colorMatrixFilter.brightness(0.4, false);
-    this.symbol.filters = [colorMatrixFilter];
+    const filter = new ColorMatrixFilter();
+    filter.brightness(0.4, false);
+    this.symbol.filters = [filter];
   }
 
   public showFeatureTriggerAnimation(): void {
-    this.symbol.filters = null;
-    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
-    const glowFilter = new GlowFilter({
-      distance: 2,
-      outerStrength: 1,
-      innerStrength: 1,
-      color: 0xffc600,
-      quality: 0.5,
-    });
-    this.symbol.filters = [glowFilter];
-    AnimationProxy.animateTween(glowFilter, {
-      duration: 0.5,
-      distance: 50,
-      outerStrength: 20,
-      innerStrength: 30,
-      repeat: -1,
-      yoyo: true,
-    });
+    this.applyGlowAnimation({ innerStrength: 30 });
   }
+
   public showWinning(): void {
-    this.symbol.filters = null;
-    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
-    const glowFilter = new GlowFilter({
-      distance: 1,
-      outerStrength: 0.4,
-      innerStrength: 0.2,
-      color: 0xffc600,
-      quality: 0.5,
-    });
-    this.symbol.filters = [glowFilter];
-    AnimationProxy.animateTween(glowFilter, {
-      duration: 0.5,
-      distance: 4,
-      outerStrength: 1,
-      innerStrength: 0.5,
-      repeat: -1,
-      yoyo: true,
-    });
+    this.applyGlowAnimation({ innerStrength: 2 });
     AnimationProxy.animateTween(this.symbol, {
       duration: 0.5,
       scaleX: 1.1,
@@ -191,7 +147,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
   public cleanUpSymbolWin(): void {
     this.symbol.filters = null;
     AnimationProxy.killTweensOf(this.symbol);
-    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
+    this.symbol.scale.set(this.getDefaultScale());
   }
 
   public showBlastAnim(onComplete?: () => void): void {
@@ -201,34 +157,54 @@ export default class ReelSymbolSprite extends ReelSymbol {
       y: 0,
       ease: Sine.easeOut,
       delay: 0.1,
-      onComplete: () => {
-        onComplete?.();
-      },
+      onComplete: () => onComplete?.(),
     });
   }
-  public showLanding(): void {}
 
-  public resetScale(): void {
-    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
-  }
-
-  public replaceSymbol(symb: string, onComplete?: () => void) {
-    this.swapSymbolTexture(symb);
+  public replaceSymbol(data: any, reelno: number, onComplete?: () => void): void {
+    this.setNewSymbol(data, reelno);
     this.symbol.scale.set(0);
+    this.symbol.visible = true;
+
+    const scale = this.getDefaultScale();
     AnimationProxy.animateTween(this.symbol, {
       duration: 0.8,
-      scaleX: 1,
-      scaleY: 1,
+      scaleX: scale,
+      scaleY: scale,
       ease: Sine.easeOut,
-      onComplete: () => {
-        onComplete?.();
-      },
+      onComplete: () => onComplete?.(),
     });
   }
 
-  public destroySymbol(): void {
-    if (this.symbol) {
-      this.symbol.destroy();
-    }
+  public resetScale(): void {
+    this.symbol.scale.set(this.getDefaultScale());
+  }
+
+  // -------------------------
+  // Overridable hooks
+  // -------------------------
+
+  public showLanding(): void {}
+  protected createExtraElements(): void {}
+
+  // -------------------------
+  // Helpers
+  // -------------------------
+
+  private applyGlowAnimation(overrides: Partial<GlowFilter>): void {
+    this.symbol.filters = null;
+    this.symbol.scale.set(this.getDefaultScale());
+
+    const glowFilter = new GlowFilter(DEFAULT_GLOW_CONFIG);
+    this.symbol.filters = [glowFilter];
+
+    AnimationProxy.animateTween(glowFilter, {
+      ...ANIMATED_GLOW_TARGET,
+      ...overrides,
+    });
+  }
+
+  private getDefaultScale(): number {
+    return Util.getDefaultValue(this.configData.data.scale, 1);
   }
 }

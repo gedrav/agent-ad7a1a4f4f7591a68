@@ -1,72 +1,79 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
-import { Spine } from '@esotericsoftware/spine-pixi-v8';
+import { AnimationStateListener, Spine } from '@esotericsoftware/spine-pixi-v8';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 
-export class PixSpine extends StandardView {
-  protected anchor: any;
-  private spineAnim: any;
+interface BoundingBoxConfig {
+  width: number;
+  height: number;
+  xPadding?: number;
+  yPadding?: number;
+}
 
-  constructor(configData: any) {
+interface SpineConfig {
+  spineName: string;
+  defaultSkin?: string;
+  defaultState?: string;
+  boundingBox?: BoundingBoxConfig;
+  [key: string]: unknown;
+}
+
+interface AnimationOptions {
+  state?: string;
+  loop?: boolean;
+  trackIndex?: number;
+  stopAtFirst?: boolean;
+}
+
+export class PixSpine extends StandardView {
+  private spineAnim: Spine;
+
+  constructor(configData: SpineConfig) {
     super(configData);
+
+    this.configData = { ...configData };
+
     this.spineAnim = Spine.from({
-      skeleton: this.configData.spineName + 'Data',
-      atlas: this.configData.spineName + 'Atlas',
+      skeleton: `${configData.spineName}Data`,
+      atlas: `${configData.spineName}Atlas`,
       scale: 1,
     });
-    //this.anchor = { x: 0.5, y: 0.5 };
-    this.configData = {};
-    for (const p in configData) {
-      this.configData[p] = configData[p];
+
+    if (configData.defaultSkin) {
+      this.setSkin(configData.defaultSkin);
     }
-    if (this.configData.defaultSkin != undefined) {
-      this.setSkin(this.configData.defaultSkin);
-    }
+
     this.addChild(this.spineAnim);
-    if (this.configData.boundingBox) {
-      this.guideRect = UIUtil.getRectangle(
-        this.configData.boundingBox.width,
-        this.configData.boundingBox.height,
-        0xff0000,
-      );
-      this.spineAnim.x = this.guideRect.width / 2 + Util.getDefaultValue(this.configData.boundingBox.xPadding, 0);
-      this.spineAnim.y = this.guideRect.height / 2 + Util.getDefaultValue(this.configData.boundingBox.yPadding, 0);
-      this.addChildAt(this.guideRect, 0);
-      this.guideRect.alpha = 0;
-    }
+    this.initBoundingBox(configData.boundingBox);
   }
 
-  public setAnimationSpeed(num: number): void {}
+  private initBoundingBox(boundingBox?: BoundingBoxConfig): void {
+    if (!boundingBox) return;
 
-  setSkin(name: string): void {
+    this.guideRect = UIUtil.getRectangle(boundingBox.width, boundingBox.height, 0xff0000);
+    this.spineAnim.x = boundingBox.width / 2 + Util.getDefaultValue(boundingBox.xPadding, 0);
+    this.spineAnim.y = boundingBox.height / 2 + Util.getDefaultValue(boundingBox.yPadding, 0);
+    this.addChildAt(this.guideRect, 0);
+  }
+
+  public setSkin(name: string): void {
     this.spineAnim.skeleton.setSkinByName(name);
   }
 
-  addEventListener(event: string, callback: any) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that: PixSpine = this;
-    if (event === 'complete') {
-      this.spineAnim.state.addListener({
-        complete: function (entry) {
-          callback(entry, that);
-        },
-      });
-    } else if (event === 'event') {
-      this.spineAnim.state.addListener({
-        event: function (entry, event) {
-          callback(event, that);
-        },
-      });
-    }
-  }
-  removeEventListners() {
-    //this.spineAnim.state.removeListener();
+  public onSpineEvent(listener: AnimationStateListener): void {
+    this.spineAnim.state.addListener(listener);
   }
 
-  public prepareAnimation(options: any = null) {
-    if (options && options.state == undefined) {
-      options.state = this.configData.defaultState;
-    }
+  public removeSpineEvent(listener: AnimationStateListener): void {
+    this.spineAnim.state.removeListener(listener);
+  }
+
+  public clearSpineEvents(): void {
+    this.spineAnim.state.clearListeners();
+  }
+
+  public prepareAnimation(options: AnimationOptions = {}): void {
+    const resolvedOptions = this.resolveAnimationOptions(options);
 
     this.spineAnim.state.data.defaultMix = 1;
     this.spineAnim.state.setEmptyAnimation(0, 0);
@@ -74,51 +81,36 @@ export class PixSpine extends StandardView {
     this.spineAnim.skeleton.setToSetupPose();
     this.spineAnim.state.timeScale = 1;
     this.spineAnim.state.tracks = [];
-    options.trackIndex = 0;
-    this.spineAnim.state.setAnimation(options.trackIndex, options.state, options.loop);
+    this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
     this.spineAnim.state.timeScale = 0;
   }
 
-  public playAnimation(options: any = null) {
-    if (options && options.state == undefined) {
-      options.state = this.configData.defaultState;
-    }
+  public playAnimation(options: AnimationOptions = {}): void {
+    const resolvedOptions = this.resolveAnimationOptions(options);
 
     this.spineAnim.state.data.defaultMix = 1;
-    this.spineAnim.state.setEmptyAnimation(0, 0);
-    this.spineAnim.state.clearTracks();
-    this.spineAnim.skeleton.setToSetupPose();
     this.spineAnim.state.timeScale = 1;
-    this.spineAnim.state.tracks = [];
-    options.trackIndex = 0;
-    this.spineAnim.state.setAnimation(options.trackIndex, options.state, options.loop);
-    if (options.stopAtFirst) {
-      this.spineAnim.state.timeScale = 0;
-      this.spineAnim.skeleton.setToSetupPose();
-    }
+    this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
   }
-  public playReverseAnimation(): void {
-    //this.spineAnim.state.timeScale = -1;
-  }
-  stopAnimation() {
+
+  public stopAnimation(): void {
     this.spineAnim.state.timeScale = 0;
     this.spineAnim.state.data.defaultMix = 1;
-    //this.spineAnim.state.setEmptyAnimation(0, 0);
-    //this.spineAnim.state.clearTracks();
     this.spineAnim.skeleton.setToSetupPose();
   }
+
   public getWidth(): number {
-    if (this.configData.boundingBox) {
-      return this.configData.boundingBox.width * this.scale.x;
-    } else {
-      return this.width;
-    }
+    return this.configData.boundingBox ? this.configData.boundingBox.width * this.scale.x : this.width;
   }
+
   public getHeight(): number {
-    if (this.configData.boundingBox) {
-      return this.configData.boundingBox.height * this.scale.y;
-    } else {
-      return this.height;
-    }
+    return this.configData.boundingBox ? this.configData.boundingBox.height * this.scale.y : this.height;
+  }
+
+  private resolveAnimationOptions(options: AnimationOptions): AnimationOptions {
+    return {
+      ...options,
+      state: options.state ?? this.configData.defaultState,
+    };
   }
 }

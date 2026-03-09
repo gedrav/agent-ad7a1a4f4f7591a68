@@ -58,7 +58,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
           },
           textConfig: {
             contentText: 'Refresh',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, fontWeight: 'bold' },
+            style: { fontFamily: 'commonFont', fontSize: 20, fill: 0xffffff, fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
           },
           options: {
