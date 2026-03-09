@@ -14,8 +14,8 @@ export class AutoplayView extends ResponsiveChildrenView {
   private spinBtnsArray: any[] = [];
   private autoPanelBg: any;
   private autoCont: any;
-  private titleText1: any;
-  private betSelectionContainer: any;
+  private titleText: any;
+  private numberSelectionContainer: any;
   private sliderContainer: any;
   private cancelBtn: any;
   private startBtn: any;
@@ -42,32 +42,25 @@ export class AutoplayView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAutoPlayPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED, this.onOkClicked.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.resetAutoplayView.bind(this));
-    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.resizeView.bind(this));
 
-    this.autoCont = this.elementsList['autoCont'];
-    this.autoPanelBg = this.autoCont.elementsList['autoPanelBg'];
-    this.titleText1 = this.autoCont.elementsList['titleText1'];
-    this.betSelectionContainer = this.autoCont.elementsList['betSelectionContainer'];
-    this.sliderContainer = this.autoCont.elementsList['sliderContainer'];
-    this.cancelBtn = this.autoCont.elementsList['cancelBtn'];
-    this.startBtn = this.autoCont.elementsList['startBtn'];
-    this.numberOfSpinsText = this.betSelectionContainer.elementsList['numberOfSpinsText'];
-    this.btn1 = this.betSelectionContainer.elementsList['btn1'];
-    this.btn2 = this.betSelectionContainer.elementsList['btn2'];
-    this.btn3 = this.betSelectionContainer.elementsList['btn3'];
-    this.btn4 = this.betSelectionContainer.elementsList['btn4'];
-    this.btn5 = this.betSelectionContainer.elementsList['btn5'];
-    this.stopSpinText = this.sliderContainer.elementsList['stopSpinText'];
-    this.onAnyWin = this.sliderContainer.elementsList['onAnyWin'];
-    this.onBonusWin = this.sliderContainer.elementsList['onBonusWin'];
+    this.autoPanelBg = this.elementsList['autoPanelBg'];
+    this.titleText = this.elementsList['titleText'];
+    this.numberSelectionContainer = this.elementsList['numberSelectionContainer'];
+    this.sliderContainer = this.elementsList['sliderContainer'];
+    this.cancelBtn = this.elementsList['cancelBtn'];
+    this.startBtn = this.elementsList['startBtn'];
+    this.numberOfSpinsText = this.numberSelectionContainer.elementsList['numberOfSpinsText'];
+    this.btn1 = this.numberSelectionContainer.elementsList['btn1'];
+    this.btn2 = this.numberSelectionContainer.elementsList['btn2'];
+    this.btn3 = this.numberSelectionContainer.elementsList['btn3'];
+    this.btn4 = this.numberSelectionContainer.elementsList['btn4'];
+    this.btn5 = this.numberSelectionContainer.elementsList['btn5'];
     this.singleWinSlider = this.sliderContainer.elementsList['singleWinSlider'];
-    this.balanceIncreaseSlider = this.sliderContainer.elementsList['balanceIncreaseSlider'];
-    this.balanceDecreaseSlider = this.sliderContainer.elementsList['balanceDecreaseSlider'];
 
     this.valuesArray = [5, 10, 25, 50, 100];
 
     this.spinBtnsArray = [];
-    const betContainer = this.autoCont.elementsList['betSelectionContainer'];
+    const betContainer = this.elementsList['numberSelectionContainer'];
     for (let i = 0; i < this.valuesArray.length; i++) {
       const btn = betContainer?.elementsList?.[`btn${i + 1}`];
       if (btn && btn.textView) {
@@ -79,9 +72,9 @@ export class AutoplayView extends ResponsiveChildrenView {
     }
 
     this.updateSelectedBtn(this.valuesArray[1]);
-    this.visible = false;
+    //this.visible = false;
 
-    UIUtil.stopPropagation(this.autoCont);
+    UIUtil.stopPropagation(this);
   }
 
   protected async hideAutoPlayPanel() {
@@ -137,29 +130,5 @@ export class AutoplayView extends ResponsiveChildrenView {
     if (this.singleWinSlider) this.singleWinSlider.value = 0;
     if (this.balanceIncreaseSlider) this.balanceIncreaseSlider.value = 0;
     if (this.balanceDecreaseSlider) this.balanceDecreaseSlider.value = 0;
-  }
-
-  protected resizeView(): void {
-    if (!this.viewCreated) return;
-    super.resizeView();
-    UIUtil.adjustForMobile(this.autoCont);
-    UIUtil.adjustForMobile(this.autoPanelBg);
-    UIUtil.adjustForMobile(this.titleText1);
-    UIUtil.adjustForMobile(this.betSelectionContainer);
-    UIUtil.adjustForMobile(this.sliderContainer);
-    UIUtil.adjustForMobile(this.cancelBtn);
-    UIUtil.adjustForMobile(this.startBtn);
-    UIUtil.adjustForMobile(this.numberOfSpinsText);
-    UIUtil.adjustForMobile(this.btn1);
-    UIUtil.adjustForMobile(this.btn2);
-    UIUtil.adjustForMobile(this.btn3);
-    UIUtil.adjustForMobile(this.btn4);
-    UIUtil.adjustForMobile(this.btn5);
-    UIUtil.adjustForMobile(this.stopSpinText);
-    UIUtil.adjustForMobile(this.onAnyWin);
-    UIUtil.adjustForMobile(this.onBonusWin);
-    UIUtil.adjustForMobile(this.singleWinSlider);
-    UIUtil.adjustForMobile(this.balanceIncreaseSlider);
-    UIUtil.adjustForMobile(this.balanceDecreaseSlider);
   }
 }

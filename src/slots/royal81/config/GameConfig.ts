@@ -27,6 +27,7 @@ export const GAME_CONFIG = {
     commonFontR: 'Roboto',
     gameFont1: 'Wakerobin Bold',
   },
+  bbImage: 'screen1',
   bigWinValues: [5, 25, 50, 100],
   buyBonusData: {
     features: [

@@ -31,21 +31,6 @@ export class PixView extends PIXI.Container {
     }
     this.label = this.configData.label ? this.configData.label : this.configData.name;
 
-    if (DeviceProxy.config.isMobile) {
-      if (this.configData.isDesktopOnly) {
-        this.elementsList = [];
-        console.log('REturning as only desktop view -- ', this.configData.name);
-        return;
-      }
-    }
-    if (DeviceProxy.config.isDesktop) {
-      if (this.configData.isMobileOnly) {
-        this.elementsList = [];
-        console.log('REturning as only mobile view -- ', this.configData.name);
-        return;
-      }
-    }
-
     if (this.configData.requiredBundle) {
       if (appModel.isBundleLoaded(this.configData.requiredBundle)) {
         this.createView();
@@ -109,6 +94,17 @@ export class PixView extends PIXI.Container {
     if (len > 0) {
       for (let k = 0; k < len; k++) {
         const obj = data[k];
+
+        if (DeviceProxy.config.isMobile) {
+          if (obj.isDesktopOnly) {
+            continue;
+          }
+        }
+        if (DeviceProxy.config.isDesktop) {
+          if (obj.isMobileOnly) {
+            continue;
+          }
+        }
         const element = UIUtil.getElement(obj);
         this.elementsList[obj.name] = element;
         if (obj.name == 'modalRect' || obj.isModalRect) {

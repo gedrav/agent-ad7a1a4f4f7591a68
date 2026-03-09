@@ -5,6 +5,7 @@ import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDec
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { AutoPlayChangeToggleBtnCommand } from '@core/commands/action/AutoPlayChangeToggleBtnCommand';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export const BET_PANEL_CONFIG = {
   name: 'betPanelView',
@@ -28,8 +29,8 @@ export const BET_PANEL_CONFIG = {
       anchor: { x: 0.5, y: 0.5 },
       x: 712,
       y: 150,
-      content: 'betPanelTitle',
       toUpperCase: true,
+      content: 'betPanelTitle',
       style: { fontFamily: 'commonFont', fontSize: 60, fill: 0x000000, fontWeight: 700 },
     },
     {
@@ -97,10 +98,10 @@ export const BET_PANEL_CONFIG = {
       },
       data: false,
       options: {
-        defaultView: 'cancelBtn',
-        hoverView: 'cancelBtn',
-        pressedView: 'cancelBtn',
-        disabledView: 'cancelBtn',
+        defaultView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        hoverView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        pressedView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        disabledView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
         animations: CoreUIConfig.buttonStates,
       },
       textConfig: {
@@ -108,7 +109,6 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         content: 'cancelText',
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
-        toUpperCase: true,
       },
       x: 520,
       y: 1540,
@@ -122,10 +122,10 @@ export const BET_PANEL_CONFIG = {
       },
       data: true,
       options: {
-        defaultView: 'okBtn',
-        hoverView: 'okBtn',
-        pressedView: 'okBtn',
-        disabledView: 'okBtn',
+        defaultView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x9ac1f4 }),
+        hoverView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x9ac1f4 }),
+        pressedView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x9ac1f4 }),
+        disabledView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x9ac1f4 }),
         animations: CoreUIConfig.buttonStates,
       },
       textConfig: {
@@ -133,7 +133,6 @@ export const BET_PANEL_CONFIG = {
         type: 'Text',
         content: 'setText',
         style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 44, fontWeight: 700 },
-        toUpperCase: true,
       },
       x: 880,
       y: 1540,

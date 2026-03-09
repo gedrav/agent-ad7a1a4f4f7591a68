@@ -10,7 +10,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 
 export const MENU_CONFIG_MOBILE: any = {
-  name: 'menuCompM',
+  name: 'menuComp',
   type: 'Comp',
   isMobileOnly: true,
   class: MenuCompMobile,

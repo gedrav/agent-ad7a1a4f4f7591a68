@@ -6,32 +6,51 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixText } from '@core/pixiwrapper/PixText';
+import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
+import { PixView } from '@core/pixiwrapper/PixView';
 
 export class BuyBonusView extends ResponsiveChildrenView {
-  private closeBtn: any;
-  private buyFreeSpinsValueText: any;
-  private stakeText: any;
+  protected buyFreeSpinsValueText: any;
+  protected splashImage: PixSprite;
+  protected buyBonusBg: PixSprite;
+  protected titleText: PixText;
+  protected cancelBtn: PixFancyButton;
+  protected startBtn: PixFancyButton;
+  protected elementsContainer: PixView;
 
   constructor(config: any) {
     super(config);
+    this.buyBonusBg = this.elementsList['buyBonusBg'];
+    this.elementsContainer = this.elementsList['elementsContainer'];
+    this.titleText = this.elementsContainer.elementsList['titleText'];
+    this.cancelBtn = this.elementsContainer.elementsList['cancelBtn'];
+    this.startBtn = this.elementsContainer.elementsList['startBtn'];
     EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBuyBonusView.bind(this));
 
-    this.closeBtn = this.elementsList['closeBtn'];
-    this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
-    this.stakeText = this.elementsList['stakeText'];
+    this.buyFreeSpinsValueText = this.elementsContainer.elementsList['buyFreeSpinsValueText'];
+
+    this.splashImage = UIUtil.getSprite(GameProxy.config.bbImage);
+    this.elementsContainer.addChild(this.splashImage);
+    this.splashImage.x = (this.buyBonusBg.width - this.splashImage.width) / 2;
+    this.splashImage.y = this.buyBonusBg.height * 0.14;
+
+    this.titleText.x = this.buyBonusBg.width / 2;
+    this.titleText.y = this.splashImage.y + this.splashImage.height + this.buyBonusBg.height * 0.06;
+
+    this.buyFreeSpinsValueText.x = this.buyBonusBg.width / 2;
+    this.buyFreeSpinsValueText.y = this.titleText.y + this.titleText.height * 0.5 + this.buyBonusBg.height * 0.1;
 
     this.visible = false;
-
     UIUtil.stopPropagation(this);
   }
 
   protected async hideBuyBonusView() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      this.parent.removeChild(this);
     }
   }
 
@@ -39,7 +58,6 @@ export class BuyBonusView extends ResponsiveChildrenView {
     if (this.visible && this.buyFreeSpinsValueText) {
       const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
       this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
-      this.stakeText.text = Util.formatCurrency(appModel.getTotalBet());
     }
   }
 
@@ -48,7 +66,6 @@ export class BuyBonusView extends ResponsiveChildrenView {
     GameProxy.config.selectedBB = bbId;
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
-    this.stakeText.text = Util.formatCurrency(appModel.getTotalBet());
     this.visible = true;
     this.resizeView();
   }

@@ -13,6 +13,7 @@ import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { MenuComp } from '@brand/views/comps/MenuComp';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { BuyBonusViewMobile } from '@brand/views/popups/BuyBonusViewMobile';
 
 export class SlotAppView extends ResponsiveChildrenView {
   protected gameBGView: BGView;
@@ -21,11 +22,10 @@ export class SlotAppView extends ResponsiveChildrenView {
   protected timerView: TimerView;
   protected betPanelView: BetPanelView;
   private autoplayView: AutoplayView;
-  private buyBonusView: BuyBonusView;
+  private buyBonusView: BuyBonusView | BuyBonusViewMobile;
   private messagePopupView: MessagePopupView;
   private popupComp: FSPopupComp;
-  private menuComp: MenuComp;
-  private menuCompM: MenuCompMobile;
+  private menuComp: MenuComp | MenuCompMobile;
 
   constructor(config) {
     super(config);
@@ -45,32 +45,35 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.popupComp);
     this.menuComp = this.elementsList['menuComp'];
     this.removeChild(this.menuComp);
-    this.menuCompM = this.elementsList['menuCompM'];
-    this.removeChild(this.menuCompM);
 
     EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_AUTO_PLAY_PANEL, this.showAutoPlayPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideAllViews.bind(this));
+    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAllViews.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideAllViews.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideAllViews.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_CANCEL_CLICKED, this.hideAllViews.bind(this));
+  }
+  protected hideAllViews(): void {
+    this.removeChild(this.betPanelView);
+    this.removeChild(this.autoplayView);
+    this.removeChild(this.buyBonusView);
+    this.removeChild(this.messagePopupView);
+    this.removeChild(this.popupComp);
+    this.removeChild(this.menuComp);
   }
   protected hideMenu(): void {
     setTimeout(() => {
-      if (DeviceProxy.config.isMobile) {
-        this.removeChild(this.menuCompM);
-      } else {
-        this.removeChild(this.menuComp);
-      }
+      this.removeChild(this.menuComp);
     }, 200);
   }
   protected onMenuClicked(): void {
-    if (DeviceProxy.config.isMobile) {
-      this.addChild(this.menuCompM);
-    } else {
-      this.addChild(this.menuComp);
-    }
+    this.addChild(this.menuComp);
   }
   protected showFSPopup(): void {
     this.addChild(this.popupComp);

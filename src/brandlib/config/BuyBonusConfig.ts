@@ -5,162 +5,100 @@ import { CloseBuyBonusCommand } from '@core/commands/action/CloseBuyBonusCommand
 import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { BuyBonusConfirmedCommand } from '@core/commands/action/BuyBonusConfirmedCommand';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export const BUY_BONUS_CONFIG = {
   name: 'buyBonusView',
   type: 'Comp',
   class: BuyBonusView,
+  isDesktopOnly: true,
   Elements: [
     {
-      name: 'betPanelBg',
-      type: 'Sprite',
+      name: 'buyBonusBg',
+      type: 'ResponsiveGraphics',
       image: 'shortPanelBG',
+      width: 1424,
+      height: 1728,
+      radius: 32,
+      color: 0xff0000,
     },
     {
-      name: 'titleText1',
-      type: 'Text',
-      anchor: { x: 0.5, y: 0.5 },
-      content: 'BuyFreeSpinsText',
-      toUpperCase: true,
-      style: { fontFamily: 'gameFont1', fontSize: 100, fill: 0xffffff },
-
-      layoutData: {
-        Desktop: {
-          refComponent: 'betPanelBg',
-          hAlign: 'center',
-          vAlign: 'top',
-          vPaddingPerc: 0.1,
-          maxScale: 1,
+      name: 'elementsContainer',
+      type: 'Container',
+      Elements: [
+        {
+          name: 'titleText',
+          type: 'Text',
+          anchor: { x: 0.5, y: 0.5 },
+          content: 'buyFreeSpinTitle',
+          style: { fontFamily: 'commonFont', fontSize: 50, fill: 0xffffff, fontWeight: 700 },
+          x: 712,
+          y: 4,
         },
-      },
-    },
-    {
-      name: 'buyFreeSpinsValueText',
-      type: 'Text',
-      anchor: { x: 0.5, y: 0.5 },
-      contentText: '',
-      style: { fontFamily: 'gameFont1', fontSize: 120, fill: 0xd4b43d },
-      layoutData: {
-        Desktop: {
-          refComponent: 'betPanelBg',
-          posRefComponent: 'titleText1',
-          hAlign: 'center',
-          vAlign: 'bottomDown',
-          vPaddingPerc: 0.6,
-          maxScale: 1,
+        {
+          name: 'buyFreeSpinsValueText',
+          type: 'Text',
+          anchor: { x: 0.5, y: 0.5 },
+          contentText: '',
+          style: { fontFamily: 'commonFont', fontSize: 50, fill: 0xffffff, fontWeight: 700 },
+          x: 712,
+          y: 1400,
         },
-      },
-    },
-
-    {
-      name: 'downStakeBtn',
-      type: 'Button',
-      scale: 1,
-      data: -1,
-      action: {
-        press: IncrementDecrementBetCommand,
-      },
-      options: {
-        defaultView: 'stakeBtnDown_up',
-        hoverView: 'stakeBtnDown_up',
-        pressedView: 'stakeBtnDown_up',
-        disabledView: 'stakeBtnDown_up',
-        animations: CoreUIConfig.buttonStates,
-      },
-      x: 220,
-      y: 540,
-    },
-
-    {
-      name: 'stakeDisplay',
-      type: 'Sprite',
-      image: 'betShownBG_up',
-      x: 600,
-      y: 540,
-      anchor: { x: 0.5, y: 0.5 },
-    },
-
-    {
-      name: 'stakeText',
-      type: 'Text',
-      contentText: '',
-      anchor: { x: 0.5, y: 0.5 },
-      style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 50 },
-      x: 600,
-      y: 536,
-    },
-
-    {
-      name: 'upStakeBtn',
-      type: 'Button',
-      scale: 1,
-      data: 1,
-      action: {
-        press: IncrementDecrementBetCommand,
-      },
-      options: {
-        defaultView: 'stakeBtnUp_up',
-        hoverView: 'stakeBtnUp_up',
-        pressedView: 'stakeBtnUp_up',
-        disabledView: 'stakeBtnUp_up',
-        animations: CoreUIConfig.buttonStates,
-      },
-      x: 980,
-      y: 540,
-    },
-
-    {
-      name: 'closeBtn',
-      type: 'Button',
-      scale: 1,
-      action: {
-        press: CloseBuyBonusCommand,
-      },
-      options: {
-        defaultView: 'cancelBtn_up',
-        hoverView: 'cancelBtn_up',
-        pressedView: 'cancelBtn_up',
-        disabledView: 'cancelBtn_up',
-        animations: CoreUIConfig.buttonStates,
-      },
-      textConfig: {
-        name: 'closeBtn1Text',
-        type: 'Text',
-        content: 'closeBtnText',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 40 },
-        toUpperCase: true,
-      },
-      x: 400,
-      y: 680,
-    },
-    {
-      name: 'okBtn',
-      type: 'Button',
-      scale: 1,
-      action: {
-        press: BuyBonusConfirmedCommand,
-      },
-      options: {
-        defaultView: 'cancelBtn_up',
-        hoverView: 'cancelBtn_up',
-        pressedView: 'cancelBtn_up',
-        disabledView: 'cancelBtn_up',
-        animations: CoreUIConfig.buttonStates,
-      },
-      textConfig: {
-        name: 'okBtnTxt',
-        type: 'Text',
-        content: 'BuyText',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 40 },
-        toUpperCase: true,
-      },
-      x: 800,
-      y: 680,
+        {
+          name: 'cancelBtn',
+          type: 'Button',
+          scale: 1,
+          action: {
+            press: CloseBuyBonusCommand,
+          },
+          data: false,
+          options: {
+            defaultView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0x000000 }),
+            hoverView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0x000000 }),
+            pressedView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0x000000 }),
+            disabledView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0xcccccc }),
+            animations: CoreUIConfig.buttonStates,
+          },
+          textConfig: {
+            name: 'closeBtn1Text',
+            type: 'Text',
+            content: 'cancelText',
+            style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
+          },
+          x: 462,
+          y: 1540,
+        },
+        {
+          name: 'startBtn',
+          type: 'Button',
+          scale: 1,
+          action: {
+            press: BuyBonusConfirmedCommand,
+          },
+          data: true,
+          options: {
+            defaultView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0xffffff }),
+            hoverView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0xffffff }),
+            pressedView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0xffffff }),
+            disabledView: UIUtil.getRoundedRectangle({ width: 500, height: 130, radius: 16, color: 0xcccccc }),
+            animations: CoreUIConfig.buttonStates,
+          },
+          textConfig: {
+            name: 'closeBtn1Text',
+            type: 'Text',
+            content: 'buyBonusBtnText',
+            style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 44, fontWeight: 700 },
+          },
+          x: 962,
+          y: 1540,
+        },
+      ],
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Landscape: { widthPerc: 0.7, heightPerc: 0.65, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Portrait: { widthPerc: 0.9, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.5, heightPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Landscape: { widthPerc: 0.8, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },
 };

@@ -110,16 +110,12 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.maxBetBtn.setSelected(false);
 
     this.positionButtons();
-
-    this.visible = false;
-
     UIUtil.stopPropagation(this);
   }
 
   protected async hideBetPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      this.parent.removeChild(this);
     }
   }
   protected async showBetPanel() {

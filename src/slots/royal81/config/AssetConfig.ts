@@ -36,8 +36,6 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    { TYPE: 'common', NAME: 'popups1', ASSETTYPE: 'sprite' },
-    { TYPE: 'common', NAME: 'popups2', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = { name: LOAD_CONSTANTS.SECONDARY, assets: [] };
