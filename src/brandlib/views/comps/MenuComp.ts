@@ -3,17 +3,18 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
 
 export class MenuComp extends ResponsiveChildrenView {
-  // private guideRect: any;
-  private homeBtn: any;
-  private ambientSoundOn: any;
-  private ambientSoundOff: any;
-  private sfxSoundOn: any;
-  private sfxSoundOff: any;
-  private historyBtn: any;
-  private infoBtn: any;
-  private menuBg: any;
+  private menuBg: PixSprite;
+  private homeBtn: PixFancyButton;
+  private soundOnBtn: PixFancyButton;
+  private soundOffBtn: PixFancyButton;
+  private infoBtn: PixFancyButton;
+  private gameHistoryBtn: PixFancyButton;
+
+  private transactionHistoryBtn: PixFancyButton;
 
   constructor(config: any) {
     super(config);
@@ -21,27 +22,14 @@ export class MenuComp extends ResponsiveChildrenView {
     this.menuBg = this.elementsList['menubg'];
 
     this.homeBtn = this.elementsList['homeBtn'];
-    this.ambientSoundOn = this.elementsList['ambientSoundOn'];
-    this.ambientSoundOff = this.elementsList['ambientSoundOff'];
-    //this.ambientSoundOff.visible = false;
-    this.sfxSoundOn = this.elementsList['sfxSoundOn'];
-    this.sfxSoundOff = this.elementsList['sfxSoundOff'];
-    //this.sfxSoundOff.visible = false;
-    this.historyBtn = this.elementsList['historyBtn'];
+    this.soundOnBtn = this.elementsList['soundOnBtn'];
+    this.soundOffBtn = this.elementsList['soundOffBtn'];
+    this.transactionHistoryBtn = this.elementsList['transactionHistoryBtn'];
     this.infoBtn = this.elementsList['infoBtn'];
-
-    /*this.homeBtn.enabled = true;
-    this.ambientSoundOn.enabled = true;
-    this.ambientSoundOff.enabled = true;
-    this.sfxSoundOn.enabled = true;
-    this.sfxSoundOff.enabled = true;
-    this.historyBtn.enabled = true;
-    this.infoBtn.enabled = true;
-    this.repositionButtons();*/
-
+    this.gameHistoryBtn = this.elementsList['gameHistoryBtn'];
+    this.soundOffBtn.visible = false;
     this.visible = false;
-    EventHandler.addEventListener(SlotEvents.MENU_COMP_AMBIENT_SOUND_TOGGLED, this.onAmbientToggled.bind(this));
-    EventHandler.addEventListener(SlotEvents.MENU_COMP_SFX_SOUND_TOGGLED, this.onSfxToggled.bind(this));
+    EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
@@ -54,39 +42,8 @@ export class MenuComp extends ResponsiveChildrenView {
     AnimationProxy.fadeIn(this, 0.1);
   }
 
-  private onAmbientToggled(isOn: boolean): void {
-    this.ambientSoundOn.visible = isOn;
-    this.ambientSoundOff.visible = !isOn;
-  }
-
-  private onSfxToggled(isOn: boolean): void {
-    this.sfxSoundOn.visible = isOn;
-    this.sfxSoundOff.visible = !isOn;
-  }
-
-  protected repositionButtons(): void {
-    const hasHomeUrl = appModel.getHomeURL() && appModel.getHomeURL().length > 0;
-    this.homeBtn.visible = hasHomeUrl;
-
-    const buttonGroups = [
-      ...(hasHomeUrl ? [{ buttons: [this.homeBtn] }] : []),
-      { buttons: [this.ambientSoundOn, this.ambientSoundOff] },
-      { buttons: [this.sfxSoundOn, this.sfxSoundOff] },
-      { buttons: [this.infoBtn] },
-      { buttons: [this.historyBtn] },
-    ];
-
-    if (!this.menuBg || buttonGroups.length === 0) return;
-
-    const containerWidth = this.menuBg.width * 0.7;
-    const padding = (this.menuBg.width - containerWidth) / 2;
-    const gap = buttonGroups.length > 1 ? containerWidth / (buttonGroups.length - 1) : 0;
-
-    buttonGroups.forEach((group, index) => {
-      const x = padding + gap * index;
-      group.buttons.forEach((button) => {
-        button.x = x;
-      });
-    });
+  private onSoundStateChanged(flag: boolean): void {
+    this.soundOnBtn.visible = flag;
+    this.soundOffBtn.visible = !flag;
   }
 }

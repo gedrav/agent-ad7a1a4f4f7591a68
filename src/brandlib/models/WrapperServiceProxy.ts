@@ -82,13 +82,6 @@ class WrapperServiceProxy extends AbstractProxy {
   // messages to wrapper
   public notifyLoadingStart(): void {}
   public sendCanvasReady(): void {}
-
-  public navigateToHome(): void {
-    const homeUrl = appModel.getHomeURL();
-    if (homeUrl) {
-      window.open(homeUrl, '_blank');
-    }
-  }
 }
 
 export const WrapperProxy = new WrapperServiceProxy();

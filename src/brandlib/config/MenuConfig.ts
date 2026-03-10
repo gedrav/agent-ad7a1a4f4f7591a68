@@ -7,6 +7,11 @@ import { MenuCompSfxSoundToggleCommand } from '@core/commands/action/MenuCompSfx
 import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand';
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
+import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
+import { ShowInfoCommand } from '@core/commands/action/ShowInfoCommand';
+import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
+import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
 
 export const MENU_CONFIG: any = {
   name: 'menuComp',
@@ -42,7 +47,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'lobbyText',
         anchor: { x: 0, y: 0 },
@@ -59,8 +64,9 @@ export const MENU_CONFIG: any = {
     {
       name: 'soundOnBtn',
       type: 'Button',
+      data: false,
       action: {
-        press: HomeClickedCommand,
+        press: SoundStateChangeCommand,
       },
       x: 300,
       y: 180,
@@ -76,7 +82,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         anchor: { x: 0, y: 0 },
         content: 'soundOnOffText',
@@ -86,8 +92,9 @@ export const MENU_CONFIG: any = {
     {
       name: 'soundOffBtn',
       type: 'Button',
+      data: true,
       action: {
-        press: HomeClickedCommand,
+        press: SoundStateChangeCommand,
       },
       x: 300,
       y: 180,
@@ -103,7 +110,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'soundOnOffText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
@@ -113,7 +120,7 @@ export const MENU_CONFIG: any = {
       name: 'transactionHistoryBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: TransactionHistoryCommand,
       },
       x: 300,
       y: 300,
@@ -129,7 +136,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'transactionHistoryText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
@@ -139,7 +146,7 @@ export const MENU_CONFIG: any = {
       name: 'infoBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowGameRulesCommand,
       },
       x: 300,
       y: 420,
@@ -155,17 +162,17 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'gameRulesText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
       },
     },
     {
-      name: 'gameRulesBtn',
+      name: 'gameHistoryBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowHistoryCommand,
       },
       x: 300,
       y: 540,
@@ -181,7 +188,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'gameHistory',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
@@ -191,7 +198,7 @@ export const MENU_CONFIG: any = {
       name: 'depositBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowDespoitCommand,
       },
       x: 300,
       y: 660,
@@ -207,7 +214,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'depositText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
@@ -217,7 +224,7 @@ export const MENU_CONFIG: any = {
       name: 'promotionBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowPromotionCommand,
       },
       x: 300,
       y: 780,
@@ -233,7 +240,7 @@ export const MENU_CONFIG: any = {
         defaultTextAnchor: { x: 0, y: 0.5 },
       },
       textConfig: {
-        name: 'homeText',
+        name: 'buttonText',
         type: 'Text',
         content: 'promotionText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },

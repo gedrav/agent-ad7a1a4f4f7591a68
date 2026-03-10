@@ -107,13 +107,13 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           L1: {
             name: 'L1',
-            spineName: 'wild_Spine',
+            spineName: 'plum_spine',
             skin: 'default',
             idleAnim1: 'Idle',
             winAnim1: 'Win',
             idleAnim: 'Idle',
             winAnim: 'Win_anim',
-            animScale: 0.4,
+            animScale: 1,
           },
           L2: {
             name: 'L2',

@@ -557,7 +557,7 @@ export const CONTROL_PANEL_CONFIG = {
       name: 'infoBtn',
       type: 'Button',
       action: {
-        press: ShowCheatPanelCommand,
+        press: ShowGameRulesCommand,
       },
       options: {
         defaultView: 'generalCPBtn',
@@ -606,7 +606,7 @@ export const CONTROL_PANEL_CONFIG = {
       name: 'homeBtn',
       type: 'Button',
       action: {
-        press: ShowCheatPanelCommand,
+        press: HomeClickedCommand,
       },
       options: {
         defaultView: 'generalCPBtn',

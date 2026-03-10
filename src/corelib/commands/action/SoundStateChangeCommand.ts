@@ -8,6 +8,7 @@ class SoundStateChangeCmd extends ActionCommand {
     super.execute(data);
     SoundFactory.ambientState = data;
     SoundFactory.sfxState = data;
+    console.log('DATAAAA == ', data);
     EventHandler.dispatchEvent(SlotEvents.SOUND_STATE_CHANGED, data);
   }
 }

@@ -9,6 +9,7 @@ class ShowGameRulesCmd extends ActionCommand {
     super.execute(data);
     GameProxy.config.exterPageOpened = true;
     loadGameRulesPanel();
+    console.log('ShowGameRulesCommand');
     EventHandler.dispatchEvent(SlotEvents.HIDE_MENU);
   }
 }
