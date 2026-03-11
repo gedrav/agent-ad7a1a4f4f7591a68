@@ -11,8 +11,8 @@ export const GAME_BG_CONFIG: any = {
       image: 'maingameBG',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
       },
     },
   ],

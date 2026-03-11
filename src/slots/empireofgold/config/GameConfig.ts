@@ -28,7 +28,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     defaultFont: '',
     commonFont: 'Roboto Regular',
-    commonFont: 'Roboto Bold',
+    commonFont2: 'Roboto Bold',
     gameFont1: 'GermaniaOne Regular',
   },
   bigWinValues: [5, 25, 50, 100],
