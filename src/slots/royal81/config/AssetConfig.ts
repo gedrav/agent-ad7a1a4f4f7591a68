@@ -16,7 +16,7 @@ const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
     { TYPE: 'common', NAME: 'Roboto.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'game', NAME: 'wakerobin-bold.otf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'Oxanium.ttf', ASSETTYPE: 'font' },
   ],
 };
 

@@ -55,6 +55,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   private modalRect: PixGraphics;
   protected spinResponseReceived: boolean;
   protected defaultReel: any[];
+  private stopIndex: number[];
 
   constructor(configData: any) {
     super(configData);
@@ -122,6 +123,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.finalSymbols[k] = reels[k];
       }
     }
+    console.log('finalSymbols', this.finalSymbols);
   }
 
   public restartIdleAnim(): void {
@@ -247,6 +249,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.numberOfStoppedReels = 0;
     this.spinStarted = true;
     this.showHideExtraSymbols(true);
+    this.stopIndex = [];
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      this.stopIndex[k] = this.reelsData.noOfRows + 1;
+    }
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       setTimeout(
         this.startReelStripSpin.bind(this, k),
@@ -364,10 +370,12 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     const lastSymbol = symbols[symbols.length - 1];
     if (lastSymbol.y > this.reelsData.reelHeight * 1.1) {
-      if (this.finalSymbols[reelno].length == 0) {
+      if (this.stopIndex[reelno] < 0) {
         this.reelSpinningState[reelno] = 4;
       } else {
-        const symb = this.finalSymbols[reelno].pop();
+        const symb = this.finalSymbols[reelno][this.stopIndex[reelno]];
+        this.stopIndex[reelno]--;
+
         const newSymbolType = this.reelsData.symbolsData[symb];
         if (newSymbolType == null) {
           throw new Error('There is no new symbol to spin on the queue.');

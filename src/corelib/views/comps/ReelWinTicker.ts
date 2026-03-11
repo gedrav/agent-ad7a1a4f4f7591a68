@@ -10,7 +10,7 @@ export class ReelWinTicker extends StandardView {
 
   constructor(config) {
     super(config);
-    this.visible = false;
+    //this.visible = false;
     this.winTicker = this.elementsList['winTicker'];
     EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));

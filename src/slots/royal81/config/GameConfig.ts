@@ -25,7 +25,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     commonFontR: 'Roboto',
-    gameFont1: 'Wakerobin Bold',
+    gameFont1: 'Oxanium',
   },
   bbImage: 'screen1',
   bigWinValues: [5, 25, 50, 100],

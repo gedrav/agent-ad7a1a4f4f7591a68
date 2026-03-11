@@ -32,11 +32,11 @@ export const BIG_WIN_CONFIG = {
       Elements: [
         {
           name: 'valueText',
-          type: 'BitmapText',
+          type: 'Text',
           anchor: { x: 0.5, y: 0.5 },
-          x: 968,
+          x: 755,
           y: 465,
-          style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffff00 },
+          style: { fontFamily: 'gameFont1', fontSize: 140, fill: 0xffff00, fontWeight: 700 },
         },
       ],
     },
