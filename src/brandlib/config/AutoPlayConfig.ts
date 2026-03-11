@@ -255,7 +255,7 @@ export const AUTOPLAY_CONFIG = {
           style: { fontFamily: 'commonFont', fontSize: 60, fill: 0x000000, fontWeight: 500 },
         },
         {
-          name: 'singleWinSlider',
+          name: 'spendingLimitSlider',
           type: 'Slider',
           bg: 'sliderbg',
           fill: 'sliderfill',

@@ -24,7 +24,7 @@ export class MenuCompMobile extends MenuComp {
       'soundOffBtn',
       'transactionHistoryBtn',
       'infoBtn',
-      'gameRulesBtn',
+      'gameHistoryBtn',
       'depositBtn',
       'promotionBtn',
     ];

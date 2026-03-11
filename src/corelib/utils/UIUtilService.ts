@@ -312,46 +312,63 @@ class UIUtilService {
     const style = new TextStyle(cloneData.style);
     return new PixBMPText({ text: label, style: style }, cloneData);
   }
+  protected getFillGradient(colors: number[], offsets: number[]): FillGradient {
+    const colorStops = colors.map((color, i) => ({
+      offset: offsets[i] ?? i / Math.max(colors.length - 1, 1),
+      color,
+    }));
+
+    return new FillGradient({
+      type: 'linear',
+      textureSpace: 'local',
+      start: { x: 0, y: 0 },
+      end: { x: 0, y: 1 },
+      colorStops,
+    });
+  }
   public getText(obj: any): PixText {
     const cloneData = JSON.parse(JSON.stringify(obj));
+
     let label = Util.getContent(cloneData.content);
+
     if (cloneData.contentText) {
       label = cloneData.contentText;
     }
+
     if (cloneData.toUpperCase) {
       label = label.toUpperCase();
     }
+
     cloneData.style.fontFamily = GameProxy.config.FontFaces[cloneData.style.fontFamily];
-    if (cloneData.style.mFontSize != undefined && DeviceProxy.config.isDevice) {
+
+    if (cloneData.style.mFontSize !== undefined && DeviceProxy.config.isDevice) {
       cloneData.style.fontSize = cloneData.style.mFontSize;
     }
 
-    if (cloneData.fontMLProps != undefined) {
-      if (cloneData.fontMLProps[appModel.language] != undefined) {
+    if (cloneData.fontMLProps !== undefined) {
+      if (cloneData.fontMLProps[appModel.language] !== undefined) {
         cloneData.style.fontSize = cloneData.fontMLProps[appModel.language].fontSize;
       }
     }
-    if (Array.isArray(cloneData?.style?.fill)) {
-      const colorStops: any[] = cloneData?.style?.fill;
-      const gradientFill: FillGradient = new FillGradient(0.5, 0, 0.5, 1);
-      colorStops.forEach((number, index) => {
-        const ratio = index / colorStops.length;
-        gradientFill.addColorStop(ratio, number);
-      });
 
-      cloneData.style.fill = gradientFill;
+    if (Array.isArray(cloneData?.style?.fill)) {
+      cloneData.style.fill = this.getFillGradient(cloneData.style.fill, cloneData.style.fillGradientStops ?? []);
+
+      delete cloneData.style.fillGradientStops;
     }
 
     const style = new TextStyle(cloneData.style);
-    const txt = new PixText({ text: label, style: style }, cloneData);
+    const txt = new PixText({ text: label, style }, cloneData);
 
-    txt.style = cloneData.style;
+    // REMOVE THIS:
+    // txt.style = cloneData.style;
+
     if (obj.destroy) {
       if (GameProxy.config.textsToClear) {
         GameProxy.config.textsToClear.push(txt);
       }
     }
-    //txt.label = obj.name;
+
     return txt;
   }
   public getHTMLText(obj: any): PixHTMLText {

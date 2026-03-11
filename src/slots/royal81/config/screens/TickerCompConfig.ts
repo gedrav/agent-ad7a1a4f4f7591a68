@@ -26,8 +26,22 @@ export const TICKER_COMP_CONFIG: any = {
           style: {
             fontFamily: 'gameFont1',
             fontSize: 36,
-            fontWeight: 700,
-            fill: 0x9bedff,
+            dropShadow: {
+              angle: 1.6,
+              blur: 0, // use 0 or a positive value in v8
+              color: '#470000',
+              distance: 2,
+              alpha: 1,
+            },
+            fill: [0xa9fcff, 0x0046ff],
+            fillGradientStops: [0.4, 1],
+            fontWeight: 'bold',
+            letterSpacing: 4,
+            stroke: {
+              color: '#01021b',
+              width: 5,
+              join: 'round',
+            },
           },
         },
         {
@@ -37,8 +51,22 @@ export const TICKER_COMP_CONFIG: any = {
           style: {
             fontFamily: 'gameFont1',
             fontSize: 36,
-            fontWeight: 700,
-            fill: 0x9bedff,
+            dropShadow: {
+              angle: 1.6,
+              blur: 0, // use 0 or a positive value in v8
+              color: '#470000',
+              distance: 2,
+              alpha: 1,
+            },
+            fill: [0xa9fcff, 0x0046ff],
+            fillGradientStops: [0.4, 1],
+            fontWeight: 'bold',
+            letterSpacing: 4,
+            stroke: {
+              color: '#01021b',
+              width: 5,
+              join: 'round',
+            },
           },
         },
       ],

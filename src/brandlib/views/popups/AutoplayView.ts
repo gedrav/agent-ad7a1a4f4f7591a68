@@ -28,7 +28,7 @@ export class AutoplayView extends ResponsiveChildrenView {
   private stopSpinText: any;
   private onAnyWin: any;
   private onBonusWin: any;
-  private singleWinSlider: any;
+  private spendingLimitSlider: any;
   private balanceIncreaseSlider: any;
   private balanceDecreaseSlider: any;
   private selectedSpins: number = 50;
@@ -55,7 +55,7 @@ export class AutoplayView extends ResponsiveChildrenView {
     this.btn3 = this.numberSelectionContainer.elementsList['btn3'];
     this.btn4 = this.numberSelectionContainer.elementsList['btn4'];
     this.btn5 = this.numberSelectionContainer.elementsList['btn5'];
-    this.singleWinSlider = this.sliderContainer.elementsList['singleWinSlider'];
+    this.spendingLimitSlider = this.sliderContainer.elementsList['spendingLimitSlider'];
 
     this.valuesArray = [5, 10, 25, 50, 100];
 
@@ -86,11 +86,7 @@ export class AutoplayView extends ResponsiveChildrenView {
   protected onOkClicked(): void {
     const obj: any = {};
     obj.selectedSpins = this.selectedSpins;
-    obj.onAnyWin = this.onAnyWin?.isSelected || false;
-    obj.onBonusWin = this.onBonusWin?.isSelected || false;
-    obj.onSingleWinExceeds = this.singleWinSlider?.getValue() || 0;
-    obj.balanceIncreaseBy = this.balanceIncreaseSlider?.getValue() || 0;
-    obj.balanceDecreaseBy = this.balanceDecreaseSlider?.getValue() || 0;
+    obj.spendlingLimit = this.spendingLimitSlider?.getValue() || 0;
     StateManager.goToState(STATES.START_AUTOSPIN_STATE, obj);
     this.hideAutoPlayPanel();
   }
@@ -99,7 +95,6 @@ export class AutoplayView extends ResponsiveChildrenView {
   protected async showAutoPlayPanel() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.resetAutoplayView();
-    this.onBonusWin.setSelected(true);
     this.resizeView();
     this.visible = true;
   }
@@ -124,10 +119,6 @@ export class AutoplayView extends ResponsiveChildrenView {
   // Reset autoplay panel to default values after autoplay completes
   protected resetAutoplayView(): void {
     this.updateSelectedBtn(this.valuesArray[1]);
-    if (this.onAnyWin?.isSelected) this.onAnyWin.setSelected(false);
-    if (this.onBonusWin?.isSelected) this.onBonusWin.setSelected(false);
-    if (this.singleWinSlider) this.singleWinSlider.value = 0;
-    if (this.balanceIncreaseSlider) this.balanceIncreaseSlider.value = 0;
-    if (this.balanceDecreaseSlider) this.balanceDecreaseSlider.value = 0;
+    if (this.spendingLimitSlider) this.spendingLimitSlider.value = 0;
   }
 }

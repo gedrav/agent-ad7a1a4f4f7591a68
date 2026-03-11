@@ -8,6 +8,10 @@ import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
+import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
+import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
+import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
+import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
 
 export const MENU_CONFIG_MOBILE: any = {
   name: 'menuComp',
@@ -68,9 +72,6 @@ export const MENU_CONFIG_MOBILE: any = {
     {
       name: 'closeBtn',
       type: 'Button',
-      action: {
-        press: HomeClickedCommand,
-      },
       options: {
         defaultView: 'closeBtn',
         hoverView: 'closeBtn',
@@ -136,8 +137,9 @@ export const MENU_CONFIG_MOBILE: any = {
     {
       name: 'soundOnBtn',
       type: 'Button',
+      data: false,
       action: {
-        press: HomeClickedCommand,
+        press: SoundStateChangeCommand,
       },
       x: 300,
       y: 300,
@@ -163,8 +165,9 @@ export const MENU_CONFIG_MOBILE: any = {
     {
       name: 'soundOffBtn',
       type: 'Button',
+      data: true,
       action: {
-        press: HomeClickedCommand,
+        press: SoundStateChangeCommand,
       },
       x: 300,
       y: 300,
@@ -190,7 +193,7 @@ export const MENU_CONFIG_MOBILE: any = {
       name: 'transactionHistoryBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: TransactionHistoryCommand,
       },
       x: 300,
       y: 420,
@@ -216,7 +219,7 @@ export const MENU_CONFIG_MOBILE: any = {
       name: 'infoBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowGameRulesCommand,
       },
       x: 300,
       y: 540,
@@ -239,10 +242,10 @@ export const MENU_CONFIG_MOBILE: any = {
       },
     },
     {
-      name: 'gameRulesBtn',
+      name: 'gameHistoryBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowHistoryCommand,
       },
       x: 300,
       y: 660,
@@ -268,7 +271,7 @@ export const MENU_CONFIG_MOBILE: any = {
       name: 'depositBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowDespoitCommand,
       },
       x: 300,
       y: 780,
@@ -294,7 +297,7 @@ export const MENU_CONFIG_MOBILE: any = {
       name: 'promotionBtn',
       type: 'Button',
       action: {
-        press: HomeClickedCommand,
+        press: ShowPromotionCommand,
       },
       x: 300,
       y: 900,

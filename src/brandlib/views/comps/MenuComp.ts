@@ -36,6 +36,7 @@ export class MenuComp extends ResponsiveChildrenView {
   }
   protected hideMenu(): void {
     AnimationProxy.fadeOut(this, 0.1, this.onMenuHidden.bind(this));
+    EventHandler.dispatchEvent(SlotEvents.HIDE_MENU_MOBILE);
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
   }
   protected onMenuHidden(): void {}

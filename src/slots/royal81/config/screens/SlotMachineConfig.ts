@@ -216,7 +216,26 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'valueText',
               type: 'Text',
               anchor: { x: 0.5, y: 0.5 },
-              style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, fontWeight: 700 },
+              style: {
+                fontFamily: 'gameFont1',
+                fontSize: 100,
+                dropShadow: {
+                  angle: 4.6,
+                  blur: 44, // use 0 or a positive value in v8
+                  color: '#5400ff',
+                  distance: 10,
+                  alpha: 1,
+                },
+                fill: ['#c49741', '#e7db5c', '#c49741'],
+                fillGradientStops: [0.4, 0.8, 1],
+                fontWeight: 'bold',
+                letterSpacing: 4,
+                stroke: {
+                  color: '#fff58e',
+                  width: 2,
+                  join: 'round',
+                },
+              },
             },
           ],
         },

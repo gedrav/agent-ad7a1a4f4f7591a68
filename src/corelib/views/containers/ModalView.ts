@@ -19,10 +19,10 @@ export class ModalView extends ResponsiveChildrenView {
   }
   protected showModalView(alpha: number = 0.8) {
     if (alpha == null) {
+      // not sure why the default value is not working
       alpha = 0.8;
     }
     GameProxy.config.isModalOpened = true;
-    console.log('showModalView -- ', alpha);
     this.alpha = alpha;
     this.visible = true;
   }

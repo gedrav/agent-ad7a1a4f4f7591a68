@@ -14,6 +14,7 @@ import { MenuComp } from '@brand/views/comps/MenuComp';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { BuyBonusViewMobile } from '@brand/views/popups/BuyBonusViewMobile';
+import { ModalView } from '@core/views/containers/ModalView';
 
 export class SlotAppView extends ResponsiveChildrenView {
   protected gameBGView: BGView;
@@ -26,6 +27,7 @@ export class SlotAppView extends ResponsiveChildrenView {
   private messagePopupView: MessagePopupView;
   private popupComp: FSPopupComp;
   private menuComp: MenuComp | MenuCompMobile;
+  private modalView: ModalView;
 
   constructor(config) {
     super(config);
@@ -45,6 +47,8 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.popupComp);
     this.menuComp = this.elementsList['menuComp'];
     this.removeChild(this.menuComp);
+    this.modalView = this.elementsList['modalView'];
+    this.removeChild(this.modalView);
 
     EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_AUTO_PLAY_PANEL, this.showAutoPlayPanel.bind(this));
@@ -52,12 +56,14 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_MODAL_VIEW, this.showModalView.bind(this));
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_CANCEL_CLICKED, this.hideAllViews.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_MENU_MOBILE, this.hideAllViews.bind(this));
   }
   protected hideAllViews(): void {
     this.removeChild(this.betPanelView);
@@ -66,6 +72,10 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.messagePopupView);
     this.removeChild(this.popupComp);
     this.removeChild(this.menuComp);
+    this.removeChild(this.modalView);
+  }
+  protected showModalView(): void {
+    this.addChild(this.modalView);
   }
   protected hideMenu(): void {
     setTimeout(() => {
