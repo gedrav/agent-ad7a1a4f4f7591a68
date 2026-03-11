@@ -140,9 +140,6 @@ export const CONTROL_PANEL_CONFIG = {
     {
       name: 'spinBtn',
       type: 'IconButton',
-      action: {
-        press: SpinClickCommand,
-      },
       tooltipText: 'playText',
       options: {
         defaultView: 'spinBtn',

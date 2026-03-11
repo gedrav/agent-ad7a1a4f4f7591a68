@@ -85,11 +85,12 @@ export class SplashView extends ResponsiveChildrenView {
       this.startBtn.x = UIUtil.getGameWidth() * 0.5;
       this.startBtn.y = this.itemContainer.y + this.itemContainer.height + UIUtil.getGameHeight() * 0.1;
     } else {
-      this.alignForLandscape();
       if (DeviceProxy.config.isDesktop) {
+        this.alignForDesktop();
         this.startBtn.x = UIUtil.getGameWidth() * 0.5;
         this.startBtn.y = this.itemContainer.y + this.itemContainer.height + UIUtil.getGameHeight() * 0.1;
       } else {
+        this.alignForLandscape();
         this.startBtn.x = this.gameTitle.x;
         this.startBtn.y = this.gameTitle.y + this.gameTitle.height + UIUtil.getGameHeight() * 0.05;
       }
@@ -161,6 +162,23 @@ export class SplashView extends ResponsiveChildrenView {
         this.itemsArray[k].x = 0;
         this.itemsArray[k].y =
           k == 0 ? 0 : this.itemsArray[k - 1].y + this.itemsArray[k - 1].height + UIUtil.getGameHeight() * 0.02;
+      }
+      this.itemContainer.scale.set(1);
+      const sc = this.guideRect.width / this.itemContainer.width;
+      const hsc = this.guideRect.height / this.itemContainer.height;
+      this.itemContainer.scale.set(Math.min(sc, hsc, 1));
+      this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
+      this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
+    }
+  }
+  protected alignForDesktop(): void {
+    // this.loadingBtn.scale.set(1);
+    const len = this.itemsArray.length;
+    if (len > 0) {
+      for (let k = 0; k < len; k++) {
+        this.itemsArray[k].x =
+          k == 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.02;
+        this.itemsArray[k].y = 0;
       }
       this.itemContainer.scale.set(1);
       const sc = this.guideRect.width / this.itemContainer.width;

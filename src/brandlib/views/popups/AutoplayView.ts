@@ -80,7 +80,6 @@ export class AutoplayView extends ResponsiveChildrenView {
   protected async hideAutoPlayPanel() {
     if (this.visible) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
-      this.parent.removeChild(this);
     }
   }
 

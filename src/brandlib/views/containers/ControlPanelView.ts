@@ -14,7 +14,13 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { ActionCommand } from '@core/commands/core/ActionCommand';
+import { SpinClickCommand } from '@core/commands/action/SpinClickCommand';
+import { AutoplayClickCommand } from '@core/commands/action/AutoplayClickCommand';
 
+let longPressTimer: ReturnType<typeof setTimeout> | null = null;
+
+const LONG_PRESS_DURATION = 500; // ms
 export class ControlPanelView extends ResponsiveChildrenView {
   private balanceComp: BalanceComp;
   private betComp: BetComp;
@@ -36,7 +42,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   private lightningBtn: PixFancyButton;
   constructor(config: any) {
     super(config);
-
+    GameProxy.config.isLongPressTriggered = false;
     this.balanceComp = this.elementsList['balanceComp'];
     this.betComp = this.elementsList['betComp'];
     this.soundOnBtn = this.elementsList['soundOnBtn'];
@@ -54,6 +60,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.lightningBtn = this.elementsList['lightningBtn'];
     this.autoCounterText.visible = false;
     this.autoCounterBG.visible = false;
+
+    const longPressSprite = UIUtil.getSprite('longPressText');
+    this.spinBtn.addChild(longPressSprite);
+    longPressSprite.anchor.set(0.5);
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN, this.updateBalanceForBBSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE, this.updateBalance.bind(this));
@@ -83,6 +93,37 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.updateBalance();
     this.updateTotalbet();
     this.disablePanel();
+
+    this.spinBtn.on('pointerdown', this.startPress.bind(this));
+    this.spinBtn.on('pointerup', this.endPress.bind(this));
+    this.spinBtn.on('pointerupoutside', this.cancelPress.bind(this));
+    this.spinBtn.on('pointerout', this.cancelPress.bind(this));
+    this.spinBtn.on('pointercancel', this.cancelPress.bind(this));
+  }
+  protected onLongPress() {
+    GameProxy.config.isLongPressTriggered = true;
+    const action: ActionCommand = AutoplayClickCommand;
+    action.execute(this.spinBtn);
+  }
+  protected startPress(): void {
+    GameProxy.config.isLongPressTriggered = false;
+    longPressTimer = setTimeout(() => {
+      this.onLongPress();
+      longPressTimer = null;
+    }, LONG_PRESS_DURATION);
+  }
+  protected endPress(): void {
+    if (!GameProxy.config.isLongPressTriggered) {
+      const action: ActionCommand = SpinClickCommand;
+      action.execute(this.spinBtn);
+    }
+    this.cancelPress();
+  }
+  protected cancelPress(): void {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
   }
   protected addKeyboardEvents(): void {
     window.addEventListener('keyup', this.handleKeyUp.bind(this));

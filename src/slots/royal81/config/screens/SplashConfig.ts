@@ -20,7 +20,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0x000000, fontSize: 40, anchor: { x: 0.5, y: 0.5 } },
+        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0xffffff, fontSize: 60, anchor: { x: 0.5, y: 0.5 } },
       },
     },
     {
@@ -34,11 +34,21 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0x000000, fontSize: 40, anchor: { x: 0.5, y: 0.5 } },
+        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0xffffff, fontSize: 60, anchor: { x: 0.5, y: 0.5 } },
       },
     },
   ],
   Elements: [
+    {
+      name: 'maingameBG',
+      type: 'Sprite',
+      image: 'maingameBG',
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+      },
+    },
     { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
     {
       name: 'gameTitle',

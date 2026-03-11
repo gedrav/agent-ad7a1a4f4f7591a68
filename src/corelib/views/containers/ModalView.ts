@@ -17,21 +17,23 @@ export class ModalView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_MODAL_VIEW, this.showModalView.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_MODAL_VIEW, this.hideModalView.bind(this));
   }
-  protected showModalView() {
+  protected showModalView(alpha: number = 0.8) {
+    if (alpha == null) {
+      alpha = 0.8;
+    }
     GameProxy.config.isModalOpened = true;
-    this.alpha = 0;
+    console.log('showModalView -- ', alpha);
+    this.alpha = alpha;
     this.visible = true;
-    AnimationProxy.fadeIn(this, 0.1);
   }
   protected hideModalView(): void {
     GameProxy.config.isModalOpened = false;
-    AnimationProxy.fadeOut(this, 0.1, this.onFadedOut.bind(this));
+    this.visible = false;
   }
   protected onModalClicked(): void {
+    if (GameProxy.config.isLongPressTriggered) {
+      return;
+    }
     EventHandler.dispatchEvent(SlotEvents.MODAL_VIEW_CLICKED);
-  }
-  protected onFadedOut(): void {
-    this.visible = false;
-    this.alpha = 1;
   }
 }

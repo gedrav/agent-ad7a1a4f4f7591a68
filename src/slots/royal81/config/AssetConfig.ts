@@ -34,6 +34,7 @@ const PRIMARY: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
   ],

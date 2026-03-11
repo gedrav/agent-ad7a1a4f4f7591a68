@@ -116,6 +116,8 @@ class AssetLoaderClass {
             if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
               if (TYPE == 'common') {
                 data.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
+              } else if (TYPE == 'lang') {
+                data.assets.push({ alias: NAME, src: [this.langSpritePath + NAME + '.' + ASSETTYPE] });
               } else {
                 data.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
               }
@@ -189,6 +191,14 @@ class AssetLoaderClass {
           sound: `canvas/assets/sounds/${name}`,
           font: `${this.fontPath}${name}`, // Handle fonts in the game path
           bmpfont: `${this.bmpFontPath}${name}`, // Handle fonts in the game path
+        };
+        return assetPaths[assetType] || `${this.spritePath}${name}`; // Default to sprite path
+      },
+      lang: (name: string, assetType: string) => {
+        const assetPaths: Record<string, string> = {
+          spine: `${this.langSpinePath}${name}.json`,
+          atlas: `${this.langSpinePath}${name}.atlas`,
+          sprite: `${this.langSpritePath}${name}.json`,
         };
         return assetPaths[assetType] || `${this.spritePath}${name}`; // Default to sprite path
       },
