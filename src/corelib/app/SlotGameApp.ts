@@ -101,7 +101,6 @@ class SlotGameApp {
     WrapperProxy.sendCanvasReady();
     GameProxy.config.bundlesLoaded = [];
     GameProxy.createAPIPath();
-    console.log('C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion);
     await MessageProxy.requestGameInit();
     this.gameInitReceived = true;
     await AssetLoader.initAssets(assetConfig, soundConfig);
@@ -160,6 +159,7 @@ class SlotGameApp {
   protected async onPreloaderLoaded() {
     GameProxy.updateCommonConfig();
     ContentProxy.initiate();
+    console.log('C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion);
     if (!this.initErrorOccured) {
       this.preloader = new PreloaderScreen(PRELOADER_CONFIG);
       this.appContainer.addChild(this.preloader);
