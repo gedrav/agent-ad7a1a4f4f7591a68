@@ -1,12 +1,10 @@
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const BIG_WIN_CONFIG = {
   name: 'bigWinsComp',
   type: 'Comp',
   class: BigWinsComp,
-  requiredBundle: LOAD_CONSTANTS.SECONDARY,
   data: {
     animations: {
       BIG_WIN: { start: 'bigWin_Start', idle: 'bigWin_idle', end: 'bigWin_End' },
@@ -18,7 +16,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    {
+    /*{
       name: 'bigWinAnim',
       type: 'Spine',
       spineName: 'Lepg_Wins',
@@ -26,7 +24,7 @@ export const BIG_WIN_CONFIG = {
       loop: true,
       x: 968,
       y: 500,
-    },
+    },*/
     {
       name: 'winTicker',
       type: 'Comp',
@@ -34,11 +32,30 @@ export const BIG_WIN_CONFIG = {
       Elements: [
         {
           name: 'valueText',
-          type: 'BitmapText',
+          type: 'Text',
           anchor: { x: 0.5, y: 0.5 },
-          x: 968,
+          x: 755,
           y: 465,
-          style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffff00 },
+          style: {
+            fontFamily: 'gameFont1',
+            fontSize: 160,
+            dropShadow: {
+              angle: 4.6,
+              blur: 44, // use 0 or a positive value in v8
+              color: '#5400ff',
+              distance: 10,
+              alpha: 1,
+            },
+            fill: ['#c49741', '#e7db5c', '#c49741'],
+            fillGradientStops: [0.4, 0.8, 1],
+            fontWeight: 'bold',
+            letterSpacing: 4,
+            stroke: {
+              color: '#fff58e',
+              width: 2,
+              join: 'round',
+            },
+          },
         },
       ],
     },

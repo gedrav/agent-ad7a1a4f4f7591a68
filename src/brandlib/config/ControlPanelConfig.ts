@@ -1,28 +1,18 @@
 import { ControlPanelView } from '@brand/views/containers/ControlPanelView';
 import { BalanceComp } from '@core/views/comps/BalanceComp';
 import { BetComp } from '@core/views/comps/BetComp';
-import { SpinClickCommand } from '@core/commands/action/SpinClickCommand';
 import { CoreUIConfig } from './CoreUIConfig';
 import { StopClickCommand } from '@core/commands/action/StopClickCommand';
-import { AutoplayClickCommand } from '@core/commands/action/AutoplayClickCommand';
-import { AutoStopSpinCommand } from '@core/commands/action/AutoStopSpinCommand';
 import { BetClickCommand } from '@core/commands/action/BetClickCommand';
 import { TurboStateChangeCommand } from '@core/commands/action/TurboStateChangeCommand';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { MenuClickCommand } from '@core/commands/action/MenuClickCommand';
 import { ShowCheatPanelCommand } from '@core/commands/action/ShowCheatPanelCommand';
-import { MenuComp } from '@brand/views/comps/MenuComp';
-import { MenuCompAmbientSoundToggleCommand } from '@core/commands/action/MenuCompAmbientSoundToggleCommand';
-import { MenuCompSfxSoundToggleCommand } from '@core/commands/action/MenuCompSfxSoundToggleCommand';
-import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand';
-import { Point } from 'pixi.js';
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
-import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoCompConfig';
-import { MENU_CONFIG } from '@brand/config/MenuConfig';
-import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
+import { UIElementConfig } from '@brand/types/types';
 
-export const CONTROL_PANEL_CONFIG = {
+export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfig) => ({
   name: 'controlPanelView',
   type: 'Comp',
   class: ControlPanelView,
@@ -747,11 +737,11 @@ export const CONTROL_PANEL_CONFIG = {
         },
       },
     },
-    FREESPIN_INFO_COMP_CONFIG,
+    ...(freespinInfoCompConfig ? [freespinInfoCompConfig] : []),
   ],
   layoutData: {
     Desktop: {},
     Portrait: {},
     Landscape: {},
   },
-};
+});
