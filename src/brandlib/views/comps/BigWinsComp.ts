@@ -27,8 +27,8 @@ export class BigWinsComp extends ResponsiveView {
   constructor(config) {
     super(config);
     this.winTicker = this.elementsList['winTicker'];
-    this.winTicker.reset();
-    this.winTicker.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
+    this.winTicker?.reset();
+    this.winTicker?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.bigWinAnim = this.elementsList['bigWinAnim'];
     if (this.bigWinAnim) {
       this.bigWinAnim.stopAnimation();
