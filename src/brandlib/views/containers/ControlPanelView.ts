@@ -61,6 +61,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.autoCounterText.visible = false;
     this.autoCounterBG.visible = false;
 
+    if (!appModel.getIsCheatMode()) {
+      this.removeChild(this.cheatBtn);
+    }
+
     const longPressSprite = UIUtil.getSprite('longPressText');
     this.spinBtn.addChild(longPressSprite);
     longPressSprite.anchor.set(0.5);

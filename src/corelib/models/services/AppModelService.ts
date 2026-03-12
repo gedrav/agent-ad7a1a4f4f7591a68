@@ -165,6 +165,9 @@ class AppModelService {
     return this._gameResult?.rewardValues || [];
   }
 
+  public getIsCheatMode(): boolean {
+    return this.gameInfo?.allowCheat && this.gameInfo?.devMode;
+  }
   public storeGameInitData(data: any): void {
     this._gameInitData = data;
     this.language = data.playerInfo.language;
@@ -172,8 +175,10 @@ class AppModelService {
     this.funMode = false;
     this.gameInfo = {};
     this.fsInfo = {};
+
     this.playerInfo = data.playerInfo;
     this.gameInfo.devMode = data.gameInfo.devMode;
+    this.gameInfo.allowCheat = data.playerInfo.allowCheat;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameInfo.betsArray = data.playerInfo.possibleBets;
