@@ -113,7 +113,8 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.cheat.reelStopPos = cheatObj.reelStopPos;
           finalObj.cheat = JSON.stringify(finalObj.cheat);
         } else {
-          finalObj.combination = cheatObj;
+          finalObj.extraData = {};
+          finalObj.extraData.combination = cheatObj;
         }
       }
     }
