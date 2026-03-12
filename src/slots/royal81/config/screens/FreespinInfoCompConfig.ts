@@ -1,9 +1,9 @@
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { FSInfoComp } from '@brand/views/comps/FSInfoComp';
-import { TitleValueComp } from '@core/views/comps/TitleValueComp';
 import { FSCountComp } from '@brand/views/comps/FSCountComp';
+import { UIElementConfig } from '@brand/types/types';
 
-export const FREESPIN_INFO_COMP_CONFIG: any = {
+export const FREESPIN_INFO_COMP_CONFIG: UIElementConfig = {
   name: 'fsInfoComp',
   type: 'Comp',
   class: FSInfoComp,

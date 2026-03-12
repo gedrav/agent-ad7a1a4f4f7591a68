@@ -10,3 +10,11 @@ export type AssetBundle = {
   name: string;
   assets: AssetEntry[];
 };
+
+export type UIElementConfig = {
+  name: string;
+  type: string;
+  Elements?: UIElementConfig[];
+  layoutData?: Record<string, unknown>;
+  [key: string]: unknown;
+};
