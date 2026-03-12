@@ -64,8 +64,7 @@ class SlotGameApp {
 
     this.app = new Application();
     await this.app.init({
-      // resolution: Math.min(window.devicePixelRatio, 2),
-      resolution: window.devicePixelRatio,
+      resolution: Math.min(window.devicePixelRatio, 2),
       backgroundColor: GameProxy.config.gameBGColor,
       hello: true,
       antialias: true, // IMPORTANT
