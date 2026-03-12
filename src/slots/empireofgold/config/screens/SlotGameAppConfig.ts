@@ -7,14 +7,14 @@ import { BUY_BONUS_CONFIG } from '@brand/config/BuyBonusConfig';
 import { AUTOPLAY_CONFIG } from '@brand/config/AutoPlayConfig';
 import { MESSAGE_POPUP_CONFIG } from '@brand/config/MessagePopupConfig';
 import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoCompConfig';
-import { CONTROL_PANEL_CONFIG } from '@brand/config/ControlPanelConfig';
+import { createControlPanelConfig } from '@brand/config/ControlPanelConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
   Elements: [
     GAME_BG_CONFIG,
     SLOT_MACHINE_CONFIG,
-    CONTROL_PANEL_CONFIG,
+    createControlPanelConfig(FREESPIN_INFO_COMP_CONFIG),
     MODAL_VIEW_CONFIG,
     BET_PANEL_CONFIG,
     BUY_BONUS_CONFIG,

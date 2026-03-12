@@ -22,7 +22,7 @@ import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoComp
 import { MENU_CONFIG } from '@brand/config/MenuConfig';
 import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 
-export const CONTROL_PANEL_CONFIG = {
+export const createControlPanelConfig = (freespinInfoCompConfig?: any) => ({
   name: 'controlPanelView',
   type: 'Comp',
   class: ControlPanelView,
@@ -747,11 +747,11 @@ export const CONTROL_PANEL_CONFIG = {
         },
       },
     },
-    FREESPIN_INFO_COMP_CONFIG,
+    ...(freespinInfoCompConfig ? [freespinInfoCompConfig] : []),
   ],
   layoutData: {
     Desktop: {},
     Portrait: {},
     Landscape: {},
   },
-};
+});
