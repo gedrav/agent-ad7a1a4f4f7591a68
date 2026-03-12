@@ -21,6 +21,7 @@ import { INIT_ERROR_POPUP_CONFIG } from '@brand/config/InitErrorPopupConfig';
 import { appModel } from '@core/models/services/AppModelService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { BaseTexture, SCALE_MODES } from '@pixi/core';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -64,12 +65,15 @@ class SlotGameApp {
     this.app = new Application();
     await this.app.init({
       // resolution: Math.min(window.devicePixelRatio, 2),
-      resolution: 1,
+      resolution: window.devicePixelRatio,
       backgroundColor: GameProxy.config.gameBGColor,
       hello: true,
       antialias: true, // IMPORTANT
-      //autoDensity: true,
+      autoDensity: true,
+      roundPixels: true,
     });
+    BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
+    BaseTexture.defaultOptions.anisotropicLevel = 16;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
     if (__SHOW_STATS__) {
       // show FPS monitoring panel when enabled via config

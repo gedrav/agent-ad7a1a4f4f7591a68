@@ -21,7 +21,6 @@ class DeviceConfigProxy extends AbstractProxy {
   public readDevice(): void {
     this._config = {};
     this._config.hostName = location.hostname;
-    let ratio = window.devicePixelRatio > 1 ? 2 : window.devicePixelRatio;
     this._config.windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     this._config.windowHeight =
       window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -44,13 +43,8 @@ class DeviceConfigProxy extends AbstractProxy {
       this._config.isPortrait = true;
       this._config.scaleFactor = this._config.windowHeight / this._config.windowWidth;
     }
-    if (this._config.isDesktop) {
-      ratio = 2;
-    } else {
-      ratio = 2;
-    }
 
-    this._config.pixelRatio = ratio > 2 ? 2 : ratio;
+    this._config.pixelRatio = 1;
     this._config.fontFactor = window.devicePixelRatio;
     this._config.pixelRatioString = '@' + this._config.pixelRatio + 'x';
     this._config.appResolution = this._config.pixelRatio;
@@ -61,13 +55,8 @@ class DeviceConfigProxy extends AbstractProxy {
     } else {
       this._config.assetResolution = '@0.5x';
     }
-    if (this._config.isDesktop) {
-      this._config.gameWidth = this._config.windowWidth * this._config.appResolution;
-      this._config.gameHeight = this._config.windowHeight * this._config.appResolution;
-    } else {
-      this._config.gameWidth = this._config.windowWidth * this._config.appResolution;
-      this._config.gameHeight = this._config.windowHeight * this._config.appResolution;
-    }
+    this._config.gameWidth = this._config.windowWidth * this._config.appResolution;
+    this._config.gameHeight = this._config.windowHeight * this._config.appResolution;
   }
 
   isDesktop(): boolean {
