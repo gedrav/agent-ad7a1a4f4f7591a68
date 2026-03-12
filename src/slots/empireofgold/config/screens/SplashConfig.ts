@@ -3,6 +3,7 @@ import { UIConfig } from '@game/config/UIConfig';
 import { SplashView } from '@brand/views/splash/SplashView';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
@@ -122,51 +123,32 @@ export const SPLASH_CONFIG: any = {
       },
     },
     {
-      name: 'loadingBtnContainer',
-      type: 'Container',
-      layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.5, vAlign: 'middle', maxScale: 1 },
-        Landscape: { widthPerc: 0.5, heightPerc: 0.1, vAlign: 'middle', maxScale: 1 },
-        Portrait: { widthPerc: 0.5, heightPerc: 0.5, vAlign: 'middle', maxScale: 1 },
+      name: 'startBtn',
+      type: 'GraphicsButton',
+      anchor: { x: 0.5, y: 0.5 },
+      action: {
+        press: SplashStartCommand,
       },
-      Elements: [
-        {
-          name: 'loaderbg',
-          type: 'Sprite',
-          image: 'startButton',
-          anchor: { x: 0.5, y: 0.5 },
-          y: 1,
-        },
-        {
-          name: 'loaderfill',
-          type: 'Sprite',
-          image: 'startButton',
-          anchor: { x: 0.5, y: 0.5 },
-          y: 1,
-        },
-        {
-          name: 'startBtn',
-          type: 'Button',
-          anchor: { x: 0.5, y: 0.5 },
-          action: {
-            press: SplashStartCommand,
-          },
-          options: {
-            defaultView: 'startButton',
-            hoverView: 'startButton',
-            pressedView: 'startButton',
-            disabledView: 'startButton',
-            animations: UIConfig.buttonStates,
-          },
-        },
-        { name: 'maskRect', type: 'Graphics', width: 532, height: 95, x: -266, y: -48, alpha: 1, color: 0xff0000 },
-        {
-          name: 'loadingText',
-          type: 'Text',
-          style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0xffffff, trim: true },
-          anchor: { x: 0.5, y: 0.5 },
-        },
-      ],
+      textConfig: {
+        content: 'playGameText',
+        style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 'bold' },
+        anchor: { x: 0.5, y: 0.5 },
+      },
+      graphics: {
+        width: 548,
+        height: 88,
+        radius: 16,
+        color: 0x000000,
+        hoverColor: 0x404040,
+        pressedColor: 0x000000,
+        disabledColor: 0xcccccc,
+        animations: CoreUIConfig.buttonStates,
+      },
+      layoutData: {
+        Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.72 },
+        Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
+        Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
+      },
     },
   ],
 };

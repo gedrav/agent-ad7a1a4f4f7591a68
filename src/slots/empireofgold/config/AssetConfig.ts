@@ -9,14 +9,14 @@ const PRELOADER: AssetBundle = {
     { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
-    { TYPE: 'common', NAME: 'Roboto-Regular.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
   ],
 };
 
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'common', NAME: 'Roboto-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'common', NAME: 'Roboto.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'GermaniaOne-Regular.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'bg_day', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
