@@ -71,10 +71,10 @@ export const MENU_CONFIG_MOBILE: any = {
       name: 'closeBtn',
       type: 'Button',
       options: {
-        defaultView: 'closeBtn',
-        hoverView: 'closeBtn',
-        pressedView: 'closeBtn',
-        disabledView: 'closeBtn',
+        defaultView: 'closeIconBtn',
+        hoverView: 'closeIconBtn',
+        pressedView: 'closeIconBtn',
+        disabledView: 'closeIconBtn',
         animations: CoreUIConfig.noScalebuttonStates,
       },
       layoutData: {
@@ -91,7 +91,7 @@ export const MENU_CONFIG_MOBILE: any = {
           refComponent: 'topbar',
           maxScale: 1,
           widthPerc: 0.4,
-          heightPerc: 0.6,
+          heightPerc: 1,
           hAlign: 'right',
           hPaddingPerc: -0.03,
           vAlign: 'middle',
