@@ -267,8 +267,8 @@ export const AUTOPLAY_CONFIG = {
           showValue: true,
           valueTextStyle: {
             fontFamily: 'commonFont',
-            initialColor: 0xcccccc,
-            updatedColor: 0xffffff,
+            initialColor: 0x000000,
+            updatedColor: 0x000000,
             fontSize: 32,
           },
           valueTextOffset: { y: -47 },

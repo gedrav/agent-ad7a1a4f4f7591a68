@@ -4,6 +4,7 @@ import {
   Assets,
   Container,
   FillGradient,
+  Graphics,
   Mesh,
   PointData,
   Sprite,

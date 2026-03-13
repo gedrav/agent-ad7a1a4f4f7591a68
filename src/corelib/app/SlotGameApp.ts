@@ -71,6 +71,8 @@ class SlotGameApp {
       autoDensity: true,
       roundPixels: true,
     });
+    GameProxy.config.app = this.app;
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxx');
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
     BaseTexture.defaultOptions.anisotropicLevel = 16;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
@@ -86,7 +88,6 @@ class SlotGameApp {
       });
     }
 
-    GameProxy.config.app = this.app;
     GameProxy.config.renderer = this.app.renderer;
     window.addEventListener('resize', this.resize.bind(this));
     document.addEventListener('visibilitychange', this.visibilityChange.bind(this));
