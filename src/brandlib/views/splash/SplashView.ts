@@ -37,14 +37,14 @@ export class SplashView extends ResponsiveChildrenView {
       }
     }
     this.resizeView();
-    /*setTimeout(() => {
+    setTimeout(() => {
       this.startBtn.click();
-    }, 500);*/
+    }, 500);
   }
 
   protected positionElements(): void {
     if (DeviceProxy.config.isDesktop) {
-      this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+      this.guideRect.width = UIUtil.getGameWidth() * 0.8;
       this.guideRect.height = UIUtil.getGameHeight() * 0.4;
 
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;

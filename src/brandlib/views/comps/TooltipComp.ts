@@ -16,7 +16,7 @@ export class TooltipComp extends StandardView {
       type: 'Text',
       toUpperCase: true,
       content: this.configData.tooltipText,
-      style: { fontFamily: 'commonFontR', fill: 0xffffff, fontSize: 44, fontWeight: 'bold' },
+      style: { fontFamily: 'commonFontR', fill: 0xffffff, fontSize: 20, fontWeight: 'bold' },
     };
     const tooltipText = UIUtil.getElement(config);
     tooltipText.anchor.set(0.5);

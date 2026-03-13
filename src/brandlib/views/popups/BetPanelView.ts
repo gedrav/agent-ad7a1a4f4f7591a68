@@ -42,7 +42,7 @@ const btnConfig: any = {
     contentText: '',
     style: {
       fontFamily: 'commonFont',
-      fontSize: 60,
+      fontSize: 28,
       nonSelectedStateColor: 0x000000,
       selectedStateColor: 0xffffff,
     },
@@ -59,7 +59,7 @@ export class BetPanelView extends ResponsiveChildrenView {
   private maxBetBtn: PixToggleButton;
   private titleText: PixText;
   private cancelBtn: PixFancyButton;
-  private startBtn: PixFancyButton;
+  private setBtn: PixFancyButton;
 
   constructor(config: any) {
     super(config);
@@ -76,7 +76,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.downStakeBtn = this.btnContainer.elementsList['downStakeBtn'];
     this.stakeText = this.btnContainer.elementsList['stakeText'];
     this.cancelBtn = this.elementsList['cancelBtn'];
-    this.startBtn = this.elementsList['startBtn'];
+    this.setBtn = this.elementsList['setBtn'];
 
     const totalBetsArray = Util.cloneArray(appModel.getAllBets());
 
@@ -148,16 +148,16 @@ export class BetPanelView extends ResponsiveChildrenView {
 
   protected positionButtons() {
     let columns: number = 0;
-    let gap = 300;
+    let gap = 160;
     if (DeviceProxy.config.isDesktop) {
       columns = 4;
-      gap = 300;
+      gap = 160;
       let rowIndex: number = 0;
       let colIndex: number = 0;
       const len2 = this.betBtnsArray.length;
       for (let i = 0; i < len2; i++) {
         this.betBtnsArray[i].x = rowIndex++ * gap;
-        this.betBtnsArray[i].y = colIndex * 150;
+        this.betBtnsArray[i].y = colIndex * 80;
         if (rowIndex == columns) {
           colIndex++;
           rowIndex = 0;
@@ -166,14 +166,14 @@ export class BetPanelView extends ResponsiveChildrenView {
     } else {
       if (DeviceProxy.config.isPortrait) {
         this.betPanelBg.resize();
-        gap = 300;
+        gap = 160;
         columns = 4;
         let rowIndex: number = 0;
         let colIndex: number = 0;
         const len2 = this.betBtnsArray.length;
         for (let i = 0; i < len2; i++) {
           this.betBtnsArray[i].x = rowIndex++ * gap;
-          this.betBtnsArray[i].y = colIndex * 150;
+          this.betBtnsArray[i].y = colIndex * 80;
           if (rowIndex == columns) {
             colIndex++;
             rowIndex = 0;
@@ -182,13 +182,13 @@ export class BetPanelView extends ResponsiveChildrenView {
       } else {
         this.betPanelBg.resize();
         columns = 8;
-        gap = 320;
+        gap = 160;
         let rowIndex: number = 0;
         let colIndex: number = 0;
         const len2 = this.betBtnsArray.length;
         for (let i = 0; i < len2; i++) {
           this.betBtnsArray[i].x = rowIndex++ * gap;
-          this.betBtnsArray[i].y = colIndex * 150;
+          this.betBtnsArray[i].y = colIndex * 80;
           if (rowIndex == columns) {
             colIndex++;
             rowIndex = 0;
@@ -213,11 +213,11 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.stakeText.y = this.upStakeBtn.y;
     this.btnContainer.x = (this.betPanelBg.width - this.btnContainer.width) / 2 + this.betBtnsArray[0].width / 2;
 
-    this.cancelBtn.x = this.betPanelBg.width * 0.5 - this.cancelBtn.width * 0.75;
-    this.startBtn.x = this.betPanelBg.width * 0.5 + this.startBtn.width * 0.75;
+    this.cancelBtn.x = this.betPanelBg.width * 0.52 - this.cancelBtn.width * 0.5;
+    this.setBtn.x = this.betPanelBg.width * 0.54 + this.setBtn.width * 0.5;
 
-    this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;
-    this.startBtn.y = this.cancelBtn.y;
+    this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.4;
+    this.setBtn.y = this.cancelBtn.y;
   }
 
   protected resizeView() {

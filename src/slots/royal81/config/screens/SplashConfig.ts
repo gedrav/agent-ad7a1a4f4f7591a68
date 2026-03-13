@@ -49,14 +49,14 @@ export const SPLASH_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 1 },
     {
       name: 'gameTitle',
       type: 'Sprite',
       image: 'gamelogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.16, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
         Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
         Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
       },
