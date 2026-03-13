@@ -50,6 +50,7 @@ export const SPLASH_CONFIG: any = {
       },
     },
     { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 1 },
+    { name: 'playButtonGuideRect', type: 'Graphics', width: 200, height: 200, color: 0xffc000, alpha: 1 },
     {
       name: 'gameTitle',
       type: 'Sprite',
@@ -118,11 +119,11 @@ export const SPLASH_CONFIG: any = {
         disabledColor: 0xcccccc,
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
-        Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.72 },
-        Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
-        Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
-      },
+      // layoutData: {
+      //   Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.72 },
+      //   Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
+      //   Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
+      // },
     },
   ],
 };

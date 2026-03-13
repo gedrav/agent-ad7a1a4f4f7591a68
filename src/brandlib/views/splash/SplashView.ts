@@ -16,12 +16,14 @@ export class SplashView extends ResponsiveChildrenView {
   private itemsArray: SplashItemComp[] = [];
   private itemContainer: PixView;
   private startBtn: PixFancyButton;
+  private playButtonGuideRect: PixView;
 
   constructor(config: any) {
     super(config);
 
     this.gameTitle = this.elementsList['gameTitle'];
     this.startBtn = this.elementsList?.['startBtn'];
+    this.playButtonGuideRect = this.elementsList?.['playButtonGuideRect'];
     this.itemContainer = UIUtil.getContainer();
 
     this.addChild(this.itemContainer);
@@ -72,6 +74,11 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.height = gh * 0.4;
         this.guideRect.x = (gw - this.guideRect.width) / 2;
         this.guideRect.y = gh * 0.45 - this.guideRect.height / 2;
+
+        this.playButtonGuideRect.width = gw * 0.45;
+        this.playButtonGuideRect.height = gh * 0.3;
+        this.playButtonGuideRect.x = (gw - this.playButtonGuideRect.width) / 2;
+        this.playButtonGuideRect.y = gh * 0.81 - this.playButtonGuideRect.height / 2;
         break;
 
       case 'portrait':
@@ -79,6 +86,12 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.height = gh * 0.6;
         this.guideRect.x = (gw - this.guideRect.width) / 2;
         this.guideRect.y = gh * 0.45 - this.guideRect.height / 2;
+
+        this.playButtonGuideRect.width = gw * 0.9;
+        this.playButtonGuideRect.height = gh * 0.2;
+        this.playButtonGuideRect.x = (gw - this.playButtonGuideRect.width) / 2;
+        this.playButtonGuideRect.y =
+          this.guideRect.y + this.guideRect.height + gh * 0.12 - this.playButtonGuideRect.height / 2;
         break;
 
       case 'landscape':
@@ -86,6 +99,11 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.height = gh * 0.8;
         this.guideRect.x = gw * 0.02;
         this.guideRect.y = gh * 0.5 - this.guideRect.height / 2;
+
+        this.playButtonGuideRect.width = gw * 0.35;
+        this.playButtonGuideRect.height = gh * 0.8;
+        this.playButtonGuideRect.x = this.guideRect.x + this.guideRect.width + gw * 0.01;
+        this.playButtonGuideRect.y = this.guideRect.y;
         break;
     }
   }
@@ -123,27 +141,24 @@ export class SplashView extends ResponsiveChildrenView {
   }
 
   private layoutStartBtn(mode: OrientationMode): void {
-    const gw = UIUtil.getGameWidth();
-    const gh = UIUtil.getGameHeight();
+    this.startBtn.x = this.playButtonGuideRect.x + this.playButtonGuideRect.width / 2;
 
-    this.startBtn.scale.set(1);
+    const scale =
+      548 < this.playButtonGuideRect.width
+        ? 548 / this.playButtonGuideRect.width
+        : this.playButtonGuideRect.width / 548;
+
+    this.startBtn.scale.set(scale * 0.9); // Scale to 80% of guide rect width
 
     switch (mode) {
       case 'portrait':
-        UIUtil.setPercentageScale(this.startBtn, 0.5, 1, 1);
-        this.startBtn.x = gw * 0.5;
-        this.startBtn.y = this.itemContainer.y + this.itemContainer.height + gh * 0.1;
+        this.startBtn.y = this.playButtonGuideRect.y + this.startBtn.height * 0.5;
         break;
-
-      case 'desktop':
-        this.startBtn.x = gw * 0.5;
-        this.startBtn.y = this.itemContainer.y + this.itemContainer.height + gh * 0.1;
-        break;
-
       case 'landscape':
-        UIUtil.setPercentageScale(this.startBtn, 0.3, 1, 1);
-        this.startBtn.x = this.gameTitle.x;
-        this.startBtn.y = this.guideRect.y + this.guideRect.height * 0.5;
+        this.startBtn.y = this.playButtonGuideRect.y + this.gameTitle.height + this.startBtn.height * 0.5;
+        break;
+      case 'desktop':
+        this.startBtn.y = this.playButtonGuideRect.y + this.startBtn.height * 0.5;
         break;
     }
   }
