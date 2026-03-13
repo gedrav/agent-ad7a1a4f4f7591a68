@@ -165,12 +165,15 @@ class AppModelService {
     return this._gameResult?.rewardValues || [];
   }
 
+  public storeLanguage(): void {
+    const params = new URLSearchParams(window.location.search);
+    this.language = params.get('language') || 'en';
+  }
   public getIsCheatMode(): boolean {
     return this.gameInfo?.allowCheat && this.gameInfo?.devMode;
   }
   public storeGameInitData(data: any): void {
     this._gameInitData = data;
-    this.language = data.playerInfo.language;
     this.currency = data.playerInfo.currencyCode;
     this.funMode = false;
     this.gameInfo = {};
