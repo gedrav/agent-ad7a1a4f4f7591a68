@@ -64,12 +64,13 @@ class SlotGameApp {
 
     this.app = new Application();
     await this.app.init({
-      resolution: Math.min(window.devicePixelRatio, 2),
+      resolution: Math.ceil(window.devicePixelRatio),
       backgroundColor: GameProxy.config.gameBGColor,
       hello: true,
       antialias: true, // IMPORTANT
       autoDensity: true,
       roundPixels: true,
+      powerPreference: 'high-performance',
     });
     GameProxy.config.app = this.app;
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxx');
