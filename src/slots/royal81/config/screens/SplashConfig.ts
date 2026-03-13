@@ -49,7 +49,7 @@ export const SPLASH_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 1 },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
     {
       name: 'gameTitle',
       type: 'Sprite',
