@@ -27,7 +27,9 @@ export class MenuComp extends ResponsiveChildrenView {
     this.transactionHistoryBtn = this.elementsList['transactionHistoryBtn'];
     this.infoBtn = this.elementsList['infoBtn'];
     this.gameHistoryBtn = this.elementsList['gameHistoryBtn'];
-    this.soundOffBtn.visible = false;
+    if (this.soundOffBtn) {
+      this.soundOffBtn.visible = false;
+    }
     this.visible = false;
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
 

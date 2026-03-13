@@ -20,7 +20,11 @@ export class PreloaderScreen extends ResponsiveChildrenView {
     this.loadingText = this.elementsList['loadingText'];
     this.bar = this.elementsList['progressBar'].elementsList['bar'];
     this.circle2 = this.elementsList['progressBar'].elementsList['circle2'];
+    this.visible = false;
     EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
+    setTimeout(() => {
+      this.visible = true;
+    }, 100);
   }
 
   protected onLoadProgress(progress: number): void {

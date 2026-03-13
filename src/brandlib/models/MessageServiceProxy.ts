@@ -57,9 +57,9 @@ export class MessageServiceProxy extends AbstractProxy {
     EventHandler.dispatchEvent(SlotEvents.HANDLE_SERVER_ERROR, { msgName: msgName, data: error });
   }
 
-  public async requestGameInit() {
+  public requestGameInit() {
     const gameinitObj = this.getGameInitRequestObject();
-    await this.communicationService.getServerResponse('gameinit', gameinitObj, GameProxy.config.initURL, 'POST');
+    this.communicationService.getServerResponse('gameinit', gameinitObj, GameProxy.config.initURL, 'POST');
   }
   async requestSpinResult(isBuyBonus = false) {
     const spinRequest = this.getSpinRequestObject(isBuyBonus);

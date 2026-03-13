@@ -4,6 +4,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { Point } from 'pixi.js';
 
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
@@ -41,44 +42,18 @@ export class MenuCompMobile extends MenuComp {
       'promotionBtn',
     ];
     const len = btns.length;
-    if (DeviceProxy.config.isLandscape) {
-      const ht: number = UIUtil.getGameHeight() * 0.96 - this.topbar.height;
-      const totalButtons = btns.length - 1;
-      const btnHeight = Math.round(ht / totalButtons);
-      const sc: number = btnHeight / this.elementsList['homeBtn'].height;
-      if (sc < 1) {
-        for (let i = 0; i < len; i++) {
-          this.elementsList[btns[i]].scale.set(sc);
-          if (i > 0) {
-            this.elementsList[btns[i]].y = this.elementsList[btns[i - 1]].y + btnHeight;
-          }
-          if (i == 2) {
-            this.elementsList[btns[i]].y = this.elementsList[btns[i - 1]].y;
-          }
-          this.elementsList[btns[i]].x = this.elementsList[btns[i]].width / 2;
-        }
+    this.elementsList['homeBtn'].scale.set(1);
+    for (let i = 0; i < len; i++) {
+      const btn = this.elementsList[btns[i]];
+      btn.resizeView();
+      if (i == 0) {
+        btn.y = this.topbar.y + this.topbar.height;
       }
-    } else {
-      this.elementsList['homeBtn'].scale.set(1);
-
-      for (let i = 0; i < len; i++) {
-        const btn = this.elementsList[btns[i]];
-        btn.scale.set(1);
-        btn.defaultView.scale.set(1);
-        const sc = ((UIUtil.getGameHeight() - this.topbar.height) * 0.06) / btn.height;
-        const wsc = UIUtil.getGameWidth() / btn.defaultView.width;
-        btn.scale.set(Math.min(wsc, sc));
-        btn.x = btn.width / 2;
-        if (i == 0) {
-          btn.y = this.topbar.y + this.topbar.height + btn.height / 2;
-        }
-        if (i > 0) {
-          btn.y = this.elementsList[btns[i - 1]].y + btn.height * 1.25;
-        }
-        if (i == 2) {
-          btn.y = this.elementsList[btns[i - 1]].y;
-        }
-        btn.defaultView.width = (UIUtil.getGameWidth() * 1) / btn.scale.x;
+      if (i > 0) {
+        btn.y = this.elementsList[btns[i - 1]].y + btn.height;
+      }
+      if (i == 2) {
+        btn.y = this.elementsList[btns[i - 1]].y;
       }
     }
   }

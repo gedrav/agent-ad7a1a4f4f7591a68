@@ -1,9 +1,6 @@
-import { MenuComp } from '@brand/views/comps/MenuComp';
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
-import { MenuCompAmbientSoundToggleCommand } from '@core/commands/action/MenuCompAmbientSoundToggleCommand';
-import { MenuCompSfxSoundToggleCommand } from '@core/commands/action/MenuCompSfxSoundToggleCommand';
 import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand';
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
@@ -12,6 +9,7 @@ import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeC
 import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
 import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
 import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
+import { MenuButton } from '@brand/views/comps/MenuButton';
 
 export const MENU_CONFIG_MOBILE: any = {
   name: 'menuComp',
@@ -77,7 +75,7 @@ export const MENU_CONFIG_MOBILE: any = {
         hoverView: 'closeBtn',
         pressedView: 'closeBtn',
         disabledView: 'closeBtn',
-        animations: CoreUIConfig.buttonStates,
+        animations: CoreUIConfig.noScalebuttonStates,
       },
       layoutData: {
         Portrait: {
@@ -102,30 +100,30 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'homeBtn',
-      type: 'Button',
-      action: {
-        press: HomeClickedCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: HomeClickedCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0xff0000, alpha: 1 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'homeIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'homeIcon',
       textConfig: {
-        name: 'homeText',
+        name: 'btnText',
         type: 'Text',
         content: 'lobbyText',
         anchor: { x: 0, y: 0 },
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -135,33 +133,31 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'soundOnBtn',
-      type: 'Button',
-      data: false,
-      action: {
-        press: SoundStateChangeCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        data: false,
+        action: {
+          press: SoundStateChangeCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          nineSliceSprite: [12, 12, 12, 12],
+          animations: CoreUIConfig.noScalebuttonStates,
+        },
       },
-      x: 200,
-      y: 300,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'soundOnIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'soundOnIcon',
       textConfig: {
-        name: 'homeText',
+        name: 'btnText',
         type: 'Text',
         anchor: { x: 0, y: 0 },
         content: 'soundOnOffText',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -171,32 +167,30 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'soundOffBtn',
-      type: 'Button',
-      data: true,
-      action: {
-        press: SoundStateChangeCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        data: true,
+        action: {
+          press: SoundStateChangeCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      x: 200,
-      y: 300,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'soundOffIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'soundOffIcon',
       textConfig: {
         name: 'homeText',
         type: 'Text',
         content: 'soundOnOffText',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -206,31 +200,29 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'transactionHistoryBtn',
-      type: 'Button',
-      action: {
-        press: TransactionHistoryCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: TransactionHistoryCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      x: 200,
-      y: 420,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'transactionHistoryIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'transactionHistoryIcon',
       textConfig: {
         name: 'homeText',
         type: 'Text',
         content: 'transactionHistoryText',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -240,31 +232,29 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'infoBtn',
-      type: 'Button',
-      action: {
-        press: ShowGameRulesCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: ShowGameRulesCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      x: 200,
-      y: 540,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'infoIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'infoIcon',
       textConfig: {
         name: 'homeText',
         type: 'Text',
         content: 'gameRulesText',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -274,31 +264,29 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'gameHistoryBtn',
-      type: 'Button',
-      action: {
-        press: ShowHistoryCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: ShowHistoryCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      x: 200,
-      y: 660,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'gameHistoryIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'gameHistoryIcon',
       textConfig: {
         name: 'homeText',
         type: 'Text',
         content: 'gameHistory',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -308,31 +296,29 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'depositBtn',
-      type: 'Button',
-      action: {
-        press: ShowDespoitCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: ShowDespoitCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      x: 200,
-      y: 780,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'depositIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'depositIcon',
       textConfig: {
         name: 'homeText',
         type: 'Text',
         content: 'depositText',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
@@ -342,31 +328,29 @@ export const MENU_CONFIG_MOBILE: any = {
     },
     {
       name: 'promotionBtn',
-      type: 'Button',
-      action: {
-        press: ShowPromotionCommand,
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: ShowPromotionCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
       },
-      x: 200,
-      y: 900,
-      options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 400, height: 60, radius: 0, color: 0x000000, alpha: 0 }),
-        animations: CoreUIConfig.buttonStates,
-        icon: 'promotionIcon',
-        iconScale: 0.5,
-        iconOffset: new Point(-170, 0),
-        textOffset: new Point(-140, 0),
-        defaultTextAnchor: { x: 0, y: 0.5 },
-      },
+      icon: 'promotionIcon',
       textConfig: {
         name: 'homeText',
         type: 'Text',
         content: 'promotionText',
         style: {
           fontFamily: 'commonFont',
-          fontSize: 24,
+          fontSize: 32,
           fill: 0xffffff,
           fontWeight: 700,
           align: 'left',
