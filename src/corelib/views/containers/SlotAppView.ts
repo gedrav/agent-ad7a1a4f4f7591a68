@@ -83,6 +83,7 @@ export class SlotAppView extends ResponsiveChildrenView {
     }, 200);
   }
   protected onMenuClicked(): void {
+    console.log('menu clicked, added to stage');
     this.addChild(this.menuComp);
   }
   protected showFSPopup(): void {

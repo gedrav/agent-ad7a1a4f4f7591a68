@@ -41,6 +41,7 @@ class SlotGameApp {
   protected appContainer: any;
   private errorPopup: InitErrorPopup;
   private isFirstTime: boolean;
+  private soundsLoaded: boolean = false;
 
   constructor() {}
 
@@ -73,7 +74,6 @@ class SlotGameApp {
       powerPreference: 'high-performance',
     });
     GameProxy.config.app = this.app;
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxx');
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
     BaseTexture.defaultOptions.anisotropicLevel = 16;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
@@ -106,8 +106,8 @@ class SlotGameApp {
     WrapperProxy.sendCanvasReady();
     GameProxy.config.bundlesLoaded = [];
     GameProxy.createAPIPath();
-    await MessageProxy.requestGameInit();
-    this.gameInitReceived = true;
+    appModel.storeLanguage();
+    MessageProxy.requestGameInit();
     await AssetLoader.initAssets(assetConfig, soundConfig);
     await this.initiateCoreApp();
   }
@@ -160,6 +160,11 @@ class SlotGameApp {
     EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
     EventHandler.addEventListener(SlotEvents.SPLASH_DESTROYED, this.onSplashDestroyed.bind(this));
     EventHandler.addEventListener(AppEvents.SOUNDS_LOADING_COMPLETE, this.onSoundsLoaded.bind(this));
+    EventHandler.addEventListener(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit.bind(this));
+  }
+  protected onGameInit(): void {
+    this.gameInitReceived = true;
+    this.checkToCreateGame();
   }
   protected async onPreloaderLoaded() {
     GameProxy.updateCommonConfig();
@@ -179,19 +184,23 @@ class SlotGameApp {
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
     appModel.primaryAssetsLoaded = true;
-    if (this.gameInitReceived && this.assetsLoaded) {
-      await AssetLoader.loadSounds();
-    }
+    await AssetLoader.loadSounds();
   }
   protected onSoundsLoaded() {
-    if (!appModel.isErrorOccurred) {
-      if (!this.isViewCreated) {
-        this.createSplash();
-        this.removePreloader();
-        this.createView();
-        this.isViewCreated = true;
-        EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
-        this.loadLazyFiles();
+    this.soundsLoaded = true;
+    this.checkToCreateGame();
+  }
+  protected checkToCreateGame(): void {
+    if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
+      if (!appModel.isErrorOccurred) {
+        if (!this.isViewCreated) {
+          this.createSplash();
+          this.removePreloader();
+          this.createView();
+          this.isViewCreated = true;
+          EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
+          this.loadLazyFiles();
+        }
       }
     }
   }

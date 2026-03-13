@@ -4,7 +4,10 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { Point } from 'pixi.js';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { Sine } from 'gsap/gsap-core';
 
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
@@ -56,5 +59,20 @@ export class MenuCompMobile extends MenuComp {
         btn.y = this.elementsList[btns[i - 1]].y;
       }
     }
+  }
+
+  protected showMenu(event: any): void {
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW, 0);
+    this.x = -this.width;
+    this.alpha = 1;
+    this.visible = true;
+    AnimationProxy.animateTween(this, { duration: 0.2, x: 0, ease: Sine.easeOut });
+  }
+  protected hideMenu(): void {
+    AnimationProxy.animateTween(this, { duration: 0.2, x: -this.width, onComplete: this.onMenuHidden.bind(this) });
+    EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
+  }
+  protected onMenuHidden(): void {
+    EventHandler.dispatchEvent(SlotEvents.HIDE_MENU_MOBILE);
   }
 }

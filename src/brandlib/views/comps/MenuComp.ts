@@ -34,7 +34,7 @@ export class MenuComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
-    EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
+    EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.showMenu.bind(this));
   }
   protected hideMenu(): void {
     AnimationProxy.fadeOut(this, 0.1, this.onMenuHidden.bind(this));
@@ -42,7 +42,7 @@ export class MenuComp extends ResponsiveChildrenView {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
   }
   protected onMenuHidden(): void {}
-  protected onMenuClicked(event: any): void {
+  protected showMenu(event: any): void {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW, 0);
     AnimationProxy.fadeIn(this, 0.1);
   }
