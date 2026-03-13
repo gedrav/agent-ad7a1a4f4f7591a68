@@ -37,9 +37,9 @@ export class SplashView extends ResponsiveChildrenView {
       }
     }
     this.resizeView();
-    setTimeout(() => {
+    /*setTimeout(() => {
       this.startBtn.click();
-    }, 500);
+    }, 500);*/
   }
 
   protected positionElements(): void {
