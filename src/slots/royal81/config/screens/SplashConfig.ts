@@ -4,6 +4,8 @@ import { SplashView } from '@brand/views/splash/SplashView';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
+import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
@@ -124,6 +126,92 @@ export const SPLASH_CONFIG: any = {
       //   Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
       //   Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
       // },
+    },
+    {
+      name: 'soundSettingsContainer',
+      type: 'Container',
+      Elements: [
+        {
+          name: 'soundOnBtn',
+          type: 'IconButton',
+          data: false,
+          x: 32,
+          y: 32,
+          options: {
+            defaultView: 'generalCPBtn',
+            hoverView: 'generalCPBtn',
+            pressedView: 'generalCPBtn',
+            disabledView: 'generalCPBtn',
+            icon: 'soundOnIcon',
+            animations: CoreUIConfig.buttonStates,
+          },
+        },
+        {
+          name: 'soundOffBtn',
+          type: 'IconButton',
+          data: true,
+          x: 32,
+          y: 32,
+          options: {
+            defaultView: 'generalCPBtn',
+            hoverView: 'generalCPBtn',
+            pressedView: 'generalCPBtn',
+            disabledView: 'generalCPBtn',
+            icon: 'soundOffIcon',
+            animations: CoreUIConfig.buttonStates,
+          },
+          visible: false,
+        },
+        {
+          name: 'soundStateText',
+          type: 'Text',
+          destroy: true,
+          x: 80,
+          y: 10,
+          content: 'turnOffSoundText',
+          style: {
+            fontFamily: 'commonFont',
+            fontWeight: 700,
+            fill: 0x000000,
+            fontSize: 32,
+            anchor: { x: 0, y: 0 },
+          },
+        },
+      ],
+    },
+    {
+      name: 'dontShowMessage',
+      type: 'PixToggleButton',
+      scale: 1,
+      options: {
+        defaultView: 'checkBox',
+        hoverView: 'checkBox',
+        pressedView: 'checkBox',
+        disabledView: 'checkBox',
+        animations: CoreUIConfig.buttonStates,
+      },
+      selectedOptions: {
+        defaultView: 'checkBoxSelected',
+        hoverView: 'checkBoxSelected',
+        pressedView: 'checkBoxSelected',
+        disabledView: 'checkBoxSelected',
+      },
+      Elements: [
+        {
+          name: 'btn1Text',
+          type: 'Text',
+          y: -20,
+          x: 30,
+          content: 'dontShowMessage',
+          style: {
+            fontFamily: 'commonFont',
+            fontSize: 32,
+            fontWeight: 700,
+            nonSelectedStateColor: 0x000000,
+            selectedStateColor: 0x000000,
+          },
+        },
+      ],
     },
   ],
 };

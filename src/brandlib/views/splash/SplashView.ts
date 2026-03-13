@@ -8,6 +8,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -17,6 +18,9 @@ export class SplashView extends ResponsiveChildrenView {
   private itemContainer: PixView;
   private startBtn: PixFancyButton;
   private playButtonGuideRect: PixView;
+  private soundSettingsContainer: PixView;
+  private soundOnBtn: PixFancyButton;
+  private dontShowMessage: PixToggleButton;
 
   constructor(config: any) {
     super(config);
@@ -25,6 +29,9 @@ export class SplashView extends ResponsiveChildrenView {
     this.startBtn = this.elementsList?.['startBtn'];
     this.playButtonGuideRect = this.elementsList?.['playButtonGuideRect'];
     this.itemContainer = UIUtil.getContainer();
+    this.soundSettingsContainer = this.elementsList?.['soundSettingsContainer'];
+    this.soundOnBtn = this.soundSettingsContainer.elementsList?.['soundOnBtn'];
+    this.dontShowMessage = this.elementsList?.['dontShowMessage'];
 
     this.addChild(this.itemContainer);
     this.initItems();
@@ -161,6 +168,13 @@ export class SplashView extends ResponsiveChildrenView {
         this.startBtn.y = this.playButtonGuideRect.y + this.startBtn.height * 0.5;
         break;
     }
+    this.soundSettingsContainer.x =
+      this.playButtonGuideRect.x + (this.playButtonGuideRect.width - this.soundSettingsContainer.width) / 2;
+    this.soundSettingsContainer.y = this.startBtn.y + this.startBtn.height;
+
+    this.dontShowMessage.x =
+      this.playButtonGuideRect.x + (this.playButtonGuideRect.width - this.dontShowMessage.width) / 2;
+    this.dontShowMessage.y = this.soundSettingsContainer.y + this.soundSettingsContainer.height;
   }
 
   // ─── Item Alignment ────────────────────────────────────────────────────────
