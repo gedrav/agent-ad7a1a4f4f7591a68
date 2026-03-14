@@ -1501,7 +1501,7 @@ class UIUtilService {
       } else {
         this.setPositionY(
           element,
-          refElement.getHeight() * layout.vPosition + Util.getDefaultValue(layout.vPadding, 0),
+          refElement.y + refElement.getHeight() * layout.vPosition + Util.getDefaultValue(layout.vPadding, 0),
         );
       }
     }

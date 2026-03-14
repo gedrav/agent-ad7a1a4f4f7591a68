@@ -10,7 +10,6 @@ export const PRELOADER_CONFIG: any = {
       height: 270,
       color: 0xff0000,
       alpha: 0,
-      x: 0,
     },
     {
       name: 'brandLogo',
@@ -34,7 +33,7 @@ export const PRELOADER_CONFIG: any = {
         {
           name: 'bg',
           type: 'RoundedRectangle',
-          width: 240,
+          width: 400,
           height: 6,
           radius: 3,
           color: '0xECF0F8',
@@ -44,7 +43,7 @@ export const PRELOADER_CONFIG: any = {
         {
           name: 'bar',
           type: 'Rectangle',
-          width: 234,
+          width: 394,
           height: 6,
           x: 3,
           color: '0x454C5D',
@@ -53,7 +52,7 @@ export const PRELOADER_CONFIG: any = {
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.2, heightPerc: 0.3 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.16, heightPerc: 0.3 },
     Portrait: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.5 },
     Landscape: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.4 },
   },

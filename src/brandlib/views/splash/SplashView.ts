@@ -63,7 +63,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.layoutGuideRect(mode);
     this.layoutGameTitle(mode);
     this.layoutItems(mode);
-    this.layoutStartBtn(mode);
+    //this.layoutStartBtn(mode);
   }
 
   private getOrientationMode(): OrientationMode {
@@ -83,23 +83,14 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.x = (gw - this.guideRect.width) / 2;
         this.guideRect.y = gh * 0.45 - this.guideRect.height / 2;
 
-        this.playButtonGuideRect.width = gw * 0.45;
-        this.playButtonGuideRect.height = gh * 0.3;
-        this.playButtonGuideRect.x = (gw - this.playButtonGuideRect.width) / 2;
-        this.playButtonGuideRect.y = gh * 0.81 - this.playButtonGuideRect.height / 2;
         break;
 
       case 'portrait':
         this.guideRect.width = gw * 0.9;
-        this.guideRect.height = gh * 0.6;
+        this.guideRect.height = gh * 0.5;
         this.guideRect.x = (gw - this.guideRect.width) / 2;
         this.guideRect.y = gh * 0.45 - this.guideRect.height / 2;
 
-        this.playButtonGuideRect.width = gw * 0.9;
-        this.playButtonGuideRect.height = gh * 0.2;
-        this.playButtonGuideRect.x = (gw - this.playButtonGuideRect.width) / 2;
-        this.playButtonGuideRect.y =
-          this.guideRect.y + this.guideRect.height + gh * 0.12 - this.playButtonGuideRect.height / 2;
         break;
 
       case 'landscape':
@@ -108,10 +99,6 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.x = gw * 0.02;
         this.guideRect.y = gh * 0.5 - this.guideRect.height / 2;
 
-        this.playButtonGuideRect.width = gw * 0.35;
-        this.playButtonGuideRect.height = gh * 0.8;
-        this.playButtonGuideRect.x = this.guideRect.x + this.guideRect.width + gw * 0.01;
-        this.playButtonGuideRect.y = this.guideRect.y;
         break;
     }
   }
@@ -149,13 +136,13 @@ export class SplashView extends ResponsiveChildrenView {
   }
 
   private layoutStartBtn(mode: OrientationMode): void {
-    const gh = UIUtil.getGameHeight();
+    /*const gh = UIUtil.getGameHeight();
     const gap = gh * 0.02;
     const cx = this.playButtonGuideRect.x + this.playButtonGuideRect.width / 2;
 
     const scaleStartBtn =
-      this.startBtnSize.width > this.playButtonGuideRect.width
-        ? this.playButtonGuideRect.width / this.startBtnSize.width
+      this.startBtnSize.width > this.playButtonGuideRect.width * 0.7
+        ? (this.playButtonGuideRect.width * 0.7) / this.startBtnSize.width
         : 1;
 
     const scaleSoundBtn =
@@ -186,8 +173,8 @@ export class SplashView extends ResponsiveChildrenView {
         break;
     }
 
-    this.dontShowMessage.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height - 20; // Align to bottom with gap
-    this.soundSettingsContainer.y = this.dontShowMessage.y - this.soundSettingsContainer.height - gap; // Above dontShowMessage with gap
+    this.soundSettingsContainer.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height * 0.4; // Above dontShowMessage with gap
+    this.dontShowMessage.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height * 0.8; // Align to bottom with gap*/
   }
 
   // ─── Item Alignment ────────────────────────────────────────────────────────

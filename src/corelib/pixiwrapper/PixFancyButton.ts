@@ -27,6 +27,7 @@ export class PixFancyButton extends FancyButton {
       this.disabledView.filters = flt;
       this.disabledView.alpha = 0.8;
     }
+    this.name = this.configData.name;
   }
 
   public click(): void {
