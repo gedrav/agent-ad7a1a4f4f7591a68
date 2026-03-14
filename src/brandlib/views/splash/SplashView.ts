@@ -186,7 +186,6 @@ export class SplashView extends ResponsiveChildrenView {
         break;
     }
 
-    // Stack soundSettingsContainer and dontShowMessage vertically below startBtn
     this.dontShowMessage.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height - 20; // Align to bottom with gap
     this.soundSettingsContainer.y = this.dontShowMessage.y - this.soundSettingsContainer.height - gap; // Above dontShowMessage with gap
   }
