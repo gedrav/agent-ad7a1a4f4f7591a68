@@ -182,7 +182,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'generalCPBtn',
             disabledView: 'generalCPBtn',
             icon: 'soundOnIcon',
-            animations: CoreUIConfig.buttonStates,
+            animations: CoreUIConfig.noS,
           },
         },
         {
