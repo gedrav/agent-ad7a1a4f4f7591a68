@@ -19,8 +19,10 @@ export class SplashView extends ResponsiveChildrenView {
   private startBtn: PixFancyButton;
   private playButtonGuideRect: PixView;
   private soundSettingsContainer: PixView;
-  private soundOnBtn: PixFancyButton;
   private dontShowMessage: PixToggleButton;
+  private startBtnSize = { width: 548, height: 88 };
+  private soundContainerSize = { width: 305, height: 64 };
+  private dontShowMessageSize = { width: 524, height: 60 };
 
   constructor(config: any) {
     super(config);
@@ -30,7 +32,6 @@ export class SplashView extends ResponsiveChildrenView {
     this.playButtonGuideRect = this.elementsList?.['playButtonGuideRect'];
     this.itemContainer = UIUtil.getContainer();
     this.soundSettingsContainer = this.elementsList?.['soundSettingsContainer'];
-    this.soundOnBtn = this.soundSettingsContainer.elementsList?.['soundOnBtn'];
     this.dontShowMessage = this.elementsList?.['dontShowMessage'];
 
     this.addChild(this.itemContainer);
@@ -148,33 +149,45 @@ export class SplashView extends ResponsiveChildrenView {
   }
 
   private layoutStartBtn(mode: OrientationMode): void {
-    this.startBtn.x = this.playButtonGuideRect.x + this.playButtonGuideRect.width / 2;
+    const gh = UIUtil.getGameHeight();
+    const gap = gh * 0.02;
+    const cx = this.playButtonGuideRect.x + this.playButtonGuideRect.width / 2;
 
-    const scale =
-      548 < this.playButtonGuideRect.width
-        ? 548 / this.playButtonGuideRect.width
-        : this.playButtonGuideRect.width / 548;
+    const scaleStartBtn =
+      this.startBtnSize.width > this.playButtonGuideRect.width
+        ? this.playButtonGuideRect.width / this.startBtnSize.width
+        : 1;
 
-    this.startBtn.scale.set(scale * 0.9); // Scale to 80% of guide rect width
+    const scaleSoundBtn =
+      this.soundContainerSize.width > this.playButtonGuideRect.width
+        ? this.playButtonGuideRect.width / this.soundContainerSize.width
+        : 1;
+
+    const scaleDontShowBtn =
+      this.dontShowMessage.width > this.playButtonGuideRect.width
+        ? this.playButtonGuideRect.width / this.dontShowMessage.width
+        : 1;
+
+    this.startBtn.scale.set(scaleStartBtn * 0.9);
+    this.soundSettingsContainer.scale.set(scaleSoundBtn * 0.7);
+    this.dontShowMessage.scale.set(scaleDontShowBtn * 0.6);
+
+    this.startBtn.x = cx;
+    this.soundSettingsContainer.x = cx - this.soundSettingsContainer.width / 2;
+    this.dontShowMessage.x = cx - this.dontShowMessage.width / 2 + 20;
 
     switch (mode) {
       case 'portrait':
-        this.startBtn.y = this.playButtonGuideRect.y + this.startBtn.height * 0.5;
-        break;
-      case 'landscape':
-        this.startBtn.y = this.playButtonGuideRect.y + this.gameTitle.height + this.startBtn.height * 0.5;
-        break;
       case 'desktop':
         this.startBtn.y = this.playButtonGuideRect.y + this.startBtn.height * 0.5;
         break;
+      case 'landscape':
+        this.startBtn.y = this.playButtonGuideRect.y + this.gameTitle.height + this.startBtn.height * 0.5 + gap;
+        break;
     }
-    this.soundSettingsContainer.x =
-      this.playButtonGuideRect.x + (this.playButtonGuideRect.width - this.soundSettingsContainer.width) / 2;
-    this.soundSettingsContainer.y = this.startBtn.y + this.startBtn.height;
 
-    this.dontShowMessage.x =
-      this.playButtonGuideRect.x + (this.playButtonGuideRect.width - this.dontShowMessage.width) / 2;
-    this.dontShowMessage.y = this.soundSettingsContainer.y + this.soundSettingsContainer.height;
+    this.dontShowMessage.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height - 20; // Align to bottom with gap
+    this.soundSettingsContainer.y = this.dontShowMessage.y - this.soundSettingsContainer.height - gap; // Above dontShowMessage with gap
   }
 
   // ─── Item Alignment ────────────────────────────────────────────────────────
@@ -234,14 +247,12 @@ export class SplashView extends ResponsiveChildrenView {
   ): void {
     const len = this.itemsArray.length;
 
-    // Compute the widest item per column slot
     const colWidths = Array<number>(cols).fill(0);
     this.itemsArray.forEach((item, i) => {
       const col = i % cols;
       colWidths[col] = Math.max(colWidths[col], item.width);
     });
 
-    // x origin for each column
     const colOrigins = colWidths.reduce<number[]>((acc, w, i) => {
       acc.push(i === 0 ? 0 : acc[i - 1] + colWidths[i - 1] + colGap);
       return acc;
@@ -256,7 +267,6 @@ export class SplashView extends ResponsiveChildrenView {
       const isLastOddRow = rowItems.length < cols;
 
       if (isLastOddRow) {
-        // Centre the lone item across the full grid width
         rowItems[0].x = (totalGridWidth - rowItems[0].width) / 2;
         rowItems[0].y = yOffset;
       } else {
