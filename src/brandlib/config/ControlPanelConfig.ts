@@ -62,7 +62,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           maxScale: 1,
         },
         Portrait: {
-          widthPerc: 0.3,
+          widthPerc: 0.36,
           heightPerc: 0.2,
           hAlign: 'left',
           hPaddingPerc: 0.02,
@@ -117,7 +117,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           maxScale: 1,
         },
         Portrait: {
-          widthPerc: 0.3,
+          widthPerc: 0.36,
           heightPerc: 0.2,
           hAlign: 'right',
           hPaddingPerc: -0.02,
