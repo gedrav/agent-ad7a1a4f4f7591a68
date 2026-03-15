@@ -6,10 +6,12 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
+import { Point } from 'pixi.js';
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
   class: SplashView,
+  itemsDesktopScale: 0.5,
   contents: [
     {
       name: 'item1',
@@ -22,7 +24,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0xffffff, fontSize: 60, anchor: { x: 0.5, y: 0.5 } },
+        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0x000000, fontSize: 60, anchor: { x: 0.5, y: 0.5 } },
       },
     },
     {
@@ -36,7 +38,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0xffffff, fontSize: 60, anchor: { x: 0.5, y: 0.5 } },
+        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0x000000, fontSize: 60, anchor: { x: 0.5, y: 0.5 } },
       },
     },
   ],
@@ -109,7 +111,13 @@ export const SPLASH_CONFIG: any = {
       color: 0x0000ff,
       alpha: 0,
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'bottom', widthPercForce: 0.25, heightPercForce: 0.32 },
+        Desktop: {
+          hAlign: 'center',
+          vAlign: 'bottom',
+          widthPercForce: 0.2,
+          heightPercForce: 0.2,
+          vPaddingPerc: -0.08,
+        },
         Portrait: { hAlign: 'center', vAlign: 'bottom', widthPercForce: 0.8, heightPercForce: 0.28 },
         Landscape: {
           hAlign: 'right',
@@ -161,7 +169,13 @@ export const SPLASH_CONFIG: any = {
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
-        Desktop: { refComponent: 'buttonsGuideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'top' },
+        Desktop: {
+          refComponent: 'buttonsGuideRect',
+          widthPerc: 1,
+          maxScale: 1,
+          hAlign: 'center',
+          vAlign: 'top',
+        },
         Portrait: { refComponent: 'buttonsGuideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'top' },
         Landscape: { refComponent: 'buttonsGuideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vPosition: 0.4 },
       },
@@ -176,13 +190,15 @@ export const SPLASH_CONFIG: any = {
           data: false,
           x: 32,
           y: 32,
+          hitArea: UIUtil.getRectangle(600, 80, 0x000000),
           options: {
             defaultView: 'generalCPBtn',
             hoverView: 'generalCPBtn',
             pressedView: 'generalCPBtn',
             disabledView: 'generalCPBtn',
             icon: 'soundOnIcon',
-            animations: CoreUIConfig.noS,
+            textOffset: new Point(100, 0),
+            animations: CoreUIConfig.noScalebuttonStates,
           },
         },
         {
@@ -197,7 +213,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'generalCPBtn',
             disabledView: 'generalCPBtn',
             icon: 'soundOffIcon',
-            animations: CoreUIConfig.buttonStates,
+            animations: CoreUIConfig.noScalebuttonStates,
           },
           visible: false,
         },

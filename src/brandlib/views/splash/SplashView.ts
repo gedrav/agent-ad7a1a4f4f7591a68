@@ -9,6 +9,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
+import { Util } from '@core/utils/UtilService';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -23,6 +24,8 @@ export class SplashView extends ResponsiveChildrenView {
   private startBtnSize = { width: 548, height: 88 };
   private soundContainerSize = { width: 305, height: 64 };
   private dontShowMessageSize = { width: 524, height: 60 };
+  private soundOnBtn: PixFancyButton;
+  private soundOffBtn: any;
 
   constructor(config: any) {
     super(config);
@@ -34,9 +37,22 @@ export class SplashView extends ResponsiveChildrenView {
     this.soundSettingsContainer = this.elementsList?.['soundSettingsContainer'];
     this.dontShowMessage = this.elementsList?.['dontShowMessage'];
 
+    this.soundOnBtn = this.soundSettingsContainer.elementsList?.['soundOnBtn'];
+    this.soundOffBtn = this.soundSettingsContainer.elementsList?.['soundOffBtn'];
+    this.soundOnBtn.onPress.connect(this.onSoundOnBtnClick.bind(this));
+    this.soundOffBtn.onPress.connect(this.onSoundOffBtnClick.bind(this));
+
     this.addChild(this.itemContainer);
     this.initItems();
     this.resizeView();
+  }
+  protected onSoundOnBtnClick(): void {
+    this.soundOnBtn.visible = false;
+    this.soundOffBtn.visible = true;
+  }
+  protected onSoundOffBtnClick(): void {
+    this.soundOnBtn.visible = true;
+    this.soundOffBtn.visible = false;
   }
 
   // ─── Initialisation ────────────────────────────────────────────────────────
@@ -195,7 +211,7 @@ export class SplashView extends ResponsiveChildrenView {
 
   protected alignForDesktop(): void {
     this.stackItemsHorizontally();
-    this.fitAndCenterItemContainer(1);
+    this.fitAndCenterItemContainer(Util.getDefaultValue(this.configData.itemsDesktopScale, 1));
   }
 
   // ─── Item Arrangement Primitives ───────────────────────────────────────────

@@ -168,6 +168,15 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
+        {
+          name: 'potAnim',
+          type: 'Spine',
+          spineName: 'Pot_spine',
+          defaultState: 'idle',
+          loop: true,
+          scale: 0.5,
+          y: 800,
+        },
         TICKER_COMP_CONFIG,
         {
           name: 'gameTitle',

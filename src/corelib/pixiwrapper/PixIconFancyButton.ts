@@ -41,6 +41,10 @@ export class PixIconFancyButton extends FancyButton {
     for (const p in configData) {
       this.configData[p] = configData[p];
     }
+    if (this.configData.hitArea) {
+      this.hitArea = this.configData.hitArea;
+      console.log('hitArea', this.hitArea);
+    }
 
     this.onPress.connect(this.onButtonPress.bind(this));
 

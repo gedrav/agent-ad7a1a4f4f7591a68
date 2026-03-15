@@ -38,6 +38,8 @@ import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 
+const desktopWidth: number = 2424;
+const desktopHeight: number = 1300;
 class UIUtilService {
   public getElement(obj: any): any {
     let element: any = null;
@@ -1517,48 +1519,6 @@ class UIUtilService {
       if (refElement == undefined) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const that = this;
-        if (element.configData.considerFullView) {
-          const bottomHeight = 250 * GameProxy.config.appBottomBarScale;
-
-          refElement = {
-            x: 0,
-            y: 0,
-            getWidth: function () {
-              return that.getGameWidth();
-            },
-            getHeight: function () {
-              return that.getGameHeight() + bottomHeight;
-            },
-          };
-        } else {
-          refElement = {
-            x: 0,
-            y: 0,
-            getWidth: function () {
-              return that.getGameWidth();
-            },
-            getHeight: function () {
-              return that.getGameHeight();
-            },
-          };
-        }
-      }
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const that = this;
-      if (element.configData.considerFullView) {
-        const bottomHeight = 250 * GameProxy.config.appBottomBarScale;
-        refElement = {
-          x: 0,
-          y: 0,
-          getWidth: function () {
-            return that.getGameWidth();
-          },
-          getHeight: function () {
-            return that.getGameHeight() + bottomHeight;
-          },
-        };
-      } else {
         refElement = {
           x: 0,
           y: 0,
@@ -1570,6 +1530,19 @@ class UIUtilService {
           },
         };
       }
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const that = this;
+      refElement = {
+        x: 0,
+        y: 0,
+        getWidth: function () {
+          return that.getGameWidth();
+        },
+        getHeight: function () {
+          return that.getGameHeight();
+        },
+      };
     }
     if (!refElement) {
       return;
@@ -1589,6 +1562,7 @@ class UIUtilService {
       const wsc: number = (refElement.getWidth() * layout.widthPerc) / element.getWidth();
       const hsc: number = (refElement.getHeight() * layout.heightPerc) / element.getHeight();
       let sc = Math.min(wsc, hsc);
+
       if (maxScale != 0) {
         sc = Math.min(sc, maxScale);
       }
