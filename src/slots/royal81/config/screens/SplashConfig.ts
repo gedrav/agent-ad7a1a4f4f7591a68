@@ -112,7 +112,7 @@ export const SPLASH_CONFIG: any = {
       width: 200,
       height: 200,
       color: 0x0000ff,
-      alpha: 0,
+      alpha: 1,
       layoutData: {
         Desktop: {
           hAlign: 'center',
@@ -126,7 +126,7 @@ export const SPLASH_CONFIG: any = {
           hAlign: 'right',
           vAlign: 'middle',
           hPaddingPerc: -0.02,
-          widthPercForce: 0.34,
+          widthPercForce: 0.3,
           heightPercForce: 0.8,
         },
       },
@@ -146,7 +146,7 @@ export const SPLASH_CONFIG: any = {
           vAlign: 'top',
           vPaddingPerc: 0.05,
         },
-        Landscape: { refComponent: 'buttonsGuideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vPosition: 0 },
+        Landscape: { refComponent: 'buttonsGuideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vPosition: 0.1 },
       },
     },
     {
@@ -262,7 +262,7 @@ export const SPLASH_CONFIG: any = {
       layoutData: {
         Desktop: { refComponent: 'buttonsGuideRect', widthPerc: 0.7, maxScale: 1, hAlign: 'center', vPosition: 0.4 },
         Portrait: { refComponent: 'buttonsGuideRect', widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.4 },
-        Landscape: { refComponent: 'buttonsGuideRect', widthPerc: 0.6, maxScale: 1, hAlign: 'center', vPosition: 0.6 },
+        Landscape: { refComponent: 'buttonsGuideRect', widthPerc: 0.6, maxScale: 1, hAlign: 'center', vPosition: 0.5 },
       },
     },
     {

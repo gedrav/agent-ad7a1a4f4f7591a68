@@ -668,6 +668,7 @@ class UIUtilService {
     const sp: PixSprite = new PixSprite(texture);
     sp.configData = data;
     sp.label = name;
+    sp.name = name;
     return sp;
   }
   getSpriteFromTexture(texture: Texture): PixSprite {
@@ -1034,8 +1035,14 @@ class UIUtilService {
       case 'center':
         if (element.anchor && element.anchor.x != 0) {
           if (refElement.anchor && refElement.anchor.x != 0) {
+            if (element.name == 'gameTitle') {
+              console.log('11111111');
+            }
             this.setPositionX(element, refElement.x + Util.getDefaultValue(layout.hPadding, 0));
           } else {
+            if (element.name == 'gameTitle') {
+              console.log('22222222222');
+            }
             this.setPositionX(
               element,
               refElement.x +
@@ -1045,6 +1052,9 @@ class UIUtilService {
             );
           }
         } else if (element.configData.anchor != undefined) {
+          if (element.name == 'gameTitle') {
+            console.log('333333');
+          }
           this.setPositionX(
             element,
             refElement.x +
@@ -1054,6 +1064,9 @@ class UIUtilService {
           );
         } else {
           if (refElement.anchor && refElement.anchor.x != 0) {
+            if (element.name == 'gameTitle') {
+              console.log('44444444444');
+            }
             this.setPositionX(
               element,
               refElement.x +
@@ -1062,6 +1075,9 @@ class UIUtilService {
                 Util.getDefaultValue(layout.hPadding, 0),
             );
           } else {
+            if (element.name == 'gameTitle') {
+              console.log('5555555555');
+            }
             this.setPositionX(
               element,
               refElement.x +

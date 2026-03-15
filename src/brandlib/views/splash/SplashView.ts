@@ -90,9 +90,7 @@ export class SplashView extends ResponsiveChildrenView {
   protected positionElements(): void {
     const mode = this.getOrientationMode();
     this.layoutGuideRect(mode);
-    this.layoutGameTitle(mode);
     this.layoutItems(mode);
-    //this.layoutStartBtn(mode);
   }
 
   private getOrientationMode(): OrientationMode {
@@ -132,22 +130,6 @@ export class SplashView extends ResponsiveChildrenView {
     }
   }
 
-  private layoutGameTitle(mode: OrientationMode): void {
-    const gw = UIUtil.getGameWidth();
-    const gh = UIUtil.getGameHeight();
-
-    if (mode === 'landscape') {
-      const availableWidth = gw - this.guideRect.x - this.guideRect.width;
-      this.gameTitle.scale.set(1);
-      this.gameTitle.scale.set((availableWidth * 0.7) / this.gameTitle.width);
-      this.gameTitle.x = this.guideRect.x + this.guideRect.width + availableWidth * 0.5;
-      this.gameTitle.y = this.guideRect.y + this.gameTitle.height * 0.5;
-    } else {
-      this.gameTitle.x = gw * 0.5;
-      this.gameTitle.y = gh * 0.1;
-    }
-  }
-
   private layoutItems(mode: OrientationMode): void {
     if (this.itemsArray.length === 0) return;
 
@@ -162,48 +144,6 @@ export class SplashView extends ResponsiveChildrenView {
         this.alignForDesktop();
         break;
     }
-  }
-
-  private layoutStartBtn(mode: OrientationMode): void {
-    /*const gh = UIUtil.getGameHeight();
-    const gap = gh * 0.02;
-    const cx = this.playButtonGuideRect.x + this.playButtonGuideRect.width / 2;
-
-    const scaleStartBtn =
-      this.startBtnSize.width > this.playButtonGuideRect.width * 0.7
-        ? (this.playButtonGuideRect.width * 0.7) / this.startBtnSize.width
-        : 1;
-
-    const scaleSoundBtn =
-      this.soundContainerSize.width > this.playButtonGuideRect.width
-        ? this.playButtonGuideRect.width / this.soundContainerSize.width
-        : 1;
-
-    const scaleDontShowBtn =
-      this.dontShowMessage.width > this.playButtonGuideRect.width
-        ? this.playButtonGuideRect.width / this.dontShowMessage.width
-        : 1;
-
-    this.startBtn.scale.set(scaleStartBtn * 0.9);
-    this.soundSettingsContainer.scale.set(scaleSoundBtn * 0.7);
-    this.dontShowMessage.scale.set(scaleDontShowBtn * 0.6);
-
-    this.startBtn.x = cx;
-    this.soundSettingsContainer.x = cx - this.soundSettingsContainer.width / 2;
-    this.dontShowMessage.x = cx - this.dontShowMessage.width / 2 + 20;
-
-    switch (mode) {
-      case 'portrait':
-      case 'desktop':
-        this.startBtn.y = this.playButtonGuideRect.y + this.startBtn.height * 0.5;
-        break;
-      case 'landscape':
-        this.startBtn.y = this.playButtonGuideRect.y + this.gameTitle.height + this.startBtn.height * 0.5 + gap;
-        break;
-    }
-
-    this.soundSettingsContainer.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height * 0.4; // Above dontShowMessage with gap
-    this.dontShowMessage.y = this.playButtonGuideRect.y + this.playButtonGuideRect.height * 0.8; // Align to bottom with gap*/
   }
 
   // ─── Item Alignment ────────────────────────────────────────────────────────
