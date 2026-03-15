@@ -10,6 +10,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { Util } from '@core/utils/UtilService';
+import { SplashButton } from '@brand/views/comps/SplashButton';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -20,12 +21,11 @@ export class SplashView extends ResponsiveChildrenView {
   private startBtn: PixFancyButton;
   private playButtonGuideRect: PixView;
   private soundSettingsContainer: PixView;
-  private dontShowMessage: PixToggleButton;
-  private startBtnSize = { width: 548, height: 88 };
-  private soundContainerSize = { width: 305, height: 64 };
-  private dontShowMessageSize = { width: 524, height: 60 };
-  private soundOnBtn: PixFancyButton;
-  private soundOffBtn: any;
+  private dontShowMessage: PixView;
+  private soundOnBtn: SplashButton;
+  private soundOffBtn: SplashButton;
+  private showOnBtn: SplashButton;
+  private showOffBtn: SplashButton;
 
   constructor(config: any) {
     super(config);
@@ -39,12 +39,25 @@ export class SplashView extends ResponsiveChildrenView {
 
     this.soundOnBtn = this.soundSettingsContainer.elementsList?.['soundOnBtn'];
     this.soundOffBtn = this.soundSettingsContainer.elementsList?.['soundOffBtn'];
-    this.soundOnBtn.onPress.connect(this.onSoundOnBtnClick.bind(this));
-    this.soundOffBtn.onPress.connect(this.onSoundOffBtnClick.bind(this));
+    this.soundOnBtn.addInteraction(this.onSoundOnBtnClick.bind(this));
+    this.soundOffBtn.addInteraction(this.onSoundOffBtnClick.bind(this));
+
+    this.showOnBtn = this.dontShowMessage.elementsList?.['showOnBtn'];
+    this.showOffBtn = this.dontShowMessage.elementsList?.['showOffBtn'];
+    this.showOnBtn.addInteraction(this.onShowOnBtnClick.bind(this));
+    this.showOffBtn.addInteraction(this.onShowOffBtnClick.bind(this));
 
     this.addChild(this.itemContainer);
     this.initItems();
     this.resizeView();
+  }
+  protected onShowOnBtnClick(): void {
+    this.showOnBtn.visible = false;
+    this.showOffBtn.visible = true;
+  }
+  protected onShowOffBtnClick(): void {
+    this.showOnBtn.visible = true;
+    this.showOffBtn.visible = false;
   }
   protected onSoundOnBtnClick(): void {
     this.soundOnBtn.visible = false;
