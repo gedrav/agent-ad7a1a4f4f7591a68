@@ -112,7 +112,7 @@ export const SPLASH_CONFIG: any = {
       width: 200,
       height: 200,
       color: 0x0000ff,
-      alpha: 1,
+      alpha: 0,
       layoutData: {
         Desktop: {
           hAlign: 'center',
