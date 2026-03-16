@@ -208,15 +208,15 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         },
         Portrait: {
           widthPerc: 0.25,
-          heightPerc: 0.15,
+          heightPerc: 0.14,
           hAlign: 'center',
           vAlign: 'bottom',
           vPaddingPerc: -0.08,
           maxScale: 1.5,
         },
         Landscape: {
-          widthPerc: 0.2,
-          heightPerc: 0.2,
+          widthPerc: 0.12,
+          heightPerc: 0.25,
           hAlign: 'right',
           vAlign: 'middle',
           hPaddingPerc: -0.02,
