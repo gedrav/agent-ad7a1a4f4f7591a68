@@ -27,7 +27,14 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0x000000, fontSize: 36, anchor: { x: 0.5, y: 0.5 } },
+        style: {
+          fontFamily: 'commonFont',
+          fontWeight: 700,
+          fill: 0x000000,
+          fontSize: 36,
+          mFontSize: 50,
+          anchor: { x: 0.5, y: 0.5 },
+        },
       },
     },
     {
@@ -41,7 +48,14 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'commonFont', fontWeight: 700, fill: 0x000000, fontSize: 36, anchor: { x: 0.5, y: 0.5 } },
+        style: {
+          fontFamily: 'commonFont',
+          fontWeight: 700,
+          fill: 0x000000,
+          fontSize: 36,
+          mFontSize: 50,
+          anchor: { x: 0.5, y: 0.5 },
+        },
       },
     },
   ],
@@ -180,6 +194,8 @@ export const SPLASH_CONFIG: any = {
           },
           layoutData: {
             Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.4 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
           },
         },
         {
@@ -207,7 +223,7 @@ export const SPLASH_CONFIG: any = {
             destroy: true,
             x: 80,
             y: 10,
-            content: 'turnOffSoundText',
+            content: 'turnOnSoundText',
             style: {
               fontFamily: 'commonFont',
               fontWeight: 400,
@@ -219,6 +235,8 @@ export const SPLASH_CONFIG: any = {
           visible: false,
           layoutData: {
             Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.4 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
           },
         },
         {
@@ -256,6 +274,8 @@ export const SPLASH_CONFIG: any = {
           },
           layoutData: {
             Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.7 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.7 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.7 },
           },
         },
         {
@@ -294,6 +314,8 @@ export const SPLASH_CONFIG: any = {
           visible: false,
           layoutData: {
             Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.7 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.7 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.7 },
           },
         },
       ],
@@ -304,7 +326,7 @@ export const SPLASH_CONFIG: any = {
           widthPerc: 0.22,
           heightPerc: 0.28,
           vPaddingPerc: -0.04,
-          minScale: 0.5,
+          minScale: 0.3,
         },
         Portrait: {
           hAlign: 'center',
@@ -340,6 +362,7 @@ export const SPLASH_CONFIG: any = {
         Landscape: {
           refComponent: 'controlsContainer',
           widthPerc: 1,
+          heightPerc: 0.8,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'topUp',

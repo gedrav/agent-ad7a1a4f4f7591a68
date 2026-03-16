@@ -33,6 +33,10 @@ export class SplashButton extends ResponsiveChildrenView {
     this.btn.anchor.set(0, 0);
   }
 
+  public setText(text: string) {
+    this.text.text = text;
+  }
+
   public addInteraction(cb: any) {
     this.btn.onPress.connect(cb);
   }

@@ -43,6 +43,7 @@ const btnConfig: any = {
     style: {
       fontFamily: 'commonFont',
       fontSize: 28,
+      fontWeight: 400,
       nonSelectedStateColor: 0x000000,
       selectedStateColor: 0xffffff,
     },
@@ -181,7 +182,7 @@ export class BetPanelView extends ResponsiveChildrenView {
         }
       } else {
         this.betPanelBg.resize();
-        columns = 8;
+        columns = 6;
         gap = 160;
         let rowIndex: number = 0;
         let colIndex: number = 0;
@@ -203,7 +204,15 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.maxBetBtn.y = this.betBtnsArray[this.betBtnsArray.length - 1].y;
 
     this.downStakeBtn.x = this.betBtnsArray[columns / 2 - 1].x - (this.betBtnsArray[1].width - this.downStakeBtn.width);
-    this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.5;
+    if (DeviceProxy.config.isDesktop) {
+      this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 0.5;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.5;
+      } else {
+        this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 0.5;
+      }
+    }
 
     this.upStakeBtn.x =
       this.betBtnsArray[columns / 2].x + (this.betBtnsArray[columns - 1].width - this.upStakeBtn.width);
@@ -216,7 +225,16 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.cancelBtn.x = this.betPanelBg.width * 0.52 - this.cancelBtn.width * 0.5;
     this.setBtn.x = this.betPanelBg.width * 0.54 + this.setBtn.width * 0.5;
 
-    this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.4;
+    if (DeviceProxy.config.isDesktop) {
+      this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;
+      } else {
+        this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height;
+      }
+    }
+
     this.setBtn.y = this.cancelBtn.y;
   }
 

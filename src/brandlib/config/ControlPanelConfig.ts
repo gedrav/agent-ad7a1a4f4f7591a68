@@ -141,8 +141,8 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       },
       layoutData: {
         Desktop: {
-          widthPerc: 0.12,
-          heightPerc: 0.12,
+          widthPerc: 0.08,
+          heightPerc: 0.16,
           hAlign: 'right',
           vAlign: 'middle',
           hPaddingPerc: -0.02,
@@ -166,7 +166,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         },
         Landscape: {
           widthPerc: 0.12,
-          heightPerc: 0.25,
+          heightPerc: 0.3,
           hAlign: 'right',
           vAlign: 'middle',
           hPaddingPerc: -0.02,
@@ -408,7 +408,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       },
       layoutData: {
         Desktop: {
-          widthPerc: 0.03,
+          widthPerc: 0.02,
           heightPerc: 0.05,
           hAlign: 'right',
           hPaddingPerc: -0.005,
@@ -417,7 +417,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           maxScale: 1,
         },
         Landscape: {
-          widthPerc: 0.4,
+          widthPerc: 0.38,
           heightPerc: 0.11,
           hAlign: 'right',
           hPaddingPerc: -0.01,

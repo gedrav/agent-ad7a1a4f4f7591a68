@@ -121,4 +121,9 @@ export class AutoplayView extends ResponsiveChildrenView {
     this.updateSelectedBtn(this.valuesArray[1]);
     if (this.spendingLimitSlider) this.spendingLimitSlider.value = 0;
   }
+
+  protected resizeView(): void {
+    super.resizeView();
+    this.autoPanelBg.resize();
+  }
 }
