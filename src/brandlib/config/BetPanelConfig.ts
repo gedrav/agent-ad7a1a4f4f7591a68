@@ -138,7 +138,7 @@ export const BET_PANEL_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.5, heightPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.3, heightPerc: 0.6, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Landscape: { widthPerc: 0.8, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },
