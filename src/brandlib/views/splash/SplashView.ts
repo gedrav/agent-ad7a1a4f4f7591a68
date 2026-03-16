@@ -254,6 +254,7 @@ export class SplashView extends ResponsiveChildrenView {
 
   protected async onFadedOut(): Promise<void> {
     await this.destroyElements();
+
     EventHandler.dispatchEvent(SlotEvents.SPLASH_DESTROYED);
   }
 }

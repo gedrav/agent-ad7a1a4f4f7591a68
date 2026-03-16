@@ -39,6 +39,7 @@ export class SplashButton extends ResponsiveChildrenView {
 
   protected resizeView() {
     super.resizeView();
+    if (this.isDestroyed) return;
     this.btn.height = 100;
     this.btn.width = this.text.x + this.text.width;
     this.icon.scale.set(1);

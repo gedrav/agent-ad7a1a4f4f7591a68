@@ -154,6 +154,9 @@ export class PixView extends PIXI.Container {
   public async destroyElements(): Promise<void> {
     this?.removeChildren().forEach((child: PixView) => {
       AnimationProxy.killTweensOf(child);
+      if (child.destroyElements) {
+        child.destroyElements();
+      }
       child?.destroy(!!child.configData.dontDestroyOnHide);
     });
     AnimationProxy.killTweensOf(this);
@@ -162,6 +165,7 @@ export class PixView extends PIXI.Container {
       await this.unloadBundle();
       this.destroy();
     }
+    this.isDestroyed = true;
     this.viewCreated = false;
   }
 
