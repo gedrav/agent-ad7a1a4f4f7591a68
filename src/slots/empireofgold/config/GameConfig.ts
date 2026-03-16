@@ -4,10 +4,8 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { UIConfig } from '@game/config/UIConfig';
 
 export const GAME_CONFIG = {
-  gameHDWidth: 1284,
-  gameHDHeight: 2200,
-  gameDesktopWidth: 1080,
-  gameDesktopHeight: 1920,
+  gameDesktopWidth: 2424,
+  gameDesktopHeight: 1300,
   gameBGColor: 0xffffff,
   globalAnimSpeed: 0.5,
   debugMode: false,

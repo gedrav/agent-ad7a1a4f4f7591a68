@@ -19,31 +19,27 @@ export class SplashView extends ResponsiveChildrenView {
   private itemsArray: SplashItemComp[] = [];
   private itemContainer: PixView;
   private startBtn: PixFancyButton;
-  private playButtonGuideRect: PixView;
-  private soundSettingsContainer: PixView;
-  private dontShowMessage: PixView;
   private soundOnBtn: SplashButton;
   private soundOffBtn: SplashButton;
   private showOnBtn: SplashButton;
   private showOffBtn: SplashButton;
+  private controlsContainer: PixView;
 
   constructor(config: any) {
     super(config);
 
     this.gameTitle = this.elementsList['gameTitle'];
     this.startBtn = this.elementsList?.['startBtn'];
-    this.playButtonGuideRect = this.elementsList?.['playButtonGuideRect'];
     this.itemContainer = UIUtil.getContainer();
-    this.soundSettingsContainer = this.elementsList?.['soundSettingsContainer'];
-    this.dontShowMessage = this.elementsList?.['dontShowMessage'];
+    this.controlsContainer = this.elementsList?.['controlsContainer'];
 
-    this.soundOnBtn = this.soundSettingsContainer.elementsList?.['soundOnBtn'];
-    this.soundOffBtn = this.soundSettingsContainer.elementsList?.['soundOffBtn'];
+    this.soundOnBtn = this.controlsContainer.elementsList?.['soundOnBtn'];
+    this.soundOffBtn = this.controlsContainer.elementsList?.['soundOffBtn'];
     this.soundOnBtn.addInteraction(this.onSoundOnBtnClick.bind(this));
     this.soundOffBtn.addInteraction(this.onSoundOffBtnClick.bind(this));
 
-    this.showOnBtn = this.dontShowMessage.elementsList?.['showOnBtn'];
-    this.showOffBtn = this.dontShowMessage.elementsList?.['showOffBtn'];
+    this.showOnBtn = this.controlsContainer.elementsList?.['showOnBtn'];
+    this.showOffBtn = this.controlsContainer.elementsList?.['showOffBtn'];
     this.showOnBtn.addInteraction(this.onShowOnBtnClick.bind(this));
     this.showOffBtn.addInteraction(this.onShowOffBtnClick.bind(this));
 
@@ -116,7 +112,7 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.width = gw * 0.9;
         this.guideRect.height = gh * 0.5;
         this.guideRect.x = (gw - this.guideRect.width) / 2;
-        this.guideRect.y = gh * 0.45 - this.guideRect.height / 2;
+        this.guideRect.y = gh * 0.44 - this.guideRect.height / 2;
 
         break;
 

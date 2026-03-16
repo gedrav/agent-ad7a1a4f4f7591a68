@@ -1529,6 +1529,7 @@ class UIUtilService {
       return;
     }
     const maxScale: number = Util.getDefaultValue(layout.maxScale, 0);
+    const minScale: number = Util.getDefaultValue(layout.minScale, 0);
     let refElement: any;
     if (element.parent && layout.refComponent) {
       refElement = element.parent.elementsList[layout.refComponent];
@@ -1582,6 +1583,10 @@ class UIUtilService {
       if (maxScale != 0) {
         sc = Math.min(sc, maxScale);
       }
+      if (minScale != 0) {
+        sc = Math.max(sc, minScale);
+      }
+      element.scale.set(sc);
       if (sc != Infinity) {
         element.scale.set(sc);
       }
@@ -1591,6 +1596,9 @@ class UIUtilService {
         let sc: number = (refElement.getWidth() * layout.widthPerc) / element.getWidth();
         if (maxScale != 0) {
           sc = Math.min(sc, maxScale);
+        }
+        if (minScale != 0) {
+          sc = Math.max(sc, minScale);
         }
         if (sc != Infinity) {
           element.scale.set(sc);
