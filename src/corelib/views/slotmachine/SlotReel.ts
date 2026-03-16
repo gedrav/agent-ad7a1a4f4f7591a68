@@ -123,7 +123,6 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.finalSymbols[k] = reels[k];
       }
     }
-    console.log('finalSymbols', this.finalSymbols);
   }
 
   public restartIdleAnim(): void {

@@ -94,6 +94,7 @@ export class MessageServiceProxy extends AbstractProxy {
         finalObj.buyBonus.multiplier = GameProxy.config.buyBonusBetMultiplier;
       }
     }
+    console.log('cheat', GameProxy.config.cheatObject);
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
@@ -112,6 +113,14 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.cheat.reelType = cheatObj.reelType;
           finalObj.cheat.reelStopPos = cheatObj.reelStopPos;
           finalObj.cheat = JSON.stringify(finalObj.cheat);
+          finalObj.extraData = {};
+          finalObj.extraData.combination = cheatObj;
+        } else if (GameProxy.config.cheatObject == 'WildBurst') {
+          const cheat: any = {};
+          cheat.forceAddWildFeature = true;
+          cheat.forceWildsAdded = 2;
+          finalObj.extraData = {};
+          finalObj.extraData.combination = cheatObj;
         } else {
           finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj;

@@ -117,8 +117,8 @@ export const SPLASH_CONFIG: any = {
         Desktop: {
           hAlign: 'center',
           vAlign: 'bottom',
-          widthPercForce: 0.2,
-          heightPercForce: 0.2,
+          widthPercForce: 0.25,
+          heightPercForce: 0.32,
           vPaddingPerc: -0.08,
         },
         Portrait: { hAlign: 'center', vAlign: 'bottom', widthPercForce: 0.8, heightPercForce: 0.28 },
