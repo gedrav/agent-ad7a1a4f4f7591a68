@@ -115,12 +115,18 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.cheat = JSON.stringify(finalObj.cheat);
           finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj;
-        } else if (GameProxy.config.cheatObject == 'WildBurst') {
-          const cheat: any = {};
-          cheat.forceAddWildFeature = true;
-          cheat.forceWildsAdded = 2;
+        } else if (GameProxy.config.cheatObject == 'WildBurst1') {
           finalObj.extraData = {};
-          finalObj.extraData.combination = cheatObj;
+          finalObj.extraData.forceAddWildFeature = true;
+          finalObj.extraData.forceWildsAdded = 1;
+        } else if (GameProxy.config.cheatObject == 'WildBurst2') {
+          finalObj.extraData = {};
+          finalObj.extraData.forceAddWildFeature = true;
+          finalObj.extraData.forceWildsAdded = 2;
+        } else if (GameProxy.config.cheatObject == 'WildBurst3') {
+          finalObj.extraData = {};
+          finalObj.extraData.forceAddWildFeature = true;
+          finalObj.extraData.forceWildsAdded = 3;
         } else {
           finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj;
