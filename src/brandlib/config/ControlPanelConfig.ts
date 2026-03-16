@@ -169,7 +169,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           heightPerc: 0.3,
           hAlign: 'right',
           vAlign: 'middle',
-          hPaddingPerc: -0.02,
+          hPaddingPerc: -0.032,
           maxScale: 1,
         },
       },
