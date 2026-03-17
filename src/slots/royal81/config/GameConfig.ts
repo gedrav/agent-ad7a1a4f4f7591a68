@@ -66,5 +66,5 @@ export const GAME_CONFIG = {
       },
     ],
   },
-  externalHistoryAPIURL: 'https://games.pixentech.com/crash.live/history/',
+  externalHistoryAPIURL: 'https://feg-external-dev.pixentech.com/external/report/betHistory/',
 };
