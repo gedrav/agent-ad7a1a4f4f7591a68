@@ -18,34 +18,36 @@ export class BuyBonusView extends ResponsiveChildrenView {
   protected titleText: PixText;
   protected cancelBtn: PixFancyButton;
   protected startBtn: PixFancyButton;
-  protected elementsContainer: PixView;
 
   constructor(config: any) {
     super(config);
     this.buyBonusBg = this.elementsList['buyBonusBg'];
-    this.elementsContainer = this.elementsList['elementsContainer'];
-    this.titleText = this.elementsContainer.elementsList['titleText'];
-    this.cancelBtn = this.elementsContainer.elementsList['cancelBtn'];
-    this.startBtn = this.elementsContainer.elementsList['startBtn'];
+    this.titleText = this.elementsList['titleText'];
+    this.cancelBtn = this.elementsList['cancelBtn'];
+    this.startBtn = this.elementsList['startBtn'];
     EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
 
-    this.buyFreeSpinsValueText = this.elementsContainer.elementsList['buyFreeSpinsValueText'];
+    this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
 
-    this.splashImage = UIUtil.getSprite(GameProxy.config.bbImage);
-    this.elementsContainer.addChild(this.splashImage);
-    this.splashImage.x = (this.buyBonusBg.width - this.splashImage.width) / 2;
+    this.splashImage = this.elementsList['splashImage'];
+    this.splashImage.texture = UIUtil.getTexture(GameProxy.config.bbImage);
+    this.resizeView();
+
+    this.visible = false;
+    UIUtil.stopPropagation(this);
+  }
+  protected resizeView(): void {
+    super.resizeView();
+    /*this.splashImage.x = (this.buyBonusBg.width - this.splashImage.width) / 2;
     this.splashImage.y = this.buyBonusBg.height * 0.14;
 
     this.titleText.x = this.buyBonusBg.width / 2;
     this.titleText.y = this.splashImage.y + this.splashImage.height + this.buyBonusBg.height * 0.06;
 
     this.buyFreeSpinsValueText.x = this.buyBonusBg.width / 2;
-    this.buyFreeSpinsValueText.y = this.titleText.y + this.titleText.height * 0.5 + this.buyBonusBg.height * 0.1;
-
-    this.visible = false;
-    UIUtil.stopPropagation(this);
+    this.buyFreeSpinsValueText.y = this.titleText.y + this.titleText.height * 0.5 + this.buyBonusBg.height * 0.1;*/
   }
 
   protected async hideBuyBonusView() {

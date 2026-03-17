@@ -1,14 +1,8 @@
-import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
 import { CoreUIConfig } from './CoreUIConfig';
-import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDecrementBetCommand';
 import { CloseBuyBonusCommand } from '@core/commands/action/CloseBuyBonusCommand';
-import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { BuyBonusConfirmedCommand } from '@core/commands/action/BuyBonusConfirmedCommand';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
-import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { BuyBonusViewMobile } from '@brand/views/popups/BuyBonusViewMobile';
-import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 
 export const BUY_BONUS_CONFIG_MOBILE = {
   name: 'buyBonusView',
@@ -32,7 +26,7 @@ export const BUY_BONUS_CONFIG_MOBILE = {
       name: 'topbar',
       type: 'Graphics',
       width: 600,
-      height: 120,
+      height: 40,
       color: 0x454c5d,
       layoutData: {
         Portrait: { widthPercForce: 1 },
@@ -40,11 +34,11 @@ export const BUY_BONUS_CONFIG_MOBILE = {
       },
     },
     {
-      name: 'topbartext',
+      name: 'titleText',
       type: 'Text',
       content: 'buyBonusBtnText',
       anchor: { x: 0, y: 0.5 },
-      style: { fontFamily: 'commonFont', fontSize: 40, fill: 0xffffff, fontWeight: 700 },
+      style: { fontFamily: 'commonFont', fontSize: 18, fill: 0xffffff, fontWeight: 700 },
       layoutData: {
         Portrait: {
           refComponent: 'topbar',
@@ -61,7 +55,7 @@ export const BUY_BONUS_CONFIG_MOBILE = {
           widthPerc: 0.4,
           heightPerc: 0.7,
           hAlign: 'left',
-          hPaddingPerc: 0.03,
+          hPaddingPerc: 0.02,
           vAlign: 'middle',
         },
       },
@@ -69,22 +63,19 @@ export const BUY_BONUS_CONFIG_MOBILE = {
     {
       name: 'closeBtn',
       type: 'Button',
-      action: {
-        press: CloseBuyBonusCommand,
-      },
       options: {
-        defaultView: 'closeBtn',
-        hoverView: 'closeBtn',
-        pressedView: 'closeBtn',
-        disabledView: 'closeBtn',
-        animations: CoreUIConfig.buttonStates,
+        defaultView: 'closeIconBtn',
+        hoverView: 'closeIconBtn',
+        pressedView: 'closeIconBtn',
+        disabledView: 'closeIconBtn',
+        animations: CoreUIConfig.noScalebuttonStates,
       },
       layoutData: {
         Portrait: {
           refComponent: 'topbar',
           maxScale: 1,
           widthPerc: 0.4,
-          heightPerc: 0.6,
+          heightPerc: 1,
           hAlign: 'right',
           hPaddingPerc: -0.03,
           vAlign: 'middle',
@@ -93,7 +84,7 @@ export const BUY_BONUS_CONFIG_MOBILE = {
           refComponent: 'topbar',
           maxScale: 1,
           widthPerc: 0.4,
-          heightPerc: 0.6,
+          heightPerc: 1,
           hAlign: 'right',
           hPaddingPerc: -0.03,
           vAlign: 'middle',

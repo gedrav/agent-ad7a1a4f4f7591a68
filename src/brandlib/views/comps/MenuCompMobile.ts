@@ -27,11 +27,7 @@ export class MenuCompMobile extends MenuComp {
   protected resizeView() {
     this.menubg.scale.set(1);
     this.menubg.height = UIUtil.getGameHeight();
-    if (DeviceProxy.config.isLandscape) {
-      this.menubg.height = UIUtil.getGameWidth() * 0.04;
-    } else {
-      this.menubg.height = UIUtil.getGameWidth() * 0.06;
-    }
+
     super.resizeView();
 
     const btns: string[] = [

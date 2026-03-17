@@ -8,11 +8,12 @@ import { STATES } from '@core/states/StateConstants';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
+import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 
 export class AutoplayView extends ResponsiveChildrenView {
   private valuesArray: number[];
   private spinBtnsArray: any[] = [];
-  private autoPanelBg: any;
+  private autoPanelBg: PixResponsiveGraphics;
   private autoCont: any;
   private titleText: any;
   private numberSelectionContainer: any;

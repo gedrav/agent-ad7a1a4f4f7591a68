@@ -13,13 +13,15 @@ export class PixResponsiveGraphics extends ResponsiveView {
 
   public resize(): void {
     this.graphics.clear();
+    const obj = this.configData;
     if (DeviceProxy.config.isDevice) {
-      const obj = this.configData;
       if (DeviceProxy.config.isPortrait) {
         this.graphics.roundRect(obj.x, obj.y, obj.pWidth, obj.pHeight, obj.radius).fill(obj.color);
       } else {
         this.graphics.roundRect(obj.x, obj.y, obj.lWidth, obj.lHeight, obj.radius).fill(obj.color);
       }
+    } else {
+      this.graphics.roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
     }
   }
 }

@@ -66,6 +66,7 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_MENU_MOBILE, this.hideAllViews.bind(this));
   }
   protected hideAllViews(): void {
+    console.log('hide all views');
     this.removeChild(this.betPanelView);
     this.removeChild(this.autoplayView);
     this.removeChild(this.buyBonusView);

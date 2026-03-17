@@ -4,6 +4,10 @@ import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { Sine } from 'gsap/gsap-core';
 
 export class BuyBonusViewMobile extends BuyBonusView {
   private topbar: PixGraphics;
@@ -11,17 +15,28 @@ export class BuyBonusViewMobile extends BuyBonusView {
 
   constructor(config: any) {
     super(config);
+    this.buyBonusBg = this.elementsList['buyBonusBg'];
     this.topbar = this.elementsList['topbar'];
-    this.closeBtn = this.elementsList['elementsContainer'].elementsList['closeBtn'];
+    this.closeBtn = this.elementsList['closeBtn'];
     if (this.closeBtn) {
+      console.log('closeBtn', this.closeBtn);
       this.closeBtn.onPress.connect(this.closeBuyBonus.bind(this));
     }
   }
-  protected closeBuyBonus() {}
 
+  protected async showBuyBonusView() {
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW, 0);
+    this.x = -this.width;
+    this.alpha = 1;
+    this.visible = true;
+    AnimationProxy.animateTween(this, { duration: 0.2, x: 0, ease: Sine.easeOut });
+  }
   protected resizeView() {
+    this.buyBonusBg.scale.set(1);
+    this.buyBonusBg.height = UIUtil.getGameHeight();
+
     super.resizeView();
-    if (DeviceProxy.config.isLandscape) {
+    /*if (DeviceProxy.config.isLandscape) {
       this.splashImage.scale.set(1);
       const sc: number = (this.buyBonusBg.width * 0.4) / this.splashImage.width;
       this.splashImage.scale.set(sc);
@@ -74,6 +89,13 @@ export class BuyBonusViewMobile extends BuyBonusView {
 
       this.elementsContainer.x = (this.buyBonusBg.width - this.elementsContainer.width) * 0.5;
       this.elementsContainer.y = this.topbar.height + this.buyBonusBg.height * 0.05;
-    }
+    }*/
+  }
+  protected closeBuyBonus(): void {
+    AnimationProxy.animateTween(this, { duration: 0.2, x: -this.width, onComplete: this.onBBHidden.bind(this) });
+    EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
+  }
+  protected onBBHidden(): void {
+    EventHandler.dispatchEvent(SlotEvents.HIDE_BUY_BONUS_VIEW);
   }
 }

@@ -17,7 +17,6 @@ export const AUTOPLAY_CONFIG = {
     {
       name: 'autoPanelBg',
       type: 'ResponsiveGraphics',
-      image: 'shortPanelBG',
       lWidth: 712,
       lHeight: 692,
       pWidth: 712,
