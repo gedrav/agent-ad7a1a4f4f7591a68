@@ -94,7 +94,6 @@ export class MessageServiceProxy extends AbstractProxy {
         finalObj.buyBonus.multiplier = GameProxy.config.buyBonusBetMultiplier;
       }
     }
-    console.log('cheat', GameProxy.config.cheatObject);
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
