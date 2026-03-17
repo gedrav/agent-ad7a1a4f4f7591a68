@@ -34,6 +34,7 @@ declare global {
     setExternalPageClosed: () => void;
     getPaytableSymbols: () => string[];
     getTotalCredit: () => number;
+    getGameConfig: () => any;
   }
 }
 
@@ -85,5 +86,6 @@ export class WindowUtil {
       });
     };
     window.getTotalCredit = () => appModel.getTotalBet();
+    window.getGameConfig = () => GameProxy.config;
   }
 }
