@@ -261,6 +261,9 @@ class AppModelService {
     return '';
   }
   public getReelsView(): any {
+    if (this.gameResult.initialReelView) {
+      return this.gameResult.initialReelView;
+    }
     return this.gameResult.reelView;
   }
   public getCascadeReelsView(): any {
@@ -675,6 +678,9 @@ class AppModelService {
   }
   public getLandedJWildPositions(): any {
     return this.gameResult.cascadeData[this.tumbleIndex + 1]?.firstJWildPosition || [];
+  }
+  public getSpinResult(): any {
+    return this.gameResult;
   }
   public getSymbolPayoutValue(multi: number): number {
     return (this.getTotalBet() / this.gameInfo.creditValue) * multi;
