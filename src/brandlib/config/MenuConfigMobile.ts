@@ -84,7 +84,7 @@ export const MENU_CONFIG_MOBILE: any = {
           widthPerc: 0.4,
           heightPerc: 1,
           hAlign: 'right',
-          hPaddingPerc: -0.03,
+          hPaddingPerc: -0.02,
           vAlign: 'middle',
         },
         Landscape: {
@@ -93,7 +93,7 @@ export const MENU_CONFIG_MOBILE: any = {
           widthPerc: 0.4,
           heightPerc: 1,
           hAlign: 'right',
-          hPaddingPerc: -0.03,
+          hPaddingPerc: -0.01,
           vAlign: 'middle',
         },
       },

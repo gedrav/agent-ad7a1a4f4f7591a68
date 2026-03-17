@@ -245,7 +245,9 @@ export const AUTOPLAY_CONFIG = {
       name: 'sliderContainer',
       type: 'ResponsiveChildrenContainer',
       x: 0,
-      y: 400,
+      y: 370,
+      py: 420,
+      ly: 370,
       Elements: [
         {
           name: 'spendingLimitText',
@@ -261,7 +263,7 @@ export const AUTOPLAY_CONFIG = {
           type: 'Text',
           anchor: { x: 0, y: 0.5 },
           x: 96,
-          y: 95,
+          y: 65,
           content: '',
           style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
         },
@@ -270,7 +272,7 @@ export const AUTOPLAY_CONFIG = {
           type: 'Text',
           anchor: { x: 1, y: 0.5 },
           x: 484,
-          y: 95,
+          y: 65,
           content: '',
           style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
         },
@@ -286,7 +288,7 @@ export const AUTOPLAY_CONFIG = {
           value: 0,
           showValue: false,
           x: 90,
-          y: 130,
+          y: 100,
           bgWidth: 400,
           bgHeight: 16,
 
@@ -302,7 +304,7 @@ export const AUTOPLAY_CONFIG = {
           type: 'Input',
           image: 'inputBG',
           x: 516,
-          y: 97,
+          y: 67,
           options: {
             placeholder: '0',
             align: 'center',
