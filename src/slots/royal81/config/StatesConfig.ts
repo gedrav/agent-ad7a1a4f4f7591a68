@@ -8,17 +8,9 @@ import { ShowSpinWinState } from '@core/commands/states/ShowSpinWinState';
 import { CheckFeatureState } from '@core/commands/states/CheckFeatureState';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
-import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
-import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
-import { CheckFSState } from '@core/commands/states/CheckFSState';
-import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
-import { CheckIsTumblePendingState } from '@core/commands/states/CheckIsTumblePendingState';
-import { ShowTumbleState } from '@core/commands/states/ShowTumbleState';
-import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
-import { ShowCascadeState } from '@core/commands/states/ShowCascadeState';
-import { ShowMultiplierCollectAnimState } from '@core/commands/states/ShowMultiplierCollectAnimState';
-import { CheckToCollectMultiplierState } from '@core/commands/states/CheckToCollectMultiplierState';
+import { PreSpinWinState } from '@core/commands/states/PreSpinWinState';
+import { GamePreWinState } from '@game/states/GamePreWinState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -27,6 +19,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
+  { name: STATES.PRE_SPIN_WIN_STATE, state: GamePreWinState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
