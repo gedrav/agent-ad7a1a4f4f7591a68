@@ -418,8 +418,8 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           minScale: 0.6,
         },
         Landscape: {
-          widthPerc: 0.38,
-          heightPerc: 0.11,
+          widthPerc: 0.3,
+          heightPerc: 0.1,
           hAlign: 'right',
           hPaddingPerc: -0.01,
           vAlign: 'top',

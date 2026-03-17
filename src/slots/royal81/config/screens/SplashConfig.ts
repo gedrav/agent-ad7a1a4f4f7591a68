@@ -308,6 +308,8 @@ export const SPLASH_CONFIG: any = {
               fontWeight: 400,
               fill: 0x000000,
               fontSize: 32,
+              wordWrap: true,
+              wordWrapWidth: 480,
               anchor: { x: 0, y: 0 },
             },
           },
@@ -338,6 +340,7 @@ export const SPLASH_CONFIG: any = {
         Landscape: {
           hAlign: 'right',
           vAlign: 'middle',
+          vPaddingPerc: 0.1,
           hPaddingPerc: -0.02,
           widthPerc: 0.3,
           heightPerc: 0.8,
