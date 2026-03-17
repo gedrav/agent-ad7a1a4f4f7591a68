@@ -304,12 +304,6 @@ export const AUTOPLAY_CONFIG = {
           image: 'inputBG', // <-- your sprite texture name
           x: 516,
           y: 97,
-          width: 120,
-          height: 50,
-          radius: 8,
-          color: 0xffffff,
-          borderColor: 0x999999,
-          borderWidth: 2,
           options: {
             placeholder: '0',
             align: 'center',
