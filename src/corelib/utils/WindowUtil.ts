@@ -32,6 +32,9 @@ declare global {
     getCommonHistoryPath: () => string;
     getCheatPath: () => string;
     setExternalPageClosed: () => void;
+    getPaytableSymbols: () => string[];
+    getTotalCredit: () => number;
+    getGameConfig: () => any;
   }
 }
 
@@ -68,5 +71,21 @@ export class WindowUtil {
     window.getCheatPath = () => `assets/panel/cheat.json`;
 
     window.setExternalPageClosed = () => (GameProxy.config.exterPageOpened = false);
+    window.getPaytableSymbols = () => {
+      const gameData = window.getGameInitData();
+      const paytable = gameData?.gameInfo?.payTable;
+
+      if (!paytable) return [];
+
+      return Object.keys(paytable).filter((key) => {
+        if (key === 'SC' || key === 'WD') {
+          const symbolData = paytable[key];
+          return symbolData && Object.values(symbolData).some((value) => Number(value) > 0);
+        }
+        return true;
+      });
+    };
+    window.getTotalCredit = () => appModel.getTotalBet();
+    window.getGameConfig = () => GameProxy.config;
   }
 }
