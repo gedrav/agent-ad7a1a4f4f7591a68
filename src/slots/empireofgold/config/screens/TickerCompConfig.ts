@@ -26,7 +26,7 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 44,
             fill: 0xfde35c,
           },
         },
@@ -36,7 +36,7 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 44,
             fill: 0xfde35c,
           },
         },

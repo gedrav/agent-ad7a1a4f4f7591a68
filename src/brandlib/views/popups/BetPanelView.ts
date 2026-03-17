@@ -205,7 +205,7 @@ export class BetPanelView extends ResponsiveChildrenView {
 
     this.downStakeBtn.x = this.betBtnsArray[columns / 2 - 1].x - (this.betBtnsArray[1].width - this.downStakeBtn.width);
     if (DeviceProxy.config.isDesktop) {
-      this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1;
+      this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.32;
     } else {
       if (DeviceProxy.config.isPortrait) {
         this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.5;
