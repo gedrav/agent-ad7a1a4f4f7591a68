@@ -40,14 +40,6 @@ export class BuyBonusView extends ResponsiveChildrenView {
   }
   protected resizeView(): void {
     super.resizeView();
-    /*this.splashImage.x = (this.buyBonusBg.width - this.splashImage.width) / 2;
-    this.splashImage.y = this.buyBonusBg.height * 0.14;
-
-    this.titleText.x = this.buyBonusBg.width / 2;
-    this.titleText.y = this.splashImage.y + this.splashImage.height + this.buyBonusBg.height * 0.06;
-
-    this.buyFreeSpinsValueText.x = this.buyBonusBg.width / 2;
-    this.buyFreeSpinsValueText.y = this.titleText.y + this.titleText.height * 0.5 + this.buyBonusBg.height * 0.1;*/
   }
 
   protected async hideBuyBonusView() {
@@ -57,7 +49,7 @@ export class BuyBonusView extends ResponsiveChildrenView {
   }
 
   protected updateBuyBonusPanel(): void {
-    if (this.visible && this.buyFreeSpinsValueText) {
+    if (this.buyFreeSpinsValueText) {
       const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
       this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
     }
@@ -66,8 +58,7 @@ export class BuyBonusView extends ResponsiveChildrenView {
   protected async showBuyBonusView(bbId: any) {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     GameProxy.config.selectedBB = bbId;
-    const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
-    this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
+    this.updateBuyBonusPanel();
     this.visible = true;
     this.resizeView();
   }
