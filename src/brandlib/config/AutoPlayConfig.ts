@@ -308,7 +308,7 @@ export const AUTOPLAY_CONFIG = {
             placeholder: '0',
             align: 'center',
             padding: 0,
-            textStyle: { fontFamily: 'commonFont', fontSize: 28, fill: 0x000000 },
+            textStyle: { fontFamily: 'Mulish', fontSize: 28, fill: 0x000000 },
           },
         },
       ],
@@ -366,7 +366,7 @@ export const AUTOPLAY_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.3, heightPerc: 0.6, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.3, heightPerc: 0.58, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Landscape: { widthPerc: 0.8, heightPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },

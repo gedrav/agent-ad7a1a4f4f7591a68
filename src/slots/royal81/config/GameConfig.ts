@@ -66,4 +66,5 @@ export const GAME_CONFIG = {
       },
     ],
   },
+  externalHistoryAPIURL: 'https://games.pixentech.com/crash.live/history/',
 };
