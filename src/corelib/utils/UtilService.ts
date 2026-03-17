@@ -95,6 +95,10 @@ class UtilService {
     return str;
   }
 
+  public toString(value: number): string {
+    return value.toString();
+  }
+
   public formatCurrency(num: number, decimal = 2) {
     if (num == undefined) {
       num = 0;
