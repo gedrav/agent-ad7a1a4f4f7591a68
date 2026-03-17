@@ -85,7 +85,9 @@ export class WindowUtil {
         return true;
       });
     };
-    window.getTotalCredit = () => appModel.getTotalBet();
+    window.getTotalCredit = function () {
+      return appModel.getTotalBet() / (GameProxy.config.totalLines * GameProxy.config.creditValue);
+    };
     window.getGameConfig = () => GameProxy.config;
   }
 }
