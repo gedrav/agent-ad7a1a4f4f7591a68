@@ -6,7 +6,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 
 export class SlotMachineView extends ResponsiveChildrenView {
   protected bigWinsComp: BigWinsComp;
-  private slotReel: SlotReel;
+  protected slotReel: SlotReel;
   constructor(config: any) {
     super(config);
     this.slotReel = this.elementsList['slotReel'];
