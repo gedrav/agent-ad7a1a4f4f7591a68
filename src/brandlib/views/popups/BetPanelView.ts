@@ -123,8 +123,8 @@ export class BetPanelView extends ResponsiveChildrenView {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     GameProxy.config.PreviousBet = appModel.getTotalBet();
     this.updateBetPanel();
-    this.resizeView();
     this.visible = true;
+    this.resizeView();
   }
   protected updateBetPanel(data: any = null): void {
     if (!this.viewCreated) {

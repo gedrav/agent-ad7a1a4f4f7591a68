@@ -246,7 +246,6 @@ export const AUTOPLAY_CONFIG = {
       type: 'ResponsiveChildrenContainer',
       x: 0,
       y: 400,
-
       Elements: [
         {
           name: 'spendingLimitText',
@@ -301,7 +300,7 @@ export const AUTOPLAY_CONFIG = {
         {
           name: 'spendingLimitInput',
           type: 'Input',
-          image: 'inputBG', // <-- your sprite texture name
+          image: 'inputBG',
           x: 516,
           y: 97,
           options: {
@@ -313,7 +312,6 @@ export const AUTOPLAY_CONFIG = {
         },
       ],
     },
-
     {
       name: 'cancelBtn',
       type: 'Button',
@@ -336,8 +334,8 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
       },
       x: 270,
-      y: 660,
-      ly: 560,
+      y: 700,
+      ly: 610,
     },
     {
       name: 'startBtn',
@@ -361,8 +359,8 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 28, fontWeight: 700 },
       },
       x: 432,
-      y: 660,
-      ly: 560,
+      y: 700,
+      ly: 610,
     },
   ],
   layoutData: {

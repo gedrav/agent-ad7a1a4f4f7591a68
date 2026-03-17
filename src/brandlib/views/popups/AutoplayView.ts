@@ -149,7 +149,7 @@ export class AutoplayView extends ResponsiveChildrenView {
   }
 
   protected resizeView(): void {
-    super.resizeView();
     this.autoPanelBg.resize();
+    super.resizeView();
   }
 }

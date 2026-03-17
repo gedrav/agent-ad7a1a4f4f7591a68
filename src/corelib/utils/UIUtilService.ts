@@ -859,35 +859,35 @@ class UIUtilService {
       if (DeviceProxy.isDevice()) {
         const layout = element.configData;
         if (DeviceProxy.config.isPortrait) {
-          if (layout.pWidth) {
+          if (element && layout?.pWidth) {
             element.width = layout.pWidth;
           }
-          if (layout.pHeight) {
+          if (element && layout?.pHeight) {
             element.height = layout.pHeight;
           }
-          if (layout.pScale != undefined) {
+          if (element && layout?.pScale != undefined) {
             element.scale.set(layout.pScale);
           }
-          if (layout.px != undefined) {
+          if (element && layout?.px != undefined) {
             element.x = layout.px;
           }
-          if (layout.py != undefined) {
+          if (element && layout?.py != undefined) {
             element.y = layout.py;
           }
         } else {
-          if (layout.lWidth) {
+          if (element && layout?.lWidth) {
             element.width = layout.lWidth;
           }
-          if (layout.lHeight) {
+          if (layout?.lHeight) {
             element.height = layout.lHeight;
           }
-          if (layout.lScale != undefined) {
+          if (element && layout?.lScale != undefined) {
             element.scale.set(layout.lScale);
           }
-          if (layout.lx != undefined) {
+          if (element && layout?.lx != undefined) {
             element.x = layout.lx;
           }
-          if (layout.ly != undefined) {
+          if (element && layout?.ly != undefined) {
             element.y = layout.ly;
           }
         }
