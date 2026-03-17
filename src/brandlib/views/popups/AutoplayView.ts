@@ -9,6 +9,8 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
+import { Input } from '@pixi/ui';
+import { Util } from '@core/utils/UtilService';
 
 export class AutoplayView extends ResponsiveChildrenView {
   private valuesArray: number[];
@@ -30,6 +32,7 @@ export class AutoplayView extends ResponsiveChildrenView {
   private onAnyWin: any;
   private onBonusWin: any;
   private spendingLimitSlider: any;
+  private spendingLimitInput: Input;
   private balanceIncreaseSlider: any;
   private balanceDecreaseSlider: any;
   private selectedSpins: number = 50;
@@ -57,6 +60,27 @@ export class AutoplayView extends ResponsiveChildrenView {
     this.btn4 = this.numberSelectionContainer.elementsList['btn4'];
     this.btn5 = this.numberSelectionContainer.elementsList['btn5'];
     this.spendingLimitSlider = this.sliderContainer.elementsList['spendingLimitSlider'];
+    this.spendingLimitInput = this.sliderContainer.elementsList['spendingLimitInput'];
+    const spendingMinLimitText = this.sliderContainer.elementsList['spendingMinLimitText'];
+    const spendingMaxLimitText = this.sliderContainer.elementsList['spendingMaxLimitText'];
+
+    if (spendingMinLimitText) spendingMinLimitText.text = Util.formatCurrency(this.spendingLimitSlider?.min ?? 0);
+    if (spendingMaxLimitText) spendingMaxLimitText.text = Util.formatCurrency(this.spendingLimitSlider?.max ?? 0);
+
+    this.spendingLimitSlider?.onUpdate.connect((value: number) => {
+      if (this.spendingLimitInput) {
+        this.spendingLimitInput.value = value === this.spendingLimitSlider.min ? '' : Util.toString(Math.round(value));
+      }
+    });
+
+    this.spendingLimitInput?.onChange.connect((text: string) => {
+      const min = this.spendingLimitSlider?.min ?? 0;
+      const max = this.spendingLimitSlider?.max ?? 0;
+      const parsed = parseFloat(text);
+      const clamped = isNaN(parsed) ? min : Math.min(Math.max(Math.round(parsed), min), max);
+      this.spendingLimitInput.value = clamped === min ? '' : Util.toString(clamped);
+      if (this.spendingLimitSlider) this.spendingLimitSlider.value = clamped;
+    });
 
     this.valuesArray = [5, 10, 25, 50, 100];
 
@@ -120,7 +144,8 @@ export class AutoplayView extends ResponsiveChildrenView {
   // Reset autoplay panel to default values after autoplay completes
   protected resetAutoplayView(): void {
     this.updateSelectedBtn(this.valuesArray[1]);
-    if (this.spendingLimitSlider) this.spendingLimitSlider.value = 0;
+    if (this.spendingLimitSlider) this.spendingLimitSlider.value = this.spendingLimitSlider.min;
+    if (this.spendingLimitInput) this.spendingLimitInput.value = '';
   }
 
   protected resizeView(): void {

@@ -37,6 +37,7 @@ import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
+import { Input } from '@pixi/ui';
 
 const desktopWidth: number = 2424;
 const desktopHeight: number = 1300;
@@ -141,6 +142,9 @@ class UIUtilService {
         break;
       case 'Slider':
         element = this.getSlider(obj);
+        break;
+      case 'Input':
+        element = this.getInput(obj);
         break;
       case 'PixToggleButton':
         element = this.getPixToggleButton(obj);
@@ -294,6 +298,20 @@ class UIUtilService {
   public getSlider(obj: any): PixSlider {
     const { configData, ...sliderData } = obj;
     return new PixSlider(sliderData, configData);
+  }
+
+  public getInput(obj: any): Input {
+    let bg: any;
+    if (obj.image) {
+      bg = Sprite.from(obj.image);
+    } else {
+      const { width = 120, height = 50, radius = 8, color = 0xffffff, borderColor = 0x999999, borderWidth = 2 } = obj;
+      bg = new Graphics()
+        .roundRect(0, 0, width, height, radius)
+        .fill(color)
+        .stroke({ width: borderWidth, color: borderColor });
+    }
+    return new Input({ ...obj.options, bg });
   }
 
   public getBitmapText(obj: any): PixBMPText {
