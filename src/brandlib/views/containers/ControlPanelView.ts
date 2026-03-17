@@ -108,6 +108,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     GameProxy.config.isLongPressTriggered = true;
     const action: ActionCommand = AutoplayClickCommand;
     action.execute(this.spinBtn);
+    setTimeout(() => {
+      GameProxy.config.isLongPressTriggered = false;
+    }, 500);
   }
   protected startPress(): void {
     GameProxy.config.isLongPressTriggered = false;

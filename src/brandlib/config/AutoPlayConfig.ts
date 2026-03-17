@@ -246,6 +246,8 @@ export const AUTOPLAY_CONFIG = {
       type: 'ResponsiveChildrenContainer',
       x: 0,
       y: 400,
+      py: 420,
+      ly: 370,
       Elements: [
         {
           name: 'spendingLimitText',
@@ -261,7 +263,7 @@ export const AUTOPLAY_CONFIG = {
           type: 'Text',
           anchor: { x: 0, y: 0.5 },
           x: 96,
-          y: 95,
+          y: 75,
           content: '',
           style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
         },
@@ -270,7 +272,7 @@ export const AUTOPLAY_CONFIG = {
           type: 'Text',
           anchor: { x: 1, y: 0.5 },
           x: 484,
-          y: 95,
+          y: 75,
           content: '',
           style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
         },
@@ -286,7 +288,7 @@ export const AUTOPLAY_CONFIG = {
           value: 0,
           showValue: false,
           x: 90,
-          y: 130,
+          y: 110,
           bgWidth: 400,
           bgHeight: 16,
 
@@ -302,7 +304,7 @@ export const AUTOPLAY_CONFIG = {
           type: 'Input',
           image: 'inputBG',
           x: 516,
-          y: 97,
+          y: 77,
           options: {
             placeholder: '0',
             align: 'center',
@@ -334,8 +336,9 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
       },
       x: 270,
-      y: 700,
+      y: 670,
       ly: 610,
+      py: 730,
     },
     {
       name: 'startBtn',
@@ -359,8 +362,9 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 28, fontWeight: 700 },
       },
       x: 432,
-      y: 700,
+      y: 670,
       ly: 610,
+      py: 730,
     },
   ],
   layoutData: {

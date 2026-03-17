@@ -25,7 +25,8 @@ export class PixResponsiveGraphics extends ResponsiveView {
         this.addChild(this.graphics);
       }
     } else {
-      this.graphics.roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
+      this.graphics = new PixGraphics().roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
+      this.addChild(this.graphics);
     }
   }
 }

@@ -60,7 +60,6 @@ export const GAME_CONFIG = {
               wordWrapWidth: 200,
               align: 'center',
             },
-            toUpperCase: true,
           },
         },
       },

@@ -146,6 +146,6 @@ export const BUY_BONUS_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.32, heightPerc: 0.64, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.3, heightPerc: 0.58, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },
 };
