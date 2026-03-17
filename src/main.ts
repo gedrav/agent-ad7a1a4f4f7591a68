@@ -1,4 +1,5 @@
 import '@common/panel/devUtils/devUtilities';
+import '@common/panel/ts/zoomDisable';
 import { GAME_CONFIG } from '@game/config/GameConfig';
 
 // optional, if you want to use __GAME_ID__ at runtime
