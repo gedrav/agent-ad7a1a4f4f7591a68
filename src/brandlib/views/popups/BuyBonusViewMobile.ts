@@ -15,7 +15,8 @@ export class BuyBonusViewMobile extends BuyBonusView {
 
   constructor(config: any) {
     super(config);
-    this.closeBtn = this.elementsList['bbCont'].elementsList['closeBtn'];
+    // this.closeBtn = this.elementsList['bbCont'].elementsList['closeBtn'];
+    this.closeBtn = this.elementsList['closeBtn'];
     if (this.closeBtn) {
       this.closeBtn.onPress.connect(this.closeBuyBonus.bind(this));
     }

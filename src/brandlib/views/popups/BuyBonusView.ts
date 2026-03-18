@@ -32,17 +32,8 @@ export class BuyBonusView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
 
-    if (DeviceProxy.config.isDevice) {
-      this.buyFreeSpinsValueText = this.bbCont.elementsList['buyFreeSpinsValueText'];
-    } else {
-      this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
-    }
-
-    if (DeviceProxy.config.isDevice) {
-      this.splashImage = this.bbCont.elementsList['splashImage'];
-    } else {
-      this.splashImage = this.elementsList['splashImage'];
-    }
+    this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
+    this.splashImage = this.elementsList['splashImage'];
 
     this.splashImage.texture = UIUtil.getTexture(GameProxy.config.bbImage);
     this.resizeView();
