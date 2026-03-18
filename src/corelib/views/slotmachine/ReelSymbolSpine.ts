@@ -81,7 +81,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (this.configData.data.winAnim) {
       this.playSpineAnimation(this.configData.data.winAnim, true);
       const name: string = this.configData.data.name ?? '';
-      console.log(name);
       if (/^H[1-4]$/i.test(name)) {
         EventHandler.dispatchEvent(`PLAY_SYMBOL_APPEAR_${name.toUpperCase()}`);
       } else if (name.toUpperCase().startsWith('L')) {
