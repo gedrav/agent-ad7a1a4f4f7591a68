@@ -3,6 +3,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
+import { gameLogic } from '@game/states/GameLogic';
 
 class SpinStoppedStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -10,7 +11,12 @@ class SpinStoppedStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.REELSPIN_COMPLETED);
     EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_BUTTON);
     // Update balance for each free spin with current balance + spin win
-    if (!appModel.getIsFeatureTriggered() && !appModel.getIsAutoSession() && !appModel.isTumbleRemaining()) {
+    if (
+      !appModel.getIsFeatureTriggered() &&
+      !appModel.getIsAutoSession() &&
+      !appModel.isTumbleRemaining() &&
+      !gameLogic.isPreWinFeatureTriggered()
+    ) {
       EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     }
     StateManager.next();
