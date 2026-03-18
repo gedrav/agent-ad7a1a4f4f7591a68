@@ -19,7 +19,6 @@ export class SymbolPayoutComp extends StandardView {
   public showComp(symbol: string, symbolAtLeft: boolean): void {
     this.infoText.text = '';
     const pays = appModel.getPaytableData();
-    console.log(pays);
     const data = pays[symbol];
     if (data) {
       let result: string = '';
@@ -34,7 +33,6 @@ export class SymbolPayoutComp extends StandardView {
         this.infoText.text = result;
       }
     } else {
-      console.log(symbol);
       this.infoText.text = Util.getContent(symbol + 'payoutContent');
     }
     if (symbolAtLeft) {
