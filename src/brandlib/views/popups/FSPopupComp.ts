@@ -59,7 +59,7 @@ export class FSPopupComp extends ResponsiveChildrenView {
 
     // Hide messageText2 to prevent showing again
     this.messageText2.visible = false;
-
+    EventHandler.dispatchEvent('START_FREESPIN_BG_MUSIC');
     this.visible = false;
     if (this.callbackFunction) {
       this.callbackFunction();

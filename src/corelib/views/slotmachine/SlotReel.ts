@@ -401,6 +401,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected showFinalJerk(reelno: number): void {
+    EventHandler.dispatchEvent('REELSTRIP_SPIN_JERK');
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
@@ -424,6 +425,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
+      EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED');
       StateManager.doNextStep();
     }
   }

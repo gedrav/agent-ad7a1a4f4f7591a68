@@ -2,6 +2,7 @@ import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { SymbolConfig } from './ReelSymbol';
 import { SpinePool } from './SpinePool';
 import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export default class ReelSymbolSpine extends ReelSymbolSprite {
   private animState: string;
@@ -79,6 +80,13 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   public showWinning(): void {
     if (this.configData.data.winAnim) {
       this.playSpineAnimation(this.configData.data.winAnim, true);
+      const name: string = this.configData.data.name ?? '';
+      console.log(name);
+      if (/^H[1-4]$/i.test(name)) {
+        EventHandler.dispatchEvent(`PLAY_SYMBOL_APPEAR_${name.toUpperCase()}`);
+      } else if (name.toUpperCase().startsWith('L')) {
+        EventHandler.dispatchEvent('PLAY_SYMBOL_APPEAR_L');
+      }
     } else {
       super.showWinning();
     }
