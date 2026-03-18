@@ -23,6 +23,7 @@ interface AnimationOptions {
   loop?: boolean;
   trackIndex?: number;
   stopAtFirst?: boolean;
+  listener?: AnimationStateListener;
 }
 
 export class PixSpine extends StandardView {
@@ -91,6 +92,10 @@ export class PixSpine extends StandardView {
     this.spineAnim.state.data.defaultMix = 1;
     this.spineAnim.state.timeScale = 1;
     this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
+
+    if (resolvedOptions.listener) {
+      this.spineAnim.state.addListener(resolvedOptions.listener);
+    }
   }
 
   public stopAnimation(): void {
