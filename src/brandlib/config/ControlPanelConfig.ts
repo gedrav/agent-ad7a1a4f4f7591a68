@@ -766,7 +766,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         },
         Landscape: {
           refComponent: 'menuBtn',
-          posRefComponent: 'soundOnBtn',
+          posRefComponent: 'homeBtn',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'right',
@@ -777,7 +777,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         },
         Portrait: {
           refComponent: 'menuBtn',
-          posRefComponent: 'soundOnBtn',
+          posRefComponent: 'homeBtn',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'right',
