@@ -18,9 +18,11 @@ export class BuyBonusView extends ResponsiveChildrenView {
   protected titleText: PixText;
   protected cancelBtn: PixFancyButton;
   protected startBtn: PixFancyButton;
+  private bbCont: PixView;
 
   constructor(config: any) {
     super(config);
+    this.bbCont = this.elementsList['bbCont'];
     this.buyBonusBg = this.elementsList['buyBonusBg'];
     this.titleText = this.elementsList['titleText'];
     this.cancelBtn = this.elementsList['cancelBtn'];
@@ -29,9 +31,9 @@ export class BuyBonusView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
 
-    this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
+    this.buyFreeSpinsValueText = this.bbCont.elementsList['buyFreeSpinsValueText'];
 
-    this.splashImage = this.elementsList['splashImage'];
+    this.splashImage = this.bbCont.elementsList['splashImage'];
     this.splashImage.texture = UIUtil.getTexture(GameProxy.config.bbImage);
     this.resizeView();
 

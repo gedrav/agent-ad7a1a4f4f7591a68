@@ -1053,9 +1053,6 @@ class UIUtilService {
       case 'center':
         if (element.anchor && element.anchor.x != 0) {
           if (refElement.anchor && refElement.anchor.x != 0) {
-            if (element.name == 'gameTitle') {
-              console.log('11111111');
-            }
             this.setPositionX(element, refElement.x + Util.getDefaultValue(layout.hPadding, 0));
           } else {
             if (element.name == 'gameTitle') {
@@ -1439,6 +1436,9 @@ class UIUtilService {
         }
         break;
       case 'bottomDown':
+        //if (element.name == 'titleText1') {
+        console.log('11111111 -- ', element.name);
+        //}
         if (element.anchor && element.anchor.y != 0) {
           if (refElement.anchor && refElement.anchor.y != 0) {
             this.setPositionY(
