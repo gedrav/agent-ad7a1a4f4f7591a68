@@ -859,35 +859,35 @@ class UIUtilService {
       if (DeviceProxy.isDevice()) {
         const layout = element.configData;
         if (DeviceProxy.config.isPortrait) {
-          if (element && layout?.pWidth) {
+          if (layout?.pWidth) {
             element.width = layout.pWidth;
           }
-          if (element && layout?.pHeight) {
+          if (layout?.pHeight) {
             element.height = layout.pHeight;
           }
-          if (element && layout?.pScale != undefined) {
+          if (layout?.pScale != undefined) {
             element.scale.set(layout.pScale);
           }
-          if (element && layout?.px != undefined) {
+          if (layout?.px != undefined) {
             element.x = layout.px;
           }
-          if (element && layout?.py != undefined) {
+          if (layout?.py != undefined) {
             element.y = layout.py;
           }
         } else {
-          if (element && layout?.lWidth) {
+          if (layout?.lWidth) {
             element.width = layout.lWidth;
           }
           if (layout?.lHeight) {
             element.height = layout.lHeight;
           }
-          if (element && layout?.lScale != undefined) {
+          if (layout?.lScale != undefined) {
             element.scale.set(layout.lScale);
           }
-          if (element && layout?.lx != undefined) {
+          if (layout?.lx != undefined) {
             element.x = layout.lx;
           }
-          if (element && layout?.ly != undefined) {
+          if (layout?.ly != undefined) {
             element.y = layout.ly;
           }
         }
@@ -1055,9 +1055,6 @@ class UIUtilService {
           if (refElement.anchor && refElement.anchor.x != 0) {
             this.setPositionX(element, refElement.x + Util.getDefaultValue(layout.hPadding, 0));
           } else {
-            if (element.name == 'gameTitle') {
-              console.log('22222222222');
-            }
             this.setPositionX(
               element,
               refElement.x +
@@ -1067,9 +1064,6 @@ class UIUtilService {
             );
           }
         } else if (element.configData.anchor != undefined) {
-          if (element.name == 'gameTitle') {
-            console.log('333333');
-          }
           this.setPositionX(
             element,
             refElement.x +
@@ -1079,9 +1073,6 @@ class UIUtilService {
           );
         } else {
           if (refElement.anchor && refElement.anchor.x != 0) {
-            if (element.name == 'gameTitle') {
-              console.log('44444444444');
-            }
             this.setPositionX(
               element,
               refElement.x +
@@ -1090,9 +1081,6 @@ class UIUtilService {
                 Util.getDefaultValue(layout.hPadding, 0),
             );
           } else {
-            if (element.name == 'gameTitle') {
-              console.log('5555555555');
-            }
             this.setPositionX(
               element,
               refElement.x +
@@ -1149,7 +1137,7 @@ class UIUtilService {
             this.setPositionX(
               element,
               refElement.x +
-                refElement.getWidth() -
+                refElement.getWidth() +
                 element.getWidth() * element.anchor.x +
                 Util.getDefaultValue(layout.hPadding, 0),
             );
@@ -1436,9 +1424,6 @@ class UIUtilService {
         }
         break;
       case 'bottomDown':
-        //if (element.name == 'titleText1') {
-        console.log('11111111 -- ', element.name);
-        //}
         if (element.anchor && element.anchor.y != 0) {
           if (refElement.anchor && refElement.anchor.y != 0) {
             this.setPositionY(

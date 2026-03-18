@@ -14,6 +14,7 @@ export class PixText extends Text {
     for (const p in configData) {
       this.configData[p] = configData[p];
     }
+    this.name = this.configData.name;
   }
   public get configData() {
     return this._configData;
