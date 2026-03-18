@@ -102,6 +102,8 @@ export class PixSpine extends StandardView {
     this.spineAnim.state.timeScale = 0;
     this.spineAnim.state.data.defaultMix = 1;
     this.spineAnim.skeleton.setToSetupPose();
+    this.spineAnim.state.clearListeners();
+    this.spineAnim.removeAllListeners();
   }
 
   public getWidth(): number {

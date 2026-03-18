@@ -103,6 +103,11 @@ export default class SlotReel extends ResponsiveChildrenView {
   public getSymbolPosition(x: number, y: number) {
     return this.symbolsArray[x][y].getGlobalPosition();
   }
+
+  public swapSymbol(reel: number, row: number, name: string) {
+    this.symbolsArray[reel][row].setNewSymbol(this.reelsData.symbolsData[name], reel);
+  }
+
   protected onSecondaryAssetsLoaded(): void {
     this.recreateAnimations();
   }

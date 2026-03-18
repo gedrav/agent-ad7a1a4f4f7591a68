@@ -2,7 +2,6 @@ import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
-import WinController from '@core/views/slotmachine/WinController';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
 
@@ -26,22 +25,13 @@ export class GameSlotMachineView extends SlotMachineView {
     this.potAnim = this.slotReel.elementsList['potAnim'];
 
     EventHandler.addEventListener('SHOW_WILD_BLAST', this.showWildBlast.bind(this));
-    (window as any).blast = () => this.showWildBlast();
   }
 
   protected resizeComponents(): void {}
 
-  protected showWildBlast(): void {
-    const obj: any = {
-      numberOfWilds: 1,
-      symbolPositions: [
-        [0, 2],
-        // [2, 1],
-        // [2, 2],
-      ],
-    };
-    const numberOfWilds = obj.numberOfWilds;
-    const symbolPositions = obj.symbolPositions;
+  protected showWildBlast(data: any): void {
+    const numberOfWilds = data.numberOfWilds;
+    const symbolPositions = data.wildPositions;
 
     const listener: AnimationStateListener = {
       event: (_, event) => {
@@ -50,12 +40,14 @@ export class GameSlotMachineView extends SlotMachineView {
           this.playSymbolTween(index - 1, symbolPositions);
         }
       },
+      complete: () => {
+        this.potAnim.stopAnimation();
+      },
     };
     this.potAnim.playAnimation({ state: `Win_anim${numberOfWilds}`, listener });
   }
 
   protected playSymbolTween(index: number, symbolPositions: Array<[number, number]>) {
-    console.log('Playing Wild', index);
     const numberOfWilds = symbolPositions.length;
     const position = symbolPositions[index];
     const wildPositions = this.wildSymbolPositions[numberOfWilds];
@@ -76,15 +68,21 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.x = this.potAnim.x + wildPositions[index].x;
     movingSymbol.y = this.potAnim.y + wildPositions[index].y;
     movingSymbol.rotation = (wildPositions[index].angle * Math.PI) / 180;
+    movingSymbol.alpha = 0;
     this.slotReel.addChild(movingSymbol);
 
     AnimationProxy.animateTween(movingSymbol, {
-      duration: 1,
+      duration: 0.5,
       x: moveTo.x,
       y: moveTo.y,
+      delay: 0.08,
       rotation: 0,
+      alpha: 1,
       scale: 1,
-      // onComplete: () => this.slotReel.removeChild(movingSymbol)
+      onComplete: () => {
+        this.slotReel.swapSymbol(position[0], position[1] + 1, 'WD');
+        this.slotReel.removeChild(movingSymbol);
+      },
     });
   }
 
