@@ -4,10 +4,19 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { ShowLowBalanceErrorCommand } from '@core/commands/action/ShowLowBalanceErrorCommand';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { RequestFullscreenCommand } from './RequestFullscreenCommand';
 
 class SpinClickCmd extends ActionCommand {
   public async execute(data: any = null) {
     super.execute(data);
+
+    const isDesktop = DeviceProxy.config.isDesktop;
+
+    // Request fullscreen on desktop on first spin
+    if (isDesktop) {
+      RequestFullscreenCommand.execute();
+    }
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent('SPIN_CLICKED');
       StateManager.goToState(STATES.SPIN_START_STATE);
