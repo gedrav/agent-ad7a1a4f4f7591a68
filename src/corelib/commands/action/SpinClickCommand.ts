@@ -14,7 +14,7 @@ class SpinClickCmd extends ActionCommand {
     const isDesktop = DeviceProxy.config.isDesktop;
 
     // Request fullscreen on desktop on first spin
-    if (isDesktop) {
+    if (!isDesktop) {
       RequestFullscreenCommand.execute();
     }
     if (appModel.getIsSpinStartPossible()) {

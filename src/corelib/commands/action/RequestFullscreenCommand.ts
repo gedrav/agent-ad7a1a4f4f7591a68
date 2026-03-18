@@ -1,4 +1,6 @@
 import { ActionCommand } from '@core/commands/core/ActionCommand';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 
 class RequestFullscreenCmd extends ActionCommand {
   public execute(data: any = null) {
@@ -9,6 +11,7 @@ class RequestFullscreenCmd extends ActionCommand {
     // Check if already in fullscreen
     if (document.fullscreenElement) {
       console.log('Already in fullscreen mode');
+      EventHandler.dispatchEvent(SlotEvents.SHOW_FULLSCREEN_MODE, false);
       return;
     }
 
@@ -29,6 +32,7 @@ class RequestFullscreenCmd extends ActionCommand {
     } else {
       console.warn('Fullscreen API is not supported in this browser');
     }
+    EventHandler.dispatchEvent(SlotEvents.SHOW_FULLSCREEN_MODE, true);
   }
 }
 

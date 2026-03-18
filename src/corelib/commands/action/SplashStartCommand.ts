@@ -10,7 +10,7 @@ class SplashStartCmd extends ActionCommand {
     EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
     const isDesktop = DeviceProxy.config.isDesktop;
 
-    if (isDesktop) {
+    if (!isDesktop) {
       RequestFullscreenCommand.execute();
     }
   }

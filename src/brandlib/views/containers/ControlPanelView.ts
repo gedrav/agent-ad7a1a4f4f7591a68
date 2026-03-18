@@ -40,6 +40,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
   private gameNameTxt: PixText;
   private gameLogo: PixSprite | PixSpine;
   private lightningBtn: PixFancyButton;
+  private fullscreenEnterBtn: PixFancyButton;
+  private fullscreenEitBtn: PixFancyButton;
   constructor(config: any) {
     super(config);
     GameProxy.config.isLongPressTriggered = false;
@@ -60,6 +62,12 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.lightningBtn = this.elementsList['lightningBtn'];
     this.autoCounterText.visible = false;
     this.autoCounterBG.visible = false;
+
+    this.fullscreenEnterBtn = this.elementsList['fullscreenEnterBtn'];
+    this.fullscreenEitBtn = this.elementsList['fullscreenExitBtn'];
+    if (this.fullscreenEitBtn) {
+      this.fullscreenEitBtn.visible = false;
+    }
 
     if (!appModel.getIsCheatMode()) {
       this.removeChild(this.cheatBtn);
@@ -89,6 +97,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_FULLSCREEN_MODE, this.onFullScreenModeChange.bind(this));
     this.addKeyboardEvents();
     this.createBBButtons();
     this.onTurboStateChanged();
@@ -103,6 +112,18 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.spinBtn.on('pointerupoutside', this.cancelPress.bind(this));
     this.spinBtn.on('pointerout', this.cancelPress.bind(this));
     this.spinBtn.on('pointercancel', this.cancelPress.bind(this));
+  }
+  protected onFullScreenModeChange(flag: boolean): void {
+    if (DeviceProxy.config.isDevice) {
+      return;
+    }
+    if (flag) {
+      this.fullscreenEnterBtn.visible = false;
+      this.fullscreenEitBtn.visible = true;
+    } else {
+      this.fullscreenEnterBtn.visible = true;
+      this.fullscreenEitBtn.visible = false;
+    }
   }
   protected onLongPress() {
     GameProxy.config.isLongPressTriggered = true;
