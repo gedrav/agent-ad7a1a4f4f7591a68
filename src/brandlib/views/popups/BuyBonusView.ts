@@ -10,6 +10,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixView } from '@core/pixiwrapper/PixView';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class BuyBonusView extends ResponsiveChildrenView {
   protected buyFreeSpinsValueText: any;
@@ -31,9 +32,18 @@ export class BuyBonusView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBuyBonusPanel.bind(this));
 
-    this.buyFreeSpinsValueText = this.bbCont.elementsList['buyFreeSpinsValueText'];
+    if (DeviceProxy.config.isDevice) {
+      this.buyFreeSpinsValueText = this.bbCont.elementsList['buyFreeSpinsValueText'];
+    } else {
+      this.buyFreeSpinsValueText = this.elementsList['buyFreeSpinsValueText'];
+    }
 
-    this.splashImage = this.bbCont.elementsList['splashImage'];
+    if (DeviceProxy.config.isDevice) {
+      this.splashImage = this.bbCont.elementsList['splashImage'];
+    } else {
+      this.splashImage = this.elementsList['splashImage'];
+    }
+
     this.splashImage.texture = UIUtil.getTexture(GameProxy.config.bbImage);
     this.resizeView();
 

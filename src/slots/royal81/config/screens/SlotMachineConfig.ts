@@ -175,7 +175,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           defaultState: 'idle',
           loop: true,
           scale: 0.5,
-          y: 800,
+          layoutData: {
+            Desktop: { scale: 0.5, x: 0, y: 800 },
+            Landscape: { scale: 0.5, x: 0, y: 800 },
+            Portrait: { scale: 0.5, x: 400, y: -156 },
+          },
         },
         TICKER_COMP_CONFIG,
         {
