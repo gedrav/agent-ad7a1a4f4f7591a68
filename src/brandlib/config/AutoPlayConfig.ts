@@ -246,7 +246,8 @@ export const AUTOPLAY_CONFIG = {
       type: 'ResponsiveChildrenContainer',
       x: 0,
       y: 400,
-
+      py: 420,
+      ly: 370,
       Elements: [
         {
           name: 'spendingLimitText',
@@ -255,6 +256,24 @@ export const AUTOPLAY_CONFIG = {
           x: 356,
           y: 0,
           content: 'spendingLimitText',
+          style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
+        },
+        {
+          name: 'spendingMinLimitText',
+          type: 'Text',
+          anchor: { x: 0, y: 0.5 },
+          x: 96,
+          y: 75,
+          content: '',
+          style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
+        },
+        {
+          name: 'spendingMaxLimitText',
+          type: 'Text',
+          anchor: { x: 1, y: 0.5 },
+          x: 484,
+          y: 75,
+          content: '',
           style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, fontWeight: 400 },
         },
         {
@@ -267,30 +286,12 @@ export const AUTOPLAY_CONFIG = {
           max: 1000,
           step: 1,
           value: 0,
-          showValue: true,
-          valueTextStyle: {
-            fontFamily: 'commonFont',
-            initialColor: 0x000000,
-            updatedColor: 0x000000,
-            fontSize: 32,
-          },
-          valueTextOffset: { y: -47 },
-          valueTextAnchor: { x: 1, y: 0.5 },
+          showValue: false,
           x: 90,
-          y: 90,
+          y: 110,
           bgWidth: 400,
           bgHeight: 16,
-          Elements: [
-            {
-              name: 'singleWinSliderLabel',
-              type: 'Text',
-              content: 'singWinExceedsText',
-              style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000 },
-              anchor: { x: 0, y: 0.5 },
-              x: 0,
-              y: -24,
-            },
-          ],
+
           configData: {
             action: {
               change: AutoPlaySliderChangeCommand,
@@ -298,9 +299,21 @@ export const AUTOPLAY_CONFIG = {
             data: { type: 'singleWin' },
           },
         },
+        {
+          name: 'spendingLimitInput',
+          type: 'Input',
+          image: 'inputBG',
+          x: 516,
+          y: 77,
+          options: {
+            placeholder: '0',
+            align: 'center',
+            padding: 0,
+            textStyle: { fontFamily: 'Mulish', fontSize: 28, fill: 0x000000 },
+          },
+        },
       ],
     },
-
     {
       name: 'cancelBtn',
       type: 'Button',
@@ -323,8 +336,9 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
       },
       x: 270,
-      y: 660,
-      ly: 560,
+      y: 670,
+      ly: 610,
+      py: 730,
     },
     {
       name: 'startBtn',
@@ -348,12 +362,13 @@ export const AUTOPLAY_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 28, fontWeight: 700 },
       },
       x: 432,
-      y: 660,
-      ly: 560,
+      y: 670,
+      ly: 610,
+      py: 730,
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.3, heightPerc: 0.6, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.3, heightPerc: 0.58, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Landscape: { widthPerc: 0.8, heightPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },

@@ -5,14 +5,11 @@ import { appModel } from '@core/models/services/AppModelService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { AssetLoader } from '@core/models/services/AssetLoader';
 import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixView } from '@core/pixiwrapper/PixView';
-import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { GameProxy } from '@core/models/GameConfigProxy';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
 
@@ -50,7 +47,6 @@ const btnConfig: any = {
   },
 };
 export class BetPanelView extends ResponsiveChildrenView {
-  private closeBtn: any;
   private betBtnsArray: PixToggleButton[] = [];
   private upStakeBtn: any;
   private downStakeBtn: any;
@@ -61,13 +57,15 @@ export class BetPanelView extends ResponsiveChildrenView {
   private titleText: PixText;
   private cancelBtn: PixFancyButton;
   private setBtn: PixFancyButton;
+  private tempBetPos: number = 0;
 
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_BET_PANEL, this.showBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideBetPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.CONFIRM_BET, this.onConfirmBet.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBetPanel.bind(this));
-    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET_TEMP, this.updateBetPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET_TEMP, this.onTempBetUpdate.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBetPanel.bind(this));
 
     this.betPanelBg = this.elementsList['betPanelBg'];
@@ -83,8 +81,6 @@ export class BetPanelView extends ResponsiveChildrenView {
 
     this.betBtnsArray = [];
     const len = totalBetsArray.length;
-    const lowbets = 8;
-    const highbets = 8;
     if (len > 0) {
       const noOfBtns: number = 11;
       for (let i = 0; i < noOfBtns; i++) {
@@ -119,32 +115,47 @@ export class BetPanelView extends ResponsiveChildrenView {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     }
   }
+
   protected async showBetPanel() {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    GameProxy.config.PreviousBet = appModel.getTotalBet();
+    this.tempBetPos = appModel.getBetPos();
     this.updateBetPanel();
-    this.resizeView();
     this.visible = true;
+    this.resizeView();
   }
-  protected updateBetPanel(data: any = null): void {
-    if (!this.viewCreated) {
-      return;
+
+  protected onTempBetUpdate(data: any): void {
+    const allBets = appModel.getAllBets();
+    if (typeof data === 'number' && data !== 1 && data !== -1) {
+      // direct bet value from ChangeTotalBetCommand
+      const pos = allBets.indexOf(data);
+      if (pos !== -1) this.tempBetPos = pos;
+    } else {
+      // +1 or -1 from IncrementDecrementBetCommand
+      const next = this.tempBetPos + data;
+      if (next >= 0 && next < allBets.length) this.tempBetPos = next;
     }
-    this.stakeText.text = Util.formatCurrency(appModel.getTotalBet());
+    this.updateBetPanel();
+  }
+
+  protected onConfirmBet(): void {
+    appModel.setTotalBet(appModel.getAllBets()[this.tempBetPos]);
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+    EventHandler.dispatchEvent(SlotEvents.HIDE_BET_PANEL);
+  }
+
+  protected updateBetPanel(data: any = null): void {
+    if (!this.viewCreated) return;
+    const allBets = appModel.getAllBets();
+    const displayBet = allBets[this.tempBetPos];
+    this.stakeText.text = Util.formatCurrency(displayBet);
     const len = this.betBtnsArray.length;
     for (let i = 0; i < len; i++) {
-      this.betBtnsArray[i].setSelected(false);
-      if (this.betBtnsArray[i].configData.data == appModel.getTotalBet()) {
-        this.betBtnsArray[i].setSelected(true);
-      }
+      this.betBtnsArray[i].setSelected(this.betBtnsArray[i].configData.data === displayBet);
     }
-    this.downStakeBtn.enabled = appModel.getBetPos() != 0;
-    this.upStakeBtn.enabled = appModel.getBetPos() != appModel.getAllBets().length - 1;
-    if (appModel.getTotalBet() == appModel.getMaxBet()) {
-      this.maxBetBtn.setSelected(true);
-    } else {
-      this.maxBetBtn.setSelected(false);
-    }
+    this.downStakeBtn.enabled = this.tempBetPos > 0;
+    this.upStakeBtn.enabled = this.tempBetPos < allBets.length - 1;
+    this.maxBetBtn.setSelected(this.tempBetPos === allBets.length - 1);
   }
 
   protected positionButtons() {
@@ -205,7 +216,7 @@ export class BetPanelView extends ResponsiveChildrenView {
 
     this.downStakeBtn.x = this.betBtnsArray[columns / 2 - 1].x - (this.betBtnsArray[1].width - this.downStakeBtn.width);
     if (DeviceProxy.config.isDesktop) {
-      this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 0.5;
+      this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.32;
     } else {
       if (DeviceProxy.config.isPortrait) {
         this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.5;
@@ -226,7 +237,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.setBtn.x = this.betPanelBg.width * 0.54 + this.setBtn.width * 0.5;
 
     if (DeviceProxy.config.isDesktop) {
-      this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height;
+      this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;
     } else {
       if (DeviceProxy.config.isPortrait) {
         this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;

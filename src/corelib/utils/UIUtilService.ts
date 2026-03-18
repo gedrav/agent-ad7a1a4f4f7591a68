@@ -37,6 +37,7 @@ import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
+import { Input } from '@pixi/ui';
 
 const desktopWidth: number = 2424;
 const desktopHeight: number = 1300;
@@ -141,6 +142,9 @@ class UIUtilService {
         break;
       case 'Slider':
         element = this.getSlider(obj);
+        break;
+      case 'Input':
+        element = this.getInput(obj);
         break;
       case 'PixToggleButton':
         element = this.getPixToggleButton(obj);
@@ -294,6 +298,20 @@ class UIUtilService {
   public getSlider(obj: any): PixSlider {
     const { configData, ...sliderData } = obj;
     return new PixSlider(sliderData, configData);
+  }
+
+  public getInput(obj: any): Input {
+    let bg: any;
+    if (obj.image) {
+      bg = Sprite.from(obj.image);
+    } else {
+      const { width = 120, height = 50, radius = 8, color = 0xffffff, borderColor = 0x999999, borderWidth = 2 } = obj;
+      bg = new Graphics()
+        .roundRect(0, 0, width, height, radius)
+        .fill(color)
+        .stroke({ width: borderWidth, color: borderColor });
+    }
+    return new Input({ ...obj.options, bg });
   }
 
   public getBitmapText(obj: any): PixBMPText {
@@ -841,35 +859,35 @@ class UIUtilService {
       if (DeviceProxy.isDevice()) {
         const layout = element.configData;
         if (DeviceProxy.config.isPortrait) {
-          if (layout.pWidth) {
+          if (element && layout?.pWidth) {
             element.width = layout.pWidth;
           }
-          if (layout.pHeight) {
+          if (element && layout?.pHeight) {
             element.height = layout.pHeight;
           }
-          if (layout.pScale != undefined) {
+          if (element && layout?.pScale != undefined) {
             element.scale.set(layout.pScale);
           }
-          if (layout.px != undefined) {
+          if (element && layout?.px != undefined) {
             element.x = layout.px;
           }
-          if (layout.py != undefined) {
+          if (element && layout?.py != undefined) {
             element.y = layout.py;
           }
         } else {
-          if (layout.lWidth) {
+          if (element && layout?.lWidth) {
             element.width = layout.lWidth;
           }
-          if (layout.lHeight) {
+          if (layout?.lHeight) {
             element.height = layout.lHeight;
           }
-          if (layout.lScale != undefined) {
+          if (element && layout?.lScale != undefined) {
             element.scale.set(layout.lScale);
           }
-          if (layout.lx != undefined) {
+          if (element && layout?.lx != undefined) {
             element.x = layout.lx;
           }
-          if (layout.ly != undefined) {
+          if (element && layout?.ly != undefined) {
             element.y = layout.ly;
           }
         }
@@ -1035,9 +1053,6 @@ class UIUtilService {
       case 'center':
         if (element.anchor && element.anchor.x != 0) {
           if (refElement.anchor && refElement.anchor.x != 0) {
-            if (element.name == 'gameTitle') {
-              console.log('11111111');
-            }
             this.setPositionX(element, refElement.x + Util.getDefaultValue(layout.hPadding, 0));
           } else {
             if (element.name == 'gameTitle') {
@@ -1421,6 +1436,9 @@ class UIUtilService {
         }
         break;
       case 'bottomDown':
+        //if (element.name == 'titleText1') {
+        console.log('11111111 -- ', element.name);
+        //}
         if (element.anchor && element.anchor.y != 0) {
           if (refElement.anchor && refElement.anchor.y != 0) {
             this.setPositionY(

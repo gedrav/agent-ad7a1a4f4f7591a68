@@ -60,10 +60,10 @@ export const GAME_CONFIG = {
               wordWrapWidth: 200,
               align: 'center',
             },
-            toUpperCase: true,
           },
         },
       },
     ],
   },
+  externalHistoryAPIURL: 'https://feg-external-dev.pixentech.com/external/report/betHistory/',
 };
