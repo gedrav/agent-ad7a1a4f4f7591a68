@@ -13,7 +13,6 @@ class GamePreWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     const result = appModel.getSpinResult();
-    console.log('result', result);
     if (result.addWildFeatureTriggered) {
       const data: any = {};
       data.wildPositions = result.wildPositions;
