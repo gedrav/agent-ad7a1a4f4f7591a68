@@ -32,6 +32,7 @@ export class GameSlotMachineView extends SlotMachineView {
   protected showWildBlast(data: any): void {
     const numberOfWilds = data.numberOfWilds;
     const symbolPositions = data.wildPositions;
+    EventHandler.dispatchEvent(`PLAY_WILD_BLAST_${numberOfWilds}`);
 
     const listener: AnimationStateListener = {
       event: (_, event) => {

@@ -121,6 +121,32 @@ export const GAME_SOUND_CONFIG = {
     //   fadeOutDuration: 100,
     // },
 
+    // --- Wild blast (1–3 wilds) ---
+    {
+      name: 'wild1Sfx',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_BLAST_1'],
+      volume: 0.6,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'wild2Sfx',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_BLAST_2'],
+      volume: 0.6,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'wild3Sfx',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_BLAST_3'],
+      volume: 0.6,
+      fadeOutDuration: 100,
+    },
+
     // --- Symbol appear after blast ---
     {
       name: 'hignVlaue1',
