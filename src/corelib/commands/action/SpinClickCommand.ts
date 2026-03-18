@@ -11,6 +11,7 @@ class SpinClickCmd extends ActionCommand {
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent('SPIN_CLICKED');
       StateManager.goToState(STATES.SPIN_START_STATE);
+      if (!appModel.turboMode) EventHandler.dispatchEvent('START_SLOT_SPIN');
     } else {
       const action: ActionCommand = ShowLowBalanceErrorCommand;
       action?.execute(null, this);

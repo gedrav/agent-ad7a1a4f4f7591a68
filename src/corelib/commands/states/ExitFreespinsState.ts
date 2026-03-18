@@ -36,6 +36,7 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins
     appModel.endFreeSpinsSession();
+    EventHandler.dispatchEvent('STOP_FREESPIN_BG_MUSIC');
     StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
   }
 }

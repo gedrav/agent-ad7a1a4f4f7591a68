@@ -40,6 +40,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.skipWildAnim = false;
     const symbolPositions: Array<[number, number]> = data.wildPositions;
     const numberOfWilds = symbolPositions.length;
+    EventHandler.dispatchEvent(`PLAY_WILD_BLAST_${numberOfWilds}`);
 
     if (!symbolPositions) return;
 

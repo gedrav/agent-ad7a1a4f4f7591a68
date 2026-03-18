@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 class StopClickCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
+    EventHandler.dispatchEvent('STOP_SPIN_CLICKED');
     EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
     EventHandler.dispatchEvent(SlotEvents.QUICK_STOP_SPIN);
   }
