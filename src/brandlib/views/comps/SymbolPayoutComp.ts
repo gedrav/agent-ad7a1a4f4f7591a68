@@ -28,7 +28,7 @@ export class SymbolPayoutComp extends StandardView {
         for (let i = 0; i < len; i++) {
           if (data[i] > 0) {
             result +=
-              i + 'x: ' + Util.formatCurrency(appModel.getSymbolPayoutValue(data[i])) + (i == len - 1 ? '' : '\n');
+              i + 1 + 'x: ' + Util.formatCurrency(appModel.getSymbolPayoutValue(data[i])) + (i == len - 1 ? '' : '\n');
           }
         }
         this.infoText.text = result;
