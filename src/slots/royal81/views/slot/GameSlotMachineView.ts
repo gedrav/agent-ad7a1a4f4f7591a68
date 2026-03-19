@@ -92,7 +92,7 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.x = this.potAnim.x + wildPositions[index].x;
     movingSymbol.y = this.potAnim.y + wildPositions[index].y;
     movingSymbol.rotation = (wildPositions[index].angle * Math.PI) / 180;
-    movingSymbol.alpha = 0.2;
+    movingSymbol.alpha = 0;
     this.slotReel.addChild(movingSymbol);
 
     AnimationProxy.animateTween(movingSymbol, {

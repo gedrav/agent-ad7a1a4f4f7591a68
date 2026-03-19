@@ -87,6 +87,7 @@ export class PixSpine extends StandardView {
   }
 
   public playAnimation(options: AnimationOptions = {}): void {
+    this.stopAnimation();
     const resolvedOptions = this.resolveAnimationOptions(options);
 
     this.spineAnim.state.data.defaultMix = 1;
