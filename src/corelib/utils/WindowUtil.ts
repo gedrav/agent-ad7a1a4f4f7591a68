@@ -4,6 +4,7 @@ import { Util } from '@core/utils/UtilService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { ContentProxy } from '@core/models/ContentServiceProxy';
 
 declare const __GAME_ID__: string;
 const GAME_PATH_PREFIX = `/src/slots/${__GAME_ID__}/`;
@@ -35,6 +36,7 @@ declare global {
     getPaytableSymbols: () => string[];
     getTotalCredit: () => number;
     getGameConfig: () => any;
+    getAllContent: () => any;
   }
 }
 
