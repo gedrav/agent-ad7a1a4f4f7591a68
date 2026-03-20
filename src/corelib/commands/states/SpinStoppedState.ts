@@ -10,7 +10,12 @@ class SpinStoppedStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.REELSPIN_COMPLETED);
     EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_BUTTON);
     // Update balance for each free spin with current balance + spin win
-    if (!appModel.getIsFeatureTriggered() && !appModel.getIsAutoSession() && !appModel.isTumbleRemaining()) {
+    if (
+      !appModel.getIsFeatureTriggered() &&
+      !appModel.getIsAutoSession() &&
+      !appModel.isTumbleRemaining() &&
+      !appModel.reelModifiersTriggered()
+    ) {
       EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     }
     StateManager.next();

@@ -28,7 +28,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.potAnim = this.slotReel.elementsList['potAnim'];
 
     EventHandler.addEventListener('SHOW_WILD_BLAST', this.showWildBlast.bind(this));
-    EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.skipWildAnimation.bind(this));
   }
 
   protected resizeComponents(): void {}

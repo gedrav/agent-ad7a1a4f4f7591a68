@@ -12,8 +12,8 @@ class GamePreWinStateCommand extends StateCommand {
   private timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
-    const result = appModel.getSpinResult();
-    if (result.addWildFeatureTriggered) {
+    const result = appModel.getReelModifiersData();
+    if (result && result.type == 'addWildFeatureTriggered') {
       const data: any = {};
       data.wildPositions = result.wildPositions;
       data.numberOfWilds = result.numberOfWilds;
@@ -21,6 +21,11 @@ class GamePreWinStateCommand extends StateCommand {
     } else {
       StateManager.next();
     }
+  }
+
+  public doNextStep(data: any = null) {
+    super.doNextStep(data);
+    StateManager.next();
   }
 }
 
