@@ -32,6 +32,7 @@ export class MenuComp extends ResponsiveChildrenView {
     }
     this.visible = false;
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
+    this.onSoundStateChanged(appModel.getPreferences().sound);
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.showMenu.bind(this));
