@@ -17,11 +17,6 @@ class RequestFullscreenCmd extends ActionCommand {
   public execute() {
     super.execute();
 
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-      return;
-    }
-
     // Try different fullscreen APIs based on browser support
     const elem = document.documentElement;
     if (elem.requestFullscreen) {

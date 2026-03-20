@@ -12,6 +12,7 @@ import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { UIElementConfig } from '@brand/types/types';
 import { RequestFullscreenCommand } from '@core/commands/action/RequestFullscreenCommand';
+import { RequestExitFullscreenCommand } from '@core/commands/action/RequestExitFullscreenCommand';
 
 export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfig) => ({
   name: 'controlPanelView',
@@ -692,7 +693,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       type: 'Button',
       isDesktopOnly: true,
       action: {
-        press: RequestFullscreenCommand,
+        press: RequestExitFullscreenCommand,
       },
       options: {
         defaultView: 'generalCPBtn',
