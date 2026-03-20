@@ -15,6 +15,11 @@ class SpinClickCmd extends ActionCommand {
       EventHandler.dispatchEvent('SPIN_CLICKED');
       StateManager.goToState(STATES.SPIN_START_STATE);
       if (!appModel.turboMode) EventHandler.dispatchEvent('START_SLOT_SPIN');
+      const isDesktop = DeviceProxy.config.isDesktop;
+      // Request fullscreen on desktop on first spin
+      if (!isDesktop) {
+        RequestFullscreenCommand.execute();
+      }
     } else {
       const action: ActionCommand = ShowLowBalanceErrorCommand;
       action?.execute(null, this);
