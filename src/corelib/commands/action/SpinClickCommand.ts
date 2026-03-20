@@ -11,12 +11,6 @@ class SpinClickCmd extends ActionCommand {
   public async execute(data: any = null) {
     super.execute(data);
 
-    const isDesktop = DeviceProxy.config.isDesktop;
-
-    // Request fullscreen on desktop on first spin
-    if (!isDesktop) {
-      RequestFullscreenCommand.execute();
-    }
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent('SPIN_CLICKED');
       StateManager.goToState(STATES.SPIN_START_STATE);

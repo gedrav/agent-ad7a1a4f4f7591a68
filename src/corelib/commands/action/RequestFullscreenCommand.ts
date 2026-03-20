@@ -3,36 +3,36 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
 class RequestFullscreenCmd extends ActionCommand {
-  public execute(data: any = null) {
-    super.execute(data);
+  constructor() {
+    super();
+    // Listen for any fullscreen state change (button click or Escape key) to update the icon
+    document.addEventListener('fullscreenchange', this.onFullscreenChange.bind(this));
+  }
 
-    const elem = document.documentElement;
+  // Dispatches fullscreen state so the UI can swap enter/exit icons
+  private onFullscreenChange(): void {
+    EventHandler.dispatchEvent(SlotEvents.SHOW_FULLSCREEN_MODE, !!document.fullscreenElement);
+  }
 
-    // Check if already in fullscreen
+  public execute() {
+    super.execute();
+
     if (document.fullscreenElement) {
-      console.log('Already in fullscreen mode');
-      EventHandler.dispatchEvent(SlotEvents.SHOW_FULLSCREEN_MODE, false);
+      document.exitFullscreen().catch(() => {});
       return;
     }
 
     // Try different fullscreen APIs based on browser support
+    const elem = document.documentElement;
     if (elem.requestFullscreen) {
-      elem.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
-      });
+      elem.requestFullscreen().catch(() => {});
     } else if ((elem as any).webkitRequestFullscreen) {
-      // Safari/Chrome
-      (elem as any).webkitRequestFullscreen();
+      (elem as any).webkitRequestFullscreen(); // Safari/Chrome
     } else if ((elem as any).mozRequestFullScreen) {
-      // Firefox
-      (elem as any).mozRequestFullScreen();
+      (elem as any).mozRequestFullScreen(); // Firefox
     } else if ((elem as any).msRequestFullscreen) {
-      // IE/Edge
-      (elem as any).msRequestFullscreen();
-    } else {
-      console.warn('Fullscreen API is not supported in this browser');
+      (elem as any).msRequestFullscreen(); // IE/Edge
     }
-    EventHandler.dispatchEvent(SlotEvents.SHOW_FULLSCREEN_MODE, true);
   }
 }
 
