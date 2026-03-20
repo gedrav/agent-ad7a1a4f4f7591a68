@@ -3,6 +3,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 import { PixView } from '@core/pixiwrapper/PixView';
+import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -20,6 +21,7 @@ export class SplashView extends ResponsiveChildrenView {
   private gameTitle: PixSprite | PixSpine;
   private itemsArray: SplashItemComp[] = [];
   private itemContainer: PixView;
+  private startBtn: PixFancyButton;
   private soundOnBtn: SplashButton;
   private soundOffBtn: SplashButton;
   private showIntroOnBtn: SplashButton;
@@ -33,6 +35,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.itemContainer = UIUtil.getContainer();
     this.controlsContainer = this.elementsList?.['controlsContainer'];
 
+    this.startBtn = this.controlsContainer.elementsList?.['startBtn'];
     this.soundOnBtn = this.controlsContainer.elementsList?.['soundOnBtn'];
     this.soundOffBtn = this.controlsContainer.elementsList?.['soundOffBtn'];
     this.soundOnBtn.addInteraction(this.onSoundOnBtnClick.bind(this));
@@ -159,11 +162,22 @@ export class SplashView extends ResponsiveChildrenView {
   // ─── Item Alignment ────────────────────────────────────────────────────────
 
   protected alignForPortrait(): void {
+    this.setScaleForStartBtn();
     this.stackItemsVertically();
     this.fitAndCenterItemContainer();
   }
 
+  protected setScaleForStartBtn(): void {
+    this.startBtn.scale.set(1);
+    const { isDevice, isPortrait } = DeviceProxy.config;
+    if (isDevice && isPortrait) {
+      const scale = (UIUtil.getGameWidth() * 0.85) / this.startBtn.width;
+      this.startBtn.scale.set(scale);
+    }
+  }
+
   protected alignForLandscape(): void {
+    this.setScaleForStartBtn();
     if (this.itemsArray.length == 2) {
       this.stackItemsVertically();
     } else if (this.itemsArray.length < 4) {

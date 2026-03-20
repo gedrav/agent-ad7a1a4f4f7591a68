@@ -14,7 +14,7 @@ export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
   class: SplashView,
-  itemsDesktopScale: 0.5,
+  itemsDesktopScale: 1,
   contents: [
     {
       name: 'item1',
@@ -129,7 +129,7 @@ export const SPLASH_CONFIG: any = {
           name: 'guideRect',
           type: 'Graphics',
           width: 548,
-          height: 360,
+          height: 280,
           color: 0x0000ff,
           alpha: 0,
         },
@@ -142,7 +142,7 @@ export const SPLASH_CONFIG: any = {
           },
           textConfig: {
             content: 'playGameText',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, fontWeight: 'bold' },
+            style: { fontFamily: 'commonFont', fontSize: 32, mFontSize: 42, fill: 0xffffff, fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
           },
           graphics: {
@@ -156,7 +156,7 @@ export const SPLASH_CONFIG: any = {
             animations: CoreUIConfig.buttonStates,
           },
           x: 274,
-          y: 44,
+          y: 33,
         },
         {
           name: 'soundOnBtn',
@@ -194,8 +194,8 @@ export const SPLASH_CONFIG: any = {
           },
           layoutData: {
             Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
-            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.4 },
-            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.35 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.35 },
           },
         },
         {
@@ -337,13 +337,13 @@ export const SPLASH_CONFIG: any = {
           vAlign: 'bottom',
           widthPerc: 0.8,
           heightPerc: 0.24,
-          vPaddingPerc: -0.02,
+          vPaddingPerc: -0.06,
         },
         Landscape: {
           hAlign: 'right',
           vAlign: 'middle',
-          vPaddingPerc: 0.1,
-          hPaddingPerc: -0.02,
+          vPaddingPerc: 0.19,
+          hPaddingPerc: -0.04,
           widthPerc: 0.3,
           heightPerc: 0.8,
         },
@@ -355,7 +355,7 @@ export const SPLASH_CONFIG: any = {
       image: 'gamelogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.16, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.13, maxScale: 1, hAlign: 'center', vPosition: 0.12 },
         Portrait: {
           widthPerc: 0.7,
           heightPerc: 0.16,
@@ -371,7 +371,7 @@ export const SPLASH_CONFIG: any = {
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'topUp',
-          vPaddingPerc: -0.1,
+          vPaddingPerc: -0.5,
         },
       },
     },
