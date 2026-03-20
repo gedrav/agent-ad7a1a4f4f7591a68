@@ -5,6 +5,7 @@ import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;

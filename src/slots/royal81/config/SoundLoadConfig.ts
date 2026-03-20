@@ -13,7 +13,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       soundType: 'ambient',
       loop: true,
-      playEvents: ['START_MAINGAME_BG_MUSIC', 'STOP_FREESPIN_BG_MUSIC'],
+      playEvents: ['START_MAINGAME_BG_MUSIC'],
       stopEvents: [
         'STOP_MAINGAME_BG_MUSIC',
         'START_BONUS_BG_MUSIC',

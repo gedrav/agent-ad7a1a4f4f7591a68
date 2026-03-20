@@ -141,6 +141,19 @@ class UtilService {
     }
     return str;
   }
+  public formatCurrencyToParts(num: number, decimal = 2): any[] {
+    let str = '';
+    if (Intl) {
+      str = new Intl.NumberFormat('en', {
+        currency: 'USD',
+        minimumFractionDigits: decimal,
+        maximumFractionDigits: decimal,
+      }).formatToParts(num);
+    } else {
+      str = appModel.currency + num;
+    }
+    return str;
+  }
 
   public getDegrees(radians: number): number {
     const pi = Math.PI;

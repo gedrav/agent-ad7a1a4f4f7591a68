@@ -327,7 +327,26 @@ class UIUtilService {
 
     if (cloneData.fontMLProps != undefined) {
       if (cloneData.fontMLProps[appModel.language] != undefined) {
-        cloneData.style.fontSize = cloneData.fontMLProps[appModel.language].fontSize;
+        const langProps = cloneData.fontMLProps[appModel.language];
+        Object.keys(langProps).forEach((key) => {
+          if (key === 'fontFamily') {
+            cloneData.style[key] = GameProxy.config.FontFaces[langProps[key]] || langProps[key];
+          } else {
+            cloneData.style[key] = langProps[key];
+          }
+        });
+      }
+    }
+    if (cloneData.tooltipMLProps != undefined) {
+      if (cloneData.tooltipMLProps[appModel.language] != undefined) {
+        const langProps = cloneData.tooltipMLProps[appModel.language];
+        Object.keys(langProps).forEach((key) => {
+          if (key === 'fontFamily') {
+            cloneData.style[key] = GameProxy.config.FontFaces[langProps[key]] || langProps[key];
+          } else {
+            cloneData.style[key] = langProps[key];
+          }
+        });
       }
     }
     const style = new TextStyle(cloneData.style);

@@ -11,7 +11,7 @@ export const TICKER_COMP_CONFIG: any = {
   tickerDelay: 3000,
   x: 160,
   y: 930,
-  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4'],
+  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
   contentYPadding: 0,
   Elements: [
     { name: 'bg', type: 'Graphics', width: 1280, height: 60, alpha: 0 },

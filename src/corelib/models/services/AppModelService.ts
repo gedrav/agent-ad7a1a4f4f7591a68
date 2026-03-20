@@ -167,7 +167,12 @@ class AppModelService {
 
   public storeLanguage(): void {
     const params = new URLSearchParams(window.location.search);
-    this.language = params.get('language') || 'en';
+    const lang = params.get('language') || 'en';
+    if (GameProxy.config.LANGUAGES_SUPPORTED.includes(lang)) {
+      this.language = lang;
+    } else {
+      this.language = 'en';
+    }
   }
   public getIsCheatMode(): boolean {
     return this.gameInfo?.allowCheat && this.gameInfo?.devMode;
