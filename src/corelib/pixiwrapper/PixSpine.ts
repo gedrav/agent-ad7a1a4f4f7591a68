@@ -24,6 +24,7 @@ interface AnimationOptions {
   trackIndex?: number;
   stopAtFirst?: boolean;
   listener?: AnimationStateListener;
+  timeScale?: number;
 }
 
 export class PixSpine extends StandardView {
@@ -76,22 +77,22 @@ export class PixSpine extends StandardView {
   public prepareAnimation(options: AnimationOptions = {}): void {
     const resolvedOptions = this.resolveAnimationOptions(options);
 
-    this.spineAnim.state.data.defaultMix = 1;
+    this.spineAnim.state.data.defaultMix = 0;
     this.spineAnim.state.setEmptyAnimation(0, 0);
     this.spineAnim.state.clearTracks();
     this.spineAnim.skeleton.setToSetupPose();
-    this.spineAnim.state.timeScale = 1;
+    this.spineAnim.state.timeScale = resolvedOptions.timeScale;
     this.spineAnim.state.tracks = [];
     this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
     this.spineAnim.state.timeScale = 0;
   }
 
   public playAnimation(options: AnimationOptions = {}): void {
-    this.stopAnimation();
+    this.prepareAnimation(options);
     const resolvedOptions = this.resolveAnimationOptions(options);
 
-    this.spineAnim.state.data.defaultMix = 1;
-    this.spineAnim.state.timeScale = 1;
+    this.spineAnim.state.data.defaultMix = 0;
+    this.spineAnim.state.timeScale = resolvedOptions.timeScale;
     this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
 
     if (resolvedOptions.listener) {
@@ -101,7 +102,7 @@ export class PixSpine extends StandardView {
 
   public stopAnimation(): void {
     this.spineAnim.state.timeScale = 0;
-    this.spineAnim.state.data.defaultMix = 1;
+    this.spineAnim.state.data.defaultMix = 0;
     this.spineAnim.skeleton.setToSetupPose();
     this.spineAnim.state.clearListeners();
     this.spineAnim.removeAllListeners();
@@ -119,6 +120,7 @@ export class PixSpine extends StandardView {
     return {
       ...options,
       state: options.state ?? this.configData.defaultState,
+      timeScale: options.timeScale ?? 1,
     };
   }
 }

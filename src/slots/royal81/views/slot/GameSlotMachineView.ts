@@ -4,8 +4,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
-import { SlotEvents } from '@core/events/SlotEvents';
-import { UIUtil } from '@core/utils/UIUtilService';
+import { StateManager } from '@core/states/StateManagerService';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;
@@ -106,6 +105,7 @@ export class GameSlotMachineView extends SlotMachineView {
       onComplete: () => {
         this.replaceWildOnReels(reelPosition);
         this.slotReel.removeChild(movingSymbol);
+        this.onFinalSymbolTween(index, numberOfWilds);
       },
       onUpdate: () => {
         if (this.skipWildAnim) {
@@ -117,6 +117,12 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected replaceWildOnReels(position: [number, number]) {
     this.slotReel.swapSymbol(position[0], position[1] + 1, 'WD');
+  }
+
+  protected onFinalSymbolTween(index: number, numberOfWilds: number) {
+    if (index === numberOfWilds - 1) {
+      setTimeout(() => StateManager.doNextStep(), 600); // If no delay is added the WILD symbol doesnt animate on line win
+    }
   }
 
   protected getSymbolPositions(x: number, y: number) {
