@@ -240,7 +240,7 @@ export const SPLASH_CONFIG: any = {
           },
         },
         {
-          name: 'showOnBtn',
+          name: 'showIntroOnBtn',
           type: 'Comp',
           class: SplashButton,
           btnConfig: {
@@ -281,7 +281,7 @@ export const SPLASH_CONFIG: any = {
           },
         },
         {
-          name: 'showOffBtn',
+          name: 'showIntroOffBtn',
           type: 'Comp',
           class: SplashButton,
           btnConfig: {

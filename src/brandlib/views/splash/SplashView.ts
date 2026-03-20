@@ -3,7 +3,6 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 import { PixView } from '@core/pixiwrapper/PixView';
-import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -11,6 +10,9 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { Util } from '@core/utils/UtilService';
 import { SplashButton } from '@brand/views/comps/SplashButton';
+import { appModel } from '@core/models/services/AppModelService';
+import { SoundFactory } from '@core/sound/SoundServiceProxy';
+import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -18,18 +20,16 @@ export class SplashView extends ResponsiveChildrenView {
   private gameTitle: PixSprite | PixSpine;
   private itemsArray: SplashItemComp[] = [];
   private itemContainer: PixView;
-  private startBtn: PixFancyButton;
   private soundOnBtn: SplashButton;
   private soundOffBtn: SplashButton;
-  private showOnBtn: SplashButton;
-  private showOffBtn: SplashButton;
+  private showIntroOnBtn: SplashButton;
+  private showIntroOffBtn: SplashButton;
   private controlsContainer: PixView;
 
   constructor(config: any) {
     super(config);
 
     this.gameTitle = this.elementsList['gameTitle'];
-    this.startBtn = this.elementsList?.['startBtn'];
     this.itemContainer = UIUtil.getContainer();
     this.controlsContainer = this.elementsList?.['controlsContainer'];
 
@@ -38,30 +38,44 @@ export class SplashView extends ResponsiveChildrenView {
     this.soundOnBtn.addInteraction(this.onSoundOnBtnClick.bind(this));
     this.soundOffBtn.addInteraction(this.onSoundOffBtnClick.bind(this));
 
-    this.showOnBtn = this.controlsContainer.elementsList?.['showOnBtn'];
-    this.showOffBtn = this.controlsContainer.elementsList?.['showOffBtn'];
-    this.showOnBtn.addInteraction(this.onShowOnBtnClick.bind(this));
-    this.showOffBtn.addInteraction(this.onShowOffBtnClick.bind(this));
+    this.showIntroOnBtn = this.controlsContainer.elementsList?.['showIntroOnBtn'];
+    this.showIntroOffBtn = this.controlsContainer.elementsList?.['showIntroOffBtn'];
+    this.showIntroOnBtn.addInteraction(this.onshowIntroOnBtnClick.bind(this));
+    this.showIntroOffBtn.addInteraction(this.onshowIntroOffBtnClick.bind(this));
+
+    const prefs = appModel.getPreferences();
+    this.soundOnBtn.visible = prefs.sound;
+    this.soundOffBtn.visible = !prefs.sound;
+    this.showIntroOnBtn.visible = !prefs.showIntro;
+    this.showIntroOffBtn.visible = prefs.showIntro;
+    SoundFactory.ambientState = prefs.sound;
+    SoundFactory.sfxState = prefs.sound;
 
     this.addChild(this.itemContainer);
     this.initItems();
     this.resizeView();
   }
-  protected onShowOnBtnClick(): void {
-    this.showOnBtn.visible = false;
-    this.showOffBtn.visible = true;
+  protected onshowIntroOnBtnClick(): void {
+    this.showIntroOnBtn.visible = false;
+    this.showIntroOffBtn.visible = true;
+    appModel.setPreferencesShow(true);
+    appModel.savePreferences();
   }
-  protected onShowOffBtnClick(): void {
-    this.showOnBtn.visible = true;
-    this.showOffBtn.visible = false;
+  protected onshowIntroOffBtnClick(): void {
+    this.showIntroOnBtn.visible = true;
+    this.showIntroOffBtn.visible = false;
+    appModel.setPreferencesShow(false);
+    appModel.savePreferences();
   }
   protected onSoundOnBtnClick(): void {
     this.soundOnBtn.visible = false;
     this.soundOffBtn.visible = true;
+    SoundStateChangeCommand.execute(false);
   }
   protected onSoundOffBtnClick(): void {
     this.soundOnBtn.visible = true;
     this.soundOffBtn.visible = false;
+    SoundStateChangeCommand.execute(true);
   }
 
   // ─── Initialisation ────────────────────────────────────────────────────────

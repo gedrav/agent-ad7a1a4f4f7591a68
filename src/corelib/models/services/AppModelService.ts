@@ -47,6 +47,7 @@ class AppModelService {
   private _fsInfo: any;
   private _turboMode: boolean = false;
   private _gameInitData: any;
+  private _preferences: { sound: boolean; showIntro: boolean } = { sound: true, showIntro: false };
   private _lineWinIndex: number = 0;
   private _autoPlayObj: any;
   private _autoPlaySession: boolean = false;
@@ -177,8 +178,27 @@ class AppModelService {
   public getIsCheatMode(): boolean {
     return this.gameInfo?.allowCheat && this.gameInfo?.devMode;
   }
+  public getPreferences(): { sound: boolean; showIntro: boolean } {
+    return this._preferences;
+  }
+
+  public setPreferencesSound(value: boolean): void {
+    this._preferences.sound = value;
+  }
+
+  public setPreferencesShow(value: boolean): void {
+    this._preferences.showIntro = value;
+  }
+
+  public savePreferences(): void {
+    WrapperProxy.savePreferences(this._preferences);
+  }
+
   public storeGameInitData(data: any): void {
     this._gameInitData = data;
+    if (data.preferences) {
+      this._preferences = { sound: data.preferences.sound ?? true, showIntro: data.preferences.showIntro ?? false };
+    }
     this.currency = data.playerInfo.currencyCode;
     this.funMode = false;
     this.gameInfo = {};

@@ -81,6 +81,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE, this.updateBalance.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateTotalbet.bind(this));
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
+    this.onSoundStateChanged(appModel.getPreferences().sound);
     EventHandler.addEventListener(SlotEvents.TURBO_STATE_CHANGED, this.onTurboStateChanged.bind(this));
 
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enablePanel.bind(this));
