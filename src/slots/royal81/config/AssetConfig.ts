@@ -6,7 +6,7 @@ const PRELOADER: AssetBundle = {
   assets: [
     { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
     { TYPE: 'content', NAME: 'gameContent.json' },
-    { TYPE: 'content', NAME: 'rules.json' },
+    // { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
