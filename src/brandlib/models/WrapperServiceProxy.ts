@@ -84,7 +84,7 @@ class WrapperServiceProxy extends AbstractProxy {
   public sendCanvasReady(): void {}
 
   public savePreferences(preferences: { sound: boolean; showIntro: boolean }): void {
-    fetch(`${import.meta.env.VITE_EXTERNAL_URL}player/preferences`, {
+    fetch(import.meta.env.VITE_EXTERNAL_PREFERENCES_URL, {
       method: 'PUT',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: this.getBEToken(), preferences }),
