@@ -70,7 +70,7 @@ export class PixIconFancyButton extends FancyButton {
         this.toolTip.scale.set((this.width / this.toolTip.width) * 0.9);
       }
       this.toolTip.x = 0;
-      this.toolTip.y = this.height * 0.4;
+      this.toolTip.y = this.height * 0.3;
     }
   }
 

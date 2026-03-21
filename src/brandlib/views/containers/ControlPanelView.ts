@@ -75,6 +75,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     const longPressSprite = UIUtil.getSprite('longPressText');
     this.spinBtn.addChild(longPressSprite);
+    longPressSprite.scale.set(0.9);
     longPressSprite.anchor.set(0.5);
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN, this.updateBalanceForBBSpin.bind(this));

@@ -17,7 +17,7 @@ export const SLOT_GAME_APP_CONFIG: any = {
   Elements: [
     GAME_BG_CONFIG,
     SLOT_MACHINE_CONFIG,
-    createControlPanelConfig(FREESPIN_INFO_COMP_CONFIG),
+    createControlPanelConfig(null),
     MODAL_VIEW_CONFIG,
     MENU_CONFIG,
     MENU_CONFIG_MOBILE,
