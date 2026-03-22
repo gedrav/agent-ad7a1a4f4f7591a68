@@ -142,6 +142,10 @@ export const SLOT_MACHINE_CONFIG: any = {
           x: 168,
           y: 148,
           Elements: [
+            { name: 'bgg1', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 0, y: 0 },
+            { name: 'bgg2', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 320, y: 0 },
+            { name: 'bgg3', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 640, y: 0 },
+            { name: 'bgg4', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 960, y: 0 },
             { name: 'bg1', type: 'Sprite', image: 'reelstripbg', x: 0, y: 0 },
             { name: 'bg2', type: 'Sprite', image: 'reelstripbg', x: 320, y: 0 },
             { name: 'bg3', type: 'Sprite', image: 'reelstripbg', x: 640, y: 0 },

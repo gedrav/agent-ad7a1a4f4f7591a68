@@ -30,8 +30,8 @@ export class ReelStripBG extends StandardView {
     for (let i = 0; i < this.totalStrips; i++) {
       AnimationProxy.animateTween(this['bg' + (i + 1)], {
         duration: 0.2,
-        alpha: 0.25,
-        delay: i * 0.1,
+        alpha: 0.4,
+        delay: i * 0.2,
         onComplete: this.doFadeIn.bind(this, this['bg' + (i + 1)]),
       });
     }
