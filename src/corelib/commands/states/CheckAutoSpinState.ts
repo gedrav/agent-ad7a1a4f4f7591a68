@@ -13,7 +13,6 @@ class CheckAutoSpinStateCommand extends StateCommand {
       appModel.setAutoPlayWin(appModel.getTotalBaseWin());
       const status = appModel.getNextAutoPossible();
       if (status === 1 && appModel.getIsSpinStartPossible()) {
-        EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
         setTimeout(() => StateManager.goToState('SPIN_START_STATE'), 250);
       } else {
         appModel.resetAutoplayData();

@@ -6,6 +6,7 @@ class AutoPlayConfirmBtnCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED);
+    EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CANCEL_CLICKED);
   }
 }
 

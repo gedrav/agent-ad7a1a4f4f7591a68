@@ -111,7 +111,7 @@ export class AutoplayView extends ResponsiveChildrenView {
   protected onOkClicked(): void {
     const obj: any = {};
     obj.selectedSpins = this.selectedSpins;
-    obj.spendlingLimit = this.spendingLimitSlider?.getValue() || 0;
+    obj.spendingLimit = this.spendingLimitSlider?.getValue() || 0;
     StateManager.goToState(STATES.START_AUTOSPIN_STATE, obj);
     this.hideAutoPlayPanel();
   }

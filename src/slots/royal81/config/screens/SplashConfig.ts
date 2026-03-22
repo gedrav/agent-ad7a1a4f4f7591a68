@@ -327,10 +327,11 @@ export const SPLASH_CONFIG: any = {
         Desktop: {
           hAlign: 'center',
           vAlign: 'bottom',
-          widthPerc: 0.22,
+          widthPerc: 0.3,
           heightPerc: 0.28,
           vPaddingPerc: -0.04,
           minScale: 0.3,
+          maxScale: 1,
         },
         Portrait: {
           hAlign: 'center',

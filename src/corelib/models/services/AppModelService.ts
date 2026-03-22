@@ -467,14 +467,13 @@ class AppModelService {
   // WHEN: Called by AutoPlayConfirmBtnCommand when user starts autoplay
   // WHY: Sets up all data needed to track autoplay progress and stop conditions
   public setAutoplayInfo(obj: any): void {
+    console.log('setAutoplayInfo', obj);
     this._autoPlayObj = {
       ...obj,
       startBalance: this.getBalance(),
       currentBalance: this.getBalance(),
       currentAutoSpin: 0,
       totalAutoWin: 0,
-      maxSingleWin: 0,
-      featureTriggered: false,
     };
     this._autoPlaySession = true;
   }
@@ -511,16 +510,13 @@ class AppModelService {
   //          4=bonus triggered, 5=single win exceeded, 6=balance decreased, 7=balance increased
   public getNextAutoPossible(): number {
     if (!this._autoPlaySession) return 0;
-    const obj = this._autoPlayObj;
     // Check stop conditions in priority order
-    if (obj.selectedSpins !== -1 && obj.currentAutoSpin > obj.selectedSpins) return 2;
-    if (obj.onAnyWin && obj.totalAutoWin > 0) return 3;
-    if (obj.onBonusWin && obj.featureTriggered) return 4;
-    if (obj.onSingleWinExceeds > 0 && obj.maxSingleWin > obj.onSingleWinExceeds) return 5;
-    if (obj.balanceDecreaseBy > 0 && obj.startBalance - this.getBalance() + this.getTotalBet() > obj.balanceDecreaseBy)
-      return 6;
-    if (obj.balanceIncreaseBy > 0 && this.getBalance() - obj.startBalance > obj.balanceIncreaseBy) return 7;
-
+    if (this._autoPlayObj.selectedSpins !== -1 && this._autoPlayObj.currentAutoSpin > this._autoPlayObj.selectedSpins)
+      return 2;
+    if (this._autoPlayObj.spendingLimit > 0) {
+      const totalSpending = this._autoPlayObj.startBalance - this.getBalance() + this.getTotalBet();
+      if (totalSpending > this._autoPlayObj.spendingLimit) return 3;
+    }
     return 1; // Continue autoplay
   }
 

@@ -345,7 +345,7 @@ export const AUTOPLAY_CONFIG = {
       type: 'Button',
       scale: 1,
       action: {
-        press: CloseBetPanelCommand,
+        press: AutoPlayConfirmBtnCommand,
       },
       data: true,
       options: {
