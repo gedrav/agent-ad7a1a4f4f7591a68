@@ -244,16 +244,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
   protected enablePanel(): void {
     this.spinBtn.enabled = true;
     this.betBtn.enabled = true;
-    this.turboBtn.enabled = true;
-    this.turboSelectedBtn.enabled = true;
     this.menuBtn.enabled = true;
     this.infoBtn.enabled = true;
-    this.soundOnBtn.enabled = true;
-    this.soundOffBtn.enabled = true;
     this.homeBtn.enabled = true;
-    this.cheatBtn.enabled = true;
-    this.fullscreenEnterBtn.enabled = true;
-    this.fullscreenEitBtn.enabled = true;
 
     // Enable buy bonus buttons
     if (this.bbButtonsArray) {
@@ -263,16 +256,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
   protected disablePanel(): void {
     this.spinBtn.enabled = false;
     this.betBtn.enabled = false;
-    this.turboBtn.enabled = false;
-    this.turboSelectedBtn.enabled = false;
     this.menuBtn.enabled = false;
     this.infoBtn.enabled = false;
-    this.soundOnBtn.enabled = false;
-    this.soundOffBtn.enabled = false;
     this.homeBtn.enabled = false;
-    this.cheatBtn.enabled = false;
-    this.fullscreenEnterBtn.enabled = false;
-    this.fullscreenEitBtn.enabled = false;
 
     // Disable buy bonus buttons during spins
     if (this.bbButtonsArray) {
