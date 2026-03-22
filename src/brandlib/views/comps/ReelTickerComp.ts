@@ -15,7 +15,6 @@ export class ReelTickerComp extends StandardView {
   private textIndex: number;
   private delayDuration: number;
   private totalWin: number;
-  protected reelWinTicker: ReelWinTicker;
 
   constructor(config) {
     super(config);
@@ -24,7 +23,7 @@ export class ReelTickerComp extends StandardView {
     this.tickerText1 = this.elementsList['textCont'].elementsList['tickerText1'];
     this.tickerText2 = this.elementsList['textCont'].elementsList['tickerText2'];
     this.tickerIndex = 0;
-    this.reelWinTicker = this.elementsList['reelWinTicker'];
+
     this.delayDuration = this.configData.tickerDelay ? this.configData.tickerDelay : 8000;
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onSpinEnd.bind(this));
@@ -38,12 +37,9 @@ export class ReelTickerComp extends StandardView {
   }
 
   protected showSpinWin(data: any): void {
-    if (this.reelWinTicker) {
-      this.tickerText1.visible = this.tickerText2.visible = false;
-    }
+    this.tickerText1.visible = this.tickerText2.visible = false;
     this.totalWin += data.value;
   }
-  protected showSpinWinCountup(): void {}
   protected clearSpinWin(): void {
     clearTimeout(this.timeoutId);
     this.totalWin = 0;

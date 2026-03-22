@@ -18,6 +18,9 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AppEvents } from '@core/events/AppEvents';
+import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
+import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
+import { FSAutoCounterComp } from '@brand/views/comps/FSAutoCounterComp';
 
 const reelSpinStartGap = 100;
 const customEase = Elastic.easeOut.config(1.4, 0.6);
@@ -56,6 +59,9 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected spinResponseReceived: boolean;
   protected defaultReel: any[];
   private stopIndex: number[];
+  protected reelWinTicker: ReelWinTicker;
+  private tickerComp: ReelTickerComp;
+  private fsAutoCounterComp: FSAutoCounterComp;
 
   constructor(configData: any) {
     super(configData);
@@ -65,6 +71,9 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.reelFrame = this.elementsList['reelFrame'];
     this.symbolPayoutComp = this.winSymbolsContainer.elementsList['symbolPayoutComp'];
     this.modalRect = this.elementsList['modalRect'];
+    this.reelWinTicker = this.elementsList['reelWinTicker'];
+    this.fsAutoCounterComp = this.elementsList['fsAutoCounterComp'];
+    this.tickerComp = this.elementsList['tickerComp'];
     this.modalRect.alpha = 0;
     UIUtil.setClickable(this.modalRect, false);
     UIUtil.addInteraction(this.modalRect, this.hidePayout.bind(this));
@@ -85,6 +94,16 @@ export default class SlotReel extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.STOP_REEL_FOR_ERROR, this.stopReelForError.bind(this));
     EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.onSecondaryAssetsLoaded.bind(this));
 
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.updateUIForAutoStart.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_COUNT, this.updateUIAutoCount.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.onAutoplayEnded.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.onAutoplayEnded.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_FULLSCREEN_MODE, this.onFullScreenModeChange.bind(this));
+
     this.winController = new this.configData.winController({
       reels: this.reelsData.noOfReels,
       rows: this.reelsData.noOfRows,
@@ -99,6 +118,26 @@ export default class SlotReel extends ResponsiveChildrenView {
     //this.ticker.start();
     this.ticker.add(this.spinReel.bind(this));
   }
+
+  protected updateUIForAutoStart(): void {
+    this.tickerComp.visible = false;
+    this.fsAutoCounterComp.visible = true;
+  }
+  protected updateUIAutoCount(): void {}
+  protected onAutoplayEnded(): void {
+    this.tickerComp.visible = true;
+    this.fsAutoCounterComp.visible = false;
+  }
+  protected updateUIForFreeSpinsStart(): void {
+    this.tickerComp.visible = false;
+    this.fsAutoCounterComp.visible = true;
+  }
+  protected updateUIFreeSpinsCount(): void {}
+  protected onFreeSpinsEnded(): void {
+    this.tickerComp.visible = true;
+    this.fsAutoCounterComp.visible = false;
+  }
+  protected onFullScreenModeChange(): void {}
 
   public getSymbolPosition(x: number, y: number) {
     return this.symbolsArray[x][y].getGlobalPosition();

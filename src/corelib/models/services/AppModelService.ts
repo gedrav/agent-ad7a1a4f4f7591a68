@@ -542,9 +542,17 @@ class AppModelService {
   // WHEN: Called by SlotGameApp to update UI counter
   // WHY: Shows user how many spins left (or current count for infinite)
   // RETURNS: For infinite (-1): current count + 1, For limited: remaining count
-  public getAutoSpinRemainingCount(): string {
+  public getAutoSpinCurrentCount(): string {
     if (!this._autoPlayObj) return '0';
-    return this._autoPlayObj.currentAutoSpin + '/' + this._autoPlayObj.selectedSpins; // Remaining spins
+    return this._autoPlayObj.currentAutoSpin;
+  }
+  public getAutoSpinTotalCount(): string {
+    if (!this._autoPlayObj) return '0';
+    return this._autoPlayObj.selectedSpins;
+  }
+
+  public getTotalAutoWin(): number {
+    return this._autoPlayObj?.totalAutoWin || 0;
   }
 
   // WHEN: Called if external code needs full autoplay config

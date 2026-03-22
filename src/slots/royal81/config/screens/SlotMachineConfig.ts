@@ -15,6 +15,8 @@ import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 import { Container } from 'pixi.js';
 import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
+import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
+import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -182,6 +184,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
         },
         TICKER_COMP_CONFIG,
+        REEL_WIN_TICKER_CONFIG,
+        FSAUTO_COUNTER_CONFIG,
         {
           name: 'gameTitle',
           type: 'Spine',
