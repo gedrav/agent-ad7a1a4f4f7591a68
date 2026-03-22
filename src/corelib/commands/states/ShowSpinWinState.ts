@@ -19,6 +19,7 @@ class ShowSpinWinStateCommand extends StateCommand {
       ) {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
+        this.checkToActivateButtons();
       } else {
         StateManager.next();
       }
@@ -26,9 +27,15 @@ class ShowSpinWinStateCommand extends StateCommand {
       if (appModel.getSpinWin() > 0) {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
+        this.checkToActivateButtons();
       } else {
         StateManager.next();
       }
+    }
+  }
+  checkToActivateButtons(): void {
+    if (!appModel.getIsFeatureTriggered() && !appModel.getIsAutoSession() && !appModel.isTumbleRemaining()) {
+      EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     }
   }
   public doNextStep(): void {

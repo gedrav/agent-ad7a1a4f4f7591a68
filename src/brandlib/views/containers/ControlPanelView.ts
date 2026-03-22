@@ -29,19 +29,20 @@ export class ControlPanelView extends ResponsiveChildrenView {
   private turboSelectedBtn: PixFancyButton;
   private turboBtn: PixFancyButton;
   private cheatBtn: PixFancyButton;
+  private stopAutoBtn: PixFancyButton;
   private menuBtn: PixFancyButton;
   private spinBtn: PixFancyButton;
   private stopSpinBtn: PixFancyButton;
   private betBtn: PixFancyButton;
   private clickOutsideHandler: any;
-  private autoCounterBG: PixSprite;
-  private autoCounterText: PixText;
   private bbButtonsArray: PixFancyButton[];
   private gameNameTxt: PixText;
   private gameLogo: PixSprite | PixSpine;
   private lightningBtn: PixFancyButton;
   private fullscreenEnterBtn: PixFancyButton;
   private fullscreenEitBtn: PixFancyButton;
+  private infoBtn: PixFancyButton;
+  private homeBtn: PixFancyButton;
   constructor(config: any) {
     super(config);
     GameProxy.config.isLongPressTriggered = false;
@@ -53,15 +54,14 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.turboSelectedBtn = this.elementsList['turboSelectedBtn'];
     this.cheatBtn = this.elementsList['cheatBtn'];
     this.menuBtn = this.elementsList['menuBtn'];
+    this.infoBtn = this.elementsList['infoBtn'];
     this.spinBtn = this.elementsList['spinBtn'];
     this.stopSpinBtn = this.elementsList['stopSpinBtn'];
+    this.stopAutoBtn = this.elementsList['stopAutoBtn'];
     this.betBtn = this.elementsList['betBtn'];
-    this.autoCounterBG = this.elementsList['autoCounter'].elementsList['autoCounterBG'];
-    this.autoCounterText = this.elementsList['autoCounter'].elementsList['autoCounterText'];
     this.gameNameTxt = this.elementsList['gameNameTxt'];
     this.lightningBtn = this.elementsList['lightningBtn'];
-    this.autoCounterText.visible = false;
-    this.autoCounterBG.visible = false;
+    this.homeBtn = this.elementsList['homeBtn'];
 
     this.fullscreenEnterBtn = this.elementsList['fullscreenEnterBtn'];
     this.fullscreenEitBtn = this.elementsList['fullscreenExitBtn'];
@@ -75,7 +75,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     const longPressSprite = UIUtil.getSprite('longPressText');
     this.spinBtn.addChild(longPressSprite);
-    longPressSprite.scale.set(0.9);
+    longPressSprite.scale.set(0.95);
     longPressSprite.anchor.set(0.5);
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN, this.updateBalanceForBBSpin.bind(this));
@@ -92,7 +92,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.DISABLE_STOPSPIN_BUTTON, this.disableStopSpinButton.bind(this));
 
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.updateUIForAutoStart.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_COUNT, this.updateUIAutoCount.bind(this));
+    //EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_COUNT, this.updateUIAutoCount.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.onAutoplayEnded.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.onAutoplayEnded.bind(this));
 
@@ -243,11 +243,17 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected enablePanel(): void {
     this.spinBtn.enabled = true;
-    if (this.lightningBtn) {
-      this.lightningBtn.enabled = true;
-    }
     this.betBtn.enabled = true;
+    this.turboBtn.enabled = true;
+    this.turboSelectedBtn.enabled = true;
     this.menuBtn.enabled = true;
+    this.infoBtn.enabled = true;
+    this.soundOnBtn.enabled = true;
+    this.soundOffBtn.enabled = true;
+    this.homeBtn.enabled = true;
+    this.cheatBtn.enabled = true;
+    this.fullscreenEnterBtn.enabled = true;
+    this.fullscreenEitBtn.enabled = true;
 
     // Enable buy bonus buttons
     if (this.bbButtonsArray) {
@@ -256,10 +262,17 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected disablePanel(): void {
     this.spinBtn.enabled = false;
-    if (this.lightningBtn) {
-      this.lightningBtn.enabled = false;
-    }
     this.betBtn.enabled = false;
+    this.turboBtn.enabled = false;
+    this.turboSelectedBtn.enabled = false;
+    this.menuBtn.enabled = false;
+    this.infoBtn.enabled = false;
+    this.soundOnBtn.enabled = false;
+    this.soundOffBtn.enabled = false;
+    this.homeBtn.enabled = false;
+    this.cheatBtn.enabled = false;
+    this.fullscreenEnterBtn.enabled = false;
+    this.fullscreenEitBtn.enabled = false;
 
     // Disable buy bonus buttons during spins
     if (this.bbButtonsArray) {
@@ -283,30 +296,24 @@ export class ControlPanelView extends ResponsiveChildrenView {
   protected updateUIForAutoStart(): void {
     this.spinBtn.renderable = false;
     this.stopSpinBtn.renderable = false;
-    this.autoCounterBG.visible = true;
-    this.autoCounterText.visible = true;
+    this.stopAutoBtn.visible = true;
+    this.stopAutoBtn.renderable = true;
     this.resizeView();
-  }
-
-  protected updateUIAutoCount(): void {
-    this.autoCounterText.text = appModel.getAutoSpinRemainingCount();
   }
 
   // Re-enable control panel buttons when autoplay completes
   protected onAutoplayEnded(): void {
     this.spinBtn.renderable = true;
     this.stopSpinBtn.renderable = true;
+    this.stopAutoBtn.visible = false;
+    this.stopAutoBtn.renderable = false;
     this.showSpinButton();
-    this.autoCounterBG.visible = false;
-    this.autoCounterText.visible = false;
   }
 
   protected updateUIForFreeSpinsStart(): void {
     this.spinBtn.renderable = false;
     this.stopSpinBtn.renderable = false;
     this.betBtn.renderable = false;
-    this.autoCounterBG.visible = false;
-    this.autoCounterText.visible = false;
     this.resizeView();
   }
 
@@ -319,8 +326,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.stopSpinBtn.renderable = true;
     this.betBtn.renderable = true;
     this.showSpinButton();
-    this.autoCounterBG.visible = false;
-    this.autoCounterText.visible = false;
     this.enablePanel();
   }
 

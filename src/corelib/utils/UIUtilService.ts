@@ -134,9 +134,6 @@ class UIUtilService {
       case 'Button':
         element = this.getFancyButton(obj);
         break;
-      case 'IconButton':
-        element = this.getIconFancyButton(obj);
-        break;
       case 'GraphicsButton':
         element = this.getGraphicsButton(obj);
         break;

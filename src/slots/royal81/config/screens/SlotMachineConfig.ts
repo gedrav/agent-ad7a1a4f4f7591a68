@@ -184,14 +184,14 @@ export const SLOT_MACHINE_CONFIG: any = {
         TICKER_COMP_CONFIG,
         {
           name: 'gameTitle',
-          type: 'Sprite',
-          image: 'gamelogo',
-          anchor: { x: 0.5, y: 0 },
+          type: 'Spine',
+          spineName: 'R81_Logo_Spine',
+          defaultState: 'Static',
           layoutData: {
             Desktop: {
-              scale: 0.4,
+              scale: 0.8,
               x: 800,
-              y: -20,
+              y: 60,
             },
             Landscape: { scale: 0.4, x: 800, y: -20 },
             Portrait: { scale: 0.6, x: 800, y: -90 },

@@ -13,6 +13,7 @@ import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { UIElementConfig } from '@brand/types/types';
 import { RequestFullscreenCommand } from '@core/commands/action/RequestFullscreenCommand';
 import { RequestExitFullscreenCommand } from '@core/commands/action/RequestExitFullscreenCommand';
+import { AutoStopSpinCommand } from '@core/commands/action/AutoStopSpinCommand';
 
 export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfig) => ({
   name: 'controlPanelView',
@@ -131,14 +132,13 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'spinBtn',
-      type: 'IconButton',
+      type: 'Button',
       tooltipText: 'playText',
       options: {
         defaultView: 'spinBtn',
         hoverView: 'spinBtn',
         pressedView: 'spinBtn',
-        disabledView: 'spinBtn',
-        icon: 'spinIcon',
+        disabledView: 'spinBtn_inactive',
         animations: CoreUIConfig.spinButtonStates,
       },
       layoutData: {
@@ -178,17 +178,66 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'stopSpinBtn',
-      type: 'IconButton',
+      type: 'Button',
       action: {
         press: StopClickCommand,
       },
       tooltipText: 'stopSpinText',
       options: {
-        defaultView: 'spinBtn',
-        hoverView: 'spinBtn',
-        pressedView: 'spinBtn',
-        disabledView: 'spinBtn',
-        icon: 'stopIcon',
+        defaultView: 'stopSpinBtn',
+        hoverView: 'stopSpinBtn',
+        pressedView: 'stopSpinBtn',
+        disabledView: 'stopSpinBtn_inactive',
+        animations: CoreUIConfig.spinButtonStates,
+      },
+      layoutData: {
+        Desktop: {
+          widthPerc: 0.08,
+          heightPerc: 0.16,
+          hAlign: 'right',
+          vAlign: 'middle',
+          hPaddingPerc: -0.02,
+          maxScale: 1,
+        },
+        DesktopPortrait: {
+          widthPerc: 0.12,
+          heightPerc: 0.12,
+          hAlign: 'center',
+          vAlign: 'bottom',
+          vPaddingPerc: -0.08,
+          maxScale: 1,
+        },
+        Portrait: {
+          widthPerc: 0.25,
+          heightPerc: 0.14,
+          hAlign: 'center',
+          vAlign: 'bottom',
+          vPaddingPerc: -0.08,
+          maxScale: 1.5,
+        },
+        Landscape: {
+          widthPerc: 0.12,
+          heightPerc: 0.3,
+          hAlign: 'right',
+          vAlign: 'middle',
+          hPaddingPerc: -0.032,
+          maxScale: 1,
+        },
+      },
+      visible: false,
+    },
+    {
+      name: 'stopAutoBtn',
+      type: 'Button',
+      action: {
+        press: AutoStopSpinCommand,
+      },
+      tooltipText: 'stopSpinText',
+      options: {
+        defaultView: 'stopSpinBtn',
+        hoverView: 'stopSpinBtn',
+        pressedView: 'stopSpinBtn',
+        disabledView: 'stopSpinBtn_inactive',
         animations: CoreUIConfig.spinButtonStates,
       },
       layoutData: {
@@ -229,18 +278,17 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'turboBtn',
-      type: 'IconButton',
+      type: 'Button',
       action: {
         press: TurboStateChangeCommand,
       },
       tooltipText: 'turboText',
       data: true,
       options: {
-        defaultView: 'betTurboBtn',
-        hoverView: 'betTurboBtn',
-        pressedView: 'betTurboBtn',
-        disabledView: 'betTurboBtn',
-        icon: 'turboIcon',
+        defaultView: 'turboBtn',
+        hoverView: 'turboBtn',
+        pressedView: 'turboBtn',
+        disabledView: 'turboBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -285,7 +333,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'turboSelectedBtn',
-      type: 'IconButton',
+      type: 'Button',
       action: {
         press: TurboStateChangeCommand,
       },
@@ -295,8 +343,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         defaultView: 'turboSelectedBtn',
         hoverView: 'turboSelectedBtn',
         pressedView: 'turboSelectedBtn',
-        disabledView: 'turboSelectedBtn',
-        icon: 'turboIcon',
+        disabledView: 'turboSelectedBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -341,17 +388,16 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'betBtn',
-      type: 'IconButton',
+      type: 'Button',
       action: {
         press: BetClickCommand,
       },
       tooltipText: 'betText',
       options: {
-        defaultView: 'betTurboBtn',
-        hoverView: 'betTurboBtn',
-        pressedView: 'betTurboBtn',
-        disabledView: 'betTurboBtn',
-        icon: 'betIcon',
+        defaultView: 'betBtn',
+        hoverView: 'betBtn',
+        pressedView: 'betBtn',
+        disabledView: 'betBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -396,16 +442,15 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'menuBtn',
-      type: 'IconButton',
+      type: 'Button',
       action: {
         press: MenuClickCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'menuIcon',
+        defaultView: 'menuBtn',
+        hoverView: 'menuBtn',
+        pressedView: 'menuBtn',
+        disabledView: 'menuBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -446,11 +491,10 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         press: ShowGameRulesCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'infoIcon',
+        defaultView: 'infoBtn',
+        hoverView: 'infoBtn',
+        pressedView: 'infoBtn',
+        disabledView: 'infoBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -490,17 +534,16 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'soundOnBtn',
-      type: 'IconButton',
+      type: 'Button',
       data: false,
       action: {
         press: SoundStateChangeCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'soundOnIcon',
+        defaultView: 'soundOnBtn',
+        hoverView: 'soundOnBtn',
+        pressedView: 'soundOnBtn',
+        disabledView: 'soundOnBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -541,17 +584,16 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     {
       name: 'soundOffBtn',
-      type: 'IconButton',
+      type: 'Button',
       data: true,
       action: {
         press: SoundStateChangeCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'soundOffIcon',
+        defaultView: 'soundOffBtn',
+        hoverView: 'soundOffBtn',
+        pressedView: 'soundOffBtn',
+        disabledView: 'soundOffBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       visible: false,
@@ -598,11 +640,10 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         press: HomeClickedCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'homeIcon',
+        defaultView: 'homeBtn',
+        hoverView: 'homeBtn',
+        pressedView: 'homeBtn',
+        disabledView: 'homeBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -645,11 +686,10 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         press: RequestFullscreenCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'fullscreenEnterIcon',
+        defaultView: 'fullscreenEnterBtn',
+        hoverView: 'fullscreenEnterBtn',
+        pressedView: 'fullscreenEnterBtn',
+        disabledView: 'fullscreenEnterBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -696,11 +736,10 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         press: RequestExitFullscreenCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'fullscreenExitIcon',
+        defaultView: 'fullscreenExitBtn',
+        hoverView: 'fullscreenExitBtn',
+        pressedView: 'fullscreenExitBtn',
+        disabledView: 'fullscreenExitBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -746,11 +785,10 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         press: ShowCheatPanelCommand,
       },
       options: {
-        defaultView: 'generalCPBtn',
-        hoverView: 'generalCPBtn',
-        pressedView: 'generalCPBtn',
-        disabledView: 'generalCPBtn',
-        icon: 'cheatIcon',
+        defaultView: 'cheatBtn',
+        hoverView: 'cheatBtn',
+        pressedView: 'cheatBtn',
+        disabledView: 'cheatBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
       layoutData: {
@@ -785,55 +823,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           hPaddingPerc: 1.3,
           vAlign: 'middle',
           vPaddingPerc: 0,
-          maxScale: 1,
-        },
-      },
-    },
-    {
-      name: 'autoCounter',
-      type: 'Container',
-      anchor: { x: 0.5, y: 0.5 },
-      Elements: [
-        { name: 'autoCounterBG', type: 'Sprite', image: 'autoCounterBG', anchor: { x: 0.5, y: 0.5 } },
-        {
-          name: 'autoCounterText',
-          type: 'Text',
-          contentText: '00',
-          style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 40 },
-          anchor: { x: 0.5, y: 0.5 },
-        },
-      ],
-      layoutData: {
-        Desktop: {
-          widthPerc: 0.12,
-          heightPerc: 0.12,
-          hAlign: 'right',
-          vAlign: 'middle',
-          hPaddingPerc: -0.02,
-          maxScale: 1,
-        },
-        DesktopPortrait: {
-          widthPerc: 0.12,
-          heightPerc: 0.12,
-          hAlign: 'center',
-          vAlign: 'bottom',
-          vPaddingPerc: -0.08,
-          maxScale: 1,
-        },
-        Portrait: {
-          widthPerc: 0.25,
-          heightPerc: 0.14,
-          hAlign: 'center',
-          vAlign: 'bottom',
-          vPaddingPerc: -0.08,
-          maxScale: 1.5,
-        },
-        Landscape: {
-          widthPerc: 0.12,
-          heightPerc: 0.25,
-          hAlign: 'right',
-          vAlign: 'middle',
-          hPaddingPerc: -0.02,
           maxScale: 1,
         },
       },

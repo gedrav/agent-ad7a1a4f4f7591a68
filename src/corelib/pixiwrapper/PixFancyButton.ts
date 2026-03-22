@@ -27,6 +27,15 @@ export class PixFancyButton extends FancyButton {
       this.disabledView.filters = flt;
       this.disabledView.alpha = 0.8;
     }
+    if (this.configData.tooltipText) {
+      this.toolTip = new TooltipComp({ tooltipText: this.configData.tooltipText });
+      this.addChild(this.toolTip);
+      if (this.toolTip.width > this.width) {
+        this.toolTip.scale.set((this.width / this.toolTip.width) * 0.9);
+      }
+      this.toolTip.x = 0;
+      this.toolTip.y = this.height * 0.45;
+    }
     this.name = this.configData.name;
   }
 

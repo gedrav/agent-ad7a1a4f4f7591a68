@@ -4,6 +4,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { ActionCommand } from '@core/commands/core/ActionCommand';
 import { TooltipComp } from '@brand/views/comps/TooltipComp';
+import { ColorMatrixFilter } from 'pixi.js';
 
 export class PixIconFancyButton extends FancyButton {
   private icon: PixSprite;
@@ -43,7 +44,6 @@ export class PixIconFancyButton extends FancyButton {
     }
     if (this.configData.hitArea) {
       this.hitArea = this.configData.hitArea;
-      console.log('hitArea', this.hitArea);
     }
 
     this.onPress.connect(this.onButtonPress.bind(this));
@@ -159,5 +159,16 @@ export class PixIconFancyButton extends FancyButton {
   enable() {
     this.interactive = true;
     this.alpha = 1;
+  }
+
+  set enabled(enabled: boolean) {
+    super.enabled = enabled;
+    console.log('icon', this.configData, this.textView, this.iconView);
+    if (this.iconView) {
+      const flt = new ColorMatrixFilter();
+      flt.greyscale(enabled ? 0 : 1, false);
+      this.iconView.filters = [flt];
+      console.log('enabled', enabled);
+    }
   }
 }

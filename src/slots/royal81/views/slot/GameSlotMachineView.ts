@@ -21,12 +21,23 @@ export class GameSlotMachineView extends SlotMachineView {
     ],
   };
   private skipWildAnim: boolean = true;
+  private gameTitle: PixSpine;
   constructor(config: any) {
     super(config);
 
     this.potAnim = this.slotReel.elementsList['potAnim'];
-
+    this.gameTitle = this.slotReel.elementsList['gameTitle'];
+    this.startGameLogoAnimation();
     EventHandler.addEventListener('SHOW_WILD_BLAST', this.showWildBlast.bind(this));
+  }
+  protected startGameLogoAnimation(): void {
+    this.gameTitle.playAnimation({ state: 'Idle', loop: false });
+    setTimeout(
+      () => {
+        this.startGameLogoAnimation();
+      },
+      Math.random() * 5000 + 5000,
+    );
   }
 
   protected resizeComponents(): void {}
