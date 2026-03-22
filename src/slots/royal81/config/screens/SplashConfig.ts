@@ -135,25 +135,23 @@ export const SPLASH_CONFIG: any = {
         },
         {
           name: 'startBtn',
-          type: 'GraphicsButton',
+          type: 'Button',
           anchor: { x: 0.5, y: 0.5 },
           action: {
             press: SplashStartCommand,
           },
+          options: {
+            defaultView: 'splashBtn',
+            hoverView: 'splashBtn',
+            pressedView: 'splashBtn',
+            disabledView: 'splashBtn',
+            animations: CoreUIConfig.noScalebuttonStates,
+            textOffset: new Point(0, 8),
+          },
           textConfig: {
             content: 'playGameText',
-            style: { fontFamily: 'commonFont', fontSize: 32, mFontSize: 42, fill: 0xffffff, fontWeight: 'bold' },
+            style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0x7994ff, fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
-          },
-          graphics: {
-            width: 548,
-            height: 88,
-            radius: 16,
-            color: 0x000000,
-            hoverColor: 0x404040,
-            pressedColor: 0x000000,
-            disabledColor: 0xcccccc,
-            animations: CoreUIConfig.buttonStates,
           },
           x: 274,
           y: 33,
@@ -256,7 +254,7 @@ export const SPLASH_CONFIG: any = {
               nineSliceSprite: [12, 12, 12, 12],
             },
           },
-          icon: 'checkBox',
+          icon: 'generalCPBtn',
           textConfig: {
             name: 'btnText',
             type: 'Text',
@@ -297,7 +295,7 @@ export const SPLASH_CONFIG: any = {
               nineSliceSprite: [12, 12, 12, 12],
             },
           },
-          icon: 'checkBoxSelected',
+          icon: 'generalCPSelectedBtn',
           textConfig: {
             name: 'btnText',
             type: 'Text',

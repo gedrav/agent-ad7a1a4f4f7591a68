@@ -112,7 +112,6 @@ export class BetPanelView extends ResponsiveChildrenView {
 
   protected async hideBetPanel() {
     if (this.visible) {
-      console.log('hideBetPanel');
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     }
   }

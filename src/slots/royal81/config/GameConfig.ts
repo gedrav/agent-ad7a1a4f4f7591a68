@@ -31,7 +31,7 @@ export const GAME_CONFIG = {
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl'],
   bbImage: 'screen1',
   bigWinValues: [5, 25, 50, 100],
-  buyBonusData: {
+  buyBonusData1: {
     features: [
       {
         btn: {

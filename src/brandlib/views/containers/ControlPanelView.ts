@@ -179,7 +179,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected createBBButtons(): void {
     this.bbButtonsArray = [];
-    const len = GameProxy.config.buyBonusData.features.length;
+    const len = GameProxy.config.buyBonusData?.features.length;
     if (len > 0) {
       for (let k = 0; k < len; k++) {
         const btn = UIUtil.getElement(GameProxy.config.buyBonusData.features[k].btn);

@@ -4,6 +4,7 @@ import { ErrorMessageCloseCommand } from '@core/commands/action/ErrorMessageClos
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { AutoPlayCancelBtnCommand } from '@core/commands/action/AutoPlayCancelBtnCommand';
 
 export const MESSAGE_POPUP_CONFIG = {
   name: 'messagePopupView',
@@ -14,53 +15,52 @@ export const MESSAGE_POPUP_CONFIG = {
       name: 'panelBG',
       type: 'ResponsiveGraphics',
       image: 'shortPanelBG',
-      width: 1424,
-      height: 1512,
-      radius: 96,
+      width: 712,
+      height: 752,
+      radius: 48,
       color: 0xdae9f7,
     },
     {
       name: 'titleText',
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
-      x: 610,
-      y: 130,
+      x: 356,
+      y: 90,
       content: '',
-      style: { fontFamily: 'gameFont1', fontSize: 70, fill: 0xf5c95b },
+      style: { fontFamily: 'commonFont', fontSize: 40, fill: 0x000000 },
     },
     {
       name: 'messageText',
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
-      x: 610,
-      y: 340,
+      x: 356,
+      y: 350,
       content: '',
-      style: { fontFamily: 'gameFont1', fontSize: 55, fill: 0xf5c95b, align: 'center' },
+      style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, align: 'center' },
     },
-
     {
       name: 'closeBtn',
       type: 'Button',
       scale: 1,
       action: {
-        press: CloseBetPanelCommand,
+        press: AutoPlayCancelBtnCommand,
       },
       data: false,
       options: {
-        defaultView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
-        hoverView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
-        pressedView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
-        disabledView: UIUtil.getRoundedRectangle({ width: 310, height: 130, radius: 16, color: 0x454c5d }),
+        defaultView: 'cancelBtn',
+        hoverView: 'cancelBtn',
+        pressedView: 'cancelBtn',
+        disabledView: 'cancelBtn',
         animations: CoreUIConfig.buttonStates,
       },
       textConfig: {
-        name: 'closeBtn1Text',
+        name: 'btnText',
         type: 'Text',
         content: 'closeText',
-        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 44, fontWeight: 700 },
+        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
       },
-      x: 712,
-      y: 1320,
+      x: 356,
+      y: 670,
     },
   ],
   layoutData: {
