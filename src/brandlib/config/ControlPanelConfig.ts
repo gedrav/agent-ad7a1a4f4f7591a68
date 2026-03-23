@@ -133,7 +133,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     {
       name: 'spinBtn',
       type: 'Button',
-      tooltipText: 'playText',
       options: {
         defaultView: 'spinBtn',
         hoverView: 'spinBtn',
@@ -182,7 +181,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: StopClickCommand,
       },
-      tooltipText: 'stopSpinText',
       options: {
         defaultView: 'stopSpinBtn',
         hoverView: 'stopSpinBtn',
@@ -232,7 +230,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: AutoStopSpinCommand,
       },
-      tooltipText: 'stopSpinText',
       options: {
         defaultView: 'stopSpinBtn',
         hoverView: 'stopSpinBtn',
@@ -282,7 +279,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: TurboStateChangeCommand,
       },
-      tooltipText: 'turboText',
       data: true,
       options: {
         defaultView: 'turboBtn',
@@ -337,7 +333,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: TurboStateChangeCommand,
       },
-      tooltipText: 'turboText',
       data: false,
       options: {
         defaultView: 'turboSelectedBtn',
@@ -392,7 +387,6 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: BetClickCommand,
       },
-      tooltipText: 'betText',
       options: {
         defaultView: 'betBtn',
         hoverView: 'betBtn',
