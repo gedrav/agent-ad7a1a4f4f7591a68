@@ -71,6 +71,6 @@ export const TICKER_COMP_CONFIG: any = {
         },
       ],
     },
-    { name: 'maskRect', type: 'Graphics', color: 0xff0000, width: 1280, height: 60, x: 0, y: 0 },
+    { name: 'maskRect', type: 'Graphics', color: 0xff0000, width: 1360, height: 60, x: 0, y: 0 },
   ],
 };

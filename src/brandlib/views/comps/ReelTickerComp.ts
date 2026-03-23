@@ -54,7 +54,11 @@ export class ReelTickerComp extends StandardView {
         y: this.bg.height * 1.1 + this.tickerText1.height,
       });
       const index = Util.getRandomRange(1, 2);
+      this.tickerText2.scale.set(1);
       this.tickerText2.text = Util.getContent('SpinTimeTicker' + index);
+      if (this.tickerText2.width > this.bg.width) {
+        this.tickerText2.scale.set(this.bg.width / this.tickerText2.width);
+      }
       this.tickerText2.y = -this.tickerText2.height;
       AnimationProxy.animateTween(this.tickerText2, {
         duration: duration,
@@ -67,7 +71,11 @@ export class ReelTickerComp extends StandardView {
         y: this.bg.height * 1.1 + this.tickerText2.height,
       });
       const index = Util.getRandomRange(1, 2);
+      this.tickerText1.scale.set(1);
       this.tickerText1.text = Util.getContent('SpinTimeTicker' + index);
+      if (this.tickerText1.width > this.bg.width) {
+        this.tickerText1.scale.set(this.bg.width / this.tickerText1.width);
+      }
       this.tickerText1.y = -this.tickerText2.height;
       AnimationProxy.animateTween(this.tickerText1, {
         duration: duration,
@@ -84,7 +92,11 @@ export class ReelTickerComp extends StandardView {
   }
   protected showFirstTicker() {
     this.textIndex = 1;
+    this.tickerText1.scale.set(1);
     this.tickerText1.text = Util.getContent(this.configData.content[this.tickerIndex]);
+    if (this.tickerText1.width > this.bg.width) {
+      this.tickerText1.scale.set(this.bg.width / this.tickerText1.width);
+    }
     this.tickerText1.y = this.bg.height / 2 + Util.getDefaultValue(this.configData.contentYPadding, 0);
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(this.changeTicker.bind(this), this.delayDuration);
@@ -102,8 +114,11 @@ export class ReelTickerComp extends StandardView {
         duration: duration,
         y: this.bg.height * 1.1 + this.tickerText1.height,
       });
-
+      this.tickerText2.scale.set(1);
       this.tickerText2.text = Util.getContent(this.configData.content[this.tickerIndex]);
+      if (this.tickerText2.width > this.bg.width) {
+        this.tickerText2.scale.set(this.bg.width / this.tickerText2.width);
+      }
       this.tickerText2.y = -this.tickerText2.height;
       AnimationProxy.animateTween(this.tickerText2, {
         duration: duration,
@@ -115,7 +130,11 @@ export class ReelTickerComp extends StandardView {
         duration: duration,
         y: this.bg.height * 1.1 + this.tickerText2.height,
       });
+      this.tickerText1.scale.set(1);
       this.tickerText1.text = Util.getContent(this.configData.content[this.tickerIndex]);
+      if (this.tickerText1.width > this.bg.width) {
+        this.tickerText1.scale.set(this.bg.width / this.tickerText1.width);
+      }
       this.tickerText1.y = -this.tickerText2.height;
       AnimationProxy.animateTween(this.tickerText1, {
         duration: duration,

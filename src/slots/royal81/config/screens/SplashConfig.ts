@@ -97,7 +97,7 @@ export const SPLASH_CONFIG: any = {
       width: 200,
       height: 200,
       color: 0xffffff,
-      alpha: 0.5,
+      alpha: 0.25,
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
@@ -144,7 +144,7 @@ export const SPLASH_CONFIG: any = {
 
     {
       name: 'controlsContainer',
-      type: 'Container',
+      type: 'ResponsiveChildrenContainer',
       Elements: [
         {
           name: 'guideRect',
@@ -175,7 +175,10 @@ export const SPLASH_CONFIG: any = {
             anchor: { x: 0.5, y: 0.5 },
           },
           x: 274,
-          y: 33,
+          y: 85,
+          layoutData: {
+            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.5, maxScale: 1 },
+          },
         },
         {
           name: 'soundOnBtn',
@@ -212,9 +215,9 @@ export const SPLASH_CONFIG: any = {
             },
           },
           layoutData: {
-            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
-            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.35 },
-            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.35 },
+            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.45 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.5 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.5 },
           },
         },
         {
@@ -253,9 +256,9 @@ export const SPLASH_CONFIG: any = {
           },
           visible: false,
           layoutData: {
-            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
-            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.4 },
-            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.4 },
+            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.45 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.5 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.5 },
           },
         },
         {
