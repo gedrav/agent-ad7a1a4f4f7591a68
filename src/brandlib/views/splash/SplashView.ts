@@ -178,11 +178,9 @@ export class SplashView extends ResponsiveChildrenView {
 
   protected alignForLandscape(): void {
     this.setScaleForStartBtn();
-    if (this.itemsArray.length == 2) {
+    if (this.itemsArray.length < 3) {
       this.stackItemsVertically();
-    } else if (this.itemsArray.length < 4) {
-      this.stackItemsHorizontally();
-    } else {
+    } else if (this.itemsArray.length >= 3) {
       this.arrangeItemsInGrid();
     }
     this.fitAndCenterItemContainer(1);
