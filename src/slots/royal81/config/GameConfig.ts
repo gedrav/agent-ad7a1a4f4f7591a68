@@ -25,7 +25,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     commonFontR: 'Roboto',
-    gameFont1: 'Oxanium',
+    gameFont1: 'bookosb',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl'],
