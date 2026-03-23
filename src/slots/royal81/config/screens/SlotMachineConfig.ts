@@ -1,7 +1,7 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
-import WinController from '@core/views/slotmachine/WinController';
+import GameWinController from '@game/views/slot/GameWinController';
 import { ReelsConfig } from '@game/config/ReelsConfig';
-import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
+import { GameLineWinAmountComp } from '@game/views/comps/GameLineWinAmountComp';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
@@ -30,7 +30,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'slotReel',
       type: 'Comp',
       class: SlotReelStandard,
-      winController: WinController,
+      winController: GameWinController,
       x: -150,
       y: 10,
       data: {
@@ -230,7 +230,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'lineWinAmountComp',
           type: 'Comp',
-          class: LineWinAmountComp,
+          class: GameLineWinAmountComp,
           y: 200,
           Elements: [
             {
@@ -238,6 +238,13 @@ export const SLOT_MACHINE_CONFIG: any = {
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
               style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
+            },
+            {
+              name: 'wildMultiplierText',
+              type: 'Text',
+              anchor: { x: 0.5, y: 1 },
+              y: -100,
+              style: { fontFamily: 'gameFont1', fontSize: 100, fill: 0xffd700, stroke: 0x000000, strokeThickness: 6 },
             },
           ],
         },

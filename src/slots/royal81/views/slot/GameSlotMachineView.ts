@@ -6,6 +6,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { Point } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
+import { UIUtil } from '../../../../corelib/utils/UIUtilService';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;
@@ -111,12 +112,15 @@ export class GameSlotMachineView extends SlotMachineView {
     const reelPosition = symbolPositions[index];
     const movingSymbol = this.movingSymbolArray[index];
 
+    const controlPointYOffset = this.potAnim.y < 0 ? -UIUtil.getGameHeight() : 0;
     const startPoint = movingSymbol.position.clone();
     const end = this.getSymbolPositions(reelPosition[0], reelPosition[1]);
-    const c1 = new Point(this.potAnim.x, this.potAnim.y);
-    const c2 = new Point(end.x, end.y);
+    const c1 = new Point(this.potAnim.x, controlPointYOffset);
+    const c2 = new Point(end.x * 0.5, controlPointYOffset);
+
     movingSymbol.scale.set(0.8);
     this.slotReel.addChildAt(movingSymbol, potAnimIndex + 1);
+
     AnimationProxy.animateTween(movingSymbol, {
       duration: 1,
       delay: 0.25 * index,
