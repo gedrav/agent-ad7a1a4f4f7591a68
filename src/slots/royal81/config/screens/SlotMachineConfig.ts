@@ -6,13 +6,7 @@ import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
-import RewardSymbol from '@brand/views/slot/RewardSymbol';
-import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
-import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
-import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
-import { Container } from 'pixi.js';
 import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
@@ -47,19 +41,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelsConfig: ReelsConfig,
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 324, y: 290 },
+            reelContainerPos: { x: 324, y: 295 },
             reelPositionX: [0, 320, 640, 950],
             symbolHeight: 226,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 324, y: 290 },
+            reelContainerPos: { x: 324, y: 295 },
             reelPositionX: [0, 320, 640, 950],
             symbolHeight: 226,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 324, y: 290 },
+            reelContainerPos: { x: 324, y: 295 },
             reelPositionX: [0, 320, 640, 950],
             symbolHeight: 226,
             symbolScale: 1,
@@ -211,7 +205,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Portrait: { scale: 0.8, x: 580, y: -10 },
           },
         },
-        { name: 'maskRect', type: 'Graphics', width: 1300, height: 692, x: 132, y: 160, color: 0xffff00 },
+        { name: 'maskRect', type: 'Graphics', width: 1300, height: 710, x: 132, y: 160, color: 0xffff00 },
         {
           name: 'winSymbolsContainer',
           type: 'Container',
