@@ -40,7 +40,7 @@ export const SPLASH_CONFIG: any = {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
             color: '0x000000',
-            distance: 6,
+            distance: 4,
             alpha: 1,
           },
         },
@@ -70,7 +70,7 @@ export const SPLASH_CONFIG: any = {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
             color: '0x000000',
-            distance: 6,
+            distance: 4,
             alpha: 1,
           },
         },
@@ -100,7 +100,7 @@ export const SPLASH_CONFIG: any = {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
             color: '0x000000',
-            distance: 6,
+            distance: 4,
             alpha: 1,
           },
         },
@@ -198,7 +198,7 @@ export const SPLASH_CONFIG: any = {
           },
           textConfig: {
             content: 'playGameText',
-            style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0x7994ff, fontWeight: 'bold' },
+            style: { fontFamily: 'gameFont1', fontSize: 50, fill: [0xffed54, 0xf5a100], fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
           },
           x: 274,
