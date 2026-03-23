@@ -57,14 +57,14 @@ export const GAME_SOUND_CONFIG = {
     // },
 
     // --- Buttons ---
-    // {
-    //   name: 'genericButtonSound',
-    //   type: 'common',
-    //   loop: false,
-    //   playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
-    //   volume: 0.6,
-    //   fadeOutDuration: 1000,
-    // },
+    {
+      name: 'genericButtonSound',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
+      volume: 0.6,
+      fadeOutDuration: 1000,
+    },
     // {
     //   name: 'historyAndRulesBtnSound',
     //   type: 'common',
@@ -85,7 +85,7 @@ export const GAME_SOUND_CONFIG = {
       name: 'stopSpinClicked',
       type: 'game',
       loop: false,
-      playEvents: ['STOP_SPIN_CLICKED'],
+      playEvents: ['STOP_SPIN_CLICKED', 'REELSTRIP_SPIN_JERK'],
       volume: 0.6,
       fadeOutDuration: 1000,
     },
@@ -104,8 +104,8 @@ export const GAME_SOUND_CONFIG = {
       name: 'turboSlotSpin',
       type: 'game',
       loop: false,
-      // playEvents: ['START_SLOT_SPIN'],
-      // stopEvents: ['STOP_REEL_IMMEDIATELY', 'FINAL_SYMBOL_SETTLED', 'STOP_SPIN_CLICKED'],
+      playEvents: ['TURBO_START_SLOT_SPIN'],
+      stopEvents: ['STOP_REEL_IMMEDIATELY', 'FINAL_SYMBOL_SETTLED', 'STOP_SPIN_CLICKED'],
       volume: 0.6,
       fadeOutDuration: 100,
     },
@@ -229,7 +229,6 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_TERM_SOUND'],
-      matchParam: 1,
       volume: 0.6,
     },
     // {
