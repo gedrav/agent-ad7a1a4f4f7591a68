@@ -56,6 +56,7 @@ export class PixSpine extends StandardView {
     this.spineAnim.x = boundingBox.width / 2 + Util.getDefaultValue(boundingBox.xPadding, 0);
     this.spineAnim.y = boundingBox.height / 2 + Util.getDefaultValue(boundingBox.yPadding, 0);
     this.addChildAt(this.guideRect, 0);
+    this.guideRect.alpha = 0;
   }
 
   public setSkin(name: string): void {
