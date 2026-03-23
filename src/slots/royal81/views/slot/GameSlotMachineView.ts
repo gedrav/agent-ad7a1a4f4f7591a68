@@ -3,25 +3,28 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
 import { StateManager } from '@core/states/StateManagerService';
+import { Point } from 'pixi.js';
+import { getBezierPoint, lerp } from '@core/utils/MathUtils';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;
-  private wildSymbolPositions = {
-    1: [{ x: 0, y: -178, angle: 0 }],
+  private wildConfig = {
+    1: [{ x: 0, y: -210, angle: 0 }],
     2: [
-      { x: -76.5, y: -190, angle: -9 },
-      { x: 64, y: -190, angle: 9 },
+      { x: -76.5, y: -210, angle: -9 },
+      { x: 64, y: -210, angle: 9 },
     ],
     3: [
-      { x: 80, y: -188, angle: 26 },
-      { x: -90, y: -188, angle: -26 },
-      { x: 0, y: -178, angle: 0 },
+      { x: 80, y: -200, angle: 26 },
+      { x: -90, y: -200, angle: -26 },
+      { x: 0, y: -210, angle: 0 },
     ],
   };
   private skipWildAnim: boolean = true;
   private gameTitle: PixSpine;
+  private movingSymbolArray: ReelSymbolSprite[] = [];
+
   constructor(config: any) {
     super(config);
 
@@ -55,73 +58,82 @@ export class GameSlotMachineView extends SlotMachineView {
 
     if (!this.skipWildAnim) {
       this.potAnim.stopAnimation();
-
-      const listener: AnimationStateListener = {
-        event: (_, event) => {
-          if (event.data.name.startsWith('Sym')) {
-            const index = parseInt(event.data.name.split('_').at(-1)); // Sym_{numberOfWilds}_{index}
-            this.playSymbolTween(index - 1, symbolPositions);
-          }
-        },
-        complete: () => {
-          this.potAnim.stopAnimation();
-          this.potAnim.playAnimation({ state: 'idle', loop: true });
-          symbolPositions.forEach((position) => this.replaceWildOnReels(position));
-        },
-      };
-      this.potAnim.playAnimation({ state: `Win_anim${numberOfWilds}`, listener });
+      this.potAnim.playAnimation({ state: 'Win_anim' });
+      this.playSymbolComingOut(symbolPositions);
       setTimeout(() => EventHandler.dispatchEvent(`PLAY_WILD_BLAST_${numberOfWilds}`), 1166);
     } else {
       symbolPositions.forEach((position) => this.replaceWildOnReels(position));
     }
   }
 
-  protected playSymbolTween(index: number, symbolPositions: Array<[number, number]>) {
-    if (this.skipWildAnim) {
-      this.potAnim.stopAnimation();
-      this.potAnim.playAnimation({ state: 'idle', loop: true });
-      return;
-    }
+  protected playSymbolComingOut(symbolPositions: Array<[number, number]>) {
+    const potAnimIndex = this.slotReel.children.indexOf(this.potAnim);
+    const numberOfWilds = symbolPositions.length;
+    const wildConfig = this.wildConfig[numberOfWilds];
+    const totalDuration = 1.166;
+    const delay = 0.9;
+
+    wildConfig.forEach((wildPosition, index) => {
+      const finalRotation = (wildPosition.angle * Math.PI) / 180;
+
+      const movingSymbol = new ReelSymbolSprite({
+        data: {
+          name: 'WD',
+          spineName: 'wild_Spine',
+          skin: 'default',
+          idleAnim: 'Idle',
+          winAnim: 'Win',
+        },
+      });
+
+      movingSymbol.scale.set(0.8);
+      movingSymbol.x = this.potAnim.x;
+      movingSymbol.y = this.potAnim.y;
+      this.movingSymbolArray.push(movingSymbol);
+      this.slotReel.addChildAt(movingSymbol, potAnimIndex - 1);
+
+      AnimationProxy.animateTween(movingSymbol, {
+        duration: totalDuration - delay,
+        delay: delay,
+        x: this.potAnim.x + wildPosition.x,
+        y: this.potAnim.y + wildPosition.y,
+        rotation: finalRotation,
+        onComplete: () => {
+          this.playSymbolMoveTween(index, symbolPositions);
+        },
+      });
+    });
+  }
+
+  protected playSymbolMoveTween(index: number, symbolPositions: Array<[number, number]>) {
+    const potAnimIndex = this.slotReel.children.indexOf(this.potAnim);
     const numberOfWilds = symbolPositions.length;
     const reelPosition = symbolPositions[index];
-    const wildPositions = this.wildSymbolPositions[numberOfWilds];
+    const movingSymbol = this.movingSymbolArray[index];
 
-    const movingSymbol = new ReelSymbolSprite({
-      data: {
-        name: 'WD',
-        spineName: 'wild_Spine',
-        skin: 'default',
-        idleAnim: 'Idle',
-        winAnim: 'Win',
-      },
-    });
-
-    const moveTo = this.getSymbolPositions(reelPosition[0], reelPosition[1]);
-
+    const startPoint = movingSymbol.position.clone();
+    const end = this.getSymbolPositions(reelPosition[0], reelPosition[1]);
+    const c1 = new Point(this.potAnim.x, this.potAnim.y);
+    const c2 = new Point(end.x, end.y);
     movingSymbol.scale.set(0.8);
-    movingSymbol.x = this.potAnim.x + wildPositions[index].x;
-    movingSymbol.y = this.potAnim.y + wildPositions[index].y;
-    movingSymbol.rotation = (wildPositions[index].angle * Math.PI) / 180;
-    movingSymbol.alpha = 0;
-    this.slotReel.addChild(movingSymbol);
-
+    this.slotReel.addChildAt(movingSymbol, potAnimIndex + 1);
     AnimationProxy.animateTween(movingSymbol, {
-      duration: 0.4,
-      x: moveTo.x,
-      y: moveTo.y,
-      delay: 0.08,
+      duration: 1,
+      delay: 0.25 * index,
       rotation: 0,
-      alpha: 1,
-      scale: 1,
       onComplete: () => {
         this.replaceWildOnReels(reelPosition);
         this.slotReel.removeChild(movingSymbol);
         this.onFinalSymbolTween(index, numberOfWilds);
       },
-      onUpdate: () => {
+      onUpdate: function () {
+        const t = this.progress();
         if (this.skipWildAnim) {
           movingSymbol.visible = false;
         }
+        const beizerPoint = getBezierPoint(t, startPoint, c1, c2, end);
+        movingSymbol.position.copyFrom(beizerPoint);
+        movingSymbol.scale.set(lerp(0.8, 1, t));
       },
     });
   }
@@ -132,6 +144,8 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected onFinalSymbolTween(index: number, numberOfWilds: number) {
     if (index === numberOfWilds - 1) {
+      this.movingSymbolArray = [];
+      this.potAnim.playAnimation({ state: 'idle', loop: true });
       setTimeout(() => StateManager.doNextStep(), 600); // If no delay is added the WILD symbol doesnt animate on line win
     }
   }
