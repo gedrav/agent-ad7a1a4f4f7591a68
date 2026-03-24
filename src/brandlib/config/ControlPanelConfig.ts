@@ -32,7 +32,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           content: 'balanceCaps',
           style: { fontFamily: 'commonFont', fontSize: 14, fill: 0xffffff, fontWeight: 600 },
           anchor: { x: 0, y: 0 },
-          x: 20,
+          x: 24,
           y: 10,
         },
         {
@@ -41,7 +41,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           contentText: '',
           style: { fontFamily: 'commonFont', fontSize: 18, fill: 0xffffff, fontWeight: 700 },
           anchor: { x: 0, y: 0 },
-          x: 20,
+          x: 24,
           y: 30,
         },
       ],
@@ -54,6 +54,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           vAlign: 'bottom',
           vPaddingPerc: -0.01,
           maxScale: 1,
+          minScale: 0.5,
         },
         Landscape: {
           widthPerc: 0.16,
@@ -87,7 +88,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           content: 'totalBetCaps',
           style: { fontFamily: 'commonFont', fontSize: 14, fill: 0xffffff, fontWeight: 600 },
           anchor: { x: 1, y: 0 },
-          x: 190,
+          x: 206,
           y: 10,
         },
         {
@@ -96,7 +97,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           contentText: '',
           style: { fontFamily: 'commonFont', fontSize: 18, fill: 0xffffff, fontWeight: 700 },
           anchor: { x: 1, y: 0 },
-          x: 190,
+          x: 206,
           y: 30,
         },
       ],
@@ -109,6 +110,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           vAlign: 'bottom',
           vPaddingPerc: -0.01,
           maxScale: 1,
+          minScale: 0.5,
         },
         Landscape: {
           widthPerc: 0.16,
@@ -148,6 +150,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           vAlign: 'middle',
           hPaddingPerc: -0.02,
           maxScale: 1,
+          minScale: 0.4,
         },
         DesktopPortrait: {
           widthPerc: 0.12,
@@ -156,6 +159,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           vAlign: 'bottom',
           vPaddingPerc: -0.08,
           maxScale: 1,
+          minScale: 0.4,
         },
         Portrait: {
           widthPerc: 0.25,
@@ -294,7 +298,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           heightPerc: 0.6,
           hAlign: 'center',
           vAlign: 'bottomDown',
-          vPaddingPerc: 0.2,
+          vPaddingPerc: 0.1,
           maxScale: 1,
         },
         DesktopPortrait: {
@@ -348,7 +352,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           heightPerc: 0.6,
           hAlign: 'center',
           vAlign: 'bottomDown',
-          vPaddingPerc: 0.2,
+          vPaddingPerc: 0.1,
           maxScale: 1,
         },
         DesktopPortrait: {
@@ -401,7 +405,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           heightPerc: 0.6,
           hAlign: 'center',
           vAlign: 'topUp',
-          vPaddingPerc: -0.2,
+          vPaddingPerc: -0.1,
           maxScale: 1,
         },
         DesktopPortrait: {
@@ -456,7 +460,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           vAlign: 'top',
           vPaddingPerc: 0.01,
           maxScale: 1,
-          minScale: 0.6,
+          minScale: 0.4,
         },
         Landscape: {
           widthPerc: 0.04,
