@@ -24,7 +24,7 @@ export const MENU_CONFIG: any = {
       name: 'menubg',
       type: 'ResponsiveGraphics',
       width: 582,
-      height: 672,
+      height: 772,
       radius: 16,
       color: 0x000000,
     },

@@ -453,13 +453,13 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       },
       layoutData: {
         Desktop: {
-          widthPerc: 0.02,
+          widthPerc: 0.04,
           heightPerc: 0.05,
           hAlign: 'right',
           hPaddingPerc: -0.016,
           vAlign: 'top',
           vPaddingPerc: 0.01,
-          maxScale: 1,
+          maxScale: 0.6,
           minScale: 0.4,
         },
         Landscape: {
