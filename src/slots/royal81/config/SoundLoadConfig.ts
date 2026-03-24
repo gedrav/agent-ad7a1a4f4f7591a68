@@ -195,7 +195,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_BIGWIN_SPECIAL_SOUND'],
-      stopEvents: ['STOP_BIGWIN_SPECIAL_SOUND', 'PLAY_BIG_WIN_COUNTUP_END_SOUND', 'STOP_BIGWIN_SOUND'],
+      stopEvents: ['STOP_BIGWIN_SPECIAL_SOUND', 'PLAY_BIG_WIN_COUNTUP_END_SOUND', 'STOP_BIGWIN_SOUND', 'CLEAR_ROUND'],
       volume: 0.6,
     },
     {
@@ -203,7 +203,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: true,
       playEvents: ['PLAY_MEGAWIN_SPECIAL_SOUND'],
-      stopEvents: ['STOP_MEGAWIN_SOUND', 'PLAY_BIG_WIN_COUNTUP_END_SOUND'],
+      stopEvents: ['STOP_MEGAWIN_SOUND', 'PLAY_BIG_WIN_COUNTUP_END_SOUND', 'CLEAR_ROUND'],
       volume: 0.6,
     },
     {
@@ -211,7 +211,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_GIGANTICWIN_SPECIAL_SOUND'],
-      stopEvents: ['PLAY_BIG_WIN_COUNTUP_END_SOUND', 'STOP_GIGANTICWIN_SOUND'],
+      stopEvents: ['PLAY_BIG_WIN_COUNTUP_END_SOUND', 'STOP_GIGANTICWIN_SOUND', 'CLEAR_ROUND'],
       volume: 0.6,
     },
     {
@@ -219,7 +219,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_UNBELIEVABLEWIN_SPECIAL_SOUND'],
-      stopEvents: ['PLAY_BIG_WIN_COUNTUP_END_SOUND'],
+      stopEvents: ['PLAY_BIG_WIN_COUNTUP_END_SOUND', 'CLEAR_ROUND'],
       volume: 0.6,
     },
 
@@ -365,7 +365,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: true,
       playEvents: ['PLAY_ALL_WIN_SOUND_BIGWIN'],
-      stopEvents: ['CLEAR_ALL_WIN', 'PLAY_BIG_WIN_COUNTUP_END_SOUND', 'STOP_ALL_WIN_SOUND_BIGWIN'],
+      stopEvents: ['CLEAR_ALL_WIN', 'PLAY_BIG_WIN_COUNTUP_END_SOUND', 'STOP_ALL_WIN_SOUND_BIGWIN', 'CLEAR_ROUND'],
       volume: 0.6,
       fadeOutDuration: 100,
     },
