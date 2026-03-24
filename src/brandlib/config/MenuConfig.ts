@@ -12,6 +12,7 @@ import { TransactionHistoryCommand } from '@core/commands/action/TransactionHist
 import { ShowInfoCommand } from '@core/commands/action/ShowInfoCommand';
 import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
 import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
+import { ShowHideSplashCommand } from '@core/commands/action/ShowHideSplashCommand';
 
 export const MENU_CONFIG: any = {
   name: 'menuComp',
@@ -169,13 +170,68 @@ export const MENU_CONFIG: any = {
       },
     },
     {
+      name: 'showSplashBtn',
+      type: 'Button',
+      data: true,
+      action: {
+        press: ShowHideSplashCommand,
+      },
+      x: 291,
+      y: 432,
+      options: {
+        defaultView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        hoverView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        pressedView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        disabledView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        animations: CoreUIConfig.buttonStates,
+        icon: 'showSplashIcon',
+        iconOffset: new Point(-236, 0),
+        textOffset: new Point(-182, 0),
+        defaultTextAnchor: { x: 0, y: 0.5 },
+      },
+      textConfig: {
+        name: 'buttonText',
+        type: 'Text',
+        content: 'showSplashText',
+        style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+      },
+    },
+    {
+      name: 'hideSplashBtn',
+      type: 'Button',
+      visible: false,
+      data: false,
+      action: {
+        press: ShowHideSplashCommand,
+      },
+      x: 291,
+      y: 432,
+      options: {
+        defaultView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        hoverView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        pressedView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        disabledView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
+        animations: CoreUIConfig.buttonStates,
+        icon: 'hideSplashIcon',
+        iconOffset: new Point(-236, 0),
+        textOffset: new Point(-182, 0),
+        defaultTextAnchor: { x: 0, y: 0.5 },
+      },
+      textConfig: {
+        name: 'buttonText',
+        type: 'Text',
+        content: 'hideSplashText',
+        style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+      },
+    },
+    {
       name: 'gameHistoryBtn',
       type: 'Button',
       action: {
         press: ShowHistoryCommand,
       },
       x: 291,
-      y: 432,
+      y: 528,
       options: {
         defaultView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
         hoverView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
@@ -201,7 +257,7 @@ export const MENU_CONFIG: any = {
         press: ShowDespoitCommand,
       },
       x: 291,
-      y: 528,
+      y: 624,
       options: {
         defaultView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
         hoverView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
@@ -227,7 +283,7 @@ export const MENU_CONFIG: any = {
         press: ShowPromotionCommand,
       },
       x: 291,
-      y: 624,
+      y: 720,
       options: {
         defaultView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),
         hoverView: UIUtil.getRoundedRectangle({ width: 582, height: 96, radius: 8, color: 0x000000, alpha: 0 }),

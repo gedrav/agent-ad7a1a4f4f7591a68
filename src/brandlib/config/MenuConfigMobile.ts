@@ -10,6 +10,7 @@ import { TransactionHistoryCommand } from '@core/commands/action/TransactionHist
 import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
 import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
 import { MenuButton } from '@brand/views/comps/MenuButton';
+import { ShowHideSplashCommand } from '@core/commands/action/ShowHideSplashCommand';
 
 export const MENU_CONFIG_MOBILE: any = {
   name: 'menuComp',
@@ -252,6 +253,73 @@ export const MENU_CONFIG_MOBILE: any = {
         name: 'homeText',
         type: 'Text',
         content: 'gameRulesText',
+        style: {
+          fontFamily: 'commonFont',
+          fontSize: 32,
+          fill: 0xffffff,
+          fontWeight: 700,
+          align: 'left',
+          anchor: { x: 0, y: 0 },
+        },
+      },
+    },
+    {
+      name: 'showSplashBtn',
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: ShowHideSplashCommand,
+        },
+        data: true,
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
+      },
+      icon: 'showSplashIcon',
+      textConfig: {
+        name: 'homeText',
+        type: 'Text',
+        content: 'showSplashText',
+        style: {
+          fontFamily: 'commonFont',
+          fontSize: 32,
+          fill: 0xffffff,
+          fontWeight: 700,
+          align: 'left',
+          anchor: { x: 0, y: 0 },
+        },
+      },
+    },
+    {
+      name: 'hideSplashBtn',
+      type: 'Comp',
+      class: MenuButton,
+      visible: false,
+      btnConfig: {
+        action: {
+          press: ShowHideSplashCommand,
+        },
+        data: false,
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
+      },
+      icon: 'hideSplashIcon',
+      textConfig: {
+        name: 'homeText',
+        type: 'Text',
+        content: 'hideSplashText',
         style: {
           fontFamily: 'commonFont',
           fontSize: 32,

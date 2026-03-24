@@ -20,10 +20,10 @@ export class MenuButton extends ResponsiveChildrenView {
     this.btn.anchor.set(0, 0);
   }
 
-  protected resizeView() {
+  public resizeView() {
     super.resizeView();
     if (DeviceProxy.config.isLandscape) {
-      this.btn.height = UIUtil.getGameHeight() * 0.12;
+      this.btn.height = (UIUtil.getGameHeight() - 40) * 0.12;
     } else {
       this.btn.height = UIUtil.getGameHeight() * 0.06;
     }

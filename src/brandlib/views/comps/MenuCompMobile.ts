@@ -8,6 +8,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap/gsap-core';
+import { MenuButton } from '@brand/views/comps/MenuButton';
 
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
@@ -36,14 +37,17 @@ export class MenuCompMobile extends MenuComp {
       'soundOffBtn',
       'transactionHistoryBtn',
       'infoBtn',
+      'showSplashBtn',
+      'hideSplashBtn',
       'gameHistoryBtn',
       'depositBtn',
       'promotionBtn',
     ];
     const len = btns.length;
     this.elementsList['homeBtn'].scale.set(1);
+
     for (let i = 0; i < len; i++) {
-      const btn = this.elementsList[btns[i]];
+      const btn: MenuButton = this.elementsList[btns[i]];
       btn.resizeView();
       if (i == 0) {
         btn.y = this.topbar.y + this.topbar.height;
@@ -51,9 +55,10 @@ export class MenuCompMobile extends MenuComp {
       if (i > 0) {
         btn.y = this.elementsList[btns[i - 1]].y + btn.height;
       }
-      if (i == 2) {
+      if (i == 2 || i == 6) {
         btn.y = this.elementsList[btns[i - 1]].y;
       }
+      console.log('btn -- ', btns[i], btn.y);
     }
   }
 
