@@ -194,9 +194,9 @@ class SlotGameApp {
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
+          this.createView();
           this.createSplash();
           this.removePreloader();
-          this.createView();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
           this.loadLazyFiles();
@@ -224,7 +224,7 @@ class SlotGameApp {
 
   protected createView() {}
   protected async onSplashStartClicked() {
-    this.splashComp.removeSplash();
+    this.splashComp?.removeSplash();
     this.makeGameVisible();
   }
   protected makeGameVisible() {}

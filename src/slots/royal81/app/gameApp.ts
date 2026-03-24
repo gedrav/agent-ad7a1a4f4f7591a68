@@ -8,6 +8,9 @@ import { GAME_SOUND_CONFIG } from '@game/config/SoundLoadConfig';
 import { GameSoundManager } from '@game/app/GameSoundManager';
 import { SplashView } from '@brand/views/splash/SplashView';
 import SlotGameApp from '@core/app/SlotGameApp';
+import { appModel } from '@core/models/services/AppModelService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 
 export class gameApp extends SlotGameApp {
   constructor() {
@@ -21,12 +24,16 @@ export class gameApp extends SlotGameApp {
 
   async createSplash() {
     const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
-    this.splashComp = new SplashView(SPLASH_CONFIG);
-    this.appContainer.addChild(this.splashComp, this.preloader);
+    if (appModel.getPreferences().showIntro) {
+      this.splashComp = new SplashView(SPLASH_CONFIG);
+      this.appContainer.addChild(this.splashComp, this.preloader);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
+      await this.onSplashDestroyed();
+    }
   }
   async createView() {
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
-    //this.appContainer.addChild(this.gameAppScreen, this.splashComp);
   }
   protected makeGameVisible() {
     this.appContainer.addChild(this.gameAppScreen);
