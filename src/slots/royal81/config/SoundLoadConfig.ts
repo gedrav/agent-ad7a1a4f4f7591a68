@@ -146,6 +146,30 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.6,
       fadeOutDuration: 100,
     },
+    {
+      name: 'wildLand1',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_LAND_1'],
+      volume: 0.6,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'wildLand2',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_LAND_2'],
+      volume: 0.6,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'wildLand3',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_LAND_3'],
+      volume: 0.6,
+      fadeOutDuration: 100,
+    },
 
     // --- Symbol appear after blast ---
     {

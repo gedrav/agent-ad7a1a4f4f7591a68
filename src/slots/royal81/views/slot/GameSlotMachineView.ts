@@ -128,6 +128,7 @@ export class GameSlotMachineView extends SlotMachineView {
       delay: 0.25 * index,
       rotation: 0,
       onComplete: () => {
+        EventHandler.dispatchEvent(`PLAY_WILD_LAND_${index + 1}`);
         this.replaceWildOnReels(reelPosition);
         this.slotReel.removeChild(movingSymbol);
         this.onFinalSymbolTween(index, numberOfWilds);
