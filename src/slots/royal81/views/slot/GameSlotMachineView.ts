@@ -68,6 +68,8 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected playSymbolComingOut(symbolPositions: Array<[number, number]>) {
+    if (!symbolPositions || symbolPositions.length < 1) return;
+
     const potAnimIndex = this.slotReel.children.indexOf(this.potAnim);
     const numberOfWilds = symbolPositions.length;
     const wildConfig = this.wildConfig[numberOfWilds];
