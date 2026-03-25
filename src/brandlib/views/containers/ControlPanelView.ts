@@ -652,16 +652,12 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
     UIUtil.setRelativeScale(this.fullscreenExitBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
-      refComponent: 'fullscreenEnterBtn',
-      hAlign: 'center',
-      hPaddingPerc: 0,
+    UIUtil.alignHorizontal(this.fullscreenExitBtn, {
+      refComponent: 'homeBtn',
+      hAlign: 'rightAfter',
+      hPaddingPerc: smallBtnHPaddingPerc,
     });
-    UIUtil.alignVertical(this.fullscreenExitBtn, {
-      refComponent: 'fullscreenEnterBtn',
-      vAlign: 'middle',
-      vPaddingPerc: 0,
-    });
+    UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
     UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.cheatBtn, {

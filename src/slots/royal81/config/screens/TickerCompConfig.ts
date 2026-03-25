@@ -9,12 +9,12 @@ export const TICKER_COMP_CONFIG: any = {
   type: 'Comp',
   class: ReelTickerComp,
   tickerDelay: 3000,
-  x: 120,
+  x: 184,
   y: 930,
   content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
   contentYPadding: 0,
   Elements: [
-    { name: 'bg', type: 'Graphics', width: 1360, height: 60, alpha: 0 },
+    { name: 'bg', type: 'Graphics', width: 1232, height: 60, alpha: 0 },
     {
       name: 'textCont',
       type: 'Container',
