@@ -7,7 +7,7 @@ export const GAME_BG_CONFIG: any = {
   Elements: [
     {
       name: 'maingameBG',
-      type: 'Sprite',
+      type: 'DualSprite',
       image: 'maingameBG',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },

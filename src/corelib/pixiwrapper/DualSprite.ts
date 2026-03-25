@@ -25,9 +25,7 @@ export class DualSprite extends PixView {
     if (this.isDestroyed) {
       return;
     }
-    if (DeviceProxy.isDevice()) {
-      this.portraitBG.visible = DeviceProxy.config.isPortrait;
-      this.landscapeBG.visible = !DeviceProxy.config.isPortrait;
-    }
+    this.portraitBG.visible = DeviceProxy.config.isPortrait;
+    this.landscapeBG.visible = !DeviceProxy.config.isPortrait;
   }
 }

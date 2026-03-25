@@ -24,7 +24,7 @@ const SPLASH: AssetBundle = {
   name: LOAD_CONSTANTS.SPLASH,
   assets: [
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gamebg', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gamebg0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
   ],
 };
