@@ -12,6 +12,7 @@ import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
+import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 
 const btnConfig: any = {
   name: 'btn1',
@@ -52,7 +53,7 @@ export class BetPanelView extends ResponsiveChildrenView {
   private downStakeBtn: any;
   private stakeText: any;
   private btnContainer: PixView;
-  private betPanelBg: PixResponsiveGraphics;
+  private betPanelBg: PixNineSpliceSprite;
   private maxBetBtn: PixToggleButton;
   private titleText: PixText;
   private cancelBtn: PixFancyButton;
@@ -177,7 +178,6 @@ export class BetPanelView extends ResponsiveChildrenView {
       }
     } else {
       if (DeviceProxy.config.isPortrait) {
-        this.betPanelBg.resize();
         gap = 160;
         columns = 4;
         let rowIndex: number = 0;
@@ -192,7 +192,6 @@ export class BetPanelView extends ResponsiveChildrenView {
           }
         }
       } else {
-        this.betPanelBg.resize();
         columns = 6;
         gap = 160;
         let rowIndex: number = 0;
@@ -251,6 +250,8 @@ export class BetPanelView extends ResponsiveChildrenView {
 
   protected resizeView() {
     this.scale.set(1);
+    this.betPanelBg.width = this.betPanelBg.configData.width;
+    this.betPanelBg.height = this.betPanelBg.configData.height;
     this.positionButtons();
     super.resizeView();
   }

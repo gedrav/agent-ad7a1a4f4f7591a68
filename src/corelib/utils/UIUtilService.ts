@@ -6,6 +6,7 @@ import {
   FillGradient,
   Graphics,
   Mesh,
+  NineSliceSprite,
   PointData,
   Sprite,
   Text,
@@ -38,6 +39,7 @@ import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { Input } from '@pixi/ui';
+import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 
 const minMobileWidth: number = 44;
 const minMobileHeight: number = 44;
@@ -120,6 +122,9 @@ class UIUtilService {
         break;
       case 'Sprite':
         element = this.getSprite(obj.image, obj);
+        break;
+      case 'NineSliceSprite':
+        element = this.getNineSliceSprite(obj.image, obj);
         break;
       case 'DualSprite':
         element = this.getDualSprite(obj);
@@ -689,6 +694,29 @@ class UIUtilService {
 
   public getDualSprite(obj: any): DualSprite {
     return new DualSprite(obj);
+  }
+  public getNineSliceSprite(name: string, data: any = null): PixNineSpliceSprite {
+    let texture;
+    if (DeviceProxy.config.isDesktop) {
+      texture = this.getTexture(name);
+    } else {
+      if (data && data.mobileImage != undefined) {
+        texture = this.getTexture(data.mobileImage);
+      } else {
+        texture = this.getTexture(name);
+      }
+    }
+    const obj: any = {};
+    obj.texture = texture;
+    obj.leftWidth = data.nineSlice[0];
+    obj.topHeight = data.nineSlice[1];
+    obj.rightWidth = data.nineSlice[2];
+    obj.bottomHeight = data.nineSlice[3];
+    const sp: PixNineSpliceSprite = new PixNineSpliceSprite(obj);
+    sp.configData = data;
+    sp.label = name;
+    sp.name = name;
+    return sp;
   }
   public getSprite(name: string, data: any = null): PixSprite {
     let texture;

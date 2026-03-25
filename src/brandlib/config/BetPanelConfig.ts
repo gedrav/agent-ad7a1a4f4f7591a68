@@ -14,16 +14,15 @@ export const BET_PANEL_CONFIG = {
   Elements: [
     {
       name: 'betPanelBg',
-      type: 'ResponsiveGraphics',
-      image: 'shortPanelBG',
+      type: 'NineSliceSprite',
+      image: 'popupbg',
+      nineSlice: [32, 32, 32, 32],
       lWidth: 1184,
       lHeight: 544,
       pWidth: 712,
       pHeight: 752,
       width: 712,
       height: 752,
-      radius: 48,
-      color: 0xdae9f7,
     },
     {
       name: 'titleText',
@@ -33,7 +32,7 @@ export const BET_PANEL_CONFIG = {
       y: 90,
       toUpperCase: true,
       content: 'betPanelTitle',
-      style: { fontFamily: 'commonFont', fontSize: 40, fill: 0x000000, fontWeight: 700 },
+      style: { fontFamily: 'commonFont', fontSize: 40, fill: 0xffffff, fontWeight: 700 },
     },
     {
       name: 'btnContainer',
