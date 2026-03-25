@@ -40,7 +40,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   private gameLogo: PixSprite | PixSpine;
   private lightningBtn: PixFancyButton;
   private fullscreenEnterBtn: PixFancyButton;
-  private fullscreenEitBtn: PixFancyButton;
+  private fullscreenExitBtn: PixFancyButton;
   private infoBtn: PixFancyButton;
   private homeBtn: PixFancyButton;
   constructor(config: any) {
@@ -64,9 +64,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.homeBtn = this.elementsList['homeBtn'];
 
     this.fullscreenEnterBtn = this.elementsList['fullscreenEnterBtn'];
-    this.fullscreenEitBtn = this.elementsList['fullscreenExitBtn'];
-    if (this.fullscreenEitBtn) {
-      this.fullscreenEitBtn.visible = false;
+    this.fullscreenExitBtn = this.elementsList['fullscreenExitBtn'];
+    if (this.fullscreenExitBtn) {
+      this.fullscreenExitBtn.visible = false;
     }
 
     if (!appModel.getIsCheatMode()) {
@@ -121,10 +121,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
     }
     if (flag) {
       this.fullscreenEnterBtn.visible = false;
-      this.fullscreenEitBtn.visible = true;
+      this.fullscreenExitBtn.visible = true;
     } else {
       this.fullscreenEnterBtn.visible = true;
-      this.fullscreenEitBtn.visible = false;
+      this.fullscreenExitBtn.visible = false;
     }
   }
   protected onLongPress() {
@@ -344,5 +344,258 @@ export class ControlPanelView extends ResponsiveChildrenView {
         this.bbButtonsArray[k].x = this.soundOnBtn.x + (this.bbButtonsArray[k].width - this.soundOnBtn.width) / 2;
       }
     }
+  }
+
+  protected resizeView(): void {
+    if (DeviceProxy.config.isDesktop) {
+      if (DeviceProxy.config.isPortrait) {
+        this.resizeForDesktopPortrait();
+      } else {
+        this.resizeForDesktopLandscape();
+      }
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+      } else {
+      }
+    }
+  }
+  protected resizeForDesktopLandscape(): void {
+    const hPaddingPerc: number = 0.005;
+    const vPaddingPerc: number = 0.008;
+    const bigBtnHPaddingPerc: number = 0.02;
+    const midBtnPaddingPerc: number = 0.1;
+    const smallBtnHPaddingPerc: number = 0.04;
+    UIUtil.setRelativeScale(this.balanceComp, 0.14, 0.06, null, 1, 0.5);
+    UIUtil.alignHorizontal(this.balanceComp, { hAlign: 'left', hPaddingPerc: hPaddingPerc });
+    UIUtil.alignVertical(this.balanceComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
+
+    UIUtil.setRelativeScale(this.betComp, 0.14, 0.06, null, 1, 0.5);
+    UIUtil.alignHorizontal(this.betComp, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
+    UIUtil.alignVertical(this.betComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
+
+    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.16, null, 1, 0.4);
+    UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'right', hPaddingPerc: -bigBtnHPaddingPerc });
+    UIUtil.alignVertical(this.spinBtn, { vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.stopSpinBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopSpinBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopAutoBtn, 1, 1, this.spinBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.stopAutoBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopAutoBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.betBtn, 0.5, 0.5, this.spinBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.betBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.betBtn, { refComponent: 'spinBtn', vAlign: 'topUp', vPaddingPerc: -midBtnPaddingPerc });
+
+    UIUtil.setRelativeScale(this.turboBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.turboBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboBtn, {
+      refComponent: 'spinBtn',
+      vAlign: 'bottomDown',
+      vPaddingPerc: midBtnPaddingPerc,
+    });
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboSelectedBtn, {
+      refComponent: 'turboBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+
+    UIUtil.setRelativeScale(this.menuBtn, 0.05, 0.04, null, 1, 0.4);
+    UIUtil.alignHorizontal(this.menuBtn, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
+    UIUtil.alignVertical(this.menuBtn, { vAlign: 'top', vPaddingPerc: vPaddingPerc });
+
+    UIUtil.setRelativeScale(this.infoBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.infoBtn, {
+      refComponent: 'menuBtn',
+      hAlign: 'leftBefore',
+      hPaddingPerc: -smallBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.homeBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.homeBtn, {
+      hAlign: 'left',
+      hPaddingPerc: hPaddingPerc,
+    });
+    UIUtil.alignVertical(this.homeBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.soundOnBtn, {
+      hAlign: 'left',
+      hPaddingPerc: hPaddingPerc,
+    });
+    UIUtil.alignVertical(this.soundOnBtn, {
+      refComponent: 'balanceComp',
+      vAlign: 'topUp',
+      vPaddingPerc: -smallBtnHPaddingPerc,
+    });
+
+    UIUtil.setRelativeScale(this.soundOffBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.soundOffBtn, {
+      refComponent: 'soundOnBtn',
+      hAlign: 'center',
+      hPaddingPerc: 0,
+    });
+    UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+      refComponent: 'homeBtn',
+      hAlign: 'rightAfter',
+      hPaddingPerc: smallBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.fullscreenExitBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+      refComponent: 'fullscreenEnterBtn',
+      hAlign: 'center',
+      hPaddingPerc: 0,
+    });
+    UIUtil.alignVertical(this.fullscreenExitBtn, {
+      refComponent: 'fullscreenEnterBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+
+    UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.cheatBtn, {
+      refComponent: 'soundOnBtn',
+      hAlign: 'rightAfter',
+      hPaddingPerc: smallBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.cheatBtn, {
+      refComponent: 'soundOnBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+  }
+  protected resizeForDesktopPortrait(): void {
+    const hPaddingPerc: number = 0.005;
+    const vPaddingPerc: number = 0.008;
+    const bigBtnVPaddingPerc: number = 0.08;
+    const midBtnPaddingPerc: number = 0.1;
+    const smallBtnHPaddingPerc: number = 0.04;
+
+    UIUtil.setRelativeScale(this.balanceComp, 0.32, 0.06, null, 1, 0.32);
+    UIUtil.alignHorizontal(this.balanceComp, { hAlign: 'left', hPaddingPerc: hPaddingPerc });
+    UIUtil.alignVertical(this.balanceComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
+
+    UIUtil.setRelativeScale(this.betComp, 0.32, 0.06, null, 1, 0.32);
+    UIUtil.alignHorizontal(this.betComp, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
+    UIUtil.alignVertical(this.betComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
+
+    UIUtil.setRelativeScale(this.spinBtn, 0.12, 0.16, null, 1, 0.32);
+    UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.spinBtn, { vAlign: 'bottom', vPaddingPerc: -bigBtnVPaddingPerc });
+
+    UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.stopSpinBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopSpinBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopAutoBtn, 1, 1, this.spinBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.stopAutoBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopAutoBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.betBtn, 0.5, 0.5, this.spinBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.betBtn, {
+      refComponent: 'spinBtn',
+      hAlign: 'rightAfter',
+      hPaddingPerc: midBtnPaddingPerc,
+    });
+    UIUtil.alignVertical(this.betBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.turboBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.turboBtn, {
+      refComponent: 'spinBtn',
+      hAlign: 'leftBefore',
+      hPaddingPerc: -midBtnPaddingPerc,
+    });
+    UIUtil.alignVertical(this.turboBtn, {
+      refComponent: 'spinBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboSelectedBtn, {
+      refComponent: 'turboBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+
+    UIUtil.setRelativeScale(this.menuBtn, 0.04, 0.05, null, 1, 0.4);
+    UIUtil.alignHorizontal(this.menuBtn, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
+    UIUtil.alignVertical(this.menuBtn, { vAlign: 'top', vPaddingPerc: vPaddingPerc });
+
+    UIUtil.setRelativeScale(this.infoBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.infoBtn, {
+      refComponent: 'menuBtn',
+      hAlign: 'leftBefore',
+      hPaddingPerc: -smallBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.homeBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.homeBtn, {
+      hAlign: 'left',
+      hPaddingPerc: hPaddingPerc,
+    });
+    UIUtil.alignVertical(this.homeBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.soundOnBtn, {
+      hAlign: 'left',
+      hPaddingPerc: hPaddingPerc,
+    });
+    UIUtil.alignVertical(this.soundOnBtn, {
+      refComponent: 'balanceComp',
+      vAlign: 'topUp',
+      vPaddingPerc: -smallBtnHPaddingPerc,
+    });
+
+    UIUtil.setRelativeScale(this.soundOffBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.soundOffBtn, {
+      refComponent: 'soundOnBtn',
+      hAlign: 'center',
+      hPaddingPerc: 0,
+    });
+    UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+      refComponent: 'homeBtn',
+      hAlign: 'rightAfter',
+      hPaddingPerc: smallBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.fullscreenExitBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+      refComponent: 'fullscreenEnterBtn',
+      hAlign: 'center',
+      hPaddingPerc: 0,
+    });
+    UIUtil.alignVertical(this.fullscreenExitBtn, {
+      refComponent: 'fullscreenEnterBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+
+    UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.cheatBtn, {
+      refComponent: 'soundOnBtn',
+      hAlign: 'rightAfter',
+      hPaddingPerc: smallBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.cheatBtn, {
+      refComponent: 'soundOnBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
   }
 }

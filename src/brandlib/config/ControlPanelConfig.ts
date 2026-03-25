@@ -30,7 +30,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           name: 'titleText',
           type: 'Text',
           content: 'balanceCaps',
-          style: { fontFamily: 'commonFont', fontSize: 14, fill: 0xffffff, fontWeight: 600 },
+          style: { fontFamily: 'commonFont', fontSize: 16, fill: 0xffffff, fontWeight: 600 },
           anchor: { x: 0, y: 0 },
           x: 24,
           y: 10,
@@ -39,13 +39,13 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           name: 'valueText',
           type: 'Text',
           contentText: '',
-          style: { fontFamily: 'commonFont', fontSize: 18, fill: 0xffffff, fontWeight: 700 },
+          style: { fontFamily: 'commonFont', fontSize: 20, fill: 0xffffff, fontWeight: 700 },
           anchor: { x: 0, y: 0 },
           x: 24,
           y: 30,
         },
       ],
-      layoutData: {
+      layoutData1: {
         Desktop: {
           widthPerc: 0.3,
           heightPerc: 0.08,
@@ -58,12 +58,13 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         },
         Landscape: {
           widthPerc: 0.16,
-          heightPerc: 0.16,
+          heightPerc: 0.2,
           hAlign: 'left',
           hPaddingPerc: 0.016,
           vAlign: 'bottom',
           vPaddingPerc: -0.016,
           maxScale: 1,
+          minScale: 0.5,
         },
         Portrait: {
           widthPerc: 0.36,
@@ -86,7 +87,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           name: 'titleText',
           type: 'Text',
           content: 'totalBetCaps',
-          style: { fontFamily: 'commonFont', fontSize: 14, fill: 0xffffff, fontWeight: 600 },
+          style: { fontFamily: 'commonFont', fontSize: 16, fill: 0xffffff, fontWeight: 600 },
           anchor: { x: 1, y: 0 },
           x: 206,
           y: 10,
@@ -95,13 +96,13 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           name: 'valueText',
           type: 'Text',
           contentText: '',
-          style: { fontFamily: 'commonFont', fontSize: 18, fill: 0xffffff, fontWeight: 700 },
+          style: { fontFamily: 'commonFont', fontSize: 20, fill: 0xffffff, fontWeight: 700 },
           anchor: { x: 1, y: 0 },
           x: 206,
           y: 30,
         },
       ],
-      layoutData: {
+      layoutData1: {
         Desktop: {
           widthPerc: 0.3,
           heightPerc: 0.08,
@@ -142,7 +143,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'spinBtn_inactive',
         animations: CoreUIConfig.spinButtonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           widthPerc: 0.08,
           heightPerc: 0.16,
@@ -192,7 +193,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'stopSpinBtn_inactive',
         animations: CoreUIConfig.spinButtonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           widthPerc: 0.08,
           heightPerc: 0.16,
@@ -241,7 +242,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'stopSpinBtn_inactive',
         animations: CoreUIConfig.spinButtonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           widthPerc: 0.08,
           heightPerc: 0.16,
@@ -291,7 +292,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'turboBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'spinBtn',
           widthPerc: 0.6,
@@ -345,7 +346,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'turboSelectedBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'spinBtn',
           widthPerc: 0.6,
@@ -398,7 +399,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'betBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'spinBtn',
           widthPerc: 0.6,
@@ -451,7 +452,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'menuBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           widthPerc: 0.04,
           heightPerc: 0.05,
@@ -495,13 +496,13 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'infoBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'left',
-          hPaddingPerc: -1.3,
+          hPaddingPerc: -1.05,
           vAlign: 'middle',
           vPaddingPerc: 0,
           maxScale: 1,
@@ -544,10 +545,11 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'soundOnBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           posRefComponent: 'balanceComp',
+          hRefComponent: 'window',
           widthPerc: 1,
           heightPerc: 1,
           hAlign: 'left',
@@ -595,7 +597,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         animations: CoreUIConfig.buttonStates,
       },
       visible: false,
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           posRefComponent: 'soundOnBtn',
@@ -644,7 +646,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'homeBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           posRefComponent: 'window',
@@ -690,7 +692,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'fullscreenEnterBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           posRefComponent: 'homeBtn',
@@ -740,7 +742,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'fullscreenExitBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           posRefComponent: 'homeBtn',
@@ -789,7 +791,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         disabledView: 'cheatBtn_inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      layoutData: {
+      layoutData1: {
         Desktop: {
           refComponent: 'menuBtn',
           posRefComponent: 'soundOnBtn',
@@ -827,7 +829,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     },
     ...(freespinInfoCompConfig ? [freespinInfoCompConfig] : []),
   ],
-  layoutData: {
+  layoutData1: {
     Desktop: {},
     Portrait: {},
     Landscape: {},

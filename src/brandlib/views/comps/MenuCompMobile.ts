@@ -58,7 +58,6 @@ export class MenuCompMobile extends MenuComp {
       if (i == 2 || i == 6) {
         btn.y = this.elementsList[btns[i - 1]].y;
       }
-      console.log('btn -- ', btns[i], btn.y);
     }
   }
 

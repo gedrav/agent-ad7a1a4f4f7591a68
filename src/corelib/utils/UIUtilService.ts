@@ -1048,7 +1048,17 @@ class UIUtilService {
         break;
       case 'leftBefore':
         if (element.anchor && element.anchor.x != 0) {
-          this.setPositionX(element, refElement.x - element.getWidth() + Util.getDefaultValue(layout.hPadding, 0));
+          if (refElement.anchor && refElement.anchor.x != 0) {
+            this.setPositionX(
+              element,
+              refElement.x -
+                refElement.getWidth() * refElement.anchor.x -
+                element.getWidth() * element.anchor.x +
+                Util.getDefaultValue(layout.hPadding, 0),
+            );
+          } else {
+            this.setPositionX(element, refElement.x - element.getWidth() + Util.getDefaultValue(layout.hPadding, 0));
+          }
         } else if (element.configData.anchor != undefined) {
           this.setPositionX(
             element,
@@ -1147,7 +1157,10 @@ class UIUtilService {
           if (refElement.anchor && refElement.anchor.x != 0) {
             this.setPositionX(
               element,
-              refElement.x + refElement.getWidth() * refElement.anchor.x + Util.getDefaultValue(layout.hPadding, 0),
+              refElement.x +
+                refElement.getWidth() * refElement.anchor.x +
+                element.getWidth() * element.anchor.x +
+                Util.getDefaultValue(layout.hPadding, 0),
             );
           } else {
             this.setPositionX(
@@ -1159,14 +1172,26 @@ class UIUtilService {
             );
           }
         } else if (element.configData.anchor != undefined) {
-          this.setPositionX(
-            element,
-            refElement.x +
-              refElement.getWidth() -
-              element.getWidth() +
-              element.getWidth() * element.configData.anchor.x +
-              Util.getDefaultValue(layout.hPadding, 0),
-          );
+          if (refElement.anchor && refElement.anchor.x != 0) {
+            this.setPositionX(
+              element,
+              refElement.x +
+                refElement.getWidth() * refElement.anchor.x +
+                refElement.getWidth() -
+                element.getWidth() +
+                element.getWidth() * element.configData.anchor.x +
+                Util.getDefaultValue(layout.hPadding, 0),
+            );
+          } else {
+            this.setPositionX(
+              element,
+              refElement.x +
+                refElement.getWidth() -
+                element.getWidth() +
+                element.getWidth() * element.configData.anchor.x +
+                Util.getDefaultValue(layout.hPadding, 0),
+            );
+          }
         } else {
           this.setPositionX(element, refElement.x + (refElement.getWidth() + Util.getDefaultValue(layout.hPadding, 0)));
         }
@@ -2066,6 +2091,60 @@ class UIUtilService {
     } catch (error) {
       console.error('Screenshot failed:', error);
       return null;
+    }
+  }
+
+  public setRelativeScale(
+    element: any,
+    widthPerc: number,
+    heightPerc: number = 1,
+    relativeTo: any = null,
+    maxScale: number,
+    minScale: number,
+  ): void {
+    if (!relativeTo) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const that: any = this;
+      relativeTo = {
+        getWidth: function () {
+          return that.getGameWidth();
+        },
+        getHeight: function () {
+          return that.getGameHeight();
+        },
+      };
+    }
+    element.scale.set(1);
+    const wsc = (relativeTo.getWidth() * widthPerc) / element.width;
+    const hsc = (relativeTo.getHeight() * heightPerc) / element.height;
+    let sc: number = Math.min(wsc, hsc);
+    if (minScale != 0) {
+      sc = Math.max(sc, minScale);
+    }
+    if (maxScale != 0) {
+      sc = Math.min(sc, maxScale);
+    }
+    element.scale.set(sc);
+  }
+  public setRelativePosition(
+    element: any,
+    hAlign: string,
+    vAlign: string,
+    relativeTo: any = null,
+    hPadding: number,
+    vPadding: number,
+  ): void {
+    if (!relativeTo) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const that: any = this;
+      relativeTo = {
+        getWidth: function () {
+          return that.getGameWidth();
+        },
+        getHeight: function () {
+          return that.getGameHeight();
+        },
+      };
     }
   }
 }
