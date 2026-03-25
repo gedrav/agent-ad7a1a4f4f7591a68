@@ -538,6 +538,7 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   // ---------------- end of spin --------------------
   protected onSymbolClicked(symb: ReelSymbolSprite): void {
+    if (appModel.gameResult && appModel.getSpinWin() > 0) return;
     if (this.currentPayoutSymbol) {
       this.symbolsContainer.addChild(this.currentPayoutSymbol);
     }
