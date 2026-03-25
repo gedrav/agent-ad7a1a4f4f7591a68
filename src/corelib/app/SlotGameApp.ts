@@ -63,10 +63,8 @@ class SlotGameApp {
     GameProxy.config.textsToClear = [];
     GameProxy.config.imagesToClear = [];
 
-    const gameHost = document.getElementById('gameStage') as HTMLDivElement;
     this.app = new Application();
     await this.app.init({
-      resizeTo: gameHost, // important: resize to container, not window
       resolution: Math.ceil(window.devicePixelRatio),
       backgroundColor: GameProxy.config.gameBGColor,
       hello: true,
