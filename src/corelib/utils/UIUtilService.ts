@@ -39,6 +39,8 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { Input } from '@pixi/ui';
 
+const minMobileWidth: number = 44;
+const minMobileHeight: number = 44;
 const desktopWidth: number = 2424;
 const desktopHeight: number = 1300;
 class UIUtilService {
@@ -2125,6 +2127,18 @@ class UIUtilService {
       sc = Math.min(sc, maxScale);
     }
     element.scale.set(sc);
+    if (DeviceProxy.config.isDevice) {
+      if (element.width < minMobileWidth) {
+        element.scale.set(1);
+        const sc = minMobileWidth / element.width;
+        element.scale.set(sc);
+      }
+      if (element.height < minMobileHeight) {
+        element.scale.set(1);
+        const sc = minMobileHeight / element.height;
+        element.scale.set(sc);
+      }
+    }
   }
   public setRelativePosition(
     element: any,
