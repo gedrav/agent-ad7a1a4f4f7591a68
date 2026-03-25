@@ -347,6 +347,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected resizeView(): void {
+    super.resizeView();
     if (DeviceProxy.config.isDesktop) {
       if (DeviceProxy.config.isPortrait) {
         this.resizeForDesktopPortrait();
