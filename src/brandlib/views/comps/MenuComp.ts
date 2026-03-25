@@ -13,6 +13,8 @@ export class MenuComp extends ResponsiveChildrenView {
   private soundOffBtn: PixFancyButton;
   private infoBtn: PixFancyButton;
   private gameHistoryBtn: PixFancyButton;
+  private showSplashBtn: PixFancyButton;
+  private hideSplashBtn: PixFancyButton;
 
   private transactionHistoryBtn: PixFancyButton;
 
@@ -27,12 +29,18 @@ export class MenuComp extends ResponsiveChildrenView {
     this.transactionHistoryBtn = this.elementsList['transactionHistoryBtn'];
     this.infoBtn = this.elementsList['infoBtn'];
     this.gameHistoryBtn = this.elementsList['gameHistoryBtn'];
+    this.showSplashBtn = this.elementsList['showSplashBtn'];
+    this.hideSplashBtn = this.elementsList['hideSplashBtn'];
+
     if (this.soundOffBtn) {
       this.soundOffBtn.visible = false;
     }
     this.visible = false;
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
     this.onSoundStateChanged(appModel.getPreferences().sound);
+
+    EventHandler.addEventListener(SlotEvents.SHOW_INTRO_STATE_CHANGED, this.onShowIntroStateChanged.bind(this));
+    this.onShowIntroStateChanged(appModel.getPreferences().showIntro);
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideMenu.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.showMenu.bind(this));
@@ -51,5 +59,10 @@ export class MenuComp extends ResponsiveChildrenView {
   private onSoundStateChanged(flag: boolean): void {
     this.soundOnBtn.visible = flag;
     this.soundOffBtn.visible = !flag;
+  }
+
+  private onShowIntroStateChanged(showIntro: boolean): void {
+    if (this.showSplashBtn) this.showSplashBtn.visible = !showIntro;
+    if (this.hideSplashBtn) this.hideSplashBtn.visible = showIntro;
   }
 }
