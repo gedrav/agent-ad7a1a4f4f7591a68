@@ -45,16 +45,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.4,
       fadeOutDuration: 1000,
     },
-    // {
-    //   name: 'musFeatureTermBGM',
-    //   type: 'game',
-    //   soundType: 'ambient',
-    //   loop: false,
-    //   playEvents: ['FREESPIN_BG_MUSIC_TERM'],
-    //   stopEvents: ['START_MAINGAME_BG_MUSIC'],
-    //   volume: 0.4,
-    //   fadeOutDuration: 1000,
-    // },
 
     // --- Buttons ---
     {
@@ -65,14 +55,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.6,
       fadeOutDuration: 1000,
     },
-    // {
-    //   name: 'historyAndRulesBtnSound',
-    //   type: 'common',
-    //   loop: false,
-    //   playEvents: ['PLAY_HISTORY_AND_RULES_BTN_SOUND'],
-    //   volume: 0.6,
-    //   fadeOutDuration: 1000,
-    // },
     {
       name: 'spinClicked',
       type: 'game',
@@ -95,7 +77,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['START_SLOT_SPIN'],
-      stopEvents: ['STOP_REEL_IMMEDIATELY', 'FINAL_SYMBOL_SETTLED', 'STOP_SPIN_CLICKED'],
+      stopEvents: ['STOP_REEL_IMMEDIATELY', 'FINAL_SYMBOL_SETTLED', 'STOP_SPIN_CLICKED', 'REELSTRIP_SPIN_JERK'],
       volume: 0.6,
       fadeOutDuration: 100,
     },
@@ -109,17 +91,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.6,
       fadeOutDuration: 100,
     },
-
-    // --- Scatter landing (param-based variants) ---
-    // {
-    //   name: 'scatterLoadingSound1',
-    //   type: 'game',
-    //   loop: false,
-    //   playEvents: ['PLAY_SCATTER_LANDING_SOUND'],
-    //   // matchParam: 1,
-    //   volume: 0.6,
-    //   fadeOutDuration: 100,
-    // },
 
     // --- Wild blast (1–3 wilds) ---
     {
@@ -417,33 +388,5 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.6,
       fadeOutDuration: 100,
     },
-
-    // --- Anticipation / cascade ---
-    // {
-    //   name: 'anticipation',
-    //   type: 'game',
-    //   loop: false,
-    //   playEvents: ['PLAY_ANTICIPATION_ANIM_SOUND'],
-    //   volume: 0.6,
-    //   fadeOutDuration: 1000,
-    // },
-    // {
-    //   name: 'cascadeDrop',
-    //   type: 'game',
-    //   loop: false,
-    //   playEvents: ['PLAY_SYMB_DROP_AFTER_SCATTER_ANTICIPATION'],
-    //   volume: 0.6,
-    //   fadeOutDuration: 1000,
-    // },
-
-    // --- Betting ---
-    // {
-    //   name: 'betUp',
-    //   type: 'common',
-    //   loop: false,
-    //   playEvents: ['PLAY_BET_SOUND'],
-    //   volume: 0.6,
-    //   fadeOutDuration: 0,
-    // },
   ],
 };

@@ -2,17 +2,19 @@ import { MenuComp } from '@brand/views/comps/MenuComp';
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
-import { MenuCompAmbientSoundToggleCommand } from '@core/commands/action/MenuCompAmbientSoundToggleCommand';
-import { MenuCompSfxSoundToggleCommand } from '@core/commands/action/MenuCompSfxSoundToggleCommand';
 import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand';
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
-import { ShowInfoCommand } from '@core/commands/action/ShowInfoCommand';
 import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
 import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
 import { ShowHideSplashCommand } from '@core/commands/action/ShowHideSplashCommand';
+
+const GLOBAL_MENU_BTN_ML_PROPS = {
+  cs: { fontSize: 33 },
+  pl: { fontSize: 30 },
+};
 
 export const MENU_CONFIG: any = {
   name: 'menuComp',
@@ -60,6 +62,7 @@ export const MENU_CONFIG: any = {
           align: 'left',
           anchor: { x: 0, y: 0 },
         },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -88,6 +91,7 @@ export const MENU_CONFIG: any = {
         anchor: { x: 0, y: 0 },
         content: 'soundOnOffText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -115,6 +119,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'soundOnOffText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -141,6 +146,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'transactionHistoryText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -167,6 +173,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'gameRulesText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -248,6 +255,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'gameHistory',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -274,6 +282,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'depositText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -300,6 +309,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'promotionText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
   ],

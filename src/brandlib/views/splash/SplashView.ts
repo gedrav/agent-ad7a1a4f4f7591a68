@@ -49,8 +49,8 @@ export class SplashView extends ResponsiveChildrenView {
     const prefs = appModel.getPreferences();
     this.soundOnBtn.visible = prefs.sound;
     this.soundOffBtn.visible = !prefs.sound;
-    this.showIntroOnBtn.visible = !prefs.showIntro;
-    this.showIntroOffBtn.visible = prefs.showIntro;
+    this.showIntroOnBtn.visible = prefs.showIntro;
+    this.showIntroOffBtn.visible = !prefs.showIntro;
     SoundFactory.ambientState = prefs.sound;
     SoundFactory.sfxState = prefs.sound;
 
@@ -61,14 +61,16 @@ export class SplashView extends ResponsiveChildrenView {
   protected onshowIntroOnBtnClick(): void {
     this.showIntroOnBtn.visible = false;
     this.showIntroOffBtn.visible = true;
-    appModel.setPreferencesShow(true);
+    appModel.setPreferencesShow(false);
     appModel.savePreferences();
+    EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, false);
   }
   protected onshowIntroOffBtnClick(): void {
     this.showIntroOnBtn.visible = true;
     this.showIntroOffBtn.visible = false;
-    appModel.setPreferencesShow(false);
+    appModel.setPreferencesShow(true);
     appModel.savePreferences();
+    EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, true);
   }
   protected onSoundOnBtnClick(): void {
     this.soundOnBtn.visible = false;
