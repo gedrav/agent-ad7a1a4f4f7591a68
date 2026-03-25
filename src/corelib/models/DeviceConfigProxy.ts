@@ -21,11 +21,11 @@ class DeviceConfigProxy extends AbstractProxy {
   public readDevice(): void {
     this._config = {};
     this._config.hostName = location.hostname;
+    this._config.isIOSDevice = isMobile.apple.device;
     const gameStage = document.getElementById('gameStage');
-    const rect = gameStage?.getBoundingClientRect();
+    const rect = this._config.isIOSDevice ? gameStage?.getBoundingClientRect() : null;
     this._config.windowWidth = rect?.width || window.innerWidth;
     this._config.windowHeight = rect?.height || window.innerHeight;
-    this._config.isIOSDevice = isMobile.apple.device;
     this._config.isIOSMobile = isMobile.apple.phone;
     this._config.isTablet = isMobile.tablet;
 
