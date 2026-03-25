@@ -469,7 +469,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     const hPaddingPerc: number = 0.005;
     const vPaddingPerc: number = 0.008;
     const bigBtnHPaddingPerc: number = 0.02;
-    const midBtnPaddingPerc: number = 0.1;
+    const midBtnPaddingPerc: number = 0.05;
     const smallBtnHPaddingPerc: number = 0.04;
     UIUtil.setRelativeScale(this.balanceComp, 0.14, 0.06, null, 1, 0.5);
     UIUtil.alignHorizontal(this.balanceComp, { hAlign: 'left', hPaddingPerc: hPaddingPerc });
@@ -479,7 +479,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.alignHorizontal(this.betComp, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
     UIUtil.alignVertical(this.betComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
 
-    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.16, null, 1, 0.4);
+    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.12, null, 1, 0.4);
     UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'right', hPaddingPerc: -bigBtnHPaddingPerc });
     UIUtil.alignVertical(this.spinBtn, { vAlign: 'middle', vPaddingPerc: 0 });
 
