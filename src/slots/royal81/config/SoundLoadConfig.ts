@@ -95,7 +95,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['START_SLOT_SPIN'],
-      stopEvents: ['STOP_REEL_IMMEDIATELY', 'FINAL_SYMBOL_SETTLED', 'STOP_SPIN_CLICKED'],
+      stopEvents: ['STOP_REEL_IMMEDIATELY', 'FINAL_SYMBOL_SETTLED', 'STOP_SPIN_CLICKED', 'REELSTRIP_SPIN_JERK'],
       volume: 0.6,
       fadeOutDuration: 100,
     },
