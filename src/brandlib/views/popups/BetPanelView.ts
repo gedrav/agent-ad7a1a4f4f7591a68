@@ -13,6 +13,7 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
 
 const btnConfig: any = {
   name: 'btn1',
@@ -42,8 +43,8 @@ const btnConfig: any = {
       fontFamily: 'commonFont',
       fontSize: 28,
       fontWeight: 400,
-      nonSelectedStateColor: 0x000000,
-      selectedStateColor: 0xffffff,
+      nonSelectedStateColor: 0xffffff,
+      selectedStateColor: 0x000000,
     },
   },
 };
@@ -59,6 +60,8 @@ export class BetPanelView extends ResponsiveChildrenView {
   private cancelBtn: PixFancyButton;
   private setBtn: PixFancyButton;
   private tempBetPos: number = 0;
+  private stakebg: PixSprite;
+  private stakeContainer: PixView;
 
   constructor(config: any) {
     super(config);
@@ -72,9 +75,11 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.betPanelBg = this.elementsList['betPanelBg'];
     this.titleText = this.elementsList['titleText'];
     this.btnContainer = this.elementsList['btnContainer'];
-    this.upStakeBtn = this.btnContainer.elementsList['upStakeBtn'];
-    this.downStakeBtn = this.btnContainer.elementsList['downStakeBtn'];
-    this.stakeText = this.btnContainer.elementsList['stakeText'];
+    this.stakeContainer = this.elementsList['stakeContainer'];
+    this.upStakeBtn = this.stakeContainer.elementsList['upStakeBtn'];
+    this.downStakeBtn = this.stakeContainer.elementsList['downStakeBtn'];
+    this.stakeText = this.stakeContainer.elementsList['stakeText'];
+    this.stakebg = this.stakeContainer.elementsList['stakebg'];
     this.cancelBtn = this.elementsList['cancelBtn'];
     this.setBtn = this.elementsList['setBtn'];
 
@@ -213,27 +218,12 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.maxBetBtn.x = this.betBtnsArray[this.betBtnsArray.length - 1].x + gap;
     this.maxBetBtn.y = this.betBtnsArray[this.betBtnsArray.length - 1].y;
 
-    this.downStakeBtn.x = this.betBtnsArray[columns / 2 - 1].x - (this.betBtnsArray[1].width - this.downStakeBtn.width);
-    if (DeviceProxy.config.isDesktop) {
-      this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.32;
-    } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 1.5;
-      } else {
-        this.downStakeBtn.y = this.maxBetBtn.y + this.maxBetBtn.height + this.downStakeBtn.height * 0.5;
-      }
-    }
-
-    this.upStakeBtn.x =
-      this.betBtnsArray[columns / 2].x + (this.betBtnsArray[columns - 1].width - this.upStakeBtn.width);
-    this.upStakeBtn.y = this.downStakeBtn.y;
-
-    this.stakeText.x = this.betBtnsArray[columns / 2 - 1].x + gap / 2;
-    this.stakeText.y = this.upStakeBtn.y;
     this.btnContainer.x = (this.betPanelBg.width - this.btnContainer.width) / 2 + this.betBtnsArray[0].width / 2;
+    this.stakeContainer.x = (this.betPanelBg.width - this.stakeContainer.width) / 2;
+    this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height + 10;
 
-    this.cancelBtn.x = this.betPanelBg.width * 0.52 - this.cancelBtn.width * 0.5;
-    this.setBtn.x = this.betPanelBg.width * 0.54 + this.setBtn.width * 0.5;
+    this.cancelBtn.x = this.betPanelBg.width * 0.48 - this.cancelBtn.width * 0.5;
+    this.setBtn.x = this.betPanelBg.width * 0.52 + this.setBtn.width * 0.5;
 
     if (DeviceProxy.config.isDesktop) {
       this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;
