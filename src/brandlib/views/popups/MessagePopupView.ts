@@ -4,6 +4,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class MessagePopupView extends ResponsiveChildrenView {
   private closeBtn: any;
@@ -34,5 +35,20 @@ export class MessagePopupView extends ResponsiveChildrenView {
   protected async closeMessagePopup() {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     this.parent.removeChild(this);
+  }
+  protected resizeView() {
+    if (DeviceProxy.config.isDesktop) {
+      this.panelBG.width = this.panelBG.configData.width;
+      this.panelBG.height = this.panelBG.configData.height;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.panelBG.width = this.panelBG.configData.pWidth;
+        this.panelBG.height = this.panelBG.configData.pHeight;
+      } else {
+        this.panelBG.width = this.panelBG.configData.lWidth;
+        this.panelBG.height = this.panelBG.configData.lHeight;
+      }
+    }
+    super.resizeView();
   }
 }
