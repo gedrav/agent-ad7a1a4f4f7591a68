@@ -2,11 +2,8 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { AppEvents } from '@core/events/AppEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { Input } from '@pixi/ui';

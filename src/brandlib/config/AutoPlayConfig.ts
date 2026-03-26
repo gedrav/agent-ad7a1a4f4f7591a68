@@ -1,13 +1,9 @@
 import { AutoplayView } from '@brand/views/popups/AutoplayView';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
 import { CoreUIConfig } from './CoreUIConfig';
-import { AutoPlayChangeToggleBtnCommand } from '@core/commands/action/AutoPlayChangeToggleBtnCommand';
 import { AutoPlaySliderChangeCommand } from '@core/commands/action/AutoPlaySliderChangeCommand';
 import { AutoPlayCancelBtnCommand } from '@core/commands/action/AutoPlayCancelBtnCommand';
 import { AutoPlayConfirmBtnCommand } from '@core/commands/action/AutoPlayConfirmBtnCommand';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
-import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
-import { UIUtil } from '@core/utils/UIUtilService';
 
 export const AUTOPLAY_CONFIG = {
   name: 'autoplayView',

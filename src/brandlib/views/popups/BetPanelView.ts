@@ -10,7 +10,6 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
