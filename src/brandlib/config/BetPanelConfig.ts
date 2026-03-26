@@ -53,7 +53,7 @@ export const BET_PANEL_CONFIG = {
           anchor: { x: 0.5, y: 0.5 },
           style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 40, fontWeight: 700 },
           x: 279,
-          y: 40,
+          y: 36,
         },
         {
           name: 'downStakeBtn',
@@ -92,7 +92,16 @@ export const BET_PANEL_CONFIG = {
           x: 500,
           y: 40,
         },
-        { name: 'minmaxbetBG', type: 'Sprite', image: 'minmaxbetBG', x: 69, y: 100 },
+        { name: 'minmaxbetBG', type: 'Sprite', image: 'minmaxbetBG', x: 39, y: 102 },
+        {
+          name: 'minmaxbetText',
+          type: 'Text',
+          contentText: '',
+          anchor: { x: 0.5, y: 0.5 },
+          style: { fontFamily: 'commonFont', fill: 0xb3b3b3, fontSize: 24, fontWeight: 700 },
+          x: 279,
+          y: 130,
+        },
       ],
     },
     {

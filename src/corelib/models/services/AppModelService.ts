@@ -318,12 +318,11 @@ class AppModelService {
     return this.gameInfo.betsArray[this.gameInfo.betPos];
   }
 
+  public getMinBet(): number {
+    return this.gameInfo.minBet;
+  }
   public getMaxBet(): number {
-    return (
-      this.gameInfo?.betsArray[this.gameInfo.betsArray.length - 1] *
-      this.gameInfo?.creditValue *
-      this.getSelectedLines()
-    );
+    return this.gameInfo.maxBet;
   }
   public getTotalBet(): number {
     return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();

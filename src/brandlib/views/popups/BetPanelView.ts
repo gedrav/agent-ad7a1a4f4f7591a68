@@ -62,6 +62,7 @@ export class BetPanelView extends ResponsiveChildrenView {
   private tempBetPos: number = 0;
   private stakebg: PixSprite;
   private stakeContainer: PixView;
+  private minmaxbetText: PixText;
 
   constructor(config: any) {
     super(config);
@@ -82,6 +83,11 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.stakebg = this.stakeContainer.elementsList['stakebg'];
     this.cancelBtn = this.elementsList['cancelBtn'];
     this.setBtn = this.elementsList['setBtn'];
+    this.minmaxbetText = this.stakeContainer.elementsList['minmaxbetText'];
+    this.minmaxbetText.text = Util.parseMessage(Util.getContent('minMaxBetText'), [
+      Util.formatCurrency(appModel.getMinBet()),
+      Util.formatCurrency(appModel.getMaxBet()),
+    ]);
 
     const totalBetsArray = Util.cloneArray(appModel.getAllBets());
 
