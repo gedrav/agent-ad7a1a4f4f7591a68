@@ -175,6 +175,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
         return;
       }
       if (this.spinBtn.enabled) {
+        if (appModel.getIsAutoSession()) {
+          return;
+        }
         const action: ActionCommand = SpinClickCommand;
         action.execute(this.spinBtn);
       } else if (this.stopSpinBtn.enabled && this.stopSpinBtn.visible && !this.spinBtn.visible) {
