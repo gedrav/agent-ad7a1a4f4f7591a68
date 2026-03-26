@@ -2,7 +2,7 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
-import { Ticker } from 'pixi.js';
+import { Point, Ticker } from 'pixi.js';
 import WinController from '@core/views/slotmachine/WinController';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -62,6 +62,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected reelWinTicker: ReelWinTicker;
   private tickerComp: ReelTickerComp;
   private fsAutoCounterComp: FSAutoCounterComp;
+  public slotGuideRect: PixGraphics;
 
   constructor(configData: any) {
     super(configData);
@@ -77,6 +78,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.modalRect.alpha = 0;
     UIUtil.setClickable(this.modalRect, false);
     UIUtil.addInteraction(this.modalRect, this.hidePayout.bind(this));
+
+    this.slotGuideRect = UIUtil.getRectangle(200, 200, 0xffff00);
+    this.addChildAt(this.slotGuideRect, 0);
+    this.slotGuideRect.alpha = 0;
 
     this.reelsData = this.configData.data;
     this.reelSpinningState = [];
@@ -111,6 +116,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.winController.symbolsContainer = this.symbolsContainer;
     this.winController.winSymbolsContainer = this.winSymbolsContainer;
     this.winController.lineWinAmountComp = this.lineWinAmountComp;
+    this.winController.slotReel = this;
     this.createReel();
 
     this.ticker = new Ticker();
@@ -687,5 +693,17 @@ export default class SlotReel extends ResponsiveChildrenView {
       }
     }
     this.winController.reelsData = this.reelsData;
+  }
+
+  protected resizeView(): void {
+    if (this.slotGuideRect) {
+      const rect = this.guideRect;
+      this.slotGuideRect.width = rect.getBounds().width;
+      this.slotGuideRect.height = rect.getBounds().height;
+      const local = this.toLocal(this.parent.toGlobal(new Point(rect.x, rect.y)));
+      this.slotGuideRect.x = local.x;
+      this.slotGuideRect.y = local.y;
+    }
+    super.resizeView();
   }
 }

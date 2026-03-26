@@ -24,7 +24,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       width: 1300,
       height1: 1050,
       height: 1050,
-      alpha: 0,
+      alpha: 1,
     },
 
     {
@@ -236,17 +236,17 @@ export const SLOT_MACHINE_CONFIG: any = {
           y: 200,
           Elements: [
             {
+              name: 'multiplierImg',
+              type: 'Sprite',
+              image: 'x2',
+              anchor: { x: 0.5, y: 0.5 },
+              y: -60,
+            },
+            {
               name: 'valueText',
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
               style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
-            },
-            {
-              name: 'wildMultiplierText',
-              type: 'Text',
-              anchor: { x: 0.5, y: 1 },
-              y: -100,
-              style: { fontFamily: 'gameFont1', fontSize: 100, fill: 0xffd700, stroke: 0x000000, strokeThickness: 6 },
             },
           ],
         },

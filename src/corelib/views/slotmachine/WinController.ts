@@ -5,12 +5,14 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
+import SlotReel from '@core/views/slotmachine/SlotReel';
 export default class WinController {
   private noOfRows: number;
   private noOfReels: number;
   public symbolsContainer;
   public winSymbolsContainer;
   public lineWinAmountComp;
+  public slotReel: SlotReel;
   public reelsData;
   private timeoutId: any;
   private tumbleWinAmountTexts: PixText[] = [];

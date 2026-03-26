@@ -17,6 +17,7 @@ export class SlotMachineView extends ResponsiveChildrenView {
   constructor(config: any) {
     super(config);
     this.slotReel = this.elementsList['slotReel'];
+    this.slotReel.guideRect = this.guideRect;
     this.bigWinsComp = this.elementsList['bigWinsComp'];
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.showSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_WINS, this.clearSpinWin.bind(this));

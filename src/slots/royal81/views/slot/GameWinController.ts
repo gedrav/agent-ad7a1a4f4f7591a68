@@ -20,6 +20,9 @@ export default class GameWinController extends WinController {
             this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;
             this.lineWinAmountComp.y = this.symbolsArray[pos.reel][pos.row + 1].y + this.winSymbolsContainer.y;
             this.lineWinAmountComp.showWin(currentLineWin.winAmount, multiplier);
+            if (this.lineWinAmountComp.width / 2 > this.slotReel.slotGuideRect.x) {
+              this.lineWinAmountComp.x = this.slotReel.slotGuideRect.x + this.lineWinAmountComp.width / 2;
+            }
           }
         }
       }
