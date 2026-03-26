@@ -280,9 +280,7 @@ class SlotGameApp {
 
   protected resize(): void {
     this.resizeNow();
-    setTimeout(this.resizeNow.bind(this), 250);
     setTimeout(this.resizeNow.bind(this), 500);
-    setTimeout(this.resizeNow.bind(this), 1000);
   }
   protected resizeNow(): void {
     const tempWidth = DeviceProxy.config.windowWidth;
