@@ -323,7 +323,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         if (DeviceProxy.config.isDesktop) {
           UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.15, 1);
           this.bbButtonsArray[k].y =
-            this.soundOnBtn.y - (k + 1) * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.1);
+            this.soundOnBtn.y - k * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.1);
 
           if (DeviceProxy.config.isPortrait) {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.1, 1);
@@ -334,7 +334,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
           if (DeviceProxy.config.isPortrait) {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.2, 0.1, 1);
             this.bbButtonsArray[k].y =
-              this.turboBtn.y - (k + 1) * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
+              this.turboBtn.y - k * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
           } else {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.14, 0.14, 1);
             this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);

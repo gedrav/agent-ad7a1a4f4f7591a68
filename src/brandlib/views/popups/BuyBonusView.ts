@@ -42,6 +42,18 @@ export class BuyBonusView extends ResponsiveChildrenView {
     UIUtil.stopPropagation(this);
   }
   protected resizeView(): void {
+    if (DeviceProxy.config.isDesktop) {
+      this.buyBonusBg.width = this.buyBonusBg.configData.width;
+      this.buyBonusBg.height = this.buyBonusBg.configData.height;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.buyBonusBg.width = this.buyBonusBg.configData.pWidth;
+        this.buyBonusBg.height = this.buyBonusBg.configData.pHeight;
+      } else {
+        this.buyBonusBg.width = this.buyBonusBg.configData.lWidth;
+        this.buyBonusBg.height = this.buyBonusBg.configData.lHeight;
+      }
+    }
     super.resizeView();
   }
 
