@@ -473,6 +473,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
+      if (appModel.turboMode) EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED_TURBO');
       EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED');
       StateManager.doNextStep();
     }

@@ -67,7 +67,7 @@ export const GAME_SOUND_CONFIG = {
       name: 'stopSpinClicked',
       type: 'game',
       loop: false,
-      playEvents: ['STOP_SPIN_CLICKED', 'REELSTRIP_SPIN_JERK'],
+      playEvents: ['STOP_SPIN_CLICKED', 'REELSTRIP_SPIN_JERK', 'FINAL_SYMBOL_SETTLED_TURBO'],
       volume: 0.6,
       fadeOutDuration: 1000,
     },
@@ -369,22 +369,6 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['NORMAL_WIN_COUNTUP_DONE', 'PLAY_FS_WIN_COUNTUP_END_SOUND', 'PLAY_BIG_WIN_COUNTUP_END_SOUND_NOW'],
-      volume: 0.6,
-      fadeOutDuration: 100,
-    },
-
-    // --- Reel stops (normalized params 0..5) ---
-    {
-      name: 'reelStop',
-      type: 'game',
-      loop: false,
-      playEvents: [
-        'REELSTRIP_SPIN_JERK',
-        'REELSTRIP_FREESPIN_JERK',
-        'PLAY_LAST_BASEGAME_STOPSPIN_SOUND',
-        'PLASY_LAST_FS_STOP_SOUND',
-      ],
-      stopEvents: ['STOP_SPIN_CLICKED'],
       volume: 0.6,
       fadeOutDuration: 100,
     },
