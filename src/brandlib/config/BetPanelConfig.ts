@@ -1,11 +1,7 @@
 import { BetPanelView } from '@brand/views/popups/BetPanelView';
-import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
 import { CoreUIConfig } from './CoreUIConfig';
 import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDecrementBetCommand';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
-import { AutoPlayChangeToggleBtnCommand } from '@core/commands/action/AutoPlayChangeToggleBtnCommand';
-import { UIUtil } from '@core/utils/UIUtilService';
 
 export const BET_PANEL_CONFIG = {
   name: 'betPanelView',
