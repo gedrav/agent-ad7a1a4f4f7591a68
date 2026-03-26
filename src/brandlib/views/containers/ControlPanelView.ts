@@ -10,18 +10,27 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { Sine } from 'gsap';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { ActionCommand } from '@core/commands/core/ActionCommand';
 import { SpinClickCommand } from '@core/commands/action/SpinClickCommand';
 import { AutoplayClickCommand } from '@core/commands/action/AutoplayClickCommand';
+import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { Point } from 'pixi.js';
 
 let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
 const LONG_PRESS_DURATION = 500; // ms
 export class ControlPanelView extends ResponsiveChildrenView {
+  private slotGuideRect: PixGraphics;
+  get slotView(): SlotMachineView {
+    return this._slotView;
+  }
+
+  set slotView(value: SlotMachineView) {
+    this._slotView = value;
+  }
   private balanceComp: BalanceComp;
   private betComp: BetComp;
   private soundOnBtn: PixFancyButton;
@@ -43,9 +52,11 @@ export class ControlPanelView extends ResponsiveChildrenView {
   private fullscreenExitBtn: PixFancyButton;
   private infoBtn: PixFancyButton;
   private homeBtn: PixFancyButton;
+  private _slotView: SlotMachineView;
   constructor(config: any) {
     super(config);
     GameProxy.config.isLongPressTriggered = false;
+    this.slotGuideRect = this.elementsList['slotGuideRect'];
     this.balanceComp = this.elementsList['balanceComp'];
     this.betComp = this.elementsList['betComp'];
     this.soundOnBtn = this.elementsList['soundOnBtn'];
@@ -324,7 +335,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         if (DeviceProxy.config.isDesktop) {
           UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.15, 1);
           this.bbButtonsArray[k].y =
-            this.soundOnBtn.y - k * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.1);
+            this.soundOnBtn.y - (k + 1) * this.bbButtonsArray[k].height * 0.4 - UIUtil.getPercentageHeight(0.1);
 
           if (DeviceProxy.config.isPortrait) {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.1, 1);
@@ -349,6 +360,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected resizeView(): void {
     super.resizeView();
+    this.setSlotViewProps();
     if (DeviceProxy.config.isDesktop) {
       if (DeviceProxy.config.isPortrait) {
         this.resizeForDesktopPortrait();
@@ -361,6 +373,17 @@ export class ControlPanelView extends ResponsiveChildrenView {
       } else {
         this.resizeForMobileLandscape();
       }
+    }
+    this.repositionView();
+  }
+  protected setSlotViewProps(): void {
+    if (this.slotView && this.slotGuideRect) {
+      const rect = this.slotView.guideRect;
+      this.slotGuideRect.width = rect.getBounds().width;
+      this.slotGuideRect.height = rect.getBounds().height;
+      const local = this.slotView.toGlobal(new Point(rect.x, rect.y));
+      this.slotGuideRect.x = local.x;
+      this.slotGuideRect.y = local.y;
     }
   }
   protected resizeForMobilePortrait(): void {
@@ -481,23 +504,23 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.alignHorizontal(this.betComp, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
     UIUtil.alignVertical(this.betComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
 
-    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.12, null, 1, 0.4);
+    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.15, null, 1, 0.25);
     UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'right', hPaddingPerc: -bigBtnHPaddingPerc });
     UIUtil.alignVertical(this.spinBtn, { vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.25);
     UIUtil.alignHorizontal(this.stopSpinBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.stopSpinBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.stopAutoBtn, 1, 1, this.spinBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.stopAutoBtn, 1, 1, this.spinBtn, 1, 0.25);
     UIUtil.alignHorizontal(this.stopAutoBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.stopAutoBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.betBtn, 0.5, 0.5, this.spinBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.betBtn, 0.5, 0.5, this.spinBtn, 1, 0.25);
     UIUtil.alignHorizontal(this.betBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.betBtn, { refComponent: 'spinBtn', vAlign: 'topUp', vPaddingPerc: -midBtnPaddingPerc });
 
-    UIUtil.setRelativeScale(this.turboBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.turboBtn, 1, 1, this.betBtn, 1, 0.25);
     UIUtil.alignHorizontal(this.turboBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.turboBtn, {
       refComponent: 'spinBtn',
@@ -558,6 +581,89 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.cheatBtn, {
       refComponent: 'soundOnBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+
+    if (this.turboBtn.y + this.turboBtn.height * 0.5 > this.betComp.y) {
+      this.placeSpinButtonsBeforeBetComp();
+    }
+  }
+
+  protected placeSpinButtonsBeforeBetComp(): void {
+    const bigBtnHPaddingPerc: number = 0;
+    const midBtnPaddingPerc: number = 0.05;
+
+    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.12, null, 1, 0.25);
+    UIUtil.alignHorizontal(this.spinBtn, {
+      refComponent: 'betComp',
+      hAlign: 'leftBefore',
+      hPaddingPerc: bigBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.spinBtn, { vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.stopSpinBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopSpinBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopAutoBtn, 1, 1, this.spinBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.stopAutoBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopAutoBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.betBtn, 0.5, 0.5, this.spinBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.betBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.betBtn, { refComponent: 'spinBtn', vAlign: 'topUp', vPaddingPerc: -midBtnPaddingPerc });
+
+    UIUtil.setRelativeScale(this.turboBtn, 1, 1, this.betBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.turboBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboBtn, {
+      refComponent: 'spinBtn',
+      vAlign: 'bottomDown',
+      vPaddingPerc: midBtnPaddingPerc,
+    });
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboSelectedBtn, {
+      refComponent: 'turboBtn',
+      vAlign: 'middle',
+      vPaddingPerc: 0,
+    });
+  }
+  protected placeSpinButtonsCloseToReel(): void {
+    const bigBtnHPaddingPerc: number = 0.08;
+    const midBtnPaddingPerc: number = 0.05;
+
+    UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.12, null, 1, 0.25);
+    UIUtil.alignHorizontal(this.spinBtn, {
+      refComponent: 'slotGuideRect',
+      hAlign: 'rightAfter',
+      hPaddingPerc: bigBtnHPaddingPerc,
+    });
+    UIUtil.alignVertical(this.spinBtn, { vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.stopSpinBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopSpinBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.stopAutoBtn, 1, 1, this.spinBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.stopAutoBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.stopAutoBtn, { refComponent: 'spinBtn', vAlign: 'middle', vPaddingPerc: 0 });
+
+    UIUtil.setRelativeScale(this.betBtn, 0.5, 0.5, this.spinBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.betBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.betBtn, { refComponent: 'spinBtn', vAlign: 'topUp', vPaddingPerc: -midBtnPaddingPerc });
+
+    UIUtil.setRelativeScale(this.turboBtn, 1, 1, this.betBtn, 1, 0.25);
+    UIUtil.alignHorizontal(this.turboBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboBtn, {
+      refComponent: 'spinBtn',
+      vAlign: 'bottomDown',
+      vPaddingPerc: midBtnPaddingPerc,
+    });
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.turboSelectedBtn, {
+      refComponent: 'turboBtn',
       vAlign: 'middle',
       vPaddingPerc: 0,
     });
@@ -672,6 +778,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vAlign: 'middle',
       vPaddingPerc: 0,
     });
+    console.log(this.spinBtn.x - (this.slotGuideRect.x + this.slotGuideRect.width));
+    if (this.spinBtn.x - (this.slotGuideRect.x + this.slotGuideRect.width) > 300) {
+      this.placeSpinButtonsCloseToReel();
+    }
   }
   protected resizeForDesktopPortrait(): void {
     const hPaddingPerc: number = 0.005;

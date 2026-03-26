@@ -23,7 +23,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xff0000,
       width: 1300,
       height1: 1050,
-      height: 1250,
+      height: 1050,
       alpha: 0,
     },
 
@@ -147,7 +147,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             { name: 'bg4', type: 'Sprite', image: 'reelstripbg', x: 960, y: 0 },
           ],
         },
-        { name: 'reelReflection', type: 'Sprite', image: 'reel_reflection', y: 952, scale: 0.81 },
+        { name: 'reelReflection', type: 'Sprite', image: 'reel_reflection', y: 952, scale: 0.985 },
         { name: 'symbolsContainer', type: 'Container' },
         {
           name: 'reelFrame',
@@ -223,7 +223,7 @@ export const SLOT_MACHINE_CONFIG: any = {
                 {
                   name: 'infoText',
                   type: 'Text',
-                  style: { fontFamily: 'gameFont1', fontSize: 30, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 220 },
+                  style: { fontFamily: 'gameFont1', fontSize: 25, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 240 },
                 },
               ],
             },
@@ -264,6 +264,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },
-    Landscape: { widthPerc: 0.8, heightPerc: 0.9, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.002 },
+    Landscape: { widthPerc: 0.7, heightPerc: 0.98, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
   },
 };

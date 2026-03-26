@@ -1,10 +1,6 @@
 import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { CoreUIConfig } from './CoreUIConfig';
-import { ErrorMessageCloseCommand } from '@core/commands/action/ErrorMessageCloseCommand';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
-import { UIUtil } from '@core/utils/UIUtilService';
-import { AutoPlayCancelBtnCommand } from '@core/commands/action/AutoPlayCancelBtnCommand';
 
 export const MESSAGE_POPUP_CONFIG = {
   name: 'messagePopupView',
@@ -16,8 +12,8 @@ export const MESSAGE_POPUP_CONFIG = {
       type: 'NineSliceSprite',
       image: 'popupbg',
       nineSlice: [32, 32, 32, 32],
-      lWidth: 1184,
-      lHeight: 640,
+      lWidth: 712,
+      lHeight: 752,
       pWidth: 712,
       pHeight: 752,
       width: 712,
