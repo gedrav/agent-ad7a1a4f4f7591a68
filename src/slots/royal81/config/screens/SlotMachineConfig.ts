@@ -147,7 +147,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             { name: 'bg4', type: 'Sprite', image: 'reelstripbg', x: 960, y: 0 },
           ],
         },
-        { name: 'reelReflection', type: 'Sprite', image: 'reel_reflection', y: 952, scale: 0.81 },
+        { name: 'reelReflection', type: 'Sprite', image: 'reel_reflection', y: 952, scale: 0.985 },
         { name: 'symbolsContainer', type: 'Container' },
         {
           name: 'reelFrame',
