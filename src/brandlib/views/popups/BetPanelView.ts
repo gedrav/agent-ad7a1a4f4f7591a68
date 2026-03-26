@@ -245,9 +245,19 @@ export class BetPanelView extends ResponsiveChildrenView {
   }
 
   protected resizeView() {
-    this.scale.set(1);
-    this.betPanelBg.width = this.betPanelBg.configData.width;
-    this.betPanelBg.height = this.betPanelBg.configData.height;
+    if (DeviceProxy.config.isDesktop) {
+      this.betPanelBg.width = this.betPanelBg.configData.width;
+      this.betPanelBg.height = this.betPanelBg.configData.height;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.betPanelBg.width = this.betPanelBg.configData.pWidth;
+        this.betPanelBg.height = this.betPanelBg.configData.pHeight;
+      } else {
+        this.betPanelBg.width = this.betPanelBg.configData.lWidth;
+        this.betPanelBg.height = this.betPanelBg.configData.lHeight;
+      }
+    }
+
     this.positionButtons();
     super.resizeView();
   }

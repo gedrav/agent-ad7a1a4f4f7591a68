@@ -149,7 +149,6 @@ class AssetLoaderClass {
               }
             } else {
               const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
-              console.log('here --- ', NAME, TYPE, ASSETTYPE);
               data.assets.push({
                 alias: NAME,
                 src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],

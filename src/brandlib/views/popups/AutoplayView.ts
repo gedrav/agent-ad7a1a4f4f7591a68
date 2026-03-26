@@ -11,6 +11,7 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { Input } from '@pixi/ui';
 import { Util } from '@core/utils/UtilService';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class AutoplayView extends ResponsiveChildrenView {
   private valuesArray: number[];
@@ -149,7 +150,21 @@ export class AutoplayView extends ResponsiveChildrenView {
   }
 
   protected resizeView(): void {
-    this.autoPanelBg.resize();
+    if (DeviceProxy.config.isDesktop) {
+      this.autoPanelBg.width = this.autoPanelBg.configData.width;
+      this.autoPanelBg.height = this.autoPanelBg.configData.height;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.autoPanelBg.width = this.autoPanelBg.configData.pWidth;
+        this.autoPanelBg.height = this.autoPanelBg.configData.pHeight;
+      } else {
+        this.autoPanelBg.width = this.autoPanelBg.configData.lWidth;
+        this.autoPanelBg.height = this.autoPanelBg.configData.lHeight;
+      }
+    }
+    this.numberSelectionContainer.x =
+      (this.autoPanelBg.width - this.numberSelectionContainer.width) / 2 + this.btn1.width / 2;
+    this.sliderContainer.x = (this.autoPanelBg.width - this.sliderContainer.width) / 2;
     super.resizeView();
   }
 }
