@@ -24,7 +24,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       width: 1300,
       height1: 1050,
       height: 1050,
-      alpha: 1,
+      alpha: 0,
     },
 
     {
