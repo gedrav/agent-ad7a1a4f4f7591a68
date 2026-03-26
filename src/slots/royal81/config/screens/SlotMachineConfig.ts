@@ -23,7 +23,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xff0000,
       width: 1300,
       height1: 1050,
-      height: 1250,
+      height: 1050,
       alpha: 0,
     },
 
@@ -264,6 +264,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },
-    Landscape: { widthPerc: 0.8, heightPerc: 0.9, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.002 },
+    Landscape: { widthPerc: 0.8, heightPerc: 0.98, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
   },
 };

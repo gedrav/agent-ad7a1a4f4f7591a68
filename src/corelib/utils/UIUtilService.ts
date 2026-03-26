@@ -1087,7 +1087,10 @@ class UIUtilService {
                 Util.getDefaultValue(layout.hPadding, 0),
             );
           } else {
-            this.setPositionX(element, refElement.x - element.getWidth() + Util.getDefaultValue(layout.hPadding, 0));
+            this.setPositionX(
+              element,
+              refElement.x - element.getWidth() * element.anchor.x + Util.getDefaultValue(layout.hPadding, 0),
+            );
           }
         } else if (element.configData.anchor != undefined) {
           this.setPositionX(

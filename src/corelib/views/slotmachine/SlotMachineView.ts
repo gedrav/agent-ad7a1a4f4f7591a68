@@ -5,8 +5,15 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
 export class SlotMachineView extends ResponsiveChildrenView {
+  get slotReel(): SlotReel {
+    return this._slotReel;
+  }
+
+  set slotReel(value: SlotReel) {
+    this._slotReel = value;
+  }
   protected bigWinsComp: BigWinsComp;
-  protected slotReel: SlotReel;
+  private _slotReel: SlotReel;
   constructor(config: any) {
     super(config);
     this.slotReel = this.elementsList['slotReel'];
