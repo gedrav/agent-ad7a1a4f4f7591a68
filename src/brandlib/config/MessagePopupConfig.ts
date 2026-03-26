@@ -13,21 +13,24 @@ export const MESSAGE_POPUP_CONFIG = {
   Elements: [
     {
       name: 'panelBG',
-      type: 'ResponsiveGraphics',
-      image: 'shortPanelBG',
+      type: 'NineSliceSprite',
+      image: 'popupbg',
+      nineSlice: [32, 32, 32, 32],
+      lWidth: 1184,
+      lHeight: 640,
+      pWidth: 712,
+      pHeight: 752,
       width: 712,
       height: 752,
-      radius: 48,
-      color: 0xdae9f7,
     },
     {
       name: 'titleText',
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
       x: 356,
-      y: 90,
+      y: 70,
       content: '',
-      style: { fontFamily: 'commonFont', fontSize: 40, fill: 0x000000 },
+      style: { fontFamily: 'commonFont', fontSize: 40, fill: 0xffffff },
     },
     {
       name: 'messageText',
@@ -36,14 +39,14 @@ export const MESSAGE_POPUP_CONFIG = {
       x: 356,
       y: 350,
       content: '',
-      style: { fontFamily: 'commonFont', fontSize: 32, fill: 0x000000, align: 'center' },
+      style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, align: 'center' },
     },
     {
       name: 'closeBtn',
       type: 'Button',
       scale: 1,
       action: {
-        press: AutoPlayCancelBtnCommand,
+        press: CloseBetPanelCommand,
       },
       data: false,
       options: {
@@ -64,8 +67,8 @@ export const MESSAGE_POPUP_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Portrait: { widthPerc: 0.9, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.3, heightPerc: 0.6, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Landscape: { widthPerc: 0.8, heightPerc: 0.9, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Portrait: { widthPerc: 0.94, heightPerc: 0.8, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
   },
 };

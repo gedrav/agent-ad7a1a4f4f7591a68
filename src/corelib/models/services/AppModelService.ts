@@ -468,7 +468,6 @@ class AppModelService {
   // WHEN: Called by AutoPlayConfirmBtnCommand when user starts autoplay
   // WHY: Sets up all data needed to track autoplay progress and stop conditions
   public setAutoplayInfo(obj: any): void {
-    console.log('setAutoplayInfo', obj);
     this._autoPlayObj = {
       ...obj,
       startBalance: this.getBalance(),

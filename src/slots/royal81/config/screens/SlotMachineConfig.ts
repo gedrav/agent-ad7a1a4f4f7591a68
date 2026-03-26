@@ -22,7 +22,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 1300,
-      height: 1050,
+      height1: 1050,
+      height: 1250,
       alpha: 0,
     },
 

@@ -9,10 +9,10 @@ export const FSAUTO_COUNTER_CONFIG: any = {
   name: 'fsAutoCounterComp',
   type: 'Comp',
   class: FSAutoCounterComp,
-  x: 120,
+  x: 180,
   y: 930,
   Elements: [
-    { name: 'bg', type: 'Graphics', width: 1360, height: 60, alpha: 0 },
+    { name: 'bg', type: 'Graphics', width: 1240, height: 60, alpha: 0 },
     {
       name: 'spinsText',
       type: 'Text',
@@ -22,6 +22,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
+        mFontSize: 36,
         fill: 0xffd82c,
         fontWeight: 'bold',
       },
@@ -30,11 +31,12 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       name: 'winningsText',
       type: 'Text',
       anchor: { x: 1, y: 0.5 },
-      x: 1350,
+      x: 1230,
       y: 30,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
+        mFontSize: 36,
         fill: 0xffd82c,
         fontWeight: 'bold',
       },
