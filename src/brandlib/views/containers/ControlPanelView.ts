@@ -24,6 +24,7 @@ let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 const LONG_PRESS_DURATION = 500; // ms
 export class ControlPanelView extends ResponsiveChildrenView {
   private slotGuideRect: PixGraphics;
+  private longPressSprite: PixSprite;
   get slotView(): SlotMachineView {
     return this._slotView;
   }
@@ -84,10 +85,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
       this.removeChild(this.cheatBtn);
     }
 
-    const longPressSprite = UIUtil.getSprite('longPressText');
-    this.spinBtn.addChild(longPressSprite);
-    longPressSprite.scale.set(0.95);
-    longPressSprite.anchor.set(0.5);
+    this.longPressSprite = UIUtil.getSprite('longPressText');
+    this.spinBtn.addChild(this.longPressSprite);
+    this.longPressSprite.scale.set(0.95);
+    this.longPressSprite.anchor.set(0.5);
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN, this.updateBalanceForBBSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE, this.updateBalance.bind(this));
@@ -148,6 +149,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected startPress(): void {
     GameProxy.config.isLongPressTriggered = false;
+    this.longPressSprite.scale.set(0.88);
     longPressTimer = setTimeout(() => {
       this.onLongPress();
       longPressTimer = null;
@@ -165,6 +167,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       clearTimeout(longPressTimer);
       longPressTimer = null;
     }
+    this.longPressSprite.scale.set(0.95);
   }
   protected addKeyboardEvents(): void {
     window.addEventListener('keyup', this.handleKeyUp.bind(this));
