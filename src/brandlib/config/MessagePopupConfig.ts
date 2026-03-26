@@ -1,10 +1,6 @@
 import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { CoreUIConfig } from './CoreUIConfig';
-import { ErrorMessageCloseCommand } from '@core/commands/action/ErrorMessageCloseCommand';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
-import { UIUtil } from '@core/utils/UIUtilService';
-import { AutoPlayCancelBtnCommand } from '@core/commands/action/AutoPlayCancelBtnCommand';
 
 export const MESSAGE_POPUP_CONFIG = {
   name: 'messagePopupView',
