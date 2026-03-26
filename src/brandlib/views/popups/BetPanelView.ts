@@ -225,16 +225,16 @@ export class BetPanelView extends ResponsiveChildrenView {
 
     this.btnContainer.x = (this.betPanelBg.width - this.btnContainer.width) / 2 + this.betBtnsArray[0].width / 2;
     this.stakeContainer.x = (this.betPanelBg.width - this.stakeContainer.width) / 2;
-    this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height + 10;
+    this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height * 0.92;
 
     this.cancelBtn.x = this.betPanelBg.width * 0.48 - this.cancelBtn.width * 0.5;
     this.setBtn.x = this.betPanelBg.width * 0.52 + this.setBtn.width * 0.5;
 
     if (DeviceProxy.config.isDesktop) {
-      this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;
+      this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.25;
     } else {
       if (DeviceProxy.config.isPortrait) {
-        this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.5;
+        this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.25;
       } else {
         this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height;
       }
