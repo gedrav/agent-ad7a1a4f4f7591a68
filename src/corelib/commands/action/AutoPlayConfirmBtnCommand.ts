@@ -7,18 +7,8 @@ import { Util } from '@core/utils/UtilService';
 class AutoPlayConfirmBtnCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
-    const status = appModel.getNextAutoPossible();
-    console.log('status', status);
-    if (status === 1 && appModel.getIsSpinStartPossible()) {
-      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED);
-      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CANCEL_CLICKED);
-    } else {
-      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CANCEL_CLICKED);
-      const obj: any = {};
-      obj.title = Util.getContent('infoText');
-      obj.message = Util.getContent('AutoplayNotPossible');
-      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
-    }
+    EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CANCEL_CLICKED);
+    EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED);
   }
 }
 

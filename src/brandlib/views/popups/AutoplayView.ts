@@ -9,6 +9,7 @@ import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { Input } from '@pixi/ui';
 import { Util } from '@core/utils/UtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class AutoplayView extends ResponsiveChildrenView {
   private valuesArray: number[];
@@ -110,8 +111,15 @@ export class AutoplayView extends ResponsiveChildrenView {
     const obj: any = {};
     obj.selectedSpins = this.selectedSpins;
     obj.spendingLimit = this.spendingLimitSlider?.getValue() || 0;
-    StateManager.goToState(STATES.START_AUTOSPIN_STATE, obj);
-    this.hideAutoPlayPanel();
+    if (obj.spendingLimit < appModel.getTotalBet() && obj.spendingLimit > 0) {
+      const obj: any = {};
+      obj.title = Util.getContent('infoText');
+      obj.message = Util.getContent('AutoplayNotPossible');
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    } else {
+      StateManager.goToState(STATES.START_AUTOSPIN_STATE, obj);
+      this.hideAutoPlayPanel();
+    }
   }
 
   // Reset to defaults and show autoplay panel
