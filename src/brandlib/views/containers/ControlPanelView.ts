@@ -335,7 +335,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         if (DeviceProxy.config.isDesktop) {
           UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.15, 1);
           this.bbButtonsArray[k].y =
-            this.soundOnBtn.y - k * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.1);
+            this.soundOnBtn.y - (k + 1) * this.bbButtonsArray[k].height * 0.4 - UIUtil.getPercentageHeight(0.1);
 
           if (DeviceProxy.config.isPortrait) {
             UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.1, 0.1, 1);
@@ -374,6 +374,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         this.resizeForMobileLandscape();
       }
     }
+    this.repositionView();
   }
   protected setSlotViewProps(): void {
     if (this.slotView && this.slotGuideRect) {
