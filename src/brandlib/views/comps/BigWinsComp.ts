@@ -43,7 +43,7 @@ export class BigWinsComp extends ResponsiveView {
   }
 
   protected onSkipClicked() {
-    if (this.winState) {
+    if (this.winState && !this.isSkipping) {
       clearTimeout(this.timeoutId);
       clearTimeout(this.winTimerId);
       this.currentLevel = this.targetLevel - 1;
@@ -53,12 +53,10 @@ export class BigWinsComp extends ResponsiveView {
       this.playEndAnimation();
       if (this.bigWinAnim) {
         this.bigWinAnim.stopAnimation();
-        this.winTicker.skipToFinalValue();
       }
+      this.winTicker.skipToFinalValue();
 
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
-      const duration = 2000;
-      this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
 
       EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
       EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
@@ -143,14 +141,18 @@ export class BigWinsComp extends ResponsiveView {
   protected notifyWinDone(): void {
     this.winState = false;
     this.skipRect.visible = false;
+    this.isSkipping = false;
     clearTimeout(this.timeoutId);
     clearTimeout(this.winTimerId);
     StateManager.doNextStep();
   }
   public clearSpinWin(): void {
+    this.winState = false;
+    this.skipRect.visible = false;
     clearTimeout(this.winTimerId);
     this.winTicker?.reset();
     clearTimeout(this.timeoutId);
+    this.isSkipping = false;
     if (this.bigWinAnim) {
       this.bigWinAnim?.stopAnimation();
       if (this.bigWinAnim) {
