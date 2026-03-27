@@ -23,7 +23,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 560,
+      textY: 500,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -53,7 +53,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 560,
+      textY: 476,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -83,7 +83,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 560,
+      textY: 474,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -94,8 +94,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 50,
+          fontSize: 44,
+          mFontSize: 44,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -112,7 +112,7 @@ export const SPLASH_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Sprite',
-      image: 'maingameBG',
+      image: 'splashbg',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
@@ -195,11 +195,27 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, 8),
+            textOffset: new Point(0, -2),
           },
           textConfig: {
             content: 'playGameText',
-            style: { fontFamily: 'gameFont1', fontSize: 40, fill: 0x7994ff, fontWeight: 'bold' },
+            style: {
+              fontFamily: 'gameFont1',
+              fontWeight: 700,
+              fill: [0xffed54, 0xf5a100],
+              stroke: 0x000000,
+              strokeThickness: 2,
+              fontSize: 40,
+              mFontSize: 40,
+              anchor: { x: 0.5, y: 0.5 },
+              dropShadow: {
+                angle: 0.5235987755982988,
+                blur: 4, // use 0 or a positive value in v8
+                color: '0x000000',
+                distance: 3,
+                alpha: 1,
+              },
+            },
             anchor: { x: 0.5, y: 0.5 },
           },
           x: 274,

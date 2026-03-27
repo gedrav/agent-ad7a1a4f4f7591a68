@@ -24,7 +24,7 @@ const SPLASH: AssetBundle = {
   name: LOAD_CONSTANTS.SPLASH,
   assets: [
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gamebg0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
   ],
 };
@@ -33,6 +33,7 @@ const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
+    { TYPE: 'game', NAME: 'gamebg0', ASSETTYPE: 'sprite' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
