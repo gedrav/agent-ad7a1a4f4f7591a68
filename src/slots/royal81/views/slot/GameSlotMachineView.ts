@@ -109,7 +109,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected playSymbolMoveTween(index: number, symbolPositions: Array<[number, number]>) {
-    const potAnimIndex = this.slotReel.children.indexOf(this.potAnim);
+    const potAnimIndex = this.slotReel.children.indexOf(this.gameTitle);
     const numberOfWilds = symbolPositions.length;
     const reelPosition = symbolPositions[index];
     const movingSymbol = this.movingSymbolArray[index];
