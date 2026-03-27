@@ -22,10 +22,8 @@ export class SplashView extends ResponsiveChildrenView {
   private itemsArray: SplashItemComp[] = [];
   private itemContainer: PixView;
   private startBtn: PixFancyButton;
-  private soundOnBtn: SplashButton;
-  private soundOffBtn: SplashButton;
-  private showIntroOnBtn: SplashButton;
-  private showIntroOffBtn: SplashButton;
+  private soundBtn: SplashButton;
+  private showIntroBtn: SplashButton;
   private controlsContainer: PixView;
 
   constructor(config: any) {
@@ -36,21 +34,15 @@ export class SplashView extends ResponsiveChildrenView {
     this.controlsContainer = this.elementsList?.['controlsContainer'];
 
     this.startBtn = this.controlsContainer.elementsList?.['startBtn'];
-    this.soundOnBtn = this.controlsContainer.elementsList?.['soundOnBtn'];
-    this.soundOffBtn = this.controlsContainer.elementsList?.['soundOffBtn'];
-    this.soundOnBtn.addInteraction(this.onSoundOnBtnClick.bind(this));
-    this.soundOffBtn.addInteraction(this.onSoundOffBtnClick.bind(this));
+    this.soundBtn = this.controlsContainer.elementsList?.['soundBtn'];
+    this.soundBtn.addInteraction(this.onSoundBtnClick.bind(this));
 
-    this.showIntroOnBtn = this.controlsContainer.elementsList?.['showIntroOnBtn'];
-    this.showIntroOffBtn = this.controlsContainer.elementsList?.['showIntroOffBtn'];
-    this.showIntroOnBtn.addInteraction(this.onshowIntroOnBtnClick.bind(this));
-    this.showIntroOffBtn.addInteraction(this.onshowIntroOffBtnClick.bind(this));
+    this.showIntroBtn = this.controlsContainer.elementsList?.['showIntroBtn'];
+    this.showIntroBtn.addInteraction(this.onshowIntroBtnClick.bind(this));
 
     const prefs = appModel.getPreferences();
-    this.soundOnBtn.visible = prefs.sound;
-    this.soundOffBtn.visible = !prefs.sound;
-    this.showIntroOnBtn.visible = prefs.showIntro;
-    this.showIntroOffBtn.visible = !prefs.showIntro;
+    this.soundBtn.setSelected(prefs.sound);
+    this.showIntroBtn.setSelected(!prefs.showIntro);
     SoundFactory.ambientState = prefs.sound;
     SoundFactory.sfxState = prefs.sound;
 
@@ -58,29 +50,17 @@ export class SplashView extends ResponsiveChildrenView {
     this.initItems();
     this.resizeView();
   }
-  protected onshowIntroOnBtnClick(): void {
-    this.showIntroOnBtn.visible = false;
-    this.showIntroOffBtn.visible = true;
-    appModel.setPreferencesShow(false);
+  protected onshowIntroBtnClick(): void {
+    const flag = this.soundBtn.isSelected();
+    this.showIntroBtn.setSelected(!flag);
+    appModel.setPreferencesShow(flag);
     appModel.savePreferences();
     EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, false);
   }
-  protected onshowIntroOffBtnClick(): void {
-    this.showIntroOnBtn.visible = true;
-    this.showIntroOffBtn.visible = false;
-    appModel.setPreferencesShow(true);
-    appModel.savePreferences();
-    EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, true);
-  }
-  protected onSoundOnBtnClick(): void {
-    this.soundOnBtn.visible = false;
-    this.soundOffBtn.visible = true;
+  protected onSoundBtnClick(): void {
+    const flag = this.soundBtn.isSelected();
+    this.soundBtn.setSelected(!flag);
     SoundStateChangeCommand.execute(false);
-  }
-  protected onSoundOffBtnClick(): void {
-    this.soundOnBtn.visible = true;
-    this.soundOffBtn.visible = false;
-    SoundStateChangeCommand.execute(true);
   }
 
   // ─── Initialisation ────────────────────────────────────────────────────────

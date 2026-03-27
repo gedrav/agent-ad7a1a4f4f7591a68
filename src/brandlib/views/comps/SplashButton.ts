@@ -4,33 +4,33 @@ import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 
 export class SplashButton extends ResponsiveChildrenView {
-  private btn: PixFancyButton;
-  private icon: PixSprite;
+  private btn: PixToggleButton;
   private text: PixText;
-  private icon2: PixSprite;
 
   constructor(config) {
     super(config);
-
-    this.btn = UIUtil.getFancyButton(this.configData.btnConfig);
-    this.icon = UIUtil.getSprite(this.configData.icon);
-    if (this.configData.icon2) {
-      this.icon2 = UIUtil.getSprite(this.configData.icon2);
-    }
-    if (this.icon2) {
-      this.icon2.scale.set(0.6);
-    }
-
+    const gr = UIUtil.getRectangle(548, 90, 0xff0000);
+    this.addChild(gr);
+    gr.alpha = 0;
+    this.btn = UIUtil.getElement(this.configData.btnConfig);
+    this.btn.x = this.btn.width * 0.5;
+    this.btn.y = this.btn.height * 0.5;
     this.text = UIUtil.getText(this.configData.textConfig);
-    if (this.icon2) {
-      this.addChild(this.btn, this.icon, this.icon2, this.text);
-    } else {
-      this.addChild(this.btn, this.icon, this.text);
-    }
+    this.text.x = this.btn.x + this.btn.width * 0.6;
+    this.text.y = this.btn.y * 0.5;
+    this.addChild(this.btn, this.text);
+    gr.width = this.text.x + this.text.width;
+  }
 
-    this.btn.anchor.set(0, 0);
+  setSelected(flag: boolean) {
+    this.btn.setSelected(flag);
+  }
+
+  public isSelected(): boolean {
+    return this.btn.isSelected;
   }
 
   public setText(text: string) {
@@ -39,26 +39,5 @@ export class SplashButton extends ResponsiveChildrenView {
 
   public addInteraction(cb: any) {
     this.btn.onPress.connect(cb);
-  }
-
-  protected resizeView() {
-    super.resizeView();
-    if (this.isDestroyed) return;
-    this.btn.height = 100;
-    this.btn.width = this.text.x + this.text.width;
-    this.icon.scale.set(1);
-
-    const sc = (this.btn.height * 0.5) / this.icon.height;
-    this.icon.scale.set(sc);
-    this.text.scale.set(sc);
-
-    this.icon.x = this.btn.width * 0.02;
-    this.text.x = this.icon.x + this.icon.width + this.icon.width * 0.25;
-    this.icon.y = (this.btn.height - this.icon.height) / 2;
-    this.text.y = (this.btn.height - this.text.height) / 2;
-    if (this.icon2) {
-      this.icon2.x = this.icon.x + (this.icon.width - this.icon2.width) * 0.5;
-      this.icon2.y = this.icon.y + (this.icon.height - this.icon2.height) * 0.5;
-    }
   }
 }
