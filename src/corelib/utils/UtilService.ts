@@ -135,6 +135,7 @@ class UtilService {
         currency: 'USD',
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
+        roundingMode: 'trunc',
       }).format(num);
     } else {
       str = appModel.currency + num;
