@@ -103,8 +103,6 @@ class UtilService {
     if (num == undefined) {
       num = 0;
     }
-    const multiplier = Math.pow(10, decimal);
-    const truncated = Math.floor(num * multiplier) / multiplier;
     let str = '';
 
     if (Intl) {
@@ -112,7 +110,7 @@ class UtilService {
         str = new Intl.NumberFormat(appModel.language, {
           minimumFractionDigits: decimal,
           maximumFractionDigits: decimal,
-        }).format(truncated);
+        }).format(num);
       } else {
         str = new Intl.NumberFormat(appModel.language, {
           style: 'currency',
@@ -121,26 +119,25 @@ class UtilService {
           minimumFractionDigits: decimal,
           maximumFractionDigits: decimal,
           useGrouping: true,
-        }).format(truncated);
+          roundingMode: 'trunc',
+        }).format(num);
       }
     } else {
-      str = appModel.currency + truncated;
+      str = appModel.currency + num;
     }
     return str;
   }
 
   public formatCurrencyNoSymbol(num: number, decimal = 2) {
-    const multiplier = Math.pow(10, decimal);
-    const truncated = Math.floor(num * multiplier) / multiplier;
     let str = '';
     if (Intl) {
       str = new Intl.NumberFormat('en', {
         currency: 'USD',
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
-      }).format(truncated);
+      }).format(num);
     } else {
-      str = appModel.currency + truncated;
+      str = appModel.currency + num;
     }
     return str;
   }
