@@ -1,10 +1,11 @@
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
-import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { settings } from '@pixi/core';
 import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
 import { type } from 'node:os';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class AppModelService {
   get featureAssetsLoaded(): boolean {
@@ -188,10 +189,6 @@ class AppModelService {
 
   public setPreferencesShow(value: boolean): void {
     this._preferences.showIntro = value;
-  }
-
-  public savePreferences(): void {
-    WrapperProxy.savePreferences(this._preferences);
   }
 
   public storeGameInitData(data: any): void {
