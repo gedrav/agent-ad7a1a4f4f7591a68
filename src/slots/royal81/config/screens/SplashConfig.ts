@@ -151,7 +151,7 @@ export const SPLASH_CONFIG: any = {
         },
         Landscape: {
           widthPerc: 0.1,
-          heightPerc: 0.14,
+          heightPerc: 0.08,
           hAlign: 'left',
           vAlign: 'top',
           hPaddingPerc: 0.01,
