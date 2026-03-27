@@ -12,12 +12,7 @@ class CloseBetPanelCmd extends ActionCommand {
     if (data && appModel.getWinDataLength() > 0) {
       (StateManager.currentState as any)?.state?.destroy();
       const winType = appModel.getWinType();
-      const isBigWin =
-        winType === CONSTANTS.BIG_WIN ||
-        winType === CONSTANTS.MEGA_WIN ||
-        winType === CONSTANTS.GIGANTIC_WIN ||
-        winType === CONSTANTS.UNBELIEVABLE_WIN;
-      if (isBigWin) {
+      if (winType !== CONSTANTS.STANDARD_WIN && winType !== CONSTANTS.BELOW_TOTALBET_WIN) {
         EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
       }
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
