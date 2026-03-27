@@ -53,8 +53,8 @@ export class BigWinsComp extends ResponsiveView {
       this.playEndAnimation();
       if (this.bigWinAnim) {
         this.bigWinAnim.stopAnimation();
-        this.winTicker.skipToFinalValue();
       }
+      this.winTicker.skipToFinalValue();
 
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
       const duration = 2000;
