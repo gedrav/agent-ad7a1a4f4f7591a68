@@ -124,9 +124,9 @@ export default class ReelSymbolSprite extends ReelSymbol {
   }
 
   public showFaded(): void {
-    const filter = new ColorMatrixFilter();
-    filter.brightness(0.4, false);
-    this.symbol.filters = [filter];
+    if (this.symbol.tint === 0xffffff) {
+      this.symbol.tint = 0x666666;
+    }
   }
 
   public showFeatureTriggerAnimation(): void {
