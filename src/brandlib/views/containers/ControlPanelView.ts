@@ -784,7 +784,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vAlign: 'middle',
       vPaddingPerc: 0,
     });
-    if (this.spinBtn.x - (this.slotGuideRect.x + this.slotGuideRect.width) > 300) {
+    if (this.spinBtn.x - (this.slotGuideRect.x + this.slotGuideRect.width) > 500) {
       this.placeSpinButtonsCloseToReel();
     }
   }

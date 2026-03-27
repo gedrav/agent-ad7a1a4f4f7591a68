@@ -199,7 +199,7 @@ export const SPLASH_CONFIG: any = {
           },
           textConfig: {
             content: 'playGameText',
-            style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0x7994ff, fontWeight: 'bold' },
+            style: { fontFamily: 'gameFont1', fontSize: 40, fill: 0x7994ff, fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
           },
           x: 274,
