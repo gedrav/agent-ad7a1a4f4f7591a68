@@ -14,6 +14,7 @@ import { SplashButton } from '@brand/views/comps/SplashButton';
 import { appModel } from '@core/models/services/AppModelService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -44,7 +45,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.showIntroBtn.on('BUTTON_PRESSED', this.onshowIntroBtnClick.bind(this));
 
     const prefs = appModel.getPreferences();
-    this.soundBtn.setSelected(prefs.sound);
+    this.soundBtn.setSelected(!prefs.sound);
     this.showIntroBtn.setSelected(!prefs.showIntro);
     SoundFactory.ambientState = prefs.sound;
     SoundFactory.sfxState = prefs.sound;
@@ -54,16 +55,18 @@ export class SplashView extends ResponsiveChildrenView {
     this.resizeView();
   }
   protected onshowIntroBtnClick(): void {
-    const flag = this.soundBtn.isSelected();
+    const flag = this.showIntroBtn.isSelected();
     this.showIntroBtn.setSelected(!flag);
     appModel.setPreferencesShow(flag);
-    appModel.savePreferences();
+    MessageProxy.savePreferences(appModel.getPreferences());
     EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, false);
   }
   protected onSoundBtnClick(): void {
     const flag = this.soundBtn.isSelected();
     this.soundBtn.setSelected(!flag);
-    SoundStateChangeCommand.execute(false);
+    appModel.setPreferencesSound(flag);
+    MessageProxy.savePreferences(appModel.getPreferences());
+    SoundStateChangeCommand.execute(flag);
   }
 
   // ─── Initialisation ────────────────────────────────────────────────────────

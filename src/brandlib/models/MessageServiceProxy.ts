@@ -170,6 +170,14 @@ export class MessageServiceProxy extends AbstractProxy {
     }
     return newobj;
   }
+
+  public savePreferences(preferences: { sound: boolean; showIntro: boolean }): void {
+    fetch(import.meta.env.VITE_EXTERNAL_PREFERENCES_URL, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: WrapperProxy.getBEToken(), preferences }),
+    }).catch((err) => console.error('SavePreferences failed', err));
+  }
 }
 
 export const MessageProxy = new MessageServiceProxy();

@@ -3,6 +3,7 @@ import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
 
 class SoundStateChangeCmd extends ActionCommand {
   public execute(data: any = null) {
@@ -11,7 +12,7 @@ class SoundStateChangeCmd extends ActionCommand {
     SoundFactory.sfxState = data;
     appModel.setPreferencesSound(data);
     EventHandler.dispatchEvent(SlotEvents.SOUND_STATE_CHANGED, data);
-    appModel.savePreferences();
+    MessageProxy.savePreferences(appModel.getPreferences());
   }
 }
 

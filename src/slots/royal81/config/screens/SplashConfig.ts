@@ -239,7 +239,8 @@ export const SPLASH_CONFIG: any = {
             destroy: true,
             x: 80,
             y: 10,
-            content: 'turnOnSoundText',
+            content: 'turnOffSoundText',
+            selectedContent: 'turnOnSoundText',
             style: {
               fontFamily: 'commonFont',
               fontWeight: 400,
