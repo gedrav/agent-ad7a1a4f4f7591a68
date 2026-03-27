@@ -5,16 +5,32 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 export class SplashButton extends ResponsiveChildrenView {
   private btn: PixToggleButton;
   private text: PixText;
+  private invisBtn: PixFancyButton;
 
   constructor(config) {
     super(config);
-    const gr = UIUtil.getRectangle(548, 90, 0xff0000);
-    this.addChild(gr);
-    gr.alpha = 0;
+    const btnconfig = {
+      name: 'transBtn',
+      type: 'Button',
+      options: {
+        defaultView: 'transRect',
+        hoverView: 'transRect',
+        pressedView: 'transRect',
+        disabledView: 'transRect',
+      },
+    };
+    this.invisBtn = UIUtil.getElement(btnconfig);
+    this.invisBtn.anchor.set(0, 0);
+    this.invisBtn.onPress.connect(() => {
+      this.emit('BUTTON_PRESSED');
+    });
+    this.addChild(this.invisBtn);
+    this.invisBtn.alpha = 0;
     this.btn = UIUtil.getElement(this.configData.btnConfig);
     this.btn.x = this.btn.width * 0.5;
     this.btn.y = this.btn.height * 0.5;
@@ -22,7 +38,7 @@ export class SplashButton extends ResponsiveChildrenView {
     this.text.x = this.btn.x + this.btn.width * 0.6;
     this.text.y = this.btn.y * 0.5;
     this.addChild(this.btn, this.text);
-    gr.width = this.text.x + this.text.width;
+    this.invisBtn.width = this.text.x + this.text.width;
   }
 
   setSelected(flag: boolean) {

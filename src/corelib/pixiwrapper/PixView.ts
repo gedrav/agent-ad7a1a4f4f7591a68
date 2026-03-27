@@ -157,7 +157,7 @@ export class PixView extends PIXI.Container {
       if (child.destroyElements) {
         child.destroyElements();
       }
-      child?.destroy(!!child.configData.dontDestroyOnHide);
+      child?.destroy(!!child?.configData?.dontDestroyOnHide);
     });
     AnimationProxy.killTweensOf(this);
     this.isDestroyed = true;
