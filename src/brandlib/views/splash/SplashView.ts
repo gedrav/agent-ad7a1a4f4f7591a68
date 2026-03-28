@@ -92,179 +92,146 @@ export class SplashView extends ResponsiveChildrenView {
   }
 
   protected positionElements(): void {
-    const mode = this.getOrientationMode();
-    this.layoutGuideRect(mode);
-    this.layoutItems(mode);
-  }
+    if (DeviceProxy.config.isDesktop) {
+      this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+      this.guideRect.height = UIUtil.getGameHeight() * 0.5;
+      this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
+      this.guideRect.y = UIUtil.getGameHeight() * 0.2;
+    } else {
+      if (DeviceProxy.config.isPortrait) {
+        this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+        this.guideRect.height = UIUtil.getGameHeight() * 0.5;
+        this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
+        this.guideRect.y = UIUtil.getGameHeight() * 0.2;
+      } else {
+        this.guideRect.width = UIUtil.getGameWidth() * 0.6;
+        this.guideRect.height = UIUtil.getGameHeight() * 0.96;
+        this.guideRect.x = UIUtil.getGameWidth() * 0.02;
+        this.guideRect.y = UIUtil.getGameHeight() * 0.02;
+      }
+    }
 
-  private getOrientationMode(): OrientationMode {
-    if (DeviceProxy.config.isDesktop) return 'desktop';
-    if (DeviceProxy.config.isPortrait) return 'portrait';
-    return 'landscape';
-  }
-
-  private layoutGuideRect(mode: OrientationMode): void {
-    const gw = UIUtil.getGameWidth();
-    const gh = UIUtil.getGameHeight();
-
-    switch (mode) {
-      case 'desktop':
-        this.guideRect.width = gw * 0.8;
-        this.guideRect.height = gh * 0.4;
-        this.guideRect.x = (gw - this.guideRect.width) / 2;
-        this.guideRect.y = gh * 0.45 - this.guideRect.height / 2;
-
-        break;
-
-      case 'portrait':
-        this.guideRect.width = gw * 0.9;
-        this.guideRect.height = gh * 0.5;
-        this.guideRect.x = (gw - this.guideRect.width) / 2;
-        this.guideRect.y = gh * 0.44 - this.guideRect.height / 2;
-
-        break;
-
-      case 'landscape':
-        this.guideRect.width = gw * 0.6;
-        this.guideRect.height = gh * 0.8;
-        this.guideRect.x = gw * 0.02;
-        this.guideRect.y = gh * 0.5 - this.guideRect.height / 2;
-
-        break;
+    if (DeviceProxy.config.isPortrait) {
+      this.alignForPortrait();
+    } else {
+      this.alignForLandscape();
     }
   }
-
-  private layoutItems(mode: OrientationMode): void {
-    if (this.itemsArray.length === 0) return;
-
-    switch (mode) {
-      case 'portrait':
-        this.alignForPortrait();
-        break;
-      case 'landscape':
-        this.alignForLandscape();
-        break;
-      case 'desktop':
-        this.alignForDesktop();
-        break;
-    }
-  }
-
-  // ─── Item Alignment ────────────────────────────────────────────────────────
 
   protected alignForPortrait(): void {
-    this.setScaleForStartBtn();
-    this.stackItemsVertically();
-    this.fitAndCenterItemContainer();
-  }
+    const len = this.itemsArray.length;
+    if (len > 0) {
+      for (const item of this.itemsArray) {
+        item.x = 0;
+        item.y = 0;
+      }
+      if (len === 2) {
+        for (let k = 0; k < len; k++) {
+          this.itemsArray[k].x = 0;
+          this.itemsArray[k].y =
+            k === 0 ? 0 : this.itemsArray[k - 1].y + this.itemsArray[k - 1].height + UIUtil.getGameHeight() * 0.02;
+        }
+      } else {
+        const colGap = UIUtil.getGameWidth() * 0.05;
+        const rowGap = UIUtil.getGameHeight() * 0.02;
+        let colWidth = 0;
+        const rowHeights: number[] = [];
 
-  protected setScaleForStartBtn(): void {
-    this.startBtn.scale.set(1);
-    const { isDevice, isPortrait } = DeviceProxy.config;
-    if (isDevice && isPortrait) {
-      const scale = (this.cGuideRect.width * 0.75) / this.startBtn.width;
-      this.startBtn.scale.set(scale);
+        for (let i = 0; i < len; i += 2) {
+          const item1 = this.itemsArray[i];
+          const item2 = this.itemsArray[i + 1];
+          colWidth = Math.max(colWidth, item1.width);
+          if (item2) colWidth = Math.max(colWidth, item2.width);
+        }
+
+        let yOffset = 0;
+        for (let i = 0; i < len; i += 2) {
+          const item1 = this.itemsArray[i];
+          const item2 = this.itemsArray[i + 1];
+
+          if (!item2 && len % 2 !== 0) {
+            item1.x = colWidth + colGap / 2 - item1.width / 2;
+            item1.y = yOffset;
+          } else {
+            item1.x = 0;
+            item1.y = yOffset;
+
+            item2.x = colWidth + colGap;
+            item2.y = yOffset;
+
+            const rowHeight = Math.max(item1.height, item2.height);
+            yOffset += rowHeight + rowGap;
+          }
+        }
+      }
+
+      this.itemContainer.scale.set(1);
+      const sc = this.guideRect.width / this.itemContainer.width;
+      const hsc = this.guideRect.height / this.itemContainer.height;
+      this.itemContainer.scale.set(Math.min(sc, hsc));
+
+      this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
+      this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
     }
   }
 
   protected alignForLandscape(): void {
-    this.setScaleForStartBtn();
-    if (this.itemsArray.length < 3) {
-      this.stackItemsVertically();
-    } else if (this.itemsArray.length >= 3) {
-      this.arrangeItemsInGrid();
-    }
-    this.fitAndCenterItemContainer(1);
-  }
-
-  protected alignForDesktop(): void {
-    this.stackItemsHorizontally();
-    this.fitAndCenterItemContainer(Util.getDefaultValue(this.configData.itemsDesktopScale, 1));
-  }
-
-  // ─── Item Arrangement Primitives ───────────────────────────────────────────
-
-  /**
-   * Arranges items in a single column, top to bottom.
-   */
-  protected stackItemsVertically(gap = UIUtil.getGameHeight() * 0.02): void {
-    this.itemsArray.forEach((item, k) => {
-      item.x = 0;
-      item.y = k === 0 ? 0 : this.itemsArray[k - 1].y + this.itemsArray[k - 1].height + gap;
-    });
-  }
-
-  /**
-   * Arranges items in a single row, left to right.
-   */
-  protected stackItemsHorizontally(gap = UIUtil.getGameWidth() * 0.02): void {
-    this.itemsArray.forEach((item, k) => {
-      item.y = 0;
-      item.x = k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + gap;
-    });
-  }
-
-  /**
-   * Arranges items in an n-column grid, row by row.
-   * An odd trailing item is centred across the full grid width.
-   * @param cols   - Number of columns (default: 2).
-   * @param colGap - Horizontal gap between columns.
-   * @param rowGap - Vertical gap between rows.
-   */
-  protected arrangeItemsInGrid(
-    cols = 2,
-    colGap = UIUtil.getGameWidth() * 0.05,
-    rowGap = UIUtil.getGameHeight() * 0.02,
-  ): void {
+    // this.loadingBtn.scale.set(1);
     const len = this.itemsArray.length;
-
-    const colWidths = Array<number>(cols).fill(0);
-    this.itemsArray.forEach((item, i) => {
-      const col = i % cols;
-      colWidths[col] = Math.max(colWidths[col], item.width);
-    });
-
-    const colOrigins = colWidths.reduce<number[]>((acc, w, i) => {
-      acc.push(i === 0 ? 0 : acc[i - 1] + colWidths[i - 1] + colGap);
-      return acc;
-    }, []);
-
-    const totalGridWidth = colOrigins[cols - 1] + colWidths[cols - 1];
-    let yOffset = 0;
-
-    for (let rowStart = 0; rowStart < len; rowStart += cols) {
-      const rowItems = this.itemsArray.slice(rowStart, rowStart + cols);
-      const rowHeight = rowItems.reduce((h, item) => Math.max(h, item.height), 0);
-      const isLastOddRow = rowItems.length < cols;
-
-      if (isLastOddRow) {
-        rowItems[0].x = (totalGridWidth - rowItems[0].width) / 2;
-        rowItems[0].y = yOffset;
-      } else {
-        rowItems.forEach((item, col) => {
-          item.x = colOrigins[col];
-          item.y = yOffset;
-        });
-        yOffset += rowHeight + rowGap;
+    if (len > 0) {
+      for (const item of this.itemsArray) {
+        item.x = 0;
+        item.y = 0;
       }
+      if (len === 2) {
+        for (let k = 0; k < len; k++) {
+          this.itemsArray[k].x =
+            k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.01;
+          this.itemsArray[k].y = 0;
+        }
+      } else {
+        const colGap = UIUtil.getGameWidth() * 0.05;
+        const rowGap = UIUtil.getGameHeight() * 0.02;
+        let colWidth = 0;
+        const rowHeights: number[] = [];
+
+        for (let i = 0; i < len; i += 2) {
+          const item1 = this.itemsArray[i];
+          const item2 = this.itemsArray[i + 1];
+          colWidth = Math.max(colWidth, item1.width);
+          if (item2) colWidth = Math.max(colWidth, item2.width);
+        }
+
+        let yOffset = 0;
+        for (let i = 0; i < len; i += 2) {
+          const item1 = this.itemsArray[i];
+          const item2 = this.itemsArray[i + 1];
+
+          if (!item2 && len % 2 !== 0) {
+            item1.x = colWidth + colGap / 2 - item1.width / 2;
+            item1.y = yOffset;
+          } else {
+            item1.x = 0;
+            item1.y = yOffset;
+
+            item2.x = colWidth + colGap;
+            item2.y = yOffset;
+
+            const rowHeight = Math.max(item1.height, item2.height);
+            yOffset += rowHeight + rowGap;
+          }
+        }
+      }
+
+      this.itemContainer.scale.set(1);
+      const sc = this.guideRect.width / this.itemContainer.width;
+      const hsc = this.guideRect.height / this.itemContainer.height;
+      this.itemContainer.scale.set(Math.min(sc, hsc));
+
+      this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
+      this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
     }
   }
-
-  /**
-   * Scales the item container to fit within the guide rect, then centres it.
-   * @param maxScale - Optional upper bound for scale (default: Infinity).
-   */
-  private fitAndCenterItemContainer(maxScale = Infinity): void {
-    this.itemContainer.scale.set(1);
-
-    const scaleX = this.guideRect.width / this.itemContainer.width;
-    const scaleY = this.guideRect.height / this.itemContainer.height;
-    this.itemContainer.scale.set(Math.min(scaleX, scaleY, maxScale));
-
-    this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
-    this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
-  }
-
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
   public removeSplash(): void {
