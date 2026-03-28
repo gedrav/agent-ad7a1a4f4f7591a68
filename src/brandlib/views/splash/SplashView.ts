@@ -15,6 +15,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -26,6 +27,7 @@ export class SplashView extends ResponsiveChildrenView {
   private soundBtn: SplashButton;
   private showIntroBtn: SplashButton;
   private controlsContainer: PixView;
+  private cGuideRect: PixGraphics;
 
   constructor(config: any) {
     super(config);
@@ -35,6 +37,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.controlsContainer = this.elementsList?.['controlsContainer'];
 
     this.startBtn = this.controlsContainer.elementsList?.['startBtn'];
+    this.cGuideRect = this.controlsContainer.elementsList?.['guideRect'];
     this.soundBtn = this.controlsContainer.elementsList?.['soundBtn'];
     this.soundBtn.addInteraction(this.onSoundBtnClick.bind(this));
 
@@ -159,7 +162,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.startBtn.scale.set(1);
     const { isDevice, isPortrait } = DeviceProxy.config;
     if (isDevice && isPortrait) {
-      const scale = (UIUtil.getGameWidth() * 0.85) / this.startBtn.width;
+      const scale = (this.cGuideRect.width * 0.75) / this.startBtn.width;
       this.startBtn.scale.set(scale);
     }
   }

@@ -354,7 +354,7 @@ export const SPLASH_CONFIG: any = {
         Desktop: { widthPerc: 0.5, heightPerc: 0.13, maxScale: 1, hAlign: 'center', vPosition: 0.12 },
         Portrait: {
           widthPerc: 0.7,
-          heightPerc: 0.16,
+          heightPerc: 0.12,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',

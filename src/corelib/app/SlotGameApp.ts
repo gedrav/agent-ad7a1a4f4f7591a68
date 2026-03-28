@@ -117,17 +117,6 @@ class SlotGameApp {
     await AssetLoader.loadPreloader();
   }
 
-  protected printConsole(): void {
-    console.log(
-      `%c ⡷⣸ ⡎⢱ ⡇⢸ ⣎⣱ ⡎⠑ ⣏⡱ ⣏⡉ ⢎⡑ ⢹⠁   ⡎⠑ ⣎⣱ ⡷⢾ ⡇ ⡷⣸ ⡎⠑
- ⠇⠹ ⠣⠜ ⠸⠃ ⠇⠸ ⠣⠔ ⠇⠱ ⠧⠤ ⠢⠜ ⠸    ⠣⠝ ⠇⠸ ⠇⠸ ⠇ ⠇⠹ ⠣⠝
-                                                              
-%cNOVACREST Game Engine %c${' :: C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion}`,
-      'color: #6169f5ff; font-size: 10px; font-weight: 700; font-family: monospace;',
-      'color: #CCCCCC; font-size: 12px; font-weight: 400;',
-      'color: #CCCCCC; font-size: 12px; font-weight: 700;',
-    );
-  }
   protected async onBundleLoaded(bundleName: string) {
     GameProxy.config.bundlesLoaded.push(bundleName);
     //console.log('bundle loaded == ', bundleName);
