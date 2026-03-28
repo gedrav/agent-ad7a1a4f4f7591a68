@@ -14,16 +14,12 @@ const PRELOADER: AssetBundle = {
 };
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
-  assets: [
-    { TYPE: 'common', NAME: 'Roboto.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
-  ],
+  assets: [{ TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' }],
 };
 
 const SPLASH: AssetBundle = {
   name: LOAD_CONSTANTS.SPLASH,
   assets: [
-    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
   ],

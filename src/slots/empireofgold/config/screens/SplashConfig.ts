@@ -2,14 +2,20 @@ import { SplashStartCommand } from '@core/commands/action/SplashStartCommand';
 import { UIConfig } from '@game/config/UIConfig';
 import { SplashView } from '@brand/views/splash/SplashView';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
+import { UIUtil } from '@core/utils/UIUtilService';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
+import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
+import { Point } from 'pixi.js';
+import { MenuButton } from '@brand/views/comps/MenuButton';
+import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
+import { SplashButton } from '@brand/views/comps/SplashButton';
+import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
   class: SplashView,
-  requiredBundle: LOAD_CONSTANTS.SPLASH,
-  unloadAssets: true,
+  itemsDesktopScale: 1,
   contents: [
     {
       name: 'item1',
@@ -17,12 +23,28 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 710,
+      textY: 500,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 60, anchor: { x: 0, y: 0.5 } },
+        style: {
+          fontFamily: 'gameFont1',
+          fontWeight: 700,
+          fill: [0xffed54, 0xf5a100],
+          stroke: 0x000000,
+          strokeThickness: 2,
+          fontSize: 50,
+          mFontSize: 50,
+          anchor: { x: 0.5, y: 0.5 },
+          dropShadow: {
+            angle: 0.5235987755982988,
+            blur: 4, // use 0 or a positive value in v8
+            color: '0x000000',
+            distance: 6,
+            alpha: 1,
+          },
+        },
       },
     },
     {
@@ -31,12 +53,28 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 710,
+      textY: 476,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 60, anchor: { x: 0, y: 0.5 } },
+        style: {
+          fontFamily: 'gameFont1',
+          fontWeight: 700,
+          fill: [0xffed54, 0xf5a100],
+          stroke: 0x000000,
+          strokeThickness: 2,
+          fontSize: 50,
+          mFontSize: 50,
+          anchor: { x: 0.5, y: 0.5 },
+          dropShadow: {
+            angle: 0.5235987755982988,
+            blur: 4, // use 0 or a positive value in v8
+            color: '0x000000',
+            distance: 6,
+            alpha: 1,
+          },
+        },
       },
     },
     {
@@ -45,26 +83,36 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 680,
+      textY: 474,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 60, anchor: { x: 0, y: 0.5 } },
+        style: {
+          fontFamily: 'gameFont1',
+          fontWeight: 700,
+          fill: [0xffed54, 0xf5a100],
+          stroke: 0x000000,
+          strokeThickness: 2,
+          fontSize: 44,
+          mFontSize: 44,
+          anchor: { x: 0.5, y: 0.5 },
+          dropShadow: {
+            angle: 0.5235987755982988,
+            blur: 4, // use 0 or a positive value in v8
+            color: '0x000000',
+            distance: 6,
+            alpha: 1,
+          },
+        },
       },
     },
   ],
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0x000000, alpha: 1 },
     {
-      name: 'splashBG',
-      type: 'Spine',
-      dontDestroyOnHide: true,
-      spineName: 'bg_day',
-      defaultSkin: 'default',
-      defaultState: 'animation',
-      boundingBox: { width: 1550, height: 1550 },
-      loop: true,
+      name: 'maingameBG',
+      type: 'Sprite',
+      image: 'splashbg',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
@@ -72,26 +120,25 @@ export const SPLASH_CONFIG: any = {
       },
     },
     {
-      name: 'gameTitle',
-      type: 'Sprite',
-      image: 'gamelogo_splash',
+      name: 'coverRect',
+      type: 'Graphics',
+      width: 200,
+      height: 200,
+      color: 0xffffff,
+      alpha: 0.25,
       layoutData: {
-        Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
-        Landscape: {
-          widthPerc: 0.5,
-          heightPerc: 0.1,
-          maxScale: 1,
-          hAlign: 'center',
-          vAlign: 'top',
-          vPaddingPerc: 0.02,
-        },
+        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
+
     {
       name: 'brandLogo',
       type: 'Sprite',
       image: 'brandLogo',
-      anchor: { x: 0, y: 0 },
+      anchor: { x: 0.5, y: 0.5 },
       layoutData: {
         Desktop: {
           widthPerc: 0.06,
@@ -104,15 +151,15 @@ export const SPLASH_CONFIG: any = {
         },
         Landscape: {
           widthPerc: 0.1,
-          heightPerc: 0.14,
-          hAlign: 'left',
+          heightPerc: 0.08,
+          hAlign: 'right',
           vAlign: 'top',
-          hPaddingPerc: 0.01,
+          hPaddingPerc: -0.01,
           vPaddingPerc: 0.01,
           maxScale: 1,
         },
         Portrait: {
-          widthPerc: 0.2,
+          widthPerc: 0.12,
           heightPerc: 0.08,
           hAlign: 'left',
           vAlign: 'top',
@@ -122,32 +169,207 @@ export const SPLASH_CONFIG: any = {
         },
       },
     },
+
     {
-      name: 'startBtn',
-      type: 'GraphicsButton',
-      anchor: { x: 0.5, y: 0.5 },
-      action: {
-        press: SplashStartCommand,
-      },
-      textConfig: {
-        content: 'playGameText',
-        style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 'bold' },
-        anchor: { x: 0.5, y: 0.5 },
-      },
-      graphics: {
-        width: 548,
-        height: 88,
-        radius: 16,
-        color: 0x000000,
-        hoverColor: 0x404040,
-        pressedColor: 0x000000,
-        disabledColor: 0xcccccc,
-        animations: CoreUIConfig.buttonStates,
-      },
+      name: 'controlsContainer',
+      type: 'ResponsiveChildrenContainer',
+      Elements: [
+        {
+          name: 'guideRect',
+          type: 'Graphics',
+          width: 548,
+          height: 360,
+          color: 0x0000ff,
+          alpha: 0,
+        },
+        {
+          name: 'startBtn',
+          type: 'Button',
+          anchor: { x: 0.5, y: 0.5 },
+          action: {
+            press: SplashStartCommand,
+          },
+          options: {
+            defaultView: 'splashBtn',
+            hoverView: 'splashBtn',
+            pressedView: 'splashBtn',
+            disabledView: 'splashBtn',
+            animations: CoreUIConfig.noScalebuttonStates,
+            textOffset: new Point(0, -2),
+          },
+          textConfig: {
+            content: 'playGameText',
+            style: {
+              fontFamily: 'gameFont1',
+              fontWeight: 700,
+              fill: [0xffed54, 0xf5a100],
+              stroke: 0x000000,
+              strokeThickness: 2,
+              fontSize: 40,
+              mFontSize: 40,
+              anchor: { x: 0.5, y: 0.5 },
+              dropShadow: {
+                angle: 0.5235987755982988,
+                blur: 4, // use 0 or a positive value in v8
+                color: '0x000000',
+                distance: 3,
+                alpha: 1,
+              },
+            },
+            anchor: { x: 0.5, y: 0.5 },
+          },
+          x: 274,
+          y: 85,
+          layoutData: {
+            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.5, maxScale: 1 },
+          },
+        },
+        {
+          name: 'soundBtn',
+          type: 'Comp',
+          class: SplashButton,
+          btnConfig: {
+            type: 'PixToggleButton',
+            scale: 1,
+            action: {
+              press: AutoPlayNoOfSpinsBtnCommand,
+            },
+            options: {
+              defaultView: 'soundOnBtn',
+              hoverView: 'soundOnBtn',
+              pressedView: 'soundOnBtn',
+              disabledView: 'soundOnBtn',
+              animations: CoreUIConfig.buttonStates,
+            },
+            selectedOptions: {
+              defaultView: 'soundOffBtn',
+              hoverView: 'soundOffBtn',
+              pressedView: 'soundOffBtn',
+              disabledView: 'soundOffBtn',
+              animations: CoreUIConfig.buttonStates,
+            },
+          },
+          textConfig: {
+            name: 'btnText',
+            type: 'Text',
+            destroy: true,
+            x: 80,
+            y: 10,
+            content: 'turnOffSoundText',
+            selectedContent: 'turnOnSoundText',
+            style: {
+              fontFamily: 'commonFont',
+              fontWeight: 400,
+              fill: 0x000000,
+              fontSize: 40,
+              anchor: { x: 0, y: 0.5 },
+            },
+          },
+          layoutData: {
+            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.5, scale: 0.6 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.5, scale: 0.6 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.5, scale: 0.6 },
+          },
+        },
+        {
+          name: 'showIntroBtn',
+          type: 'Comp',
+          class: SplashButton,
+          btnConfig: {
+            type: 'PixToggleButton',
+            scale: 1,
+            action: {
+              press: AutoPlayNoOfSpinsBtnCommand,
+            },
+            options: {
+              defaultView: 'generalCPBtn',
+              hoverView: 'generalCPBtn',
+              pressedView: 'generalCPBtn',
+              disabledView: 'generalCPBtn',
+              animations: CoreUIConfig.buttonStates,
+            },
+            selectedOptions: {
+              defaultView: 'generalCPSelectedBtn',
+              hoverView: 'generalCPSelectedBtn',
+              pressedView: 'generalCPSelectedBtn',
+              disabledView: 'generalCPSelectedBtn',
+              animations: CoreUIConfig.buttonStates,
+            },
+          },
+          textConfig: {
+            name: 'btnText',
+            type: 'Text',
+            destroy: true,
+            x: 80,
+            y: 10,
+            content: 'dontShowMessage',
+            style: {
+              fontFamily: 'commonFont',
+              fontWeight: 400,
+              fill: 0x000000,
+              fontSize: 40,
+              anchor: { x: 0, y: 0.5 },
+            },
+          },
+          layoutData: {
+            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.75, scale: 0.6 },
+            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.75, scale: 0.6 },
+            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.75, scale: 0.6 },
+          },
+        },
+      ],
       layoutData: {
-        Desktop: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.72 },
-        Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
-        Landscape: { widthPerc: 0.5, maxScale: 1, hAlign: 'center', vPosition: 0.14 },
+        Desktop: {
+          hAlign: 'center',
+          vAlign: 'bottom',
+          widthPerc: 0.5,
+          heightPerc: 0.28,
+          vPaddingPerc: -0.01,
+          maxScale: 1,
+        },
+        Portrait: {
+          hAlign: 'center',
+          vAlign: 'bottom',
+          widthPerc: 1,
+          heightPerc: 0.28,
+          vPaddingPerc: -0.01,
+          maxScale: 1,
+        },
+        Landscape: {
+          hAlign: 'right',
+          vAlign: 'bottom',
+          vPaddingPerc: -0.05,
+          hPaddingPerc: -0.01,
+          widthPerc: 0.36,
+          heightPerc: 0.5,
+        },
+      },
+    },
+    {
+      name: 'gameTitle',
+      type: 'Spine',
+      spineName: 'R81_Logo_Spine',
+      defaultState: 'Static',
+      boundingBox: { width: 560, height: 200 },
+      layoutData: {
+        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
+        Portrait: {
+          widthPerc: 0.6,
+          heightPerc: 0.12,
+          maxScale: 1,
+          hAlign: 'center',
+          vAlign: 'top',
+          vPaddingPerc: 0.05,
+        },
+        Landscape: {
+          posRefComponent: 'controlsContainer',
+          widthPerc: 0.36,
+          heightPerc: 0.2,
+          maxScale: 1,
+          hAlign: 'center',
+          vAlign: 'topUp',
+          vPaddingPerc: -0.2,
+        },
       },
     },
   ],

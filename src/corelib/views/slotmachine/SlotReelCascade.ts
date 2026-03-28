@@ -95,7 +95,7 @@ export default class SlotReelCascade extends SlotReel {
       for (let k = 0; k < this.configData.data.noOfReels; k++) {
         for (let i = 0; i < this.configData.data.noOfRows; i++) {
           symb = this.symbolsArray[k][i];
-          symb.swapSymbolTexture(reelsview[k][i]);
+          symb.swapSymbolTexture(reelsview[k][i], k);
           this.symbolsContainer.addChild(symb);
           symb.x = this.configData.data.reelPositionX[k];
           symb.y = -(this.configData.data.noOfRows - i) * this.configData.data.symbolHeight * 2;

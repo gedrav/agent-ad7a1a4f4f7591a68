@@ -24,7 +24,6 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
-    commonFontR: 'Roboto',
     gameFont1: 'bookosb',
     bitmapFont: 'bitmapFont',
   },

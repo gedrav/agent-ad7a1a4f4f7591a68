@@ -20,7 +20,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
   type: 'Comp',
   class: ControlPanelView,
   Elements: [
-    { name: 'slotGuideRect', type: 'Graphics', width: 200, height: 200, color: 0xffff00, alpha: 0 },
+    { name: 'slotGuideRect', type: 'Graphics', width: 200, height: 200, color: 0xff00ff, alpha: 0 },
     {
       name: 'balanceComp',
       type: 'Comp',

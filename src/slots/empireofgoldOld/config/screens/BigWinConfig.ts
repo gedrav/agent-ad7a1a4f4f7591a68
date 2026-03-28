@@ -1,0 +1,68 @@
+import { WinTicker } from '@core/views/comps/WinTicker';
+import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
+
+export const BIG_WIN_CONFIG = {
+  name: 'bigWinsComp',
+  type: 'Comp',
+  class: BigWinsComp,
+  data: {
+    animations: {
+      BIG_WIN: { start: 'bigWin_Start', idle: 'bigWin_idle', end: 'bigWin_End' },
+      MEGA_WIN: { start: 'megaWin_Start', idle: 'megaWin_Idle', end: 'megaWin_End' },
+      GIGANTIC_WIN: { start: 'superBigWin_Start', idle: 'superBigWin_Idle', end: 'superBigWin_End' },
+      UNBELIEVABLE_WIN: { start: 'superBigWin_Start', idle: 'superBigWin_Idle', end: 'superBigWin_End' },
+    },
+  },
+  Elements: [
+    { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
+    { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
+    /*{
+      name: 'bigWinAnim',
+      type: 'Spine',
+      spineName: 'Lepg_Wins',
+      defaultState: 'bigWin_idle',
+      loop: true,
+      x: 968,
+      y: 500,
+    },*/
+    {
+      name: 'winTicker',
+      type: 'Comp',
+      class: WinTicker,
+      Elements: [
+        {
+          name: 'valueText',
+          type: 'Text',
+          anchor: { x: 0.5, y: 0.5 },
+          x: 755,
+          y: 465,
+          style: {
+            fontFamily: 'gameFont1',
+            fontSize: 160,
+            dropShadow: {
+              angle: 4.6,
+              blur: 44, // use 0 or a positive value in v8
+              color: '#5400ff',
+              distance: 10,
+              alpha: 1,
+            },
+            fill: ['#c49741', '#e7db5c', '#c49741'],
+            fillGradientStops: [0.4, 0.8, 1],
+            fontWeight: 'bold',
+            letterSpacing: 4,
+            stroke: {
+              color: '#fff58e',
+              width: 2,
+              join: 'round',
+            },
+          },
+        },
+      ],
+    },
+  ],
+  layoutData: {
+    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Portrait: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+  },
+};

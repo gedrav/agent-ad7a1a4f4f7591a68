@@ -650,6 +650,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
   }
   protected placeSpinButtonsCloseToReel(): void {
+    if (!this.slotView) {
+      return;
+    }
     const bigBtnHPaddingPerc: number = 0.08;
     const midBtnPaddingPerc: number = 0.05;
 
@@ -798,7 +801,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vAlign: 'middle',
       vPaddingPerc: 0,
     });
-    if (this.spinBtn.x - (this.slotGuideRect.x + this.slotGuideRect.width) > 500) {
+    if (this.spinBtn.x - (this.slotGuideRect.x + this.slotGuideRect.width) > 700) {
       this.placeSpinButtonsCloseToReel();
     }
   }

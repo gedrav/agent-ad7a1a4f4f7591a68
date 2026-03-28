@@ -24,9 +24,11 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));
 
-    this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
+    //this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
   }
-
+  public restartIdleAnim(): void {
+    //this.showIdleAnim(true);
+  }
   protected stopSpinQuick(): void {
     this.quickSpinStarted = true;
 
@@ -39,7 +41,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         for (let i = 0; i < this.configData.data.noOfRows; i++) {
           symb = this.symbolsArray[k][i] as RewardSymbol;
           symb.setNormalTexture();
-          symb.swapSymbolTexture(reelsview[k][i]);
+          symb.swapSymbolTexture(reelsview[k][i], k);
           const isBonusSymbol = this.reelsData.symbolsData[reelsview[k][i]]?.isBonusSymbol;
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);

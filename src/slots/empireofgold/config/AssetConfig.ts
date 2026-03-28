@@ -1,56 +1,63 @@
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { AssetBundle } from '@brand/types/types';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const PRELOADER: AssetBundle = {
   name: LOAD_CONSTANTS.PRELOADER,
   assets: [
     { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
     { TYPE: 'content', NAME: 'gameContent.json' },
-    { TYPE: 'content', NAME: 'rules.json' },
+    // { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
   ],
 };
-
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
-  assets: [
-    { TYPE: 'common', NAME: 'Roboto.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'game', NAME: 'GermaniaOne-Regular.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'game', NAME: 'bg_day', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
-  ],
+  assets: [{ TYPE: 'game', NAME: 'HeroBeamRegular.ttf', ASSETTYPE: 'font' }],
 };
 
 const SPLASH: AssetBundle = {
   name: LOAD_CONSTANTS.SPLASH,
-  assets: [{ TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' }],
+  assets: [
+    { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
+  ],
 };
 
 const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
+    { TYPE: 'game', NAME: 'BG_king', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'reels_frame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    { TYPE: 'common', NAME: 'popups1', ASSETTYPE: 'sprite' },
-    { TYPE: 'common', NAME: 'popups2', ASSETTYPE: 'sprite' },
+    // { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
+
+    // { TYPE: 'game', NAME: 'Pot_spine', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
-  assets: [{ TYPE: 'game', NAME: 'Lepg_Wins', ASSETTYPE: 'spine' }],
-};
-const FEATURES: AssetBundle = {
-  name: LOAD_CONSTANTS.FEATURES,
   assets: [
-    { TYPE: 'game', NAME: 'bg_night', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'freespinAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'scatter', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'chest', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'book', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'shield', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'cup', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'low_1', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'low_2', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'low_3', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'low_4', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'low_5', ASSETTYPE: 'spine' },
   ],
 };
+const FREESPIN: AssetBundle = {
+  name: LOAD_CONSTANTS.FEATURES,
+  assets: [],
+};
 
-export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY, FEATURES];
-export const PRIMARY_ASSET_LENGTH: number = 4;
+export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY];

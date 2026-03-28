@@ -1,5 +1,4 @@
 import { GameBGView } from '@game/views/containers/GameBGView';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const GAME_BG_CONFIG: any = {
   name: 'gameBGView',
@@ -9,32 +8,15 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Spine',
-      spineName: 'bg_day',
-      defaultSkin: 'default',
-      defaultState: 'animation',
-      boundingBox: { width: 1550, height: 1550 },
+      spineName: 'BG_king',
+      defaultState: 'day',
       loop: true,
+      boundingBox: { width: 1540, height: 1540 },
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
       },
     },
-    /*{
-      name: 'freegameBG',
-      assetName: 'bg_night',
-      type: 'Spine',
-      toCreate: false,
-      spineName: 'bg_night',
-      defaultSkin: 'default',
-      defaultState: 'animation',
-      boundingBox: { width: 1550, height: 1550 },
-      loop: true,
-      layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-      },
-    },*/
   ],
 };
