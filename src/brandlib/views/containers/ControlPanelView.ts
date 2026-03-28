@@ -358,6 +358,15 @@ export class ControlPanelView extends ResponsiveChildrenView {
             this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
           }
         }
+        if (DeviceProxy.config.isDevice && DeviceProxy.config.isPortrait) {
+          if (
+            this.bbButtonsArray[k].y - this.bbButtonsArray[k].height * 0.5 <
+            this.slotGuideRect.y + this.slotGuideRect.height
+          ) {
+            this.bbButtonsArray[k].scale.set(this.spinBtn.scale.x * 0.8);
+            this.bbButtonsArray[k].y = this.slotGuideRect.y + this.slotGuideRect.height + this.spinBtn.height * 0.3;
+          }
+        }
 
         this.bbButtonsArray[k].x = this.soundOnBtn.x + (this.bbButtonsArray[k].width - this.soundOnBtn.width) / 2;
       }
@@ -410,6 +419,11 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.setRelativeScale(this.spinBtn, 0.2, 0.16, null, 1, 0.4);
     UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.spinBtn, { vAlign: 'top', vPaddingPerc: 0.74 });
+
+    if (this.spinBtn.y - this.spinBtn.height * 0.5 < this.slotGuideRect.y + this.slotGuideRect.height) {
+      this.spinBtn.scale.set(this.spinBtn.scale.x * 0.8);
+      this.spinBtn.y = this.slotGuideRect.y + this.slotGuideRect.height + this.spinBtn.height * 0.6;
+    }
 
     UIUtil.setRelativeScale(this.stopSpinBtn, 1, 1, this.spinBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.stopSpinBtn, { refComponent: 'spinBtn', hAlign: 'center', hPaddingPerc: 0 });

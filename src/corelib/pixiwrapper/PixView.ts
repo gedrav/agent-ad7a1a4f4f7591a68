@@ -94,8 +94,7 @@ export class PixView extends PIXI.Container {
     if (len > 0) {
       for (let k = 0; k < len; k++) {
         const obj = data[k];
-
-        if (DeviceProxy.config.isMobile) {
+        if (DeviceProxy.config.isDevice) {
           if (obj.isDesktopOnly) {
             continue;
           }

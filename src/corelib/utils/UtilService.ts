@@ -135,6 +135,7 @@ class UtilService {
         currency: 'USD',
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
+        useGrouping: true,
         roundingMode: 'trunc',
       }).format(num);
     } else {

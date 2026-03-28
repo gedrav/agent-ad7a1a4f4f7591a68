@@ -124,9 +124,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
   }
 
   public showFaded(): void {
-    if (this.symbol.tint === 0xffffff) {
-      this.symbol.tint = 0x666666;
-    }
+    this.symbol.tint = 0x666666;
   }
 
   public showFeatureTriggerAnimation(): void {
@@ -146,6 +144,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
 
   public cleanUpSymbolWin(): void {
     this.symbol.filters = null;
+    this.symbol.tint = 0xffffff;
     AnimationProxy.killTweensOf(this.symbol);
     this.symbol.scale.set(this.getDefaultScale());
   }

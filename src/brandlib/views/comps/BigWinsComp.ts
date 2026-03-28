@@ -80,7 +80,6 @@ export class BigWinsComp extends ResponsiveView {
 
   public async showSpinWin() {
     const winType = appModel.getWinType();
-    console.log('showSpinWin', winType);
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);
@@ -192,7 +191,6 @@ export class BigWinsComp extends ResponsiveView {
 
   protected onCountUpCompleted(): void {
     clearTimeout(this.timeoutId);
-    console.log('count up completed');
     this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
     EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
     EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND_NOW');
