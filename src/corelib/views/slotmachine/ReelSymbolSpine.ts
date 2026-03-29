@@ -3,6 +3,7 @@ import { SymbolConfig } from './ReelSymbol';
 import { SpinePool } from './SpinePool';
 import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { appModel } from '@core/models/services/AppModelService';
 
 export default class ReelSymbolSpine extends ReelSymbolSprite {
   private animState: string;
@@ -66,6 +67,9 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   // -------------------------
 
   public showIdle(): void {
+    if (!appModel.secondaryAssetsLoaded) {
+      return;
+    }
     if (this.configData.data.idleAnim) {
       this.playSpineAnimation(this.configData.data.idleAnim, false);
     } else {
@@ -78,6 +82,10 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   public showWinning(): void {
+    if (!appModel.secondaryAssetsLoaded) {
+      super.showWinning();
+      return;
+    }
     if (this.configData.data.winAnim) {
       this.playSpineAnimation(this.configData.data.winAnim, true);
       const name: string = this.configData.data.name ?? '';
