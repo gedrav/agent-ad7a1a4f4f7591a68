@@ -114,7 +114,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const reelPosition = symbolPositions[index];
     const movingSymbol = this.movingSymbolArray[index];
 
-    const controlPointYOffset = this.potAnim.y < 0 ? -UIUtil.getGameHeight() : this.potAnim.y * 0.5;
+    const controlPointYOffset = this.potAnim.y * 0.5;
     const startPoint = movingSymbol.position.clone();
     const end = this.getSymbolPositions(reelPosition[0], reelPosition[1]);
     const c1 = new Point(this.potAnim.x, controlPointYOffset);
