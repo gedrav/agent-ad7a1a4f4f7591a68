@@ -118,7 +118,11 @@ export class SplashView extends ResponsiveChildrenView {
     if (DeviceProxy.config.isPortrait) {
       this.alignForPortrait();
     } else {
-      this.alignForLandscape();
+      if (DeviceProxy.config.isDesktop) {
+        this.alignForDesktop();
+      } else {
+        this.alignForLandscape();
+      }
     }
   }
 
@@ -188,6 +192,63 @@ export class SplashView extends ResponsiveChildrenView {
         item.y = 0;
       }
       if (len === 2) {
+        for (let k = 0; k < len; k++) {
+          this.itemsArray[k].x =
+            k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.01;
+          this.itemsArray[k].y = 0;
+        }
+      } else {
+        const colGap = UIUtil.getGameWidth() * 0.05;
+        const rowGap = UIUtil.getGameHeight() * 0.02;
+        let colWidth = 0;
+        const rowHeights: number[] = [];
+
+        for (let i = 0; i < len; i += 2) {
+          const item1 = this.itemsArray[i];
+          const item2 = this.itemsArray[i + 1];
+          colWidth = Math.max(colWidth, item1.width);
+          if (item2) colWidth = Math.max(colWidth, item2.width);
+        }
+
+        let yOffset = 0;
+        for (let i = 0; i < len; i += 2) {
+          const item1 = this.itemsArray[i];
+          const item2 = this.itemsArray[i + 1];
+
+          if (!item2 && len % 2 !== 0) {
+            item1.x = colWidth + colGap / 2 - item1.width / 2;
+            item1.y = yOffset;
+          } else {
+            item1.x = 0;
+            item1.y = yOffset;
+
+            item2.x = colWidth + colGap;
+            item2.y = yOffset;
+
+            const rowHeight = Math.max(item1.height, item2.height);
+            yOffset += rowHeight + rowGap;
+          }
+        }
+      }
+
+      this.itemContainer.scale.set(1);
+      const sc = this.guideRect.width / this.itemContainer.width;
+      const hsc = this.guideRect.height / this.itemContainer.height;
+      this.itemContainer.scale.set(Math.min(sc, hsc));
+
+      this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
+      this.itemContainer.y = this.guideRect.y + (this.guideRect.height - this.itemContainer.height) / 2;
+    }
+  }
+  protected alignForDesktop(): void {
+    // this.loadingBtn.scale.set(1);
+    const len = this.itemsArray.length;
+    if (len > 0) {
+      for (const item of this.itemsArray) {
+        item.x = 0;
+        item.y = 0;
+      }
+      if (len === 3) {
         for (let k = 0; k < len; k++) {
           this.itemsArray[k].x =
             k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.01;

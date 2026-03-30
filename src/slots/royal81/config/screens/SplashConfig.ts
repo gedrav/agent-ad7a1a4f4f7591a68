@@ -119,19 +119,6 @@ export const SPLASH_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
-    {
-      name: 'coverRect',
-      type: 'Graphics',
-      width: 200,
-      height: 200,
-      color: 0xffffff,
-      alpha: 0.25,
-      layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-      },
-    },
     { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
 
     {
@@ -260,7 +247,7 @@ export const SPLASH_CONFIG: any = {
             style: {
               fontFamily: 'commonFont',
               fontWeight: 400,
-              fill: 0x000000,
+              fill: 0xffffff,
               fontSize: 40,
               anchor: { x: 0, y: 0.5 },
             },
@@ -306,7 +293,7 @@ export const SPLASH_CONFIG: any = {
             style: {
               fontFamily: 'commonFont',
               fontWeight: 400,
-              fill: 0x000000,
+              fill: 0xffffff,
               fontSize: 40,
               anchor: { x: 0, y: 0.5 },
             },
