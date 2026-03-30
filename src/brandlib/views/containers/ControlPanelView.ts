@@ -350,7 +350,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
           }
         } else {
           if (DeviceProxy.config.isPortrait) {
-            UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.2, 0.1, 1);
+            UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.16, 0.1, 1);
             this.bbButtonsArray[k].y =
               this.turboBtn.y - k * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
           } else {
