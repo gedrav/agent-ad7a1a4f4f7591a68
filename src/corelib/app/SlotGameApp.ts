@@ -22,6 +22,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { BaseTexture, SCALE_MODES } from '@pixi/core';
+import { SoundFactory } from '@core/sound/SoundServiceProxy';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -296,15 +297,13 @@ class SlotGameApp {
 
   protected visibilityChange(): void {
     if (document.visibilityState === 'hidden') {
-      //console.log(' visibility --- HIDDEN');
-      //SoundFactory.muteAllSounds();
-      //EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
-      //this.app.stop();
+      SoundFactory.muteAllSounds();
+      EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
+      this.app.stop();
     } else {
-      //console.log(' visibility --- SHOW');
-      //EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
-      //SoundFactory.unmuteAllSounds();
-      //this.app.start();
+      EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
+      SoundFactory.unmuteAllSounds();
+      this.app.start();
     }
   }
   // -----------------------------------------------------------------------
