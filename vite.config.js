@@ -24,12 +24,11 @@ const COMMON_ASSETS_ROOT = path.resolve(ASSETS_ROOT, 'common');
 const COMMON_ASSETS_PATTERN = `${toPosix(COMMON_ASSETS_ROOT)}/**/*`;
 const COMMON_ASSETS_IGNORE = `!${toPosix(COMMON_ASSETS_ROOT)}/**/.DS_Store`;
 const SHOW_STATS_OVERLAY = false; // toggle FPS stats overlay
-const PIXI_VENDOR_PACKAGES = new Set(['pixi.js', 'pixi-filters']);
+const PIXI_VENDOR_PACKAGES = new Set(['pixi.js', 'pixi-filters', 'howler']);
 const VENDOR_ANIMATION_PACKAGES = new Set([
   'gsap',
   'socket.io-client',
   'stats.js',
-  'howler',
   'ky',
   'crypto',
   'crypto-js',
@@ -135,7 +134,8 @@ export default defineConfig(({ mode }) => {
               }
 
               if (VENDOR_ANIMATION_PACKAGES.has(pkgName)) {
-                return 'vendor-animation';
+                // Keep these with Pixi to avoid circular chunk init between vendor-animation and vendor-pixi.
+                return 'vendor-pixi';
               }
             }
 
