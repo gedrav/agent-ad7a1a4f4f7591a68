@@ -125,24 +125,12 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.ticker.add(this.spinReel.bind(this));
   }
 
-  protected updateUIForAutoStart(): void {
-    this.tickerComp.visible = false;
-    this.fsAutoCounterComp.visible = true;
-  }
+  protected updateUIForAutoStart(): void {}
   protected updateUIAutoCount(): void {}
-  protected onAutoplayEnded(): void {
-    this.tickerComp.visible = true;
-    this.fsAutoCounterComp.visible = false;
-  }
-  protected updateUIForFreeSpinsStart(): void {
-    this.tickerComp.visible = false;
-    this.fsAutoCounterComp.visible = true;
-  }
+  protected onAutoplayEnded(): void {}
+  protected updateUIForFreeSpinsStart(): void {}
   protected updateUIFreeSpinsCount(): void {}
-  protected onFreeSpinsEnded(): void {
-    this.tickerComp.visible = true;
-    this.fsAutoCounterComp.visible = false;
-  }
+  protected onFreeSpinsEnded(): void {}
   protected onFullScreenModeChange(): void {}
 
   public getSymbolPosition(x: number, y: number) {

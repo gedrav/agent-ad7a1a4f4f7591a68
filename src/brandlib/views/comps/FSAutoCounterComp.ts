@@ -19,13 +19,14 @@ export class FSAutoCounterComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.updateUIForAutoStart.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_COUNT, this.updateUIAutoCount.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.onAutoplayEnded.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.onAutoplayEnded.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
   }
-  protected updateUIForAutoStart(): void {}
+  protected updateUIForAutoStart(): void {
+    this.visible = true;
+  }
   protected updateUIAutoCount(): void {
     if (appModel.getIsFreeSpinsSession()) {
     } else {
@@ -36,8 +37,14 @@ export class FSAutoCounterComp extends StandardView {
       this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(totalwin)]);
     }
   }
-  protected onAutoplayEnded(): void {}
-  protected updateUIForFreeSpinsStart(): void {}
+  protected onAutoplayEnded(): void {
+    this.visible = false;
+  }
+  protected updateUIForFreeSpinsStart(): void {
+    this.visible = true;
+  }
   protected updateUIFreeSpinsCount(): void {}
-  protected onFreeSpinsEnded(): void {}
+  protected onFreeSpinsEnded(): void {
+    this.visible = false;
+  }
 }

@@ -4,10 +4,12 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class CheckAutoSpinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
+    console.log('check auto spin state -- ', appModel.getIsAutoSession());
     if (appModel.getIsAutoSession()) {
       appModel.incrementAutoSpin();
       appModel.setAutoPlayWin(appModel.getTotalBaseWin());
@@ -24,6 +26,10 @@ class CheckAutoSpinStateCommand extends StateCommand {
         EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
       }
     } else {
+      if (GameProxy.config.isAutoStopped) {
+        EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_ENDED);
+        GameProxy.config.isAutoStopped = false;
+      }
       StateManager.goToState('IDLE_STATE');
     }
   }
