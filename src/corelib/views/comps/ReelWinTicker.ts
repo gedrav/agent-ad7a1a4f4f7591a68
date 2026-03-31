@@ -20,6 +20,7 @@ export class ReelWinTicker extends StandardView {
   protected showSpinWin(data: any): void {
     if (this.totalWin == 0) {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
+      this.winTicker.reset();
     }
     this.totalWin += data.value;
     if (data.duration == 0) {
