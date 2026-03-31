@@ -14,6 +14,7 @@ import { ShowHideSplashCommand } from '@core/commands/action/ShowHideSplashComma
 const GLOBAL_MENU_BTN_ML_PROPS = {
   cs: { fontSize: 33 },
   pl: { fontSize: 30 },
+  lt: { fontSize: 33 },
 };
 
 export const MENU_CONFIG: any = {

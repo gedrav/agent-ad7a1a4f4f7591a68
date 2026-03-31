@@ -1,14 +1,8 @@
 import { SplashStartCommand } from '@core/commands/action/SplashStartCommand';
-import { UIConfig } from '@game/config/UIConfig';
 import { SplashView } from '@brand/views/splash/SplashView';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
-import { UIUtil } from '@core/utils/UIUtilService';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
-import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
-import { ChangeTotalBetCommand } from '@core/commands/action/ChangeTotalBetCommand';
 import { Point } from 'pixi.js';
-import { MenuButton } from '@brand/views/comps/MenuButton';
-import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { SplashButton } from '@brand/views/comps/SplashButton';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
 export const SPLASH_CONFIG: any = {
@@ -207,6 +201,7 @@ export const SPLASH_CONFIG: any = {
               },
             },
             anchor: { x: 0.5, y: 0.5 },
+            fontMLProps: { lt: { fontSize: 36 } },
           },
           x: 274,
           y: 85,
