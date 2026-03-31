@@ -266,6 +266,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.menuBtn.enabled = true;
     this.infoBtn.enabled = true;
     this.homeBtn.enabled = true;
+    this.turboBtn.enabled = true;
+    this.turboSelectedBtn.enabled = true;
 
     // Enable buy bonus buttons
     if (this.bbButtonsArray) {
@@ -278,6 +280,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.menuBtn.enabled = false;
     this.infoBtn.enabled = false;
     this.homeBtn.enabled = false;
+    this.turboBtn.enabled = false;
+    this.turboSelectedBtn.enabled = false;
 
     // Disable buy bonus buttons during spins
     if (this.bbButtonsArray) {
