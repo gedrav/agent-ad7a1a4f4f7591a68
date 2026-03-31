@@ -68,6 +68,7 @@ export class BigWinsComp extends ResponsiveView {
       } else {
         EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
       }
+      this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
     }
   }
 
