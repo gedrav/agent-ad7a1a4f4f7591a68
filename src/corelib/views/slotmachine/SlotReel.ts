@@ -466,6 +466,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
+    this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
       if (appModel.turboMode) EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED_TURBO');
       EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED');
@@ -484,6 +485,12 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
   }
 
+  protected setAllNormalTexture(reelno): void {
+    const len = this.symbolsArray[reelno].length;
+    for (let k = 0; k < len; k++) {
+      this.symbolsArray[reelno][k].resetSymbol();
+    }
+  }
   protected stopReelQuick(reelno: number): void {
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];

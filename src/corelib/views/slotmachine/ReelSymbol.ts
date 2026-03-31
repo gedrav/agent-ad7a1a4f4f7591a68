@@ -32,6 +32,8 @@ export default class ReelSymbol extends StandardView {
 
   public resetSymbol(): void {
     if (!this.symbol) return;
+    this.isBlurred = false;
+    this.symbol.texture = this.resolveTexture();
     this.symbol.x = 0;
     this.symbol.y = 0;
     this.symbol.visible = true;
@@ -39,6 +41,10 @@ export default class ReelSymbol extends StandardView {
     this.symbol.alpha = 1;
     this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1));
     this.setSpineVisible(false);
+  }
+  protected resolveTexture() {
+    const name = this.isBlurred ? `${this.configData.data.name}_blur` : this.configData.data.name;
+    return UIUtil.getTexture(name);
   }
 
   protected setSpineVisible(flag: boolean): void {

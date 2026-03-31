@@ -98,11 +98,6 @@ export default class ReelSymbolSprite extends ReelSymbol {
     }
   }
 
-  private resolveTexture() {
-    const name = this.isBlurred ? `${this.configData.data.name}_blur` : this.configData.data.name;
-    return UIUtil.getTexture(name);
-  }
-
   // -------------------------
   // Animations
   // -------------------------
