@@ -5,31 +5,31 @@
   <meta charset="UTF-8" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-touch-fullscreen" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="theme-color" content="#000000" />
-  <meta name="color-scheme" content="dark">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title></title>
   <link rel="stylesheet" href="assets/panel/css/common.css" />
-
   <link rel="stylesheet" href="assets/panel/css/panel.css" />
-  <link rel="stylesheet" href="assets/panel/css/history.css" /> 
-  <link rel="stylesheet" href="assets/history/style.css" /> 
-  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/panel/css/history.css" />
+  <link rel="stylesheet" href="assets/history/style.css" />
+  <link rel="icon" href="data:," />
 </head>
 
 <body>
-  <script type="module" src="/src/main.ts"></script>
   <div id="gameStage"></div>
+
   <div id="preload">
     <div id="preload-logo">
-      <img src="assets/images/loader.webp" class="preloadercenter"></img>
+      <img src="assets/images/loader.webp" class="preloadercenter" alt="" />
     </div>
   </div>
-  <div id="gameRulesPanel" isMobile="false"></div>
-  <div id="historyPanel" isMobile="false" isLand="true"></div>
-  <!-- <script type="text/javascript" src="common/panel/devUtils/devUtilities.ts"></script> -->
+
+  <div id="gameRulesPanel" data-is-mobile="false"></div>
+  <div id="historyPanel" data-is-mobile="false" data-is-land="true"></div>
+
+  <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
