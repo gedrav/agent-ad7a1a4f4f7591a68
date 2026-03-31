@@ -198,13 +198,15 @@ class SoundServiceProxy {
     return obj;
   }
   public muteAllSounds(): void {
-    console.log(' MUTE 🔕');
+    //console.log(' MUTE 🔕');
     Howler.mute(true);
   }
 
   public unmuteAllSounds(fromFocusOff = false): void {
-    console.log(' UNMUTE 🔔');
-    Howler.mute(false);
+    //console.log(' UNMUTE 🔔');
+    if (this.isAmbientSoundOn) {
+      Howler.mute(false);
+    }
   }
 }
 
