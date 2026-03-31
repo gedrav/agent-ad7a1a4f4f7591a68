@@ -403,8 +403,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
     }
   }
   protected resizeForMobilePortrait(): void {
-    const hPaddingPerc: number = 0.005;
-    const vPaddingPerc: number = 0.008;
+    const hPaddingPerc: number = 0.04;
+    const vPaddingPerc: number = 0.01;
     const bigBtnVPaddingPerc: number = 0.2;
     const midBtnPaddingPerc: number = 0.1;
     const smallBtnHPaddingPerc: number = 0.04;
@@ -512,9 +512,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
   }
   protected resizeForMobileLandscape(): void {
-    const hPaddingPerc: number = 0.005;
-    const vPaddingPerc: number = 0.008;
-    const bigBtnHPaddingPerc: number = 0.02;
+    const hPaddingPerc: number = 0.02;
+    const vPaddingPerc: number = 0.02;
+    const bigBtnHPaddingPerc: number = 0.032;
     const midBtnPaddingPerc: number = 0.05;
     const smallBtnHPaddingPerc: number = 0.04;
     UIUtil.setRelativeScale(this.balanceComp, 0.14, 0.06, null, 1, 0.5);
