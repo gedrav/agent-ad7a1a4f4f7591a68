@@ -46,7 +46,7 @@ export const PRELOADER_CONFIG: any = {
           width: 394,
           height: 6,
           x: 3,
-          color: '0x454C5D',
+          color: '0x5841f1',
         },
       ],
     },

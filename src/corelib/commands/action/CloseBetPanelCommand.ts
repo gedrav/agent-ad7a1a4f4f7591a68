@@ -15,6 +15,7 @@ class CloseBetPanelCmd extends ActionCommand {
       if (winType !== CONSTANTS.STANDARD_WIN && winType !== CONSTANTS.BELOW_TOTALBET_WIN) {
         EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
       }
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
       EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');

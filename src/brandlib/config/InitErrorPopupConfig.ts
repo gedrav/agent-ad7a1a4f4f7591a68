@@ -26,10 +26,11 @@ export const INIT_ERROR_POPUP_CONFIG = {
       Elements: [
         {
           name: 'bg',
-          type: 'RoundedRectangle',
+          type: 'BorderRoundedRectangle',
           width: 1000,
           height: 800,
-          color: 0xdae9f7,
+          backgroundColor: 0x272728,
+          borderColor: 0x5841f1,
           borderWidth: 10,
           radius: 24,
         },
@@ -39,7 +40,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
           style: {
             fontFamily: 'commonFont',
             fontSize: 30,
-            fill: 0x000000,
+            fill: 0xd9d9d9,
             wordWrap: true,
             wordWrapWidth: 800,
             lineHeight: 30,
@@ -62,9 +63,9 @@ export const INIT_ERROR_POPUP_CONFIG = {
             anchor: { x: 0.5, y: 0.5 },
           },
           options: {
-            defaultView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x333333 }),
-            hoverView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x555555 }),
-            pressedView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x333333 }),
+            defaultView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x0f0f0f }),
+            hoverView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x252525 }),
+            pressedView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x0f0f0f }),
             disabledView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0xcccccc }),
             animations: CoreUIConfig.buttonStates,
           },

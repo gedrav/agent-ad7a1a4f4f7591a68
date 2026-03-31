@@ -6,7 +6,7 @@ import { UIConfig } from '@game/config/UIConfig';
 export const GAME_CONFIG = {
   gameDesktopWidth: 2424,
   gameDesktopHeight: 1300,
-  gameBGColor: 0xffffff,
+  gameBGColor: 0x000000,
   globalAnimSpeed: 0.5,
   debugMode: false,
   configPath: '/',

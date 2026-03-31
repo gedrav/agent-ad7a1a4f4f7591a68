@@ -55,11 +55,10 @@ export class SplashView extends ResponsiveChildrenView {
 
     this.addChild(this.itemContainer);
     this.initItems();
-    this.resizeView();
-
-    /*setTimeout(() => {
-      this.startBtn.click();
-    }, 250);*/
+    this.visible = false;
+    setTimeout(() => {
+      this.visible = true;
+    }, 50);
   }
   protected onshowIntroBtnClick(): void {
     const flag = this.showIntroBtn.isSelected();
