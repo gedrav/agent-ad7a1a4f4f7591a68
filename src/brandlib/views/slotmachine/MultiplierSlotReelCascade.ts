@@ -27,7 +27,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     //this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
   }
   public restartIdleAnim(): void {
-    //this.showIdleAnim(true);
+    this.showIdleAnim(true);
   }
   protected stopSpinQuick(): void {
     this.quickSpinStarted = true;
