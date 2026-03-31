@@ -9,7 +9,6 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 class CheckAutoSpinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    console.log('check auto spin state -- ', appModel.getIsAutoSession());
     if (appModel.getIsAutoSession()) {
       appModel.incrementAutoSpin();
       appModel.setAutoPlayWin(appModel.getTotalBaseWin());
