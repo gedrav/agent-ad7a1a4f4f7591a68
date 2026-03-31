@@ -52,8 +52,8 @@ export const PRELOADER_CONFIG: any = {
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.16, heightPerc: 0.3 },
-    Portrait: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.5 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.5, heightPerc: 0.4 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.12, heightPerc: 0.1 },
+    Portrait: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.32, heightPerc: 0.25 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', maxScale: 1, widthPerc: 0.2, heightPerc: 0.2 },
   },
 };
