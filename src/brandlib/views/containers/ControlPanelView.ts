@@ -89,10 +89,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.spinBtn.addChild(this.longPressSprite);
     this.longPressSprite.scale.set(0.95);
     this.longPressSprite.anchor.set(0.5);
-    if (appModel.language === 'lt') {
-      this.longPressSprite.position.y = -30;
-      this.longPressSprite.position.x = 3;
-    }
+
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN, this.updateBalanceForBBSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE, this.updateBalance.bind(this));
