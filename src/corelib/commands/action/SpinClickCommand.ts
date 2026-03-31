@@ -20,8 +20,9 @@ class SpinClickCmd extends ActionCommand {
         EventHandler.dispatchEvent('START_SLOT_SPIN');
       }
       const isDesktop = DeviceProxy.config.isDesktop;
+      const isTablet = DeviceProxy.config.isTablet;
       // Request fullscreen on desktop on first spin
-      if (!isDesktop) {
+      if (!isDesktop && !isTablet) {
         RequestFullscreenCommand.execute();
       }
     } else {
