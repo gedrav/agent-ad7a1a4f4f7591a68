@@ -1782,7 +1782,12 @@ class UIUtilService {
         }
       } else {
         if (DeviceProxy.config.isLandscape) {
-          obj = data.Landscape ?? data.Portrait ?? data.Desktop;
+          this.isShortPhone();
+          if (this.isShortPhone()) {
+            obj = data.SmallLandscape ?? data.SmallLandscape ?? data.Landscape ?? data.Portrait ?? data.Desktop;
+          } else {
+            obj = data.Landscape ?? data.Portrait ?? data.Desktop;
+          }
         } else {
           obj = data.Portrait ?? data.Landscape ?? data.Desktop;
         }
@@ -2191,6 +2196,20 @@ class UIUtilService {
         },
       };
     }
+  }
+
+  public isShortPhone(): boolean {
+    const shortScreen = Math.min(window.screen.width, window.screen.height);
+    const longScreen = Math.max(window.screen.width, window.screen.height);
+
+    // Actual visible area for layout/canvas sizing
+    const vv = window.visualViewport;
+    const usableWidth = Math.round(vv?.width ?? window.innerWidth);
+    const usableHeight = Math.round(vv?.height ?? window.innerHeight);
+
+    const isSE1Class = DeviceProxy.config.isIOSDevice && shortScreen <= 320 && longScreen <= 568;
+    const isSmallIPhoneClass = DeviceProxy.config.isIOSDevice && shortScreen <= 375 && longScreen <= 667;
+    return isSmallIPhoneClass;
   }
 }
 

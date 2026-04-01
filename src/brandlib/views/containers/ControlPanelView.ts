@@ -529,6 +529,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.alignHorizontal(this.betComp, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
     UIUtil.alignVertical(this.betComp, { vAlign: 'bottom', vPaddingPerc: -vPaddingPerc });
 
+    UIUtil.setRelativeScale(this.spinBtn, 0.14, 0.16, null, 1, 0.4);
+    UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'center', hPaddingPerc: 0 });
+    UIUtil.alignVertical(this.spinBtn, { vAlign: 'top', vPaddingPerc: 0.74 });
+
     UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.15, null, 1, 0.4);
     UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'right', hPaddingPerc: -bigBtnHPaddingPerc });
     UIUtil.alignVertical(this.spinBtn, { vAlign: 'middle', vPaddingPerc: 0 });

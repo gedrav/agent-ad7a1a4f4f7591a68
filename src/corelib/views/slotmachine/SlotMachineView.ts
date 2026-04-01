@@ -3,6 +3,7 @@ import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
 import SlotReel from '@core/views/slotmachine/SlotReel';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export class SlotMachineView extends ResponsiveChildrenView {
   get slotReel(): SlotReel {
