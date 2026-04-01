@@ -38,13 +38,20 @@ export class BigWinsComp extends ResponsiveView {
         complete: (entry) => this.onAnimComplete(entry),
       };
       this.attachAnimCompleteListener();
-      console.log('bigwinanim event added');
     }
 
     this.skipRect = this.elementsList['skipRect'];
     UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
     UIUtil.setClickable(this.skipRect, true);
     this.skipRect.visible = false;
+    this.applyTickerPosition();
+  }
+
+  protected applyTickerPosition(): void {
+    const tickerPos = this.configData.data.winTickerPosition;
+    if (!tickerPos || !this.winTicker) return;
+    const pos = this.bigWinAnim?.visible ? tickerPos.withAnim : tickerPos.withoutAnim;
+    this.winTicker.setPosition(pos.x, pos.y);
   }
 
   protected onSkipClicked() {
@@ -126,11 +133,12 @@ export class BigWinsComp extends ResponsiveView {
         if (this.bigWinAnim) {
           this.bigWinAnim.visible = true;
           this.attachAnimCompleteListener();
+          this.applyTickerPosition();
         }
         EventHandler.dispatchEvent('PLAY_ALL_WIN_SOUND_BIGWIN');
         this.winTicker.countUpValue(appModel.getSpinWin(), this.totalDuration);
         this.playNextWinAnimation();
-        this.intervalDelay = (this.totalDuration - 2000) / this.targetLevel;
+        this.intervalDelay = (this.totalDuration - 1000) / this.targetLevel;
         if (!appModel.isCascadeGame()) {
           /*EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
             value: appModel.getSpinWin(),
@@ -138,7 +146,7 @@ export class BigWinsComp extends ResponsiveView {
           });*/
         }
         if (this.currentLevel < this.targetLevel - 1) {
-          //this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
+          this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
         }
       }
     }
@@ -167,6 +175,7 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim?.stopAnimation();
       if (this.bigWinAnim) {
         this.bigWinAnim.visible = false;
+        this.applyTickerPosition();
       }
     }
   }
@@ -197,7 +206,7 @@ export class BigWinsComp extends ResponsiveView {
     }
     console.log('onAnimComplete', data.animation.name);
     if (data.animation.name === this.configData.data.animations[this.currentState].start) {
-      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: false });
+      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: true });
     } else if (data.animation.name === this.configData.data.animations[this.currentState].end) {
       this.checkForNextAnim();
     }

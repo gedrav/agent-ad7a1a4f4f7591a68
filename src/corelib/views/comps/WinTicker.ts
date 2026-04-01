@@ -23,6 +23,11 @@ export class WinTicker extends StandardView {
     this.tickerActive = false;
   }
 
+  public setPosition(x: number, y: number): void {
+    this.valueText.x = x;
+    this.valueText.y = y;
+  }
+
   public reset(): void {
     this.tickerActive = false;
     this.valueText.text = '';
