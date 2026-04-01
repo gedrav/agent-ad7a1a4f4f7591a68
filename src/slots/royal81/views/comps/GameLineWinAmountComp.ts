@@ -13,7 +13,7 @@ export class GameLineWinAmountComp extends LineWinAmountComp {
     this.wildMultiplierText = this.elementsList['wildMultiplierText'];
     this.multiplierImg = this.elementsList['multiplierImg'];
     this.multiplierImg.visible = false;
-    this.multiplierImg.scale.set(0.5);
+    this.multiplierImg.scale.set(1);
   }
 
   public reset(): void {
