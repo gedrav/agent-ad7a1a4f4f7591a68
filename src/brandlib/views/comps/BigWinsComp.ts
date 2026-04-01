@@ -32,6 +32,7 @@ export class BigWinsComp extends ResponsiveView {
     this.winTickerBW = this.elementsList['winTickerBW'];
     this.winTicker?.reset();
     this.winTickerBW?.reset();
+    this.showWinTickerType();
     this.winTickerBW?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.winTicker?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.bigWinAnim = this.elementsList['bigWinAnim'];
@@ -172,6 +173,7 @@ export class BigWinsComp extends ResponsiveView {
     this.winTicker?.reset();
     this.winTickerBW?.reset();
     clearTimeout(this.timeoutId);
+    this.showWinTickerType();
     this.isSkipping = false;
     if (this.bigWinAnim) {
       this.bigWinAnim?.stopAnimation();

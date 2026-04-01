@@ -28,13 +28,13 @@ export const BIG_WIN_CONFIG = {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
+      x: 755,
+      y: 465,
       Elements: [
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          x: 755,
-          y: 465,
           style: { fontFamily: 'bitmapFont', fontSize: 300, fill: 0xffffff },
         },
       ],
@@ -43,13 +43,14 @@ export const BIG_WIN_CONFIG = {
       name: 'winTickerBW',
       type: 'Comp',
       class: WinTicker,
+      x: 755,
+      y: 890,
       Elements: [
+        { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 50 },
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          x: 755,
-          y: 890,
           style: { fontFamily: 'bitmapFontBW', fontSize: 300, fill: 0xffffff },
         },
       ],
