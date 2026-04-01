@@ -24,11 +24,15 @@ export class BigWinsComp extends ResponsiveView {
   private winState: boolean = false;
   private isSkipping: boolean = false;
   private animCompleteListener: { complete: (entry) => void };
+  private winTickerBW: WinTicker;
 
   constructor(config) {
     super(config);
     this.winTicker = this.elementsList['winTicker'];
+    this.winTickerBW = this.elementsList['winTickerBW'];
     this.winTicker?.reset();
+    this.winTickerBW?.reset();
+    this.winTickerBW?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.winTicker?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.bigWinAnim = this.elementsList['bigWinAnim'];
     if (this.bigWinAnim) {
@@ -44,14 +48,16 @@ export class BigWinsComp extends ResponsiveView {
     UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
     UIUtil.setClickable(this.skipRect, true);
     this.skipRect.visible = false;
-    this.applyTickerPosition();
   }
 
-  protected applyTickerPosition(): void {
-    const tickerPos = this.configData.data.winTickerPosition;
-    if (!tickerPos || !this.winTicker) return;
-    const pos = this.bigWinAnim?.visible ? tickerPos.withAnim : tickerPos.withoutAnim;
-    this.winTicker.setPosition(pos.x, pos.y);
+  protected showWinTickerType(type: string = 'normal'): void {
+    if (type === 'normal') {
+      this.winTicker.visible = true;
+      this.winTickerBW.visible = false;
+    } else {
+      this.winTickerBW.visible = true;
+      this.winTicker.visible = false;
+    }
   }
 
   protected onSkipClicked() {
@@ -66,7 +72,7 @@ export class BigWinsComp extends ResponsiveView {
       if (this.bigWinAnim) {
         this.bigWinAnim.stopAnimation();
       }
-      this.winTicker.skipToFinalValue();
+      this.winTickerBW.skipToFinalValue();
 
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
 
@@ -80,7 +86,7 @@ export class BigWinsComp extends ResponsiveView {
       } else {
         EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
       }
-      this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
+      this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1600);
     }
   }
 
@@ -96,13 +102,8 @@ export class BigWinsComp extends ResponsiveView {
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);
+      this.showWinTickerType();
       this.winTicker.showSpinValue(appModel.getSpinWin());
-      /*if (!appModel.isCascadeGame()) {
-        EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
-          value: appModel.getSpinWin(),
-          duration: 0,
-        });
-      }*/
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
     } else {
       this.winState = true;
@@ -133,10 +134,10 @@ export class BigWinsComp extends ResponsiveView {
         if (this.bigWinAnim) {
           this.bigWinAnim.visible = true;
           this.attachAnimCompleteListener();
-          this.applyTickerPosition();
         }
         EventHandler.dispatchEvent('PLAY_ALL_WIN_SOUND_BIGWIN');
-        this.winTicker.countUpValue(appModel.getSpinWin(), this.totalDuration);
+        this.showWinTickerType('bigwin');
+        this.winTickerBW.countUpValue(appModel.getSpinWin(), this.totalDuration);
         this.playNextWinAnimation();
         this.intervalDelay = (this.totalDuration - 1000) / this.targetLevel;
         if (!appModel.isCascadeGame()) {
@@ -169,13 +170,13 @@ export class BigWinsComp extends ResponsiveView {
     this.skipRect.visible = false;
     clearTimeout(this.winTimerId);
     this.winTicker?.reset();
+    this.winTickerBW?.reset();
     clearTimeout(this.timeoutId);
     this.isSkipping = false;
     if (this.bigWinAnim) {
       this.bigWinAnim?.stopAnimation();
       if (this.bigWinAnim) {
         this.bigWinAnim.visible = false;
-        this.applyTickerPosition();
       }
     }
   }

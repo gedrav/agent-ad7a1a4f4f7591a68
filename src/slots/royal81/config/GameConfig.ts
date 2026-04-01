@@ -26,6 +26,7 @@ export const GAME_CONFIG = {
     commonFont: 'Mulish',
     gameFont1: 'bookosb',
     bitmapFont: 'bitmapFont',
+    bitmapFontBW: 'bitmapFontBW',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',

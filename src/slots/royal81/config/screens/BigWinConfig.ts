@@ -12,10 +12,6 @@ export const BIG_WIN_CONFIG = {
       GIGANTIC_WIN: { start: 'GIG_win_Start', idle: 'GIG_win_idle', end: 'GIG_win_End' },
       UNBELIEVABLE_WIN: { start: 'UNB_win_Start', idle: 'UNB_win_idle', end: 'UNB_win_End' },
     },
-    winTickerPosition: {
-      withAnim: { x: 755, y: 890 },
-      withoutAnim: { x: 755, y: 465 },
-    },
   },
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
@@ -38,15 +34,44 @@ export const BIG_WIN_CONFIG = {
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
           x: 755,
-          y: 890,
+          y: 465,
           style: { fontFamily: 'bitmapFont', fontSize: 300, fill: 0xffffff },
+        },
+      ],
+    },
+    {
+      name: 'winTickerBW',
+      type: 'Comp',
+      class: WinTicker,
+      Elements: [
+        {
+          name: 'valueText',
+          type: 'BitmapText',
+          anchor: { x: 0.5, y: 0.5 },
+          x: 755,
+          y: 890,
+          style: { fontFamily: 'bitmapFontBW', fontSize: 300, fill: 0xffffff },
         },
       ],
     },
   ],
   layoutData: {
     Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Portrait: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Landscape: {
+      refComponent: 'guideRect',
+      widthPerc: 1,
+      heightPerc: 0.9,
+      maxScale: 1,
+      hAlign: 'center',
+      vAlign: 'middle',
+    },
+    Portrait: {
+      refComponent: 'guideRect',
+      widthPerc: 0.9,
+      heightPerc: 1,
+      maxScale: 1,
+      hAlign: 'center',
+      vAlign: 'middle',
+    },
   },
 };
