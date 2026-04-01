@@ -82,14 +82,6 @@ class WrapperServiceProxy extends AbstractProxy {
   // messages to wrapper
   public notifyLoadingStart(): void {}
   public sendCanvasReady(): void {}
-
-  public savePreferences(preferences: { sound: boolean; showIntro: boolean }): void {
-    fetch(import.meta.env.VITE_EXTERNAL_PREFERENCES_URL, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ token: this.getBEToken(), preferences }),
-    }).catch((err) => console.error('SavePreferences failed', err));
-  }
 }
 
 export const WrapperProxy = new WrapperServiceProxy();
