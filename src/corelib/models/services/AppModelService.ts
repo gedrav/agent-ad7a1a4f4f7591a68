@@ -277,6 +277,9 @@ class AppModelService {
 
   // public methods -------------------------------------------
 
+  public resetGameResult(): void {
+    this.gameResult = null;
+  }
   // ------------------- All get methods ---------------------------------------------------------
   public getHomeURL(): string {
     // return this.playerInfo ? this.playerInfo.homeURL : null;

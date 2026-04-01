@@ -232,6 +232,7 @@ class SlotGameApp {
       this.errorPopup.showMessage(obj.data?.message);
       this.removePreloader();
     } else {
+      appModel.resetGameResult();
       const data: any = {};
       data.title = Util.getContent('infoText');
       data.message = obj.data?.message;
