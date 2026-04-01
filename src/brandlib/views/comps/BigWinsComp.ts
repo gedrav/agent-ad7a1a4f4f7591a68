@@ -35,9 +35,9 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
       this.animCompleteListener = {
-        complete: (entry) => this.onAnimComplete.bind(this, entry),
+        complete: (entry) => this.onAnimComplete(entry),
       };
-      this.bigWinAnim.onSpineEvent(this.animCompleteListener);
+      this.attachAnimCompleteListener();
       console.log('bigwinanim event added');
     }
 
@@ -125,6 +125,7 @@ export class BigWinsComp extends ResponsiveView {
       if (this.targetLevel > this.currentLevel) {
         if (this.bigWinAnim) {
           this.bigWinAnim.visible = true;
+          this.attachAnimCompleteListener();
         }
         EventHandler.dispatchEvent('PLAY_ALL_WIN_SOUND_BIGWIN');
         this.winTicker.countUpValue(appModel.getSpinWin(), this.totalDuration);
@@ -235,5 +236,13 @@ export class BigWinsComp extends ResponsiveView {
       }
       EventHandler.dispatchEvent(STATES[this.currentLevel] + 'START');
     }
+  }
+
+  private attachAnimCompleteListener(): void {
+    if (!this.bigWinAnim || !this.animCompleteListener) {
+      return;
+    }
+    this.bigWinAnim.removeSpineEvent(this.animCompleteListener);
+    this.bigWinAnim.onSpineEvent(this.animCompleteListener);
   }
 }
