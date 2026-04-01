@@ -29,13 +29,13 @@ export class GameLineWinAmountComp extends LineWinAmountComp {
       this.multiplierImg.visible = true;
       this.multiplierImg.texture = UIUtil.getTexture('x' + multiplier);
       this.multiplierImg.anchor.set(0.5);
-      /*AnimationProxy.animateTween(this.multiplierImg, {
+      AnimationProxy.animateTween(this.multiplierImg, {
         duration: 1,
         scaleX: 0.6,
         scaleY: 0.6,
         yoyo: true,
         repeat: -1,
-      });*/
+      });
     }
   }
 }
