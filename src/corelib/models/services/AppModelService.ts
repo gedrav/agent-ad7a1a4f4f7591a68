@@ -283,12 +283,12 @@ class AppModelService {
     return '';
   }
   public getReelsView(): any {
-    if (this.gameResult.reelModifiers && this.gameResult.reelModifiers.length > 0) {
-      if (this.gameResult.reelModifiers[0].initialReelView) {
-        return this.gameResult.reelModifiers[0].initialReelView;
+    if (this.gameResult?.reelModifiers && this.gameResult?.reelModifiers.length > 0) {
+      if (this.gameResult?.reelModifiers[0]?.initialReelView) {
+        return this.gameResult?.reelModifiers[0]?.initialReelView;
       }
     }
-    return this.gameResult.reelView;
+    return this.gameResult?.reelView;
   }
   public reelModifiersTriggered(): boolean {
     if (this.gameResult.reelModifiers && this.gameResult.reelModifiers.length > 0) {

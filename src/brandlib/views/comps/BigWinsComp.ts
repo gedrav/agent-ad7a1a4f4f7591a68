@@ -186,7 +186,6 @@ export class BigWinsComp extends ResponsiveView {
 
   protected playNextWinAnimation(): void {
     if (this.bigWinAnim) {
-      console.log('play next animation -- ', this.currentState, this.currentLevel, this.targetLevel);
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].start, loop: false });
     }
     if (this.currentLevel === 0) {
@@ -203,11 +202,9 @@ export class BigWinsComp extends ResponsiveView {
     }
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {
-    console.log('onAnimComplete', data.animation.name);
     if (this.isSkipping) {
       return;
     }
-    console.log('onAnimComplete', data.animation.name);
     if (data.animation.name === this.configData.data.animations[this.currentState].start) {
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: true });
     } else if (data.animation.name === this.configData.data.animations[this.currentState].end) {
@@ -229,7 +226,6 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected playEndAnimation(): void {
     if (this.bigWinAnim) {
-      console.log('play end animation -- ', this.currentState, this.currentLevel, this.targetLevel);
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
     } else {
       this.checkForNextAnim();
@@ -241,7 +237,6 @@ export class BigWinsComp extends ResponsiveView {
       //console.log('all completed send done notification');
     } else {
       this.currentState = STATES[this.currentLevel];
-      console.log('play next state anim', this.currentState);
       this.playNextWinAnimation();
       if (this.currentLevel < this.targetLevel - 1) {
         this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);

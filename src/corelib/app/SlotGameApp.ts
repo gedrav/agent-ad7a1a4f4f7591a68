@@ -234,7 +234,7 @@ class SlotGameApp {
     } else {
       const data: any = {};
       data.title = Util.getContent('infoText');
-      data.message = obj.data?.response?.data?.message;
+      data.message = obj.data?.message;
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
   }

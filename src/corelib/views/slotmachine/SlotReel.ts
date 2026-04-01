@@ -475,7 +475,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected stopSpinQuick(): void {
-    if (!this.spinStarted || !appModel.gameResult) return;
+    if (!this.spinStarted) return;
     this.spinResponseReceived = true;
     this.ticker.stop();
     this.quickSpinStarted = true;
@@ -521,6 +521,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     const quickDuration = 0.15;
 
     for (let k = 0; k < len; k++) {
+      symbols[k].visible = true;
       if (k === len - 1) {
         AnimationProxy.animateTween(symbols[k], {
           duration: quickDuration,
