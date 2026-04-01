@@ -2201,15 +2201,7 @@ class UIUtilService {
   public isShortPhone(): boolean {
     const shortScreen = Math.min(window.screen.width, window.screen.height);
     const longScreen = Math.max(window.screen.width, window.screen.height);
-
-    // Actual visible area for layout/canvas sizing
-    const vv = window.visualViewport;
-    const usableWidth = Math.round(vv?.width ?? window.innerWidth);
-    const usableHeight = Math.round(vv?.height ?? window.innerHeight);
-
-    const isSE1Class = DeviceProxy.config.isIOSDevice && shortScreen <= 320 && longScreen <= 568;
-    const isSmallIPhoneClass = DeviceProxy.config.isIOSDevice && shortScreen <= 375 && longScreen <= 667;
-    return isSmallIPhoneClass;
+    return DeviceProxy.config.isIOSDevice && shortScreen <= 375 && longScreen <= 667;
   }
 }
 
