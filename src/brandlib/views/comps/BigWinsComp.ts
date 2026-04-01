@@ -23,6 +23,7 @@ export class BigWinsComp extends ResponsiveView {
   private skipRect: PixGraphics;
   private winState: boolean = false;
   private isSkipping: boolean = false;
+  private animCompleteListener: { complete: (entry) => void };
 
   constructor(config) {
     super(config);
@@ -33,7 +34,11 @@ export class BigWinsComp extends ResponsiveView {
     if (this.bigWinAnim) {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
-      this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
+      this.animCompleteListener = {
+        complete: (entry) => this.onAnimComplete.bind(this, entry),
+      };
+      this.bigWinAnim.onSpineEvent(this.animCompleteListener);
+      console.log('bigwinanim event added');
     }
 
     this.skipRect = this.elementsList['skipRect'];
@@ -132,7 +137,7 @@ export class BigWinsComp extends ResponsiveView {
           });*/
         }
         if (this.currentLevel < this.targetLevel - 1) {
-          this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
+          //this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
         }
       }
     }
@@ -168,6 +173,7 @@ export class BigWinsComp extends ResponsiveView {
 
   protected playNextWinAnimation(): void {
     if (this.bigWinAnim) {
+      console.log('play next animation -- ', this.currentState, this.currentLevel, this.targetLevel);
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].start, loop: false });
     }
     if (this.currentLevel === 0) {
@@ -183,12 +189,14 @@ export class BigWinsComp extends ResponsiveView {
       EventHandler.dispatchEvent('PLAY_UNBELIEVABLEWIN_SPECIAL_SOUND');
     }
   }
-  protected onAnimComplete(data: any): void {
+  protected onAnimComplete(data: { animation: { name: string } }): void {
+    console.log('onAnimComplete', data.animation.name);
     if (this.isSkipping) {
       return;
     }
+    console.log('onAnimComplete', data.animation.name);
     if (data.animation.name === this.configData.data.animations[this.currentState].start) {
-      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: true });
+      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: false });
     } else if (data.animation.name === this.configData.data.animations[this.currentState].end) {
       this.checkForNextAnim();
     }
@@ -208,6 +216,7 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected playEndAnimation(): void {
     if (this.bigWinAnim) {
+      console.log('play end animation -- ', this.currentState, this.currentLevel, this.targetLevel);
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
     } else {
       this.checkForNextAnim();
@@ -219,6 +228,7 @@ export class BigWinsComp extends ResponsiveView {
       //console.log('all completed send done notification');
     } else {
       this.currentState = STATES[this.currentLevel];
+      console.log('play next state anim', this.currentState);
       this.playNextWinAnimation();
       if (this.currentLevel < this.targetLevel - 1) {
         this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
