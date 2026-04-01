@@ -209,11 +209,14 @@ export class BigWinsComp extends ResponsiveView {
   protected playEndAnimation(): void {
     if (this.bigWinAnim) {
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
+    } else {
+      this.checkForNextAnim();
     }
   }
   protected checkForNextAnim() {
     this.currentLevel++;
     if (this.currentLevel >= this.targetLevel) {
+      //console.log('all completed send done notification');
     } else {
       this.currentState = STATES[this.currentLevel];
       this.playNextWinAnimation();

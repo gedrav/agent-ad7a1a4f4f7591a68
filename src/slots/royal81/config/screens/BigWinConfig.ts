@@ -7,10 +7,10 @@ export const BIG_WIN_CONFIG = {
   class: BigWinsComp,
   data: {
     animations: {
-      BIG_WIN: { start: 'bigWin_Start', idle: 'bigWin_idle', end: 'bigWin_End' },
-      MEGA_WIN: { start: 'megaWin_Start', idle: 'megaWin_Idle', end: 'megaWin_End' },
-      GIGANTIC_WIN: { start: 'superBigWin_Start', idle: 'superBigWin_Idle', end: 'superBigWin_End' },
-      UNBELIEVABLE_WIN: { start: 'superBigWin_Start', idle: 'superBigWin_Idle', end: 'superBigWin_End' },
+      BIG_WIN: { start: 'Big_win_Start', idle: 'Big_win_idle', end: 'Big_win_End' },
+      MEGA_WIN: { start: 'Mega_win_Start', idle: 'Mega_win_idle', end: 'Mega_win_End' },
+      GIGANTIC_WIN: { start: 'GIG_win_Start', idle: 'GIG_win_idle', end: 'GIG_win_End' },
+      UNBELIEVABLE_WIN: { start: 'UNB_win_Start', idle: 'UNB_win_idle', end: 'UNB_win_End' },
     },
   },
   Elements: [
@@ -21,8 +21,8 @@ export const BIG_WIN_CONFIG = {
       type: 'Spine',
       spineName: 'Big_Wins_spine_HD',
       loop: true,
-      x: 968,
-      y: 500,
+      x: 755,
+      y: 430,
     },
     {
       name: 'winTicker',
@@ -34,8 +34,8 @@ export const BIG_WIN_CONFIG = {
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
           x: 755,
-          y: 465,
-          style: { fontFamily: 'bitmapFont', fontSize: 400, fill: 0xffffff },
+          y: 890,
+          style: { fontFamily: 'bitmapFont', fontSize: 300, fill: 0xffffff },
         },
       ],
     },
