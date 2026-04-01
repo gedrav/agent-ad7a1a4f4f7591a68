@@ -85,12 +85,12 @@ export class BigWinsComp extends ResponsiveView {
       const duration = 2000;
       clearTimeout(this.winTimerId);
       this.winTicker.showSpinValue(appModel.getSpinWin());
-      if (!appModel.isCascadeGame()) {
+      /*if (!appModel.isCascadeGame()) {
         EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
           value: appModel.getSpinWin(),
           duration: 0,
         });
-      }
+      }*/
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
     } else {
       this.winState = true;
@@ -126,10 +126,10 @@ export class BigWinsComp extends ResponsiveView {
         this.playNextWinAnimation();
         this.intervalDelay = (this.totalDuration - 2000) / this.targetLevel;
         if (!appModel.isCascadeGame()) {
-          EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+          /*EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
             value: appModel.getSpinWin(),
             duration: this.totalDuration,
-          });
+          });*/
         }
         if (this.currentLevel < this.targetLevel - 1) {
           this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
@@ -145,6 +145,10 @@ export class BigWinsComp extends ResponsiveView {
     clearTimeout(this.timeoutId);
     clearTimeout(this.winTimerId);
     StateManager.doNextStep();
+    EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+      value: appModel.getSpinWin(),
+      duration: 0,
+    });
   }
   public clearSpinWin(): void {
     this.winState = false;
@@ -210,7 +214,6 @@ export class BigWinsComp extends ResponsiveView {
   protected checkForNextAnim() {
     this.currentLevel++;
     if (this.currentLevel >= this.targetLevel) {
-      console.log('all completed send done notification');
     } else {
       this.currentState = STATES[this.currentLevel];
       this.playNextWinAnimation();

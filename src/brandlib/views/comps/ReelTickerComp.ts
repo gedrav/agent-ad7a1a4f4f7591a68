@@ -44,11 +44,9 @@ export class ReelTickerComp extends StandardView {
 
   protected hideTicker(): void {
     this.visible = false;
-    console.log('hide ticker');
   }
   protected showTicker(): void {
     this.visible = true;
-    console.log('show ticker');
   }
 
   protected showSpinWin(data: any): void {

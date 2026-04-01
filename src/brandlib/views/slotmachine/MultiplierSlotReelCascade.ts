@@ -279,7 +279,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected fsTotalMultiplierWentUp(totalMultiText: PixText) {
     this.removeChild(totalMultiText);
     totalMultiText.destroy();
-    console.log('aaaaaaaa', this.fsTotalMultiComp.getCurrentTotalMultiplierVal());
     this.cascadeReelWinTicker.updateMultiplier(this.fsTotalMultiComp.getCurrentTotalMultiplierVal());
     this.createMultipliersToAnimate();
   }

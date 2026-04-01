@@ -163,12 +163,10 @@ export class PixIconFancyButton extends FancyButton {
 
   set enabled(enabled: boolean) {
     super.enabled = enabled;
-    console.log('icon', this.configData, this.textView, this.iconView);
     if (this.iconView) {
       const flt = new ColorMatrixFilter();
       flt.greyscale(enabled ? 0 : 1, false);
       this.iconView.filters = [flt];
-      console.log('enabled', enabled);
     }
   }
 }

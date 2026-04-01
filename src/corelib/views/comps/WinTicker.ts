@@ -28,12 +28,20 @@ export class WinTicker extends StandardView {
     this.valueText.text = '';
     this.currentValue = 0;
   }
-  public showSpinValue(newValue: number, showCurrency: boolean = false): void {
+  public showSpinValue(newValue: number, showCurrency: boolean = false, showPrefix: boolean = false): void {
     this.visible = true;
     this.showCurrency = showCurrency;
     this.currentValue = newValue;
     if (this.showCurrency) {
-      this.valueText.text = Util.formatCurrency(this.currentValue);
+      if (showPrefix) {
+        this.valueText.text = Util.getContent('totalWin') + ' ' + Util.formatCurrency(this.currentValue);
+      } else {
+        if (showPrefix) {
+          this.valueText.text = Util.getContent('totalWin') + ' ' + Util.formatCurrency(this.currentValue);
+        } else {
+          this.valueText.text = Util.formatCurrency(this.currentValue);
+        }
+      }
     } else {
       this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
     }

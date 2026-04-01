@@ -3,6 +3,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class ReelWinTicker extends StandardView {
   protected winTicker: WinTicker;
@@ -22,9 +23,12 @@ export class ReelWinTicker extends StandardView {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
     }
+    if (appModel.getIsAutoSession() || appModel.getIsFreeSpinsSession()) {
+      return;
+    }
     this.totalWin += data.value;
     if (data.duration == 0) {
-      this.winTicker.showSpinValue(this.totalWin, true);
+      this.winTicker.showSpinValue(this.totalWin, true, true);
     } else {
       this.winTicker.countUpValue(this.totalWin, data.duration, true);
     }
