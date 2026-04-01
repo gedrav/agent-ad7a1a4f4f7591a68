@@ -4,7 +4,6 @@ import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 import { appModel } from '@core/models/services/AppModelService';
 
 export class FSAutoCounterComp extends StandardView {
