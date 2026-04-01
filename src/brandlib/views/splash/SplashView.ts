@@ -70,8 +70,6 @@ export class SplashView extends ResponsiveChildrenView {
   protected onSoundBtnClick(): void {
     const flag = this.soundBtn.isSelected();
     this.soundBtn.setSelected(!flag);
-    appModel.setPreferencesSound(flag);
-    MessageProxy.savePreferences(appModel.getPreferences());
     SoundStateChangeCommand.execute(flag);
   }
 
