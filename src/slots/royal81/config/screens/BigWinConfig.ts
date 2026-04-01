@@ -12,6 +12,10 @@ export const BIG_WIN_CONFIG = {
       GIGANTIC_WIN: { start: 'GIG_win_Start', idle: 'GIG_win_idle', end: 'GIG_win_End' },
       UNBELIEVABLE_WIN: { start: 'UNB_win_Start', idle: 'UNB_win_idle', end: 'UNB_win_End' },
     },
+    winTickerPosition: {
+      withAnim: { x: 755, y: 890 },
+      withoutAnim: { x: 755, y: 465 },
+    },
   },
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
