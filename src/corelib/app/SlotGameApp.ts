@@ -169,6 +169,10 @@ class SlotGameApp {
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
+    if (appModel.getPreferences()?.showIntro !== false) {
+      this.createSplash();
+      this.removePreloader();
+    }
     await AssetLoader.loadPrimary();
   }
   async onPrimaryAssetsLoaded() {
@@ -180,15 +184,24 @@ class SlotGameApp {
     this.soundsLoaded = true;
     this.checkToCreateGame();
   }
+  protected createView(): void {
+    // overridden in game
+  }
   protected checkToCreateGame(): void {
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
           this.createView();
-          this.createSplash();
-          this.removePreloader();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
+          console.log('primary assets loaded');
+          if (appModel.getPreferences()?.showIntro !== false) {
+          } else {
+            EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
+            setTimeout(() => {
+              this.onSplashDestroyed();
+            }, 50);
+          }
           this.loadLazyFiles();
         }
       }
@@ -212,7 +225,6 @@ class SlotGameApp {
     appModel.featureAssetsLoaded = true;
   }
 
-  protected createView() {}
   protected async onSplashStartClicked() {
     this.splashComp?.removeSplash();
     this.makeGameVisible();

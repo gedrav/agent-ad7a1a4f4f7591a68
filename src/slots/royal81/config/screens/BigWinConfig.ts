@@ -1,5 +1,6 @@
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const BIG_WIN_CONFIG = {
   name: 'bigWinsComp',
@@ -12,18 +13,19 @@ export const BIG_WIN_CONFIG = {
       GIGANTIC_WIN: { start: 'GIG_win_Start', idle: 'GIG_win_idle', end: 'GIG_win_End' },
       UNBELIEVABLE_WIN: { start: 'UNB_win_Start', idle: 'UNB_win_idle', end: 'UNB_win_End' },
     },
-  },
-  Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
-    { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    {
+    bigWinAnim: {
       name: 'bigWinAnim',
+      dontCreateView: true,
       type: 'Spine',
       spineName: 'Big_Wins_spine_HD',
       loop: true,
       x: 755,
       y: 430,
     },
+  },
+  Elements: [
+    { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
+    { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
     {
       name: 'winTicker',
       type: 'Comp',

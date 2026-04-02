@@ -16,6 +16,7 @@ import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { AppEvents } from '@core/events/AppEvents';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -37,6 +38,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.controlsContainer = this.elementsList?.['controlsContainer'];
 
     this.startBtn = this.controlsContainer.elementsList?.['startBtn'];
+    this.startBtn.visible = false;
     this.cGuideRect = this.controlsContainer.elementsList?.['guideRect'];
     this.soundBtn = this.controlsContainer.elementsList?.['soundBtn'];
     this.soundBtn.addInteraction(this.onSoundBtnClick.bind(this));
@@ -46,6 +48,8 @@ export class SplashView extends ResponsiveChildrenView {
 
     this.soundBtn.on('BUTTON_PRESSED', this.onSoundBtnClick.bind(this));
     this.showIntroBtn.on('BUTTON_PRESSED', this.onshowIntroBtnClick.bind(this));
+
+    EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryLoaded.bind(this));
 
     const prefs = appModel.getPreferences();
     this.soundBtn.setSelected(!prefs.sound);
@@ -59,6 +63,9 @@ export class SplashView extends ResponsiveChildrenView {
     setTimeout(() => {
       this.visible = true;
     }, 50);
+  }
+  protected onPrimaryLoaded(): void {
+    this.startBtn.visible = true;
   }
   protected onshowIntroBtnClick(): void {
     const flag = this.showIntroBtn.isSelected();

@@ -24,6 +24,7 @@ export class gameApp extends SlotGameApp {
 
   async createSplash() {
     const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
+    console.log('showIntro', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
       this.splashComp = new SplashView(SPLASH_CONFIG);
       this.appContainer.addChild(this.splashComp, this.preloader);
