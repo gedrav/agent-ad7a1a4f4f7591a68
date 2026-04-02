@@ -32,13 +32,17 @@ export class gameApp extends SlotGameApp {
       EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
       setTimeout(() => {
         this.onSplashDestroyed();
-      }, 50);
+      }, 10);
     }
   }
   async createView() {
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
   }
   protected makeGameVisible() {
+    this.gameAppScreen.visible = false;
     this.appContainer.addChild(this.gameAppScreen);
+    setTimeout(() => {
+      this.gameAppScreen.visible = true;
+    }, 10);
   }
 }
