@@ -22,7 +22,7 @@ export class MessageServiceProxy extends AbstractProxy {
   public connectToServer(): void {}
 
   protected checkForServerError(msgName: string, data: any): boolean {
-    if ((data && data.errorCode == 0) || data.errorCode == null) {
+    if (data?.errorCode == 0 || data?.errorCode == null) {
       return false;
     } else {
       EventHandler.dispatchEvent(SlotEvents.HANDLE_SERVER_ERROR, { msgName: msgName, data: data });

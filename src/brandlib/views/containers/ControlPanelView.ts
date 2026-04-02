@@ -18,6 +18,7 @@ import { AutoplayClickCommand } from '@core/commands/action/AutoplayClickCommand
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { Point } from 'pixi.js';
+import { SoundFactory } from '@core/sound/SoundServiceProxy';
 
 let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -95,7 +96,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE, this.updateBalance.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateTotalbet.bind(this));
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
-    this.onSoundStateChanged(appModel.getPreferences().sound);
+
     EventHandler.addEventListener(SlotEvents.TURBO_STATE_CHANGED, this.onTurboStateChanged.bind(this));
 
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enablePanel.bind(this));
@@ -113,6 +114,11 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FULLSCREEN_MODE, this.onFullScreenModeChange.bind(this));
+
+    const soundOn = !appModel.getPreferences()?.sound === false;
+    this.onSoundStateChanged(soundOn);
+    SoundFactory.ambientState = soundOn;
+    SoundFactory.sfxState = soundOn;
     this.addKeyboardEvents();
     this.createBBButtons();
     this.onTurboStateChanged();

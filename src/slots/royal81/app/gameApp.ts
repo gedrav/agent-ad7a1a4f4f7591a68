@@ -24,12 +24,14 @@ export class gameApp extends SlotGameApp {
 
   async createSplash() {
     const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
-    if (appModel.getPreferences().showIntro) {
+    if (appModel.getPreferences()?.showIntro !== false) {
       this.splashComp = new SplashView(SPLASH_CONFIG);
       this.appContainer.addChild(this.splashComp, this.preloader);
     } else {
       EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
-      await this.onSplashDestroyed();
+      setTimeout(() => {
+        this.onSplashDestroyed();
+      }, 50);
     }
   }
   async createView() {
