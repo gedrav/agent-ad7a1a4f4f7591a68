@@ -1,7 +1,6 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { Util } from '@core/utils/UtilService';
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
