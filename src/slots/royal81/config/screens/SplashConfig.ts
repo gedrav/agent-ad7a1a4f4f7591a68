@@ -5,11 +5,15 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
 import { SplashButton } from '@brand/views/comps/SplashButton';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
+
+const fontMLProps = { sk: { fontSize: 45 } };
+
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
   class: SplashView,
   itemsDesktopScale: 1,
+
   contents: [
     {
       name: 'item1',
@@ -23,6 +27,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -54,6 +59,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -85,6 +91,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
