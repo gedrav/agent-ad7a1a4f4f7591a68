@@ -162,7 +162,10 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
-    this.checkToCreateGame();
+    console.log('game init received -- ');
+    if (appModel.getPreferences()?.showIntro !== false) {
+      this.checkToCreateSplash();
+    }
   }
   protected async onPreloaderLoaded() {
     GameProxy.updateCommonConfig();
@@ -177,12 +180,14 @@ class SlotGameApp {
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
+    console.log('splash assets loaded -- ', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
       this.checkToCreateSplash();
     }
     await AssetLoader.loadPrimary();
   }
   protected checkToCreateSplash() {
+    console.log('check to create splash -- ', this.gameInitReceived, this.splashAssetsLoaded);
     if (this.gameInitReceived && this.splashAssetsLoaded) {
       this.createSplash();
       this.removePreloader();
