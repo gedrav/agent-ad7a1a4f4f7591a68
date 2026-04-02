@@ -216,9 +216,6 @@ export const SPLASH_CONFIG: any = {
           btnConfig: {
             type: 'PixToggleButton',
             scale: 1,
-            action: {
-              press: AutoPlayNoOfSpinsBtnCommand,
-            },
             options: {
               defaultView: 'soundOnBtn',
               hoverView: 'soundOnBtn',
