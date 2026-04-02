@@ -177,12 +177,16 @@ class SlotGameApp {
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
-    console.log('splash assets loaded -- ', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
+      this.checkToCreateSplash();
+    }
+    await AssetLoader.loadPrimary();
+  }
+  protected checkToCreateSplash() {
+    if (this.gameInitReceived && this.splashAssetsLoaded) {
       this.createSplash();
       this.removePreloader();
     }
-    await AssetLoader.loadPrimary();
   }
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
@@ -203,11 +207,8 @@ class SlotGameApp {
           this.createView();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
-          console.log('primary assets loaded ', appModel.getPreferences()?.showIntro);
           if (appModel.getPreferences()?.showIntro !== false) {
-            console.log('xxxxxxxxxxxxxx');
           } else {
-            console.log('yyyyyyyyyyy');
             EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
             setTimeout(() => {
               this.onSplashDestroyed();
@@ -248,7 +249,6 @@ class SlotGameApp {
 
   protected onServerError(obj: any): void {
     //Logger.logObj(obj, 'server error');
-    console.log('server error newwwwwwwwwwwww == ', obj);
     if (obj.msgName == 'gameinit') {
       this.initErrorOccured = true;
       this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);

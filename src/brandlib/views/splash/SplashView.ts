@@ -76,7 +76,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.preloaderComp.y = this.startBtn.height / 2;
   }
   protected onPrimaryLoaded(): void {
-    this.preloaderComp.destroy();
+    this.preloaderComp.visible = false;
     this.startBtn.visible = true;
   }
   protected onshowIntroBtnClick(): void {

@@ -194,7 +194,7 @@ class AppModelService {
   public storeGameInitData(data: any): void {
     this._gameInitData = data;
     if (data.preferences) {
-      this._preferences = { sound: data.preferences.sound ?? true, showIntro: data.preferences.showIntro ?? false };
+      this._preferences = { sound: data.preferences.sound ?? true, showIntro: data.preferences.showIntro ?? true };
     }
     this.currency = data.playerInfo.currencyCode;
     this.funMode = false;
