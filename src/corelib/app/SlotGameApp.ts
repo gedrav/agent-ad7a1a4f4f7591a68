@@ -169,6 +169,7 @@ class SlotGameApp {
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
+    console.log('splash assets loaded -- ', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
       this.createSplash();
       this.removePreloader();
