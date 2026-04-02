@@ -162,7 +162,7 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
-    console.log('game init received -- ');
+    console.log('game init received -- ', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
       this.checkToCreateSplash();
     }

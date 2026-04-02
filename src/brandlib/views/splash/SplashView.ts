@@ -69,6 +69,7 @@ export class SplashView extends ResponsiveChildrenView {
     setTimeout(() => {
       this.visible = true;
     }, 50);
+    this.resizeView();
   }
   protected createPreloader(): void {
     this.preloaderComp = new SplashPreloaderComp(SPLASH_PRELOADER_CONFIG);
