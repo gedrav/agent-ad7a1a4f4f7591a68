@@ -41,14 +41,14 @@ export const SPLASH_PRELOADER_CONFIG: any = {
     Portrait: {
       refComponent: 'guideRect',
       hAlign: 'center',
-      vAlign: 'middle',
+      vAlign: 'top',
       maxScale: 1,
       widthPerc: 1,
     },
     Landscape: {
       refComponent: 'guideRect',
       hAlign: 'center',
-      vAlign: 'middle',
+      vAlign: 'top',
       maxScale: 1,
       widthPerc: 1,
     },

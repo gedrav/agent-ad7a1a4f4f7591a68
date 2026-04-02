@@ -73,7 +73,6 @@ export class SplashView extends ResponsiveChildrenView {
   protected createPreloader(): void {
     this.preloaderComp = new SplashPreloaderComp(SPLASH_PRELOADER_CONFIG);
     this.controlsContainer.addChild(this.preloaderComp);
-    //this.preloaderComp.y = this.startBtn.height / 2;
   }
   protected onPrimaryLoaded(): void {
     this.preloaderComp.visible = false;
