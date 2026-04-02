@@ -17,6 +17,10 @@ import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeC
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { AppEvents } from '@core/events/AppEvents';
+import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
+import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
+import { SplashPreloaderComp } from '@brand/views/comps/SplashPreloaderComp';
+import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -29,6 +33,7 @@ export class SplashView extends ResponsiveChildrenView {
   private showIntroBtn: SplashButton;
   private controlsContainer: PixView;
   private cGuideRect: PixGraphics;
+  private preloaderComp: SplashPreloaderComp;
 
   constructor(config: any) {
     super(config);
@@ -60,11 +65,18 @@ export class SplashView extends ResponsiveChildrenView {
     this.addChild(this.itemContainer);
     this.initItems();
     this.visible = false;
+    this.createPreloader();
     setTimeout(() => {
       this.visible = true;
     }, 50);
   }
+  protected createPreloader(): void {
+    this.preloaderComp = new SplashPreloaderComp(SPLASH_PRELOADER_CONFIG);
+    this.controlsContainer.addChild(this.preloaderComp);
+    this.preloaderComp.y = this.startBtn.height / 2;
+  }
   protected onPrimaryLoaded(): void {
+    this.preloaderComp.destroy();
     this.startBtn.visible = true;
   }
   protected onshowIntroBtnClick(): void {

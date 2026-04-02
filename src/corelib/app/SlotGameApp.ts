@@ -79,7 +79,7 @@ class SlotGameApp {
       antialias: !isIOSMobile,
       autoDensity: true,
       roundPixels: true,
-      powerPreference: isIOSMobile ? 'default' : 'high-performance',
+      //powerPreference: isIOSMobile ? 'default' : 'high-performance',
     });
     GameProxy.config.app = this.app;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
@@ -203,9 +203,11 @@ class SlotGameApp {
           this.createView();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
-          console.log('primary assets loaded');
+          console.log('primary assets loaded ', appModel.getPreferences()?.showIntro);
           if (appModel.getPreferences()?.showIntro !== false) {
+            console.log('xxxxxxxxxxxxxx');
           } else {
+            console.log('yyyyyyyyyyy');
             EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
             setTimeout(() => {
               this.onSplashDestroyed();

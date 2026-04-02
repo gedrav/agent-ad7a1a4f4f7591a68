@@ -55,7 +55,6 @@ export class BigWinsComp extends ResponsiveView {
       };
       this.attachAnimCompleteListener();
     }
-    console.log('BigWinsComp onSecondaryAssetsLoaded');
   }
 
   protected showWinTickerType(type: string = 'normal'): void {

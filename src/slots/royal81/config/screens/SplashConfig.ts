@@ -153,7 +153,6 @@ export const SPLASH_CONFIG: any = {
         },
       },
     },
-
     {
       name: 'controlsContainer',
       type: 'ResponsiveChildrenContainer',
