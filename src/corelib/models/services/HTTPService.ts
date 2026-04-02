@@ -4,8 +4,11 @@ import { appModel } from '@core/models/services/AppModelService';
 
 // Shared ky instance — prefixUrl is set from the env var baked in at build time.
 // All requests only need to pass the endpoint path (e.g. 'init', 'spin').
+// 30s timeout: on iOS the event loop can stall during asset loading while the init
+// response is in flight; 10s (ky default) is too short in that scenario.
 const httpClient = ky.create({
   prefixUrl: import.meta.env.VITE_API_URL,
+  timeout: 30000,
 });
 
 // Shared ky instance for external URLs (no prefixUrl).

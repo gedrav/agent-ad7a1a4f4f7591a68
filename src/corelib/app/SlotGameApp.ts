@@ -43,6 +43,8 @@ class SlotGameApp {
   private errorPopup: InitErrorPopup;
   private isFirstTime: boolean;
   private soundsLoaded: boolean = false;
+  private animBound: (time: number) => void;
+  private rafId: number | null = null;
 
   constructor() {}
 
@@ -64,19 +66,24 @@ class SlotGameApp {
     GameProxy.config.textsToClear = [];
     GameProxy.config.imagesToClear = [];
 
+    // iOS Safari: high-performance mode + uncapped DPR + antialias causes GPU thermal
+    // throttling, WebGL context loss, and touch interaction failure on the canvas.
+    // Cap resolution at 2x, drop antialias, and use default power on iOS mobile.
+    const isIOSMobile = DeviceProxy.config.isIOSMobile;
+
     this.app = new Application();
     await this.app.init({
-      resolution: Math.ceil(window.devicePixelRatio),
+      resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
       backgroundColor: GameProxy.config.gameBGColor,
       hello: true,
-      antialias: true, // IMPORTANT
+      antialias: !isIOSMobile,
       autoDensity: true,
       roundPixels: true,
-      powerPreference: 'high-performance',
+      powerPreference: isIOSMobile ? 'default' : 'high-performance',
     });
     GameProxy.config.app = this.app;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
-    BaseTexture.defaultOptions.anisotropicLevel = 16;
+    BaseTexture.defaultOptions.anisotropicLevel = isIOSMobile ? 0 : 16;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
     if (__SHOW_STATS__) {
       // show FPS monitoring panel when enabled via config
@@ -97,7 +104,8 @@ class SlotGameApp {
     globalThis.__PIXI_APP__ = this.app;
     EventHandler.setScope(this.app.stage);
     this.addEvents();
-    requestAnimationFrame(this.animate.bind(this));
+    this.animBound = this.animate.bind(this);
+    this.rafId = requestAnimationFrame(this.animBound);
 
     this.appContainer = new PixView({ label: 'appContainer' });
     this.app.stage.addChild(this.appContainer);
@@ -274,7 +282,7 @@ class SlotGameApp {
 
   protected animate(time: number) {
     this.refreshView(time);
-    requestAnimationFrame(this.animate.bind(this));
+    this.rafId = requestAnimationFrame(this.animBound);
   }
 
   protected refreshView(time: number): void {
@@ -315,10 +323,17 @@ class SlotGameApp {
       SoundFactory.muteAllSounds();
       EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
       this.app.stop();
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
     } else {
       EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
       SoundFactory.unmuteAllSounds();
       this.app.start();
+      if (this.rafId === null) {
+        this.rafId = requestAnimationFrame(this.animBound);
+      }
     }
   }
   // -----------------------------------------------------------------------
