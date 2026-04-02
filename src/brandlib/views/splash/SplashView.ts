@@ -16,6 +16,11 @@ import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { AppEvents } from '@core/events/AppEvents';
+import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
+import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
+import { SplashPreloaderComp } from '@brand/views/comps/SplashPreloaderComp';
+import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -28,6 +33,7 @@ export class SplashView extends ResponsiveChildrenView {
   private showIntroBtn: SplashButton;
   private controlsContainer: PixView;
   private cGuideRect: PixGraphics;
+  private preloaderComp: SplashPreloaderComp;
 
   constructor(config: any) {
     super(config);
@@ -37,6 +43,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.controlsContainer = this.elementsList?.['controlsContainer'];
 
     this.startBtn = this.controlsContainer.elementsList?.['startBtn'];
+    this.startBtn.visible = false;
     this.cGuideRect = this.controlsContainer.elementsList?.['guideRect'];
     this.soundBtn = this.controlsContainer.elementsList?.['soundBtn'];
     this.soundBtn.addInteraction(this.onSoundBtnClick.bind(this));
@@ -47,6 +54,8 @@ export class SplashView extends ResponsiveChildrenView {
     this.soundBtn.on('BUTTON_PRESSED', this.onSoundBtnClick.bind(this));
     this.showIntroBtn.on('BUTTON_PRESSED', this.onshowIntroBtnClick.bind(this));
 
+    EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryLoaded.bind(this));
+
     const prefs = appModel.getPreferences();
     this.soundBtn.setSelected(!prefs.sound);
     this.showIntroBtn.setSelected(!prefs.showIntro);
@@ -56,9 +65,19 @@ export class SplashView extends ResponsiveChildrenView {
     this.addChild(this.itemContainer);
     this.initItems();
     this.visible = false;
+    this.createPreloader();
     setTimeout(() => {
       this.visible = true;
     }, 50);
+    this.resizeView();
+  }
+  protected createPreloader(): void {
+    this.preloaderComp = new SplashPreloaderComp(SPLASH_PRELOADER_CONFIG);
+    this.controlsContainer.addChild(this.preloaderComp);
+  }
+  protected onPrimaryLoaded(): void {
+    this.preloaderComp.visible = false;
+    this.startBtn.visible = true;
   }
   protected onshowIntroBtnClick(): void {
     const flag = this.showIntroBtn.isSelected();
@@ -70,8 +89,6 @@ export class SplashView extends ResponsiveChildrenView {
   protected onSoundBtnClick(): void {
     const flag = this.soundBtn.isSelected();
     this.soundBtn.setSelected(!flag);
-    appModel.setPreferencesSound(flag);
-    MessageProxy.savePreferences(appModel.getPreferences());
     SoundStateChangeCommand.execute(flag);
   }
 
@@ -304,7 +321,6 @@ export class SplashView extends ResponsiveChildrenView {
 
   protected async onFadedOut(): Promise<void> {
     await this.destroyElements();
-    EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
     EventHandler.dispatchEvent(SlotEvents.SPLASH_DESTROYED);
   }
 }

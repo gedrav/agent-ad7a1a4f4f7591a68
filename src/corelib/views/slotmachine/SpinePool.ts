@@ -14,6 +14,9 @@ interface PoolEntry {
 export class SpinePool {
   private static instance: SpinePool;
   private pool: Map<string, PoolEntry[]> = new Map();
+  // Tracks spines created when the pool is exhausted — not in entries[], so
+  // release() can find and destroy them instead of silently leaking GPU memory.
+  private temporarySpines: Set<PixSpine> = new Set();
 
   static readonly MIN_SIZE = 5;
   static readonly MAX_SIZE = 30;
@@ -59,10 +62,21 @@ export class SpinePool {
     }
 
     console.warn(`SpinePool: pool exhausted for symbol "${data.name}", creating temporary spine.`);
-    return this.createSpine(data);
+    const tempSpine = this.createSpine(data);
+    this.temporarySpines.add(tempSpine);
+    return tempSpine;
   }
 
   public release(data: SymbolConfig['data'], spine: PixSpine): void {
+    // Temporary spine (created when pool was exhausted) — destroy it outright
+    // instead of returning it to the pool, so GPU memory is freed immediately.
+    if (this.temporarySpines.has(spine)) {
+      this.temporarySpines.delete(spine);
+      spine.stopAnimation();
+      spine.destroy();
+      return;
+    }
+
     const entries = this.pool.get(data.name);
     if (!entries) return;
 

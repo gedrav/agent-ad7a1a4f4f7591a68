@@ -20,22 +20,28 @@ export class gameApp extends SlotGameApp {
 
   protected async init() {
     await this.setupApp(GAME_CONFIG, ASSET_CONFIG, GAME_SOUND_CONFIG, STATES_CONFIG);
+    const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
   }
 
   async createSplash() {
-    const gsManager = new GameSoundManager(GAME_SOUND_CONFIG);
-    if (appModel.getPreferences().showIntro) {
+    if (appModel.getPreferences()?.showIntro !== false) {
       this.splashComp = new SplashView(SPLASH_CONFIG);
       this.appContainer.addChild(this.splashComp, this.preloader);
     } else {
       EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
-      await this.onSplashDestroyed();
+      setTimeout(() => {
+        this.onSplashDestroyed();
+      }, 10);
     }
   }
   async createView() {
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
   }
   protected makeGameVisible() {
+    this.gameAppScreen.visible = false;
     this.appContainer.addChild(this.gameAppScreen);
+    setTimeout(() => {
+      this.gameAppScreen.visible = true;
+    }, 10);
   }
 }

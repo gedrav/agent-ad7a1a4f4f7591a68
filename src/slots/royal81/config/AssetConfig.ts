@@ -22,6 +22,8 @@ const SPLASH: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -36,13 +38,12 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'Pot_spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'Big_Wins_spine_HD', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
+    { TYPE: 'game', NAME: 'Big_Wins_spine_HD', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: '777_Spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'bar_spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'bells_Spine', ASSETTYPE: 'spine' },

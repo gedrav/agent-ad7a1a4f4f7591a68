@@ -35,7 +35,18 @@ export class BigWinsComp extends ResponsiveView {
     this.showWinTickerType();
     this.winTickerBW?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.winTicker?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
-    this.bigWinAnim = this.elementsList['bigWinAnim'];
+
+    this.skipRect = this.elementsList['skipRect'];
+    UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
+    UIUtil.setClickable(this.skipRect, true);
+    this.skipRect.visible = false;
+  }
+
+  protected onSecondaryAssetsLoaded(): void {
+    super.onSecondaryAssetsLoaded();
+    this.bigWinAnim = UIUtil.getElement(this.configData.data.bigWinAnim);
+    this.addChild(this.bigWinAnim, this.winTicker, this.winTickerBW, this.skipRect);
+
     if (this.bigWinAnim) {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
@@ -44,11 +55,6 @@ export class BigWinsComp extends ResponsiveView {
       };
       this.attachAnimCompleteListener();
     }
-
-    this.skipRect = this.elementsList['skipRect'];
-    UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
-    UIUtil.setClickable(this.skipRect, true);
-    this.skipRect.visible = false;
   }
 
   protected showWinTickerType(type: string = 'normal'): void {

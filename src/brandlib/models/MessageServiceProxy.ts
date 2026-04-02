@@ -22,7 +22,7 @@ export class MessageServiceProxy extends AbstractProxy {
   public connectToServer(): void {}
 
   protected checkForServerError(msgName: string, data: any): boolean {
-    if ((data && data.errorCode == 0) || data.errorCode == null) {
+    if (data?.errorCode == 0 || data?.errorCode == null) {
       return false;
     } else {
       EventHandler.dispatchEvent(SlotEvents.HANDLE_SERVER_ERROR, { msgName: msgName, data: data });
@@ -171,12 +171,14 @@ export class MessageServiceProxy extends AbstractProxy {
     return newobj;
   }
 
-  public savePreferences(preferences: { sound: boolean; showIntro: boolean }): void {
-    fetch(import.meta.env.VITE_EXTERNAL_PREFERENCES_URL, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ token: WrapperProxy.getBEToken(), preferences }),
-    }).catch((err) => console.error('SavePreferences failed', err));
+  async savePreferences(preferences: { sound: boolean; showIntro: boolean }): Promise<void> {
+    const request = { token: WrapperProxy.getBEToken(), preferences };
+    await this.communicationService.getServerResponse(
+      'savePreferences',
+      request,
+      `${import.meta.env.VITE_EXTERNAL_URL}/player/preferences`,
+      'PUT',
+    );
   }
 }
 

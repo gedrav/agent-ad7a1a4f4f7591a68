@@ -138,7 +138,7 @@ class SoundServiceProxy {
       return;
     }
 
-    // console.log('PLAY SOUND == ', sObj.name, sObj.loop);
+    //console.log('PLAY SOUND == ', sObj.name, this.isFxSoundOn, this.isAmbientSoundOn);
 
     const instance = this.soundLibrary[sObj.name];
     if (instance) {

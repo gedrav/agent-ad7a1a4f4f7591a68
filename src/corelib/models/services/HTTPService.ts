@@ -4,9 +4,15 @@ import { appModel } from '@core/models/services/AppModelService';
 
 // Shared ky instance — prefixUrl is set from the env var baked in at build time.
 // All requests only need to pass the endpoint path (e.g. 'init', 'spin').
+// 30s timeout: on iOS the event loop can stall during asset loading while the init
+// response is in flight; 10s (ky default) is too short in that scenario.
 const httpClient = ky.create({
   prefixUrl: import.meta.env.VITE_API_URL,
+  timeout: 30000,
 });
+
+// Shared ky instance for external URLs (no prefixUrl).
+const externalHttpClient = ky.create({});
 
 export class HTTPService {
   protected app: MessageServiceProxy;
@@ -22,14 +28,18 @@ export class HTTPService {
     methodType = 'POST',
   ): Promise<void> {
     appModel.isErrorOccurred = false;
+    const isAbsolute = /^https?:\/\//.test(endpoint);
     // ky's prefixUrl requires the endpoint must NOT start with '/'
-    const path = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+    const path = isAbsolute ? endpoint : endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+    const client = isAbsolute ? externalHttpClient : httpClient;
     try {
       let responseData: any;
       if (methodType === 'GET') {
-        responseData = await httpClient.get(path).json();
+        responseData = await client.get(path).json();
+      } else if (methodType === 'PUT') {
+        responseData = await client.put(path, { json: request }).json();
       } else {
-        responseData = await httpClient.post(path, { json: request }).json();
+        responseData = await client.post(path, { json: request }).json();
       }
       this.callBackFunction(messageName, responseData.data);
     } catch (error) {
