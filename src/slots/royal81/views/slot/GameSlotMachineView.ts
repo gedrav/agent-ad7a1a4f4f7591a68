@@ -6,7 +6,8 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { Point } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
-import { UIUtil } from '../../../../corelib/utils/UIUtilService';
+import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
+import { RoyalReelFrameComp } from '@game/views/comps/RoyalReelFrameComp';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;

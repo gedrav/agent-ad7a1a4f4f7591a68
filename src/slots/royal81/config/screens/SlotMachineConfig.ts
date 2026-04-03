@@ -11,6 +11,7 @@ import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
+import { RoyalReelFrameComp } from '@game/views/comps/RoyalReelFrameComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -152,10 +153,20 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'reelFrame',
           type: 'Comp',
-          class: ReelFrameComp,
+          class: RoyalReelFrameComp,
           x: 0,
-          y: 60,
-          Elements: [{ name: 'reelFrame', type: 'Sprite', image: 'reelFrame', x: 0, y: 0 }],
+          y: 0,
+          Elements: [
+            {
+              name: 'reelFrameAnim',
+              type: 'Spine',
+              spineName: 'reelFrame_spine',
+              defaultState: 'Static',
+              loop: false,
+              x: 800,
+              y: 548,
+            },
+          ],
         },
         { name: '81waysLeft', type: 'Sprite', image: '81ways', x: 274, y: 70 },
         { name: '81waysRight', type: 'Sprite', image: '81ways', x: 1234, y: 70 },
