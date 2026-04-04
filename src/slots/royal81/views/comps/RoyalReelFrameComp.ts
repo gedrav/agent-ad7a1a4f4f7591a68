@@ -17,7 +17,7 @@ export class RoyalReelFrameComp extends ReelFrameComp {
   constructor(config: any) {
     super(config);
     this.reelFrameAnim = this.elementsList['reelFrameAnim'];
-    //EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.showSpinWin.bind(this));
+    EventHandler.addEventListener(SlotEvents.BIG_WIN_ANIM_COMPLETED, this.onBigWinCompleted.bind(this));
   }
 
   public showWin(): void {
@@ -28,7 +28,10 @@ export class RoyalReelFrameComp extends ReelFrameComp {
     if (winType == CONSTANTS.STANDARD_WIN) {
       this.reelFrameAnim.playAnimation({ state: 'Small_Win', loop: false });
     } else {
-      this.reelFrameAnim.playAnimation({ state: 'Big_Win', loop: false });
+      this.reelFrameAnim.playAnimation({ state: 'Big_Win', loop: true });
     }
+  }
+  protected onBigWinCompleted(): void {
+    this.reelFrameAnim.playAnimation({ state: 'Static', loop: false });
   }
 }

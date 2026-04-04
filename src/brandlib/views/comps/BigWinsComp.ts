@@ -93,6 +93,7 @@ export class BigWinsComp extends ResponsiveView {
       } else {
         EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
       }
+      EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
       this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1600);
     }
   }
@@ -221,6 +222,7 @@ export class BigWinsComp extends ResponsiveView {
   protected onCountUpCompleted(): void {
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
+    EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
     EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
     EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND_NOW');
     EventHandler.dispatchEvent('PLAY_TERM_SOUND');

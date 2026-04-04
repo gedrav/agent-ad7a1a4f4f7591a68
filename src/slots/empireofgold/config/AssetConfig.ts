@@ -33,6 +33,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'BG_king', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'reels_frame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },

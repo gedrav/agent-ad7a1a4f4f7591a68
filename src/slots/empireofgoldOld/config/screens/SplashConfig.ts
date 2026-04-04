@@ -56,10 +56,9 @@ export const SPLASH_CONFIG: any = {
   ],
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0x000000, alpha: 1 },
-    {
+    /*{
       name: 'splashBG',
       type: 'Spine',
-      dontDestroyOnHide: true,
       spineName: 'bg_day',
       defaultSkin: 'default',
       defaultState: 'animation',
@@ -70,11 +69,12 @@ export const SPLASH_CONFIG: any = {
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
-    },
+    },*/
     {
       name: 'gameTitle',
       type: 'Sprite',
-      image: 'gamelogo_splash',
+      image: 'empireLogo',
+      anchor: { x: 0.5, y: 0.5 },
       layoutData: {
         Portrait: { widthPerc: 0.7, maxScale: 1, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
         Landscape: {

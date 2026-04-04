@@ -14,6 +14,10 @@ import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig
 import RewardSymbol from '@brand/views/slot/RewardSymbol';
 import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import WinController from '@core/views/slotmachine/WinController';
+import { WIN_COLLECTOR_CONFIG } from '@slots/empireofgoldOld/config/screens/WinCollectorConfig';
+import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
+import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
+import { EMPIRE_MULTIPLIER_CONFIG } from '@game/config/screens/EmpireMultiplierConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -24,8 +28,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xffff00,
-      width: 1360,
-      height: 1430,
+      width: 1940,
+      height: 1440,
       alpha: 0,
     },
 
@@ -34,8 +38,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: MultiplierSlotReelCascade,
       winController: WinController,
-      x: -170,
-      y: 100,
+      x: 160,
+      y: 120,
       data: {
         symbolClass: ReelSymbolSpine,
         noOfReels: 6,
@@ -118,6 +122,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             cluster: 'cluster',
             isBonusSymbol: false,
             animScale: 0.4,
+            scale: 0.85,
           },
           L2: {
             name: 'L2',
@@ -127,6 +132,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             cluster: 'cluster',
             isBonusSymbol: false,
             animScale: 0.4,
+            scale: 0.85,
           },
           L3: {
             name: 'L3',
@@ -136,6 +142,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             cluster: 'cluster',
             isBonusSymbol: false,
             animScale: 0.4,
+            scale: 0.85,
           },
           L4: {
             name: 'L4',
@@ -145,6 +152,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             cluster: 'cluster',
             isBonusSymbol: false,
             animScale: 0.4,
+            scale: 0.85,
           },
           L5: {
             name: 'L5',
@@ -154,6 +162,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             cluster: 'cluster',
             isBonusSymbol: false,
             animScale: 0.4,
+            scale: 0.85,
           },
           BN: { name: 'L5', isBonusSymbol: false },
           BN_1: { name: 'BN_1', isBonusSymbol: true },
@@ -198,11 +207,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'kingAnim',
           type: 'Spine',
           spineName: 'king_character',
-          defaultState: 'fall',
+          defaultState: 'idle',
           loop: true,
-          skins: 'main',
+          defaultSkin: 'main',
           layoutData: {
-            Desktop: { x: 1650, y: 900 },
+            Desktop: { scale: 0.7, x: 1900, y: 900 },
             DesktopPortrait: { scale: 0.5, x: 345, y: -50 },
             Landscape: { scale: 0.5, x: 0, y: 800 },
             Portrait: { scale: 0.5, x: 345, y: -50 },
@@ -211,27 +220,25 @@ export const SLOT_MACHINE_CONFIG: any = {
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
-        /*{
+        {
           name: 'gameTitle',
-          type: 'Spine',
-          spineName: 'R81_Logo_Spine',
-          defaultState: 'Static',
+          type: 'Sprite',
+          image: 'empireLogo',
           anchor: { x: 0.5, y: 0.5 },
-          boundingBox: { width: 560, height: 200 },
           layoutData: {
             Desktop: {
-              scale: 0.8,
-              x: 580,
-              y: -100,
+              scale: 0.75,
+              x: 860,
+              y: -30,
             },
             Landscape: {
-              scale: 0.8,
+              scale: 0.85,
               x: 580,
               y: -100,
             },
-            Portrait: { scale: 0.8, x: 580, y: -100 },
+            Portrait: { scale: 0.85, x: 580, y: -100 },
           },
-        },*/
+        },
         {
           name: 'maskRect',
           type: 'Graphics',
@@ -265,16 +272,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'lineWinAmountComp',
           type: 'Comp',
-          class: GameLineWinAmountComp,
+          class: LineWinAmountComp,
           y: 200,
           Elements: [
-            {
-              name: 'multiplierImg',
-              type: 'Sprite',
-              image: 'x2',
-              anchor: { x: 0.5, y: 0.5 },
-              y: -60,
-            },
             {
               name: 'valueText',
               type: 'BitmapText',
@@ -285,6 +285,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
+    EMPIRE_MULTIPLIER_CONFIG,
+    ANTE_BET_CONFIG,
+    WIN_COLLECTOR_CONFIG,
     //BIG_WIN_CONFIG,
   ],
   layoutData: {

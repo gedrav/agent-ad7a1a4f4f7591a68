@@ -174,7 +174,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected showIdleAnim(flag: boolean = true): void {
     if (flag) {
       clearTimeout(this.idleAnimTimeoutId);
-      this.idleAnimTimeoutId = setTimeout(this.showIdleAnimInSymbols.bind(this), 2500);
+      this.idleAnimTimeoutId = setTimeout(this.showIdleAnimInSymbols.bind(this), 8000);
     } else {
       clearTimeout(this.idleAnimTimeoutId);
     }
