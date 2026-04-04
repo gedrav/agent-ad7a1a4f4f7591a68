@@ -10,7 +10,7 @@ export const WIN_COLLECTOR_CONFIG: any = {
   px: 1000,
   py: 0,
   lx: 0,
-  ly: 640,
+  ly: 800,
   scale: 0.9,
   Elements: [
     { name: 'winCollectorBg', type: 'Sprite', image: 'collect_bg', x: 8, y: 40 },
