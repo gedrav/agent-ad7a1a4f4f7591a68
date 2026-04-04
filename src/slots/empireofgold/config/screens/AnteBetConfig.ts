@@ -7,11 +7,11 @@ export const ANTE_BET_CONFIG: any = {
   type: 'Comp',
   class: AnteBetComp,
   x: 48,
-  y: 500,
+  y: 520,
   px: 1132,
   py: 1840,
   lx: 48,
-  ly: 500,
+  ly: 360,
   scale: 0.9,
   Elements: [
     { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 8, y: 12 },

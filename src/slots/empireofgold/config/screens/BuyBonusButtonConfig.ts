@@ -8,11 +8,11 @@ export const BUY_BONUS_BTN_CONFIG: any = {
   name: 'bbBtn',
   type: 'Button',
   x: 180,
-  y: 300,
+  y: 1432,
   px: 140,
   py: 1978,
   lx: 180,
-  ly: 300,
+  ly: 1260,
   scale: 0.9,
   action: {
     press: BuyBonusClickCommand,
