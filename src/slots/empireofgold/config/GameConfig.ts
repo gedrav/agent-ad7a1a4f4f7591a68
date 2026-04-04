@@ -24,7 +24,7 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Yugitoy',
+    gameFont1: 'PirataOne',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
