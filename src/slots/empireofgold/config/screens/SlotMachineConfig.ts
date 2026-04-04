@@ -235,9 +235,9 @@ export const SLOT_MACHINE_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              scale: 0.75,
-              x: 860,
-              y: -30,
+              scale: 0.7,
+              x: 800,
+              y: -20,
             },
             Landscape: {
               scale: 0.6,
@@ -301,8 +301,8 @@ export const SLOT_MACHINE_CONFIG: any = {
   ],
   layoutData: {
     Desktop: {
-      widthPerc: 0.7,
-      heightPerc: 0.94,
+      widthPerc: 0.8,
+      heightPerc: 1,
       hAlign: 'center',
       vAlign: 'middle',
       vPaddingPerc: 0,
