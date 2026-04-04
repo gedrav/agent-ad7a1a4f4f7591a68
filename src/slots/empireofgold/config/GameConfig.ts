@@ -24,13 +24,13 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'HeroBeamRegular',
+    gameFont1: 'Yugitoy',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
   bigWinValues: [5, 25, 50, 100],
-  buyBonusData: {
+  buyBonusData1: {
     features: [
       {
         btn: {
@@ -41,10 +41,10 @@ export const GAME_CONFIG = {
           },
           data: { id: 'FG1' },
           options: {
-            defaultView: 'buyBonusBtn',
-            hoverView: 'buyBonusBtn',
-            pressedView: 'buyBonusBtn',
-            disabledView: 'buyBonusBtn',
+            defaultView: 'ante_frame_gold',
+            hoverView: 'ante_frame_gold',
+            pressedView: 'ante_frame_gold',
+            disabledView: 'ante_frame_gold',
             textOffset: new Point(0, 2),
             animations: CoreUIConfig.spinButtonStates,
           },

@@ -1,12 +1,17 @@
 import { WinCollectorComp } from '@game/views/comps/WinCollectorComp';
 import { UIConfig } from '../../../empireofgoldOld/config/UIConfig';
+import { AnteBetComp } from '@game/views/comps/AnteBetComp';
 
 export const ANTE_BET_CONFIG: any = {
-  name: 'winCollector',
+  name: 'anteBetComp',
   type: 'Comp',
-  class: WinCollectorComp,
-  x: 0,
+  class: AnteBetComp,
+  x: 48,
   y: 500,
+  px: 1132,
+  py: 1840,
+  lx: 48,
+  ly: 500,
   scale: 0.9,
   Elements: [
     { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 8, y: 12 },

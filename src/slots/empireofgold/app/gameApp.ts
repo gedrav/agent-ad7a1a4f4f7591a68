@@ -33,9 +33,11 @@ export class gameApp extends SlotGameApp {
     }
   }
   async createView() {
+    console.log('createView');
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
   }
   protected makeGameVisible() {
+    console.log('makeGameVisible');
     this.appContainer.addChild(this.gameAppScreen);
   }
 }

@@ -14,7 +14,7 @@ const PRELOADER: AssetBundle = {
 };
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
-  assets: [{ TYPE: 'game', NAME: 'HeroBeamRegular.ttf', ASSETTYPE: 'font' }],
+  assets: [{ TYPE: 'game', NAME: 'Yugitoy.otf', ASSETTYPE: 'font' }],
 };
 
 const SPLASH: AssetBundle = {

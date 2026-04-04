@@ -18,6 +18,7 @@ import { WIN_COLLECTOR_CONFIG } from '@slots/empireofgoldOld/config/screens/WinC
 import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { EMPIRE_MULTIPLIER_CONFIG } from '@game/config/screens/EmpireMultiplierConfig';
+import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -30,6 +31,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xffff00,
       width: 1940,
       height: 1440,
+      lWidth: 1940,
+      lHeight: 1440,
+      pWidth: 1400,
+      pHeight: 1830,
       alpha: 0,
     },
 
@@ -40,6 +45,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: WinController,
       x: 160,
       y: 120,
+      px: -140,
+      py: 490,
+      lx: 160,
+      ly: 120,
       data: {
         symbolClass: ReelSymbolSpine,
         noOfReels: 6,
@@ -212,9 +221,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           defaultSkin: 'main',
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
-            DesktopPortrait: { scale: 0.5, x: 345, y: -50 },
-            Landscape: { scale: 0.5, x: 0, y: 800 },
-            Portrait: { scale: 0.5, x: 345, y: -50 },
+            Landscape: { scale: 1.25, x: 1840, y: 800 },
+            Portrait: { scale: 1.25, x: 855, y: -150 },
           },
         },
         TICKER_COMP_CONFIG,
@@ -232,11 +240,11 @@ export const SLOT_MACHINE_CONFIG: any = {
               y: -30,
             },
             Landscape: {
-              scale: 0.85,
-              x: 580,
-              y: -100,
+              scale: 0.6,
+              x: 862,
+              y: -24,
             },
-            Portrait: { scale: 0.85, x: 580, y: -100 },
+            Portrait: { scale: 0.5, x: 862, y: -24 },
           },
         },
         {
@@ -285,6 +293,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
+    BUY_BONUS_BTN_CONFIG,
     EMPIRE_MULTIPLIER_CONFIG,
     ANTE_BET_CONFIG,
     WIN_COLLECTOR_CONFIG,
@@ -299,7 +308,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       vPaddingPerc: 0,
       hPaddingPerc: 0,
     },
-    Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },
-    Landscape: { widthPerc: 0.7, heightPerc: 0.98, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
+    Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
+    SmallPortrait: { widthPerc: 1.3, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
+    Landscape: { widthPerc: 0.7, heightPerc: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
   },
 };

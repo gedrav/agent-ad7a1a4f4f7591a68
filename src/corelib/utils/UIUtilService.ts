@@ -1782,14 +1782,17 @@ class UIUtilService {
         }
       } else {
         if (DeviceProxy.config.isLandscape) {
-          this.isShortPhone();
           if (this.isShortPhone()) {
             obj = data.SmallLandscape ?? data.SmallLandscape ?? data.Landscape ?? data.Portrait ?? data.Desktop;
           } else {
             obj = data.Landscape ?? data.Portrait ?? data.Desktop;
           }
         } else {
-          obj = data.Portrait ?? data.Landscape ?? data.Desktop;
+          if (this.isShortPhone()) {
+            obj = data.SmallPortrait ?? data.SmallPortrait ?? data.Portrait ?? data.Landscape ?? data.Desktop;
+          } else {
+            obj = data.Portrait ?? data.Landscape ?? data.Desktop;
+          }
         }
       }
     }

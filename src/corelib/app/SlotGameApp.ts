@@ -116,6 +116,7 @@ class SlotGameApp {
     GameProxy.config.bundlesLoaded = [];
     GameProxy.createAPIPath();
     appModel.storeLanguage();
+    console.log('request game init');
     MessageProxy.requestGameInit();
     await AssetLoader.initAssets(assetConfig, soundConfig);
     await this.initiateCoreApp();
@@ -179,15 +180,16 @@ class SlotGameApp {
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
-    if (appModel.getPreferences()?.showIntro !== false) {
-      this.checkToCreateSplash();
-    }
+    console.log('splash assets loaded -- ', appModel.getPreferences()?.showIntro);
+    this.checkToCreateSplash();
     await AssetLoader.loadPrimary();
   }
   protected checkToCreateSplash() {
     if (this.gameInitReceived && this.splashAssetsLoaded) {
-      this.createSplash();
-      this.removePreloader();
+      if (appModel.getPreferences().showIntro) {
+        this.createSplash();
+        this.removePreloader();
+      }
     }
   }
   async onPrimaryAssetsLoaded() {
@@ -206,6 +208,7 @@ class SlotGameApp {
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
+          console.log('check to create game --');
           this.createView();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
@@ -241,7 +244,9 @@ class SlotGameApp {
 
   protected async onSplashStartClicked() {
     this.splashComp?.removeSplash();
-    this.makeGameVisible();
+    if (this.isViewCreated) {
+      this.makeGameVisible();
+    }
   }
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
