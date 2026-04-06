@@ -163,8 +163,11 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
+    console.log('game init received --');
     if (appModel.getPreferences()?.showIntro !== false) {
       this.checkToCreateSplash();
+    } else {
+      this.checkToCreateGame();
     }
   }
   protected async onPreloaderLoaded() {
@@ -195,18 +198,22 @@ class SlotGameApp {
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
     appModel.primaryAssetsLoaded = true;
+    console.log('primary assets loaded --');
     await AssetLoader.loadSounds();
   }
   protected onSoundsLoaded() {
     this.soundsLoaded = true;
+    console.log('sounds loaded --');
     this.checkToCreateGame();
   }
   protected createView(): void {
     // overridden in game
   }
   protected checkToCreateGame(): void {
+    console.log('check to create game --', this.gameInitReceived, this.assetsLoaded, this.soundsLoaded);
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
+        console.log('no error in gameinit -- ', this.isViewCreated);
         if (!this.isViewCreated) {
           console.log('check to create game --');
           this.createView();
@@ -215,12 +222,17 @@ class SlotGameApp {
           if (appModel.getPreferences()?.showIntro !== false) {
           } else {
             EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
+            this.removePreloader();
             setTimeout(() => {
               this.onSplashDestroyed();
             }, 50);
           }
           this.loadLazyFiles();
+        } else {
+          console.log('view already created --');
         }
+      } else {
+        console.log('error in gameinit -- ', this.isViewCreated);
       }
     }
   }

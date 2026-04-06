@@ -49,9 +49,8 @@ export default class ReelSymbol extends StandardView {
 
   protected setSpineVisible(flag: boolean): void {
     if (!this.spine) return;
-
-    this.spine.visible = flag;
     this.symbol.visible = !flag;
+    this.spine.visible = flag;
   }
 
   public swapSymbolTexture(data: any, reelno: number): void {

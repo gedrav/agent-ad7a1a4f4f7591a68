@@ -58,22 +58,22 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelsConfig: ReelsConfig,
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 304, y: 190 },
-            reelPositionX: [0, 216, 434, 660, 875, 1090],
+            reelContainerPos: { x: 310, y: 190 },
+            reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
-            symbolScale: 1,
+            symbolScale: 0.8,
           },
           Portrait: {
-            reelContainerPos: { x: 300, y: 190 },
-            reelPositionX: [0, 210, 434, 670, 890, 1090],
+            reelContainerPos: { x: 310, y: 190 },
+            reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
-            symbolScale: 1,
+            symbolScale: 0.8,
           },
           Landscape: {
-            reelContainerPos: { x: 300, y: 190 },
-            reelPositionX: [0, 210, 434, 670, 890, 1090],
+            reelContainerPos: { x: 310, y: 190 },
+            reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
-            symbolScale: 1,
+            symbolScale: 0.8,
           },
         },
 
@@ -85,7 +85,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             landing: 'landing',
             winAnim: 'win',
             winAnim2: 'win2',
-            animScale: 0.4,
+            animScale: 1,
           },
           H1: {
             name: 'H1',
@@ -94,7 +94,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.4,
+            animScale: 1,
           },
           H2: {
             name: 'H2',
@@ -103,7 +103,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.4,
+            animScale: 1,
           },
           H3: {
             name: 'H3',
@@ -112,7 +112,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.4,
+            animScale: 1,
           },
           H4: {
             name: 'H4',
@@ -121,7 +121,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.4,
+            animScale: 1,
           },
           L1: {
             name: 'L1',
@@ -130,8 +130,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.32,
-            scale: 0.8,
+            animScale: 0.82,
+            scale: 0.82,
           },
           L2: {
             name: 'L2',
@@ -140,8 +140,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.32,
-            scale: 0.8,
+            animScale: 0.82,
+            scale: 0.82,
           },
           L3: {
             name: 'L3',
@@ -150,8 +150,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.32,
-            scale: 0.8,
+            animScale: 0.82,
+            scale: 0.82,
           },
           L4: {
             name: 'L4',
@@ -160,8 +160,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.32,
-            scale: 0.8,
+            animScale: 0.82,
+            scale: 0.82,
           },
           L5: {
             name: 'L5',
@@ -170,8 +170,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'win',
             cluster: 'cluster',
             isBonusSymbol: false,
-            animScale: 0.32,
-            scale: 0.8,
+            animScale: 0.82,
+            scale: 0.82,
           },
           BN: { name: 'L5', isBonusSymbol: false },
           BN_1: { name: 'BN_1', isBonusSymbol: true },
@@ -215,7 +215,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'kingAnim',
           type: 'Spine',
-          spineName: 'king_character',
+          spineName: 'king_pers',
           defaultState: 'idle',
           loop: true,
           defaultSkin: 'main',
@@ -297,7 +297,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     EMPIRE_MULTIPLIER_CONFIG,
     ANTE_BET_CONFIG,
     WIN_COLLECTOR_CONFIG,
-    //BIG_WIN_CONFIG,
+    BIG_WIN_CONFIG,
   ],
   layoutData: {
     Desktop: {

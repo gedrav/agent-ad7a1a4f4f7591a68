@@ -34,15 +34,16 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'reels_frame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'king_character', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'king_pers', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
+    { TYPE: 'game', NAME: 'text', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'big_win_2', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'scatter', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'chest', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'book', ASSETTYPE: 'spine' },
