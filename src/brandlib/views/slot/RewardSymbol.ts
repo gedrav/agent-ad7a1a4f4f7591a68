@@ -3,8 +3,9 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { appModel } from '@core/models/services/AppModelService';
 import { ColorMatrixFilter } from 'pixi.js';
+import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 
-export default class RewardSymbol extends ReelSymbolSprite {
+export default class RewardSymbol extends ReelSymbolSpine {
   private multiplierVal: PixText;
   constructor(configData: any) {
     super(configData);

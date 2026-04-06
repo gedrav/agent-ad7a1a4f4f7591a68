@@ -1,14 +1,9 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
-import GameWinController from '@game/views/slot/GameWinController';
 import { ReelsConfig } from '@game/config/ReelsConfig';
-import { GameLineWinAmountComp } from '@game/views/comps/GameLineWinAmountComp';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
-import { ReelStripBG } from '@game/views/comps/ReelStripBG';
-import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import RewardSymbol from '@brand/views/slot/RewardSymbol';
@@ -50,7 +45,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lx: 220,
       ly: 120,
       data: {
-        symbolClass: ReelSymbolSpine,
+        symbolClass: RewardSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,

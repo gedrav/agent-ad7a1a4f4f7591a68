@@ -23,7 +23,7 @@ export class BGView extends ResponsiveChildrenView {
     this.showMainGameBG();
   }
   protected showMainGameBG() {
-    if (this.currentBG === 'free') {
+    if (this.currentBG === 'free' && this.freegameBG.configData.unload) {
       this.unloadFSBG();
     }
     this.currentBG = 'main';
@@ -34,7 +34,9 @@ export class BGView extends ResponsiveChildrenView {
   }
   protected showFreeGameBG() {
     this.currentBG = 'free';
-    this.loadFSBG();
+    if (this.freegameBG.configData.unload) {
+      this.loadFSBG();
+    }
     if (this.freegameBG) {
       this.freegameBG.visible = true;
     }
@@ -42,13 +44,13 @@ export class BGView extends ResponsiveChildrenView {
   }
   protected async unloadFSBG() {
     if (this.freegameBG) {
-      if (this.freegameBG.configData.assetName) {
-        await AssetLoader.unloadAsset(this.freegameBG.configData.assetName);
+      if (this.freegameBG.configData.spineName) {
+        await AssetLoader.unloadAsset(this.freegameBG.configData.spineName);
       }
     }
   }
   async loadFSBG() {
-    await UIUtil.loadAsset(this.freegameBG.configData.assetName);
+    await UIUtil.loadAsset(this.freegameBG.configData.spineName);
     this.freegameBG = this.elementsList['freegameBG'];
   }
 }
