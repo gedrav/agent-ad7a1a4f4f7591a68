@@ -6,7 +6,6 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
-import { MultiplierComp } from '@game/views/comps/MultiplierComp';
 import { gsap } from 'gsap';
 type BlastSymbol = {
   reelIndex: number;
@@ -24,12 +23,10 @@ type ConvertedJWildPosition = {
 export default class SlotReelTumble extends SlotReel {
   protected pendingBlastAnimations = 0;
   protected pendingJwdAnimations = 0;
-  protected multiplierComp: MultiplierComp;
   private pendingAppearingAnimations: number;
 
   constructor(configData: any) {
     super(configData);
-    this.multiplierComp = this.elementsList['multiplierComp'];
     EventHandler.addEventListener(SlotEvents.BLAST_SYMBOLS, this.showBlastAnim.bind(this));
   }
 
@@ -118,7 +115,6 @@ export default class SlotReelTumble extends SlotReel {
       symbol.scale.set(initialScaleX, initialScaleY);
       symbol.visible = false;
     });
-    this.multiplierComp.setMultiplierLvl(appModel.tumbleIndex + 2); // +2 since lvl starts from 1 and aft blast the win multiplier increases by 1
     this.introduceNewSymbols(blastSymbols);
   }
 

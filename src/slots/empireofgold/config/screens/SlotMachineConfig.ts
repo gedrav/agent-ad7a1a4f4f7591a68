@@ -12,8 +12,8 @@ import WinController from '@core/views/slotmachine/WinController';
 import { WIN_COLLECTOR_CONFIG } from '@slots/empireofgold/config/screens/WinCollectorConfig';
 import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { EMPIRE_MULTIPLIER_CONFIG } from '@game/config/screens/EmpireMultiplierConfig';
 import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
+import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -289,7 +289,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       ],
     },
     BUY_BONUS_BTN_CONFIG,
-    EMPIRE_MULTIPLIER_CONFIG,
+    FS_TOTAL_MULTI_CONFIG,
     ANTE_BET_CONFIG,
     WIN_COLLECTOR_CONFIG,
     BIG_WIN_CONFIG,

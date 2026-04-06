@@ -1,8 +1,3 @@
-import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { MultiplierComp } from '@game/views/comps/MultiplierComp';
-import { MultiComp } from '@game/views/comps/MultiComp';
-import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
-import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { FSAutoCounterComp } from '@brand/views/comps/FSAutoCounterComp';
 
 export const FSAUTO_COUNTER_CONFIG: any = {
