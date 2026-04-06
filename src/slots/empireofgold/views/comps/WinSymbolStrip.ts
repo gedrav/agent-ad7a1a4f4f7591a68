@@ -13,8 +13,8 @@ export class WinSymbolStrip extends StandardView {
 
   constructor(config) {
     super(config);
-    this.stripBg = UIUtil.getSprite('winShownDayBg');
-    this.stripBg.scale.set(1, 0.79);
+    this.stripBg = UIUtil.getSprite('add_line');
+    this.stripBg.scale.set(1, 0.96);
     const tConfig = {
       name: 'symbolCountText',
       type: 'Text',
@@ -46,8 +46,8 @@ export class WinSymbolStrip extends StandardView {
 
   protected checkForScaling() {
     this.symbImage.scale.set(1);
-    if (this.symbImage.height > this.stripBg.height * 0.9) {
-      const scaleFactor = (this.stripBg.height * 0.9) / this.symbImage.height;
+    if (this.symbImage.height > this.stripBg.height * 0.8) {
+      const scaleFactor = (this.stripBg.height * 0.8) / this.symbImage.height;
       this.symbImage.scale.set(scaleFactor);
     }
   }
