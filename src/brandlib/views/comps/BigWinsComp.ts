@@ -40,14 +40,12 @@ export class BigWinsComp extends ResponsiveView {
     UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
     UIUtil.setClickable(this.skipRect, true);
     this.skipRect.visible = false;
-    console.log('BigWinsComp constructor');
   }
 
   protected onSecondaryAssetsLoaded(): void {
     super.onSecondaryAssetsLoaded();
     this.bigWinAnim = UIUtil.getElement(this.configData.data.bigWinAnim);
     this.addChild(this.bigWinAnim, this.winTicker, this.winTickerBW, this.skipRect);
-    console.log('big win added == ', this.bigWinAnim);
 
     if (this.bigWinAnim) {
       this.bigWinAnim.stopAnimation();

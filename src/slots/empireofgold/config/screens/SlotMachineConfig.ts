@@ -221,8 +221,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           defaultSkin: 'main',
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
-            Landscape: { scale: 1.25, x: 1840, y: 800 },
-            Portrait: { scale: 1.25, x: 855, y: -150 },
+            Landscape: { scale: 0.7, x: 1840, y: 800 },
+            Portrait: { scale: 0.7, x: 855, y: -150 },
           },
         },
         TICKER_COMP_CONFIG,
