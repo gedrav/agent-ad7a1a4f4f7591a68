@@ -33,8 +33,8 @@ export default class RewardSymbol extends ReelSymbolSpine {
 
   public resizeMultiplier() {
     this.multiplierVal.style.fontSize = this.multiplierVal.configData.style.fontSize;
-    if (this.multiplierVal.width > this.symbol.width * 0.54) {
-      const factor = (this.symbol.width * 0.54) / this.multiplierVal.width;
+    if (this.multiplierVal.width > this.symbol.width * 0.41) {
+      const factor = (this.symbol.width * 0.41) / this.multiplierVal.width;
       this.multiplierVal.style.fontSize = this.multiplierVal.configData.style.fontSize * factor;
     }
   }

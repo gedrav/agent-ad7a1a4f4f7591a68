@@ -4,12 +4,12 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
   name: 'fsTotalMultiComp',
   type: 'Comp',
   class: FsTotalMultiplierComp,
-  x: 300,
-  y: 8,
-  px: 14,
-  py: 348,
-  lx: 300,
-  ly: 8,
+  x: 86,
+  y: -110,
+  px: 158,
+  py: -140,
+  lx: 86,
+  ly: -110,
   Elements: [
     {
       name: 'multiBg',
