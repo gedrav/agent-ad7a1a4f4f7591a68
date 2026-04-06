@@ -120,16 +120,17 @@ class AssetLoaderClass {
                 data.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
               }
             } else if (ASSETTYPE === 'spine') {
+              console.log(TYPE, NAME, ASSETTYPE, file, TEXTURES);
               // Load spine JSON data
               data.assets.push({
                 alias: NAME + 'Data',
-                src: this.spinePath + NAME + '.json',
+                src: TYPE == 'lang' ? this.langSpinePath + NAME + '.json' : this.spinePath + NAME + '.json',
               });
 
               // Load single atlas file
               data.assets.push({
                 alias: NAME + 'Atlas',
-                src: this.spinePath + NAME + '.atlas',
+                src: TYPE == 'lang' ? this.langSpinePath + NAME + '.atlas' : this.spinePath + NAME + '.atlas',
               });
               // Handle multiple texture images
               if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
@@ -137,14 +138,14 @@ class AssetLoaderClass {
                 TEXTURES.forEach((textureIndex: string) => {
                   data.assets.push({
                     alias: textureIndex,
-                    src: this.spinePath + textureIndex + '.png',
+                    src: TYPE == 'lang' ? this.langSpinePath + NAME + '.png' : this.spinePath + NAME + '.png',
                   });
                 });
               } else {
                 // Single texture file (default behavior)
                 data.assets.push({
                   alias: NAME + 'Texture',
-                  src: this.spinePath + NAME + '.png',
+                  src: TYPE == 'lang' ? this.langSpinePath + NAME + '.png' : this.spinePath + NAME + '.png',
                 });
               }
             } else {
