@@ -7,7 +7,7 @@ export const FS_POPUP_CONFIG = {
   class: FSPopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
-    { name: 'popupbg', type: 'Sprite', image: 'popupBG' },
+    { name: 'popupbg', type: 'Sprite', image: 'popupBg' },
     {
       name: 'titleText',
       type: 'Text',
@@ -53,10 +53,10 @@ export const FS_POPUP_CONFIG = {
       name: 'okBtn',
       type: 'Button',
       options: {
-        defaultView: 'popupOkBtn',
-        hoverView: 'popupOkBtn',
-        pressedView: 'popupOkBtn',
-        disabledView: 'popupOkBtn',
+        defaultView: 'popupBtn',
+        hoverView: 'popupBtn',
+        pressedView: 'popupBtn',
+        disabledView: 'popupBtn',
         animations: CoreUIConfig.buttonStates,
       },
       textConfig: {

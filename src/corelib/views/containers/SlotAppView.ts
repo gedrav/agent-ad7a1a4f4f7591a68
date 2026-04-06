@@ -60,11 +60,17 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_MODAL_VIEW, this.showModalView.bind(this));
 
     EventHandler.addEventListener(SlotEvents.HIDE_MENU, this.hideAllViews.bind(this));
-    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAllViews.bind(this));
+    EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.onModalViewClicked.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BUY_BONUS_VIEW, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_BET_PANEL, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_CANCEL_CLICKED, this.hideAllViews.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_MENU_MOBILE, this.hideAllViews.bind(this));
+  }
+  protected onModalViewClicked(): void {
+    if (this.popupComp.parent) {
+      return;
+    }
+    this.hideAllViews();
   }
   protected hideAllViews(): void {
     this.removeChild(this.betPanelView);

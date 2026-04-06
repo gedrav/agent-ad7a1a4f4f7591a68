@@ -31,7 +31,7 @@ export class ModalView extends ResponsiveChildrenView {
     this.visible = false;
   }
   protected onModalClicked(): void {
-    if (GameProxy.config.isLongPressTriggered) {
+    if (GameProxy.config.isLongPressTriggered || GameProxy.config.isPopupOpened) {
       return;
     }
     EventHandler.dispatchEvent(SlotEvents.MODAL_VIEW_CLICKED);

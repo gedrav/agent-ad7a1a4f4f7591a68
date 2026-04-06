@@ -4,33 +4,18 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
   name: 'fsTotalMultiComp',
   type: 'Comp',
   class: FsTotalMultiplierComp,
-  x: -380,
+  x: 86,
+  y: -110,
+  px: 158,
+  py: -140,
+  lx: 86,
+  ly: -110,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', color: '0xffff00', width: 360, height: 420, alpha: 0 },
-    {
-      name: 'totalMulText',
-      type: 'Text',
-      anchor: { x: 0.5, y: 0.5 },
-      content: 'totalMultiplier',
-      style: {
-        fontFamily: 'commonFont',
-        fontSize: 60,
-        fill: 0x00f30f,
-        wordWrap: true,
-        wordWrapWidth: 250,
-        align: 'center',
-      },
-      layoutData: {
-        Desktop: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'top' },
-      },
-    },
     {
       name: 'multiBg',
       type: 'Sprite',
-      image: 'stone_ocean',
-      layoutData: {
-        Desktop: { refComponent: 'guideRect', widthPerc: 0.8, hAlign: 'center', vAlign: 'bottom' },
-      },
+      image: 'mult_collect',
+      layoutData: {},
     },
     {
       name: 'multiplierValText',

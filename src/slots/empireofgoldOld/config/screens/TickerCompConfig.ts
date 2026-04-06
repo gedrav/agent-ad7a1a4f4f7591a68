@@ -1,8 +1,4 @@
-import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { MultiplierComp } from '@game/views/comps/MultiplierComp';
-import { MultiComp } from '@game/views/comps/MultiComp';
 import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
-import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 
 export const TICKER_COMP_CONFIG: any = {
   name: 'tickerComp',

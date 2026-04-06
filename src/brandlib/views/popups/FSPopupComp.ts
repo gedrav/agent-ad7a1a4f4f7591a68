@@ -4,6 +4,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class FSPopupComp extends ResponsiveChildrenView {
   private okBtn: any;
@@ -16,10 +17,6 @@ export class FSPopupComp extends ResponsiveChildrenView {
 
   constructor(config: any) {
     super(config);
-    EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
-  }
-
-  protected onViewCreated() {
     this.okBtn = this.elementsList['okBtn'];
     this.titleText = this.elementsList['titleText'];
     this.messageText1 = this.elementsList['messageText1'];
@@ -28,9 +25,11 @@ export class FSPopupComp extends ResponsiveChildrenView {
     this.panelBG = this.elementsList['popupbg'];
     this.okBtn.onPress.connect(this.onCloseClicked.bind(this));
     this.visible = false;
+    EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
   }
 
   protected async showFSPopup(data: any) {
+    GameProxy.config.isPopupOpened = true;
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.visible = true;
     this.titleText.text = data.title;
@@ -43,7 +42,7 @@ export class FSPopupComp extends ResponsiveChildrenView {
       this.messageText1.y = 400; // Normal case
     }
     clearTimeout(this.timeoutId);
-    this.timeoutId = setTimeout(this.onTimerEnd.bind(this), 5000);
+    // this.timeoutId = setTimeout(this.onTimerEnd.bind(this), 5000);
     this.messageText1.text = data.message1;
     this.callbackFunction = data.callbackFunction;
   }
@@ -52,6 +51,7 @@ export class FSPopupComp extends ResponsiveChildrenView {
   }
 
   protected async onCloseClicked() {
+    GameProxy.config.isPopupOpened = false;
     if (!appModel.getIsLightningSession()) {
       EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     }

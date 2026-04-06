@@ -1,24 +1,19 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
-import GameWinController from '@game/views/slot/GameWinController';
 import { ReelsConfig } from '@game/config/ReelsConfig';
-import { GameLineWinAmountComp } from '@game/views/comps/GameLineWinAmountComp';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
-import { ReelStripBG } from '@game/views/comps/ReelStripBG';
-import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import RewardSymbol from '@brand/views/slot/RewardSymbol';
 import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import WinController from '@core/views/slotmachine/WinController';
-import { WIN_COLLECTOR_CONFIG } from '@slots/empireofgoldOld/config/screens/WinCollectorConfig';
+import { WIN_COLLECTOR_CONFIG } from '@slots/empireofgold/config/screens/WinCollectorConfig';
 import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { EMPIRE_MULTIPLIER_CONFIG } from '@game/config/screens/EmpireMultiplierConfig';
 import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
+import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -50,7 +45,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lx: 220,
       ly: 120,
       data: {
-        symbolClass: ReelSymbolSpine,
+        symbolClass: RewardSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,
@@ -173,11 +168,17 @@ export const SLOT_MACHINE_CONFIG: any = {
             animScale: 0.82,
             scale: 0.82,
           },
-          BN: { name: 'L5', isBonusSymbol: false },
-          BN_1: { name: 'BN_1', isBonusSymbol: true },
-          BN_2: { name: 'BN_2', isBonusSymbol: true },
-          BN_3: { name: 'BN_3', isBonusSymbol: true },
-          BN_4: { name: 'BN_4', isBonusSymbol: true },
+          // todo: write logic bind sprites with bn symbols and remove these dummy symbols
+          BN: { name: 'multi_blue', isBonusSymbol: false },
+          BN_1: { name: 'multi_blue', isBonusSymbol: true },
+          BN_2: { name: 'multi_blue', isBonusSymbol: true },
+          BN_3: { name: 'multi_blue', isBonusSymbol: true },
+          BN_4: { name: 'multi_blue', isBonusSymbol: true },
+          BN_5: { name: 'multi_blue', isBonusSymbol: true },
+          BN_6: { name: 'multi_blue', isBonusSymbol: true },
+          BN_7: { name: 'multi_blue', isBonusSymbol: true },
+          BN_8: { name: 'multi_blue', isBonusSymbol: true },
+          //-----------------------
           S_SC: { name: 'SC', isBonusSymbol: false },
         },
       },
@@ -227,6 +228,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
+        FS_TOTAL_MULTI_CONFIG,
         FSAUTO_COUNTER_CONFIG,
         {
           name: 'gameTitle',
@@ -294,7 +296,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       ],
     },
     BUY_BONUS_BTN_CONFIG,
-    EMPIRE_MULTIPLIER_CONFIG,
     ANTE_BET_CONFIG,
     WIN_COLLECTOR_CONFIG,
     BIG_WIN_CONFIG,

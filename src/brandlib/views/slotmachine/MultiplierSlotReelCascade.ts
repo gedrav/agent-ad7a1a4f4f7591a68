@@ -19,7 +19,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   constructor(configData: any) {
     super(configData);
     this.multiplierTextArr = [];
-    this.cascadeReelWinTicker = this.elementsList['tickerComp'].elementsList['reelWinTicker'];
+    this.cascadeReelWinTicker = this.elementsList['reelWinTicker'];
     this.fsTotalMultiComp = this.elementsList['fsTotalMultiComp'];
     EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));

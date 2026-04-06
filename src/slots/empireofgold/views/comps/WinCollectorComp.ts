@@ -8,7 +8,6 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import gsap from 'gsap';
 import { CustomEase } from 'gsap/CustomEase';
 import { CustomBounce } from 'gsap/CustomBounce';
-import { FancyButton } from '@pixi/ui';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 
 gsap.registerPlugin(CustomEase, CustomBounce);
@@ -32,15 +31,12 @@ export class WinCollectorComp extends StandardView {
 
     this.winStripArray = [];
     this.collectorFilled = false;
-    if (this.winBoxContainer) {
-      this.winBoxContainer.mask = this.maskRect;
-    }
-
-    EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.onCollectWinSymbols.bind(this));
+    this.winBoxContainer.mask = this.maskRect;
+    EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.onCollectWinSymbols.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.onResetWinCollector.bind(this));
 
-    this.upBtn?.onPress.connect(this.onUpBtnClicked.bind(this));
-    this.downBtn?.onPress.connect(this.onDownBtnClicked.bind(this));
+    this.upBtn.onPress.connect(this.onUpBtnClicked.bind(this));
+    this.downBtn.onPress.connect(this.onDownBtnClicked.bind(this));
 
     this.showButtons(false);
   }
@@ -127,9 +123,7 @@ export class WinCollectorComp extends StandardView {
   }
 
   protected showButtons(flag: boolean) {
-    if (this.upBtn) {
-      this.upBtn.visible = this.downBtn.visible = flag;
-    }
+    this.upBtn.visible = this.downBtn.visible = flag;
   }
 
   protected onResetWinCollector(): void {
