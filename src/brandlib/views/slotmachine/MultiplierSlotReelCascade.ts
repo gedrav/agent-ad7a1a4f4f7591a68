@@ -24,7 +24,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));
 
-    //this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
+    this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
   }
   public restartIdleAnim(): void {
     this.showIdleAnim(true);
@@ -41,12 +41,18 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         for (let i = 0; i < this.configData.data.noOfRows; i++) {
           symb = this.symbolsArray[k][i] as RewardSymbol;
           symb.setNormalTexture();
-          symb.swapSymbolTexture(reelsview[k][i], k);
-          const isBonusSymbol = this.reelsData.symbolsData[reelsview[k][i]]?.isBonusSymbol;
+          const isBonusSymbol = reelsview[k][i]?.includes('BN');
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
             const currentSymb = this.symbolsArray[k][i] as RewardSymbol;
             currentSymb.setRewardData(multiplierVal);
+            const multiplierSymb = this.getCorrespondingMultiplierSymbol(
+              multiplierVal,
+              GameProxy.config.symbMultipliers,
+            );
+            symb.swapSymbolTexture(this.configData?.data?.symbolsData[multiplierSymb], k);
+          } else {
+            symb.swapSymbolTexture(this.configData?.data?.symbolsData[reelsview[k][i]], k);
           }
           this.symbolsContainer.addChild(symb);
           symb.x = this.configData.data.reelPositionX[k];
@@ -87,15 +93,21 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         index = k * 0.2;
         rowIndex = 0;
         for (let i = 0; i < this.reelsData.noOfRows; i++) {
-          symb = this.symbolsArray[k][i];
+          symb = this.symbolsArray[k][i] as RewardSymbol;
           symb.setNormalTexture();
-          const isBonusSymbol = this.reelsData.symbolsData[reelsView[k][i]]?.isBonusSymbol;
+          const isBonusSymbol = reelsView[k][i]?.includes('BN');
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
             const currentSymb = this.symbolsArray[k][i] as RewardSymbol;
             currentSymb.setRewardData(multiplierVal);
+            const multiplierSymb = this.getCorrespondingMultiplierSymbol(
+              multiplierVal,
+              GameProxy.config.symbMultipliers,
+            );
+            symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+          } else {
+            symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
           }
-          symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]]);
           this.symbolsContainer.addChild(symb);
           symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
         }
@@ -144,12 +156,18 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         if (this.symbolsArray[k][i]) {
           this.symbolsArray[k][i].resetScale();
           this.symbolsArray[k][i].setNormalTexture();
-          this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
-          const isBonusSymbol = this.reelsData.symbolsData[reelsView[k][i]]?.isBonusSymbol;
+          const isBonusSymbol = reelsView[k][i]?.includes('BN');
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
             const currentSymb = this.symbolsArray[k][i] as RewardSymbol;
             currentSymb.setRewardData(multiplierVal);
+            const multiplierSymb = this.getCorrespondingMultiplierSymbol(
+              multiplierVal,
+              GameProxy.config.symbMultipliers,
+            );
+            currentSymb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+          } else {
+            this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
           }
           this.symbolsArray[k][i].y = -(len - i + 1) * this.configData.data.symbolHeight;
           const delay = k * 0.06 + (len - i) * 0.05;
@@ -294,5 +312,14 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       elem.destroy();
     });
     this.multiplierTextArr = [];
+  }
+
+  protected getCorrespondingMultiplierSymbol(multiplierVal: number, symbMultipliers: Record<string, number[]>): string {
+    for (const key in symbMultipliers) {
+      if (symbMultipliers[key].includes(multiplierVal)) {
+        return key;
+      }
+    }
+    return Object.keys(symbMultipliers)[0];
   }
 }

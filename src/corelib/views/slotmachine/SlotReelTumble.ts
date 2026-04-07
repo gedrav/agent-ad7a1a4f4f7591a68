@@ -27,7 +27,6 @@ export default class SlotReelTumble extends SlotReel {
 
   constructor(configData: any) {
     super(configData);
-    EventHandler.addEventListener(SlotEvents.BLAST_SYMBOLS, this.showBlastAnim.bind(this));
   }
 
   public resetReelForError(): void {
@@ -74,21 +73,6 @@ export default class SlotReelTumble extends SlotReel {
     );
   }
 
-  protected showBlastAnim(): void {
-    const tumbleData = appModel.getSpinBlastData();
-    const tumblePositions = Util.combineBlastPoisitions(tumbleData);
-    const blastSymbols = this.getBlastSymbols(tumblePositions);
-
-    if (!blastSymbols.length) {
-      this.introduceNewSymbols([]);
-      return;
-    }
-    this.pendingBlastAnimations = blastSymbols.length;
-    blastSymbols.forEach((blast) => {
-      blast.symbol.showBlastAnim(() => this.onBlastAnimComplete(blastSymbols));
-    });
-  }
-
   private getBlastSymbols(tumblePositions: number[][]): BlastSymbol[] {
     if (!tumblePositions?.length) return [];
 
@@ -106,120 +90,5 @@ export default class SlotReelTumble extends SlotReel {
 
       return acc;
     }, []);
-  }
-
-  protected onBlastAnimComplete(blastSymbols: BlastSymbol[]): void {
-    this.pendingBlastAnimations -= 1;
-    if (this.pendingBlastAnimations > 0) return;
-    blastSymbols.forEach(({ symbol, initialScaleX, initialScaleY }) => {
-      symbol.scale.set(initialScaleX, initialScaleY);
-      symbol.visible = false;
-    });
-    this.introduceNewSymbols(blastSymbols);
-  }
-
-  protected introduceNewSymbols(blastSymbols: BlastSymbol[]): void {
-    const reelsView = appModel.getNextCascadeReelsView();
-    if (!reelsView) {
-      console.error('CASCADE: ReelsView is undefined!');
-      return;
-    }
-    this.pendingAppearingAnimations = blastSymbols.length;
-    blastSymbols?.forEach(({ symbol, reelIndex, rowIndex }) => {
-      symbol.visible = true;
-      symbol.replaceSymbol(reelsView[reelIndex][rowIndex], () => this.onNewSymbolsAppeared());
-    });
-  }
-  protected onNewSymbolsAppeared(): void {
-    this.pendingAppearingAnimations--;
-    if (this.pendingAppearingAnimations <= 0) {
-      this.checkIfJWildConverted();
-    }
-  }
-
-  protected checkIfJWildConverted(): void {
-    const convertedJWildPositions = appModel.getConvertedJWildPositions() as ConvertedJWildPosition[];
-    const landedJWildPositions = appModel.getLandedJWildPositions() as ConvertedJWildPosition[];
-
-    const convertedPositions = (convertedJWildPositions ?? [])
-      .map((e) => e?.position)
-      .filter((p): p is [number, number] => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite));
-
-    const landedPositions = (landedJWildPositions ?? [])
-      .map((e) => e?.position)
-      .filter((p): p is [number, number] => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite));
-
-    if (!convertedPositions.length) {
-      StateManager.doNextStep();
-      return;
-    }
-    this.replaceOtherSymbolsWithJWild(convertedPositions, landedPositions);
-  }
-
-  protected async replaceOtherSymbolsWithJWild(
-    convertedPositions: [number, number][],
-    landedPositions: [number, number][],
-  ): Promise<void> {
-    const reelsView = appModel.getNextCascadeReelsView();
-
-    if (!reelsView || !landedPositions?.length) {
-      console.error('CASCADE: ReelsView or landedPositions is undefined!');
-      StateManager.doNextStep();
-      return;
-    }
-
-    const animSymbols: ReelSymbolSprite[] = [];
-    this.pendingJwdAnimations = convertedPositions.length;
-
-    convertedPositions.forEach(([fromReel, fromRow], i) => {
-      const toConvertedJWSymb = convertedPositions[i];
-      const fromLandedJWSymb = landedPositions[0];
-      if (!fromLandedJWSymb || !toConvertedJWSymb) {
-        this.pendingJwdAnimations--;
-        return;
-      }
-
-      const landedWildSymbol = this.symbolsArray[fromLandedJWSymb[0]][fromLandedJWSymb[1] + 1];
-      const movingSymb = new ReelSymbolSprite({ data: { name: 'JWD' } });
-
-      movingSymb.scale.set(landedWildSymbol.scale.x, landedWildSymbol.scale.y);
-      movingSymb.x = landedWildSymbol.x;
-      movingSymb.y = landedWildSymbol.y;
-
-      this.symbolsContainer.addChild(movingSymb);
-      animSymbols.push(movingSymb);
-
-      AnimationProxy.animateTween(movingSymb, {
-        duration: 1,
-        delay: 0.5,
-        x: this.symbolsArray[toConvertedJWSymb[0]][toConvertedJWSymb[1] + 1].x,
-        y: this.symbolsArray[toConvertedJWSymb[0]][toConvertedJWSymb[1] + 1].y,
-        onComplete: () => this.onJWildConversionComplete(reelsView, animSymbols, convertedPositions),
-      });
-    });
-  }
-
-  protected onJWildConversionComplete(
-    reelsView: any,
-    animSymbols: ReelSymbolSprite[],
-    convertedPositions: [number, number][],
-  ): void {
-    this.pendingJwdAnimations--;
-
-    if (this.pendingJwdAnimations === 0) {
-      animSymbols.forEach((symb) => {
-        this.symbolsContainer.removeChild(symb);
-        symb.destroy();
-      });
-
-      convertedPositions.forEach(([reelIndex, rowIndex]) => {
-        const symbol = this.symbolsArray?.[reelIndex]?.[rowIndex + 1];
-        const nextSymbol = reelsView?.[reelIndex]?.[rowIndex];
-        if (!symbol || !nextSymbol) return;
-        symbol.visible = true;
-        symbol.swapSymbolTexture(nextSymbol);
-      });
-      StateManager.doNextStep();
-    }
   }
 }

@@ -79,7 +79,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
   // -------------------------
 
   public setNewSymbol(data: any, reelno: number): void {
-    this.configData.data = { ...this.configData.data, ...data };
+    this.configData.data = { reelNumber: reelno, ...data };
     this.symbol.texture = this.resolveTexture();
     this.handleGameProp();
   }
