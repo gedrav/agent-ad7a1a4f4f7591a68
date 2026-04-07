@@ -23,12 +23,13 @@ export class ReelWinTicker extends StandardView {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
     }
-    if (appModel.getIsAutoSession()) {
+    if (appModel.getIsAutoSession() && !appModel.isCascadeGame()) {
       return;
     }
     this.totalWin += data.value;
     if (data.duration == 0) {
-      this.winTicker.showSpinValue(this.totalWin, true, true);
+      const flag: boolean = !appModel.isCascadeGame() || !appModel.getIsFreeSpinsSession();
+      this.winTicker.showSpinValue(this.totalWin, true, flag);
     } else {
       this.winTicker.countUpValue(this.totalWin, data.duration, true);
     }

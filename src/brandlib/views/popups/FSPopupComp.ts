@@ -36,10 +36,10 @@ export class FSPopupComp extends ResponsiveChildrenView {
 
     // Adjust messageText1 position based on unfinished case
     if (data.message2 && this.messageText2.visible !== false) {
-      this.messageText1.y = 345; // Unfinished case
+      this.messageText1.y = 260; // Unfinished case
       this.messageText2.text = data.message2;
     } else {
-      this.messageText1.y = 400; // Normal case
+      this.messageText1.y = 330; // Normal case
     }
     clearTimeout(this.timeoutId);
     // this.timeoutId = setTimeout(this.onTimerEnd.bind(this), 5000);

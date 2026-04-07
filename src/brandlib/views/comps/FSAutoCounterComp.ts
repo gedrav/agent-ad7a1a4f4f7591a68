@@ -21,6 +21,7 @@ export class FSAutoCounterComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_FS_TOTALWIN, this.updateFSTotalWin.bind(this));
   }
   protected updateUIForAutoStart(): void {
     this.visible = true;
@@ -39,10 +40,20 @@ export class FSAutoCounterComp extends StandardView {
     this.visible = false;
   }
   protected updateUIForFreeSpinsStart(): void {
+    console.log('updateUIForFreeSpinsStart');
     this.visible = true;
   }
-  protected updateUIFreeSpinsCount(): void {}
+  protected updateUIFreeSpinsCount(): void {
+    const totalspins = appModel.getTotalFreespins();
+    const currentSpin = appModel.getCurrentFreeSpin();
+    this.spinsText.text = Util.parseMessage(Util.getContent('spinsCounterText'), [currentSpin, totalspins]);
+  }
+  protected updateFSTotalWin(): void {
+    const totalwin = appModel.getTotalFreespinWinAmount();
+    this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(totalwin)]);
+  }
   protected onFreeSpinsEnded(): void {
+    console.log('onFreeSpinsEnded');
     this.visible = false;
   }
 }

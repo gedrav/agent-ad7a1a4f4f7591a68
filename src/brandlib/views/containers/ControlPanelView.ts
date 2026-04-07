@@ -209,7 +209,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
       for (let k = 0; k < len; k++) {
         const btn = UIUtil.getElement(GameProxy.config.buyBonusData.features[k].btn);
         const bbBet = this.getMultiplier(GameProxy.config.buyBonusData.features[k].featureId) * appModel.getTotalBet();
-        const bbBetAmt = Util.formatCurrency(bbBet);
         if (k == 0) {
           //btn.tText.text = Util.parseMessage(Util.getContent('BuyFreeSpinText'), [bbBetAmt]);
         } else {
@@ -322,9 +321,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateUIForFreeSpinsStart(): void {
-    this.spinBtn.renderable = false;
-    this.stopSpinBtn.renderable = false;
-    this.betBtn.renderable = false;
     this.resizeView();
   }
 
@@ -333,9 +329,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected onFreeSpinsEnded(): void {
-    this.spinBtn.renderable = true;
-    this.stopSpinBtn.renderable = true;
-    this.betBtn.renderable = true;
     this.showSpinButton();
     this.enablePanel();
   }

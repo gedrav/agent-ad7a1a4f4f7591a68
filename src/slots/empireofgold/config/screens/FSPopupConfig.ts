@@ -6,7 +6,7 @@ export const FS_POPUP_CONFIG = {
   type: 'Comp',
   class: FSPopupComp,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
+    // { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
     { name: 'popupbg', type: 'Sprite', image: 'popupBg' },
     {
       name: 'titleText',
@@ -14,8 +14,8 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1100 },
       anchor: { x: 0.5, y: 0.5 },
-      x: 648,
-      y: 100,
+      x: 560,
+      y: 75,
     },
     {
       name: 'messageText1',
@@ -30,8 +30,8 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 648,
-      y: 345,
+      x: 560,
+      y: 320,
     },
     {
       name: 'messageText2',
@@ -46,8 +46,8 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 648,
-      y: 445,
+      x: 560,
+      y: 360,
     },
     {
       name: 'okBtn',
@@ -63,16 +63,16 @@ export const FS_POPUP_CONFIG = {
         name: 'okBtnTxt',
         type: 'Text',
         content: 'okBtnText',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 100 },
+        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 60 },
         toUpperCase: true,
       },
-      x: 648,
-      y: 720,
+      x: 560,
+      y: 575,
     },
   ],
   layoutData: {
     Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.8, maxScale: 1 },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.8 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.8, vPaddingPerc: 0.06 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.8 },
   },
 };
