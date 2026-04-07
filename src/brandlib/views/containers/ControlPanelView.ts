@@ -209,7 +209,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
       for (let k = 0; k < len; k++) {
         const btn = UIUtil.getElement(GameProxy.config.buyBonusData.features[k].btn);
         const bbBet = this.getMultiplier(GameProxy.config.buyBonusData.features[k].featureId) * appModel.getTotalBet();
-        const bbBetAmt = Util.formatCurrency(bbBet);
         if (k == 0) {
           //btn.tText.text = Util.parseMessage(Util.getContent('BuyFreeSpinText'), [bbBetAmt]);
         } else {
