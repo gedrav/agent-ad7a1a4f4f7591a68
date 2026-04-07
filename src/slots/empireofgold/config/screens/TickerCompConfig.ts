@@ -11,7 +11,6 @@ export const TICKER_COMP_CONFIG: any = {
   contentYPadding: 0,
   Elements: [
     { name: 'bg', type: 'Graphics', width: 1340, height: 116, alpha: 0 },
-    { name: 'tickerbg', type: 'Sprite', image: 'last_win' },
     {
       name: 'textCont',
       type: 'Container',
