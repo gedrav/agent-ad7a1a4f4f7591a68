@@ -25,6 +25,7 @@ export class BigWinsComp extends ResponsiveView {
   private isSkipping: boolean = false;
   private animCompleteListener: { complete: (entry) => void };
   private winTickerBW: WinTicker;
+  private bigWinTextAnim: PixSpine;
 
   constructor(config) {
     super(config);
@@ -50,10 +51,19 @@ export class BigWinsComp extends ResponsiveView {
     if (this.bigWinAnim) {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
+      this.guideRect.alpha = 0;
       this.animCompleteListener = {
         complete: (entry) => this.onAnimComplete(entry),
       };
       this.attachAnimCompleteListener();
+    }
+    if (this.configData.data.bigWinTextAnim) {
+      this.bigWinTextAnim = UIUtil.getElement(this.configData.data.bigWinTextAnim);
+      this.addChild(this.bigWinAnim, this.bigWinTextAnim, this.winTicker, this.winTickerBW, this.skipRect);
+    }
+    if (this.bigWinTextAnim) {
+      this.bigWinTextAnim.stopAnimation();
+      this.bigWinTextAnim.visible = false;
     }
   }
 
@@ -79,6 +89,9 @@ export class BigWinsComp extends ResponsiveView {
       if (this.bigWinAnim) {
         this.bigWinAnim.stopAnimation();
       }
+      if (this.bigWinTextAnim) {
+        this.bigWinTextAnim.stopAnimation();
+      }
       this.winTickerBW.skipToFinalValue();
 
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
@@ -103,10 +116,12 @@ export class BigWinsComp extends ResponsiveView {
       value: appModel.getTumbleSpinWin(),
       duration: 0,
     });
+    console.log('showTumbleWin', appModel.getTumbleSpinWin());
   }
 
   public async showSpinWin() {
     const winType = appModel.getWinType();
+    //const winType: string = CONSTANTS.UNBELIEVABLE_WIN;
     console.log('showSpinWin', winType);
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
@@ -141,8 +156,15 @@ export class BigWinsComp extends ResponsiveView {
       }
       if (this.targetLevel > this.currentLevel) {
         if (this.bigWinAnim) {
+          if (this.configData.data.backgroundAlpha > 0) {
+            this.guideRect.visible = true;
+            this.guideRect.alpha = this.configData.data.backgroundAlpha;
+          }
           this.bigWinAnim.visible = true;
           this.attachAnimCompleteListener();
+        }
+        if (this.bigWinTextAnim) {
+          this.bigWinTextAnim.visible = true;
         }
         EventHandler.dispatchEvent('PLAY_ALL_WIN_SOUND_BIGWIN');
         this.showWinTickerType('bigwin');
@@ -185,9 +207,12 @@ export class BigWinsComp extends ResponsiveView {
     this.isSkipping = false;
     if (this.bigWinAnim) {
       this.bigWinAnim?.stopAnimation();
-      if (this.bigWinAnim) {
-        this.bigWinAnim.visible = false;
-      }
+      this.bigWinAnim.visible = false;
+      this.guideRect.alpha = 0;
+    }
+    if (this.bigWinTextAnim) {
+      this.bigWinTextAnim?.stopAnimation();
+      this.bigWinTextAnim.visible = false;
     }
   }
   public showLineWin(): void {}
@@ -195,6 +220,12 @@ export class BigWinsComp extends ResponsiveView {
   protected playNextWinAnimation(): void {
     if (this.bigWinAnim) {
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].start, loop: false });
+    }
+    if (this.bigWinTextAnim) {
+      this.bigWinTextAnim.playAnimation({
+        state: this.configData.data.textAnimations[this.currentState].start,
+        loop: false,
+      });
     }
     if (this.currentLevel === 0) {
       EventHandler.dispatchEvent('PLAY_BIGWIN_SPECIAL_SOUND');
@@ -215,6 +246,12 @@ export class BigWinsComp extends ResponsiveView {
     }
     if (data.animation.name === this.configData.data.animations[this.currentState].start) {
       this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: true });
+      if (this.bigWinTextAnim) {
+        this.bigWinTextAnim.playAnimation({
+          state: this.configData.data.textAnimations[this.currentState].idle,
+          loop: true,
+        });
+      }
     } else if (data.animation.name === this.configData.data.animations[this.currentState].end) {
       this.checkForNextAnim();
     }
@@ -235,7 +272,19 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected playEndAnimation(): void {
     if (this.bigWinAnim) {
-      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
+      if (this.configData.data.animations[this.currentState].end) {
+        this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
+      } else {
+        this.checkForNextAnim();
+      }
+      if (this.bigWinTextAnim) {
+        if (this.configData.data.textAnimations[this.currentState].end) {
+          this.bigWinTextAnim.playAnimation({
+            state: this.configData.data.textAnimations[this.currentState].end,
+            loop: false,
+          });
+        }
+      }
     } else {
       this.checkForNextAnim();
     }

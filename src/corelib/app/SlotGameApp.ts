@@ -163,7 +163,7 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
-    console.log('game init received --');
+    console.log('game init received --', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
       this.checkToCreateSplash();
     } else {
@@ -189,9 +189,15 @@ class SlotGameApp {
   }
   protected checkToCreateSplash() {
     if (this.gameInitReceived && this.splashAssetsLoaded) {
-      if (appModel.getPreferences().showIntro) {
-        this.createSplash();
-        this.removePreloader();
+      if (appModel.getPreferences().showIntro !== false) {
+        console.log('check to create splash --', this.splashComp);
+        if (this.splashComp) {
+          console.log('splash already created --');
+          EventHandler.dispatchEvent(SlotEvents.ACTIVATE_SPLASH);
+        } else {
+          this.createSplash();
+          this.removePreloader();
+        }
       }
     }
   }

@@ -120,7 +120,6 @@ class AssetLoaderClass {
                 data.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
               }
             } else if (ASSETTYPE === 'spine') {
-              console.log(TYPE, NAME, ASSETTYPE, file, TEXTURES);
               // Load spine JSON data
               data.assets.push({
                 alias: NAME + 'Data',

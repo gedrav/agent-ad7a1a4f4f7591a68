@@ -55,6 +55,7 @@ export class SplashView extends ResponsiveChildrenView {
     this.showIntroBtn.on('BUTTON_PRESSED', this.onshowIntroBtnClick.bind(this));
 
     EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryLoaded.bind(this));
+    EventHandler.addEventListener(SlotEvents.ACTIVATE_SPLASH, this.onPrimaryLoaded.bind(this));
 
     const prefs = appModel.getPreferences();
     this.soundBtn.setSelected(!prefs.sound);
