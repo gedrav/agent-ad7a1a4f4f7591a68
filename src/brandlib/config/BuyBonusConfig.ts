@@ -7,7 +7,6 @@ import { BuyBonusConfirmedCommand } from '@core/commands/action/BuyBonusConfirme
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
-import { GameProxy } from '@core/models/GameConfigProxy';
 
 export const BUY_BONUS_CONFIG = {
   name: 'buyBonusView',
