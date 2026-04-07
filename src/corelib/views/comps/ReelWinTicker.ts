@@ -28,7 +28,8 @@ export class ReelWinTicker extends StandardView {
     }
     this.totalWin += data.value;
     if (data.duration == 0) {
-      this.winTicker.showSpinValue(this.totalWin, true, !appModel.isCascadeGame());
+      const flag: boolean = !appModel.isCascadeGame() || !appModel.getIsFreeSpinsSession();
+      this.winTicker.showSpinValue(this.totalWin, true, flag);
     } else {
       this.winTicker.countUpValue(this.totalWin, data.duration, true);
     }
