@@ -63,7 +63,7 @@ export const FS_POPUP_CONFIG = {
         name: 'okBtnTxt',
         type: 'Text',
         content: 'okBtnText',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 100 },
+        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 60 },
         toUpperCase: true,
       },
       x: 560,

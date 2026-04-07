@@ -10,7 +10,6 @@ import { MESSAGE_POPUP_CONFIG } from '@brand/config/MessagePopupConfig';
 import { MENU_CONFIG } from '@brand/config/MenuConfig';
 import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 import { BUY_BONUS_CONFIG_MOBILE } from '@brand/config/BuyBonusConfigMobile';
-import { FREESPIN_INFO_COMP_CONFIG } from '@game/config/screens/FreespinInfoCompConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',

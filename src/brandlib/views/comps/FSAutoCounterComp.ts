@@ -39,10 +39,12 @@ export class FSAutoCounterComp extends StandardView {
     this.visible = false;
   }
   protected updateUIForFreeSpinsStart(): void {
+    console.log('updateUIForFreeSpinsStart');
     this.visible = true;
   }
   protected updateUIFreeSpinsCount(): void {}
   protected onFreeSpinsEnded(): void {
+    console.log('onFreeSpinsEnded');
     this.visible = false;
   }
 }
