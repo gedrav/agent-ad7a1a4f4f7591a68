@@ -67,7 +67,7 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_MENU_MOBILE, this.hideAllViews.bind(this));
   }
   protected onModalViewClicked(): void {
-    if (this.popupComp.parent) {
+    if (this.popupComp?.parent) {
       return;
     }
     this.hideAllViews();
