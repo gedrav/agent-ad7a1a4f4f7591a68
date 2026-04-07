@@ -24,17 +24,11 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Almendra Bold',
+    gameFont1: 'PirataOne',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  symbMultipliers: {
-    BN_G: [2, 3, 4, 5, 6, 8],
-    BN_B: [10, 12, 15, 20, 25],
-    BN_P: [50],
-    BN_R: [100, 250, 500],
-  },
   bigWinValues: [5, 25, 50, 100],
   buyBonusData1: {
     features: [

@@ -209,6 +209,12 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 0.82,
           },
         },
+        symbMultipliers: {
+          BN_G: [2, 3, 4, 5, 6, 8],
+          BN_B: [10, 12, 15, 20, 25],
+          BN_P: [50],
+          BN_R: [100, 250, 500],
+        },
       },
       Elements: [
         {
