@@ -26,7 +26,7 @@ export default class RewardSymbol extends ReelSymbolSpine {
   public setRewardData(multiplier: number): void {
     if (multiplier) {
       this.clearRewardData();
-      this.multiplierVal.text = `x${multiplier}`;
+      this.multiplierVal.text = `${multiplier}x`;
       this.resizeMultiplier();
     }
   }
