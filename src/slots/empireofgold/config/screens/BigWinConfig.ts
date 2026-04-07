@@ -24,7 +24,7 @@ export const BIG_WIN_CONFIG = {
       name: 'bigWinAnim',
       dontCreateView: true,
       type: 'Spine',
-      spineName: 'big_win_2',
+      spineName: 'bigwins',
       loop: true,
       scale: 0.5,
       x: 650,
