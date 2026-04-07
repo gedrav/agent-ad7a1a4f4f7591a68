@@ -322,9 +322,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateUIForFreeSpinsStart(): void {
-    this.spinBtn.renderable = false;
-    this.stopSpinBtn.renderable = false;
-    this.betBtn.renderable = false;
     this.resizeView();
   }
 
@@ -333,9 +330,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected onFreeSpinsEnded(): void {
-    this.spinBtn.renderable = true;
-    this.stopSpinBtn.renderable = true;
-    this.betBtn.renderable = true;
     this.showSpinButton();
     this.enablePanel();
   }
