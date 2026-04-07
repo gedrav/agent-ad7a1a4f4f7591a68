@@ -40,7 +40,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: WinController,
       x: 220,
       y: 120,
-      px: -140,
+      px: -150,
       py: 490,
       lx: 220,
       ly: 120,

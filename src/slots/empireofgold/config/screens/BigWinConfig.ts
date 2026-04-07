@@ -94,11 +94,10 @@ export const BIG_WIN_CONFIG = {
     },
     Portrait: {
       refComponent: 'guideRect',
-      widthPerc: 0.9,
-      heightPerc: 1,
-      maxScale: 1,
+      widthPerc: 0.96,
       hAlign: 'center',
       vAlign: 'middle',
+      vPaddingPerc: 0.1,
     },
   },
 };
