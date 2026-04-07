@@ -7,7 +7,7 @@ export const BIG_WIN_CONFIG = {
   type: 'Comp',
   class: BigWinsComp,
   data: {
-    backgroundAlpha: 0.6,
+    backgroundAlpha: 0.8,
     animations: {
       BIG_WIN: { start: 'big_start', idle: 'big_idle' },
       MEGA_WIN: { start: 'mega_start', idle: 'mega_idle' },
@@ -31,7 +31,7 @@ export const BIG_WIN_CONFIG = {
       y: 500,
     },
     bigWinTextAnim: {
-      name: 'bigWinAnim',
+      name: 'bigWinTextAnim',
       dontCreateView: true,
       type: 'Spine',
       spineName: 'text',
@@ -94,11 +94,10 @@ export const BIG_WIN_CONFIG = {
     },
     Portrait: {
       refComponent: 'guideRect',
-      widthPerc: 0.9,
-      heightPerc: 1,
-      maxScale: 1,
+      widthPerc: 0.96,
       hAlign: 'center',
       vAlign: 'middle',
+      vPaddingPerc: 0.1,
     },
   },
 };

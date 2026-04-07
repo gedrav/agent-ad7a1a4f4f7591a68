@@ -14,7 +14,7 @@ const PRELOADER: AssetBundle = {
 };
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
-  assets: [{ TYPE: 'game', NAME: 'PirataOne.ttf', ASSETTYPE: 'font' }],
+  assets: [{ TYPE: 'game', NAME: 'Almendra-Bold.ttf', ASSETTYPE: 'font' }],
 };
 
 const SPLASH: AssetBundle = {
@@ -56,9 +56,9 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'low_5', ASSETTYPE: 'spine' },
   ],
 };
-const FREESPIN: AssetBundle = {
+/*const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FEATURES,
   assets: [],
-};
+};*/
 
 export const ASSET_CONFIG: AssetBundle[] = [PRELOADER, COMMON, SPLASH, PRIMARY, SECONDARY];
