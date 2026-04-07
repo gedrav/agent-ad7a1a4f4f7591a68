@@ -41,11 +41,7 @@ export class WinTicker extends StandardView {
       if (showPrefix) {
         this.valueText.text = Util.getContent('totalWin') + ' ' + Util.formatCurrency(this.currentValue);
       } else {
-        if (showPrefix) {
-          this.valueText.text = Util.getContent('totalWin') + ' ' + Util.formatCurrency(this.currentValue);
-        } else {
-          this.valueText.text = Util.formatCurrency(this.currentValue);
-        }
+        this.valueText.text = Util.formatCurrency(this.currentValue);
       }
     } else {
       this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);

@@ -22,6 +22,25 @@ export class CascadeReelWinTicker extends ReelWinTicker {
     this.positionElements();
   }
 
+  // overriding this to show "Total Win" string during cascade in FS
+  protected showSpinWin(data: any): void {
+    if (this.totalWin == 0) {
+      AnimationProxy.fadeIn(this.winTicker, 0.25);
+      this.winTicker.reset();
+    }
+    if (appModel.getIsAutoSession() && !appModel.isCascadeGame()) {
+      return;
+    }
+    this.totalWin += data.value;
+    if (data.duration == 0) {
+      this.winTicker.showSpinValue(this.totalWin, true, true);
+    } else {
+      this.winTicker.countUpValue(this.totalWin, data.duration, true);
+    }
+
+    this.visible = true;
+  }
+
   protected positionElements() {
     this.xText.alpha = 0;
     this.multiplierText.alpha = 0;
@@ -83,7 +102,7 @@ export class CascadeReelWinTicker extends ReelWinTicker {
   protected onTextMoveDone() {
     this.emit(SlotEvents.UPDATE_TOTAL_MULTIPLIER);
     const value = appModel.getTotalCascadeWin();
-    this.winTicker.showSpinValue(value, true);
+    this.winTicker.showSpinValue(value, true, true);
     this.multiplierText.text = '';
     this.multiplierText.alpha = 0;
   }
