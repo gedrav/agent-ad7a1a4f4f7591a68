@@ -264,6 +264,15 @@ class SlotGameApp {
     this.splashComp?.removeSplash();
     if (this.isViewCreated) {
       this.makeGameVisible();
+      this.app.stop();
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.app.start();
+      if (this.rafId === null) {
+        this.rafId = requestAnimationFrame(this.animBound);
+      }
     }
   }
   protected makeGameVisible() {}
