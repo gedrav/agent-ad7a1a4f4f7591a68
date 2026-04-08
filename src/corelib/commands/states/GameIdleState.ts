@@ -13,12 +13,8 @@ class GameIdleStateCommand extends StateCommand {
     const winData = appModel.getWinData();
     if (!appModel.isCascadeGame()) {
       if (winData?.length > 0) {
-        if (winData.length > 1) {
-          this.showLineWin();
-          this.intervalId = setInterval(this.showLineWin.bind(this), 2000);
-        } else {
-          this.showLineWin();
-        }
+        this.showLineWin();
+        this.intervalId = setInterval(this.showLineWin.bind(this), 2000);
       } else {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
       }
