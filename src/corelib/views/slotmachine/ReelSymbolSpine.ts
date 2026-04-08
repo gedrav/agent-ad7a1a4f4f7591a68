@@ -101,7 +101,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   public cleanUpSymbolWin(): void {
-    console.log('cleanUpSymbolWin');
     super.cleanUpSymbolWin();
     this.destroySpine();
   }
@@ -119,7 +118,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (this.configData.data.skin) {
       this.spine.setSkin(this.configData.data.skin);
     }
-    console.log('playSpineAnimation', state, loop, this.symbol.visible);
     this.spine.playAnimation({ state, loop });
   }
 
@@ -130,15 +128,10 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (!this.spine) return;
     this.spine.stopAnimation();
     this.spine.visible = false;
-    console.log('onAnimComplete', this.spineAnimCompleteCallback);
     if (this.spineAnimCompleteCallback) {
-      console.log('dispatched callback');
       this.spineAnimCompleteCallback();
       this.spineAnimCompleteCallback = null;
     }
     this.destroySpine();
-    if (isBlastAnim) {
-      this.symbol.visible = false;
-    }
   }
 }

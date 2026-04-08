@@ -56,11 +56,9 @@ export default class WinController {
     StateManager.doNextStep();
   }
   public showTumbleWin(): void {
-    console.log('aaaaaaaaaaaaaaaaa');
     this.winSymbolIndex = 0;
     this.totalWinSymbols = 0;
     if (appModel.isCascadeGame()) {
-      console.log('bbbbbbbbbbbbbbbbbbbb');
       this.clearTumbleWinTexts();
       const tumbleData = appModel.getSpinBlastData();
       const blastSymbols = appModel.getSpinBlastSymbols();
@@ -121,7 +119,7 @@ export default class WinController {
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
     this.winSymbolIndex++;
     if (this.winSymbolIndex === this.totalWinSymbols) {
-      this.notifySpinWinDone();
+      setTimeout(this.notifySpinWinDone.bind(this), 0);
     }
   }
 
