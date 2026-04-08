@@ -92,6 +92,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
       const loop: boolean = false;
       this.explosionMovie.playAnimation({ state, loop });
       this.spineAnimCompleteCallback = onComplete;
+      console.log('showBlastAnim', this.spineAnimCompleteCallback);
       this.playSpineAnimation(this.configData.data.blastAnim, false);
     } else {
       super.showBlastAnim();
@@ -99,6 +100,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
   }
 
   protected onExplosionAnimComplete(data: { animation: { name: string } }): void {
+    console.log('xxxxxxxxxxxxxxx');
     this.explosionMovie.stopAnimation();
     this.removeChild(this.explosionMovie);
   }

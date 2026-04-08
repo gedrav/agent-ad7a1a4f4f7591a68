@@ -81,13 +81,14 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.showWinning();
   }
 
-  public showWinning(): void {
+  public showWinning(onComplete?: () => void): void {
     if (!appModel.secondaryAssetsLoaded) {
       super.showWinning();
       return;
     }
     if (this.configData.data.winAnim) {
-      this.playSpineAnimation(this.configData.data.winAnim, true);
+      this.spineAnimCompleteCallback = onComplete;
+      this.playSpineAnimation(this.configData.data.winAnim, false);
       const name: string = this.configData.data.name ?? '';
       if (/^H[1-4]$/i.test(name)) {
         EventHandler.dispatchEvent(`PLAY_SYMBOL_APPEAR_${name.toUpperCase()}`);
@@ -100,6 +101,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   public cleanUpSymbolWin(): void {
+    console.log('cleanUpSymbolWin');
     super.cleanUpSymbolWin();
     this.destroySpine();
   }
@@ -112,12 +114,12 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (!this.spine) {
       this.createExtraElements();
     }
-
     this.animState = state;
     this.setSpineVisible(true);
     if (this.configData.data.skin) {
       this.spine.setSkin(this.configData.data.skin);
     }
+    console.log('playSpineAnimation', state, loop, this.symbol.visible);
     this.spine.playAnimation({ state, loop });
   }
 
@@ -125,13 +127,18 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
     const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);
-    if (!this.spine || isWinAnim) return;
+    if (!this.spine) return;
     this.spine.stopAnimation();
-    this.setSpineVisible(false);
-    this.destroySpine();
+    this.spine.visible = false;
+    console.log('onAnimComplete', this.spineAnimCompleteCallback);
     if (this.spineAnimCompleteCallback) {
+      console.log('dispatched callback');
       this.spineAnimCompleteCallback();
       this.spineAnimCompleteCallback = null;
+    }
+    this.destroySpine();
+    if (isBlastAnim) {
+      this.symbol.visible = false;
     }
   }
 }

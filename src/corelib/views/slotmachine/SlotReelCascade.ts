@@ -270,6 +270,7 @@ export default class SlotReelCascade extends SlotReel {
   }
   protected onBlastAnimComplete(symbol: ReelSymbolSprite): void {
     this.blastIndex++;
+    console.log('onBlastAnimComplete -- ', this.blastIndex, this.totalBlasts);
     if (this.blastIndex == this.totalBlasts) {
       this.enterCascadeExistingSymbols();
     }
