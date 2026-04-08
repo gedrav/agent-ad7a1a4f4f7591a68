@@ -6,10 +6,10 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 
 export default class ReelSymbolSpine extends ReelSymbolSprite {
-  private animState: string;
+  protected animState: string;
   private readonly pool: SpinePool = SpinePool.getInstance();
   private animCompleteListener: AnimationStateListener | null = null;
-
+  protected spineAnimCompleteCallback: () => void;
   constructor(configData: SymbolConfig) {
     super(configData);
   }
@@ -108,7 +108,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   // Helpers
   // -------------------------
 
-  private playSpineAnimation(state: string, loop: boolean): void {
+  protected playSpineAnimation(state: string, loop: boolean): void {
     if (!this.spine) {
       this.createExtraElements();
     }
@@ -124,11 +124,14 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   protected onAnimComplete(data: { animation: { name: string } }): void {
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
-
-    if (!isCurrentAnim || isWinAnim || !this.spine) return;
-
+    const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);
+    if (!this.spine || isWinAnim) return;
     this.spine.stopAnimation();
     this.setSpineVisible(false);
     this.destroySpine();
+    if (this.spineAnimCompleteCallback) {
+      this.spineAnimCompleteCallback();
+      this.spineAnimCompleteCallback = null;
+    }
   }
 }

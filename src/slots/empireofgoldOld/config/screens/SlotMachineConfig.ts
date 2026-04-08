@@ -7,7 +7,7 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
-import RewardSymbol from '@brand/views/slot/RewardSymbol';
+import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 
@@ -32,7 +32,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       x: 396,
       y: 0,
       data: {
-        symbolClass: RewardSymbol,
+        symbolClass: CascadeReelSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,

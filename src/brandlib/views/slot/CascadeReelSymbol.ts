@@ -4,13 +4,29 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { appModel } from '@core/models/services/AppModelService';
 import { ColorMatrixFilter } from 'pixi.js';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { Sine } from 'gsap';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
-export default class RewardSymbol extends ReelSymbolSpine {
+export default class CascadeReelSymbol extends ReelSymbolSpine {
   private multiplierVal: PixText;
+  private explosionMovie: PixSpine;
+
   constructor(configData: any) {
     super(configData);
-
+    this.createExplosion();
     this.createReward();
+  }
+  protected createExplosion(): void {
+    if (this.configData.data.explosion) {
+      this.explosionMovie = UIUtil.getElement(this.configData.data.explosion);
+      this.explosionMovie.stopAnimation();
+      const animCompleteListener = {
+        complete: (entry) => this.onExplosionAnimComplete(entry),
+      };
+      this.explosionMovie.onSpineEvent(animCompleteListener);
+    }
   }
   protected createReward(): void {
     const tconfig: any = {
@@ -62,5 +78,28 @@ export default class RewardSymbol extends ReelSymbolSpine {
 
   public getTextElement() {
     return this.multiplierVal;
+  }
+
+  public showBlastAnim(onComplete?: () => void): void {
+    if (!appModel.secondaryAssetsLoaded) {
+      super.showBlastAnim();
+      return;
+    }
+    if (this.configData.data.blastAnim) {
+      this.addChildAt(this.explosionMovie, 0);
+      this.explosionMovie.visible = true;
+      const state = this.configData.data.explosion.defaultState;
+      const loop: boolean = false;
+      this.explosionMovie.playAnimation({ state, loop });
+      this.spineAnimCompleteCallback = onComplete;
+      this.playSpineAnimation(this.configData.data.blastAnim, false);
+    } else {
+      super.showBlastAnim();
+    }
+  }
+
+  protected onExplosionAnimComplete(data: { animation: { name: string } }): void {
+    this.explosionMovie.stopAnimation();
+    this.removeChild(this.explosionMovie);
   }
 }

@@ -37,6 +37,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'reels_frame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'character', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'explosion1', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {

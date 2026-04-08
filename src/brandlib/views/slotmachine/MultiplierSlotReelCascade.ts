@@ -2,7 +2,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import RewardSymbol from '@brand/views/slot/RewardSymbol';
+import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
@@ -35,16 +35,16 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     if (this.isStopSpinButtonClick) {
       this.isStopSpinButtonClick = false;
       EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
-      let symb: RewardSymbol;
+      let symb: CascadeReelSymbol;
       const reelsview = appModel.getCascadeReelsView();
       for (let k = 0; k < this.configData.data.noOfReels; k++) {
         for (let i = 0; i < this.configData.data.noOfRows; i++) {
-          symb = this.symbolsArray[k][i] as RewardSymbol;
+          symb = this.symbolsArray[k][i] as CascadeReelSymbol;
           symb.setNormalTexture();
           const isBonusSymbol = reelsview[k][i]?.includes('BN');
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
-            const currentSymb = this.symbolsArray[k][i] as RewardSymbol;
+            const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
             currentSymb.setRewardData(multiplierVal);
             const multiplierSymb = this.getCorrespondingMultiplierSymbol(
               multiplierVal,
@@ -93,12 +93,12 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         index = k * 0.2;
         rowIndex = 0;
         for (let i = 0; i < this.reelsData.noOfRows; i++) {
-          symb = this.symbolsArray[k][i] as RewardSymbol;
+          symb = this.symbolsArray[k][i] as CascadeReelSymbol;
           symb.setNormalTexture();
           const isBonusSymbol = reelsView[k][i]?.includes('BN');
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
-            const currentSymb = this.symbolsArray[k][i] as RewardSymbol;
+            const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
             currentSymb.setRewardData(multiplierVal);
             const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
             symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
@@ -156,7 +156,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
           const isBonusSymbol = reelsView[k][i]?.includes('BN');
           if (isBonusSymbol) {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
-            const currentSymb = this.symbolsArray[k][i] as RewardSymbol;
+            const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
             currentSymb.setRewardData(multiplierVal);
             const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
             currentSymb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
@@ -231,7 +231,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         reel: data.position[0],
         row: this.reelsData.isFixedSymbol ? data.position[1] : data.position[1] + 1,
       };
-      const symb = this.symbolsArray[pos.reel][pos.row] as RewardSymbol;
+      const symb = this.symbolsArray[pos.reel][pos.row] as CascadeReelSymbol;
       symb.clearRewardData();
       const textElemet = symb.getTextElement();
       const tconfig: any = {
