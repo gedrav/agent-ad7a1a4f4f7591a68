@@ -37,10 +37,10 @@ export class GameSlotMachineView extends SlotMachineView {
     if (DeviceProxy.config.isDevice) {
       if (DeviceProxy.config.isPortrait) {
         this.slotReel.addChildAt(this.kingAnim, 1);
+        this.positionEdgeButtons();
       } else {
         this.slotReel.addChild(this.kingAnim);
       }
-      this.positionEdgeButtons();
     }
   }
 
