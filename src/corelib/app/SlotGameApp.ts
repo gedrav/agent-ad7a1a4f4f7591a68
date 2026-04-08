@@ -319,8 +319,15 @@ class SlotGameApp {
   }
 
   protected resize(): void {
-    this.resizeNow();
-    setTimeout(this.resizeNow.bind(this), 500);
+    // On iOS, wait for layout to stabilize after orientation change
+    if (DeviceProxy.config.isIOSDevice) {
+      setTimeout(this.resizeNow.bind(this), 100);
+      setTimeout(this.resizeNow.bind(this), 300);
+      setTimeout(this.resizeNow.bind(this), 500);
+    } else {
+      this.resizeNow();
+      setTimeout(this.resizeNow.bind(this), 300);
+    }
   }
   protected resizeNow(): void {
     const tempWidth = DeviceProxy.config.windowWidth;

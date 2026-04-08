@@ -22,10 +22,23 @@ class DeviceConfigProxy extends AbstractProxy {
     this._config = {};
     this._config.hostName = location.hostname;
     this._config.isIOSDevice = isMobile.apple.device;
-    const gameStage = document.getElementById('gameStage');
-    const rect = this._config.isIOSDevice ? gameStage?.getBoundingClientRect() : null;
-    this._config.windowWidth = rect?.width || window.innerWidth;
-    this._config.windowHeight = rect?.height || window.innerHeight;
+
+    // On iOS, use gameStage dimensions to account for safe-area insets
+    // On other devices, use window dimensions
+    if (this._config.isIOSDevice) {
+      const gameStage = document.getElementById('gameStage');
+      if (gameStage) {
+        const rect = gameStage.getBoundingClientRect();
+        this._config.windowWidth = rect.width;
+        this._config.windowHeight = rect.height;
+      } else {
+        this._config.windowWidth = window.innerWidth;
+        this._config.windowHeight = window.innerHeight;
+      }
+    } else {
+      this._config.windowWidth = window.innerWidth;
+      this._config.windowHeight = window.innerHeight;
+    }
     this._config.isIOSMobile = isMobile.apple.phone;
     this._config.isTablet = isMobile.tablet;
 
