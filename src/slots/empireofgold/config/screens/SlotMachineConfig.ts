@@ -250,7 +250,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'kingAnim',
           type: 'Spine',
-          spineName: 'king_pers',
+          spineName: 'character',
           defaultState: 'idle',
           loop: true,
           defaultSkin: 'main',
