@@ -40,13 +40,15 @@ export class GameSlotMachineView extends SlotMachineView {
       } else {
         this.slotReel.addChild(this.kingAnim);
       }
+      this.positionEdgeButtons();
     }
-    const isShortPhone = UIUtil.isShortPhone();
-    if (isShortPhone) {
-      if (DeviceProxy.config.isDevice && DeviceProxy.config.isPortrait) {
-        this.bbBtn.x -= UIUtil.getGameWidth() * 0.3;
-        this.anteBetComp.x += UIUtil.getGameWidth() * 0.3;
-      }
-    }
+  }
+
+  private positionEdgeButtons(): void {
+    const gameWidth = UIUtil.getGameWidth();
+    const localLeft = (0 - this.x) / this.scale.x;
+    const localRight = (gameWidth - this.x) / this.scale.x;
+    this.bbBtn.x = localLeft + this.bbBtn.width * 0.5;
+    this.anteBetComp.x = localRight - this.anteBetComp.width;
   }
 }
