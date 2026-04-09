@@ -35,6 +35,8 @@ export class AutoplayView extends ResponsiveChildrenView {
   private balanceIncreaseSlider: any;
   private balanceDecreaseSlider: any;
   private selectedSpins: number = 50;
+  private _sliderUpdating: boolean = false; // guard: prevents slider onUpdate from overwriting input
+  private _inputUpdating: boolean = false; // guard: prevents onChange re-entry when we set input.value
 
   constructor(config: any) {
     super(config);
@@ -66,19 +68,50 @@ export class AutoplayView extends ResponsiveChildrenView {
     if (spendingMinLimitText) spendingMinLimitText.text = Util.formatCurrency(this.spendingLimitSlider?.min ?? 0);
     if (spendingMaxLimitText) spendingMaxLimitText.text = Util.formatCurrency(this.spendingLimitSlider?.max ?? 0);
 
+    // Slider dragged by user → show integer only (step:1 so value is always whole number)
     this.spendingLimitSlider?.onUpdate.connect((value: number) => {
+      if (this._sliderUpdating) return; // Input is typing — don't overwrite
       if (this.spendingLimitInput) {
-        this.spendingLimitInput.value = value === this.spendingLimitSlider.min ? '' : Util.toString(Math.round(value));
+        const intVal = Math.round(value);
+        this.spendingLimitInput.value = intVal === this.spendingLimitSlider.min ? '' : intVal.toString();
       }
     });
 
+    // User typing → enforce max 2dp, move slider silently, never overwrite freely-typed text
     this.spendingLimitInput?.onChange.connect((text: string) => {
+      if (this._inputUpdating) return; // prevent re-entry when we set input.value below
+
+      // Strip anything beyond 2 decimal places (e.g. "12.559" → "12.55")
+      const valid = text.match(/^\d*\.?\d{0,2}/)?.[0] ?? '';
+      if (valid !== text) {
+        this._inputUpdating = true;
+        this.spendingLimitInput.value = valid; // fires onChange again → caught by guard above
+        this._inputUpdating = false;
+        return; // onChange will re-fire with the valid truncated value
+      }
+
+      // Sync slider position silently (no input.value write)
       const min = this.spendingLimitSlider?.min ?? 0;
       const max = this.spendingLimitSlider?.max ?? 0;
       const parsed = parseFloat(text);
-      const clamped = isNaN(parsed) ? min : Math.min(Math.max(Math.round(parsed), min), max);
-      this.spendingLimitInput.value = clamped === min ? '' : Util.toString(clamped);
+      if (!isNaN(parsed) && this.spendingLimitSlider) {
+        const clamped = Math.min(Math.max(parseFloat(parsed.toFixed(2)), min), max);
+        this._sliderUpdating = true;
+        this.spendingLimitSlider.value = clamped;
+        this._sliderUpdating = false;
+      }
+    });
+
+    // User presses Enter → validate, clamp, and format to 2dp, then sync both
+    this.spendingLimitInput?.onEnter.connect((text: string) => {
+      const min = this.spendingLimitSlider?.min ?? 0;
+      const max = this.spendingLimitSlider?.max ?? 0;
+      const parsed = parseFloat(text);
+      const clamped = isNaN(parsed) ? min : Math.min(Math.max(parseFloat(parsed.toFixed(2)), min), max);
+      this.spendingLimitInput.value = clamped === min ? '' : clamped.toFixed(2);
+      this._sliderUpdating = true;
       if (this.spendingLimitSlider) this.spendingLimitSlider.value = clamped;
+      this._sliderUpdating = false;
     });
 
     this.valuesArray = [5, 10, 25, 50, 100];
