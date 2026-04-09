@@ -36,15 +36,14 @@ export class AnteBetComp extends StandardView {
     this.toggleOff = this.toggleContainer.elementsList['anteToggleOff'];
     this.toggleOn = this.toggleContainer.elementsList['anteToggleOn'];
     this.toggleHit = this.toggleContainer.elementsList['anteToggleHit'];
-    this.isAnteEnabled = false;
     this.toggleBtnOnX = Math.round(this.toggleTick.x + this.toggleTick.width * 0.5 - this.toggleBtn.width * 0.53);
     this.toggleArrowOffsetX = this.toggleArrow.x - this.toggleBtn.x;
+    this.isAnteEnabled = false;
 
     this.setupToggle();
     this.updateValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValue.bind(this));
   }
-
   private updateValue() {
     this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());
   }
