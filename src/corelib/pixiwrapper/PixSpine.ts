@@ -3,125 +3,155 @@ import { AnimationStateListener, Spine } from '@esotericsoftware/spine-pixi-v8';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 
-interface BoundingBoxConfig {
-  width: number;
-  height: number;
-  xPadding?: number;
-  yPadding?: number;
-}
-
-interface SpineConfig {
-  spineName: string;
-  defaultSkin?: string;
-  defaultState?: string;
-  boundingBox?: BoundingBoxConfig;
-  [key: string]: unknown;
-}
-
-interface AnimationOptions {
-  state?: string;
-  loop?: boolean;
-  trackIndex?: number;
-  stopAtFirst?: boolean;
-  listener?: AnimationStateListener;
-  timeScale?: number;
-}
-
 export class PixSpine extends StandardView {
-  private spineAnim: Spine;
+  protected anchor: any;
+  private spineAnim: any;
 
-  constructor(configData: SpineConfig) {
+  constructor(configData: any) {
     super(configData);
-
-    this.configData = { ...configData };
-
     this.spineAnim = Spine.from({
-      skeleton: `${configData.spineName}Data`,
-      atlas: `${configData.spineName}Atlas`,
+      skeleton: this.configData.spineName + 'Data',
+      atlas: this.configData.spineName + 'Atlas',
       scale: 1,
     });
-
-    if (configData.defaultSkin) {
-      this.setSkin(configData.defaultSkin);
+    //this.anchor = { x: 0.5, y: 0.5 };
+    this.configData = {};
+    for (const p in configData) {
+      this.configData[p] = configData[p];
     }
-
+    if (this.configData.defaultSkin != undefined) {
+      this.setSkin(this.configData.defaultSkin);
+    }
     this.addChild(this.spineAnim);
-    this.initBoundingBox(configData.boundingBox);
+    if (this.configData.boundingBox) {
+      this.guideRect = UIUtil.getRectangle(
+        this.configData.boundingBox.width,
+        this.configData.boundingBox.height,
+        0xff0000,
+      );
+      this.guideRect.alpha = 0;
+      this.spineAnim.x = this.guideRect.width / 2 + Util.getDefaultValue(this.configData.boundingBox.xPadding, 0);
+      this.spineAnim.y = this.guideRect.height / 2 + Util.getDefaultValue(this.configData.boundingBox.yPadding, 0);
+      this.addChildAt(this.guideRect, 0);
+    }
   }
 
-  private initBoundingBox(boundingBox?: BoundingBoxConfig): void {
-    if (!boundingBox) return;
+  public setAnimationSpeed(num: number): void {}
 
-    this.guideRect = UIUtil.getRectangle(boundingBox.width, boundingBox.height, 0xff0000);
-    this.spineAnim.x = boundingBox.width / 2 + Util.getDefaultValue(boundingBox.xPadding, 0);
-    this.spineAnim.y = boundingBox.height / 2 + Util.getDefaultValue(boundingBox.yPadding, 0);
-    this.addChildAt(this.guideRect, 0);
-    this.guideRect.alpha = 0;
-  }
-
-  public setSkin(name: string): void {
+  setSkin(name: string): void {
     this.spineAnim.skeleton.setSkinByName(name);
   }
 
-  public onSpineEvent(listener: AnimationStateListener): void {
-    this.spineAnim.state.addListener(listener);
+  addEventListener(event: string, callback: any) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that: PixSpine = this;
+    if (event === 'complete') {
+      this.spineAnim.state.addListener({
+        complete: function (entry) {
+          callback(entry, that);
+        },
+      });
+    } else if (event === 'event') {
+      this.spineAnim.state.addListener({
+        event: function (entry, event) {
+          callback(event, that);
+        },
+      });
+    }
+  }
+  removeEventListners() {
+    //this.spineAnim.state.removeListener();
   }
 
-  public removeSpineEvent(listener: AnimationStateListener): void {
-    this.spineAnim.state.removeListener(listener);
-  }
+  /*public prepareAnimation(options: any = null) {
+    options = options || {};
+    if (options.state == undefined) {
+      options.state = this.configData.defaultState;
+    }
 
-  public clearSpineEvents(): void {
-    this.spineAnim.state.clearListeners();
-  }
-
-  public prepareAnimation(options: AnimationOptions = {}): void {
-    const resolvedOptions = this.resolveAnimationOptions(options);
-
-    this.spineAnim.state.data.defaultMix = 0;
+    this.spineAnim.state.data.defaultMix = Util.getDefaultValue(options.defaultMix, 1);
     this.spineAnim.state.setEmptyAnimation(0, 0);
     this.spineAnim.state.clearTracks();
     this.spineAnim.skeleton.setToSetupPose();
-    this.spineAnim.state.timeScale = resolvedOptions.timeScale;
+    this.spineAnim.state.timeScale = 1;
     this.spineAnim.state.tracks = [];
-    this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
+    options.trackIndex = 0;
+    this.spineAnim.state.setAnimation(options.trackIndex, options.state, options.loop);
     this.spineAnim.state.timeScale = 0;
-  }
+  }*/
 
-  public playAnimation(options: AnimationOptions = {}): void {
-    this.prepareAnimation(options);
-    const resolvedOptions = this.resolveAnimationOptions(options);
+  public playAnimation(options: any = null) {
+    options = options || {};
+    if (options.state == undefined) {
+      options.state = this.configData.defaultState;
+    }
 
-    this.spineAnim.state.data.defaultMix = 0;
-    this.spineAnim.state.timeScale = resolvedOptions.timeScale;
-    this.spineAnim.state.setAnimation(0, resolvedOptions.state!, resolvedOptions.loop);
-
-    if (resolvedOptions.listener) {
-      this.spineAnim.state.addListener(resolvedOptions.listener);
+    const shouldReset = Util.getDefaultValue(options.reset, false);
+    this.spineAnim.state.data.defaultMix = Util.getDefaultValue(options.defaultMix, 1);
+    if (shouldReset) {
+      this.spineAnim.state.setEmptyAnimation(0, 0);
+      this.spineAnim.state.clearTracks();
+      this.spineAnim.skeleton.setToSetupPose();
+      this.spineAnim.state.tracks = [];
+    }
+    this.spineAnim.state.timeScale = 1;
+    options.trackIndex = Util.getDefaultValue(options.trackIndex, 0);
+    this.spineAnim.state.setAnimation(options.trackIndex, options.state, options.loop);
+    if (options.nextState) {
+      this.spineAnim.state.addAnimation(
+        options.trackIndex,
+        options.nextState,
+        Util.getDefaultValue(options.nextLoop, true),
+        Util.getDefaultValue(options.delay, 0),
+      );
     }
   }
-
-  public stopAnimation(): void {
+  public playReverseAnimation(): void {
+    //this.spineAnim.state.timeScale = -1;
+  }
+  stopAnimation() {
     this.spineAnim.state.timeScale = 0;
-    this.spineAnim.state.data.defaultMix = 0;
-    this.spineAnim.skeleton.setToSetupPose();
-    this.spineAnim.state.clearListeners();
-    this.spineAnim.removeAllListeners();
+    this.spineAnim.state.data.defaultMix = 1;
+    //this.spineAnim.state.setEmptyAnimation(0, 0);
+    //this.spineAnim.state.clearTracks();
   }
-
   public getWidth(): number {
-    return this.configData.boundingBox ? this.configData.boundingBox.width * this.scale.x : this.width;
+    if (this.configData.boundingBox) {
+      return this.configData.boundingBox.width * this.scale.x;
+    } else {
+      return this.width;
+    }
   }
-
   public getHeight(): number {
-    return this.configData.boundingBox ? this.configData.boundingBox.height * this.scale.y : this.height;
+    if (this.configData.boundingBox) {
+      return this.configData.boundingBox.height * this.scale.y;
+    } else {
+      return this.height;
+    }
   }
+  public removeSpineEvent(listener: AnimationStateListener): void {
+    this.spineAnim.state.removeListener(listener);
+  }
+  public destroySpine() {
+    if (!this.spineAnim) return;
 
-  private resolveAnimationOptions(options: AnimationOptions): AnimationOptions {
-    return {
-      ...options,
-      state: options.state ?? this.configData.defaultState,
-      timeScale: options.timeScale ?? 1,
-    };
+    // 1) IMPORTANT: stop auto-updating (unhooks from Ticker.shared)
+    this.spineAnim.autoUpdate = false;
+
+    // 2) Stop animations + remove AnimationState listeners (prevents leaks)
+    this.spineAnim.state.clearTracks();
+    this.spineAnim.state.clearListeners();
+
+    // 3) If you attached Pixi objects to slots, remove them
+    this.spineAnim.removeSlotObjects?.();
+
+    // 4) Remove any Pixi/Federated event handlers YOU added (pointerdown etc.)
+    // If you kept handler refs, prefer spine.off('pointerdown', handler)
+    this.spineAnim.removeAllListeners?.();
+
+    // 5) Detach and destroy
+    this.removeChild(this.spineAnim);
+    this.parent?.removeChild(this);
+    this.spineAnim.destroy({ children: true }); // D
   }
 }

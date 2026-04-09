@@ -33,7 +33,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.animCompleteListener = {
       complete: (entry) => this.onAnimComplete(entry),
     };
-    this.spine.onSpineEvent(this.animCompleteListener);
+    this.spine.addEventListener('complete', this.onAnimComplete.bind(this));
     this.addChild(this.spine);
     this.setSpineVisible(false);
   }

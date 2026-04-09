@@ -52,10 +52,7 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
       this.guideRect.alpha = 0;
-      this.animCompleteListener = {
-        complete: (entry) => this.onAnimComplete(entry),
-      };
-      this.attachAnimCompleteListener();
+      this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
     }
     if (this.configData.data.bigWinTextAnim) {
       this.bigWinTextAnim = UIUtil.getElement(this.configData.data.bigWinTextAnim);
