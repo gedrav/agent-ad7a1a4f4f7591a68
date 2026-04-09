@@ -1,43 +1,52 @@
-import { WinCollectorComp } from '@game/views/comps/WinCollectorComp';
-import { UIConfig } from '../UIConfig';
-import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
-import { Point } from 'pixi.js';
-import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { BuyBonusButtonComp } from '@game/views/comps/BuyBonusButtonComp';
 
 export const BUY_BONUS_BTN_CONFIG: any = {
-  name: 'bbBtn',
-  type: 'Button',
-  x: 130,
-  y: 362,
+  name: 'buyBonusComp',
+  type: 'Comp',
+  class: BuyBonusButtonComp,
+  x: 6,
+  y: 208,
   px: 140,
-  py: 1978,
-  lx: 130,
-  ly: 362,
+  py: 1840,
+  lx: 8,
+  ly: 230,
   scale: 0.9,
-  action: {
-    press: BuyBonusClickCommand,
-  },
   data: { id: 'FG1' },
-  options: {
-    defaultView: 'bbBtn',
-    hoverView: 'bbBtn',
-    pressedView: 'bbBtn',
-    disabledView: 'bbBtn',
-    textOffset: new Point(0, 2),
-    animations: CoreUIConfig.spinButtonStates,
-  },
-  textConfig: {
-    name: 'bbBtn',
-    type: 'Text',
-    content: 'BuyText',
-    style: {
-      fontFamily: 'gameFont1',
-      fill: 0xffffff,
-      fontSize: 50,
-      fontWeight: 'bold',
-      wordWrap: true,
-      wordWrapWidth: 200,
-      align: 'center',
+  Elements: [
+    { name: 'bbBg', type: 'Sprite', image: 'bbBtn' },
+    {
+      name: 'bbBtnText',
+      type: 'Text',
+      content: 'BuyText',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 50,
+        fill: 0xffffff,
+        wordWrap: true,
+        wordWrapWidth: 200,
+        fontWeight: 'bold',
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 145,
+      y: 80,
     },
-  },
+    {
+      name: 'bbBetValue',
+      type: 'Text',
+      content: ' ',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 60,
+        fill: 0xffff00,
+        wordWrap: true,
+        wordWrapWidth: 200,
+        fontWeight: 'bold',
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 145,
+      y: 190,
+    },
+  ],
 };

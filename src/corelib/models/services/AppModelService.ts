@@ -514,7 +514,9 @@ class AppModelService {
     if (this._autoPlayObj.selectedSpins !== -1 && this._autoPlayObj.currentAutoSpin > this._autoPlayObj.selectedSpins)
       return 2;
     if (this._autoPlayObj.spendingLimit > 0) {
-      const totalSpending = this._autoPlayObj.startBalance - this.getBalance() + this.getTotalBet();
+      const totalSpending = parseFloat(
+        (this._autoPlayObj.startBalance - this.getBalance() + this.getTotalBet()).toFixed(10),
+      );
       if (totalSpending > this._autoPlayObj.spendingLimit) return 3;
     }
     return 1; // Continue autoplay
