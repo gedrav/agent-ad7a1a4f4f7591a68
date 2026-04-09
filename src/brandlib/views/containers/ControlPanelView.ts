@@ -237,6 +237,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected updateBalanceForSpin(): void {
     this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
+    appModel.setAfterSpinBalance();
   }
   protected updateBalanceForBBSpin(): void {
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
