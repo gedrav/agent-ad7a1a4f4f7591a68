@@ -183,7 +183,10 @@ export class AutoplayView extends ResponsiveChildrenView {
   // Reset autoplay panel to default values after autoplay completes
   protected resetAutoplayView(): void {
     this.updateSelectedBtn(this.valuesArray[1]);
-    if (this.spendingLimitSlider) this.spendingLimitSlider.value = this.spendingLimitSlider.min;
+    if (this.spendingLimitSlider) {
+      this.spendingLimitSlider.dragging = 0; // clear any stuck drag state
+      this.spendingLimitSlider.value = this.spendingLimitSlider.min;
+    }
     if (this.spendingLimitInput) this.spendingLimitInput.value = '';
   }
 
