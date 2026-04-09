@@ -17,13 +17,14 @@ class SpinStartStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER); // reset multiplier to lvl1 on each spin
     EventHandler.dispatchEvent(SlotEvents.START_SPIN);
-    EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE_FOR_SPIN);
     if (appModel.getIsAutoSession()) {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
     await MessageProxy.requestSpinResult(false);
     EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
-
+    if (!appModel.isErrorOccurred) {
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE_FOR_SPIN);
+    }
     await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.next();
