@@ -7,9 +7,14 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 class ShowHistoryCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
-    GameProxy.config.exterPageOpened = true;
-    loadHistoryPanelFirst();
-    EventHandler.dispatchEvent(SlotEvents.HIDE_MENU);
+    try {
+      GameProxy.config.exterPageOpened = true;
+      loadHistoryPanelFirst();
+      EventHandler.dispatchEvent(SlotEvents.HIDE_MENU);
+    } catch (error) {
+      console.error('Error opening history:', error);
+      GameProxy.config.exterPageOpened = false;
+    }
   }
 }
 
