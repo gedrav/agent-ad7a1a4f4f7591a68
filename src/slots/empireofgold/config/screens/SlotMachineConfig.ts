@@ -14,7 +14,7 @@ import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
 import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
-
+import { CharacterController } from '@game/views/comps/CharacterController';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -301,12 +301,19 @@ export const SLOT_MACHINE_CONFIG: any = {
           visible: false,
         },
         {
-          name: 'kingAnim',
-          type: 'Spine',
-          spineName: 'character',
-          defaultState: 'idle',
-          loop: true,
-          defaultSkin: 'main',
+          name: 'character',
+          type: 'Comp',
+          class: CharacterController,
+          Elements: [
+            {
+              name: 'kingAnim',
+              type: 'Spine',
+              spineName: 'character',
+              defaultState: 'idle',
+              loop: true,
+              defaultSkin: 'main',
+            },
+          ],
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
             Landscape: { scale: 0.7, x: 1840, y: 800 },
