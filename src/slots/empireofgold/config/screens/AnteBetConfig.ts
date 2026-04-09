@@ -1,5 +1,3 @@
-import { WinCollectorComp } from '@game/views/comps/WinCollectorComp';
-import { UIConfig } from '../../../empireofgoldOld/config/UIConfig';
 import { AnteBetComp } from '@game/views/comps/AnteBetComp';
 
 export const ANTE_BET_CONFIG: any = {
@@ -16,6 +14,73 @@ export const ANTE_BET_CONFIG: any = {
   Elements: [
     { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 8, y: 12 },
     { name: 'anteFrame', type: 'Sprite', image: 'ante_frame_gold', x: 0, y: 0 },
+    {
+      name: 'betText',
+      type: 'Text',
+      content: 'betText',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 50,
+        fill: 0xffffff,
+        wordWrap: true,
+        wordWrapWidth: 200,
+        fontWeight: 'bold',
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 145,
+      y: 42,
+    },
+    {
+      name: 'betAmnt',
+      type: 'Text',
+      contentText: ' ',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 50,
+        fill: 0xffff00,
+        wordWrap: true,
+        wordWrapWidth: 200,
+        fontWeight: 'bold',
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 145,
+      y: 88,
+    },
+    {
+      name: 'anteBetContent',
+      type: 'Text',
+      content: 'anteBetContent',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 26,
+        fill: 0xffffff,
+        wordWrap: true,
+        wordWrapWidth: 212,
+        fontWeight: 'bold',
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 145,
+      y: 152,
+    },
+    {
+      name: 'anteToggleContainer',
+      type: 'Container',
+      x: 30,
+      y: 200,
+      Elements: [
+        { name: 'anteToggleFrameBox', type: 'Sprite', image: 'ante_frame_box', x: 2, y: 6 },
+        { name: 'anteToggleFrame', type: 'Sprite', image: 'ante_bg_box', x: 5, y: 10 },
+        { name: 'anteToggleBtn', type: 'Sprite', image: 'ante_slide_btn', x: 5, y: 4 },
+        { name: 'anteToggleArrow', type: 'Sprite', image: 'ante_btn_arrow', x: 31, y: 17 },
+        { name: 'anteToggleTick', type: 'Sprite', image: 'ante_btn_tick', x: 142, y: 12, alpha: 0 },
+        { name: 'anteToggleOff', type: 'Sprite', image: 'ante_OFF', x: 125, y: 19, scale: 0.9 },
+        { name: 'anteToggleOn', type: 'Sprite', image: 'ante_ON', x: 27, y: 18, alpha: 0, scale: 0.9 },
+        { name: 'anteToggleHit', type: 'Graphics', width: 222, height: 72, color: 0xff0000, alpha: 0, x: 0, y: 0 },
+      ],
+    },
   ],
   data: {
     H1: { name: 'H1', type: 'Sprite', image: 'H1' },

@@ -1,5 +1,4 @@
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
-import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { AnteBetComp } from '@game/views/comps/AnteBetComp';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
@@ -7,16 +6,17 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import SlotReelTumble from '@core/views/slotmachine/SlotReelTumble';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { BuyBonusButtonComp } from '../comps/BuyBonusButtonComp';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private bbBtn: PixFancyButton;
+  private buyBonusComp: BuyBonusButtonComp;
   private anteBetComp: AnteBetComp;
   private kingAnim: PixSpine;
   protected tumbleSlotReel: SlotReelTumble;
 
   constructor(config: any) {
     super(config);
-    this.bbBtn = this.elementsList['bbBtn'];
+    this.buyBonusComp = this.elementsList['buyBonusComp'];
     this.anteBetComp = this.elementsList['anteBetComp'];
     this.kingAnim = this.slotReel.elementsList['kingAnim'];
     this.tumbleSlotReel = this.elementsList['slotReel'];
@@ -48,7 +48,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const gameWidth = UIUtil.getGameWidth();
     const localLeft = (0 - this.x) / this.scale.x;
     const localRight = (gameWidth - this.x) / this.scale.x;
-    this.bbBtn.x = localLeft + this.bbBtn.width * 0.5;
-    this.anteBetComp.x = localRight - this.anteBetComp.width;
+    this.buyBonusComp.x = localLeft + 5; // hardcoded this 5 value to give padding from edges
+    this.anteBetComp.x = localRight - this.anteBetComp.width - 10; // hardcoded this 10 value to give padding from edges
   }
 }
