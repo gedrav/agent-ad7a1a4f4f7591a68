@@ -17,6 +17,7 @@ export class BuyBonusButtonComp extends StandardView {
     this.bbBetValue = this.elementsList['bbBetValue'];
     this.setupInteraction();
     this.updateBBBetValue();
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
   }
 
   protected updateBBBetValue(): void {
