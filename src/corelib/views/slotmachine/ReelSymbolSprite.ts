@@ -81,6 +81,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
   public setNewSymbol(data: any, reelno: number): void {
     this.configData.data = { reelNumber: reelno, ...data };
     this.symbol.texture = this.resolveTexture();
+    this.symbol.scale.set(this.getDefaultScale());
     this.handleGameProp();
   }
 
