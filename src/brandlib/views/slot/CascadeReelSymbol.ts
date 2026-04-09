@@ -22,10 +22,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
     if (this.configData.data.explosion) {
       this.explosionMovie = UIUtil.getElement(this.configData.data.explosion);
       this.explosionMovie.stopAnimation();
-      const animCompleteListener = {
-        complete: (entry) => this.onExplosionAnimComplete(entry),
-      };
-      this.explosionMovie.onSpineEvent(animCompleteListener);
+      this.explosionMovie.addEventListener('complete', this.onExplosionAnimComplete.bind(this));
     }
   }
   protected createReward(): void {
