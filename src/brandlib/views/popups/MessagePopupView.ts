@@ -5,6 +5,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class MessagePopupView extends ResponsiveChildrenView {
   private closeBtn: any;
@@ -30,6 +31,7 @@ export class MessagePopupView extends ResponsiveChildrenView {
   protected async showMessagePopup(data: any) {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.visible = true;
+    GameProxy.config.isPopupOpened = true;
     this.titleText.text = data.title;
     this.messageText.text = data.message;
     this.callback = data.callback;

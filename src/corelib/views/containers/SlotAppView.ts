@@ -15,6 +15,7 @@ import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { BuyBonusViewMobile } from '@brand/views/popups/BuyBonusViewMobile';
 import { ModalView } from '@core/views/containers/ModalView';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class SlotAppView extends ResponsiveChildrenView {
   protected gameBGView: BGView;
@@ -67,10 +68,11 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_MENU_MOBILE, this.hideAllViews.bind(this));
   }
   protected onModalViewClicked(): void {
-    if (this.popupComp?.parent) {
+    if (this.popupComp?.parent || this.messagePopupView?.parent) {
       return;
     }
     this.hideAllViews();
+    GameProxy.config.isPopupOpened = false;
   }
   protected hideAllViews(): void {
     this.removeChild(this.betPanelView);
