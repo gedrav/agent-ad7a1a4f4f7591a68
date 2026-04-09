@@ -14,13 +14,17 @@ class GameIdleStateCommand extends StateCommand {
     if (!appModel.isCascadeGame()) {
       if (winData?.length > 0) {
         this.showLineWin();
-        this.intervalId = setInterval(this.showLineWin.bind(this), 2000);
+        //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
       } else {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
       }
     } else {
       EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
     }
+  }
+  public doNextStep(data: any = null) {
+    super.doNextStep(data);
+    setTimeout(this.showLineWin.bind(this), 0);
   }
 
   protected showLineWin(): void {

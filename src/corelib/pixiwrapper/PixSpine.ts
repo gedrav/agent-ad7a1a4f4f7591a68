@@ -86,7 +86,7 @@ export class PixSpine extends StandardView {
       options.state = this.configData.defaultState;
     }
 
-    const shouldReset = Util.getDefaultValue(options.reset, false);
+    const shouldReset = Util.getDefaultValue(options.reset, true);
     this.spineAnim.state.data.defaultMix = Util.getDefaultValue(options.defaultMix, 1);
     if (shouldReset) {
       this.spineAnim.state.setEmptyAnimation(0, 0);

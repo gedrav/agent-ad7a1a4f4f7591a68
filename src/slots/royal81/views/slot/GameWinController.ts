@@ -5,6 +5,8 @@ export default class GameWinController extends WinController {
   public showLineWin(): void {
     if (!appModel.isCascadeGame() && appModel.getWinDataLength() > 0) {
       this.fadeOutAllSymbols();
+      this.winSymbolIndex = 0;
+      this.totalWinSymbols = 0;
       this.lineWinAmountComp.reset();
       this.lineWinAmountComp.visible = false;
       const currentLineWin = appModel.getCurrentLineWinData();
@@ -14,7 +16,10 @@ export default class GameWinController extends WinController {
         for (let j = 0; j < winningPos.length; j++) {
           const pos = this.getReelPosition(winningPos[j]);
           this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-          this.symbolsArray[pos.reel][pos.row + 1].showWinning();
+          this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+            this.onLineWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+          );
+          this.totalWinSymbols++;
           if (j === 0) {
             this.lineWinAmountComp.visible = true;
             this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;

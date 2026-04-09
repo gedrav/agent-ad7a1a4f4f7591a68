@@ -16,8 +16,8 @@ export default class WinController {
   public reelsData;
   private timeoutId: any;
   private tumbleWinAmountTexts: PixText[] = [];
-  private winSymbolIndex: number;
-  private totalWinSymbols: number;
+  protected winSymbolIndex: number;
+  protected totalWinSymbols: number;
 
   get symbolsArray(): ReelSymbolSprite[][] {
     return this._symbolsArray;
@@ -124,15 +124,20 @@ export default class WinController {
   }
 
   public showSpinWin(): void {
+    this.winSymbolIndex = 0;
+    this.totalWinSymbols = 0;
     if (appModel.isCascadeGame()) {
       const blastSymbols = appModel.getSpinBlastSymbols();
       if (blastSymbols) {
         this.fadeOutAllSymbols();
         blastSymbols.forEach((blastSymbol: any) => {
           blastSymbol.forEach((position: number[]) => {
+            this.totalWinSymbols++;
             const pos = { reel: position[0], row: this.reelsData.isFixedSymbol ? position[1] : position[1] + 1 };
             this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-            this.symbolsArray[pos.reel][pos.row].showWinning();
+            this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+            );
           });
         });
       }
@@ -141,20 +146,23 @@ export default class WinController {
       if (winDataLength > 0) {
         this.fadeOutAllSymbols();
         for (let i = 0; i < winDataLength; i++) {
+          this.totalWinSymbols++;
           const winData = appModel.getWinData();
           const winningPos = winData[i].winningPosition;
           if (winningPos && winningPos.length > 0) {
             for (let j = 0; j < winningPos.length; j++) {
               const pos = this.getReelPosition(winData[i].winningPosition[j]);
               this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-              this.symbolsArray[pos.reel][pos.row + 1].showWinning();
+              this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+              );
             }
           }
         }
       }
     }
-    clearTimeout(this.timeoutId);
-    this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
+    // clearTimeout(this.timeoutId);
+    // this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
   }
   protected notifySpinWinDone(): void {
     clearTimeout(this.timeoutId);
@@ -165,6 +173,8 @@ export default class WinController {
     if (appModel.isCascadeGame()) {
       // No line win for cascade game
     } else {
+      this.winSymbolIndex = 0;
+      this.totalWinSymbols = 0;
       const winDataLength = appModel.getWinDataLength();
       if (winDataLength > 0) {
         this.fadeOutAllSymbols();
@@ -174,8 +184,10 @@ export default class WinController {
           for (let j = 0; j < winningPos.length; j++) {
             const pos = this.getReelPosition(winningPos[j]);
             this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-            this.symbolsArray[pos.reel][pos.row + 1].showWinning();
-
+            this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+              this.onLineWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+            );
+            this.totalWinSymbols++;
             if (j == 0) {
               this.lineWinAmountComp.visible = true;
               this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;
@@ -189,6 +201,12 @@ export default class WinController {
     appModel.lineWinIndex++;
     if (appModel.lineWinIndex > appModel.getWinDataLength() - 1) {
       appModel.lineWinIndex = 0;
+    }
+  }
+  protected onLineWinAnimComplete(symbol: ReelSymbolSprite): void {
+    this.winSymbolIndex++;
+    if (this.winSymbolIndex == this.totalWinSymbols) {
+      StateManager.doNextStep();
     }
   }
   public clearSpinWin(): void {
