@@ -23,6 +23,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { BaseTexture, SCALE_MODES } from '@pixi/core';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
+import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -294,8 +295,14 @@ class SlotGameApp {
       const data: any = {};
       data.title = Util.getContent('infoText');
       data.message = obj.data?.message;
+      data.callback = this.refreshGame.bind(this);
+      console.log('error popup data == ', data);
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
+  }
+  protected refreshGame(): void {
+    console.log('refresh game');
+    RefreshGameCommand.execute();
   }
 
   // ----------------- app methods ---------------

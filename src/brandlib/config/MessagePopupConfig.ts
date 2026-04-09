@@ -41,9 +41,6 @@ export const MESSAGE_POPUP_CONFIG = {
       name: 'closeBtn',
       type: 'Button',
       scale: 1,
-      action: {
-        press: CloseBetPanelCommand,
-      },
       data: false,
       options: {
         defaultView: 'cancelBtn',

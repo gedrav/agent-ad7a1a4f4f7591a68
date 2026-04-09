@@ -11,6 +11,7 @@ export class MessagePopupView extends ResponsiveChildrenView {
   private titleText: PixText;
   private messageText: PixText;
   private panelBG: PixSprite;
+  private callback: any;
 
   constructor(config: any) {
     super(config);
@@ -23,6 +24,7 @@ export class MessagePopupView extends ResponsiveChildrenView {
     this.panelBG = this.elementsList['panelBG'];
     this.messageText.y = this.panelBG.height / 2;
     UIUtil.updateWordWrapWidth(this.messageText, this.panelBG.width * 0.8);
+    this.closeBtn.onPress.connect(this.closeMessagePopup.bind(this));
   }
 
   protected async showMessagePopup(data: any) {
@@ -30,11 +32,16 @@ export class MessagePopupView extends ResponsiveChildrenView {
     this.visible = true;
     this.titleText.text = data.title;
     this.messageText.text = data.message;
+    this.callback = data.callback;
   }
 
   protected async closeMessagePopup() {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     this.parent.removeChild(this);
+    console.log('closeMessagePopup -- ', this.callback);
+    if (this.callback) {
+      this.callback();
+    }
   }
   protected resizeView() {
     if (DeviceProxy.config.isDesktop) {
