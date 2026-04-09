@@ -40,7 +40,6 @@ export class FSAutoCounterComp extends StandardView {
     this.visible = false;
   }
   protected updateUIForFreeSpinsStart(): void {
-    console.log('updateUIForFreeSpinsStart');
     this.visible = true;
   }
   protected updateUIFreeSpinsCount(): void {
@@ -53,7 +52,6 @@ export class FSAutoCounterComp extends StandardView {
     this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(totalwin)]);
   }
   protected onFreeSpinsEnded(): void {
-    console.log('onFreeSpinsEnded');
     this.visible = false;
   }
 }

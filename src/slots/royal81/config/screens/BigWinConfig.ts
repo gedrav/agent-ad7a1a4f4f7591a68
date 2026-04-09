@@ -20,7 +20,7 @@ export const BIG_WIN_CONFIG = {
       spineName: 'Big_Wins_spine_HD',
       loop: true,
       x: 755,
-      y: 430,
+      y: 560,
     },
   },
   Elements: [
@@ -46,7 +46,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 755,
-      y: 900,
+      y: 950,
       Elements: [
         { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 50 },
         {
