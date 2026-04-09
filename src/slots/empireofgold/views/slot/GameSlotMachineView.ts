@@ -7,18 +7,19 @@ import SlotReelTumble from '@core/views/slotmachine/SlotReelTumble';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { BuyBonusButtonComp } from '../comps/BuyBonusButtonComp';
+import { CharacterController } from '../comps/CharacterController';
 
 export class GameSlotMachineView extends SlotMachineView {
   private buyBonusComp: BuyBonusButtonComp;
   private anteBetComp: AnteBetComp;
-  private kingAnim: PixSpine;
+  private character: CharacterController;
   protected tumbleSlotReel: SlotReelTumble;
 
   constructor(config: any) {
     super(config);
     this.buyBonusComp = this.elementsList['buyBonusComp'];
     this.anteBetComp = this.elementsList['anteBetComp'];
-    this.kingAnim = this.slotReel.elementsList['kingAnim'];
+    this.character = this.slotReel.elementsList['character'];
     this.tumbleSlotReel = this.elementsList['slotReel'];
     EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.showTumbleWin.bind(this));
   }
@@ -36,10 +37,10 @@ export class GameSlotMachineView extends SlotMachineView {
     super.resizeView();
     if (DeviceProxy.config.isDevice) {
       if (DeviceProxy.config.isPortrait) {
-        this.slotReel.addChildAt(this.kingAnim, 1);
+        this.slotReel.addChildAt(this.character, 1);
         this.positionEdgeButtons();
       } else {
-        this.slotReel.addChild(this.kingAnim);
+        this.slotReel.addChild(this.character);
       }
     }
   }
