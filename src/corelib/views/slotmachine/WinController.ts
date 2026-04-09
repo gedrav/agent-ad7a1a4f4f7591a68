@@ -16,6 +16,8 @@ export default class WinController {
   public reelsData;
   private timeoutId: any;
   private tumbleWinAmountTexts: PixText[] = [];
+  private winSymbolIndex: number;
+  private totalWinSymbols: number;
 
   get symbolsArray(): ReelSymbolSprite[][] {
     return this._symbolsArray;
@@ -54,6 +56,8 @@ export default class WinController {
     StateManager.doNextStep();
   }
   public showTumbleWin(): void {
+    this.winSymbolIndex = 0;
+    this.totalWinSymbols = 0;
     if (appModel.isCascadeGame()) {
       this.clearTumbleWinTexts();
       const tumbleData = appModel.getSpinBlastData();
@@ -65,7 +69,10 @@ export default class WinController {
           blastSymbol.forEach((position: number[], index: number) => {
             const pos = { reel: position[0], row: this.reelsData.isFixedSymbol ? position[1] : position[1] + 1 };
             this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-            this.symbolsArray[pos.reel][pos.row].showWinning();
+            this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+            );
+            this.totalWinSymbols++;
             if (index === 2 && symbWinAmount > 0) {
               const tConfig = {
                 name: 'symbWinAmount',
@@ -106,7 +113,14 @@ export default class WinController {
       }
     }
     clearTimeout(this.timeoutId);
-    this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
+    //this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
+  }
+
+  protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
+    this.winSymbolIndex++;
+    if (this.winSymbolIndex === this.totalWinSymbols) {
+      setTimeout(this.notifySpinWinDone.bind(this), 0);
+    }
   }
 
   public showSpinWin(): void {

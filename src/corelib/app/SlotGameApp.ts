@@ -264,6 +264,15 @@ class SlotGameApp {
     this.splashComp?.removeSplash();
     if (this.isViewCreated) {
       this.makeGameVisible();
+      this.app.stop();
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.app.start();
+      if (this.rafId === null) {
+        this.rafId = requestAnimationFrame(this.animBound);
+      }
     }
   }
   protected makeGameVisible() {}
@@ -321,12 +330,11 @@ class SlotGameApp {
   protected resize(): void {
     // On iOS, wait for layout to stabilize after orientation change
     if (DeviceProxy.config.isIOSDevice) {
-      setTimeout(this.resizeNow.bind(this), 100);
-      setTimeout(this.resizeNow.bind(this), 300);
-      setTimeout(this.resizeNow.bind(this), 500);
+      setTimeout(this.resizeNow.bind(this), 0);
+      setTimeout(this.resizeNow.bind(this), 250);
     } else {
       this.resizeNow();
-      setTimeout(this.resizeNow.bind(this), 300);
+      setTimeout(this.resizeNow.bind(this), 250);
     }
   }
   protected resizeNow(): void {

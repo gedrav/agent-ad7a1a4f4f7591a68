@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.38',
+  gameVersion: '0.40',
   gameId: 'royal81',
   gameName: 'Royal 81',
   uiConfig: UIConfig,

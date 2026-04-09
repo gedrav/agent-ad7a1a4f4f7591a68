@@ -126,7 +126,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
     this.applyGlowAnimation({ innerStrength: 30 });
   }
 
-  public showWinning(): void {
+  public showWinning(onComplete?: () => void): void {
     //this.applyGlowAnimation({ innerStrength: 2 });
     this.symbol.tint = 0xffffff;
     AnimationProxy.animateTween(this.symbol, {
