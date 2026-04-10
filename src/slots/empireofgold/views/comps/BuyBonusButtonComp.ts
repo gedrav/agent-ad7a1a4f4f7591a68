@@ -5,6 +5,7 @@ import { Util } from '@core/utils/UtilService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
 export class BuyBonusButtonComp extends StandardView {
   protected bbBetValue: any;
@@ -36,6 +37,6 @@ export class BuyBonusButtonComp extends StandardView {
   }
 
   protected onBuyBonusClicked(): void {
-    EventHandler.dispatchEvent(SlotEvents.SHOW_BUY_BONUS_VIEW);
+    BuyBonusClickCommand.execute({ id: this.configData.data.id });
   }
 }
