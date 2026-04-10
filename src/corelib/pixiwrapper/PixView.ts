@@ -16,6 +16,11 @@ export class PixView extends PIXI.Container {
   public guideRect: PixGraphics;
   protected viewCreated: boolean;
 
+  // Store bound handlers to enable cleanup
+  private boundSecondaryAssetsLoaded: () => void;
+  private boundFeatureAssetsLoaded: () => void;
+  private boundOnUpdate: (delta: number) => void;
+
   constructor(configData: any = null) {
     super();
     this.configData = {};
@@ -44,9 +49,14 @@ export class PixView extends PIXI.Container {
       this.createView();
     }
 
-    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.onSecondaryAssetsLoaded.bind(this));
-    EventHandler.addEventListener(AppEvents.FEATURE_ASSETS_LOADED, this.onFeatureAssetsLoaded.bind(this));
-    EventHandler.addEventListener(AppEvents.ON_UPDATE, this.onUpdate.bind(this));
+    // Store bound references for cleanup
+    this.boundSecondaryAssetsLoaded = this.onSecondaryAssetsLoaded.bind(this);
+    this.boundFeatureAssetsLoaded = this.onFeatureAssetsLoaded.bind(this);
+    this.boundOnUpdate = this.onUpdate.bind(this);
+
+    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.boundSecondaryAssetsLoaded);
+    EventHandler.addEventListener(AppEvents.FEATURE_ASSETS_LOADED, this.boundFeatureAssetsLoaded);
+    EventHandler.addEventListener(AppEvents.ON_UPDATE, this.boundOnUpdate);
   }
 
   protected onSecondaryAssetsLoaded(): void {
@@ -152,6 +162,9 @@ export class PixView extends PIXI.Container {
     this._configData = value;
   }
   public async destroyElements(): Promise<void> {
+    // CRITICAL: Remove event listeners first to prevent memory leaks
+    this.removeEventListeners();
+
     this?.removeChildren().forEach((child: PixView) => {
       AnimationProxy.killTweensOf(child);
       if (child.destroyElements) {
@@ -170,6 +183,9 @@ export class PixView extends PIXI.Container {
   }
 
   public destroyView(): void {
+    // CRITICAL: Remove event listeners first to prevent memory leaks
+    this.removeEventListeners();
+
     this?.removeChildren().forEach((child) => {
       AnimationProxy.killTweensOf(child);
       child?.destroy();
@@ -177,5 +193,17 @@ export class PixView extends PIXI.Container {
     AnimationProxy.killTweensOf(this);
     this.isDestroyed = true;
     this?.destroy();
+  }
+
+  private removeEventListeners(): void {
+    if (this.boundSecondaryAssetsLoaded) {
+      EventHandler.removeEventListener(AppEvents.SECONDARY_ASSETS_LOADED, this.boundSecondaryAssetsLoaded);
+    }
+    if (this.boundFeatureAssetsLoaded) {
+      EventHandler.removeEventListener(AppEvents.FEATURE_ASSETS_LOADED, this.boundFeatureAssetsLoaded);
+    }
+    if (this.boundOnUpdate) {
+      EventHandler.removeEventListener(AppEvents.ON_UPDATE, this.boundOnUpdate);
+    }
   }
 }
