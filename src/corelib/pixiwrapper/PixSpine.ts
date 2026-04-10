@@ -40,6 +40,7 @@ export class PixSpine extends StandardView {
 
   setSkin(name: string): void {
     this.spineAnim.skeleton.setSkinByName(name);
+    this.spineAnim.skeleton.setSlotsToSetupPose(); //resets all slot attachments (images, meshes, etc.) on the skeleton back to what's defined in the current skin's setup pose.
   }
 
   addEventListener(event: string, callback: any) {
