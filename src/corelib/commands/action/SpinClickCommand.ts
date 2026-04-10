@@ -8,22 +8,35 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { RequestFullscreenCommand } from './RequestFullscreenCommand';
 
 class SpinClickCmd extends ActionCommand {
+  private static isSpinning = false;
+
   public async execute(data: any = null) {
     super.execute(data);
 
+    // Guard against multiple rapid clicks
+    if (SpinClickCmd.isSpinning) return;
+
     if (appModel.getIsSpinStartPossible()) {
-      EventHandler.dispatchEvent('SPIN_CLICKED');
-      StateManager.goToState(STATES.SPIN_START_STATE);
-      if (appModel.turboMode) {
-        EventHandler.dispatchEvent('TURBO_START_SLOT_SPIN');
-      } else {
-        EventHandler.dispatchEvent('START_SLOT_SPIN');
-      }
-      const isDesktop = DeviceProxy.config.isDesktop;
-      const isTablet = DeviceProxy.config.isTablet;
-      // Request fullscreen on desktop on first spin
-      if (!isDesktop && !isTablet) {
-        RequestFullscreenCommand.execute();
+      SpinClickCmd.isSpinning = true;
+      try {
+        EventHandler.dispatchEvent('SPIN_CLICKED');
+        StateManager.goToState(STATES.SPIN_START_STATE);
+        if (appModel.turboMode) {
+          EventHandler.dispatchEvent('TURBO_START_SLOT_SPIN');
+        } else {
+          EventHandler.dispatchEvent('START_SLOT_SPIN');
+        }
+        const isDesktop = DeviceProxy.config.isDesktop;
+        const isTablet = DeviceProxy.config.isTablet;
+        // Request fullscreen on desktop on first spin
+        if (!isDesktop && !isTablet) {
+          RequestFullscreenCommand.execute();
+        }
+      } finally {
+        // Reset after minimum spin duration
+        setTimeout(() => {
+          SpinClickCmd.isSpinning = false;
+        }, 500);
       }
     } else {
       const action: ActionCommand = ShowLowBalanceErrorCommand;
