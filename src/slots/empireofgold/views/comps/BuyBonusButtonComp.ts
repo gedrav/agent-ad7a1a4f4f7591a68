@@ -19,6 +19,8 @@ export class BuyBonusButtonComp extends StandardView {
     this.setupInteraction();
     this.updateBBBetValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
+    EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
   }
 
   protected updateBBBetValue(): void {
@@ -34,6 +36,16 @@ export class BuyBonusButtonComp extends StandardView {
     this.eventMode = 'static';
     this.cursor = 'pointer';
     UIUtil.addInteraction(this, this.onBuyBonusClicked.bind(this));
+  }
+
+  private enableBtn(): void {
+    this.interactive = true;
+    this.alpha = 1;
+  }
+
+  private disableBtn(): void {
+    this.interactive = false;
+    this.alpha = 0.9;
   }
 
   protected onBuyBonusClicked(): void {

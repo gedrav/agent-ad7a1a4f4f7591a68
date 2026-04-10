@@ -33,6 +33,7 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
   protected async exitFreespin() {
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins
     appModel.endFreeSpinsSession();

@@ -43,20 +43,22 @@ export class AnteBetComp extends StandardView {
     this.setupToggle();
     this.updateValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValue.bind(this));
+    EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
   }
   private updateValue() {
     this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());
   }
 
   protected setupToggle(): void {
-    if (!this.toggleHit || !this.toggleBtn) {
+    if (!this.toggleBtn) {
       return;
     }
-    UIUtil.resumeInteraction(this.toggleHit);
-    UIUtil.setHandCursor(this.toggleHit, true);
-    this.toggleHit.eventMode = 'static';
-    this.toggleHit.cursor = 'pointer';
-    UIUtil.addInteraction(this.toggleHit, this.onToggleClicked.bind(this));
+    UIUtil.resumeInteraction(this);
+    UIUtil.setHandCursor(this, true);
+    this.eventMode = 'static';
+    this.cursor = 'pointer';
+    UIUtil.addInteraction(this, this.onToggleClicked.bind(this));
     this.updateToggleVisuals(false);
   }
 
@@ -127,5 +129,15 @@ export class AnteBetComp extends StandardView {
       alpha: onAlpha,
     });
     AnimationProxy.animateTween(this.toggleFrame, { duration: 0.12, alpha: 0.88, yoyo: true, repeat: 1 }, false);
+  }
+
+  private enableBtn(): void {
+    this.interactive = true;
+    this.alpha = 1;
+  }
+
+  private disableBtn(): void {
+    this.interactive = false;
+    this.alpha = 0.9;
   }
 }

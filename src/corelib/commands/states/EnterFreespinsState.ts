@@ -37,6 +37,7 @@ class EnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
   protected async enterFreespin() {
+    EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_START);
     StateManager.goToState(STATES.FS_SPIN_START_STATE);
