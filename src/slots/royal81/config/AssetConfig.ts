@@ -32,7 +32,7 @@ const PRIMARY: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
-    { TYPE: 'game', NAME: 'gamebg0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BG_Animation_Spine', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },

@@ -50,7 +50,7 @@ export class BGView extends ResponsiveChildrenView {
     }
   }
   async loadFSBG() {
-    await UIUtil.loadAsset(this.freegameBG.configData.spineName);
+    await AssetLoader.loadFeatures();
     this.freegameBG = this.elementsList['freegameBG'];
   }
 }

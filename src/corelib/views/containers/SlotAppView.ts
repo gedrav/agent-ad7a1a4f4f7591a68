@@ -35,7 +35,10 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.gameBGView = this.elementsList['gameBGView'];
     this.slotMachineView = this.elementsList['slotMachineView'];
     this.controlPanelView = this.elementsList['controlPanelView'];
-    this.controlPanelView.slotView = this.slotMachineView;
+    if (this.controlPanelView) {
+      this.controlPanelView.slotView = this.slotMachineView;
+    }
+
     this.timerView = this.elementsList['timerView'];
     this.betPanelView = this.elementsList['betPanelView'];
     this.removeChild(this.betPanelView);

@@ -36,4 +36,6 @@ export class PixSprite extends PIXI.Sprite {
   getHeight() {
     return this.height;
   }
+
+  public setSkin(str: string): void {}
 }

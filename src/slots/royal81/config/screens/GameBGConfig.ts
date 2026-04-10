@@ -7,8 +7,12 @@ export const GAME_BG_CONFIG: any = {
   Elements: [
     {
       name: 'maingameBG',
-      type: 'DualSprite',
-      image: 'maingameBG',
+      type: 'Spine',
+      spineName: 'BG_Animation_Spine',
+      defaultState: 'idle',
+      defaultSkin: 'Landscape',
+      loop: true,
+      boundingBox: { width: 3000, height: 1700 },
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
