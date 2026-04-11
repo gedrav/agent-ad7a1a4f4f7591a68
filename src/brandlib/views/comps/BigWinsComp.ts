@@ -81,14 +81,22 @@ export class BigWinsComp extends ResponsiveView {
       this.currentLevel = this.targetLevel - 1;
       this.currentState = STATES[this.currentLevel];
       this.isSkipping = true;
-      this.playNextWinAnimation();
-      this.playEndAnimation();
+
       if (this.bigWinAnim) {
-        this.bigWinAnim.stopAnimation();
+        this.bigWinAnim.playAnimation({
+          state: this.configData.data.animations[this.currentState].idle,
+          loop: false,
+          defaultMix: 0,
+        });
       }
       if (this.bigWinTextAnim) {
-        this.bigWinTextAnim.stopAnimation();
+        this.bigWinTextAnim.playAnimation({
+          state: this.configData.data.textAnimations[this.currentState].idle,
+          loop: false,
+          defaultMix: 0,
+        });
       }
+
       this.winTickerBW.skipToFinalValue();
 
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
@@ -104,7 +112,6 @@ export class BigWinsComp extends ResponsiveView {
         EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
       }
       EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
-      this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1600);
     }
   }
 
@@ -213,12 +220,17 @@ export class BigWinsComp extends ResponsiveView {
 
   protected playNextWinAnimation(): void {
     if (this.bigWinAnim) {
-      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].start, loop: false });
+      this.bigWinAnim.playAnimation({
+        state: this.configData.data.animations[this.currentState].start,
+        loop: false,
+        defaultMix: 0,
+      });
     }
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim.playAnimation({
         state: this.configData.data.textAnimations[this.currentState].start,
         loop: false,
+        defaultMix: 0,
       });
     }
     if (this.currentLevel === 0) {
@@ -235,25 +247,46 @@ export class BigWinsComp extends ResponsiveView {
     }
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {
+    const animations = this.configData.data.animations[this.currentState];
     if (this.isSkipping) {
+      if (data.animation.name === animations.idle) {
+        if (animations.end) {
+          if (this.bigWinAnim) {
+            this.bigWinAnim.playAnimation({ state: animations.end, loop: false, reset: false, defaultMix: 0.15 });
+          }
+          if (this.bigWinTextAnim && this.configData.data.textAnimations[this.currentState].end) {
+            this.bigWinTextAnim.playAnimation({
+              state: this.configData.data.textAnimations[this.currentState].end,
+              loop: false,
+              reset: false,
+              defaultMix: 0.15,
+            });
+          }
+        } else {
+          this.notifyWinDone();
+        }
+      } else if (data.animation.name === animations.end) {
+        this.notifyWinDone();
+      }
       return;
     }
-    if (data.animation.name === this.configData.data.animations[this.currentState].start) {
-      this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].idle, loop: true });
+    if (data.animation.name === animations.start) {
+      this.bigWinAnim.playAnimation({ state: animations.idle, loop: true, reset: false, defaultMix: 0 });
       if (this.bigWinTextAnim) {
         this.bigWinTextAnim.playAnimation({
           state: this.configData.data.textAnimations[this.currentState].idle,
           loop: true,
+          reset: false,
+          defaultMix: 0,
         });
       }
-    } else if (data.animation.name === this.configData.data.animations[this.currentState].end) {
+    } else if (data.animation.name === animations.end) {
       this.checkForNextAnim();
     }
   }
 
   protected onCountUpCompleted(): void {
     clearTimeout(this.timeoutId);
-    this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
     EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
     EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
     EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND_NOW');
@@ -263,11 +296,32 @@ export class BigWinsComp extends ResponsiveView {
     } else {
       EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
     }
+    const animations = this.configData.data.animations[this.currentState];
+    if (animations.end) {
+      if (this.bigWinAnim) {
+        this.bigWinAnim.playAnimation({ state: animations.end, loop: false, reset: false, defaultMix: 0.15 });
+      }
+      if (this.bigWinTextAnim && this.configData.data.textAnimations[this.currentState].end) {
+        this.bigWinTextAnim.playAnimation({
+          state: this.configData.data.textAnimations[this.currentState].end,
+          loop: false,
+          reset: false,
+          defaultMix: 0.15,
+        });
+      }
+    } else {
+      this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
+    }
   }
   protected playEndAnimation(): void {
     if (this.bigWinAnim) {
       if (this.configData.data.animations[this.currentState].end) {
-        this.bigWinAnim.playAnimation({ state: this.configData.data.animations[this.currentState].end, loop: false });
+        this.bigWinAnim.playAnimation({
+          state: this.configData.data.animations[this.currentState].end,
+          loop: false,
+          reset: false,
+          defaultMix: 0.15,
+        });
       } else {
         this.checkForNextAnim();
       }
@@ -276,6 +330,8 @@ export class BigWinsComp extends ResponsiveView {
           this.bigWinTextAnim.playAnimation({
             state: this.configData.data.textAnimations[this.currentState].end,
             loop: false,
+            reset: false,
+            defaultMix: 0.15,
           });
         }
       }
@@ -285,8 +341,9 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected checkForNextAnim() {
     this.currentLevel++;
+    console.log('aaaaaaaa11111', this.currentLevel, this.targetLevel);
     if (this.currentLevel >= this.targetLevel) {
-      //console.log('all completed send done notification');
+      this.notifyWinDone();
     } else {
       this.currentState = STATES[this.currentLevel];
       this.playNextWinAnimation();

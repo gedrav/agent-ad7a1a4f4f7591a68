@@ -9,7 +9,7 @@ export class CharacterController extends StandardView {
   private idleListenerAttached = false;
   private readonly idleMix = 0.3;
   private readonly idleAnims = ['idle', 'idle2'];
-  private readonly winAnims = ['win'];
+  private readonly winAnims = ['win', 'win4'];
 
   constructor(config) {
     super(config);

@@ -106,6 +106,10 @@ export class PixSpine extends StandardView {
         Util.getDefaultValue(options.delay, 0),
       );
     }
+    if (options.stopAtFirst) {
+      this.spineAnim.state.timeScale = 0;
+      this.spineAnim.skeleton.setToSetupPose();
+    }
   }
   public playReverseAnimation(): void {
     //this.spineAnim.state.timeScale = -1;
@@ -115,6 +119,7 @@ export class PixSpine extends StandardView {
     this.spineAnim.state.data.defaultMix = 1;
     //this.spineAnim.state.setEmptyAnimation(0, 0);
     //this.spineAnim.state.clearTracks();
+    this.spineAnim.skeleton.setToSetupPose();
   }
   public getWidth(): number {
     if (this.configData.boundingBox) {
