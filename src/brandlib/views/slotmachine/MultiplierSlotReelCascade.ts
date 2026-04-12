@@ -9,6 +9,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { CascadeReelWinTicker } from '../comps/CascadeReelWinTicker';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { FsTotalMultiplierComp } from '../comps/FsTotalMultiplierComp';
+import { Power1, Power2, Back } from 'gsap/gsap-core';
 
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
   private cascadeReelWinTicker: CascadeReelWinTicker;
@@ -88,6 +89,8 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       let index = 0;
       let rowIndex = 0;
       let symb;
+      const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
+
       const reelsView = appModel.getCascadeReelsView();
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         index = k * 0.2;
@@ -111,13 +114,19 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       }
       this.symbolFallingIndex = 0;
       let finalY, delay, timeVal;
+
+      const COL_STAGGER = 0.1;
+      const ROW_STAGGER = 0.05;
+      const ENTER_DURATION = 0.32;
+
       for (let k = 0; k < this.configData.data.noOfReels; k++) {
         index = k * 0.2;
         rowIndex = 0;
+
         for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
           finalY = i * this.configData.data.symbolHeight;
-          delay = index + rowIndex++ * 0.05;
-          timeVal = (this.fallingInDuration + delay - 0.8) * 500;
+          const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
+          this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
               duration: this.fallingInDuration,
@@ -128,10 +137,10 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
             });
           } else {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration,
-              delay: delay,
+              duration: ENTER_DURATION,
+              delay,
               y: finalY,
-              ease: this.symbEase,
+              ease: Back.easeOut.config(0.6),
               onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
             });
           }

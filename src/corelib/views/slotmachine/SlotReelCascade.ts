@@ -12,6 +12,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { StateManager } from '@core/states/StateManagerService';
 import ReelSymbol from '@core/views/slotmachine/ReelSymbol';
 import { STATES } from '@core/states/StateConstants';
+import { Power3, Power1, Sine } from 'gsap/gsap-core';
 
 type BlastSymbol = {
   reelIndex: number;
@@ -22,8 +23,8 @@ type BlastSymbol = {
 };
 
 export default class SlotReelCascade extends SlotReel {
-  protected fallingOutDuration = 0.4;
-  protected fallingInDuration = 0.4;
+  protected fallingOutDuration = 0.32;
+  protected fallingInDuration = 0.32;
   protected fallingCounter = 0;
   protected totalBlasts = 0;
   protected blastIndex = 0;
@@ -127,28 +128,41 @@ export default class SlotReelCascade extends SlotReel {
     const len = this.symbolsArray.length;
     let index = 0;
     let rowIndex = 0;
-    let delay = 0;
+
+    const COL_STAGGER = 0.06;
+    const EXIT_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
+    const EXIT_DURATION = 0.44;
+
     for (let k = 0; k < len; k++) {
       const len2 = this.symbolsArray[k].length;
       index = k * 0.1;
       rowIndex = 0;
       for (let i = len2 - 1; i >= 0; i--) {
         if (appModel.turboMode) {
-          AnimationProxy.animateTween(this.symbolsArray[k][i], {
-            duration: this.fallingOutDuration / 2,
-            delay: index * 0.1,
-            y: this.configData.data.reelHeight + i * this.configData.data.symbolHeight,
-            ease: Strong.easeIn,
-            onComplete: this.onSymbolReachedEnd.bind(this, this.symbolsArray[k][i]),
+          const symbol = this.symbolsArray[k][i];
+          const startY = symbol.y;
+          const targetY = startY + EXIT_DISTANCE;
+          const delay = k * COL_STAGGER;
+
+          AnimationProxy.animateTween(symbol, {
+            duration: EXIT_DURATION / 2,
+            delay,
+            y: targetY,
+            ease: Power1.easeIn, // GSAP 2 style
+            onComplete: this.onSymbolReachedEnd.bind(this, symbol),
           });
         } else {
-          delay = index + rowIndex++ * 0.02;
-          AnimationProxy.animateTween(this.symbolsArray[k][i], {
-            duration: this.fallingOutDuration,
-            delay: delay,
-            y: this.configData.data.reelHeight + i * this.configData.data.symbolHeight,
-            ease: Strong.easeIn,
-            onComplete: this.onSymbolReachedEnd.bind(this, this.symbolsArray[k][i]),
+          const symbol = this.symbolsArray[k][i];
+          const startY = symbol.y;
+          const targetY = startY + EXIT_DISTANCE;
+          const delay = k * COL_STAGGER;
+
+          AnimationProxy.animateTween(symbol, {
+            duration: EXIT_DURATION,
+            delay,
+            y: targetY,
+            ease: Power1.easeIn, // GSAP 2 style
+            onComplete: this.onSymbolReachedEnd.bind(this, symbol),
           });
         }
       }
