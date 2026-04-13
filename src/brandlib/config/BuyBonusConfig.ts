@@ -4,8 +4,6 @@ import { IncrementDecrementBetCommand } from '@core/commands/action/IncrementDec
 import { CloseBuyBonusCommand } from '@core/commands/action/CloseBuyBonusCommand';
 import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { BuyBonusConfirmedCommand } from '@core/commands/action/BuyBonusConfirmedCommand';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
-import { CloseBetPanelCommand } from '@core/commands/action/CloseBetPanelCommand';
 
 export const BUY_BONUS_CONFIG = {
   name: 'buyBonusView',
