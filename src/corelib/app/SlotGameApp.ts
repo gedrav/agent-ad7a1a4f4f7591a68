@@ -102,6 +102,9 @@ class SlotGameApp {
     window.addEventListener('resize', this.resize.bind(this));
     document.addEventListener('visibilitychange', this.visibilityChange.bind(this));
 
+    window.stopPixiApp = () => this.stopPixiApp();
+    window.startPixiApp = () => this.startPixiApp();
+
     globalThis.__PIXI_APP__ = this.app;
     EventHandler.setScope(this.app.stage);
     this.addEvents();
@@ -363,20 +366,28 @@ class SlotGameApp {
 
   protected visibilityChange(): void {
     if (document.visibilityState === 'hidden') {
-      SoundFactory.muteAllSounds();
-      EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
-      this.app.stop();
-      if (this.rafId !== null) {
-        cancelAnimationFrame(this.rafId);
-        this.rafId = null;
-      }
+      this.stopPixiApp();
     } else {
-      EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
-      SoundFactory.unmuteAllSounds();
-      this.app.start();
-      if (this.rafId === null) {
-        this.rafId = requestAnimationFrame(this.animBound);
-      }
+      this.startPixiApp();
+    }
+  }
+
+  private stopPixiApp(): void {
+    SoundFactory.muteAllSounds();
+    EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
+    this.app.stop();
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
+  private startPixiApp(): void {
+    EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
+    SoundFactory.unmuteAllSounds();
+    this.app.start();
+    if (this.rafId === null) {
+      this.rafId = requestAnimationFrame(this.animBound);
     }
   }
   // -----------------------------------------------------------------------

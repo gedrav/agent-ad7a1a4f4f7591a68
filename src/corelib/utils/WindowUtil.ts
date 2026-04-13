@@ -37,6 +37,8 @@ declare global {
     getTotalCredit: () => number;
     getGameConfig: () => any;
     getAllContent: () => any;
+    stopPixiApp: () => void;
+    startPixiApp: () => void;
     getRtpValue: () => number;
     getMaxExposure: () => number;
   }
@@ -93,6 +95,8 @@ export class WindowUtil {
       return appModel.getTotalBet() / (GameProxy.config.totalLines * GameProxy.config.creditValue);
     };
     window.getGameConfig = () => GameProxy.config;
+    window.stopPixiApp = () => {};
+    window.startPixiApp = () => {};
     window.getRtpValue = () => appModel.getRTP();
     window.getMaxExposure = () => appModel.maxExposure();
   }
