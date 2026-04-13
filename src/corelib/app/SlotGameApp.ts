@@ -46,10 +46,6 @@ class SlotGameApp {
   private soundsLoaded: boolean = false;
   private animBound: (time: number) => void;
   private rafId: number | null = null;
-  private resizeHandler: () => void;
-  private visibilityHandler: () => void;
-  private contextLostHandler: (event: Event) => void;
-  private contextRestoredHandler: () => void;
 
   constructor() {}
 
@@ -90,14 +86,6 @@ class SlotGameApp {
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
     BaseTexture.defaultOptions.anisotropicLevel = isIOSMobile ? 0 : 16;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
-
-    // iOS WebGL Context Loss Handler - CRITICAL for stability
-    this.contextLostHandler = this.onContextLost.bind(this);
-    this.contextRestoredHandler = this.onContextRestored.bind(this);
-    const canvas = this.app.canvas as HTMLCanvasElement;
-    canvas.addEventListener('webglcontextlost', this.contextLostHandler, false);
-    canvas.addEventListener('webglcontextrestored', this.contextRestoredHandler, false);
-
     if (__SHOW_STATS__) {
       // show FPS monitoring panel when enabled via config
       const stats = new Stats();
@@ -111,10 +99,8 @@ class SlotGameApp {
     }
 
     GameProxy.config.renderer = this.app.renderer;
-    this.resizeHandler = this.resize.bind(this);
-    this.visibilityHandler = this.visibilityChange.bind(this);
-    window.addEventListener('resize', this.resizeHandler);
-    document.addEventListener('visibilitychange', this.visibilityHandler);
+    window.addEventListener('resize', this.resize.bind(this));
+    document.addEventListener('visibilitychange', this.visibilityChange.bind(this));
 
     globalThis.__PIXI_APP__ = this.app;
     EventHandler.setScope(this.app.stage);
@@ -362,17 +348,12 @@ class SlotGameApp {
       tempHeight != DeviceProxy.config.windowHeight
     ) {
       this.isFirstTime = false;
-
-      // iOS FIX: Use clientHeight instead of innerHeight to avoid Safari chrome issues
-      const vw = document.documentElement.clientWidth;
-      const vh = document.documentElement.clientHeight;
-
-      const canvaswid = vw * DeviceProxy.config.appResolution;
-      const canvasht = vh * DeviceProxy.config.appResolution;
+      const canvaswid = DeviceProxy.config.windowWidth * DeviceProxy.config.appResolution;
+      const canvasht = DeviceProxy.config.windowHeight * DeviceProxy.config.appResolution;
 
       // Update canvas style dimensions and scroll window up to avoid issues on mobile resize
-      this.app.renderer.canvas.style.width = `${vw}px`;
-      this.app.renderer.canvas.style.height = `${vh}px`;
+      this.app.renderer.canvas.style.width = `${DeviceProxy.config.windowWidth}px`;
+      this.app.renderer.canvas.style.height = `${DeviceProxy.config.windowHeight}px`;
       window.scrollTo(0, 0);
       this.app.renderer.resize(canvaswid, canvasht);
 
@@ -469,54 +450,6 @@ class SlotGameApp {
         },
       },
     });
-  }
-
-  private onContextLost(event: Event): void {
-    event.preventDefault();
-    console.warn('WebGL context lost - iOS memory pressure detected');
-    this.app.stop();
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-    const data: any = {};
-    data.title = 'Connection Issue';
-    data.message = 'Please refresh the game to continue';
-    data.callback = () => window.location.reload();
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
-  }
-
-  private onContextRestored(): void {
-    console.log('WebGL context restored - reloading game');
-    window.location.reload();
-  }
-
-  public cleanup(): void {
-    // Remove window listeners
-    if (this.resizeHandler) {
-      window.removeEventListener('resize', this.resizeHandler);
-    }
-    if (this.visibilityHandler) {
-      document.removeEventListener('visibilitychange', this.visibilityHandler);
-    }
-
-    // Remove canvas listeners
-    const canvas = this.app.canvas as HTMLCanvasElement;
-    if (this.contextLostHandler) {
-      canvas.removeEventListener('webglcontextlost', this.contextLostHandler);
-    }
-    if (this.contextRestoredHandler) {
-      canvas.removeEventListener('webglcontextrestored', this.contextRestoredHandler);
-    }
-
-    // Cancel RAF
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-
-    // Destroy app
-    this.app.destroy(true, { children: true, texture: true, baseTexture: true });
   }
 }
 
