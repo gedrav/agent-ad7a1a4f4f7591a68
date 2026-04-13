@@ -564,6 +564,10 @@ class AppModelService {
     return 97;
   }
 
+  public maxExposure(): number {
+    return 10000;
+  }
+
   // WHEN: Called if external code needs full autoplay config
   // WHAT: Returns complete autoplay object
   public getAutoSpinObj(): any {

@@ -37,6 +37,8 @@ declare global {
     getTotalCredit: () => number;
     getGameConfig: () => any;
     getAllContent: () => any;
+    getRtpValue: () => number;
+    getMaxExposure: () => number;
   }
 }
 
@@ -56,7 +58,7 @@ export class WindowUtil {
     window.getMaxPayout = () => Util.formatCurrency(getData()?.playerInfo?.maxPayout);
     window.getMaxBBPayout = () => Util.formatCurrency(getData()?.playerInfo?.bbMaxWin);
     window.getGameInitData = getData;
-    window.getGameVersion = () => getData()?.version;
+    window.getGameVersion = () => GameProxy.config.gameVersion;
     window.getIsSoundOn = () => {
       return SoundFactory.sfxState;
     };
@@ -91,5 +93,7 @@ export class WindowUtil {
       return appModel.getTotalBet() / (GameProxy.config.totalLines * GameProxy.config.creditValue);
     };
     window.getGameConfig = () => GameProxy.config;
+    window.getRtpValue = () => appModel.getRTP();
+    window.getMaxExposure = () => appModel.maxExposure();
   }
 }
