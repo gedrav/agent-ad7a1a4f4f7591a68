@@ -6,7 +6,7 @@ import { Util } from '@core/utils/UtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import SlotReel from '@core/views/slotmachine/SlotReel';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
-import { Cubic, Elastic, Strong } from 'gsap/gsap-core';
+import { Back, Cubic, Elastic, Strong } from 'gsap/gsap-core';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { StateManager } from '@core/states/StateManagerService';
@@ -214,8 +214,8 @@ export default class SlotReelCascade extends SlotReel {
           timeVal = (this.fallingInDuration + delay - 0.8) * 500;
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration,
-              delay: delay * 0.15,
+              duration: this.fallingInDuration / 2,
+              delay: delay,
               y: finalY,
               ease: this.symbEase,
               onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
@@ -312,6 +312,9 @@ export default class SlotReelCascade extends SlotReel {
         }
       }
     }
+    const COL_STAGGER = 0.1;
+    const ROW_STAGGER = 0.05;
+    const ENTER_DURATION = 0.32;
     len = this.moveArray.length;
     this.totalCascades = 0;
     this.cascadeIndex = 0;
@@ -320,22 +323,24 @@ export default class SlotReelCascade extends SlotReel {
       for (let i = 0; i < len2; i++) {
         if (this.moveArray[k][i] > 0) {
           this.totalCascades++;
-          const delay = k * 0.06 + (len2 - i) * 0.05;
+          const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
           const timeVal = (this.fallingInDuration / 2 + delay - 0.5) * 1000;
+          const finalY = this.symbolsArray[k][i].y + this.moveArray[k][i] * this.configData.data.symbolHeight;
+
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration / 4,
-              delay: delay * 0.25,
-              y: this.symbolsArray[k][i].y + this.moveArray[k][i] * this.configData.data.symbolHeight,
-              ease: this.symbEase,
+              duration: ENTER_DURATION / 2,
+              delay,
+              y: finalY,
+              ease: Back.easeOut.config(0.6),
               onComplete: this.onCascadeFallStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           } else {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration / 2,
-              delay: delay,
-              y: this.symbolsArray[k][i].y + this.moveArray[k][i] * this.configData.data.symbolHeight,
-              ease: this.symbEase,
+              duration: ENTER_DURATION,
+              delay,
+              y: finalY,
+              ease: Back.easeOut.config(0.6),
               onComplete: this.onCascadeFallStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           }
