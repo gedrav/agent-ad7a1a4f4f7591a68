@@ -45,6 +45,7 @@ export class AnteBetComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
+    this.disableBtn();
   }
   private updateValue() {
     this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());

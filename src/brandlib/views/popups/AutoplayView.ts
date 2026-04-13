@@ -151,7 +151,6 @@ export class AutoplayView extends ResponsiveChildrenView {
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
     } else {
       StateManager.goToState(STATES.START_AUTOSPIN_STATE, obj);
-      this.hideAutoPlayPanel();
     }
   }
 

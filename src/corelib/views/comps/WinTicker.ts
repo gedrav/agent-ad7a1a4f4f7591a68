@@ -37,6 +37,7 @@ export class WinTicker extends StandardView {
     this.visible = true;
     this.showCurrency = showCurrency;
     this.currentValue = newValue;
+    this.targetValue = newValue;
     if (this.showCurrency) {
       if (showPrefix) {
         this.valueText.text = Util.getContent('totalWin') + ' ' + Util.formatCurrency(this.currentValue);

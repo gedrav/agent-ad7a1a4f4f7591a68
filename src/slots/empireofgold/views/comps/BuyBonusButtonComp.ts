@@ -21,6 +21,7 @@ export class BuyBonusButtonComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
+    this.disableBtn();
   }
 
   protected updateBBBetValue(): void {

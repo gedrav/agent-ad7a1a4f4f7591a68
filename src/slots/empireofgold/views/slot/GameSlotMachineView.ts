@@ -26,6 +26,15 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener(SlotEvents.HIDE_MAINGAME_ELEMENTS, this.hideMainGameElements.bind(this));
   }
 
+  protected enablePanel(): void {
+    this.buyBonusComp.interactive = true;
+    this.anteBetComp.interactive = true;
+  }
+  protected disablePanel(): void {
+    this.buyBonusComp.interactive = false;
+    this.anteBetComp.interactive = false;
+  }
+
   protected showSpinWin(): void {
     this.bigWinsComp.showSpinWin();
   }

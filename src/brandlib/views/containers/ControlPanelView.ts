@@ -287,7 +287,12 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     // Disable buy bonus buttons during spins
     if (this.bbButtonsArray) {
-      this.bbButtonsArray.forEach((btn) => (btn.enabled = false));
+      const len = this.bbButtonsArray.length;
+      if (len > 0) {
+        for (let k = 0; k < len; k++) {
+          this.bbButtonsArray[k].enabled = false;
+        }
+      }
     }
   }
 

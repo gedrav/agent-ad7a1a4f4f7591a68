@@ -40,7 +40,6 @@ export class MessagePopupView extends ResponsiveChildrenView {
   protected async closeMessagePopup() {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     this.parent.removeChild(this);
-    console.log('closeMessagePopup -- ', this.callback);
     if (this.callback) {
       this.callback();
     }
