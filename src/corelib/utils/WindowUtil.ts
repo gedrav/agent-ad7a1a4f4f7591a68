@@ -37,6 +37,8 @@ declare global {
     getTotalCredit: () => number;
     getGameConfig: () => any;
     getAllContent: () => any;
+    stopPixiApp: () => void;
+    startPixiApp: () => void;
   }
 }
 
@@ -91,5 +93,7 @@ export class WindowUtil {
       return appModel.getTotalBet() / (GameProxy.config.totalLines * GameProxy.config.creditValue);
     };
     window.getGameConfig = () => GameProxy.config;
+    window.stopPixiApp = () => {};
+    window.startPixiApp = () => {};
   }
 }
