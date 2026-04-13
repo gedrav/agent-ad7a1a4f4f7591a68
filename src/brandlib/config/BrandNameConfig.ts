@@ -1,4 +1,3 @@
-import { TimerView } from '@core/views/containers/TimerView';
 import { BrandNameComp } from '@core/views/containers/BrandNameComp';
 export const BRANDNAME_CONFIG = {
   name: 'timerView',
