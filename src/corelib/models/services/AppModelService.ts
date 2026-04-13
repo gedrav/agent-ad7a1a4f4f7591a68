@@ -560,6 +560,10 @@ class AppModelService {
     return this._autoPlayObj?.totalAutoWin || 0;
   }
 
+  public getRTP(): number {
+    return 97;
+  }
+
   // WHEN: Called if external code needs full autoplay config
   // WHAT: Returns complete autoplay object
   public getAutoSpinObj(): any {
