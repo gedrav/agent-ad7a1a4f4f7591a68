@@ -4,16 +4,13 @@ import { PixView } from '@core/pixiwrapper/PixView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export class ResponsiveChildrenView extends PixView {
-  private resizeHandler: () => void;
-
   constructor(configData: any) {
     super(configData);
   }
   protected onViewCreated() {
     super.onViewCreated();
-    this.resizeHandler = this.resizeView.bind(this);
-    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.resizeHandler);
-    setTimeout(this.resizeHandler, 10);
+    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.resizeView.bind(this));
+    setTimeout(this.resizeView.bind(this), 10);
   }
 
   protected resizeView(): void {
@@ -29,22 +26,5 @@ export class ResponsiveChildrenView extends PixView {
     this.repositionView();
     UIUtil.adjustElement(this);
   }
-
-  public destroyView(): void {
-    // CRITICAL: Remove resize listener to prevent memory leak
-    if (this.resizeHandler) {
-      EventHandler.removeEventListener(AppEvents.APP_RESIZE, this.resizeHandler);
-    }
-    super.destroyView();
-  }
-
-  public async destroyElements(): Promise<void> {
-    // CRITICAL: Remove resize listener to prevent memory leak
-    if (this.resizeHandler) {
-      EventHandler.removeEventListener(AppEvents.APP_RESIZE, this.resizeHandler);
-    }
-    await super.destroyElements();
-  }
-
   protected repositionView(): void {}
 }
