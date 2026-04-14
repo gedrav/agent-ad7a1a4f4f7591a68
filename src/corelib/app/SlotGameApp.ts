@@ -199,6 +199,7 @@ class SlotGameApp {
           console.log('splash already created --');
           EventHandler.dispatchEvent(SlotEvents.ACTIVATE_SPLASH);
         } else {
+          console.log('create splasn now');
           this.createSplash();
           this.removePreloader();
         }
@@ -266,6 +267,9 @@ class SlotGameApp {
 
   protected async onSplashStartClicked() {
     this.splashComp?.removeSplash();
+    this.appContainer.removeChild(this.splashComp);
+    this.splashComp.destroy();
+    this.splashComp = null;
     if (this.isViewCreated) {
       this.makeGameVisible();
       this.app.stop();

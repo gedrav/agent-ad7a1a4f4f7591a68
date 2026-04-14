@@ -27,6 +27,7 @@ export class gameApp extends SlotGameApp {
     if (appModel.getPreferences()?.showIntro !== false) {
       this.splashComp = new SplashView(SPLASH_CONFIG);
       this.appContainer.addChild(this.splashComp, this.preloader);
+      console.log('in game app splash created -- ', this.splashComp);
     } else {
       EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
       setTimeout(() => {
