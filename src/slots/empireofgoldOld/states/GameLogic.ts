@@ -1,6 +1,6 @@
 import { appModel } from '@core/models/services/AppModelService';
 
-class Royal81GameLogic {
+class Royale81GameLogic {
   constructor() {}
 
   public isPreWinFeatureTriggered(): boolean {
@@ -12,4 +12,4 @@ class Royal81GameLogic {
   }
 }
 
-export const gameLogic = new Royal81GameLogic();
+export const gameLogic = new Royale81GameLogic();
