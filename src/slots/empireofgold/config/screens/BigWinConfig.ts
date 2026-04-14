@@ -45,7 +45,7 @@ export const BIG_WIN_CONFIG = {
       name: 'guideRect',
       type: 'Graphics',
       width: 1300,
-      height: 1050,
+      height: 1080,
       color: 0x000000,
       alpha: 0,
     },

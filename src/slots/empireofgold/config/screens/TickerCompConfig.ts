@@ -20,7 +20,7 @@ export const TICKER_COMP_CONFIG: any = {
           type: 'Text',
           anchor: { x: 0.5, y: 0.5 },
           style: {
-            fontFamily: 'gameFont1',
+            fontFamily: 'commonFontBold',
             fontSize: 40,
             mFontSize: 44,
             fill: 0xffffff,
@@ -32,7 +32,7 @@ export const TICKER_COMP_CONFIG: any = {
           type: 'Text',
           anchor: { x: 0.5, y: 0.5 },
           style: {
-            fontFamily: 'gameFont1',
+            fontFamily: 'commonFontBold',
             fontSize: 40,
             mFontSize: 44,
             fill: 0xffffff,

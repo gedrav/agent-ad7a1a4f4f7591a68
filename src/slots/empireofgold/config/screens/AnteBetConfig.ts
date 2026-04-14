@@ -20,7 +20,7 @@ export const ANTE_BET_CONFIG: any = {
       type: 'Text',
       content: 'betText',
       style: {
-        fontFamily: 'gameFont1',
+        fontFamily: 'commonFontBold',
         fontSize: 44,
         fill: 0xffffff,
         wordWrap: true,
@@ -37,7 +37,7 @@ export const ANTE_BET_CONFIG: any = {
       type: 'Text',
       contentText: ' ',
       style: {
-        fontFamily: 'gameFont1',
+        fontFamily: 'commonFontBold',
         fontSize: 50,
         fill: 0xffff00,
         wordWrap: true,
@@ -54,7 +54,7 @@ export const ANTE_BET_CONFIG: any = {
       type: 'Text',
       content: 'anteBetContent',
       style: {
-        fontFamily: 'gameFont1',
+        fontFamily: 'commonFontBold',
         fontSize: 26,
         fill: 0xffffff,
         wordWrap: true,
@@ -85,7 +85,7 @@ export const ANTE_BET_CONFIG: any = {
           y: 39,
           anchor: { x: 0.5, y: 0.5 },
           style: {
-            fontFamily: 'gameFont1',
+            fontFamily: 'commonFontBold',
             fontSize: 45,
             fill: 0xffffff,
             wordWrap: true,
@@ -104,7 +104,7 @@ export const ANTE_BET_CONFIG: any = {
           alpha: 0,
           anchor: { x: 0.5, y: 0.5 },
           style: {
-            fontFamily: 'gameFont1',
+            fontFamily: 'commonFontBold',
             fontSize: 45,
             fill: 0xffffff,
             wordWrap: true,

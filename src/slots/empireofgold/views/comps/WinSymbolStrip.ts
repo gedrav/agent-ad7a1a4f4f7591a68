@@ -21,7 +21,7 @@ export class WinSymbolStrip extends StandardView {
       toUpperCase: true,
       contentText: 'x10',
       anchor: { x: 1, y: 0.5 },
-      style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 46 },
+      style: { fontFamily: 'commonFontBold', fill: 0xffffff, fontSize: 40 },
     };
     this.symbolCountText = UIUtil.getElement(tConfig);
     this.symbolCountText.text = this.configData.size;
@@ -31,11 +31,11 @@ export class WinSymbolStrip extends StandardView {
     this.symbImage = UIUtil.getSprite(this.configData.symbol);
     this.symbImage.anchor.set(0.5);
     this.stripBg.x = -4;
-    this.symbolCountText.x = 80;
+    this.symbolCountText.x = 60;
     this.symbolCountText.y = this.stripBg.height / 2;
     this.winvalueText.x = 330;
     this.winvalueText.y = this.stripBg.height / 2;
-    this.symbImage.x = 120;
+    this.symbImage.x = 100;
     this.symbImage.y = this.stripBg.height / 2;
     this.addChild(this.stripBg);
     this.addChild(this.symbolCountText);

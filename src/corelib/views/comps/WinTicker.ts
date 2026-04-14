@@ -89,6 +89,7 @@ export class WinTicker extends StandardView {
     } else {
       this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
     }
+    this.emit('COUNTUP_UPDATE');
 
     if (clamped < 1) {
       if (this.tickerActive) {

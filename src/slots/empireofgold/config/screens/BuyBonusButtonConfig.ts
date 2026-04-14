@@ -19,8 +19,8 @@ export const BUY_BONUS_BTN_CONFIG: any = {
       type: 'Text',
       content: 'BuyText',
       style: {
-        fontFamily: 'gameFont1',
-        fontSize: 50,
+        fontFamily: 'commonFontBold',
+        fontSize: 40,
         fill: 0xffffff,
         wordWrap: true,
         wordWrapWidth: 200,
@@ -29,14 +29,14 @@ export const BUY_BONUS_BTN_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 112,
+      y: 104,
     },
     {
       name: 'bbBetValue',
       type: 'Text',
       content: ' ',
       style: {
-        fontFamily: 'gameFont1',
+        fontFamily: 'commonFontBold',
         fontSize: 60,
         fill: 0xffff00,
         wordWrap: true,

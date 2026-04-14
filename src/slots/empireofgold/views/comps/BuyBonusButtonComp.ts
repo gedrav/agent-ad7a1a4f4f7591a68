@@ -27,7 +27,11 @@ export class BuyBonusButtonComp extends StandardView {
   protected updateBBBetValue(): void {
     if (this.bbBetValue) {
       const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
+      this.bbBetValue.scale.set(1);
       this.bbBetValue.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
+      if (this.bbBetValue.width > this.bbBg.width * 0.8) {
+        this.bbBetValue.scale.set((this.bbBg.width * 0.8) / this.bbBetValue.width);
+      }
     }
   }
 

@@ -118,7 +118,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       const COL_STAGGER = 0.1;
       const ROW_STAGGER = 0.05;
       const ENTER_DURATION = 0.32;
-      console.log('aaaaaaaaaaaaaaaaaaa');
       for (let k = 0; k < this.configData.data.noOfReels; k++) {
         index = k * 0.2;
         rowIndex = 0;
@@ -160,7 +159,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     const COL_STAGGER = 0.1;
     const ROW_STAGGER = 0.05;
     const ENTER_DURATION = 0.32;
-    console.log('bbbbbbbbbbbbb');
     for (let k = 0; k < len1; k++) {
       this.newExploadedSymbolIndexes[k].sort();
       const len = this.newExploadedSymbolIndexes[k].length;

@@ -22,7 +22,7 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
       style: {
-        fontFamily: 'gameFont1',
+        fontFamily: 'commonFontBold',
         fontSize: 90,
         fill: 0xfde35c,
       },

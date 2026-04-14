@@ -42,7 +42,6 @@ export class AnteBetComp extends StandardView {
     this.toggleArrowOffsetX = this.toggleArrow.x - this.toggleBtn.x;
     this.isAnteEnabled = false;
     this.anteFrameGold = this.elementsList['anteFrameGold'];
-    console.log('xxx -- ', this.anteFrameGold);
     this.anteFrameSilver = this.elementsList['anteFrameSilver'];
     this.anteFrameGold.visible = false;
 

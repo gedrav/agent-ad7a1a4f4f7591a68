@@ -35,6 +35,7 @@ export class BigWinsComp extends ResponsiveView {
     this.winTickerBW?.reset();
     this.showWinTickerType();
     this.winTickerBW?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
+    this.winTickerBW?.on('COUNTUP_UPDATE', this.onCountUpUpdateBW.bind(this));
     this.winTicker?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
 
     this.skipRect = this.elementsList['skipRect'];
@@ -283,6 +284,13 @@ export class BigWinsComp extends ResponsiveView {
       }
     } else if (data.animation.name === animations.end) {
       this.checkForNextAnim();
+    }
+  }
+
+  protected onCountUpUpdateBW(): void {
+    this.winTickerBW.scale.set(1);
+    if (this.winTickerBW.width > this.guideRect.width * 0.9) {
+      this.winTickerBW.scale.set((this.guideRect.width * 0.9) / this.winTickerBW.width);
     }
   }
 

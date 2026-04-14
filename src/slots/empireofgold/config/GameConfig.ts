@@ -24,12 +24,13 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
+    commonFontBold: 'Oswald Bold',
     gameFont1: 'NewRocker Regular',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  bigWinValues: [5, 25, 50, 75],
+  bigWinValues: [20, 50, 75, 100],
   buyBonusData1: {
     features: [
       {
