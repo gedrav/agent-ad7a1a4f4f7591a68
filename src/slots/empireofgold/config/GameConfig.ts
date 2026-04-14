@@ -24,7 +24,7 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Almendra Bold',
+    gameFont1: 'NewRocker Regular',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],

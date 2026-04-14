@@ -22,6 +22,8 @@ export class AnteBetComp extends StandardView {
   protected isAnteEnabled: boolean;
   protected toggleBtnOnX: number;
   protected toggleArrowOffsetX: number;
+  private anteFrameGold: PixSprite;
+  private anteFrameSilver: PixSprite;
 
   constructor(config: any) {
     super(config);
@@ -39,6 +41,10 @@ export class AnteBetComp extends StandardView {
     this.toggleBtnOnX = Math.round(this.toggleTick.x + this.toggleTick.width * 0.5 - this.toggleBtn.width * 0.53);
     this.toggleArrowOffsetX = this.toggleArrow.x - this.toggleBtn.x;
     this.isAnteEnabled = false;
+    this.anteFrameGold = this.elementsList['anteFrameGold'];
+    console.log('xxx -- ', this.anteFrameGold);
+    this.anteFrameSilver = this.elementsList['anteFrameSilver'];
+    this.anteFrameGold.visible = false;
 
     this.setupToggle();
     this.updateValue();
@@ -75,6 +81,8 @@ export class AnteBetComp extends StandardView {
     const onAlpha = this.isAnteEnabled ? 1 : 0;
     const offAlpha = this.isAnteEnabled ? 0 : 1;
     const frameTint = this.isAnteEnabled ? 0x028d09 : 0x950c00;
+    this.anteFrameGold.visible = this.isAnteEnabled;
+    this.anteFrameSilver.visible = !this.isAnteEnabled;
 
     AnimationProxy.killTweensOf(this.toggleBtn);
     AnimationProxy.killTweensOf(this.toggleArrow);

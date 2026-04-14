@@ -14,7 +14,7 @@ const PRELOADER: AssetBundle = {
 };
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
-  assets: [{ TYPE: 'game', NAME: 'Almendra-Bold.ttf', ASSETTYPE: 'font' }],
+  assets: [{ TYPE: 'game', NAME: 'NewRocker-Regular.ttf', ASSETTYPE: 'font' }],
 };
 
 const SPLASH: AssetBundle = {

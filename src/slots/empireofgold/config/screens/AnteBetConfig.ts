@@ -12,15 +12,16 @@ export const ANTE_BET_CONFIG: any = {
   ly: 520,
   scale: 0.9,
   Elements: [
-    { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 8, y: 12 },
-    { name: 'anteFrame', type: 'Sprite', image: 'ante_frame_gold', x: 0, y: 0 },
+    { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 0, y: 0 },
+    { name: 'anteFrameGold', type: 'Sprite', image: 'ante_frame_gold', x: 0, y: 0 },
+    { name: 'anteFrameSilver', type: 'Sprite', image: 'ante_frame_silver', x: 0, y: 0 },
     {
       name: 'betText',
       type: 'Text',
       content: 'betText',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 50,
+        fontSize: 44,
         fill: 0xffffff,
         wordWrap: true,
         wordWrapWidth: 200,
