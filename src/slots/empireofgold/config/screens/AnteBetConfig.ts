@@ -47,7 +47,7 @@ export const ANTE_BET_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 100,
+      y: 110,
     },
     {
       name: 'anteBetContent',
@@ -64,7 +64,7 @@ export const ANTE_BET_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 176,
+      y: 190,
     },
     {
       name: 'anteToggleContainer',
@@ -106,7 +106,7 @@ export const ANTE_BET_CONFIG: any = {
           style: {
             fontFamily: 'commonFontBold',
             fontSize: 45,
-            fill: 0xffffff,
+            fill: 0x3dffb1,
             wordWrap: true,
             wordWrapWidth: 212,
             fontWeight: 'bold',
