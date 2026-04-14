@@ -12,8 +12,8 @@ export const GAME_CONFIG = {
   configPath: '/',
   gamePath: '/',
   gameVersion: '0.44',
-  gameId: 'royal81',
-  gameName: 'Royal 81',
+  gameId: 'royale81',
+  gameName: 'Royale 81',
   uiConfig: UIConfig,
   gameAssetVersion: '0.01',
   creditValue: 20,
@@ -30,7 +30,7 @@ export const GAME_CONFIG = {
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  bigWinValues: [5, 25, 50, 100],
+  bigWinValues: [20, 50, 75, 100],
   buyBonusData1: {
     features: [
       {
