@@ -291,10 +291,13 @@ class AssetLoaderClass {
   }
 
   async loadSounds() {
+    console.log(' load sounds -- ', this.soundConfig.soundFiles);
     await SoundFactory.loadSounds(this.soundConfig.soundFiles, this.soundPath);
+    console.log('primary sounds loaded');
   }
   public loadSecondarySounds() {
     if (this.soundConfig.lazySoundFiles && this.soundConfig.lazySoundFiles.length > 0) {
+      console.log(' load secondary sounds -- ', this.soundConfig.lazySoundFiles);
       SoundFactory.loadSounds(this.soundConfig.lazySoundFiles, this.soundPath);
     }
   }

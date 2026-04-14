@@ -23,6 +23,7 @@ class SoundServiceProxy {
     this.isFxSoundOn = true;
     this.isAmbientSoundOn = true;
     this.soundLibrary = null;
+    this.soundLibrary = {};
     this.ambientSounds = [];
     this.sfxSounds = [];
   }
@@ -54,7 +55,7 @@ class SoundServiceProxy {
   public loadSounds(list: any, gamePath: string) {
     // EventHandler.dispatchEvent(AppEvents.SOUNDS_LOADING_COMPLETE);
     // return;
-    this.soundLibrary = {};
+
     this.loadingIndex = 0;
     const soundPathMP3: string = gamePath + 'mp3/';
     const soundPathOGG: string = gamePath + 'ogg/';
@@ -138,9 +139,8 @@ class SoundServiceProxy {
       return;
     }
 
-    //console.log('PLAY SOUND == ', sObj.name, this.isFxSoundOn, this.isAmbientSoundOn);
-
     const instance = this.soundLibrary[sObj.name];
+    //console.log('PLAY SOUND == ', sObj.name, instance, this.soundLibrary);
     if (instance) {
       if (sObj.type == 'ambient') {
         if (this._ambientPlaying == instance) {
@@ -165,6 +165,7 @@ class SoundServiceProxy {
 
       const soundId = instance.play();
       instance.fade(0, sObj.volume, duration, soundId);
+
       //console.log(soundId, sObj.name, sObj.volume, duration);
     }
 
@@ -179,7 +180,7 @@ class SoundServiceProxy {
     }
     //console.log('stop sound == ', sObj.name);
     const instance = this.soundLibrary[sObj.name];
-    if (instance.playing()) {
+    if (instance?.playing()) {
       instance.stop();
     }
   }

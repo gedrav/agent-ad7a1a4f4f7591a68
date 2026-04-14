@@ -55,6 +55,8 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.6,
       fadeOutDuration: 1000,
     },
+  ],
+  lazySoundFiles: [
     {
       name: 'spinClicked',
       type: 'game',
