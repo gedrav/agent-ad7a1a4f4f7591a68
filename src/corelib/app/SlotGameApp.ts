@@ -267,9 +267,12 @@ class SlotGameApp {
 
   protected async onSplashStartClicked() {
     this.splashComp?.removeSplash();
-    this.appContainer.removeChild(this.splashComp);
-    this.splashComp.destroy();
-    this.splashComp = null;
+    if (this.splashComp) {
+      this.appContainer.removeChild(this.splashComp);
+      this.splashComp.destroy();
+      this.splashComp = null;
+    }
+
     if (this.isViewCreated) {
       this.makeGameVisible();
       this.app.stop();
