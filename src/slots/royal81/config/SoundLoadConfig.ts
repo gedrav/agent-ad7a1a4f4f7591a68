@@ -27,6 +27,17 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.4,
       fadeOutDuration: 1000,
     },
+    // --- Buttons ---
+    {
+      name: 'genericButtonSound',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
+      volume: 0.6,
+      fadeOutDuration: 1000,
+    },
+  ],
+  lazySoundFiles: [
     {
       name: 'musFeatureBGM',
       type: 'game',
@@ -45,18 +56,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.4,
       fadeOutDuration: 1000,
     },
-
-    // --- Buttons ---
-    {
-      name: 'genericButtonSound',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
-      volume: 0.6,
-      fadeOutDuration: 1000,
-    },
-  ],
-  lazySoundFiles: [
     {
       name: 'spinClicked',
       type: 'game',
