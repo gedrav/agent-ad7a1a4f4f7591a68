@@ -28,8 +28,8 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
   protected createReward(): void {
     const tconfig: any = {
       name: 'multiplierVal',
-      type: 'Text',
-      style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 200 },
+      type: 'BitmapText',
+      style: { fontFamily: 'bitmapFont', fill: 0xffffff, fontSize: 200 },
     };
     this.multiplierVal = UIUtil.getElement(tconfig);
     this.multiplierVal.anchor.set(0.5, 0.5);
