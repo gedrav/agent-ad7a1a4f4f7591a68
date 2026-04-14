@@ -76,18 +76,16 @@ export default class WinController {
             if (index === 2 && symbWinAmount > 0) {
               const tConfig = {
                 name: 'symbWinAmount',
-                type: 'Text',
+                type: 'BitmapText',
                 anchor: { x: 0.5, y: 0.5 },
                 style: {
-                  fontFamily: 'gameFont1',
+                  fontFamily: 'bitmapFont',
                   fill: 0xffffff,
-                  fontSize: 80,
-                  stroke: 0x000000,
-                  strokeThickness: 4,
+                  fontSize: 250,
                 },
               };
               let winAmountText = UIUtil.getElement(tConfig) as PixText;
-              winAmountText.text = Util.formatCurrency(symbWinAmount);
+              winAmountText.text = symbWinAmount;
               winAmountText.x = this.symbolsArray[pos.reel][pos.row].x;
               winAmountText.y =
                 this.symbolsArray[pos.reel][pos.row].y +
