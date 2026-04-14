@@ -31,7 +31,11 @@ export class CascadeReelWinTicker extends ReelWinTicker {
     if (appModel.getIsAutoSession() && !appModel.isCascadeGame()) {
       return;
     }
-    this.totalWin += data.value;
+    if (data.toShowTotalWin) {
+      this.totalWin = data.value;
+    } else {
+      this.totalWin += data.value;
+    }
     if (data.duration == 0) {
       this.winTicker.showSpinValue(this.totalWin, true, true);
     } else {

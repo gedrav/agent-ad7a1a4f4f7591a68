@@ -195,6 +195,7 @@ export class BigWinsComp extends ResponsiveView {
     EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
       value: appModel.getSpinWin(),
       duration: 0,
+      toShowTotalWin: appModel.isCascadeGame(),
     });
   }
   public clearSpinWin(): void {
