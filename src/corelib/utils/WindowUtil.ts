@@ -41,6 +41,8 @@ declare global {
     startPixiApp: () => void;
     getRtpValue: () => number;
     getMaxExposure: () => number;
+    getCachedGameContent: () => any;
+    getCachedCommonContent: () => any;
   }
 }
 
@@ -99,5 +101,7 @@ export class WindowUtil {
     window.startPixiApp = () => {};
     window.getRtpValue = () => appModel.getRTP();
     window.getMaxExposure = () => appModel.maxExposure();
+    window.getCachedGameContent = () => ContentProxy.content;
+    window.getCachedCommonContent = () => ContentProxy.content;
   }
 }

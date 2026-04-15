@@ -103,8 +103,6 @@ export class BigWinsComp extends ResponsiveView {
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
 
       EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
-      EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
-      EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND_NOW');
       EventHandler.dispatchEvent('PLAY_TERM_SOUND');
 
       if (appModel.getIsFreeSpinsSession()) {
@@ -297,8 +295,7 @@ export class BigWinsComp extends ResponsiveView {
   protected onCountUpCompleted(): void {
     clearTimeout(this.timeoutId);
     EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
-    EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
-    EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND_NOW');
+    EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
     EventHandler.dispatchEvent('PLAY_TERM_SOUND');
     if (appModel.getIsFreeSpinsSession()) {
       EventHandler.dispatchEvent('START_FREESPIN_BG_MUSIC');

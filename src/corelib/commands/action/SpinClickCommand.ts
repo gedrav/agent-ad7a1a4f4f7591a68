@@ -14,11 +14,6 @@ class SpinClickCmd extends ActionCommand {
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent('SPIN_CLICKED');
       StateManager.goToState(STATES.SPIN_START_STATE);
-      if (appModel.turboMode) {
-        EventHandler.dispatchEvent('TURBO_START_SLOT_SPIN');
-      } else {
-        EventHandler.dispatchEvent('START_SLOT_SPIN');
-      }
       const isDesktop = DeviceProxy.config.isDesktop;
       const isTablet = DeviceProxy.config.isTablet;
       // Request fullscreen on desktop on first spin

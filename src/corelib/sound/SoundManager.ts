@@ -4,43 +4,47 @@ import { SoundFactory } from '@core/sound/SoundServiceProxy';
 
 export class SoundManager {
   constructor(config: any) {
-    this.addEvents(config);
+    this.addEvents(config.soundFiles);
+    if (config.lazySoundFiles && Array.isArray(config.lazySoundFiles)) {
+      this.addEvents(config.lazySoundFiles);
+    }
   }
 
-  addEvents(config: any) {
-    const soundsLength = config.soundFiles.length;
+  addEvents(soundArray: any[]) {
+    if (!Array.isArray(soundArray)) return;
+    const soundsLength = soundArray.length;
     if (soundsLength > 0) {
       for (let k = 0; k < soundsLength; k++) {
-        if (config.soundFiles[k].playEvents) {
-          const playLength = config.soundFiles[k].playEvents.length;
+        if (soundArray[k].playEvents) {
+          const playLength = soundArray[k].playEvents.length;
           if (playLength > 0) {
             for (let i = 0; i < playLength; i++) {
-              if (SlotEvents[config.soundFiles[k].playEvents[i]]) {
+              if (SlotEvents[soundArray[k].playEvents[i]]) {
                 EventHandler.addEventListener(
-                  SlotEvents[config.soundFiles[k].playEvents[i]],
-                  this.onSoundPlayEvent.bind(this, config.soundFiles[k]),
+                  SlotEvents[soundArray[k].playEvents[i]],
+                  this.onSoundPlayEvent.bind(this, soundArray[k]),
                 );
               } else {
                 EventHandler.addEventListener(
-                  config.soundFiles[k].playEvents[i],
-                  this.onSoundPlayEvent.bind(this, config.soundFiles[k]),
+                  soundArray[k].playEvents[i],
+                  this.onSoundPlayEvent.bind(this, soundArray[k]),
                 );
               }
             }
           }
-          if (config.soundFiles[k].stopEvents) {
-            const stopLength = config.soundFiles[k].stopEvents.length;
+          if (soundArray[k].stopEvents) {
+            const stopLength = soundArray[k].stopEvents.length;
             if (stopLength > 0) {
               for (let i = 0; i < stopLength; i++) {
-                if (SlotEvents[config.soundFiles[k].stopEvents[i]]) {
+                if (SlotEvents[soundArray[k].stopEvents[i]]) {
                   EventHandler.addEventListener(
-                    SlotEvents[config.soundFiles[k].stopEvents[i]],
-                    this.onSoundStopEvent.bind(this, config.soundFiles[k]),
+                    SlotEvents[soundArray[k].stopEvents[i]],
+                    this.onSoundStopEvent.bind(this, soundArray[k]),
                   );
                 } else {
                   EventHandler.addEventListener(
-                    config.soundFiles[k].stopEvents[i],
-                    this.onSoundStopEvent.bind(this, config.soundFiles[k]),
+                    soundArray[k].stopEvents[i],
+                    this.onSoundStopEvent.bind(this, soundArray[k]),
                   );
                 }
               }
