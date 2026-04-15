@@ -1,6 +1,5 @@
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
-import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const BIG_WIN_CONFIG = {
   name: 'bigWinsComp',

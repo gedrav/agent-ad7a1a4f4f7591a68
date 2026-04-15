@@ -1,9 +1,7 @@
 import { HomeClickedCommand } from '@core/commands/action/HomeClickedCommand';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
-import { Point } from 'pixi.js';
 import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand';
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
-import { UIUtil } from '@core/utils/UIUtilService';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
 import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
