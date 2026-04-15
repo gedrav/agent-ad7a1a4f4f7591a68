@@ -30,7 +30,6 @@ export class gameApp extends SlotGameApp {
       if (appModel.primaryAssetsLoaded) {
         EventHandler.dispatchEvent(SlotEvents.ACTIVATE_SPLASH);
       }
-      console.log('in game app splash created -- ', this.splashComp);
     } else {
       EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
       setTimeout(() => {

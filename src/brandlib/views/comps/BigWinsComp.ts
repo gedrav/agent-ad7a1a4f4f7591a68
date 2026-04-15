@@ -265,6 +265,8 @@ export class BigWinsComp extends ResponsiveView {
               reset: false,
               defaultMix: 0.15,
             });
+          } else {
+            this.notifyWinDone();
           }
         } else {
           this.notifyWinDone();

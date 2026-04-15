@@ -61,7 +61,12 @@ export const SLOT_MACHINE_CONFIG: any = {
             symbolScale: 1,
           },
         },
-
+        initialReel: [
+          ['H1', 'L3', 'L4'],
+          ['L1', 'H2', 'L2'],
+          ['H3', 'L4', 'L1'],
+          ['L4', 'L1', 'H3'],
+        ],
         symbolsData: {
           WD: {
             name: 'WD',
