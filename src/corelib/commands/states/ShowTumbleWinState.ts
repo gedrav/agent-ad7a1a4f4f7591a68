@@ -9,6 +9,7 @@ class ShowTumbleWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.isCascadeGame()) {
+      console.log('Tumble win -- ', appModel.getTumbleSpinWin());
       if (appModel.getTumbleSpinWin() > 0) {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_TUMBLE_WIN);

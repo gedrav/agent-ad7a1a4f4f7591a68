@@ -62,7 +62,9 @@ export default class WinController {
       this.clearTumbleWinTexts();
       const tumbleData = appModel.getSpinBlastData();
       const blastSymbols = appModel.getSpinBlastSymbols();
-      if (blastSymbols) {
+      console.log('tumbleData', tumbleData);
+      console.log('blastSymbols', blastSymbols);
+      if (blastSymbols && blastSymbols.length > 0) {
         this.fadeOutAllSymbols();
         blastSymbols.forEach((blastSymbol: any, index: number) => {
           const symbWinAmount = tumbleData[index].winAmount;
@@ -111,6 +113,8 @@ export default class WinController {
           });
         });
       }
+    } else {
+      this.notifySpinWinDone();
     }
     clearTimeout(this.timeoutId);
     //this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);

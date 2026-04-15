@@ -19,16 +19,16 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
     },
     {
       name: 'multiplierValText',
-      type: 'Text',
+      type: 'BitmapText',
       anchor: { x: 0.5, y: 0.5 },
       style: {
-        fontFamily: 'commonFontBold',
+        fontFamily: 'bitmapFont',
         fontSize: 90,
         fill: 0xfde35c,
+        letterSpacing: -8,
       },
-      layoutData: {
-        Desktop: { refComponent: 'multiBg', hAlign: 'center', vAlign: 'middle' },
-      },
+      x: 85,
+      y: 58,
     },
   ],
 };
