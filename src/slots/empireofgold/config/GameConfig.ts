@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.14',
+  gameVersion: '0.16',
   gameId: 'empireofgold',
   gameName: 'Empire of Gold',
   uiConfig: UIConfig,
@@ -29,7 +29,7 @@ export const GAME_CONFIG = {
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
-  bbImage: 'screen1',
+  bbImage: 'screen2',
   bigWinValues: [20, 50, 75, 100],
   buyBonusData1: {
     features: [
