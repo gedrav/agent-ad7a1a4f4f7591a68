@@ -120,7 +120,6 @@ class SlotGameApp {
     GameProxy.config.bundlesLoaded = [];
     GameProxy.createAPIPath();
     appModel.storeLanguage();
-    console.log('request game init');
     MessageProxy.requestGameInit();
     await AssetLoader.initAssets(assetConfig, soundConfig);
     await this.initiateCoreApp();
@@ -167,7 +166,6 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
-    console.log('game init received --', appModel.getPreferences()?.showIntro);
     if (appModel.getPreferences()?.showIntro !== false) {
       this.checkToCreateSplash();
     } else {
@@ -187,19 +185,15 @@ class SlotGameApp {
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
-    console.log('splash assets loaded -- ', appModel.getPreferences()?.showIntro);
     this.checkToCreateSplash();
     await AssetLoader.loadPrimary();
   }
   protected checkToCreateSplash() {
     if (this.gameInitReceived && this.splashAssetsLoaded) {
       if (appModel.getPreferences().showIntro !== false) {
-        console.log('check to create splash --', this.splashComp);
         if (this.splashComp) {
-          console.log('splash already created --');
           EventHandler.dispatchEvent(SlotEvents.ACTIVATE_SPLASH);
         } else {
-          console.log('create splasn now');
           this.createSplash();
           this.removePreloader();
         }
@@ -209,24 +203,19 @@ class SlotGameApp {
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
     appModel.primaryAssetsLoaded = true;
-    console.log('primary assets loaded --');
     await AssetLoader.loadSounds();
   }
   protected onSoundsLoaded() {
     this.soundsLoaded = true;
-    console.log('sounds loaded --');
     this.checkToCreateGame();
   }
   protected createView(): void {
     // overridden in game
   }
   protected checkToCreateGame(): void {
-    console.log('check to create game --', this.gameInitReceived, this.assetsLoaded, this.soundsLoaded);
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
-        console.log('no error in gameinit -- ', this.isViewCreated);
         if (!this.isViewCreated) {
-          console.log('check to create game --');
           this.createView();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
@@ -240,10 +229,8 @@ class SlotGameApp {
           }
           this.loadLazyFiles();
         } else {
-          console.log('view already created --');
         }
       } else {
-        console.log('error in gameinit -- ', this.isViewCreated);
       }
     }
   }
@@ -306,12 +293,10 @@ class SlotGameApp {
       data.title = Util.getContent('infoText');
       data.message = obj.data?.message;
       data.callback = this.refreshGame.bind(this);
-      console.log('error popup data == ', data);
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
   }
   protected refreshGame(): void {
-    console.log('refresh game');
     RefreshGameCommand.execute();
   }
 

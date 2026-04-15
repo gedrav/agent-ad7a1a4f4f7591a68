@@ -71,6 +71,14 @@ export const SLOT_MACHINE_CONFIG: any = {
             symbolScale: 0.8,
           },
         },
+        initialReel: [
+          ['H1', 'L3', 'L4', 'H3', 'L2'],
+          ['L1', 'H2', 'L2', 'L1', 'H4'],
+          ['H3', 'L4', 'L1', 'L5', 'L1'],
+          ['L4', 'L1', 'H3', 'H1', 'L3'],
+          ['L2', 'L4', 'H1', 'L5', 'L3'],
+          ['L1', 'L4', 'H2', 'H4', 'L1'],
+        ],
         symbolsData: {
           SC: {
             name: 'SC',

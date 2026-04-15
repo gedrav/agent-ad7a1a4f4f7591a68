@@ -238,7 +238,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       this.reelSpinningState.push(0);
       const rows: number = this.reelsData.isFixedSymbol ? this.reelsData.noOfRows : this.reelsData.noOfRows + 2;
       for (let j = 0; j < rows; j++) {
-        const symb = this.getNextSymbol(k);
+        const symb = this.getFirstTimeSymbol(k, j);
         this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
@@ -608,6 +608,15 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected getNextSymbol(reelno: number) {
     const symbol = this.getNextSymbolName(reelno);
+    const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
+    return new this.reelsData.symbolClass({ data: data });
+  }
+
+  protected getFirstTimeSymbol(reelno: number, rowIndex: number) {
+    if (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1) {
+      return this.getNextSymbol(reelno);
+    }
+    const symbol = this.reelsData.initialReel[reelno][rowIndex - 1];
     const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
