@@ -77,8 +77,8 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     }
   }
 
-  public showFeatureTriggerAnimation(): void {
-    this.showWinning();
+  public showFeatureTriggerAnimation(onComplete?: () => void): void {
+    this.showWinning(onComplete);
   }
 
   public showWinning(onComplete?: () => void): void {

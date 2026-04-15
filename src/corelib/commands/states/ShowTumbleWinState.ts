@@ -9,7 +9,6 @@ class ShowTumbleWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.isCascadeGame()) {
-      console.log('Tumble win -- ', appModel.getTumbleSpinWin());
       if (appModel.getTumbleSpinWin() > 0) {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_TUMBLE_WIN);
@@ -22,7 +21,6 @@ class ShowTumbleWinStateCommand extends StateCommand {
   }
   public doNextStep(): void {
     this.completedIndex++;
-    console.log('do next step -- ', this.completedIndex);
     if (this.completedIndex === 1) {
       //stopping at 1 as we are not showing bigwin animation during tumble wins
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);

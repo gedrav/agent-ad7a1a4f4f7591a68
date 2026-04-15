@@ -6,6 +6,8 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import SlotReel from '@core/views/slotmachine/SlotReel';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 export default class WinController {
   private noOfRows: number;
   private noOfReels: number;
@@ -111,7 +113,29 @@ export default class WinController {
           });
         });
       } else {
-        this.notifySpinWinDone();
+        if (appModel.getSpinWin() > 0) {
+          const positions: number[] = appModel.getFeatureTriggerPositions();
+          if (positions && positions.length > 0) {
+            const len = positions.length;
+            for (let j = 0; j < len; j++) {
+              const pos = this.getReelPosition(positions[j]);
+              if (this.reelsData.isFixedSymbol) {
+                this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+                this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+                  this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+                );
+              } else {
+                this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+                this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+                  this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
+                );
+              }
+            }
+            EventHandler.dispatchEvent(SlotEvents.SHOW_WIN_IN_REEL_FOR_SCATTER_WIN);
+          }
+        } else {
+          this.notifySpinWinDone();
+        }
       }
     }
 
@@ -142,6 +166,25 @@ export default class WinController {
             );
           });
         });
+      } else {
+        const positions: number[] = appModel.getFeatureTriggerPositions();
+        if (positions && positions.length > 0) {
+          const len = positions.length;
+          for (let j = 0; j < len; j++) {
+            const pos = this.getReelPosition(positions[j]);
+            if (this.reelsData.isFixedSymbol) {
+              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+              this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+              );
+            } else {
+              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+              this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
+              );
+            }
+          }
+        }
       }
     } else {
       const winDataLength = appModel.getWinDataLength();

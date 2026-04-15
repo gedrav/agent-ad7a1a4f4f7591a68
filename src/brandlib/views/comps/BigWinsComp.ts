@@ -37,6 +37,7 @@ export class BigWinsComp extends ResponsiveView {
     this.winTickerBW?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
     this.winTickerBW?.on('COUNTUP_UPDATE', this.onCountUpUpdateBW.bind(this));
     this.winTicker?.on('COUNTUP_COMPLETED', this.onCountUpCompleted.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_WIN_IN_REEL_FOR_SCATTER_WIN, this.showScatterWin.bind(this));
 
     this.skipRect = this.elementsList['skipRect'];
     UIUtil.addInteraction(this.skipRect, this.onSkipClicked.bind(this));
@@ -121,9 +122,14 @@ export class BigWinsComp extends ResponsiveView {
     });
   }
 
+  protected async showScatterWin() {
+    await this.showSpinWin();
+  }
+
   public async showSpinWin() {
     const winType = appModel.getWinType();
     //const winType: string = CONSTANTS.UNBELIEVABLE_WIN;
+    console.log('showSpinWin in big win comp', winType);
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);

@@ -123,7 +123,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
     this.symbol.tint = 0x666666;
   }
 
-  public showFeatureTriggerAnimation(): void {
+  public showFeatureTriggerAnimation(onComplete?: () => void): void {
     this.applyGlowAnimation({ innerStrength: 30 });
   }
 

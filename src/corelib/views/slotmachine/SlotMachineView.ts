@@ -25,11 +25,16 @@ export class SlotMachineView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_LINE_WIN, this.showLineWin.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER, this.showScatterTrigger.bind(this));
     EventHandler.addEventListener(SlotEvents.RESET_REEL_FOR_ERROR, this.resetReelForError.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.showTumbleWin.bind(this));
   }
 
   protected showSpinWin(): void {
     this.slotReel.showSpinWin();
     this.bigWinsComp?.showSpinWin();
+  }
+  protected showTumbleWin(): void {
+    this.slotReel.showTumbleWin();
+    this.bigWinsComp.showTumbleWin();
   }
   protected clearSpinWin(): void {
     this.slotReel.clearSpinWin();

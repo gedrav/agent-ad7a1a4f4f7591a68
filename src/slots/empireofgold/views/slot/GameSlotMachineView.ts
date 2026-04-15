@@ -21,7 +21,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.anteBetComp = this.elementsList['anteBetComp'];
     this.character = this.slotReel.elementsList['character'];
     this.tumbleSlotReel = this.elementsList['slotReel'];
-    EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.showTumbleWin.bind(this));
+
     EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_ELEMENTS, this.showMainGameElements.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_MAINGAME_ELEMENTS, this.hideMainGameElements.bind(this));
   }
@@ -37,11 +37,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected showSpinWin(): void {
     this.bigWinsComp.showSpinWin();
-  }
-
-  protected showTumbleWin(): void {
-    this.tumbleSlotReel.showTumbleWin();
-    this.bigWinsComp.showTumbleWin();
   }
 
   protected showMainGameElements(): void {
