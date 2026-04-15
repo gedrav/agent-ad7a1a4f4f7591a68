@@ -219,7 +219,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       const tconfig: any = {
         name: 'multiplierVal',
         type: 'Text',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 200 },
+        style: { fontFamily: 'gameFont1', fill: 0xfde35c, fontSize: 200 },
         anchor: { x: 0.5, y: 0.5 },
       };
       const totalMultiText = UIUtil.getElement(tconfig);
@@ -253,7 +253,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       const tconfig: any = {
         name: 'multiplierVal',
         type: 'Text',
-        style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 200 },
+        style: { fontFamily: 'gameFont1', fill: 0xfde35c, fontSize: 200 },
         anchor: { x: 0.5, y: 0.5 },
       };
       const multiText = UIUtil.getElement(tconfig);

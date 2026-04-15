@@ -9,7 +9,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
   px: 140,
   py: 1840,
   lx: 8,
-  ly: 230,
+  ly: 200,
   scale: 0.9,
   data: { id: 'FG1' },
   Elements: [

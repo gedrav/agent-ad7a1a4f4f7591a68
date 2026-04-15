@@ -131,6 +131,7 @@ export class BigWinsComp extends ResponsiveView {
       this.winTicker.showSpinValue(appModel.getSpinWin());
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
     } else {
+      EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: false });
       this.winState = true;
       this.skipRect.visible = true;
       this.currentLevel = 0;
@@ -191,6 +192,7 @@ export class BigWinsComp extends ResponsiveView {
     clearTimeout(this.timeoutId);
     clearTimeout(this.winTimerId);
     StateManager.doNextStep();
+    EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: true });
     EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
       value: appModel.getSpinWin(),
       duration: 0,
@@ -347,7 +349,6 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected checkForNextAnim() {
     this.currentLevel++;
-    console.log('aaaaaaaa11111', this.currentLevel, this.targetLevel);
     if (this.currentLevel >= this.targetLevel) {
       this.notifyWinDone();
     } else {
