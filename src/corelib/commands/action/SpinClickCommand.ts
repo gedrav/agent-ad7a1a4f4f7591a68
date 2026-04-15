@@ -13,6 +13,8 @@ class SpinClickCmd extends ActionCommand {
 
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent('SPIN_CLICKED');
+      EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
+      EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
       StateManager.goToState(STATES.SPIN_START_STATE);
       const isDesktop = DeviceProxy.config.isDesktop;
       const isTablet = DeviceProxy.config.isTablet;

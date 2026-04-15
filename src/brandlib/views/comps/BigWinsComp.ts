@@ -204,6 +204,8 @@ export class BigWinsComp extends ResponsiveView {
       duration: 0,
       toShowTotalWin: appModel.isCascadeGame(),
     });
+    EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
+    EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
   }
   public clearSpinWin(): void {
     this.winState = false;
