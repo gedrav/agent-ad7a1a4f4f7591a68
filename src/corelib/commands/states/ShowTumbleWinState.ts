@@ -22,6 +22,7 @@ class ShowTumbleWinStateCommand extends StateCommand {
   }
   public doNextStep(): void {
     this.completedIndex++;
+    console.log('do next step -- ', this.completedIndex);
     if (this.completedIndex === 1) {
       //stopping at 1 as we are not showing bigwin animation during tumble wins
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);

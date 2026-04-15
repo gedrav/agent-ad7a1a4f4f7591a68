@@ -273,7 +273,6 @@ class AppModelService {
     this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
     this.fsInfo.totalFreespins = data.result.featureResults[data.result.featureResults.length - 1].totalCount;
     this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
-    console.log('featureResult', this.fsInfo.totalFreespinWinAmount);
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;

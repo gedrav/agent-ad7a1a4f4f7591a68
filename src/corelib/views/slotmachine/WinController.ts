@@ -62,8 +62,6 @@ export default class WinController {
       this.clearTumbleWinTexts();
       const tumbleData = appModel.getSpinBlastData();
       const blastSymbols = appModel.getSpinBlastSymbols();
-      console.log('tumbleData', tumbleData);
-      console.log('blastSymbols', blastSymbols);
       if (blastSymbols && blastSymbols.length > 0) {
         this.fadeOutAllSymbols();
         blastSymbols.forEach((blastSymbol: any, index: number) => {
@@ -78,18 +76,17 @@ export default class WinController {
             if (index === 2 && symbWinAmount > 0) {
               const tConfig = {
                 name: 'symbWinAmount',
-                type: 'Text',
+                type: 'BitmapText',
                 anchor: { x: 0.5, y: 0.5 },
                 style: {
-                  fontFamily: 'gameFont1',
+                  fontFamily: 'bitmapFont',
                   fill: 0xffffff,
-                  fontSize: 80,
-                  stroke: 0x000000,
-                  strokeThickness: 4,
+                  fontSize: 150,
+                  letterSpacing: -20,
                 },
               };
               let winAmountText = UIUtil.getElement(tConfig) as PixText;
-              winAmountText.text = Util.formatCurrency(symbWinAmount);
+              winAmountText.text = symbWinAmount; //Util.formatCurrency(symbWinAmount);
               winAmountText.x = this.symbolsArray[pos.reel][pos.row].x;
               winAmountText.y =
                 this.symbolsArray[pos.reel][pos.row].y +
@@ -104,6 +101,7 @@ export default class WinController {
                 scaleY: 0.9,
                 alpha: 0.25,
                 duration: 1,
+                ease: 'Power2.easeOut',
                 onComplete: () => {
                   this.removeTumbleWinText(winAmountText);
                   winAmountText = null;
@@ -112,11 +110,11 @@ export default class WinController {
             }
           });
         });
+      } else {
+        this.notifySpinWinDone();
       }
-    } else {
-      this.notifySpinWinDone();
     }
-    clearTimeout(this.timeoutId);
+
     //this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
   }
 

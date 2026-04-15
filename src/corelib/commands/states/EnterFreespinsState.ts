@@ -13,6 +13,7 @@ class EnterFreespinsStateCommand extends StateCommand {
   }
 
   public doNextStep(data: any = null) {
+    console.log('EnterFreespinsStateCommand.doNextStep');
     super.doNextStep(data);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
