@@ -153,7 +153,7 @@ export const MENU_CONFIG_MOBILE: any = {
         name: 'btnText',
         type: 'Text',
         anchor: { x: 0, y: 0 },
-        content: 'soundOnOffText',
+        content: 'soundOnText',
         style: {
           fontFamily: 'commonFont',
           fontSize: 32,
@@ -186,7 +186,7 @@ export const MENU_CONFIG_MOBILE: any = {
       textConfig: {
         name: 'homeText',
         type: 'Text',
-        content: 'soundOnOffText',
+        content: 'soundOnText',
         style: {
           fontFamily: 'commonFont',
           fontSize: 32,

@@ -90,7 +90,7 @@ export const MENU_CONFIG: any = {
         name: 'buttonText',
         type: 'Text',
         anchor: { x: 0, y: 0 },
-        content: 'soundOnOffText',
+        content: 'soundOnText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
         fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
@@ -118,7 +118,7 @@ export const MENU_CONFIG: any = {
       textConfig: {
         name: 'buttonText',
         type: 'Text',
-        content: 'soundOnOffText',
+        content: 'soundOffText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
         fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
