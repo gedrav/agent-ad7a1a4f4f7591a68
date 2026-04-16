@@ -138,13 +138,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
     if (DeviceProxy.config.isDevice) {
       return;
     }
-    if (flag) {
+    /*if (flag) {
       this.fullscreenEnterBtn.visible = false;
       this.fullscreenExitBtn.visible = true;
     } else {
       this.fullscreenEnterBtn.visible = true;
       this.fullscreenExitBtn.visible = false;
-    }
+    }*/
   }
   protected onLongPress() {
     GameProxy.config.isLongPressTriggered = true;
@@ -784,7 +784,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
+    /*UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
       refComponent: 'homeBtn',
       hAlign: 'rightAfter',
@@ -798,7 +798,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       hAlign: 'rightAfter',
       hPaddingPerc: smallBtnHPaddingPerc,
     });
-    UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });*/
 
     UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.cheatBtn, {
@@ -907,7 +907,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
+    /*UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
       refComponent: 'homeBtn',
       hAlign: 'rightAfter',
@@ -925,7 +925,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       refComponent: 'fullscreenEnterBtn',
       vAlign: 'middle',
       vPaddingPerc: 0,
-    });
+    });*/
 
     UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.cheatBtn, {
