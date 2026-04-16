@@ -314,7 +314,7 @@ export default class SlotReelCascade extends SlotReel {
     }
     const COL_STAGGER = 0.1;
     const ROW_STAGGER = 0.05;
-    const ENTER_DURATION = 0.32;
+    const ENTER_DURATION = 0.32 / 5;
     len = this.moveArray.length;
     this.totalCascades = 0;
     this.cascadeIndex = 0;
@@ -329,7 +329,7 @@ export default class SlotReelCascade extends SlotReel {
 
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: ENTER_DURATION / 2,
+              duration: (ENTER_DURATION / 2) * this.moveArray[k][i],
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
@@ -337,7 +337,7 @@ export default class SlotReelCascade extends SlotReel {
             });
           } else {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: ENTER_DURATION,
+              duration: ENTER_DURATION * this.moveArray[k][i],
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
@@ -369,6 +369,10 @@ export default class SlotReelCascade extends SlotReel {
     this.allBlastsCompleted();
   }
 
+  protected onCascadeFallStepComplete(symb: ReelSymbolSprite): void {
+    symb.showLanding();
+  }
+
   protected getNewExploadedSymbolIndexes(): void {
     this.newExploadedSymbolIndexes = [];
     const tempSymbols: Array<Array<ReelSymbolSprite>> = [];
@@ -392,24 +396,6 @@ export default class SlotReelCascade extends SlotReel {
     }
   }
 
-  protected onCascadeFallStepComplete(symb: ReelSymbolSprite): void {
-    symb.showLanding();
-    const originalScale: number = symb.scale.y;
-    const value = symb.scale.y * 0.94 + (Math.random() * 6) / 100;
-    AnimationProxy.animateTween(symb, {
-      duration: 0.1,
-      scaleY: value,
-      onComplete: this.onSymbolCascadeCameInCompleted.bind(this, symb, originalScale),
-    });
-  }
-
-  protected onSymbolCascadeCameInCompleted(symb: ReelSymbolSprite, originalScale: number): void {
-    AnimationProxy.animateTween(symb, {
-      duration: 0.1,
-      scaleY: originalScale,
-    });
-  }
-
   protected allBlastsCompleted(): void {
     StateManager.next();
   }
@@ -419,31 +405,38 @@ export default class SlotReelCascade extends SlotReel {
     this.totalNewSymbolsToCascade = 0;
     this.newSymbolCascadeIndex = 0;
     const reelsView = appModel.getCascadeReelsView();
+
+    const COL_STAGGER = 0.1;
+    const ROW_STAGGER = 0.05;
+    const ENTER_DURATION = 0.32 / 5;
+
     for (let k = 0; k < len1; k++) {
       this.newExploadedSymbolIndexes[k].sort();
       const len = this.newExploadedSymbolIndexes[k].length;
       for (let i = 0; i < len; i++) {
         this.totalNewSymbolsToCascade++;
+        const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
         if (this.symbolsArray[k][i]) {
           this.symbolsArray[k][i].resetScale();
           this.symbolsArray[k][i].setNormalTexture();
           this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
           this.symbolsArray[k][i].y = -(len - i + 1) * this.configData.data.symbolHeight;
-          const delay = k * 0.06 + (len - i) * 0.05;
+          const finalY = i * this.configData.data.symbolHeight;
+          console.log('here == ', i, finalY - this.symbolsArray[k][i].y);
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration / 2,
-              delay: delay * 0.25,
-              y: i * this.configData.data.symbolHeight,
-              ease: this.symbEase,
+              duration: (ENTER_DURATION / 2) * this.moveArray[k][i],
+              delay,
+              y: finalY,
+              ease: Back.easeOut.config(0.6),
               onComplete: this.onFallCCNewSymbolStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           } else {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration,
-              delay: delay,
-              y: i * this.configData.data.symbolHeight,
-              ease: this.symbEase,
+              duration: ENTER_DURATION * this.moveArray[k][i],
+              delay,
+              y: finalY,
+              ease: Back.easeOut.config(0.6),
               onComplete: this.onFallCCNewSymbolStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           }
