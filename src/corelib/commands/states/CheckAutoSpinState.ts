@@ -19,10 +19,10 @@ class CheckAutoSpinStateCommand extends StateCommand {
         appModel.resetAutoplayData();
         EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_ENDED);
         StateManager.goToState('IDLE_STATE');
-        const obj: any = {};
+        /*const obj: any = {};
         obj.title = Util.getContent('infoText');
         obj.message = Util.getContent('AutoplayCompleted');
-        EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+        EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);*/
       }
     } else {
       if (GameProxy.config.isAutoStopped) {
