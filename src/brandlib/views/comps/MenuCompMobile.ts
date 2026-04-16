@@ -35,13 +35,10 @@ export class MenuCompMobile extends MenuComp {
       'homeBtn',
       'soundOnBtn',
       'soundOffBtn',
-      'transactionHistoryBtn',
       'infoBtn',
+      'gameHistoryBtn',
       'showSplashBtn',
       'hideSplashBtn',
-      'gameHistoryBtn',
-      'depositBtn',
-      'promotionBtn',
     ];
     const len = btns.length;
     this.elementsList['homeBtn'].scale.set(1);

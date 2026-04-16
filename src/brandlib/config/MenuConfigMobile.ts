@@ -198,38 +198,6 @@ export const MENU_CONFIG_MOBILE: any = {
       },
     },
     {
-      name: 'transactionHistoryBtn',
-      type: 'Comp',
-      class: MenuButton,
-      btnConfig: {
-        action: {
-          press: TransactionHistoryCommand,
-        },
-        options: {
-          defaultView: 'transRect',
-          hoverView: 'transRect',
-          pressedView: 'transRect',
-          disabledView: 'transRect',
-          animations: CoreUIConfig.noScalebuttonStates,
-          nineSliceSprite: [12, 12, 12, 12],
-        },
-      },
-      icon: 'transactionHistoryIcon',
-      textConfig: {
-        name: 'homeText',
-        type: 'Text',
-        content: 'transactionHistoryText',
-        style: {
-          fontFamily: 'commonFont',
-          fontSize: 32,
-          fill: 0xffffff,
-          fontWeight: 700,
-          align: 'left',
-          anchor: { x: 0, y: 0 },
-        },
-      },
-    },
-    {
       name: 'infoBtn',
       type: 'Comp',
       class: MenuButton,
@@ -251,6 +219,38 @@ export const MENU_CONFIG_MOBILE: any = {
         name: 'homeText',
         type: 'Text',
         content: 'gameRulesText',
+        style: {
+          fontFamily: 'commonFont',
+          fontSize: 32,
+          fill: 0xffffff,
+          fontWeight: 700,
+          align: 'left',
+          anchor: { x: 0, y: 0 },
+        },
+      },
+    },
+    {
+      name: 'gameHistoryBtn',
+      type: 'Comp',
+      class: MenuButton,
+      btnConfig: {
+        action: {
+          press: ShowHistoryCommand,
+        },
+        options: {
+          defaultView: 'transRect',
+          hoverView: 'transRect',
+          pressedView: 'transRect',
+          disabledView: 'transRect',
+          animations: CoreUIConfig.noScalebuttonStates,
+          nineSliceSprite: [12, 12, 12, 12],
+        },
+      },
+      icon: 'gameHistoryIcon',
+      textConfig: {
+        name: 'homeText',
+        type: 'Text',
+        content: 'gameHistory',
         style: {
           fontFamily: 'commonFont',
           fontSize: 32,
@@ -318,102 +318,6 @@ export const MENU_CONFIG_MOBILE: any = {
         name: 'homeText',
         type: 'Text',
         content: 'hideSplashText',
-        style: {
-          fontFamily: 'commonFont',
-          fontSize: 32,
-          fill: 0xffffff,
-          fontWeight: 700,
-          align: 'left',
-          anchor: { x: 0, y: 0 },
-        },
-      },
-    },
-    {
-      name: 'gameHistoryBtn',
-      type: 'Comp',
-      class: MenuButton,
-      btnConfig: {
-        action: {
-          press: ShowHistoryCommand,
-        },
-        options: {
-          defaultView: 'transRect',
-          hoverView: 'transRect',
-          pressedView: 'transRect',
-          disabledView: 'transRect',
-          animations: CoreUIConfig.noScalebuttonStates,
-          nineSliceSprite: [12, 12, 12, 12],
-        },
-      },
-      icon: 'gameHistoryIcon',
-      textConfig: {
-        name: 'homeText',
-        type: 'Text',
-        content: 'gameHistory',
-        style: {
-          fontFamily: 'commonFont',
-          fontSize: 32,
-          fill: 0xffffff,
-          fontWeight: 700,
-          align: 'left',
-          anchor: { x: 0, y: 0 },
-        },
-      },
-    },
-    {
-      name: 'depositBtn',
-      type: 'Comp',
-      class: MenuButton,
-      btnConfig: {
-        action: {
-          press: ShowDespoitCommand,
-        },
-        options: {
-          defaultView: 'transRect',
-          hoverView: 'transRect',
-          pressedView: 'transRect',
-          disabledView: 'transRect',
-          animations: CoreUIConfig.noScalebuttonStates,
-          nineSliceSprite: [12, 12, 12, 12],
-        },
-      },
-      icon: 'depositIcon',
-      textConfig: {
-        name: 'homeText',
-        type: 'Text',
-        content: 'depositText',
-        style: {
-          fontFamily: 'commonFont',
-          fontSize: 32,
-          fill: 0xffffff,
-          fontWeight: 700,
-          align: 'left',
-          anchor: { x: 0, y: 0 },
-        },
-      },
-    },
-    {
-      name: 'promotionBtn',
-      type: 'Comp',
-      class: MenuButton,
-      btnConfig: {
-        action: {
-          press: ShowPromotionCommand,
-        },
-        options: {
-          defaultView: 'transRect',
-          hoverView: 'transRect',
-          pressedView: 'transRect',
-          disabledView: 'transRect',
-          animations: CoreUIConfig.noScalebuttonStates,
-          nineSliceSprite: [12, 12, 12, 12],
-        },
-      },
-      icon: 'promotionIcon',
-      textConfig: {
-        name: 'homeText',
-        type: 'Text',
-        content: 'promotionText',
         style: {
           fontFamily: 'commonFont',
           fontSize: 32,
