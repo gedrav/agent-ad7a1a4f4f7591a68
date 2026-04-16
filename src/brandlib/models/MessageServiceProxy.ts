@@ -94,6 +94,11 @@ export class MessageServiceProxy extends AbstractProxy {
         finalObj.buyBonus.multiplier = GameProxy.config.buyBonusBetMultiplier;
       }
     }
+
+    finalObj.extraData = {};
+    if (GameProxy.config.isAnteEnabled) {
+      finalObj.extraData.ante = true;
+    }
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
@@ -112,22 +117,17 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.cheat.reelType = cheatObj.reelType;
           finalObj.cheat.reelStopPos = cheatObj.reelStopPos;
           finalObj.cheat = JSON.stringify(finalObj.cheat);
-          finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj;
         } else if (GameProxy.config.cheatObject == 'WildBurst1') {
-          finalObj.extraData = {};
           finalObj.extraData.forceAddWildFeature = true;
           finalObj.extraData.forceWildsAdded = 1;
         } else if (GameProxy.config.cheatObject == 'WildBurst2') {
-          finalObj.extraData = {};
           finalObj.extraData.forceAddWildFeature = true;
           finalObj.extraData.forceWildsAdded = 2;
         } else if (GameProxy.config.cheatObject == 'WildBurst3') {
-          finalObj.extraData = {};
           finalObj.extraData.forceAddWildFeature = true;
           finalObj.extraData.forceWildsAdded = 3;
         } else {
-          finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj;
         }
       }

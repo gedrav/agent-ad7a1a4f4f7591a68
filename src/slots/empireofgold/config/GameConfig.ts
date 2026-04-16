@@ -17,6 +17,7 @@ export const GAME_CONFIG = {
   uiConfig: UIConfig,
   gameAssetVersion: '0.01',
   creditValue: 20,
+  anteBetMultiplier: 1.25,
   totalLines: 1,
   initURL: 'init',
   spinURL: 'spin',

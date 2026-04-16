@@ -7,6 +7,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { Sine } from 'gsap/gsap-core';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class AnteBetComp extends StandardView {
   protected betAmnt: any;
@@ -19,7 +20,6 @@ export class AnteBetComp extends StandardView {
   protected toggleOff: PixSprite;
   protected toggleOn: PixSprite;
   protected toggleHit: any;
-  protected isAnteEnabled: boolean;
   protected toggleBtnOnX: number;
   protected toggleArrowOffsetX: number;
   private anteFrameGold: PixSprite;
@@ -40,7 +40,7 @@ export class AnteBetComp extends StandardView {
     this.toggleHit = this.toggleContainer.elementsList['anteToggleHit'];
     this.toggleBtnOnX = Math.round(this.toggleTick.x + this.toggleTick.width * 0.5 - this.toggleBtn.width * 0.53);
     this.toggleArrowOffsetX = this.toggleArrow.x - this.toggleBtn.x;
-    this.isAnteEnabled = false;
+    GameProxy.config.isAnteEnabled = false;
     this.anteFrameGold = this.elementsList['anteFrameGold'];
     this.anteFrameSilver = this.elementsList['anteFrameSilver'];
     this.anteFrameGold.visible = false;
@@ -53,7 +53,7 @@ export class AnteBetComp extends StandardView {
     this.disableBtn();
   }
   private updateValue() {
-    this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());
+    this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
   }
 
   protected setupToggle(): void {
@@ -69,19 +69,25 @@ export class AnteBetComp extends StandardView {
   }
 
   protected onToggleClicked(): void {
-    this.isAnteEnabled = !this.isAnteEnabled;
+    GameProxy.config.isAnteEnabled = !GameProxy.config.isAnteEnabled;
     this.updateToggleVisuals(true);
+    if (GameProxy.config.isAnteEnabled) {
+      appModel.setAnteBet(GameProxy.config.anteBetMultiplier);
+    } else {
+      appModel.setAnteBet(1);
+    }
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
   }
 
   protected updateToggleVisuals(animate: boolean): void {
-    const targetX = this.isAnteEnabled ? this.toggleBtnOnX : this.toggleBtn.configData.x;
+    const targetX = GameProxy.config.isAnteEnabled ? this.toggleBtnOnX : this.toggleBtn.configData.x;
     const arrowTargetX = targetX + this.toggleArrowOffsetX;
-    const tickTargetX = this.isAnteEnabled ? this.toggleTick.configData.x : this.toggleTick.x;
-    const onAlpha = this.isAnteEnabled ? 1 : 0;
-    const offAlpha = this.isAnteEnabled ? 0 : 1;
-    const frameTint = this.isAnteEnabled ? 0x028d09 : 0x950c00;
-    this.anteFrameGold.visible = this.isAnteEnabled;
-    this.anteFrameSilver.visible = !this.isAnteEnabled;
+    const tickTargetX = GameProxy.config.isAnteEnabled ? this.toggleTick.configData.x : this.toggleTick.x;
+    const onAlpha = GameProxy.config.isAnteEnabled ? 1 : 0;
+    const offAlpha = GameProxy.config.isAnteEnabled ? 0 : 1;
+    const frameTint = GameProxy.config.isAnteEnabled ? 0x028d09 : 0x950c00;
+    this.anteFrameGold.visible = GameProxy.config.isAnteEnabled;
+    this.anteFrameSilver.visible = !GameProxy.config.isAnteEnabled;
 
     AnimationProxy.killTweensOf(this.toggleBtn);
     AnimationProxy.killTweensOf(this.toggleArrow);
@@ -124,14 +130,14 @@ export class AnteBetComp extends StandardView {
     });
     AnimationProxy.animateTween(this.toggleOff, {
       duration: 0.08,
-      delay: this.isAnteEnabled ? 0.02 : 0.06,
+      delay: GameProxy.config.isAnteEnabled ? 0.02 : 0.06,
       x: this.toggleOff.configData.x,
       y: this.toggleOff.configData.y,
       alpha: offAlpha,
     });
     AnimationProxy.animateTween(this.toggleOn, {
       duration: 0.08,
-      delay: this.isAnteEnabled ? 0.06 : 0.02,
+      delay: GameProxy.config.isAnteEnabled ? 0.06 : 0.02,
       x: this.toggleOn.configData.x,
       y: this.toggleOn.configData.y,
       alpha: onAlpha,

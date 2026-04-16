@@ -236,7 +236,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateBalanceForSpin(): void {
-    this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
+    this.updateBalance(appModel.getBalance() - appModel.getTotalBet(true));
     appModel.setAfterSpinBalance();
   }
   protected updateBalanceForBBSpin(): void {
@@ -247,7 +247,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.balanceComp.updateValue(value == undefined ? appModel.getBalance() : value);
   }
   protected updateTotalbet(value: number = null) {
-    this.betComp.updateValue(value == undefined ? appModel.getTotalBet() : value);
+    this.betComp.updateValue(value == undefined ? appModel.getTotalBet(true) : value);
   }
   protected onSoundStateChanged(flag: boolean): void {
     this.soundOnBtn.visible = flag;

@@ -66,6 +66,7 @@ class SlotGameApp {
     WrapperProxy.notifyLoadingStart();
     GameProxy.config.textsToClear = [];
     GameProxy.config.imagesToClear = [];
+    GameProxy.config.isAnteEnabled = false;
 
     // iOS Safari: high-performance mode + uncapped DPR + antialias causes GPU thermal
     // throttling, WebGL context loss, and touch interaction failure on the canvas.

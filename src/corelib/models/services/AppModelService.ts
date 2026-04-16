@@ -205,6 +205,7 @@ class AppModelService {
     this.gameInfo.devMode = data.gameInfo.devMode;
     this.gameInfo.allowCheat = data.playerInfo.allowCheat;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
+    this.gameInfo.anteBet = 1;
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameInfo.betsArray = data.playerInfo.possibleBets;
     this.gameInfo.minBet = data.playerInfo.minBet;
@@ -329,9 +330,29 @@ class AppModelService {
       this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1] * this.gameInfo?.creditValue * this.getSelectedLines()
     );
   }
-  public getTotalBet(): number {
-    return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
+  public setAnteBet(value: number): void {
+    this.gameInfo.anteBet = value;
   }
+  public getAnteBet(): number {
+    return this.gameInfo.anteBet;
+  }
+  public getCreditValue(): number {
+    return this.gameInfo.creditValue;
+  }
+
+  public getTotalBet(isAnte: boolean = false): number {
+    if (isAnte) {
+      return (
+        this.gameInfo?.betsArray[this.gameInfo.betPos] *
+        this.gameInfo?.creditValue *
+        this.gameInfo?.anteBet *
+        this.getSelectedLines()
+      );
+    } else {
+      return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
+    }
+  }
+
   public getAllBets(): number[] {
     const bets: number[] = [];
     const len = this.gameInfo.betsArray.length;
