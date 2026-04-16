@@ -679,7 +679,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
         },
       },
     },
-    /*{
+    {
       name: 'fullscreenEnterBtn',
       type: 'Button',
       isDesktopOnly: true,
@@ -778,7 +778,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
           maxScale: 1,
         },
       },
-    },*/
+    },
     {
       name: 'cheatBtn',
       type: 'Button',
