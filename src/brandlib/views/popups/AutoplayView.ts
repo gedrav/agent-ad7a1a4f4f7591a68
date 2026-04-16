@@ -79,25 +79,48 @@ export class AutoplayView extends ResponsiveChildrenView {
 
     // User typing → enforce max 2dp, move slider silently, never overwrite freely-typed text
     this.spendingLimitInput?.onChange.connect((text: string) => {
-      if (this._inputUpdating) return; // prevent re-entry when we set input.value below
+      if (this._inputUpdating) return;
 
-      // Strip anything beyond 2 decimal places (e.g. "12.559" → "12.55")
-      const valid = text.match(/^\d*\.?\d{0,2}/)?.[0] ?? '';
-      if (valid !== text) {
-        this._inputUpdating = true;
-        this.spendingLimitInput.value = valid; // fires onChange again → caught by guard above
-        this._inputUpdating = false;
-        return; // onChange will re-fire with the valid truncated value
-      }
-
-      // Sync slider position silently (no input.value write)
       const min = this.spendingLimitSlider?.min ?? 0;
       const max = this.spendingLimitSlider?.max ?? 0;
-      const parsed = parseFloat(text);
-      if (!isNaN(parsed) && this.spendingLimitSlider) {
-        const clamped = Math.min(Math.max(parseFloat(parsed.toFixed(2)), min), max);
+
+      let valid = text.match(/^\d*\.?\d{0,2}/)?.[0] ?? '';
+
+      //  HANDLE EMPTY INPUT
+      if (valid === '') {
         this._sliderUpdating = true;
-        this.spendingLimitSlider.value = clamped;
+        if (this.spendingLimitSlider) {
+          this.spendingLimitSlider.value = min;
+        }
+        this._sliderUpdating = false;
+        return;
+      }
+
+      let num = parseFloat(valid);
+
+      // Clamp max
+      if (!isNaN(num) && num > max) {
+        valid = max.toFixed(2);
+        num = max;
+      }
+
+      // Clamp min
+      if (!isNaN(num) && num < min) {
+        valid = min.toString();
+        num = min;
+      }
+
+      // Force input correction
+      if (valid !== text) {
+        this._inputUpdating = true;
+        this.spendingLimitInput.value = valid;
+        this._inputUpdating = false;
+      }
+
+      // Sync slider
+      if (!isNaN(num) && this.spendingLimitSlider) {
+        this._sliderUpdating = true;
+        this.spendingLimitSlider.value = num;
         this._sliderUpdating = false;
       }
     });

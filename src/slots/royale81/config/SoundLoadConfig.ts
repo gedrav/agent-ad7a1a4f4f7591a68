@@ -238,7 +238,7 @@ export const GAME_SOUND_CONFIG = {
       name: 'rollupTerm',
       type: 'game',
       loop: false,
-      playEvents: ['PLAY_BIG_WIN_COUNTUP_END_SOUND'],
+      playEvents: ['PLAY_FS_WIN_COUNTUP_END_SOUND'],
       volume: 0.6,
       fadeOutDuration: 100,
     },
