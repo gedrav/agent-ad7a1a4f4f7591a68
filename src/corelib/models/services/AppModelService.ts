@@ -690,6 +690,9 @@ class AppModelService {
     return this.gameResult?.firstReelMultiplierValue !== this.gameResult?.newCascadeMultiplierValue;
   }
 
+  public getScatterPay(): number {
+    return this.gameResult.cascadeData[this.tumbleIndex].scatterPay;
+  }
   public getTotalCascadeWin(): number {
     return this.gameResult.totalWin;
   }

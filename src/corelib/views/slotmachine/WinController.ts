@@ -113,33 +113,9 @@ export default class WinController {
           });
         });
       } else {
-        if (appModel.getSpinWin() > 0) {
-          const positions: number[] = appModel.getFeatureTriggerPositions();
-          if (positions && positions.length > 0) {
-            const len = positions.length;
-            for (let j = 0; j < len; j++) {
-              const pos = this.getReelPosition(positions[j]);
-              if (this.reelsData.isFixedSymbol) {
-                this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-                this.symbolsArray[pos.reel][pos.row].showWinning(() =>
-                  this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
-                );
-              } else {
-                this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-                this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
-                  this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
-                );
-              }
-            }
-            EventHandler.dispatchEvent(SlotEvents.SHOW_WIN_IN_REEL_FOR_SCATTER_WIN);
-          }
-        } else {
-          this.notifySpinWinDone();
-        }
+        this.notifySpinWinDone();
       }
     }
-
-    //this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
   }
 
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {

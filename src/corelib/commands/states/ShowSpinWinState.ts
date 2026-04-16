@@ -12,10 +12,12 @@ class ShowSpinWinStateCommand extends StateCommand {
     super.execute(data);
     if (appModel.isCascadeGame()) {
       const winType = appModel.getWinType();
+      console.log('winType', winType, appModel.getScatterPay());
       if (
-        appModel.getTotalCascadeWin() > 0 &&
-        winType !== CONSTANTS.BELOW_TOTALBET_WIN &&
-        winType !== CONSTANTS.STANDARD_WIN
+        (appModel.getTotalCascadeWin() > 0 &&
+          winType !== CONSTANTS.BELOW_TOTALBET_WIN &&
+          winType !== CONSTANTS.STANDARD_WIN) ||
+        appModel.getScatterPay() > 0
       ) {
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
