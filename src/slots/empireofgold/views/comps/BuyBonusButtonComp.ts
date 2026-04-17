@@ -52,8 +52,10 @@ export class BuyBonusButtonComp extends StandardView {
   }
 
   private enableBtn(): void {
-    this.interactive = true;
-    this.alpha = 1;
+    if (GameProxy.config.isAnteEnabled) {
+      this.interactive = true;
+      this.alpha = 1;
+    }
   }
 
   private disableBtn(): void {
