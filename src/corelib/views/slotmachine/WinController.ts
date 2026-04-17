@@ -84,11 +84,11 @@ export default class WinController {
                   fontFamily: 'bitmapFont',
                   fill: 0xffffff,
                   fontSize: 150,
-                  letterSpacing: -20,
+                  letterSpacing: -25,
                 },
               };
               let winAmountText = UIUtil.getElement(tConfig) as PixText;
-              winAmountText.text = symbWinAmount; //Util.formatCurrency(symbWinAmount);
+              winAmountText.text = Util.formatCurrencyNoSymbol(symbWinAmount); //Util.formatCurrency(symbWinAmount);
               winAmountText.x = this.symbolsArray[pos.reel][pos.row].x;
               winAmountText.y =
                 this.symbolsArray[pos.reel][pos.row].y +
