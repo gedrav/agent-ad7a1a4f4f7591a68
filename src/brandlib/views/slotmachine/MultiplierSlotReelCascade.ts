@@ -6,6 +6,7 @@ import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 import SlotReelCascade from '@core/views/slotmachine/SlotReelCascade';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { Util } from '@core/utils/UtilService';
 import { CascadeReelWinTicker } from '../comps/CascadeReelWinTicker';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { FsTotalMultiplierComp } from '../comps/FsTotalMultiplierComp';
@@ -231,13 +232,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected createFsTotalMultiplier() {
     const totalMultValue = this.fsTotalMultiComp.getCurrentTotalMultiplierVal();
     if (totalMultValue) {
-      const tconfig: any = {
-        name: 'multiplierVal',
-        type: 'Text',
-        style: { fontFamily: 'gameFont1', fill: 0xfde35c, fontSize: 200 },
-        anchor: { x: 0.5, y: 0.5 },
-      };
-      const totalMultiText = UIUtil.getElement(tconfig);
+      const totalMultiText = UIUtil.getElement(this.configData.data.multiplierTextConfig);
       const totalMultiComp = this.fsTotalMultiComp.getTotalMultiTextComp();
       totalMultiText.style.fontSize = totalMultiComp.style.fontSize;
       const multiplierPos = GameProxy.config.FsTotalMultiplierComp.toGlobal(this);
@@ -257,29 +252,27 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected createMultipliersToAnimate() {
     const multiplierPos = appModel.getMultiplierPositionData();
     this.totalMultiplierCount = multiplierPos.length;
-    multiplierPos.forEach((data) => {
-      const pos = {
-        reel: data.position[0],
-        row: this.reelsData.isFixedSymbol ? data.position[1] : data.position[1] + 1,
-      };
-      const symb = this.symbolsArray[pos.reel][pos.row] as CascadeReelSymbol;
-      symb.clearRewardData();
-      const textElemet = symb.getTextElement();
-      const tconfig: any = {
-        name: 'multiplierVal',
-        type: 'Text',
-        style: { fontFamily: 'gameFont1', fill: 0xfde35c, fontSize: 200 },
-        anchor: { x: 0.5, y: 0.5 },
-      };
-      const multiText = UIUtil.getElement(tconfig);
-      multiText.text = `${data.multiplier}x`;
-      multiText.style.fontSize = textElemet.style.fontSize * symb.scale.x;
-      multiText.x = this.symbolsContainer.x + symb.x;
-      multiText.y = this.symbolsContainer.y + symb.y;
-      this.addChild(multiText);
-      this.multiplierTextArr.push(multiText);
-    });
+    this.createMultiplierAt(0);
     this.animateMultiplier();
+  }
+
+  protected createMultiplierAt(index: number) {
+    const multiplierPos = appModel.getMultiplierPositionData();
+    const data = multiplierPos[index];
+    const pos = {
+      reel: data.position[0],
+      row: this.reelsData.isFixedSymbol ? data.position[1] : data.position[1] + 1,
+    };
+    const symb = this.symbolsArray[pos.reel][pos.row] as CascadeReelSymbol;
+    symb.clearRewardData();
+    const textElemet = symb.getTextElement();
+    const multiText = UIUtil.getElement(this.configData.data.multiplierTextConfig);
+    multiText.text = `${data.multiplier}x`;
+    multiText.style.fontSize = textElemet.style.fontSize * symb.scale.x;
+    multiText.x = this.symbolsContainer.x + symb.x;
+    multiText.y = this.symbolsContainer.y + symb.y;
+    this.addChild(multiText);
+    this.multiplierTextArr[index] = multiText;
   }
 
   protected animateFsTotalMultiplier(totalMultiText: PixText) {
@@ -313,6 +306,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.cascadeReelWinTicker.updateMultiplier(multiplierPos[this.multiplierAnimCount].multiplier);
     this.multiplierAnimCount++;
     if (this.multiplierAnimCount < this.totalMultiplierCount) {
+      this.createMultiplierAt(this.multiplierAnimCount);
       this.animateMultiplier();
     } else {
       this.cascadeReelWinTicker.animateToShowTotalWin();
@@ -337,6 +331,41 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       elem.destroy();
     });
     this.multiplierTextArr = [];
+  }
+
+  //overriding these methods to pass multiplierTextConfig to symbols in cascade
+  protected getRandomSymbol(reelno: number) {
+    const symbols = this.reelsData.reelsConfig.maingame[reelno];
+    const symbol = symbols[Util.getRandomRange(0, symbols.length - 1)];
+    const data: any = {
+      ...this.reelsData.symbolsData[symbol],
+      reelNumber: reelno,
+      multiplierTextConfig: this.reelsData.multiplierTextConfig,
+    };
+    return new this.reelsData.symbolClass({ data });
+  }
+
+  protected getNextSymbol(reelno: number) {
+    const symbol = this.getNextSymbolName(reelno);
+    const data: any = {
+      ...this.reelsData.symbolsData[symbol],
+      reelNumber: reelno,
+      multiplierTextConfig: this.reelsData.multiplierTextConfig,
+    };
+    return new this.reelsData.symbolClass({ data });
+  }
+
+  protected getFirstTimeSymbol(reelno: number, rowIndex: number) {
+    if (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1) {
+      return this.getNextSymbol(reelno);
+    }
+    const symbol = this.reelsData.initialReel[reelno][rowIndex - 1];
+    const data: any = {
+      ...this.reelsData.symbolsData[symbol],
+      reelNumber: reelno,
+      multiplierTextConfig: this.reelsData.multiplierTextConfig,
+    };
+    return new this.reelsData.symbolClass({ data });
   }
 
   protected getCorrespondingMultiplierSymbol(multiplierVal: number, symbMultipliers: Record<string, number[]>): string {
