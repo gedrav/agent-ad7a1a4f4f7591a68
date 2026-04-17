@@ -225,6 +225,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     if (appModel.getIsFreeSpinsSession()) {
       this.createFsTotalMultiplier();
     } else {
+      this.cascadeReelWinTicker.setupForAnimation();
       this.createMultipliersToAnimate();
     }
   }

@@ -708,7 +708,7 @@ class AppModelService {
     if (this.getIsFreeSpinsSession()) {
       return this.gameResult?.freeSpinMultiplier !== this.gameResult?.prevFreeSpinMultiplier;
     }
-    return this.gameResult?.firstReelMultiplierValue !== this.gameResult?.newCascadeMultiplierValue;
+    return this.gameResult?.multiplier && this.gameResult?.cascadeData?.length > 1;
   }
 
   public getScatterPay(): number {
