@@ -16,7 +16,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
   constructor(configData: any) {
     super(configData);
     this.createExplosion();
-    this.createReward();
+    this.createMultiplierText();
   }
   protected createExplosion(): void {
     if (this.configData.data.explosion) {
@@ -25,16 +25,12 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
       this.explosionMovie.addEventListener('complete', this.onExplosionAnimComplete.bind(this));
     }
   }
-  protected createReward(): void {
-    const tconfig: any = {
-      name: 'multiplierVal',
-      type: 'BitmapText',
-      style: { fontFamily: 'bitmapFont', fill: 0xffffff, fontSize: 160, letterSpacing: -20 },
-    };
+  protected createMultiplierText(): void {
+    const tconfig = this.configData.data.multiplierTextConfig;
     this.multiplierVal = UIUtil.getElement(tconfig);
-    this.multiplierVal.anchor.set(0.5, 0.5);
-    this.multiplierVal.x = -8;
-    this.multiplierVal.y = -20;
+    this.multiplierVal.anchor.set(tconfig.anchor?.x ?? 0.5, tconfig.anchor?.y ?? 0.5);
+    this.multiplierVal.x = tconfig.x ?? 0;
+    this.multiplierVal.y = tconfig.y ?? 0;
     this.addChild(this.multiplierVal);
   }
 
@@ -65,14 +61,12 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
 
   public showFaded(): void {
     super.showFaded();
-    const colorMatrixFilter = new ColorMatrixFilter();
-    colorMatrixFilter.brightness(0.4, false);
-    this.multiplierVal.filters = [colorMatrixFilter];
+    this.multiplierVal.alpha = 0.4;
   }
 
   public cleanUpSymbolWin(): void {
     super.cleanUpSymbolWin();
-    this.multiplierVal.filters = null;
+    this.multiplierVal.alpha = 1;
   }
 
   public getTextElement() {

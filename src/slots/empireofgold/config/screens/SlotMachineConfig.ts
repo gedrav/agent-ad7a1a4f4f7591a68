@@ -51,6 +51,14 @@ export const SLOT_MACHINE_CONFIG: any = {
         isFixedSymbol: true,
         reelHeight: 1200,
         reelsConfig: ReelsConfig,
+        multiplierTextConfig: {
+          name: 'multiplierVal',
+          type: 'BitmapText',
+          anchor: { x: 0.5, y: 0.5 },
+          x: -8,
+          y: -20,
+          style: { fontFamily: 'bitmapFont', fill: 0xffffff, fontSize: 160, letterSpacing: -20 },
+        },
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 310, y: 190 },
