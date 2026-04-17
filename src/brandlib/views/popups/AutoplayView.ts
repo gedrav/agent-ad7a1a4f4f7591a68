@@ -81,12 +81,18 @@ export class AutoplayView extends ResponsiveChildrenView {
     this.spendingLimitInput?.onChange.connect((text: string) => {
       if (this._inputUpdating) return;
 
-      const min = this.spendingLimitSlider?.min ?? 0;
-      const max = this.spendingLimitSlider?.max ?? 0;
+      // restrict to 2 decimal places
+      const valid = text.match(/^\d*\.?\d{0,2}/)?.[0] ?? '';
+      if (valid !== text) {
+        this._inputUpdating = true;
 
-      let valid = text.match(/^\d*\.?\d{0,2}/)?.[0] ?? '';
+        this.spendingLimitInput.value = valid;
+        this._inputUpdating = false;
+        return;
+      }
+      const max = Number(this.spendingLimitSlider?.max ?? 0);
+      const min = Number(this.spendingLimitSlider?.min ?? 0);
 
-      //  HANDLE EMPTY INPUT
       if (valid === '') {
         this._sliderUpdating = true;
         if (this.spendingLimitSlider) {
@@ -96,31 +102,23 @@ export class AutoplayView extends ResponsiveChildrenView {
         return;
       }
 
-      let num = parseFloat(valid);
+      const parsed = parseFloat(valid);
 
-      // Clamp max
-      if (!isNaN(num) && num > max) {
-        valid = max.toFixed(2);
-        num = max;
-      }
+      if (!isNaN(parsed) && this.spendingLimitSlider) {
+        let value = Number(parsed.toFixed(2));
 
-      // Clamp min
-      if (!isNaN(num) && num < min) {
-        valid = min.toString();
-        num = min;
-      }
+        // clamp ONLY to max and reflect in input
+        if (value > max) {
+          value = max;
 
-      // Force input correction
-      if (valid !== text) {
-        this._inputUpdating = true;
-        this.spendingLimitInput.value = valid;
-        this._inputUpdating = false;
-      }
+          this._inputUpdating = true;
+          this.spendingLimitInput.value = value.toString();
+          this._inputUpdating = false;
+        }
 
-      // Sync slider
-      if (!isNaN(num) && this.spendingLimitSlider) {
+        // sync slider
         this._sliderUpdating = true;
-        this.spendingLimitSlider.value = num;
+        this.spendingLimitSlider.value = value.toString();
         this._sliderUpdating = false;
       }
     });
