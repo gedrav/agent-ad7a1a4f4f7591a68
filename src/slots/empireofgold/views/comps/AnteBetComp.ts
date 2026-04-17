@@ -77,6 +77,7 @@ export class AnteBetComp extends StandardView {
       appModel.setAnteBet(1);
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_ANTE_BET_STATUS);
   }
 
   protected updateToggleVisuals(animate: boolean): void {

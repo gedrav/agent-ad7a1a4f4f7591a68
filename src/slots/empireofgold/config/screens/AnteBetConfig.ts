@@ -47,7 +47,7 @@ export const ANTE_BET_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 110,
+      y: 102,
     },
     {
       name: 'anteBetContent',
@@ -64,7 +64,7 @@ export const ANTE_BET_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 190,
+      y: 184,
     },
     {
       name: 'anteToggleContainer',

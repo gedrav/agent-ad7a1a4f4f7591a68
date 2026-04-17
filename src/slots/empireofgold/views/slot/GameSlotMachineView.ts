@@ -36,6 +36,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected showSpinWin(): void {
+    this.slotReel.showSpinWin();
     this.bigWinsComp.showSpinWin();
   }
 

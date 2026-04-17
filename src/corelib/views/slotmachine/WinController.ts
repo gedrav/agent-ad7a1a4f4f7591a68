@@ -130,8 +130,8 @@ export default class WinController {
     this.totalWinSymbols = 0;
     if (appModel.isCascadeGame()) {
       const blastSymbols = appModel.getSpinBlastSymbols();
-      if (blastSymbols) {
-        this.fadeOutAllSymbols();
+      this.fadeOutAllSymbols();
+      if (blastSymbols && blastSymbols.length > 0) {
         blastSymbols.forEach((blastSymbol: any) => {
           blastSymbol.forEach((position: number[]) => {
             this.totalWinSymbols++;
@@ -142,23 +142,22 @@ export default class WinController {
             );
           });
         });
-      } else {
-        const positions: number[] = appModel.getFeatureTriggerPositions();
-        if (positions && positions.length > 0) {
-          const len = positions.length;
-          for (let j = 0; j < len; j++) {
-            const pos = this.getReelPosition(positions[j]);
-            if (this.reelsData.isFixedSymbol) {
-              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-              this.symbolsArray[pos.reel][pos.row].showWinning(() =>
-                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
-              );
-            } else {
-              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-              this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
-                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
-              );
-            }
+      }
+      const positions: number[] = appModel.getFeatureTriggerPositions();
+      if (positions && positions.length > 0) {
+        const len = positions.length;
+        for (let j = 0; j < len; j++) {
+          const pos = this.getReelPosition(positions[j]);
+          if (this.reelsData.isFixedSymbol) {
+            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+            this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+            );
+          } else {
+            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+            this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
+            );
           }
         }
       }

@@ -21,7 +21,15 @@ export class BuyBonusButtonComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_ANTE_BET_STATUS, this.onAnteBetStatusUpdate.bind(this));
     this.disableBtn();
+  }
+  protected onAnteBetStatusUpdate(): void {
+    if (GameProxy.config.isAnteEnabled) {
+      this.disableBtn();
+    } else {
+      this.enableBtn();
+    }
   }
 
   protected updateBBBetValue(): void {
@@ -50,7 +58,7 @@ export class BuyBonusButtonComp extends StandardView {
 
   private disableBtn(): void {
     this.interactive = false;
-    this.alpha = 0.9;
+    this.alpha = 0.6;
   }
 
   protected onBuyBonusClicked(): void {

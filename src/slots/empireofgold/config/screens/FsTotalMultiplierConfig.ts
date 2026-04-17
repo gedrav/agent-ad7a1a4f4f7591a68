@@ -5,11 +5,11 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
   type: 'Comp',
   class: FsTotalMultiplierComp,
   x: 86,
-  y: -110,
+  y: -120,
   px: 158,
-  py: -140,
+  py: -150,
   lx: 86,
-  ly: -110,
+  ly: -120,
   Elements: [
     {
       name: 'multiBg',
@@ -23,12 +23,12 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
       anchor: { x: 0.5, y: 0.5 },
       style: {
         fontFamily: 'bitmapFont',
-        fontSize: 90,
+        fontSize: 100,
         fill: 0xfde35c,
         letterSpacing: -8,
       },
-      x: 85,
-      y: 58,
+      x: 106,
+      y: 50,
     },
   ],
 };
