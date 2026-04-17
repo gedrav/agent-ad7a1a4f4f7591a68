@@ -97,11 +97,11 @@ export default class WinController {
               this.winSymbolsContainer.addChild(winAmountText);
               this.tumbleWinAmountTexts.push(winAmountText);
               AnimationProxy.animateTween(winAmountText, {
-                delay: 0.5,
+                delay: 1,
                 y: winAmountText.y - this.symbolsArray[pos.reel][pos.row].height * 0.7,
                 scaleX: 0.9,
                 scaleY: 0.9,
-                alpha: 0.25,
+                alpha: 0.5,
                 duration: 1,
                 ease: 'Power2.easeOut',
                 onComplete: () => {
