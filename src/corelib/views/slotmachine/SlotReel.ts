@@ -108,6 +108,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FULLSCREEN_MODE, this.onFullScreenModeChange.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_SYMBOL_PAYOUT, this.hidePayout.bind(this));
 
     this.winController = new this.configData.winController({
       reels: this.reelsData.noOfReels,
@@ -541,7 +542,8 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   // ---------------- end of spin --------------------
   protected onSymbolClicked(symb: ReelSymbolSprite): void {
-    if (appModel.gameResult && appModel.getSpinWin() > 0) return;
+    //if (appModel.gameResult && appModel.getSpinWin() > 0) return;
+    EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     if (this.currentPayoutSymbol) {
       this.symbolsContainer.addChild(this.currentPayoutSymbol);
     }

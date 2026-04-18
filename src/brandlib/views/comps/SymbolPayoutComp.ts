@@ -4,6 +4,8 @@ import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 
 export class SymbolPayoutComp extends StandardView {
   private infoText: PixText;
@@ -33,7 +35,12 @@ export class SymbolPayoutComp extends StandardView {
         this.infoText.text = result;
       }
     } else {
-      this.infoText.text = Util.getContent(symbol + 'payoutContent');
+      const str = Util.getContent(symbol + 'payoutContent');
+      if (str && str.length > 0) {
+        this.infoText.text = str;
+      } else {
+        EventHandler.dispatchEvent(SlotEvents.HIDE_SYMBOL_PAYOUT);
+      }
     }
     if (symbolAtLeft) {
       this.infoText.x = this.bg.width - this.infoText.width - this.bg.width * this.configData.textXPadding;

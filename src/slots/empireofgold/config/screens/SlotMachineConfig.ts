@@ -15,6 +15,7 @@ import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
 import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 import { CharacterController } from '@game/views/comps/CharacterController';
+import { WinValueComp } from '@game/views/comps/WinValueComp';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -30,7 +31,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lHeight: 1520,
       pWidth: 1400,
       pHeight: 1900,
-      alpha: 0,
+      alpha: 1,
     },
 
     {
@@ -49,6 +50,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,
+        winValueComponent: WinValueComp,
         reelHeight: 1200,
         reelsConfig: ReelsConfig,
         multiplierTextConfig: {

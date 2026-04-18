@@ -74,21 +74,11 @@ export default class WinController {
             this.symbolsArray[pos.reel][pos.row].showWinning(() =>
               this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
             );
+            console.log(this.reelsData);
             this.totalWinSymbols++;
             if (index === 2 && symbWinAmount > 0) {
-              const tConfig = {
-                name: 'symbWinAmount',
-                type: 'BitmapText',
-                anchor: { x: 0.5, y: 0.5 },
-                style: {
-                  fontFamily: 'bitmapFont',
-                  fill: 0xffffff,
-                  fontSize: 150,
-                  letterSpacing: -25,
-                },
-              };
-              let winAmountText = UIUtil.getElement(tConfig) as PixText;
-              winAmountText.text = Util.formatCurrencyNoSymbol(symbWinAmount); //Util.formatCurrency(symbWinAmount);
+              let winAmountText: any = new this.reelsData.winValueComponent();
+              winAmountText.showValue(Util.formatCurrencyNoSymbol(symbWinAmount));
               winAmountText.x = this.symbolsArray[pos.reel][pos.row].x;
               winAmountText.y =
                 this.symbolsArray[pos.reel][pos.row].y +

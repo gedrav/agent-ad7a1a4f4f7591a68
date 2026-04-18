@@ -621,7 +621,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected placeSpinButtonsBeforeBetComp(): void {
-    const bigBtnHPaddingPerc: number = 0;
+    const bigBtnHPaddingPerc: number = 0.15;
     const midBtnPaddingPerc: number = 0.05;
 
     UIUtil.setRelativeScale(this.spinBtn, 0.08, 0.12, null, 1, 0.3);
