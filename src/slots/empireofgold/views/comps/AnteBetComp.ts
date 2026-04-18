@@ -153,6 +153,6 @@ export class AnteBetComp extends StandardView {
 
   private disableBtn(): void {
     this.interactive = false;
-    this.alpha = 0.9;
+    this.alpha = 0.6;
   }
 }

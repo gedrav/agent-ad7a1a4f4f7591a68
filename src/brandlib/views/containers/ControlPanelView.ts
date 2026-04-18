@@ -424,7 +424,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     UIUtil.setRelativeScale(this.spinBtn, 0.24, 0.16, null, 1, 0.4);
     UIUtil.alignHorizontal(this.spinBtn, { hAlign: 'center', hPaddingPerc: 0 });
-    UIUtil.alignVertical(this.spinBtn, { vAlign: 'top', vPaddingPerc: 0.74 });
+    UIUtil.alignVertical(this.spinBtn, { vAlign: 'bottom', vPaddingPerc: -0.12 });
 
     if (this.spinBtn.y - this.spinBtn.height * 0.5 < this.slotGuideRect.y + this.slotGuideRect.height) {
       this.spinBtn.scale.set(this.spinBtn.scale.x * 0.8);

@@ -7,10 +7,11 @@ export const ANTE_BET_CONFIG: any = {
   x: 0,
   y: 490,
   px: 1132,
-  py: 1840,
+  py: 1890,
   lx: 0,
-  ly: 480,
+  ly: 440,
   scale: 0.9,
+  pScale: 1.1,
   Elements: [
     { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 0, y: 0 },
     { name: 'anteFrameGold', type: 'Sprite', image: 'ante_frame_gold', x: 0, y: 0 },
