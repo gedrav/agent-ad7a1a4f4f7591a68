@@ -42,7 +42,7 @@ export const SPLASH_CONFIG: any = {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
             color: '0x000000',
-            distance: 6,
+            distance: 4,
             alpha: 1,
           },
         },
@@ -73,7 +73,7 @@ export const SPLASH_CONFIG: any = {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
             color: '0x000000',
-            distance: 6,
+            distance: 4,
             alpha: 1,
           },
         },
@@ -104,7 +104,7 @@ export const SPLASH_CONFIG: any = {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
             color: '0x000000',
-            distance: 6,
+            distance: 4,
             alpha: 1,
           },
         },
@@ -198,7 +198,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, -2),
+            textOffset: new Point(0, 6),
           },
           textConfig: {
             content: 'playGameText',
