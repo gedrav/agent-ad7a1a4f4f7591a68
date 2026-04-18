@@ -58,7 +58,7 @@ export default class SlotReelCascade extends SlotReel {
     this.showIdleAnim(false);
     this.resetSpinParams();
     this.hidePayout();
-    this.isStopSpinButtonClick = true;
+    this.isStopSpinButtonClick = false;
     this.quickSpinStarted = false;
     this.fallingCounter = 0;
     this.explodedSymbolsIndexes = [];
@@ -76,13 +76,7 @@ export default class SlotReelCascade extends SlotReel {
       return;
     }
     this.spinResponseReceived = true;
-
-    if (appModel.turboMode) {
-      this.stopSpinQuick();
-      return;
-    } else {
-      this.checkToGetNewSymbols();
-    }
+    this.checkToGetNewSymbols();
   }
 
   protected stopSpinQuick(): void {
@@ -185,50 +179,48 @@ export default class SlotReelCascade extends SlotReel {
     }
   }
   protected getNewSymbolsIn(): void {
-    if (this.isStopSpinButtonClick) {
-      this.isStopSpinButtonClick = false;
-      EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
-      let index = 0;
-      let rowIndex = 0;
-      let symb;
-      const reelsView = appModel.getCascadeReelsView();
-      for (let k = 0; k < this.reelsData.noOfReels; k++) {
-        index = k * 0.2;
-        rowIndex = 0;
-        for (let i = 0; i < this.reelsData.noOfRows; i++) {
-          symb = this.symbolsArray[k][i];
-          symb.setNormalTexture();
-          symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]]);
-          this.symbolsContainer.addChild(symb);
-          symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
-        }
+    this.isStopSpinButtonClick = false;
+    EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
+    let index = 0;
+    let rowIndex = 0;
+    let symb;
+    const reelsView = appModel.getCascadeReelsView();
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      index = k * 0.2;
+      rowIndex = 0;
+      for (let i = 0; i < this.reelsData.noOfRows; i++) {
+        symb = this.symbolsArray[k][i];
+        symb.setNormalTexture();
+        symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]]);
+        this.symbolsContainer.addChild(symb);
+        symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
       }
-      this.symbolFallingIndex = 0;
-      let finalY, delay, timeVal;
-      for (let k = 0; k < this.configData.data.noOfReels; k++) {
-        index = k * 0.2;
-        rowIndex = 0;
-        for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
-          finalY = i * this.configData.data.symbolHeight;
-          delay = index + rowIndex++ * 0.05;
-          timeVal = (this.fallingInDuration + delay - 0.8) * 500;
-          if (appModel.turboMode) {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration / 2,
-              delay: delay,
-              y: finalY,
-              ease: this.symbEase,
-              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
-            });
-          } else {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: this.fallingInDuration,
-              delay: delay,
-              y: finalY,
-              ease: this.symbEase,
-              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
-            });
-          }
+    }
+    this.symbolFallingIndex = 0;
+    let finalY, delay, timeVal;
+    for (let k = 0; k < this.configData.data.noOfReels; k++) {
+      index = k * 0.2;
+      rowIndex = 0;
+      for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
+        finalY = i * this.configData.data.symbolHeight;
+        delay = index + rowIndex++ * 0.05;
+        timeVal = (this.fallingInDuration + delay - 0.8) * 500;
+        if (appModel.turboMode) {
+          AnimationProxy.animateTween(this.symbolsArray[k][i], {
+            duration: this.fallingInDuration / 2,
+            delay: delay,
+            y: finalY,
+            ease: this.symbEase,
+            onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
+          });
+        } else {
+          AnimationProxy.animateTween(this.symbolsArray[k][i], {
+            duration: this.fallingInDuration,
+            delay: delay,
+            y: finalY,
+            ease: this.symbEase,
+            onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
+          });
         }
       }
     }

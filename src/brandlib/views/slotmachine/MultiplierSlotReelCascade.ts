@@ -32,133 +32,123 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.showIdleAnim(true);
   }
   protected stopSpinQuick(): void {
+    console.log('stop spin quick');
     this.quickSpinStarted = true;
-    if (this.isStopSpinButtonClick) {
-      this.isStopSpinButtonClick = false;
-      EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
-      let index = 0;
-      let rowIndex = 0;
-      let symb;
-      const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
+    console.log('stop spin quick -- ', this.isStopSpinButtonClick);
+    console.log('xxxxxxxxxxxxxxxxx');
+    this.isStopSpinButtonClick = false;
+    EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
+    let index = 0;
+    let rowIndex = 0;
+    let symb;
+    const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
 
-      const reelsView = appModel.getCascadeReelsView();
-      for (let k = 0; k < this.reelsData.noOfReels; k++) {
-        index = k * 0.2;
-        rowIndex = 0;
-        for (let i = 0; i < this.reelsData.noOfRows; i++) {
-          symb = this.symbolsArray[k][i] as CascadeReelSymbol;
-          symb.setNormalTexture();
-          const isBonusSymbol = reelsView[k][i]?.includes('BN');
-          if (isBonusSymbol) {
-            const multiplierVal = appModel.getSymbMultiplierValue(k, i);
-            const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
-            currentSymb.setRewardData(multiplierVal);
-            const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
-            symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
-          } else {
-            symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
-          }
-          this.symbolsContainer.addChild(symb);
-          symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
+    const reelsView = appModel.getCascadeReelsView();
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      index = k * 0.2;
+      rowIndex = 0;
+      for (let i = 0; i < this.reelsData.noOfRows; i++) {
+        symb = this.symbolsArray[k][i] as CascadeReelSymbol;
+        symb.setNormalTexture();
+        const isBonusSymbol = reelsView[k][i]?.includes('BN');
+        if (isBonusSymbol) {
+          const multiplierVal = appModel.getSymbMultiplierValue(k, i);
+          const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
+          currentSymb.setRewardData(multiplierVal);
+          const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
+          symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+        } else {
+          symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
         }
+        this.symbolsContainer.addChild(symb);
+        //symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
       }
-      this.symbolFallingIndex = 0;
-      let finalY, delay, timeVal;
+    }
+    this.symbolFallingIndex = 0;
+    let finalY, delay, timeVal;
 
-      const COL_STAGGER = 0.1;
-      const ROW_STAGGER = 0.05;
-      const ENTER_DURATION = 0.32;
-      for (let k = 0; k < this.configData.data.noOfReels; k++) {
-        index = k * 0.2;
-        rowIndex = 0;
+    const COL_STAGGER = 0.1;
+    const ROW_STAGGER = 0.05;
+    const ENTER_DURATION = 0.32;
+    for (let k = 0; k < this.configData.data.noOfReels; k++) {
+      index = k * 0.2;
+      rowIndex = 0;
 
-        for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
-          finalY = i * this.configData.data.symbolHeight;
-          const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
-          this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
-          if (appModel.turboMode) {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: ENTER_DURATION / 2,
-              delay,
-              y: finalY,
-              ease: Back.easeOut.config(0.6),
-              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
-            });
-          } else {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: ENTER_DURATION,
-              delay,
-              y: finalY,
-              ease: Back.easeOut.config(0.6),
-              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
-            });
-          }
-        }
+      for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
+        finalY = i * this.configData.data.symbolHeight;
+        const delay = 0; //k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
+        //this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
+
+        AnimationProxy.animateTween(this.symbolsArray[k][i], {
+          duration: ENTER_DURATION / 2,
+          delay,
+          y: finalY,
+          ease: Back.easeOut.config(0.6),
+          onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
+        });
       }
     }
   }
 
   protected getNewSymbolsIn(): void {
-    if (this.isStopSpinButtonClick) {
-      this.isStopSpinButtonClick = false;
-      EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
-      let index = 0;
-      let rowIndex = 0;
-      let symb;
-      const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
+    this.isStopSpinButtonClick = false;
+    //EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
+    let index = 0;
+    let rowIndex = 0;
+    let symb;
+    const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
 
-      const reelsView = appModel.getCascadeReelsView();
-      for (let k = 0; k < this.reelsData.noOfReels; k++) {
-        index = k * 0.2;
-        rowIndex = 0;
-        for (let i = 0; i < this.reelsData.noOfRows; i++) {
-          symb = this.symbolsArray[k][i] as CascadeReelSymbol;
-          symb.setNormalTexture();
-          const isBonusSymbol = reelsView[k][i]?.includes('BN');
-          if (isBonusSymbol) {
-            const multiplierVal = appModel.getSymbMultiplierValue(k, i);
-            const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
-            currentSymb.setRewardData(multiplierVal);
-            const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
-            symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
-          } else {
-            symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
-          }
-          this.symbolsContainer.addChild(symb);
-          symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
+    const reelsView = appModel.getCascadeReelsView();
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      index = k * 0.2;
+      rowIndex = 0;
+      for (let i = 0; i < this.reelsData.noOfRows; i++) {
+        symb = this.symbolsArray[k][i] as CascadeReelSymbol;
+        symb.setNormalTexture();
+        const isBonusSymbol = reelsView[k][i]?.includes('BN');
+        if (isBonusSymbol) {
+          const multiplierVal = appModel.getSymbMultiplierValue(k, i);
+          const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
+          currentSymb.setRewardData(multiplierVal);
+          const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
+          symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+        } else {
+          symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
         }
+        this.symbolsContainer.addChild(symb);
+        symb.y = -(this.reelsData.noOfRows - i) * this.reelsData.symbolHeight * 2;
       }
-      this.symbolFallingIndex = 0;
-      let finalY, delay, timeVal;
+    }
+    this.symbolFallingIndex = 0;
+    let finalY, delay, timeVal;
 
-      const COL_STAGGER = 0.1;
-      const ROW_STAGGER = 0.05;
-      const ENTER_DURATION = 0.32;
-      for (let k = 0; k < this.configData.data.noOfReels; k++) {
-        index = k * 0.2;
-        rowIndex = 0;
+    const COL_STAGGER = 0.1;
+    const ROW_STAGGER = 0.05;
+    const ENTER_DURATION = 0.32;
+    for (let k = 0; k < this.configData.data.noOfReels; k++) {
+      index = k * 0.2;
+      rowIndex = 0;
 
-        for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
-          finalY = i * this.configData.data.symbolHeight;
-          const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
-          this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
-          if (appModel.turboMode) {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: ENTER_DURATION / 2,
-              delay,
-              y: finalY,
-              ease: Back.easeOut.config(0.6),
-              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
-            });
-          } else {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
-              duration: ENTER_DURATION,
-              delay,
-              y: finalY,
-              ease: Back.easeOut.config(0.6),
-              onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
-            });
-          }
+      for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
+        finalY = i * this.configData.data.symbolHeight;
+        const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
+        this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
+        if (appModel.turboMode) {
+          AnimationProxy.animateTween(this.symbolsArray[k][i], {
+            duration: ENTER_DURATION / 2,
+            delay,
+            y: finalY,
+            ease: Back.easeOut.config(0.6),
+            onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
+          });
+        } else {
+          AnimationProxy.animateTween(this.symbolsArray[k][i], {
+            duration: ENTER_DURATION,
+            delay,
+            y: finalY,
+            ease: Back.easeOut.config(0.6),
+            onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
+          });
         }
       }
     }
