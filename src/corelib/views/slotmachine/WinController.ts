@@ -95,7 +95,6 @@ export default class WinController {
                 ease: 'Power2.easeOut',
                 onComplete: () => {
                   this.removeTumbleWinText(winAmountText);
-                  winAmountText = null;
                 },
               });
             }
