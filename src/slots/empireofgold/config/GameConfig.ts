@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.16',
+  gameVersion: '0.18',
   gameId: 'empireofgold',
   gameName: 'Empire of Gold',
   uiConfig: UIConfig,

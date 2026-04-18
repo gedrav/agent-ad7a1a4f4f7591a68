@@ -74,10 +74,9 @@ export default class WinController {
             this.symbolsArray[pos.reel][pos.row].showWinning(() =>
               this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
             );
-            console.log(this.reelsData);
             this.totalWinSymbols++;
             if (index === 2 && symbWinAmount > 0) {
-              let winAmountText: any = new this.reelsData.winValueComponent();
+              const winAmountText: any = new this.reelsData.winValueComponent();
               winAmountText.showValue(Util.formatCurrencyNoSymbol(symbWinAmount));
               winAmountText.x = this.symbolsArray[pos.reel][pos.row].x;
               winAmountText.y =
@@ -102,6 +101,12 @@ export default class WinController {
             }
           });
         });
+        const len = this.tumbleWinAmountTexts.length;
+        if (len > 0) {
+          for (let k = 0; k < len; k++) {
+            this.winSymbolsContainer.addChild(this.tumbleWinAmountTexts[k]);
+          }
+        }
       } else {
         this.notifySpinWinDone();
       }
@@ -267,13 +272,15 @@ export default class WinController {
     }
   }
 
-  private removeTumbleWinText(text: PixText): void {
+  private removeTumbleWinText(text: any): void {
     const index = this.tumbleWinAmountTexts.indexOf(text);
     if (index === -1) {
       return;
     }
+
     this.tumbleWinAmountTexts.splice(index, 1);
     AnimationProxy.killTweensOf(text);
+    text.destroyComp();
     if (text.parent) {
       text.parent.removeChild(text);
     }

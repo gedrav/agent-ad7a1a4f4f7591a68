@@ -35,15 +35,19 @@ export class WinValueComp extends StandardView {
         fontFamily: 'bitmapFont',
         fill: 0xffffff,
         fontSize: 150,
-        letterSpacing: -25,
+        letterSpacing: -20,
       },
     };
     this.text = UIUtil.getElement(tConfig);
     this.addChild(this.text);
+    this.text.x = this.bg.width * 0.5;
+    this.text.y = 36;
   }
 
   public showValue(str: string): void {
     this.text.text = str;
+    this.bg.width = this.text.width + 80;
+    this.text.x = this.bg.width * 0.45;
   }
 
   public destroyComp(): void {
