@@ -77,7 +77,10 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
         finalY = i * this.configData.data.symbolHeight;
         const delay = 0; //k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
-        //this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
+        if (!this.isStopSpinButtonClick) {
+          this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
+          console.log('xxxx');
+        }
 
         AnimationProxy.animateTween(this.symbolsArray[k][i], {
           duration: ENTER_DURATION / 2,
