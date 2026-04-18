@@ -24,7 +24,7 @@ export const SPLASH_CONFIG: any = {
       image: 'screen1',
       content: 'splash1',
       textY: 640,
-      textAreaHeight: 190,
+      textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -55,7 +55,7 @@ export const SPLASH_CONFIG: any = {
       image: 'screen2',
       content: 'splash2',
       textY: 640,
-      textAreaHeight: 190,
+      textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -86,7 +86,7 @@ export const SPLASH_CONFIG: any = {
       image: 'screen3',
       content: 'splash3',
       textY: 640,
-      textAreaHeight: 190,
+      textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',

@@ -206,15 +206,28 @@ class AppModelService {
     this.gameInfo.allowCheat = data.playerInfo.allowCheat;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.anteBet = 1;
+    data.playerInfo.maxBet = 100;
     this.gameInfo.balance = data.playerInfo.balance;
-    this.gameInfo.betsArray = data.playerInfo.possibleBets;
     this.gameInfo.minBet = data.playerInfo.minBet;
     this.gameInfo.maxBet = data.playerInfo.maxBet;
+    this.gameInfo.selectedLines = GameProxy.config.totalLines;
+    this.gameInfo.creditValue = GameProxy.config.creditValue;
+    this.gameInfo.betsArray = [];
+    const len = data.playerInfo.possibleBets.length;
+    if (len > 0) {
+      for (let i = 0; i < len; i++) {
+        const totalbet = this.getTotalBetTemp(data.playerInfo.possibleBets[i]);
+        if (totalbet >= data.playerInfo.minBet && totalbet <= data.playerInfo.maxBet) {
+          this.gameInfo.betsArray.push(data.playerInfo.possibleBets[i]);
+        }
+      }
+    }
+
     this.gameInfo.betPos =
       this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet) > -1
         ? this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet)
         : 0;
-    this.gameInfo.selectedLines = GameProxy.config.totalLines;
+
     this.gameInfo.paytable = data.gameInfo.payTable;
     this.unfinishedData = data.unfinishedInfo;
     if (this.unfinishedData) {
@@ -351,6 +364,10 @@ class AppModelService {
     } else {
       return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
     }
+  }
+
+  public getTotalBetTemp(value: number): number {
+    return value * this.gameInfo?.creditValue * this.getSelectedLines();
   }
 
   public getAllBets(): number[] {
