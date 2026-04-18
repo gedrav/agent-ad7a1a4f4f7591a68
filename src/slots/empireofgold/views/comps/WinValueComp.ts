@@ -42,7 +42,7 @@ export class WinValueComp extends StandardView {
     this.addChild(this.text);
     this.text.x = this.bg.width * 0.5;
     this.text.y = 36;
-    this.bg.alpha = 0.7;
+    this.bg.alpha = 0.8;
   }
 
   public showValue(str: string): void {
