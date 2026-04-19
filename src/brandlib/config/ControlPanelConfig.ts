@@ -188,7 +188,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: StopClickCommand,
       },
-      soundEvent: 'STOP_SPIN_CLICKED_SOUND',
+      soundEvent: 'PLAY_STOP_SPIN_CLICKED_SOUND',
       options: {
         defaultView: 'stopSpinBtn',
         hoverView: 'stopSpinBtn',
@@ -238,7 +238,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: AutoStopSpinCommand,
       },
-      soundEvent: 'STOP_SPIN_CLICKED_SOUND',
+      soundEvent: 'PLAY_STOP_SPIN_CLICKED_SOUND',
       options: {
         defaultView: 'stopSpinBtn',
         hoverView: 'stopSpinBtn',
