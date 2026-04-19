@@ -452,6 +452,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     for (let k = 0; k < len; k++) {
       if (k == len - 1) {
         AnimationProxy.animateTween(symbols[k], {
@@ -468,9 +469,13 @@ export default class SlotReel extends ResponsiveChildrenView {
         });
       }
     }
+    if (reelno == this.reelsData.noOfReels - 2) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
+    }
   }
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
+
     this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
       const len = this.timeoutIds.length;
@@ -547,6 +552,9 @@ export default class SlotReel extends ResponsiveChildrenView {
           ease: quickEase,
         });
       }
+    }
+    if (reelno == this.reelsData.noOfReels - 2) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
     }
   }
 

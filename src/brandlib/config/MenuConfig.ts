@@ -34,6 +34,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'homeBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: HomeClickedCommand,
       },
@@ -70,6 +71,7 @@ export const MENU_CONFIG: any = {
       name: 'soundOnBtn',
       type: 'Button',
       data: false,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: SoundStateChangeCommand,
       },
@@ -99,6 +101,7 @@ export const MENU_CONFIG: any = {
       name: 'soundOffBtn',
       type: 'Button',
       data: true,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: SoundStateChangeCommand,
       },
@@ -126,6 +129,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'infoBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: ShowGameRulesCommand,
       },
@@ -153,6 +157,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'gameHistoryBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: ShowHistoryCommand,
       },
@@ -180,6 +185,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'showSplashBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: true,
       action: {
         press: ShowHideSplashCommand,
@@ -208,6 +214,7 @@ export const MENU_CONFIG: any = {
       name: 'hideSplashBtn',
       type: 'Button',
       visible: false,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: false,
       action: {
         press: ShowHideSplashCommand,

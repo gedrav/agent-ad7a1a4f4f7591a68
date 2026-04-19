@@ -98,6 +98,7 @@ export class BigWinsComp extends ResponsiveView {
           defaultMix: 0,
         });
       }
+      this.playCurrentBigWinSound();
 
       this.winTickerBW.skipToFinalValue();
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
@@ -125,6 +126,7 @@ export class BigWinsComp extends ResponsiveView {
       this.showWinTickerType();
       this.winTicker.showSpinValue(appModel.getSpinWin());
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
+      EventHandler.dispatchEvent(SlotEvents.PLAY_WIN_SOUND);
     } else {
       EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: false });
       this.winState = true;
@@ -180,6 +182,9 @@ export class BigWinsComp extends ResponsiveView {
   }
 
   protected notifyWinDone(): void {
+    EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+    EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
+    EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     this.winState = false;
     this.skipRect.visible = false;
     this.isSkipping = false;
@@ -228,6 +233,20 @@ export class BigWinsComp extends ResponsiveView {
         loop: false,
         defaultMix: 0,
       });
+    }
+    this.playCurrentBigWinSound();
+  }
+  protected playCurrentBigWinSound(): void {
+    EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+    EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+    if (this.currentState === CONSTANTS.BIG_WIN) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_SOUND);
+    } else if (this.currentState === CONSTANTS.MEGA_WIN) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_MEGA_WIN_SOUND);
+    } else if (this.currentState === CONSTANTS.GIGANTIC_WIN) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_GIGANTIC_WIN_SOUND);
+    } else if (this.currentState === CONSTANTS.UNBELIEVABLE_WIN) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_UNBELIEVABLE_WIN_SOUND);
     }
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {

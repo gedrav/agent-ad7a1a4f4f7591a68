@@ -164,6 +164,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected endPress(): void {
     if (!GameProxy.config.isLongPressTriggered) {
+      if (this.spinBtn.configData?.soundEvent) {
+        EventHandler.dispatchEvent(this.spinBtn.configData?.soundEvent);
+      }
       const action: ActionCommand = SpinClickCommand;
       action.execute(this.spinBtn);
     }

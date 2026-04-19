@@ -277,6 +277,7 @@ class SlotGameApp {
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
     StateManager.initiate();
+    EventHandler.dispatchEvent(SlotEvents.PLAY_BG_SOUND);
   }
 
   protected onServerError(obj: any): void {

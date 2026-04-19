@@ -137,7 +137,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     {
       name: 'spinBtn',
       type: 'Button',
-      customSound: true,
+      soundEvent: 'PLAY_SPIN_CLICKED_SOUND',
       options: {
         defaultView: 'spinBtn',
         hoverView: 'spinBtn',
@@ -188,6 +188,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: StopClickCommand,
       },
+      soundEvent: 'STOP_SPIN_CLICKED_SOUND',
       options: {
         defaultView: 'stopSpinBtn',
         hoverView: 'stopSpinBtn',
@@ -237,6 +238,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: AutoStopSpinCommand,
       },
+      soundEvent: 'STOP_SPIN_CLICKED_SOUND',
       options: {
         defaultView: 'stopSpinBtn',
         hoverView: 'stopSpinBtn',
@@ -286,6 +288,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: TurboStateChangeCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: true,
       options: {
         defaultView: 'turboBtn',
@@ -340,6 +343,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: TurboStateChangeCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: false,
       options: {
         defaultView: 'turboSelectedBtn',
@@ -394,6 +398,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: BetClickCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'betBtn',
         hoverView: 'betBtn',
@@ -447,6 +452,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: MenuClickCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'menuBtn',
         hoverView: 'menuBtn',
@@ -491,6 +497,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: ShowGameRulesCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'infoBtn',
         hoverView: 'infoBtn',
@@ -540,6 +547,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: SoundStateChangeCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'soundOnBtn',
         hoverView: 'soundOnBtn',
@@ -588,6 +596,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       name: 'soundOffBtn',
       type: 'Button',
       data: true,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: SoundStateChangeCommand,
       },
@@ -641,6 +650,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: HomeClickedCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'homeBtn',
         hoverView: 'homeBtn',
@@ -687,6 +697,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: RequestFullscreenCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'fullscreenEnterBtn',
         hoverView: 'fullscreenEnterBtn',
@@ -737,6 +748,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: RequestExitFullscreenCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'fullscreenExitBtn',
         hoverView: 'fullscreenExitBtn',
@@ -786,6 +798,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       action: {
         press: ShowCheatPanelCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'cheatBtn',
         hoverView: 'cheatBtn',

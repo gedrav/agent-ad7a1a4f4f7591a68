@@ -1,6 +1,8 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { Util } from '@core/utils/UtilService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export class WinTicker extends StandardView {
   private valueText: PixText;
@@ -56,7 +58,7 @@ export class WinTicker extends StandardView {
     this.duration = duration;
     this.startTime = null;
     this.startValue = this.currentValue;
-
+    EventHandler.dispatchEvent(SlotEvents.PLAY_COUNT_UP_SOUND);
     if (!this.tickerActive) {
       this.tickerActive = true;
       requestAnimationFrame(this.update.bind(this));
@@ -70,6 +72,7 @@ export class WinTicker extends StandardView {
       this.valueText.text = Util.formatCurrencyNoSymbol(this.targetValue);
     }
     this.tickerActive = false;
+    EventHandler.dispatchEvent(SlotEvents.STOP_COUNT_UP_SOUND);
   }
 
   protected update(timestamp) {
@@ -98,6 +101,7 @@ export class WinTicker extends StandardView {
     } else {
       this.tickerActive = false;
       this.emit('COUNTUP_COMPLETED');
+      EventHandler.dispatchEvent(SlotEvents.STOP_COUNT_UP_SOUND);
     }
   }
 }

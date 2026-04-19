@@ -140,7 +140,7 @@ class SoundServiceProxy {
     }
 
     const instance = this.soundLibrary[sObj.name];
-    console.log('PLAY SOUND == ', sObj.name);
+    //console.log('PLAY SOUND == ', sObj.name);
     if (instance) {
       if (sObj.type == 'ambient') {
         if (this._ambientPlaying == instance) {
@@ -162,11 +162,8 @@ class SoundServiceProxy {
       instance.volume(Util.getDefaultValue(sObj.volume, 1));
       instance.loop(Util.getDefaultValue(sObj.loop, false));
       const duration = sObj.fadeInDuration ? sObj.fadeInDuration : 0;
-
-      const soundId = instance.play();
-      instance.fade(0, sObj.volume, duration, soundId);
-
-      //console.log(soundId, sObj.name, sObj.volume, duration);
+      instance.play();
+      instance.fade(0, sObj.volume, duration);
     }
 
     return instance;
@@ -181,7 +178,9 @@ class SoundServiceProxy {
     //console.log('stop sound == ', sObj.name);
     const instance = this.soundLibrary[sObj.name];
     if (instance?.playing()) {
-      instance.stop();
+      const duration = sObj.fadeOutDuration ? sObj.fadeOutDuration : 0;
+      //const soundId = instance.play();
+      instance.fade(sObj.volume, 0, duration);
     }
   }
   public resumeAmbientSound() {

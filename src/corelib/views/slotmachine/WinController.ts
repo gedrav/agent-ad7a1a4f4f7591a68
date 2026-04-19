@@ -199,6 +199,7 @@ export default class WinController {
             this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
               this.onLineWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
             );
+
             this.totalWinSymbols++;
             if (j == 0) {
               this.lineWinAmountComp.visible = true;

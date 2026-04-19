@@ -1,5 +1,6 @@
 import WinController from '@core/views/slotmachine/WinController';
 import { appModel } from '@core/models/services/AppModelService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export default class GameWinController extends WinController {
   public showLineWin(): void {
@@ -30,6 +31,7 @@ export default class GameWinController extends WinController {
             }
           }
         }
+        EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_' + currentLineWin.symbol);
       }
     }
     appModel.lineWinIndex++;
