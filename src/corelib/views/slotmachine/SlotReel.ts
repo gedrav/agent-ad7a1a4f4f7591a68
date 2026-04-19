@@ -63,6 +63,8 @@ export default class SlotReel extends ResponsiveChildrenView {
   private tickerComp: ReelTickerComp;
   private fsAutoCounterComp: FSAutoCounterComp;
   public slotGuideRect: PixGraphics;
+  private timeoutIds: any[];
+  private timeoutIds2: any[];
 
   constructor(configData: any) {
     super(configData);
@@ -287,6 +289,8 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.showIdleAnim(false);
     this.resetSpinParams();
     this.hidePayout();
+    this.timeoutIds = [];
+    this.timeoutIds2 = [];
     this.quickSpinStarted = false;
     this.numberOfStoppedReels = 0;
     this.spinStarted = true;
@@ -294,9 +298,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.stopIndex = [];
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       this.stopIndex[k] = this.reelsData.noOfRows + 1;
+      this.reelSpinningState[k] = 0;
     }
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      setTimeout(
+      this.timeoutIds2[k] = setTimeout(
         this.startReelStripSpin.bind(this, k),
         appModel.turboMode ? k * reelSpinStartGap * 0.25 : k * reelSpinStartGap,
       );
@@ -387,7 +392,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     const reels = appModel.getReelsView();
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      setTimeout(
+      this.timeoutIds[k] = setTimeout(
         this.stopReelStrip.bind(this, k),
         appModel.turboMode ? this.reelStopGap * k * 0.25 : this.reelStopGap * k,
       );
@@ -469,6 +474,14 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.numberOfStoppedReels++;
     this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
+      const len = this.timeoutIds.length;
+      for (let k = 0; k < len; k++) {
+        clearTimeout(this.timeoutIds[k]);
+      }
+      const len2 = this.timeoutIds2.length;
+      for (let k = 0; k < len2; k++) {
+        clearTimeout(this.timeoutIds2[k]);
+      }
       if (appModel.turboMode) EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED_TURBO');
       EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED');
       StateManager.doNextStep();

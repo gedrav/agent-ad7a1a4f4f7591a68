@@ -129,7 +129,6 @@ export class BigWinsComp extends ResponsiveView {
   public async showSpinWin() {
     const winType = appModel.getWinType();
     //const winType: string = CONSTANTS.UNBELIEVABLE_WIN;
-    console.log('showSpinWin in big win comp', winType);
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);
