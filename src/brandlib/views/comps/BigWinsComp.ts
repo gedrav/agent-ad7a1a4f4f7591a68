@@ -100,17 +100,7 @@ export class BigWinsComp extends ResponsiveView {
       }
 
       this.winTickerBW.skipToFinalValue();
-
       EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
-
-      EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
-      EventHandler.dispatchEvent('PLAY_TERM_SOUND');
-
-      if (appModel.getIsFreeSpinsSession()) {
-        EventHandler.dispatchEvent('START_FREESPIN_BG_MUSIC');
-      } else {
-        EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
-      }
       EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
     }
   }
@@ -172,7 +162,6 @@ export class BigWinsComp extends ResponsiveView {
         if (this.bigWinTextAnim) {
           this.bigWinTextAnim.visible = true;
         }
-        EventHandler.dispatchEvent('PLAY_ALL_WIN_SOUND_BIGWIN');
         this.showWinTickerType('bigwin');
         this.winTickerBW.countUpValue(appModel.getSpinWin(), this.totalDuration);
         this.playNextWinAnimation();
@@ -203,8 +192,6 @@ export class BigWinsComp extends ResponsiveView {
       duration: 0,
       toShowTotalWin: appModel.isCascadeGame(),
     });
-    EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
-    EventHandler.dispatchEvent('PLAY_BIG_WIN_COUNTUP_END_SOUND');
   }
   public clearSpinWin(): void {
     this.winState = false;
@@ -241,18 +228,6 @@ export class BigWinsComp extends ResponsiveView {
         loop: false,
         defaultMix: 0,
       });
-    }
-    if (this.currentLevel === 0) {
-      EventHandler.dispatchEvent('PLAY_BIGWIN_SPECIAL_SOUND');
-    } else if (this.currentLevel === 1) {
-      EventHandler.dispatchEvent('STOP_BIGWIN_SOUND');
-      EventHandler.dispatchEvent('PLAY_MEGAWIN_SPECIAL_SOUND');
-    } else if (this.currentLevel === 2) {
-      EventHandler.dispatchEvent('STOP_MEGAWIN_SOUND');
-      EventHandler.dispatchEvent('PLAY_GIGANTICWIN_SPECIAL_SOUND');
-    } else if (this.currentLevel === 3) {
-      EventHandler.dispatchEvent('STOP_GIGANTICWIN_SOUND');
-      EventHandler.dispatchEvent('PLAY_UNBELIEVABLEWIN_SPECIAL_SOUND');
     }
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {
@@ -306,13 +281,6 @@ export class BigWinsComp extends ResponsiveView {
   protected onCountUpCompleted(): void {
     clearTimeout(this.timeoutId);
     EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
-    EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
-    EventHandler.dispatchEvent('PLAY_TERM_SOUND');
-    if (appModel.getIsFreeSpinsSession()) {
-      EventHandler.dispatchEvent('START_FREESPIN_BG_MUSIC');
-    } else {
-      EventHandler.dispatchEvent('START_MAINGAME_BG_MUSIC');
-    }
     const animations = this.configData.data.animations[this.currentState];
     if (animations.end) {
       if (this.bigWinAnim) {

@@ -137,6 +137,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     {
       name: 'spinBtn',
       type: 'Button',
+      customSound: true,
       options: {
         defaultView: 'spinBtn',
         hoverView: 'spinBtn',

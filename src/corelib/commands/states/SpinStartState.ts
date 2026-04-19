@@ -17,11 +17,6 @@ class SpinStartStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER); // reset multiplier to lvl1 on each spin
     EventHandler.dispatchEvent(SlotEvents.START_SPIN);
-    if (!appModel.turboMode) {
-      EventHandler.dispatchEvent('START_SLOT_SPIN');
-    } else {
-      EventHandler.dispatchEvent('TURBO_START_SLOT_SPIN');
-    }
     if (appModel.getIsAutoSession()) {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }

@@ -3,6 +3,8 @@ import { TooltipComp } from '@brand/views/comps/TooltipComp';
 import { ActionCommand } from '@core/commands/core/ActionCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { ColorMatrixFilter } from 'pixi.js';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SoundFactory } from '@core/sound/SoundServiceProxy';
 export class PixFancyButton extends FancyButton {
   private toolTip: TooltipComp;
 
@@ -54,6 +56,9 @@ export class PixFancyButton extends FancyButton {
     if (this.configData?.action?.press) {
       const action: ActionCommand = this.configData.action.press;
       action?.execute(this.configData.data, this);
+    }
+    if (this.configData?.soundEvent) {
+      EventHandler.dispatchEvent(this.configData?.soundEvent);
     }
   }
 

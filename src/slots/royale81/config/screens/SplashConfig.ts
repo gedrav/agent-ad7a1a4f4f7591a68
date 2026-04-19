@@ -179,6 +179,7 @@ export const SPLASH_CONFIG: any = {
           action: {
             press: SplashStartCommand,
           },
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           options: {
             defaultView: 'splashBtn',
             hoverView: 'splashBtn',

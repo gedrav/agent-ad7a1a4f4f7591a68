@@ -17,7 +17,6 @@ class CloseBetPanelCmd extends ActionCommand {
       }
       EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-      EventHandler.dispatchEvent('STOP_ALL_WIN_SOUND_BIGWIN');
     }
     EventHandler.dispatchEvent(data ? SlotEvents.CONFIRM_BET : SlotEvents.HIDE_BET_PANEL);
   }

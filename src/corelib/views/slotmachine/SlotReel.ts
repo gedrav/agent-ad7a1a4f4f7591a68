@@ -449,7 +449,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected showFinalJerk(reelno: number): void {
-    EventHandler.dispatchEvent('REELSTRIP_SPIN_JERK');
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
@@ -482,8 +481,6 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (let k = 0; k < len2; k++) {
         clearTimeout(this.timeoutIds2[k]);
       }
-      if (appModel.turboMode) EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED_TURBO');
-      EventHandler.dispatchEvent('FINAL_SYMBOL_SETTLED');
       StateManager.doNextStep();
     }
   }
