@@ -63,6 +63,7 @@ export const BUY_BONUS_CONFIG_MOBILE = {
     {
       name: 'closeBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'closeIconBtn',
         hoverView: 'closeIconBtn',
@@ -165,6 +166,7 @@ export const BUY_BONUS_CONFIG_MOBILE = {
       name: 'cancelBtn',
       type: 'Button',
       scale: 1,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: CloseBuyBonusCommand,
       },
@@ -209,6 +211,7 @@ export const BUY_BONUS_CONFIG_MOBILE = {
       name: 'startBtn',
       type: 'Button',
       scale: 1,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: BuyBonusConfirmedCommand,
       },

@@ -56,6 +56,7 @@ export const BET_PANEL_CONFIG = {
           type: 'Button',
           scale: 1,
           data: -1,
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: IncrementDecrementBetCommand,
           },
@@ -75,6 +76,7 @@ export const BET_PANEL_CONFIG = {
           type: 'Button',
           scale: 1,
           data: 1,
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: IncrementDecrementBetCommand,
           },
@@ -107,6 +109,7 @@ export const BET_PANEL_CONFIG = {
       action: {
         press: CloseBetPanelCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: false,
       options: {
         defaultView: 'cancelBtn',
@@ -131,6 +134,7 @@ export const BET_PANEL_CONFIG = {
       action: {
         press: CloseBetPanelCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: true,
       options: {
         defaultView: 'okBtn',

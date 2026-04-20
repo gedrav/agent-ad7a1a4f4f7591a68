@@ -454,6 +454,12 @@ export default class SlotReel extends ResponsiveChildrenView {
     const len = symbols.length;
     EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     for (let k = 0; k < len; k++) {
+      if (k > 0 && k <= this.reelsData.noOfRows) {
+        if (this.reelsData.landingSymbols.includes(symbols[k].getSymbolName())) {
+          EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symbols[k].getSymbolName());
+        }
+      }
+
       if (k == len - 1) {
         AnimationProxy.animateTween(symbols[k], {
           y: (k - 1) * this.reelsData.symbolHeight,

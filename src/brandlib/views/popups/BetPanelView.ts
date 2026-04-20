@@ -21,6 +21,7 @@ const btnConfig: any = {
   action: {
     press: ChangeTotalBetCommand,
   },
+  soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
   options: {
     defaultView: 'betSelectionBtn',
     hoverView: 'betSelectionBtn',
