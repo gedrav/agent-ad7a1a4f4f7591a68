@@ -51,6 +51,7 @@ export const AUTOPLAY_CONFIG = {
           name: 'btn1',
           type: 'PixToggleButton',
           scale: 1,
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: AutoPlayNoOfSpinsBtnCommand,
           },
@@ -88,6 +89,7 @@ export const AUTOPLAY_CONFIG = {
           scale: 1,
           pScale: 1,
           lScale: 1,
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: AutoPlayNoOfSpinsBtnCommand,
           },
@@ -125,7 +127,7 @@ export const AUTOPLAY_CONFIG = {
           scale: 1,
           pScale: 1,
           lScale: 1,
-
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: AutoPlayNoOfSpinsBtnCommand,
           },
@@ -164,7 +166,7 @@ export const AUTOPLAY_CONFIG = {
           scale: 1,
           pScale: 1,
           lScale: 1,
-
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: AutoPlayNoOfSpinsBtnCommand,
           },
@@ -203,7 +205,7 @@ export const AUTOPLAY_CONFIG = {
           scale: 1,
           pScale: 1,
           lScale: 1,
-
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           action: {
             press: AutoPlayNoOfSpinsBtnCommand,
           },
@@ -315,6 +317,7 @@ export const AUTOPLAY_CONFIG = {
       action: {
         press: AutoPlayCancelBtnCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: false,
       options: {
         defaultView: 'cancelBtn',
@@ -339,6 +342,7 @@ export const AUTOPLAY_CONFIG = {
       action: {
         press: AutoPlayConfirmBtnCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: true,
       options: {
         defaultView: 'startBtn',

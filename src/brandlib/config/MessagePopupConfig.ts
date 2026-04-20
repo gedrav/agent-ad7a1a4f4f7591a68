@@ -41,6 +41,7 @@ export const MESSAGE_POPUP_CONFIG = {
       name: 'closeBtn',
       type: 'Button',
       scale: 1,
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: false,
       options: {
         defaultView: 'cancelBtn',

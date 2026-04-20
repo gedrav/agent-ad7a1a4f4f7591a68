@@ -83,6 +83,7 @@ export const BUY_BONUS_CONFIG = {
       action: {
         press: CloseBuyBonusCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: false,
       options: {
         defaultView: 'cancelBtn',
@@ -107,6 +108,7 @@ export const BUY_BONUS_CONFIG = {
       action: {
         press: BuyBonusConfirmedCommand,
       },
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       data: true,
       options: {
         defaultView: 'okBtn',

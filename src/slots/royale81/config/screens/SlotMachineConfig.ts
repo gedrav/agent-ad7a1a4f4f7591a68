@@ -41,6 +41,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         noOfRows: 3,
         reelHeight: 660,
         reelsConfig: ReelsConfig,
+        landingSymbols: ['WD'],
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 324, y: 295 },

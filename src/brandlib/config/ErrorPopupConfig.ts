@@ -45,6 +45,7 @@ export const ERROR_POPUP_CONFIG = {
         {
           name: 'closeBtn',
           type: 'FancyButton',
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           options: {
             defaultView: UIUtil.getRectangle(200, 60, 0xff0000),
             hoverView: `smallCross`,
