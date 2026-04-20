@@ -220,6 +220,7 @@ export const SPLASH_CONFIG: any = {
           name: 'soundBtn',
           type: 'Comp',
           class: SplashButton,
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           btnConfig: {
             type: 'PixToggleButton',
             scale: 1,
@@ -264,6 +265,7 @@ export const SPLASH_CONFIG: any = {
           name: 'showIntroBtn',
           type: 'Comp',
           class: SplashButton,
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           btnConfig: {
             type: 'PixToggleButton',
             scale: 1,

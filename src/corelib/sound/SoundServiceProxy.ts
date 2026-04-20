@@ -140,7 +140,7 @@ class SoundServiceProxy {
     }
 
     const instance = this.soundLibrary[sObj.name];
-    //console.log('PLAY SOUND == ', sObj.name);
+    console.log('PLAY SOUND == ', sObj.name);
     if (instance) {
       if (sObj.type == 'ambient') {
         if (this._ambientPlaying == instance) {

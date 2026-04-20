@@ -188,6 +188,7 @@ export const SPLASH_CONFIG: any = {
         {
           name: 'startBtn',
           type: 'Button',
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           anchor: { x: 0.5, y: 0.5 },
           action: {
             press: SplashStartCommand,
@@ -230,6 +231,7 @@ export const SPLASH_CONFIG: any = {
         {
           name: 'soundBtn',
           type: 'Comp',
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           class: SplashButton,
           btnConfig: {
             type: 'PixToggleButton',
@@ -277,6 +279,7 @@ export const SPLASH_CONFIG: any = {
         {
           name: 'showIntroBtn',
           type: 'Comp',
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           class: SplashButton,
           btnConfig: {
             type: 'PixToggleButton',

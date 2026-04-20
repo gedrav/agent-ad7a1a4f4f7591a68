@@ -26,6 +26,9 @@ export default class ReelSymbol extends StandardView {
     super(configData);
   }
 
+  public getSymbolName(): string {
+    return this.configData.data.name;
+  }
   public showIdle(): void {}
 
   public stopIdleAnim(): void {}

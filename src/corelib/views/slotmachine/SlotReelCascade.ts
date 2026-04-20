@@ -231,22 +231,12 @@ export default class SlotReelCascade extends SlotReel {
   }
   protected onSymbolCameIn(symb: ReelSymbol): void {
     symb.showLanding();
-    const originalScale = symb.scale.y;
-    const value = symb.scale.y * 0.94 + (Math.random() * 4) / 100;
-    AnimationProxy.animateTween(symb, {
-      duration: 0.05,
-      scaleY: value,
-      onComplete: this.onSymbolCameInCompleted.bind(this, symb, originalScale),
-    });
+    if (this.reelsData.landingSymbols.includes(symb.getSymbolName())) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symb.getSymbolName());
+    }
+    this.onSymbolFinallySettled(symb);
   }
 
-  protected onSymbolCameInCompleted(symb: ReelSymbol, originalScale): void {
-    AnimationProxy.animateTween(symb, {
-      duration: 0.05,
-      scaleY: originalScale,
-      onComplete: this.onSymbolFinallySettled.bind(this, symb),
-    });
-  }
   protected onSymbolFinallySettled(symb: ReelSymbol): void {
     this.symbolFallingIndex++;
     if (this.symbolFallingIndex == this.totalSymbols) {
@@ -276,6 +266,7 @@ export default class SlotReelCascade extends SlotReel {
     }
   }
   protected showSymbolBlast(symbol: ReelSymbolSprite, delay: number = 0): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND);
     symbol.showBlastAnim(() => this.onBlastAnimComplete(symbol));
   }
   protected onBlastAnimComplete(symbol: ReelSymbolSprite): void {
@@ -361,6 +352,7 @@ export default class SlotReelCascade extends SlotReel {
 
       this.cascadeIndex = -1;
     }
+    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND);
     this.getNewExploadedSymbolIndexes();
     this.allBlastsCompleted();
   }
@@ -425,7 +417,7 @@ export default class SlotReelCascade extends SlotReel {
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
-              onComplete: this.onFallCCNewSymbolStepComplete.bind(this, this.symbolsArray[k][i]),
+              onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           } else {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
@@ -433,7 +425,7 @@ export default class SlotReelCascade extends SlotReel {
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
-              onComplete: this.onFallCCNewSymbolStepComplete.bind(this, this.symbolsArray[k][i]),
+              onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           }
         } else {
@@ -443,26 +435,11 @@ export default class SlotReelCascade extends SlotReel {
     }
   }
 
-  onFallCCNewSymbolStepComplete(symb: ReelSymbolSprite) {
-    symb.showLanding();
-    const originalYScale = symb.scale.y;
-    const value = symb.scale.y * 0.94 + (Math.random() * 6) / 100;
-    AnimationProxy.animateTween(symb, {
-      duration: 0.1,
-      scaleY: value,
-      onComplete: this.onSymbolNewSymbolCameInCompleted.bind(this, symb, originalYScale),
-    });
-  }
-  protected onSymbolNewSymbolCameInCompleted(symb: ReelSymbolSprite, originalYScale: number): void {
-    AnimationProxy.animateTween(symb, {
-      duration: 0.1,
-      scaleY: originalYScale,
-      onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, symb),
-    });
-  }
-
   protected onVallCCNewSymbolFinalStepComplete(symb: ReelSymbolSprite): void {
     this.newSymbolCascadeIndex++;
+    if (this.reelsData.landingSymbols.includes(symb.getSymbolName())) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symb.getSymbolName());
+    }
     if (this.newSymbolCascadeIndex == this.totalNewSymbolsToCascade) {
       StateManager.goToState(STATES.SHOW_TUMBLE_WIN_STATE);
     }

@@ -32,10 +32,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.showIdleAnim(true);
   }
   protected stopSpinQuick(): void {
-    console.log('stop spin quick');
     this.quickSpinStarted = true;
-    console.log('stop spin quick -- ', this.isStopSpinButtonClick);
-    console.log('xxxxxxxxxxxxxxxxx');
     this.isStopSpinButtonClick = false;
     EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
     let index = 0;
@@ -79,7 +76,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         const delay = 0; //k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
         if (!this.isStopSpinButtonClick) {
           this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
-          console.log('xxxx');
         }
 
         AnimationProxy.animateTween(this.symbolsArray[k][i], {
@@ -155,6 +151,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         }
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_IN_SOUND);
   }
 
   protected showNewSymbolsCascadeIn() {
@@ -196,7 +193,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
-              onComplete: this.onFallCCNewSymbolStepComplete.bind(this, this.symbolsArray[k][i]),
+              onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           } else {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
@@ -204,7 +201,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
-              onComplete: this.onFallCCNewSymbolStepComplete.bind(this, this.symbolsArray[k][i]),
+              onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           }
         } else {

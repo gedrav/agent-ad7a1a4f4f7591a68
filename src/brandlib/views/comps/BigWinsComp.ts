@@ -201,6 +201,7 @@ export class BigWinsComp extends ResponsiveView {
   public clearSpinWin(): void {
     if (this.winState) {
       EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+      EventHandler.dispatchEvent(SlotEvents.STOP_COUNT_UP_SOUND);
       EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     }
     this.winState = false;

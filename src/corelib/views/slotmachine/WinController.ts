@@ -8,6 +8,7 @@ import { Util } from '@core/utils/UtilService';
 import SlotReel from '@core/views/slotmachine/SlotReel';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { GameProxy } from '@core/models/GameConfigProxy';
 export default class WinController {
   private noOfRows: number;
   private noOfReels: number;
@@ -49,6 +50,7 @@ export default class WinController {
           this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation();
         }
       }
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND);
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(this.notifyFeatureTriggerAnimDone.bind(this), 2000);
     }
@@ -103,6 +105,17 @@ export default class WinController {
           for (let k = 0; k < len; k++) {
             this.winSymbolsContainer.addChild(this.tumbleWinAmountTexts[k]);
           }
+        }
+        if (appModel.turboMode) {
+          EventHandler.dispatchEvent(
+            SlotEvents.PLAY_TURBO_TUMBLE_WIN_SOUND,
+            (appModel.tumbleIndex + 1) % Util.getDefaultValue(GameProxy.config.cascadeTumbleSoundCount, 6),
+          );
+        } else {
+          EventHandler.dispatchEvent(
+            SlotEvents.PLAY_TUMBLE_WIN_SOUND,
+            (appModel.tumbleIndex + 1) % Util.getDefaultValue(GameProxy.config.cascadeTumbleSoundCount, 6),
+          );
         }
       } else {
         this.notifySpinWinDone();

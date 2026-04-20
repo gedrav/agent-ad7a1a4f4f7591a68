@@ -63,18 +63,9 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
 
-    {
-      name: 'turboSlotSpin',
-      type: 'game',
-      loop: false,
-      playEvents: [],
-      stopEvents: [],
-      volume: 1,
-      fadeOutDuration: 100,
-    },
     //PLAY_WIN_SOUND
     {
-      name: 'wild1Sfx',
+      name: 'Wild Land Sfx',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],

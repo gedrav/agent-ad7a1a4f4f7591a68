@@ -52,6 +52,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         isFixedSymbol: true,
         winValueComponent: WinValueComp,
         reelHeight: 1200,
+        landingSymbols: ['SC'],
         reelsConfig: ReelsConfig,
         multiplierTextConfig: {
           name: 'multiplierVal',
