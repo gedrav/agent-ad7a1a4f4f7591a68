@@ -361,6 +361,9 @@ class SlotGameApp {
     if (document.visibilityState === 'hidden') {
       this.stopPixiApp();
     } else {
+      if ((globalThis as any)._isPanelOpen) {
+        return;
+      }
       this.startPixiApp();
     }
   }
