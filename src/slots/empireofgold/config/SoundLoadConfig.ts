@@ -53,7 +53,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
-
     {
       name: 'turboSlotSpin',
       type: 'game',
@@ -63,7 +62,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
-    //PLAY_WIN_SOUND
     {
       name: 'wild1Sfx',
       type: 'game',
@@ -158,7 +156,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
-      name: 'bigWinIntro',
+      name: 'WIN 1',
       type: 'game',
       loop: true,
       playEvents: ['PLAY_BIG_WIN_SOUND'],
@@ -168,7 +166,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 250,
     },
     {
-      name: 'megaIntro',
+      name: 'WIN 2',
       type: 'game',
       loop: true,
       playEvents: ['PLAY_MEGA_WIN_SOUND'],
@@ -178,7 +176,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 250,
     },
     {
-      name: 'giganticIntro',
+      name: 'WIN 3',
       type: 'game',
       loop: true,
       playEvents: ['PLAY_GIGANTIC_WIN_SOUND'],
@@ -188,7 +186,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 250,
     },
     {
-      name: 'unbelievableIntro',
+      name: 'WIN 4',
       type: 'game',
       loop: true,
       playEvents: ['PLAY_UNBELIEVABLE_WIN_SOUND'],
@@ -198,23 +196,23 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 250,
     },
     {
-      name: 'winTerm',
+      name: 'WIN TERMINATION',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_BIG_WIN_TERMINATION_SOUND'],
       volume: 1,
     },
     {
-      name: 'rollup',
+      name: 'ROLL UP',
       type: 'game',
       loop: true,
       playEvents: ['PLAY_COUNT_UP_SOUND'],
       stopEvents: ['STOP_COUNT_UP_SOUND'],
-      volume: 0.25,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {
-      name: 'rollupTerm',
+      name: 'ROLL UP TERMINATION',
       type: 'game',
       loop: false,
       playEvents: ['STOP_COUNT_UP_SOUND'],
