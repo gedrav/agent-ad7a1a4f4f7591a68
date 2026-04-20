@@ -190,15 +190,19 @@ export class BigWinsComp extends ResponsiveView {
     this.isSkipping = false;
     clearTimeout(this.timeoutId);
     clearTimeout(this.winTimerId);
-    StateManager.doNextStep();
     EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: true });
     EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
       value: appModel.getSpinWin(),
       duration: 0,
       toShowTotalWin: appModel.isCascadeGame(),
     });
+    StateManager.doNextStep();
   }
   public clearSpinWin(): void {
+    if (this.winState) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+      EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
+    }
     this.winState = false;
     this.skipRect.visible = false;
     clearTimeout(this.winTimerId);
