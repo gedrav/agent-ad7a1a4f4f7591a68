@@ -82,7 +82,7 @@ export class AutoplayView extends ResponsiveChildrenView {
       if (this._inputUpdating) return;
 
       // restrict to 2 decimal places
-      const valid = text.match(/^\d*\.?\d{0,2}/)?.[0] ?? '';
+      const valid = text.match(/^(?:0|[1-9]\d*)(?:\.\d{0,2})?/)?.[0] ?? '';
       if (valid !== text) {
         this._inputUpdating = true;
 
