@@ -46,6 +46,7 @@ class SlotGameApp {
   private soundsLoaded: boolean = false;
   private animBound: (time: number) => void;
   private rafId: number | null = null;
+  private isTabSuspended: boolean;
 
   constructor() {}
 
@@ -67,6 +68,7 @@ class SlotGameApp {
     GameProxy.config.textsToClear = [];
     GameProxy.config.imagesToClear = [];
     GameProxy.config.isAnteEnabled = false;
+    this.isTabSuspended = false;
 
     // iOS Safari: high-performance mode + uncapped DPR + antialias causes GPU thermal
     // throttling, WebGL context loss, and touch interaction failure on the canvas.
@@ -164,6 +166,7 @@ class SlotGameApp {
     EventHandler.addEventListener(SlotEvents.SPLASH_DESTROYED, this.onSplashDestroyed.bind(this));
     EventHandler.addEventListener(AppEvents.SOUNDS_LOADING_COMPLETE, this.onSoundsLoaded.bind(this));
     EventHandler.addEventListener(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit.bind(this));
+    EventHandler.addEventListener(SlotEvents.CHECK_TO_RESUME_SOUND, this.checkForIOSAudiioResume.bind(this));
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
@@ -368,9 +371,17 @@ class SlotGameApp {
     }
   }
 
+  protected checkForIOSAudiioResume(): void {
+    if (this.isTabSuspended) {
+      SoundFactory.resumeAudioContext();
+      this.isTabSuspended = false;
+    }
+  }
+
   private stopPixiApp(): void {
     SoundFactory.muteAllSounds();
     EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
+    this.isTabSuspended = true;
     this.app.stop();
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
@@ -380,6 +391,9 @@ class SlotGameApp {
 
   private startPixiApp(): void {
     EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
+    if (DeviceProxy.config.isIOSDevice) {
+      SoundFactory.resumeAudioContext();
+    }
     SoundFactory.unmuteAllSounds();
     this.app.start();
     if (this.rafId === null) {

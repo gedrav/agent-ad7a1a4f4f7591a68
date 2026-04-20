@@ -197,6 +197,17 @@ class SoundServiceProxy {
     }
     return obj;
   }
+  public resumeAudioContext() {
+    if (!this.isSoundPresent) {
+      return;
+    }
+    if (Howler.ctx && Howler.ctx.state && Howler.ctx.state === 'suspended') {
+      Howler.ctx.resume().catch((e) => {
+        console.error('Failed to resume audio context on gesture:', e);
+      });
+    }
+  }
+
   public muteAllSounds(): void {
     //console.log(' MUTE 🔕');
     Howler.mute(true);

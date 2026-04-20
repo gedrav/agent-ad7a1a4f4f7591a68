@@ -6,6 +6,7 @@ import { ShowLowBalanceErrorCommand } from '@core/commands/action/ShowLowBalance
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { RequestFullscreenCommand } from './RequestFullscreenCommand';
+import { SlotEvents } from '@core/events/SlotEvents';
 
 class SpinClickCmd extends ActionCommand {
   public async execute(data: any = null) {
@@ -22,6 +23,9 @@ class SpinClickCmd extends ActionCommand {
     } else {
       const action: ActionCommand = ShowLowBalanceErrorCommand;
       action?.execute(null, this);
+    }
+    if (DeviceProxy.config.isIOSDevice) {
+      EventHandler.dispatchEvent(SlotEvents.CHECK_TO_RESUME_SOUND);
     }
   }
 }
