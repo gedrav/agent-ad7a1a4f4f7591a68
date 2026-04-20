@@ -264,9 +264,15 @@ export default class SlotReelCascade extends SlotReel {
         }
       }
     }
+    const len1 = tumbleData.length;
+    if (len1 > 0) {
+      for (let k = 0; k < len1; k++) {
+        console.log('dispatching -- ', tumbleData[k].symbol);
+        EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND, tumbleData[k].symbol);
+      }
+    }
   }
   protected showSymbolBlast(symbol: ReelSymbolSprite, delay: number = 0): void {
-    EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND);
     symbol.showBlastAnim(() => this.onBlastAnimComplete(symbol));
   }
   protected onBlastAnimComplete(symbol: ReelSymbolSprite): void {

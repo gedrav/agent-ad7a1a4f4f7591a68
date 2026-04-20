@@ -60,6 +60,10 @@ export class SoundManager {
       if (sObj.matchParam === param) {
         SoundFactory.playSound(sObj);
       }
+    } else if (sObj.matchParams != undefined) {
+      if (sObj.matchParams.includes(param)) {
+        SoundFactory.playSound(sObj);
+      }
     } else {
       SoundFactory.playSound(sObj);
     }

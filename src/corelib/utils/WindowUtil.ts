@@ -72,7 +72,6 @@ export class WindowUtil {
     window.getGameInitData = getData;
     window.getGameVersion = () => GameProxy.config.gameVersion;
     window.getIsSoundOn = () => {
-      console.log(SoundFactory.sfxState);
       return SoundFactory.sfxState;
     };
     window.playHistoryRulesSound = function () {
