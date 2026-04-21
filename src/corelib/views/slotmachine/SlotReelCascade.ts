@@ -13,6 +13,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import ReelSymbol from '@core/views/slotmachine/ReelSymbol';
 import { STATES } from '@core/states/StateConstants';
 import { Power3, Power1, Sine } from 'gsap/gsap-core';
+import { gsap } from 'gsap';
 
 type BlastSymbol = {
   reelIndex: number;
@@ -44,6 +45,7 @@ export default class SlotReelCascade extends SlotReel {
   protected timeoutIds: any[] = [];
   protected explodedSymbolsIndexes: any[];
   protected totalSymbols: number;
+  private landingSymbolsIndex: number[];
 
   constructor(configData: any) {
     super(configData);
@@ -66,6 +68,13 @@ export default class SlotReelCascade extends SlotReel {
     for (let k = 0; k < this.configData.data.noOfReels; k++) {
       arr = [];
       this.explodedSymbolsIndexes.push(arr);
+    }
+    if (this.reelsData.landingSymbols && this.reelsData.landingSymbols.length > 0) {
+      this.landingSymbolsIndex = [];
+      const len = this.reelsData.landingSymbols.length;
+      for (let i = 0; i < len; i++) {
+        this.landingSymbolsIndex.push(1);
+      }
     }
     this.allSymbolsFallen = false;
     this.spinResponseReceived = false;
@@ -267,7 +276,6 @@ export default class SlotReelCascade extends SlotReel {
     const len1 = tumbleData.length;
     if (len1 > 0) {
       for (let k = 0; k < len1; k++) {
-        console.log('dispatching -- ', tumbleData[k].symbol);
         EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND, tumbleData[k].symbol);
       }
     }
@@ -416,7 +424,6 @@ export default class SlotReelCascade extends SlotReel {
           this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
           this.symbolsArray[k][i].y = -(len - i + 1) * this.configData.data.symbolHeight;
           const finalY = i * this.configData.data.symbolHeight;
-          console.log('here == ', i, finalY - this.symbolsArray[k][i].y);
           if (appModel.turboMode) {
             AnimationProxy.animateTween(this.symbolsArray[k][i], {
               duration: (ENTER_DURATION / 2) * this.moveArray[k][i],
@@ -443,11 +450,24 @@ export default class SlotReelCascade extends SlotReel {
 
   protected onVallCCNewSymbolFinalStepComplete(symb: ReelSymbolSprite): void {
     this.newSymbolCascadeIndex++;
-    if (this.reelsData.landingSymbols.includes(symb.getSymbolName())) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symb.getSymbolName());
-    }
+
     if (this.newSymbolCascadeIndex == this.totalNewSymbolsToCascade) {
       StateManager.goToState(STATES.SHOW_TUMBLE_WIN_STATE);
+    }
+  }
+
+  protected checkForSymbolDistanceCovered(symb: ReelSymbol, tween: gsap.core.Tween): void {
+    if (tween.progress() > 0.5) {
+      tween.eventCallback('onUpdate', null);
+      this.checkForLanding(symb);
+    }
+  }
+  protected checkForLanding(symb?: ReelSymbol): void {
+    const pos = this.reelsData.landingSymbols.indexOf(symb.getSymbolName());
+    if (pos > -1) {
+      const param = symb.getSymbolName() + this.landingSymbolsIndex[pos];
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, param);
+      this.landingSymbolsIndex[pos]++;
     }
   }
 }

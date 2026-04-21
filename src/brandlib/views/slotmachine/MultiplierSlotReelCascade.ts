@@ -144,19 +144,25 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
         this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
         if (appModel.turboMode) {
-          AnimationProxy.animateTween(this.symbolsArray[k][i], {
+          const tween = AnimationProxy.animateTween(this.symbolsArray[k][i], {
             duration: ENTER_DURATION / 2,
             delay,
             y: finalY,
             ease: Back.easeOut.config(0.6),
+            onUpdate: () => {
+              this.checkForSymbolDistanceCovered(this.symbolsArray[k][i], tween);
+            },
             onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
           });
         } else {
-          AnimationProxy.animateTween(this.symbolsArray[k][i], {
+          const tween = AnimationProxy.animateTween(this.symbolsArray[k][i], {
             duration: ENTER_DURATION,
             delay,
             y: finalY,
             ease: Back.easeOut.config(0.6),
+            onUpdate: () => {
+              this.checkForSymbolDistanceCovered(this.symbolsArray[k][i], tween);
+            },
             onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
           });
         }
@@ -199,19 +205,25 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
           const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
           this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
           if (appModel.turboMode) {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
+            const tween = AnimationProxy.animateTween(this.symbolsArray[k][i], {
               duration: ENTER_DURATION / 2,
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
+              onUpdate: () => {
+                this.checkForSymbolDistanceCovered(this.symbolsArray[k][i], tween);
+              },
               onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           } else {
-            AnimationProxy.animateTween(this.symbolsArray[k][i], {
+            const tween = AnimationProxy.animateTween(this.symbolsArray[k][i], {
               duration: ENTER_DURATION,
               delay,
               y: finalY,
               ease: Back.easeOut.config(0.6),
+              onUpdate: () => {
+                this.checkForSymbolDistanceCovered(this.symbolsArray[k][i], tween);
+              },
               onComplete: this.onVallCCNewSymbolFinalStepComplete.bind(this, this.symbolsArray[k][i]),
             });
           }
