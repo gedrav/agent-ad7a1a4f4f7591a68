@@ -276,6 +276,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       ease: 'Linear.easeOut',
       onComplete: this.fsTotalMultiplierWentUp.bind(this, totalMultiText),
     });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_MULTIPLIER_TRAILING_SOUND);
   }
 
   protected animateMultiplier() {
@@ -289,6 +290,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       ease: 'Linear.easeOut',
       onComplete: this.onMultiplierWentUp.bind(this),
     });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_MULTIPLIER_TRAILING_SOUND);
   }
 
   protected onMultiplierWentUp() {
@@ -358,6 +360,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     };
     return new this.reelsData.symbolClass({ data });
   }
+  //-------------------------------
 
   protected getCorrespondingMultiplierSymbol(multiplierVal: number, symbMultipliers: Record<string, number[]>): string {
     for (const key in symbMultipliers) {

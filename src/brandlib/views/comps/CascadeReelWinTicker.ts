@@ -2,6 +2,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { appModel } from '@core/models/services/AppModelService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
@@ -101,6 +102,7 @@ export class CascadeReelWinTicker extends ReelWinTicker {
       ease: 'Linear.easeOut',
       onComplete: this.onFinalMovementDone.bind(this),
     });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_MULTIPLIER_TOTAL_WIN_SOUND);
   }
 
   protected onTextMoveDone() {

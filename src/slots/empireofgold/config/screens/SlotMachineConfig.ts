@@ -52,7 +52,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         isFixedSymbol: true,
         winValueComponent: WinValueComp,
         reelHeight: 1200,
-        landingSymbols: ['SC'],
+        landingSymbols: ['SC', 'BN_G', 'BN_B', 'BN_P', 'BN_R'],
         reelsConfig: ReelsConfig,
         multiplierTextConfig: {
           name: 'multiplierVal',
@@ -237,7 +237,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           },
           BN_G: {
-            name: 'multi_green',
+            name: 'BN_G',
             spineName: 'multiplayer',
             skin: 'green',
             idleAnim: 'idle',
@@ -248,7 +248,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 0.82,
           },
           BN_B: {
-            name: 'multi_blue',
+            name: 'BN_B',
             spineName: 'multiplayer',
             skin: 'blue',
             idleAnim: 'idle',
@@ -259,7 +259,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 0.82,
           },
           BN_P: {
-            name: 'multi_purple',
+            name: 'BN_P',
             spineName: 'multiplayer',
             skin: 'purple',
             idleAnim: 'idle',
@@ -270,7 +270,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 0.82,
           },
           BN_R: {
-            name: 'multi_red',
+            name: 'BN_R',
             spineName: 'multiplayer',
             skin: 'red',
             idleAnim: 'idle',

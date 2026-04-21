@@ -63,7 +63,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   private tickerComp: ReelTickerComp;
   private fsAutoCounterComp: FSAutoCounterComp;
   public slotGuideRect: PixGraphics;
-  private timeoutIds: any[];
+  protected timeoutIds: any[];
   private timeoutIds2: any[];
 
   constructor(configData: any) {
