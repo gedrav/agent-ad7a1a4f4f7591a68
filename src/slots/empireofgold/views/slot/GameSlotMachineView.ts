@@ -54,10 +54,14 @@ export class GameSlotMachineView extends SlotMachineView {
     super.resizeView();
     if (DeviceProxy.config.isDevice) {
       if (DeviceProxy.config.isPortrait) {
-        this.slotReel.addChildAt(this.character, 1);
+        if (this.character) {
+          this.slotReel.addChildAt(this.character, 1);
+        }
         this.positionEdgeButtons();
       } else {
-        this.slotReel.addChild(this.character);
+        if (this.character) {
+          this.slotReel.addChild(this.character);
+        }
       }
     }
   }
