@@ -347,7 +347,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC',
-      volume: 0.8,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {
