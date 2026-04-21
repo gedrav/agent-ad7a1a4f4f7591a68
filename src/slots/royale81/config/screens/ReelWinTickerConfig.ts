@@ -1,4 +1,3 @@
-import { CascadeReelWinTicker } from '@brand/views/comps/CascadeReelWinTicker';
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 
