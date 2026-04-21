@@ -44,21 +44,21 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 324, y: 295 },
+            reelContainerPos: { x: 324, y: 285 },
             reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 226,
+            symbolHeight: 236,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 324, y: 295 },
+            reelContainerPos: { x: 324, y: 285 },
             reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 226,
+            symbolHeight: 236,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 324, y: 295 },
+            reelContainerPos: { x: 324, y: 285 },
             reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 226,
+            symbolHeight: 236,
             symbolScale: 1,
           },
         },

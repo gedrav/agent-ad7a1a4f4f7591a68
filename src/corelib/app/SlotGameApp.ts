@@ -263,7 +263,7 @@ class SlotGameApp {
       this.splashComp.destroy();
       this.splashComp = null;
     }
-
+    console.log('splash start clicked -- ', this.isViewCreated);
     if (this.isViewCreated) {
       this.makeGameVisible();
       this.app.stop();

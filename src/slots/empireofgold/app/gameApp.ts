@@ -41,6 +41,7 @@ export class gameApp extends SlotGameApp {
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
   }
   protected makeGameVisible() {
+    console.trace('makeGameVisible');
     this.appContainer.addChild(this.gameAppScreen);
   }
 }
