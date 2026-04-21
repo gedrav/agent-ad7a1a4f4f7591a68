@@ -198,7 +198,6 @@ export class BigWinsComp extends ResponsiveView {
       duration: 0,
       toShowTotalWin: appModel.isCascadeGame(),
     });
-    this.clearSpinWin();
     console.log('current state -- ', StateManager.currentState);
     StateManager.doNextStep();
   }
@@ -213,7 +212,6 @@ export class BigWinsComp extends ResponsiveView {
     clearTimeout(this.winTimerId);
     this.winTicker?.reset();
     this.winTickerBW?.reset();
-    console.log('clearSpinWin');
     clearTimeout(this.timeoutId);
     this.showWinTickerType();
     this.isSkipping = false;
@@ -261,7 +259,7 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {
     const animations = this.configData.data.animations[this.currentState];
-    console.log('onAnimComplete', this.isSkipping);
+    console.log('onAnimComplete', this.isSkipping, data.animation.name);
     if (this.isSkipping) {
       console.log('onAnimComplete skipping');
       if (data.animation.name === animations.idle) {

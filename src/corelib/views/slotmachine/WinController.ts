@@ -170,17 +170,21 @@ export default class WinController {
       const winDataLength = appModel.getWinDataLength();
       if (winDataLength > 0) {
         this.fadeOutAllSymbols();
+        const doneSymbols = [];
         for (let i = 0; i < winDataLength; i++) {
-          this.totalWinSymbols++;
           const winData = appModel.getWinData();
           const winningPos = winData[i].winningPosition;
           if (winningPos && winningPos.length > 0) {
             for (let j = 0; j < winningPos.length; j++) {
               const pos = this.getReelPosition(winData[i].winningPosition[j]);
-              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-              this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
-                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
-              );
+              const symb = this.symbolsArray[pos.reel][pos.row + 1];
+              if (doneSymbols.indexOf(symb) > -1) {
+              } else {
+                this.totalWinSymbols++;
+              }
+              doneSymbols.push(symb);
+              this.winSymbolsContainer.addChild(symb);
+              symb.showWinning(() => this.onSpinWinAnimComplete(symb));
             }
           }
         }

@@ -41,6 +41,7 @@ class ShowSpinWinStateCommand extends StateCommand {
   }
   public doNextStep(): void {
     this.completedIndex++;
+    console.trace('in next step == , ', this.completedIndex);
     if (appModel.isCascadeGame()) {
       if (this.completedIndex === 1) {
         //stopping at 1 as there will be not any symbol anim while spin ends
@@ -48,6 +49,7 @@ class ShowSpinWinStateCommand extends StateCommand {
         StateManager.next();
       }
     } else {
+      console.log('in next step checkinggggggggg== , ', this.completedIndex);
       if (this.completedIndex === 2) {
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
         StateManager.next();
