@@ -18,6 +18,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   private multiplierTextArr: PixText[];
   private multiplierAnimCount: number = 0;
   private totalMultiplierCount: number = 0;
+  private isFallingIn: boolean = false;
   constructor(configData: any) {
     super(configData);
     this.multiplierTextArr = [];
@@ -31,9 +32,18 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   public restartIdleAnim(): void {
     this.showIdleAnim(true);
   }
+  protected startSpin(): void {
+    this.isFallingIn = false;
+    super.startSpin();
+  }
   protected stopSpinQuick(): void {
     this.quickSpinStarted = true;
     this.isStopSpinButtonClick = false;
+    // clear any existing timeouts to avoid calls to getNewSymbolsIn which is sored with an timeout
+    if (this.timeoutIds[0]) {
+      clearTimeout(this.timeoutIds[0]);
+      this.timeoutIds[0] = null;
+    }
     EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
     let index = 0;
     let rowIndex = 0;
@@ -62,7 +72,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       }
     }
     this.symbolFallingIndex = 0;
-    let finalY, delay, timeVal;
+    let finalY;
 
     const COL_STAGGER = 0.1;
     const ROW_STAGGER = 0.05;
@@ -74,7 +84,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       for (let i = this.configData.data.noOfRows - 1; i >= 0; i--) {
         finalY = i * this.configData.data.symbolHeight;
         const delay = 0; //k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
-        if (!this.isStopSpinButtonClick) {
+        if (!this.isFallingIn) {
           this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
         }
 
@@ -91,6 +101,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
 
   protected getNewSymbolsIn(): void {
     this.isStopSpinButtonClick = false;
+    this.isFallingIn = true;
     //EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
     let index = 0;
     let rowIndex = 0;
@@ -119,7 +130,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       }
     }
     this.symbolFallingIndex = 0;
-    let finalY, delay, timeVal;
+    let finalY;
 
     const COL_STAGGER = 0.1;
     const ROW_STAGGER = 0.05;
@@ -160,7 +171,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.newSymbolCascadeIndex = 0;
     const reelsView = appModel.getCascadeReelsView();
     const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
-    let finalY, delay, timeVal;
+    let finalY;
 
     const COL_STAGGER = 0.1;
     const ROW_STAGGER = 0.05;
