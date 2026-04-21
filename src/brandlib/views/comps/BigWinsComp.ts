@@ -67,6 +67,7 @@ export class BigWinsComp extends ResponsiveView {
   }
 
   protected showWinTickerType(type: string = 'normal'): void {
+    console.log('showWinTickerType', type);
     if (type === 'normal') {
       this.winTicker.visible = true;
       this.winTickerBW.visible = false;
@@ -182,6 +183,7 @@ export class BigWinsComp extends ResponsiveView {
   }
 
   protected notifyWinDone(): void {
+    console.log('in notifyWinDone');
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
@@ -209,6 +211,7 @@ export class BigWinsComp extends ResponsiveView {
     clearTimeout(this.winTimerId);
     this.winTicker?.reset();
     this.winTickerBW?.reset();
+    console.log('clearSpinWin');
     clearTimeout(this.timeoutId);
     this.showWinTickerType();
     this.isSkipping = false;
@@ -256,7 +259,9 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {
     const animations = this.configData.data.animations[this.currentState];
+    console.log('onAnimComplete', this.isSkipping);
     if (this.isSkipping) {
+      console.log('onAnimComplete skipping');
       if (data.animation.name === animations.idle) {
         if (animations.end) {
           if (this.bigWinAnim) {
@@ -319,6 +324,7 @@ export class BigWinsComp extends ResponsiveView {
         });
       }
     } else {
+      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
     }
   }
@@ -350,7 +356,9 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected checkForNextAnim() {
     this.currentLevel++;
+    console.log('xxxxxxxxxxxxx -- ', this.currentLevel, this.targetLevel);
     if (this.currentLevel >= this.targetLevel) {
+      console.log('bbbbbbbbbbbbbbbbbbb');
       this.notifyWinDone();
     } else {
       this.currentState = STATES[this.currentLevel];
