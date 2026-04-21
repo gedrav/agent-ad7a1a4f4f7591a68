@@ -335,13 +335,19 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.5,
       fadeOutDuration: 100,
     },
-
     {
-      name: 'turboSlotSpin',
+      name: 'INTRO',
       type: 'game',
       loop: false,
-      playEvents: [],
-      stopEvents: [],
+      playEvents: ['PLAY_FS_ENTRY_POPUP_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'OUTRO',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_FS_EXIT_POPUP_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
     },
