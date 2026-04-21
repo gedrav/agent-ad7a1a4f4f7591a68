@@ -71,7 +71,11 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
       return;
     }
     if (this.configData.data.idleAnim) {
-      this.playSpineAnimation(this.configData.data.idleAnim, false);
+      if (this.configData.data.idleAnim === 'none') {
+        // dont play idle anim for some reason
+      } else {
+        this.playSpineAnimation(this.configData.data.idleAnim, false);
+      }
     } else {
       super.showIdle();
     }
