@@ -1,13 +1,5 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
-import { appModel } from '@core/models/services/AppModelService';
-import { Util } from '@core/utils/UtilService';
-import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { SlotEvents } from '@core/events/SlotEvents';
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
-import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { Sine } from 'gsap/gsap-core';
-import { GameProxy } from '@core/models/GameConfigProxy';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 
@@ -25,6 +17,7 @@ export class WinValueComp extends StandardView {
       nineSlice: [16, 16, 16, 16],
     };
     this.bg = UIUtil.getElement(bg);
+    this.bg.anchor.set(0.5, 0.5);
     this.addChild(this.bg);
 
     const tConfig = {
@@ -40,15 +33,14 @@ export class WinValueComp extends StandardView {
     };
     this.text = UIUtil.getElement(tConfig);
     this.addChild(this.text);
-    this.text.x = this.bg.width * 0.5;
-    this.text.y = 36;
+    this.text.y = -18;
     this.bg.alpha = 0.8;
   }
 
   public showValue(str: string): void {
     this.text.text = str;
     this.bg.width = this.text.width + 80;
-    this.text.x = this.bg.width * 0.45;
+    this.text.x = -4;
   }
 
   public destroyComp(): void {
