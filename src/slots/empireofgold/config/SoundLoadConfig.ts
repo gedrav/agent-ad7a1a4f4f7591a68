@@ -103,7 +103,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
-
     {
       name: 'spinClicked',
       type: 'game',
@@ -315,6 +314,31 @@ export const GAME_SOUND_CONFIG = {
       stopEvents: [],
       matchParam: 6,
       volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'MULTIPLIER LAND SFX',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
+      matchParams: ['BN_G', 'BN_B', 'BN_P', 'BN_R'],
+      volume: 0.5,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'MULTIPLIER TRAIL SFX',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_MULTIPLIER_TRAILING_SOUND'],
+      volume: 0.5,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'MULTIPLIER TOTAL WIN',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_MULTIPLIER_TOTAL_WIN_SOUND'],
+      volume: 0.5,
       fadeOutDuration: 100,
     },
     {
