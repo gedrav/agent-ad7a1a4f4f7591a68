@@ -198,6 +198,8 @@ export class BigWinsComp extends ResponsiveView {
       duration: 0,
       toShowTotalWin: appModel.isCascadeGame(),
     });
+    this.clearSpinWin();
+    console.log('current state -- ', StateManager.currentState);
     StateManager.doNextStep();
   }
   public clearSpinWin(): void {
