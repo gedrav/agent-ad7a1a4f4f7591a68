@@ -56,16 +56,16 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
       this.guideRect.alpha = 0;
-      this.bigWinAnim.update(0);
+      //this.bigWinAnim.update(0);
       console.log('this.bigWinAnim', GameProxy.config.app.renderer.prepare);
       this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
     }
     if (this.configData.data.bigWinTextAnim) {
       this.bigWinTextAnim = UIUtil.getElement(this.configData.data.bigWinTextAnim);
-      this.bigWinTextAnim.update(0);
+      //this.bigWinTextAnim.update(0);
       this.addChild(this.bigWinAnim, this.bigWinTextAnim, this.winTicker, this.winTickerBW, this.skipRect);
     }
-    GameProxy.config.app.render();
+    //GameProxy.config.app.render();
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim.stopAnimation();
       this.bigWinTextAnim.visible = false;
