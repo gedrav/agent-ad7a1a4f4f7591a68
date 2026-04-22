@@ -6,8 +6,6 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { Point } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
-import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
-import { RoyalReelFrameComp } from '@game/views/comps/RoyalReelFrameComp';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;
@@ -38,9 +36,21 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected showWildBlastAnticipation(): void {
-    // play the pot spine anim anticipation.
-    // on complete of anticipation call StateManager.doNextStep();
+    this.potAnim.stopAnimation();
+
+    // Play anticipation animation
+    this.potAnim.playAnimation({
+      state: 'anticipation',
+      loop: false,
+      nextState: 'idle',
+      nextLoop: true,
+    });
+
+    setTimeout(() => {
+      StateManager.doNextStep();
+    }, 100);
   }
+
   protected startGameLogoAnimation(): void {
     this.gameTitle.playAnimation({ state: 'Idle', loop: false });
     setTimeout(

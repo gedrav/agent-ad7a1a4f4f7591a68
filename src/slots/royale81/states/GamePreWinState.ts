@@ -19,7 +19,12 @@ class GamePreWinStateCommand extends StateCommand {
       data.numberOfWilds = result.numberOfWilds;
       EventHandler.dispatchEvent('SHOW_WILD_BLAST', data);
     } else {
-      StateManager.next();
+      const rnd = Math.floor(Math.random() * 5) + 1;
+      if (rnd === 1) {
+        EventHandler.dispatchEvent('SHOW_WILD_BLAST_ANTICIPATION');
+      } else {
+        StateManager.next();
+      }
     }
   }
 
