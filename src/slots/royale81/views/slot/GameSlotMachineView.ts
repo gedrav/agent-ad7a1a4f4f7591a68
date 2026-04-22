@@ -34,6 +34,12 @@ export class GameSlotMachineView extends SlotMachineView {
     this.gameTitle = this.slotReel.elementsList['gameTitle'];
     this.startGameLogoAnimation();
     EventHandler.addEventListener('SHOW_WILD_BLAST', this.showWildBlast.bind(this));
+    EventHandler.addEventListener('SHOW_WILD_BLAST_ANTICIPATION', this.showWildBlastAnticipation.bind(this));
+  }
+
+  protected showWildBlastAnticipation(): void {
+    // play the pot spine anim anticipation.
+    // on complete of anticipation call StateManager.doNextStep();
   }
   protected startGameLogoAnimation(): void {
     this.gameTitle.playAnimation({ state: 'Idle', loop: false });
