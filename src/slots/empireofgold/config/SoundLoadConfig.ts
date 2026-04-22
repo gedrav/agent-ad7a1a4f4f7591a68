@@ -138,7 +138,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
-      name: 'REEL SPIN',
+      name: 'smallSymbolsDrop',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND'],

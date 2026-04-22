@@ -73,18 +73,37 @@ class SlotGameApp {
     // iOS Safari: high-performance mode + uncapped DPR + antialias causes GPU thermal
     // throttling, WebGL context loss, and touch interaction failure on the canvas.
     // Cap resolution at 2x, drop antialias, and use default power on iOS mobile.
+    DeviceProxy.readDevice();
     const isIOSMobile = DeviceProxy.config.isIOSMobile;
 
     this.app = new Application();
-    await this.app.init({
-      resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
-      backgroundColor: GameProxy.config.gameBGColor,
-      hello: true,
-      antialias: !isIOSMobile,
-      autoDensity: true,
-      roundPixels: true,
-      //powerPreference: isIOSMobile ? 'default' : 'high-performance',
-    });
+    if (isIOSMobile) {
+      await this.app.init({
+        resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
+        backgroundColor: GameProxy.config.gameBGColor,
+        hello: true,
+        antialias: false,
+        autoDensity: true,
+        roundPixels: true,
+        powerPreference: 'low-power',
+        preferWebGLVersion: 1, // A/B test this on iOS
+        backgroundAlpha: 1,
+        textureGCActive: true,
+        textureGCCheckCountMax: 300,
+        textureGCMaxIdle: 600,
+      });
+    } else {
+      await this.app.init({
+        resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
+        backgroundColor: GameProxy.config.gameBGColor,
+        hello: true,
+        antialias: true,
+        autoDensity: true,
+        roundPixels: true,
+        powerPreference: isIOSMobile ? 'low-power' : 'high-performance',
+      });
+    }
+
     GameProxy.config.app = this.app;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
     BaseTexture.defaultOptions.anisotropicLevel = isIOSMobile ? 0 : 16;
