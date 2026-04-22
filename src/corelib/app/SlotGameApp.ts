@@ -58,6 +58,7 @@ class SlotGameApp {
     this.isFirstTime = true;
     this.assetsLoaded = false;
     this.gameInitReceived = false;
+    console.log('constructor making this.gameInitReceived false');
     GameProxy.setGameConfig(gameConfig);
     StateManager.setStates(statesConfig);
     DeviceProxy.readDevice();
@@ -79,8 +80,9 @@ class SlotGameApp {
     this.app = new Application();
     if (isIOSMobile) {
       const lowEndIOS = /iPhone/.test(navigator.userAgent); // refine if needed
+      console.log('lowEndIOS == ', lowEndIOS);
       await this.app.init({
-        resolution: lowEndIOS ? 1 : Math.min(Math.ceil(window.devicePixelRatio), 2),
+        resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         antialias: false,
@@ -147,6 +149,7 @@ class SlotGameApp {
     GameProxy.config.bundlesLoaded = [];
     GameProxy.createAPIPath();
     appModel.storeLanguage();
+    console.log('requesting game init');
     MessageProxy.requestGameInit();
     await AssetLoader.initAssets(assetConfig, soundConfig);
     await this.initiateCoreApp();
