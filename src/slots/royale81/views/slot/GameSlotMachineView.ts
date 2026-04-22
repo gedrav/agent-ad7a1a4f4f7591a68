@@ -30,9 +30,17 @@ export class GameSlotMachineView extends SlotMachineView {
 
     this.potAnim = this.slotReel.elementsList['potAnim'];
     this.gameTitle = this.slotReel.elementsList['gameTitle'];
+    this.potAnim.addEventListener('complete', this.onPotAnimCompleted.bind(this));
     this.startGameLogoAnimation();
     EventHandler.addEventListener('SHOW_WILD_BLAST', this.showWildBlast.bind(this));
     EventHandler.addEventListener('SHOW_WILD_BLAST_ANTICIPATION', this.showWildBlastAnticipation.bind(this));
+  }
+
+  protected onPotAnimCompleted(data: any): void {
+    if (data.animation.name == 'anticipation') {
+      this.potAnim.playAnimation({ state: 'idle', loop: true });
+      StateManager.doNextStep();
+    }
   }
 
   protected showWildBlastAnticipation(): void {
@@ -45,10 +53,6 @@ export class GameSlotMachineView extends SlotMachineView {
       nextState: 'idle',
       nextLoop: true,
     });
-
-    setTimeout(() => {
-      StateManager.doNextStep();
-    }, 100);
   }
 
   protected startGameLogoAnimation(): void {

@@ -7,6 +7,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
+import { Util } from '@core/utils/UtilService';
 
 class GamePreWinStateCommand extends StateCommand {
   private timeoutId: any;
@@ -19,7 +20,7 @@ class GamePreWinStateCommand extends StateCommand {
       data.numberOfWilds = result.numberOfWilds;
       EventHandler.dispatchEvent('SHOW_WILD_BLAST', data);
     } else {
-      const rnd = Math.floor(Math.random() * 5) + 1;
+      const rnd = Util.getRandomRange(1, 40);
       if (rnd === 1) {
         EventHandler.dispatchEvent('SHOW_WILD_BLAST_ANTICIPATION');
       } else {
