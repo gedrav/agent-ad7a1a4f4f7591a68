@@ -346,21 +346,22 @@ export const SLOT_MACHINE_CONFIG: any = {
         FSAUTO_COUNTER_CONFIG,
         {
           name: 'gameTitle',
-          type: 'Sprite',
-          image: 'empireLogo',
+          type: 'Spine',
+          spineName: 'EOG_Logo_Anim',
+          defaultState: 'Idle',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
               scale: 0.7,
               x: 852,
-              y: -20,
+              y: -34,
             },
             Landscape: {
               scale: 0.6,
               x: 862,
-              y: -24,
+              y: -30,
             },
-            Portrait: { scale: 0.5, x: 862, y: -24 },
+            Portrait: { scale: 0.6, x: 862, y: -30 },
           },
         },
         {

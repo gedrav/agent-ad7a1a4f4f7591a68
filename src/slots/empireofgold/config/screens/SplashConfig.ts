@@ -315,8 +315,9 @@ export const SPLASH_CONFIG: any = {
     },
     {
       name: 'gameTitle',
-      type: 'Sprite',
-      image: 'empireLogo',
+      type: 'Spine',
+      spineName: 'EOG_Logo_Anim',
+      defaultState: 'Idle',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
         Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },

@@ -26,6 +26,7 @@ const SPLASH: AssetBundle = {
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'EOG_Logo_Anim', ASSETTYPE: 'spine' },
   ],
 };
 
