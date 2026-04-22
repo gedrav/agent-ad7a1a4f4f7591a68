@@ -210,7 +210,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, 6),
+            textOffset: new Point(0, 0),
           },
           textConfig: {
             content: 'playGameText',
