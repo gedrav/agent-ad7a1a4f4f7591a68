@@ -121,7 +121,7 @@ export const BUY_BONUS_CONFIG = {
         name: 'btnText',
         type: 'Text',
         content: 'buyBonusBtnText',
-        style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
+        style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 28, fontWeight: 700 },
       },
       x: 512,
       y: 680,

@@ -122,7 +122,7 @@ export const PROMOFS_POPUP_CONFIG = {
                 name: 'btnText',
                 type: 'Text',
                 content: 'setText',
-                style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
+                style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 28, fontWeight: 700 },
               },
               x: 880,
               y: 710,

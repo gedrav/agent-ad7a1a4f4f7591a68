@@ -5,6 +5,7 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
 import { SplashButton } from '@brand/views/comps/SplashButton';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
+import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 
 const fontMLProps = { sk: { fontSize: 45 } };
 
@@ -124,7 +125,6 @@ export const SPLASH_CONFIG: any = {
       },
     },
     { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
-
     {
       name: 'brandLogo',
       type: 'Sprite',
@@ -141,11 +141,11 @@ export const SPLASH_CONFIG: any = {
           maxScale: 1,
         },
         Landscape: {
-          widthPerc: 0.1,
+          widthPerc: 0.08,
           heightPerc: 0.08,
-          hAlign: 'right',
+          hAlign: 'left',
           vAlign: 'top',
-          hPaddingPerc: -0.01,
+          hPaddingPerc: 0.01,
           vPaddingPerc: 0.01,
           maxScale: 1,
         },
@@ -161,6 +161,31 @@ export const SPLASH_CONFIG: any = {
       },
     },
     {
+      name: 'soundBtn',
+      type: 'PixToggleButton',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
+      scale: 1,
+      options: {
+        defaultView: 'soundOnBtn',
+        hoverView: 'soundOnBtn',
+        pressedView: 'soundOnBtn',
+        disabledView: 'soundOnBtn',
+        animations: CoreUIConfig.buttonStates,
+      },
+      selectedOptions: {
+        defaultView: 'soundOffBtn',
+        hoverView: 'soundOffBtn',
+        pressedView: 'soundOffBtn',
+        disabledView: 'soundOffBtn',
+        animations: CoreUIConfig.buttonStates,
+      },
+      layoutData: {
+        Desktop: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.005, vPaddingPerc: 0.01, scale: 0.6 },
+        Landscape: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.01, vPaddingPerc: 0.01, scale: 0.5 },
+        Portrait: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.02, vPaddingPerc: 0.01, scale: 0.5 },
+      },
+    },
+    {
       name: 'controlsContainer',
       type: 'ResponsiveChildrenContainer',
       Elements: [
@@ -168,7 +193,7 @@ export const SPLASH_CONFIG: any = {
           name: 'guideRect',
           type: 'Graphics',
           width: 548,
-          height: 360,
+          height: 220,
           color: 0x0000ff,
           alpha: 0,
         },
@@ -213,52 +238,7 @@ export const SPLASH_CONFIG: any = {
           x: 274,
           y: 85,
           layoutData: {
-            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.5, maxScale: 1 },
-          },
-        },
-        {
-          name: 'soundBtn',
-          type: 'Comp',
-          class: SplashButton,
-          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
-          btnConfig: {
-            type: 'PixToggleButton',
-            scale: 1,
-            options: {
-              defaultView: 'soundOnBtn',
-              hoverView: 'soundOnBtn',
-              pressedView: 'soundOnBtn',
-              disabledView: 'soundOnBtn',
-              animations: CoreUIConfig.buttonStates,
-            },
-            selectedOptions: {
-              defaultView: 'soundOffBtn',
-              hoverView: 'soundOffBtn',
-              pressedView: 'soundOffBtn',
-              disabledView: 'soundOffBtn',
-              animations: CoreUIConfig.buttonStates,
-            },
-          },
-          textConfig: {
-            name: 'btnText',
-            type: 'Text',
-            destroy: true,
-            x: 80,
-            y: 10,
-            content: 'turnOffSoundText',
-            selectedContent: 'turnOnSoundText',
-            style: {
-              fontFamily: 'commonFont',
-              fontWeight: 400,
-              fill: 0xffffff,
-              fontSize: 40,
-              anchor: { x: 0, y: 0.5 },
-            },
-          },
-          layoutData: {
-            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.5, scale: 0.6 },
-            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.5, scale: 0.6 },
-            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.5, scale: 0.6 },
+            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.7, maxScale: 1 },
           },
         },
         {
@@ -292,7 +272,7 @@ export const SPLASH_CONFIG: any = {
             type: 'Text',
             destroy: true,
             x: 80,
-            y: 10,
+            y: 0,
             content: 'dontShowMessage',
             style: {
               fontFamily: 'commonFont',
@@ -303,9 +283,7 @@ export const SPLASH_CONFIG: any = {
             },
           },
           layoutData: {
-            Desktop: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.75, scale: 0.6 },
-            Landscape: { refComponent: 'guideRect', hAlign: 'left', vPosition: 0.75, scale: 0.6 },
-            Portrait: { refComponent: 'guideRect', hAlign: 'center', vPosition: 0.75, scale: 0.6 },
+            Desktop: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'bottom', vPaddingPerc: -0.05, scale: 0.6 },
           },
         },
       ],
@@ -321,18 +299,18 @@ export const SPLASH_CONFIG: any = {
         Portrait: {
           hAlign: 'center',
           vAlign: 'bottom',
-          widthPerc: 1,
-          heightPerc: 0.28,
+          widthPerc: 0.8,
+          heightPerc: 0.2,
           vPaddingPerc: -0.01,
           maxScale: 1,
         },
         Landscape: {
-          hAlign: 'right',
+          hAlign: 'center',
           vAlign: 'bottom',
-          vPaddingPerc: -0.05,
-          hPaddingPerc: -0.01,
+          vPaddingPerc: -0.02,
+          hPaddingPerc: 0,
           widthPerc: 0.36,
-          heightPerc: 0.5,
+          heightPerc: 0.22,
         },
       },
     },
@@ -353,13 +331,12 @@ export const SPLASH_CONFIG: any = {
           vPaddingPerc: 0.05,
         },
         Landscape: {
-          posRefComponent: 'controlsContainer',
           widthPerc: 0.36,
-          heightPerc: 0.2,
+          heightPerc: 0.12,
           maxScale: 1,
           hAlign: 'center',
-          vAlign: 'topUp',
-          vPaddingPerc: -0.2,
+          vAlign: 'top',
+          vPaddingPerc: 0.02,
         },
       },
     },

@@ -29,7 +29,7 @@ export class SplashView extends ResponsiveChildrenView {
   private itemsArray: SplashItemComp[] = [];
   private itemContainer: PixView;
   private startBtn: PixFancyButton;
-  private soundBtn: SplashButton;
+  private soundBtn: PixToggleButton;
   private showIntroBtn: SplashButton;
   private controlsContainer: PixView;
   private cGuideRect: PixGraphics;
@@ -45,8 +45,8 @@ export class SplashView extends ResponsiveChildrenView {
     this.startBtn = this.controlsContainer.elementsList?.['startBtn'];
     this.startBtn.visible = false;
     this.cGuideRect = this.controlsContainer.elementsList?.['guideRect'];
-    this.soundBtn = this.controlsContainer.elementsList?.['soundBtn'];
-    this.soundBtn.addInteraction(this.onSoundBtnClick.bind(this));
+    this.soundBtn = this.elementsList['soundBtn'];
+    this.soundBtn.onPress.connect(this.onSoundBtnClick.bind(this));
 
     this.showIntroBtn = this.controlsContainer.elementsList?.['showIntroBtn'];
     this.showIntroBtn.addInteraction(this.onshowIntroBtnClick.bind(this));
@@ -88,7 +88,7 @@ export class SplashView extends ResponsiveChildrenView {
     EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, false);
   }
   protected onSoundBtnClick(): void {
-    const flag = this.soundBtn.isSelected();
+    const flag = this.soundBtn.isSelected;
     this.soundBtn.setSelected(!flag);
     SoundStateChangeCommand.execute(flag);
   }
@@ -125,10 +125,10 @@ export class SplashView extends ResponsiveChildrenView {
         this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
         this.guideRect.y = UIUtil.getGameHeight() * 0.2;
       } else {
-        this.guideRect.width = UIUtil.getGameWidth() * 0.6;
-        this.guideRect.height = UIUtil.getGameHeight() * 0.96;
-        this.guideRect.x = UIUtil.getGameWidth() * 0.02;
-        this.guideRect.y = UIUtil.getGameHeight() * 0.02;
+        this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+        this.guideRect.height = UIUtil.getGameHeight() * 0.5;
+        this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
+        this.guideRect.y = UIUtil.getGameHeight() * 0.2;
       }
     }
 
@@ -208,7 +208,7 @@ export class SplashView extends ResponsiveChildrenView {
         item.x = 0;
         item.y = 0;
       }
-      if (len === 2) {
+      if (len === 3) {
         for (let k = 0; k < len; k++) {
           this.itemsArray[k].x =
             k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.01;

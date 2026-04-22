@@ -693,7 +693,11 @@ class AppModelService {
     return this.fsInfo.totalFreespinWinAmount;
   }
   public getIsMaxCapReached(): boolean {
-    return this.fsInfo.maxCapReached;
+    if (this.getIsFreeSpinsSession()) {
+      return this.fsInfo.maxCapReached;
+    } else {
+      return this.gameResult.maxCapReached;
+    }
   }
 
   public getCurrentFreeSpinWin(): number {

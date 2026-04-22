@@ -44,7 +44,7 @@ const btnConfig: any = {
       fontSize: 28,
       fontWeight: 400,
       nonSelectedStateColor: 0xffffff,
-      selectedStateColor: 0x6f98ff,
+      selectedStateColor: 0xffffff,
     },
   },
 };

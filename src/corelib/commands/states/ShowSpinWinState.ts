@@ -4,6 +4,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
+import { Util } from '@core/utils/UtilService';
 
 class ShowSpinWinStateCommand extends StateCommand {
   private timeoutId: any;
@@ -41,21 +42,33 @@ class ShowSpinWinStateCommand extends StateCommand {
   }
   public doNextStep(): void {
     this.completedIndex++;
-    console.trace('in next step == , ', this.completedIndex);
     if (appModel.isCascadeGame()) {
       if (this.completedIndex === 1) {
         //stopping at 1 as there will be not any symbol anim while spin ends
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+        this.checkForMaxCapWin();
         StateManager.next();
       }
     } else {
-      console.log('in next step checkinggggggggg== , ', this.completedIndex);
       if (this.completedIndex === 2) {
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+        this.checkForMaxCapWin();
         StateManager.next();
       }
     }
   }
+  protected checkForMaxCapWin(): void {
+    const isMaxCapReached = appModel.getIsMaxCapReached();
+    if (isMaxCapReached) {
+      const obj: any = {};
+      obj.title = Util.getContent('infoText');
+      obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
+        Util.formatCurrency(appModel.getTotalBaseWin()),
+      ]);
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    }
+  }
+  protected handleNext(): void {}
 
   public async destroy(data: any = null): Promise<void> {
     super.destroy(data);

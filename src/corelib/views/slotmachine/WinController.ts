@@ -220,7 +220,10 @@ export default class WinController {
             this.totalWinSymbols++;
             if (j == 0) {
               this.lineWinAmountComp.visible = true;
-              this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;
+              this.lineWinAmountComp.x =
+                this.symbolsArray[pos.reel][pos.row + 1].x +
+                this.winSymbolsContainer.x +
+                this.winSymbolsContainer.width * 0.25;
               this.lineWinAmountComp.y = this.symbolsArray[pos.reel][pos.row + 1].y + this.winSymbolsContainer.y;
               this.lineWinAmountComp.showWin(currentLineWin.winAmount);
             }

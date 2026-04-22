@@ -217,6 +217,13 @@ class SlotGameApp {
     // overridden in game
   }
   protected checkToCreateGame(): void {
+    console.log(
+      'check to create game == ',
+      this.gameInitReceived,
+      this.assetsLoaded,
+      this.soundsLoaded,
+      appModel.isErrorOccurred,
+    );
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
