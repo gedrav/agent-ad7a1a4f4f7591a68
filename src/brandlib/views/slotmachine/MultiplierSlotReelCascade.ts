@@ -232,6 +232,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         }
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND);
   }
 
   protected showMultiplierCollection(): void {

@@ -366,7 +366,7 @@ export default class SlotReelCascade extends SlotReel {
 
       this.cascadeIndex = -1;
     }
-    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND);
+
     this.getNewExploadedSymbolIndexes();
     this.allBlastsCompleted();
   }
@@ -446,6 +446,7 @@ export default class SlotReelCascade extends SlotReel {
         }
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND);
   }
 
   protected onVallCCNewSymbolFinalStepComplete(symb: ReelSymbolSprite): void {

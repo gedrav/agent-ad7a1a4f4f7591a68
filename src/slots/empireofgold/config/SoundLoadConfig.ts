@@ -7,7 +7,7 @@ export const GAME_SOUND_CONFIG = {
     FADE_TIME: 1000,
   },
   soundFiles: [
-    {
+    /*{
       name: 'BBGM',
       type: 'game',
       soundType: 'ambient',
@@ -28,7 +28,7 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.8,
       fadeInDuration: 250,
       fadeOutDuration: 1000,
-    },
+    },*/
     {
       name: 'genericButtonSound',
       type: 'game',
@@ -132,7 +132,16 @@ export const GAME_SOUND_CONFIG = {
       name: 'REEL SPIN',
       type: 'game',
       loop: false,
-      playEvents: ['PLAY_CASCADE_NEW_SYMBOLS_IN_SOUND', 'PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND'],
+      playEvents: ['PLAY_CASCADE_NEW_SYMBOLS_IN_SOUND'],
+      stopEvents: [],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'REEL SPIN',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND'],
       stopEvents: [],
       volume: 1,
       fadeOutDuration: 100,
