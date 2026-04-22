@@ -8,22 +8,39 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { BuyBonusButtonComp } from '../comps/BuyBonusButtonComp';
 import { CharacterController } from '../comps/CharacterController';
+import { Util } from '@core/utils/UtilService';
 
 export class GameSlotMachineView extends SlotMachineView {
   private buyBonusComp: BuyBonusButtonComp;
   private anteBetComp: AnteBetComp;
   private character: CharacterController;
   protected tumbleSlotReel: SlotReelTumble;
+  private gameTitle: PixSpine;
 
   constructor(config: any) {
     super(config);
     this.buyBonusComp = this.elementsList['buyBonusComp'];
     this.anteBetComp = this.elementsList['anteBetComp'];
     this.character = this.slotReel.elementsList['character'];
+    this.gameTitle = this.slotReel.elementsList['gameTitle'];
     this.tumbleSlotReel = this.elementsList['slotReel'];
+    this.startGameLogoAnimation();
 
     EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_ELEMENTS, this.showMainGameElements.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_MAINGAME_ELEMENTS, this.hideMainGameElements.bind(this));
+  }
+  protected showTumbleWin(): void {
+    super.showTumbleWin();
+    this.gameTitle.playAnimation({ state: 'Win', loop: false });
+  }
+  protected startGameLogoAnimation(): void {
+    this.gameTitle.playAnimation({ state: 'Idle', loop: false });
+    setTimeout(
+      () => {
+        this.startGameLogoAnimation();
+      },
+      Util.getRandomRange(1, 5000) + 5000,
+    );
   }
 
   protected enablePanel(): void {
@@ -33,11 +50,6 @@ export class GameSlotMachineView extends SlotMachineView {
   protected disablePanel(): void {
     this.buyBonusComp.interactive = false;
     this.anteBetComp.interactive = false;
-  }
-
-  protected showSpinWin(): void {
-    this.slotReel.showSpinWin();
-    this.bigWinsComp.showSpinWin();
   }
 
   protected showMainGameElements(): void {
