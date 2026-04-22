@@ -46,18 +46,23 @@ class ShowSpinWinStateCommand extends StateCommand {
       if (this.completedIndex === 1) {
         //stopping at 1 as there will be not any symbol anim while spin ends
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-        this.checkForMaxCapWin();
-        StateManager.next();
+        const flag = this.checkForMaxCapWin();
+        if (!flag) {
+          StateManager.next();
+        }
       }
     } else {
       if (this.completedIndex === 2) {
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
         this.checkForMaxCapWin();
-        StateManager.next();
+        const flag = this.checkForMaxCapWin();
+        if (!flag) {
+          StateManager.next();
+        }
       }
     }
   }
-  protected checkForMaxCapWin(): void {
+  protected checkForMaxCapWin(): boolean {
     const isMaxCapReached = appModel.getIsMaxCapReached();
     if (isMaxCapReached) {
       const obj: any = {};
@@ -65,8 +70,14 @@ class ShowSpinWinStateCommand extends StateCommand {
       obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
         Util.formatCurrency(appModel.getTotalBaseWin()),
       ]);
+      obj.callback = this.goToNextStep.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
     }
+    return isMaxCapReached;
+  }
+  protected goToNextStep(): void {
+    console.log('go to next step');
+    StateManager.next();
   }
   protected handleNext(): void {}
 

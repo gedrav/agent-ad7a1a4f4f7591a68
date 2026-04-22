@@ -170,9 +170,12 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
+    console.log('game init received == ', this.gameInitReceived);
     if (appModel.getPreferences()?.showIntro !== false) {
+      console.log('111111111111111');
       this.checkToCreateSplash();
     } else {
+      console.log('22222222222');
       this.checkToCreateGame();
     }
   }
