@@ -20,7 +20,6 @@ export class RoyalReelFrameComp extends ReelFrameComp {
   }
 
   public showWin(): void {
-    if (!this.reelFrameAnim) return;
     const winType = appModel.getWinType();
     if (winType == CONSTANTS.BELOW_TOTALBET_WIN) {
       return;
@@ -32,8 +31,6 @@ export class RoyalReelFrameComp extends ReelFrameComp {
     }
   }
   protected onBigWinCompleted(): void {
-    if (this.reelFrameAnim) {
-      this.reelFrameAnim.playAnimation({ state: 'Static', loop: false });
-    }
+    this.reelFrameAnim.playAnimation({ state: 'Static', loop: false });
   }
 }

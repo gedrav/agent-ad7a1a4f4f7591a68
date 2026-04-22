@@ -391,23 +391,10 @@ class SlotGameApp {
 
   protected visibilityChange(): void {
     if (document.visibilityState === 'hidden') {
-      if (DeviceProxy.config.isIOSDevice) {
-        SoundFactory.muteAllSounds();
-        EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
-        this.isTabSuspended = true;
-        return;
-      }
       this.stopPixiApp();
     } else {
       if ((globalThis as any)._isPanelOpen) {
         return;
-      }
-      if (DeviceProxy.config.isIOSDevice) {
-        EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
-        SoundFactory.resumeAudioContext();
-        if (this.rafId === null) {
-          this.rafId = requestAnimationFrame(this.animBound);
-        }
       }
       this.startPixiApp();
     }
@@ -432,28 +419,14 @@ class SlotGameApp {
   }
 
   private startPixiApp(): void {
-    this.ensureCanvasVisible();
     EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, true);
-    SoundFactory.resumeAudioContext();
+    if (DeviceProxy.config.isIOSDevice) {
+      SoundFactory.resumeAudioContext();
+    }
     SoundFactory.unmuteAllSounds();
     this.app.start();
     if (this.rafId === null) {
       this.rafId = requestAnimationFrame(this.animBound);
-    }
-  }
-
-  private ensureCanvasVisible(): void {
-    try {
-      const canvas = this.app.canvas as HTMLCanvasElement;
-      const gameStage = document.getElementById('gameStage');
-      if (!canvas || !gameStage) return;
-      if (!gameStage.contains(canvas)) {
-        console.log('[SlotGameApp] Re-attaching canvas to DOM');
-        gameStage.appendChild(canvas);
-        this.resize();
-      }
-    } catch (e) {
-      console.log('[SlotGameApp] Canvas visibility check error:', e);
     }
   }
   // -----------------------------------------------------------------------
