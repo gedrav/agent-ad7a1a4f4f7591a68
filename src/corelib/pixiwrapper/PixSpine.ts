@@ -114,6 +114,9 @@ export class PixSpine extends StandardView {
   public playReverseAnimation(): void {
     //this.spineAnim.state.timeScale = -1;
   }
+  update(val: number): void {
+    this.spineAnim.update(val);
+  }
   stopAnimation() {
     this.spineAnim.state.timeScale = 0;
     this.spineAnim.state.data.defaultMix = 1;

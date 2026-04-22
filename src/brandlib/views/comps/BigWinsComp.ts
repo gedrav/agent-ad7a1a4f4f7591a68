@@ -8,6 +8,8 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { GameProxy } from '@core/models/GameConfigProxy';
+import 'pixi.js/prepare';
 
 const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.GIGANTIC_WIN, CONSTANTS.UNBELIEVABLE_WIN];
 export class BigWinsComp extends ResponsiveView {
@@ -45,7 +47,7 @@ export class BigWinsComp extends ResponsiveView {
     this.skipRect.visible = false;
   }
 
-  protected onSecondaryAssetsLoaded(): void {
+  async onSecondaryAssetsLoaded() {
     super.onSecondaryAssetsLoaded();
     this.bigWinAnim = UIUtil.getElement(this.configData.data.bigWinAnim);
     this.addChild(this.bigWinAnim, this.winTicker, this.winTickerBW, this.skipRect);
@@ -54,10 +56,19 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
       this.guideRect.alpha = 0;
+      this.bigWinAnim.update(0);
+      console.log('this.bigWinAnim', GameProxy.config.app.renderer.prepare);
+      await new Promise<void>((resolve) => {
+        GameProxy.config.app.renderer.prepare.upload(this.bigWinAnim, () => resolve());
+      });
       this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
     }
     if (this.configData.data.bigWinTextAnim) {
       this.bigWinTextAnim = UIUtil.getElement(this.configData.data.bigWinTextAnim);
+      this.bigWinTextAnim.update(0);
+      await new Promise<void>((resolve) => {
+        GameProxy.config.app.renderer.prepare.upload(this.bigWinTextAnim, () => resolve());
+      });
       this.addChild(this.bigWinAnim, this.bigWinTextAnim, this.winTicker, this.winTickerBW, this.skipRect);
     }
     if (this.bigWinTextAnim) {
