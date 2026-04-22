@@ -78,8 +78,9 @@ class SlotGameApp {
 
     this.app = new Application();
     if (isIOSMobile) {
+      const lowEndIOS = /iPhone/.test(navigator.userAgent); // refine if needed
       await this.app.init({
-        resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
+        resolution: lowEndIOS ? 1 : Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         antialias: false,
@@ -92,6 +93,10 @@ class SlotGameApp {
         textureGCCheckCountMax: 300,
         textureGCMaxIdle: 600,
       });
+      if (lowEndIOS) {
+        this.app.ticker.maxFPS = 30;
+        this.app.ticker.minFPS = 24;
+      }
     } else {
       await this.app.init({
         resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
