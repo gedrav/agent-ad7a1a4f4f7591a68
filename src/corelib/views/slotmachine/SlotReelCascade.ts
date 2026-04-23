@@ -324,7 +324,8 @@ export default class SlotReelCascade extends SlotReel {
       for (let i = 0; i < len2; i++) {
         if (this.moveArray[k][i] > 0) {
           this.totalCascades++;
-          const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
+          const destI = i + this.moveArray[k][i];
+          const delay = k * COL_STAGGER + (this.configData.data.noOfRows - destI) * ROW_STAGGER;
           const timeVal = (this.fallingInDuration / 2 + delay - 0.5) * 1000;
           const finalY = this.symbolsArray[k][i].y + this.moveArray[k][i] * this.configData.data.symbolHeight;
 

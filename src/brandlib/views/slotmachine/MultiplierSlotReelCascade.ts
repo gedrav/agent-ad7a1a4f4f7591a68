@@ -176,7 +176,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.totalNewSymbolsToCascade = 0;
     this.newSymbolCascadeIndex = 0;
     const reelsView = appModel.getCascadeReelsView();
-    const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
     let finalY;
 
     const COL_STAGGER = 0.1;
@@ -186,6 +185,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
       this.newExploadedSymbolIndexes[k].sort();
       const len = this.newExploadedSymbolIndexes[k].length;
       for (let i = 0; i < len; i++) {
+        const ENTER_DISTANCE = (len - i) * this.configData.data.symbolHeight + this.configData.data.symbolHeight * 0.5;
         this.totalNewSymbolsToCascade++;
         if (this.symbolsArray[k][i]) {
           this.symbolsArray[k][i].resetScale();
@@ -203,7 +203,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
 
           finalY = i * this.configData.data.symbolHeight;
           const delay = k * COL_STAGGER + (this.configData.data.noOfRows - i) * ROW_STAGGER;
-          this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
+          this.symbolsArray[k][i].y = 0 - ENTER_DISTANCE;
           if (appModel.turboMode) {
             const tween = AnimationProxy.animateTween(this.symbolsArray[k][i], {
               duration: ENTER_DURATION / 2,
