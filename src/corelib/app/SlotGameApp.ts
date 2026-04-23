@@ -357,7 +357,9 @@ class SlotGameApp {
   }
 
   protected resize(): void {
-    this.resizeNow();
+    if (!DeviceProxy.config.isIOSDevice) {
+      this.resizeNow();
+    }
     setTimeout(this.resizeNow.bind(this), 250);
   }
   protected resizeNow(): void {
