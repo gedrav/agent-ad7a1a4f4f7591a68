@@ -7,7 +7,7 @@ export const GAME_SOUND_CONFIG = {
     FADE_TIME: 1000,
   },
   soundFiles: [
-    /*{
+    {
       name: 'BBGM',
       type: 'game',
       soundType: 'ambient',
@@ -28,7 +28,7 @@ export const GAME_SOUND_CONFIG = {
       volume: 0.8,
       fadeInDuration: 250,
       fadeOutDuration: 1000,
-    },*/
+    },
     {
       name: 'genericButtonSound',
       type: 'game',
