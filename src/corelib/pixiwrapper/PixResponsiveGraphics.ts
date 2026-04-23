@@ -11,22 +11,41 @@ export class PixResponsiveGraphics extends ResponsiveView {
     this.addChild(this.graphics);
   }
 
+  public updateHeight(ht: number): void {
+    this.configData.height = ht;
+    this.rebuild();
+  }
+
+  public updateWidth(wid: number): void {
+    this.configData.width = wid;
+    this.rebuild();
+  }
+
   public resize(): void {
+    this.rebuild();
+  }
+
+  private rebuild(): void {
     this.graphics.clear();
     this.graphics.destroy();
     this.graphics = null;
     const obj = this.configData;
+    let wid = obj.width;
+    let ht = obj.height;
     if (DeviceProxy.config.isDevice) {
       if (DeviceProxy.config.isPortrait) {
-        this.graphics = new PixGraphics().roundRect(obj.x, obj.y, obj.pWidth, obj.pHeight, obj.radius).fill(obj.color);
-        this.addChild(this.graphics);
+        if (obj.pWidth && obj.pHeight) {
+          wid = obj.pWidth;
+          ht = obj.pHeight;
+        }
       } else {
-        this.graphics = new PixGraphics().roundRect(obj.x, obj.y, obj.lWidth, obj.lHeight, obj.radius).fill(obj.color);
-        this.addChild(this.graphics);
+        if (obj.lWidth && obj.lHeight) {
+          wid = obj.lWidth;
+          ht = obj.lHeight;
+        }
       }
-    } else {
-      this.graphics = new PixGraphics().roundRect(obj.x, obj.y, obj.width, obj.height, obj.radius).fill(obj.color);
-      this.addChild(this.graphics);
     }
+    this.graphics = new PixGraphics().roundRect(obj.x, obj.y, wid, ht, obj.radius).fill(obj.color);
+    this.addChild(this.graphics);
   }
 }

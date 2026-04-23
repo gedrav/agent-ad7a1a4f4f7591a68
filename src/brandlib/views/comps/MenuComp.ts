@@ -4,10 +4,10 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
-import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 
 export class MenuComp extends ResponsiveChildrenView {
-  protected menuBg: PixSprite;
+  protected menuBg: PixResponsiveGraphics;
   protected homeBtn: PixFancyButton;
   protected soundOnBtn: PixFancyButton;
   protected soundOffBtn: PixFancyButton;
@@ -39,7 +39,7 @@ export class MenuComp extends ResponsiveChildrenView {
     const homeURL = appModel.getHomeURL?.();
 
     if (!homeURL && this.homeBtn) {
-      this.homeBtn.visible = false;
+      this.removeChild(this.homeBtn);
     }
     this.visible = false;
     EventHandler.addEventListener(SlotEvents.SOUND_STATE_CHANGED, this.onSoundStateChanged.bind(this));
@@ -90,28 +90,29 @@ export class MenuComp extends ResponsiveChildrenView {
     ].filter(Boolean);
   }
 
-  protected getVisibleMenuButtons(): any[] {
-    return this.getMenuButtons().filter((btn) => btn.visible);
+  protected getActiveMenuButtons(): any[] {
+    return this.getMenuButtons().filter((btn) => btn.visible && btn.parent);
   }
 
   protected layoutMenuButtons(startY: number, gap: number): any[] {
-    const visibleButtons = this.getVisibleMenuButtons();
+    const activeBtns = this.getActiveMenuButtons();
 
-    visibleButtons.forEach((btn, index) => {
+    activeBtns.forEach((btn, index) => {
       btn.y = startY + index * gap;
     });
 
-    return visibleButtons;
+    return activeBtns;
   }
 
   protected updateMenuLayout(): void {
-    const startY = this.homeBtn?.y ?? 48;
+    const startY = 48;
     const gap = 96;
     const visibleButtons = this.layoutMenuButtons(startY, gap);
 
     if (this.menuBg) {
-      const verticalPadding = 32;
-      this.menuBg.height = visibleButtons.length > 0 ? visibleButtons.length * gap + verticalPadding : verticalPadding;
+      const verticalPadding = 20;
+      const newHeight = visibleButtons.length > 0 ? visibleButtons.length * gap + verticalPadding : verticalPadding;
+      this.menuBg.updateHeight(newHeight);
     }
   }
 }

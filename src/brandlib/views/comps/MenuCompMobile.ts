@@ -9,6 +9,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap/gsap-core';
 import { MenuButton } from '@brand/views/comps/MenuButton';
 import { appModel } from '@core/models/services/AppModelService';
+import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
@@ -26,7 +27,7 @@ export class MenuCompMobile extends MenuComp {
     const homeURL = appModel.getHomeURL?.();
 
     if (!homeURL && this.homeBtn) {
-      this.homeBtn.visible = false;
+      this.removeChild(this.homeBtn);
     }
   }
 
@@ -40,16 +41,13 @@ export class MenuCompMobile extends MenuComp {
       const menuBtn = btn as unknown as MenuButton;
       menuBtn.resizeView();
     });
-
     this.updateMenuLayout();
   }
 
   protected updateMenuLayout(): void {
     if (!this.topbar) {
-      super.updateMenuLayout();
       return;
     }
-
     const firstButton = this.getMenuButtons().find(Boolean) as any;
     const gap = firstButton?.height;
     const startY = this.topbar.y + this.topbar.height;

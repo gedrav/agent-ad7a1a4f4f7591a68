@@ -88,7 +88,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     // Hide home button if getHomeURL is null or empty
     if (!appModel.getHomeURL()) {
-      this.homeBtn.visible = false;
+      this.removeChild(this.homeBtn);
     }
 
     this.longPressSprite = UIUtil.getSprite('longPressText');
