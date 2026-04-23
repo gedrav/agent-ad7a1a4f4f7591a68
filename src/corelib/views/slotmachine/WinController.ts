@@ -9,6 +9,7 @@ import SlotReel from '@core/views/slotmachine/SlotReel';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { CONSTANTS } from '@core/utils/CONSTANTS';
 export default class WinController {
   private noOfRows: number;
   private noOfReels: number;
@@ -133,63 +134,71 @@ export default class WinController {
   public showSpinWin(): void {
     this.winSymbolIndex = 0;
     this.totalWinSymbols = 0;
-    if (appModel.isCascadeGame()) {
-      const blastSymbols = appModel.getSpinBlastSymbols();
-      this.fadeOutAllSymbols();
-      if (blastSymbols && blastSymbols.length > 0) {
-        blastSymbols.forEach((blastSymbol: any) => {
-          blastSymbol.forEach((position: number[]) => {
-            this.totalWinSymbols++;
-            const pos = { reel: position[0], row: this.reelsData.isFixedSymbol ? position[1] : position[1] + 1 };
-            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-            this.symbolsArray[pos.reel][pos.row].showWinning(() =>
-              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
-            );
+    const winType = appModel.getWinType();
+    //const winType: string = CONSTANTS.UNBELIEVABLE_WIN;
+    if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
+      if (appModel.isCascadeGame()) {
+        const blastSymbols = appModel.getSpinBlastSymbols();
+        this.fadeOutAllSymbols();
+        if (blastSymbols && blastSymbols.length > 0) {
+          blastSymbols.forEach((blastSymbol: any) => {
+            blastSymbol.forEach((position: number[]) => {
+              this.totalWinSymbols++;
+              const pos = { reel: position[0], row: this.reelsData.isFixedSymbol ? position[1] : position[1] + 1 };
+              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+              this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+              );
+            });
           });
-        });
-      }
-      const positions: number[] = appModel.getFeatureTriggerPositions();
-      if (positions && positions.length > 0) {
-        const len = positions.length;
-        for (let j = 0; j < len; j++) {
-          const pos = this.getReelPosition(positions[j]);
-          if (this.reelsData.isFixedSymbol) {
-            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-            this.symbolsArray[pos.reel][pos.row].showWinning(() =>
-              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
-            );
-          } else {
-            this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-            this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
-              this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
-            );
+        }
+        const positions: number[] = appModel.getFeatureTriggerPositions();
+        if (positions && positions.length > 0) {
+          const len = positions.length;
+          for (let j = 0; j < len; j++) {
+            const pos = this.getReelPosition(positions[j]);
+            if (this.reelsData.isFixedSymbol) {
+              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+              this.symbolsArray[pos.reel][pos.row].showWinning(() =>
+                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+              );
+            } else {
+              this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+              this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+                this.onSpinWinAnimComplete(this.symbolsArray[pos.reel][pos.row + 1]),
+              );
+            }
           }
         }
-      }
-    } else {
-      const winDataLength = appModel.getWinDataLength();
-      if (winDataLength > 0) {
-        this.fadeOutAllSymbols();
-        const doneSymbols = [];
-        for (let i = 0; i < winDataLength; i++) {
-          const winData = appModel.getWinData();
-          const winningPos = winData[i].winningPosition;
-          if (winningPos && winningPos.length > 0) {
-            for (let j = 0; j < winningPos.length; j++) {
-              const pos = this.getReelPosition(winData[i].winningPosition[j]);
-              const symb = this.symbolsArray[pos.reel][pos.row + 1];
-              if (doneSymbols.indexOf(symb) > -1) {
-              } else {
-                this.totalWinSymbols++;
+      } else {
+        const winDataLength = appModel.getWinDataLength();
+        if (winDataLength > 0) {
+          this.fadeOutAllSymbols();
+          const doneSymbols = [];
+          for (let i = 0; i < winDataLength; i++) {
+            const winData = appModel.getWinData();
+            const winningPos = winData[i].winningPosition;
+            if (winningPos && winningPos.length > 0) {
+              for (let j = 0; j < winningPos.length; j++) {
+                const pos = this.getReelPosition(winData[i].winningPosition[j]);
+                const symb = this.symbolsArray[pos.reel][pos.row + 1];
+                if (doneSymbols.indexOf(symb) > -1) {
+                } else {
+                  this.totalWinSymbols++;
+                }
+                doneSymbols.push(symb);
+                this.winSymbolsContainer.addChild(symb);
+                symb.showWinning(() => this.onSpinWinAnimComplete(symb));
               }
-              doneSymbols.push(symb);
-              this.winSymbolsContainer.addChild(symb);
-              symb.showWinning(() => this.onSpinWinAnimComplete(symb));
             }
           }
         }
       }
+    } else {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
     }
+
     // clearTimeout(this.timeoutId);
     // this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
   }

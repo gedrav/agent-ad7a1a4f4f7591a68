@@ -58,7 +58,6 @@ class SlotGameApp {
     this.isFirstTime = true;
     this.assetsLoaded = false;
     this.gameInitReceived = false;
-    console.log('constructor making this.gameInitReceived false');
     GameProxy.setGameConfig(gameConfig);
     StateManager.setStates(statesConfig);
     DeviceProxy.readDevice();
@@ -80,7 +79,6 @@ class SlotGameApp {
     this.app = new Application();
     if (isIOSMobile) {
       const lowEndIOS = /iPhone/.test(navigator.userAgent); // refine if needed
-      console.log('lowEndIOS == ', lowEndIOS);
       await this.app.init({
         resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
@@ -149,7 +147,6 @@ class SlotGameApp {
     GameProxy.config.bundlesLoaded = [];
     GameProxy.createAPIPath();
     appModel.storeLanguage();
-    console.log('requesting game init');
     MessageProxy.requestGameInit();
     await AssetLoader.initAssets(assetConfig, soundConfig);
     await this.initiateCoreApp();
@@ -197,12 +194,9 @@ class SlotGameApp {
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
-    console.log('game init received == ', this.gameInitReceived);
     if (appModel.getPreferences()?.showIntro !== false) {
-      console.log('111111111111111');
       this.checkToCreateSplash();
     } else {
-      console.log('22222222222');
     }
     this.checkToCreateGame();
   }
@@ -247,13 +241,6 @@ class SlotGameApp {
     // overridden in game
   }
   protected checkToCreateGame(): void {
-    console.log(
-      'check to create game == ',
-      this.gameInitReceived,
-      this.assetsLoaded,
-      this.soundsLoaded,
-      appModel.isErrorOccurred,
-    );
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
@@ -300,7 +287,6 @@ class SlotGameApp {
       this.splashComp.destroy();
       this.splashComp = null;
     }
-    console.log('splash start clicked -- ', this.isViewCreated);
     if (this.isViewCreated) {
       this.makeGameVisible();
       this.app.stop();

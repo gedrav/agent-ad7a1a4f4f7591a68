@@ -476,7 +476,7 @@ class AppModelService {
 
     // Safety: if config is missing or empty, fall back to simple logic
     if (!Array.isArray(bigwinValues) || bigwinValues.length < 1) {
-      return win < bet ? CONSTANTS.BELOW_TOTALBET_WIN : CONSTANTS.STANDARD_WIN;
+      return win <= bet ? CONSTANTS.BELOW_TOTALBET_WIN : CONSTANTS.STANDARD_WIN;
     }
 
     // Define thresholds from smallest "big" to largest
@@ -488,7 +488,7 @@ class AppModelService {
       { multiplier: bigwinValues[3], type: CONSTANTS.UNBELIEVABLE_WIN },
     ];
 
-    if (win < bet) {
+    if (win <= bet) {
       return CONSTANTS.BELOW_TOTALBET_WIN;
     }
 

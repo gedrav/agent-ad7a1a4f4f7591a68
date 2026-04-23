@@ -7,7 +7,7 @@ export const GAME_SOUND_CONFIG = {
     FADE_TIME: 1000,
   },
   soundFiles: [
-    {
+    /*{
       name: 'musMainBGM',
       type: 'game',
       soundType: 'ambient',
@@ -25,7 +25,7 @@ export const GAME_SOUND_CONFIG = {
       playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
       volume: 1,
       fadeOutDuration: 1000,
-    },
+    },*/
   ],
   lazySoundFiles: [
     {
@@ -179,6 +179,16 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_STANDARD_WIN_SOUND'],
+      stopEvents: ['CLEAR_WINS'],
+      volume: 1,
+      fadeInDuration: 250,
+      fadeOutDuration: 250,
+    },
+    {
+      name: 'HighValueAllWin',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_PREMIUM_WIN_SOUND'],
       stopEvents: ['CLEAR_WINS'],
       volume: 1,
       fadeInDuration: 250,

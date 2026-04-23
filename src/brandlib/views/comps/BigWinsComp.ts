@@ -131,7 +131,11 @@ export class BigWinsComp extends ResponsiveView {
       this.showWinTickerType();
       this.winTicker.showSpinValue(appModel.getSpinWin());
       this.winTimerId = setTimeout(() => this.notifyWinDone(), duration);
-      EventHandler.dispatchEvent(SlotEvents.PLAY_STANDARD_WIN_SOUND);
+      if (winType === CONSTANTS.BELOW_TOTALBET_WIN) {
+        EventHandler.dispatchEvent(SlotEvents.PLAY_STANDARD_WIN_SOUND);
+      } else {
+        EventHandler.dispatchEvent(SlotEvents.PLAY_PREMIUM_WIN_SOUND);
+      }
     } else {
       EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: false });
       this.winState = true;
