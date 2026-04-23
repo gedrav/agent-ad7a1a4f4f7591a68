@@ -86,6 +86,11 @@ export class ControlPanelView extends ResponsiveChildrenView {
       this.removeChild(this.cheatBtn);
     }
 
+    // Hide home button if getHomeURL is null or empty
+    if (!appModel.getHomeURL()) {
+      this.homeBtn.visible = false;
+    }
+
     this.longPressSprite = UIUtil.getSprite('longPressText');
     this.spinBtn.addChild(this.longPressSprite);
     this.longPressSprite.scale.set(0.95);
@@ -788,20 +793,38 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
     UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
-      refComponent: 'homeBtn',
-      hAlign: 'rightAfter',
-      hPaddingPerc: smallBtnHPaddingPerc,
-    });
-    UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    if (!appModel.getHomeURL()) {
+      // Position fullscreen button at home button's location when home is hidden
+      UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+        hAlign: 'left',
+        hPaddingPerc: hPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    } else {
+      UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+        refComponent: 'homeBtn',
+        hAlign: 'rightAfter',
+        hPaddingPerc: smallBtnHPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    }
 
     UIUtil.setRelativeScale(this.fullscreenExitBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.fullscreenExitBtn, {
-      refComponent: 'homeBtn',
-      hAlign: 'rightAfter',
-      hPaddingPerc: smallBtnHPaddingPerc,
-    });
-    UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    if (!appModel.getHomeURL()) {
+      // Position fullscreen button at home button's location when home is hidden
+      UIUtil.alignHorizontal(this.fullscreenExitBtn, {
+        hAlign: 'left',
+        hPaddingPerc: hPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    } else {
+      UIUtil.alignHorizontal(this.fullscreenExitBtn, {
+        refComponent: 'homeBtn',
+        hAlign: 'rightAfter',
+        hPaddingPerc: smallBtnHPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    }
 
     UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.cheatBtn, {
@@ -911,24 +934,42 @@ export class ControlPanelView extends ResponsiveChildrenView {
     UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
     UIUtil.setRelativeScale(this.fullscreenEnterBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
-      refComponent: 'homeBtn',
-      hAlign: 'rightAfter',
-      hPaddingPerc: smallBtnHPaddingPerc,
-    });
-    UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    if (!appModel.getHomeURL()) {
+      // Position fullscreen button at home button's location when home is hidden
+      UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+        hAlign: 'left',
+        hPaddingPerc: hPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    } else {
+      UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
+        refComponent: 'homeBtn',
+        hAlign: 'rightAfter',
+        hPaddingPerc: smallBtnHPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenEnterBtn, { refComponent: 'homeBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    }
 
     UIUtil.setRelativeScale(this.fullscreenExitBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.fullscreenEnterBtn, {
-      refComponent: 'fullscreenEnterBtn',
-      hAlign: 'center',
-      hPaddingPerc: 0,
-    });
-    UIUtil.alignVertical(this.fullscreenExitBtn, {
-      refComponent: 'fullscreenEnterBtn',
-      vAlign: 'middle',
-      vPaddingPerc: 0,
-    });
+    if (!appModel.getHomeURL()) {
+      // Position fullscreen button at home button's location when home is hidden
+      UIUtil.alignHorizontal(this.fullscreenExitBtn, {
+        hAlign: 'left',
+        hPaddingPerc: hPaddingPerc,
+      });
+      UIUtil.alignVertical(this.fullscreenExitBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
+    } else {
+      UIUtil.alignHorizontal(this.fullscreenExitBtn, {
+        refComponent: 'fullscreenEnterBtn',
+        hAlign: 'center',
+        hPaddingPerc: 0,
+      });
+      UIUtil.alignVertical(this.fullscreenExitBtn, {
+        refComponent: 'fullscreenEnterBtn',
+        vAlign: 'middle',
+        vPaddingPerc: 0,
+      });
+    }
 
     UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.cheatBtn, {

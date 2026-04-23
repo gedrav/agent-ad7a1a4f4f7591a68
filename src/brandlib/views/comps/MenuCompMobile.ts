@@ -1,7 +1,6 @@
 import { MenuComp } from '@brand/views/comps/MenuComp';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
-import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -9,6 +8,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap/gsap-core';
 import { MenuButton } from '@brand/views/comps/MenuButton';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
@@ -23,6 +23,11 @@ export class MenuCompMobile extends MenuComp {
       this.closeBtn.onPress.connect(this.hideMenu.bind(this));
     }
     setTimeout(this.resizeView.bind(this), 500);
+    const homeURL = appModel.getHomeURL?.();
+
+    if (!homeURL && this.homeBtn) {
+      this.homeBtn.visible = false;
+    }
   }
 
   protected resizeView() {
@@ -31,31 +36,24 @@ export class MenuCompMobile extends MenuComp {
 
     super.resizeView();
 
-    const btns: string[] = [
-      'homeBtn',
-      'soundOnBtn',
-      'soundOffBtn',
-      'infoBtn',
-      'gameHistoryBtn',
-      'showSplashBtn',
-      'hideSplashBtn',
-    ];
-    const len = btns.length;
-    this.elementsList['homeBtn'].scale.set(1);
+    this.getMenuButtons().forEach((btn) => {
+      const menuBtn = btn as unknown as MenuButton;
+      menuBtn.resizeView();
+    });
 
-    for (let i = 0; i < len; i++) {
-      const btn: MenuButton = this.elementsList[btns[i]];
-      btn.resizeView();
-      if (i == 0) {
-        btn.y = this.topbar.y + this.topbar.height;
-      }
-      if (i > 0) {
-        btn.y = this.elementsList[btns[i - 1]].y + btn.height;
-      }
-      if (i == 2 || i == 6) {
-        btn.y = this.elementsList[btns[i - 1]].y;
-      }
+    this.updateMenuLayout();
+  }
+
+  protected updateMenuLayout(): void {
+    if (!this.topbar) {
+      super.updateMenuLayout();
+      return;
     }
+
+    const firstButton = this.getMenuButtons().find(Boolean) as any;
+    const gap = firstButton?.height;
+    const startY = this.topbar.y + this.topbar.height;
+    this.layoutMenuButtons(startY, gap);
   }
 
   protected showMenu(event: any): void {
