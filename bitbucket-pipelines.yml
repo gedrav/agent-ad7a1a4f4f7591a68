@@ -5,7 +5,7 @@ clone:
 
 definitions:
   steps:
-    # ─────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # Build & Deploy to a specific environment.
     #
     # Required repo-level variables:
@@ -18,15 +18,15 @@ definitions:
     # Required deployment environment variables:
     #   SLOT_FE_STORAGE_ACCOUNT  - Storage account name (e.g. fegslotfedev)
     #   SLOT_FE_CDN_RG           - Resource group (e.g. feg-slot-rg-dev)
-    #   SLOT_FE_CDN_PROFILE      - CDN profile name (e.g. feg-slot-cdn-dev)
-    #   SLOT_FE_CDN_ENDPOINT     - CDN endpoint name (e.g. feg-slot-fe-dev)
-    # ─────────────────────────────────────────────────────────────
+    #   SLOT_FE_CDN_PROFILE      - AFD profile name (optional for dev, required for staging/prod)
+    #   SLOT_FE_CDN_ENDPOINT     - AFD endpoint name (optional for dev, required for staging/prod)
+    # -----------------------------------------------------------------
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # Pipelines
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 pipelines:
-  # ── Auto-trigger: push to main → deploy to dev ───────────────
+  # -- Auto-trigger: push to main -> deploy to dev ------------------
   branches:
     main:
       - step:
@@ -54,15 +54,17 @@ pipelines:
               --auth-mode login
               --overwrite
               --output none
-            - >
-              az cdn endpoint purge
-              --resource-group "$SLOT_FE_CDN_RG"
-              --profile-name "$SLOT_FE_CDN_PROFILE"
-              --name "$SLOT_FE_CDN_ENDPOINT"
-              --content-paths '/*'
-              --no-wait
+            - |
+              if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
+                az afd endpoint purge \
+                  --resource-group "$SLOT_FE_CDN_RG" \
+                  --profile-name "$SLOT_FE_CDN_PROFILE" \
+                  --name "$SLOT_FE_CDN_ENDPOINT" \
+                  --content-paths '/*' \
+                  --no-wait
+              fi
 
-  # ── Manual triggers ──────────────────────────────────────────
+  # -- Manual triggers ----------------------------------------------
   custom:
     deploy-dev:
       - step:
@@ -90,13 +92,15 @@ pipelines:
               --auth-mode login
               --overwrite
               --output none
-            - >
-              az cdn endpoint purge
-              --resource-group "$SLOT_FE_CDN_RG"
-              --profile-name "$SLOT_FE_CDN_PROFILE"
-              --name "$SLOT_FE_CDN_ENDPOINT"
-              --content-paths '/*'
-              --no-wait
+            - |
+              if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
+                az afd endpoint purge \
+                  --resource-group "$SLOT_FE_CDN_RG" \
+                  --profile-name "$SLOT_FE_CDN_PROFILE" \
+                  --name "$SLOT_FE_CDN_ENDPOINT" \
+                  --content-paths '/*' \
+                  --no-wait
+              fi
 
     deploy-staging:
       - step:
@@ -125,7 +129,7 @@ pipelines:
               --overwrite
               --output none
             - >
-              az cdn endpoint purge
+              az afd endpoint purge
               --resource-group "$SLOT_FE_CDN_RG"
               --profile-name "$SLOT_FE_CDN_PROFILE"
               --name "$SLOT_FE_CDN_ENDPOINT"
@@ -159,7 +163,7 @@ pipelines:
               --overwrite
               --output none
             - >
-              az cdn endpoint purge
+              az afd endpoint purge
               --resource-group "$SLOT_FE_CDN_RG"
               --profile-name "$SLOT_FE_CDN_PROFILE"
               --name "$SLOT_FE_CDN_ENDPOINT"
