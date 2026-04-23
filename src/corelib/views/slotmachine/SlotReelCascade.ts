@@ -315,7 +315,6 @@ export default class SlotReelCascade extends SlotReel {
     }
     const COL_STAGGER = 0.1;
     const ROW_STAGGER = 0.05;
-    const ENTER_DURATION = 0.32 / 5;
     len = this.moveArray.length;
     this.totalCascades = 0;
     this.cascadeIndex = 0;
@@ -324,6 +323,7 @@ export default class SlotReelCascade extends SlotReel {
       for (let i = 0; i < len2; i++) {
         if (this.moveArray[k][i] > 0) {
           this.totalCascades++;
+          const ENTER_DURATION = 0.32 / this.moveArray[k][i];
           const destI = i + this.moveArray[k][i];
           const delay = k * COL_STAGGER + (this.configData.data.noOfRows - destI) * ROW_STAGGER;
           const timeVal = (this.fallingInDuration / 2 + delay - 0.5) * 1000;
