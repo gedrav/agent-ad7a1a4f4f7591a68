@@ -4,7 +4,8 @@
     "paths": {
       "@game/*": [
         "src/slots/empireofgold/*",
-        "src/slots/royale81/*"
+        "src/slots/royale81/*",
+        "src/slots/empireofgoldnewconquest/*"
       ],
       "@assets/*": [
         "../feg_games_assets/empireofgold/*"

@@ -5,7 +5,7 @@ import { compression } from 'vite-plugin-compression2';
 import path from 'node:path';
 
 // SINGLE CONTROL POINT (with env override)
-const GAME_ID = process.env.GAME_ID || 'royale81';
+const GAME_ID = process.env.GAME_ID || 'empireofgoldnewconquest';
 const BUILD_OUTPUT_ROOT = process.env.BUILD_OUTPUT_ROOT
   ? path.resolve(__dirname, process.env.BUILD_OUTPUT_ROOT)
   : path.resolve(__dirname, '../feg_games_build');
