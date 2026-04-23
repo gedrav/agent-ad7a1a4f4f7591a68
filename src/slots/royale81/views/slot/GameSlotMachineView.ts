@@ -53,6 +53,7 @@ export class GameSlotMachineView extends SlotMachineView {
       nextState: 'idle',
       nextLoop: true,
     });
+    EventHandler.dispatchEvent('PLAY_POT_SHAKE_SOUND');
   }
 
   protected startGameLogoAnimation(): void {
@@ -82,6 +83,7 @@ export class GameSlotMachineView extends SlotMachineView {
       this.potAnim.stopAnimation();
       this.potAnim.playAnimation({ state: 'Win_anim' });
       this.playSymbolComingOut(symbolPositions);
+      EventHandler.dispatchEvent('PLAY_POT_SHAKE_SOUND');
       setTimeout(() => EventHandler.dispatchEvent(`PLAY_WILD_BLAST_${numberOfWilds}`), 1166);
     } else {
       symbolPositions.forEach((position) => this.replaceWildOnReels(position));

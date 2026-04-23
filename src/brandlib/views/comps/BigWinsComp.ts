@@ -57,7 +57,6 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim.visible = false;
       this.guideRect.alpha = 0;
       //this.bigWinAnim.update(0);
-      console.log('this.bigWinAnim', GameProxy.config.app.renderer.prepare);
       this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
     }
     if (this.configData.data.bigWinTextAnim) {

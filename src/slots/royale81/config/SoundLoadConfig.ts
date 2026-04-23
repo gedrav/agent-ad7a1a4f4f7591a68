@@ -65,6 +65,14 @@ export const GAME_SOUND_CONFIG = {
 
     //PLAY_WIN_SOUND
     {
+      name: 'POT SHAKE SFX',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_POT_SHAKE_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
       name: 'Wild Land Sfx',
       type: 'game',
       loop: false,
