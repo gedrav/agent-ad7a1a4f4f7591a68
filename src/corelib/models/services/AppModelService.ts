@@ -299,8 +299,8 @@ class AppModelService {
   }
   // ------------------- All get methods ---------------------------------------------------------
   public getHomeURL(): string {
-    // return this.playerInfo ? this.playerInfo.homeURL : null;
-    return '';
+    return this.playerInfo ? this.playerInfo.homeURL : null;
+    // return '';
   }
   public getReelsView(): any {
     if (this.gameResult?.reelModifiers && this.gameResult?.reelModifiers.length > 0) {
