@@ -7,18 +7,19 @@ definitions:
   steps:
     # ─────────────────────────────────────────────────────────────
     # Build & Deploy to a specific environment.
-    # Required pipeline variables (per deployment environment):
-    #   SWA_DEPLOYMENT_TOKEN  — Azure SWA deployment token
-    #                           (pulumi stack output feSlotDeploymentToken)
-    #   SWA_NAME              — Azure Static Web App name
-    #                           (e.g. feg-slot-fe-dev)
-    #   AZURE_RESOURCE_GROUP  — Resource group (e.g. feg-slot-rg-dev)
     #
     # Required repo-level variables:
-    #   ASSETS_REPO_ACCESS_TOKEN — Bitbucket token with read access to feg_games_assets
+    #   ASSETS_REPO_ACCESS_TOKEN - Bitbucket token with read access to feg_games_assets
+    #   AZURE_CLIENT_ID          - Azure SP app ID (feg-slot-fe-ci)
+    #   AZURE_CLIENT_SECRET      - Azure SP secret
+    #   AZURE_TENANT_ID          - Azure tenant ID
+    #   AZURE_SUBSCRIPTION_ID    - Azure subscription ID
     #
-    # URLs are sourced from the committed .env.* files in the repo.
-    # No runtime patching required.
+    # Required deployment environment variables:
+    #   SLOT_FE_STORAGE_ACCOUNT  - Storage account name (e.g. fegslotfedev)
+    #   SLOT_FE_CDN_RG           - Resource group (e.g. feg-slot-rg-dev)
+    #   SLOT_FE_CDN_PROFILE      - CDN profile name (e.g. feg-slot-cdn-dev)
+    #   SLOT_FE_CDN_ENDPOINT     - CDN endpoint name (e.g. feg-slot-fe-dev)
     # ─────────────────────────────────────────────────────────────
 
 # ─────────────────────────────────────────────────────────────────
@@ -42,7 +43,24 @@ pipelines:
             - npm ci
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:development
             - cp staticwebapp.config.json ../feg_slot_build/
-            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
+            - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+            - az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+            - az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+            - >
+              az storage blob upload-batch
+              --account-name "$SLOT_FE_STORAGE_ACCOUNT"
+              --source ../feg_slot_build
+              --destination '$web'
+              --auth-mode login
+              --overwrite
+              --output none
+            - >
+              az cdn endpoint purge
+              --resource-group "$SLOT_FE_CDN_RG"
+              --profile-name "$SLOT_FE_CDN_PROFILE"
+              --name "$SLOT_FE_CDN_ENDPOINT"
+              --content-paths '/*'
+              --no-wait
 
   # ── Manual triggers ──────────────────────────────────────────
   custom:
@@ -61,7 +79,24 @@ pipelines:
             - npm ci
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:development
             - cp staticwebapp.config.json ../feg_slot_build/
-            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
+            - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+            - az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+            - az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+            - >
+              az storage blob upload-batch
+              --account-name "$SLOT_FE_STORAGE_ACCOUNT"
+              --source ../feg_slot_build
+              --destination '$web'
+              --auth-mode login
+              --overwrite
+              --output none
+            - >
+              az cdn endpoint purge
+              --resource-group "$SLOT_FE_CDN_RG"
+              --profile-name "$SLOT_FE_CDN_PROFILE"
+              --name "$SLOT_FE_CDN_ENDPOINT"
+              --content-paths '/*'
+              --no-wait
 
     deploy-staging:
       - step:
@@ -78,7 +113,24 @@ pipelines:
             - npm ci
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:staging
             - cp staticwebapp.config.json ../feg_slot_build/
-            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
+            - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+            - az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+            - az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+            - >
+              az storage blob upload-batch
+              --account-name "$SLOT_FE_STORAGE_ACCOUNT"
+              --source ../feg_slot_build
+              --destination '$web'
+              --auth-mode login
+              --overwrite
+              --output none
+            - >
+              az cdn endpoint purge
+              --resource-group "$SLOT_FE_CDN_RG"
+              --profile-name "$SLOT_FE_CDN_PROFILE"
+              --name "$SLOT_FE_CDN_ENDPOINT"
+              --content-paths '/*'
+              --no-wait
 
     deploy-prod:
       - step:
@@ -95,4 +147,21 @@ pipelines:
             - npm ci
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build
             - cp staticwebapp.config.json ../feg_slot_build/
-            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
+            - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+            - az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+            - az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+            - >
+              az storage blob upload-batch
+              --account-name "$SLOT_FE_STORAGE_ACCOUNT"
+              --source ../feg_slot_build
+              --destination '$web'
+              --auth-mode login
+              --overwrite
+              --output none
+            - >
+              az cdn endpoint purge
+              --resource-group "$SLOT_FE_CDN_RG"
+              --profile-name "$SLOT_FE_CDN_PROFILE"
+              --name "$SLOT_FE_CDN_ENDPOINT"
+              --content-paths '/*'
+              --no-wait
