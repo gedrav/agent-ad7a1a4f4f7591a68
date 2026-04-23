@@ -203,8 +203,8 @@ class SlotGameApp {
       this.checkToCreateSplash();
     } else {
       console.log('22222222222');
-      this.checkToCreateGame();
     }
+    this.checkToCreateGame();
   }
   protected async onPreloaderLoaded() {
     GameProxy.updateCommonConfig();
