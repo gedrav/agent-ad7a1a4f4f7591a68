@@ -59,7 +59,7 @@ pipelines:
                 az afd endpoint purge \
                   --resource-group "$SLOT_FE_CDN_RG" \
                   --profile-name "$SLOT_FE_CDN_PROFILE" \
-                  --name "$SLOT_FE_CDN_ENDPOINT" \
+                  --endpoint-name "$SLOT_FE_CDN_ENDPOINT" \
                   --content-paths '/*' \
                   --no-wait
               fi
@@ -97,7 +97,7 @@ pipelines:
                 az afd endpoint purge \
                   --resource-group "$SLOT_FE_CDN_RG" \
                   --profile-name "$SLOT_FE_CDN_PROFILE" \
-                  --name "$SLOT_FE_CDN_ENDPOINT" \
+                  --endpoint-name "$SLOT_FE_CDN_ENDPOINT" \
                   --content-paths '/*' \
                   --no-wait
               fi
@@ -132,7 +132,7 @@ pipelines:
               az afd endpoint purge
               --resource-group "$SLOT_FE_CDN_RG"
               --profile-name "$SLOT_FE_CDN_PROFILE"
-              --name "$SLOT_FE_CDN_ENDPOINT"
+              --endpoint-name "$SLOT_FE_CDN_ENDPOINT"
               --content-paths '/*'
               --no-wait
 
@@ -166,6 +166,6 @@ pipelines:
               az afd endpoint purge
               --resource-group "$SLOT_FE_CDN_RG"
               --profile-name "$SLOT_FE_CDN_PROFILE"
-              --name "$SLOT_FE_CDN_ENDPOINT"
+              --endpoint-name "$SLOT_FE_CDN_ENDPOINT"
               --content-paths '/*'
               --no-wait
