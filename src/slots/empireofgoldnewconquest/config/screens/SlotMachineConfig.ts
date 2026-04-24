@@ -9,7 +9,7 @@ import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig
 import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import WinController from '@core/views/slotmachine/WinController';
-import { WIN_COLLECTOR_CONFIG } from '@slots/empireofgold/config/screens/WinCollectorConfig';
+import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
 import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
