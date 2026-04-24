@@ -5,10 +5,14 @@
       "@game/*": [
         "src/slots/empireofgold/*",
         "src/slots/royale81/*",
-        "src/slots/empireofgoldnewconquest/*"
+        "src/slots/empireofgoldnewconquest/*",
+        "src/slots/sweetsalonroyale/*"
       ],
       "@assets/*": [
-        "../feg_games_assets/empireofgold/*"
+        "../feg_games_assets/empireofgold/*",
+        "../feg_games_assets/royale81/*",
+        "../feg_games_assets/empireofgoldnewconquest/*",
+        "../feg_games_assets/sweetsalonroyale/*"
       ],
       "@common/*": [
         "../feg_games_assets/common/*"
