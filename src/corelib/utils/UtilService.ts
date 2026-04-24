@@ -100,7 +100,7 @@ class UtilService {
   }
 
   public formatCurrency(num: number, decimal = 2) {
-    if (num == undefined) {
+    if (num == undefined || isNaN(num)) {
       num = 0;
     }
     let str = '';
@@ -129,6 +129,9 @@ class UtilService {
   }
 
   public formatCurrencyNoSymbol(num: number, decimal = 2) {
+    if (num == undefined || isNaN(num)) {
+      num = 0;
+    }
     let str = '';
     if (Intl) {
       str = new Intl.NumberFormat('en', {
