@@ -206,7 +206,6 @@ class AppModelService {
     this.gameInfo.allowCheat = data.playerInfo.allowCheat;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.anteBet = 1;
-    data.playerInfo.maxBet = 100;
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameInfo.minBet = data.playerInfo.minBet;
     this.gameInfo.maxBet = data.playerInfo.maxBet;
