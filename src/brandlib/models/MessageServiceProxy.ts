@@ -127,6 +127,16 @@ export class MessageServiceProxy extends AbstractProxy {
         } else if (GameProxy.config.cheatObject == 'WildBurst3') {
           finalObj.extraData.forceAddWildFeature = true;
           finalObj.extraData.forceWildsAdded = 3;
+        } else if (GameProxy.config.cheatObject == 'LowToHighConversion') {
+          finalObj.extraData.forceSymbolChange = true;
+        } else if (GameProxy.config.cheatObject == 'L1ToH1') {
+          finalObj.extraData.forceSymbolChange = true;
+          finalObj.extraData.forceSymbolChangeLow = 'L1';
+          finalObj.extraData.forceSymbolChangeHigh = 'H1';
+        } else if (GameProxy.config.cheatObject == 'L5ToH3') {
+          finalObj.extraData.forceSymbolChange = true;
+          finalObj.extraData.forceSymbolChangeLow = 'L5';
+          finalObj.extraData.forceSymbolChangeHigh = 'H3';
         } else {
           finalObj.extraData.combination = cheatObj;
         }

@@ -94,7 +94,8 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.betBtnsArray = [];
     const len = totalBetsArray.length;
     if (len > 0) {
-      const noOfBtns: number = 11;
+      // Use however many bets come from BE, capped at 11 (max btn is the 12th)
+      const noOfBtns: number = Math.min(len, 11);
       for (let i = 0; i < noOfBtns; i++) {
         const btn = UIUtil.getElement(btnConfig);
         if (btn) {
@@ -221,10 +222,28 @@ export class BetPanelView extends ResponsiveChildrenView {
     }
 
     this.titleText.x = this.betPanelBg.width / 2;
-    this.maxBetBtn.x = this.betBtnsArray[this.betBtnsArray.length - 1].x + gap;
-    this.maxBetBtn.y = this.betBtnsArray[this.betBtnsArray.length - 1].y;
 
-    this.btnContainer.x = (this.betPanelBg.width - this.btnContainer.width) / 2 + this.betBtnsArray[0].width / 2;
+    // derive rowHeight from actual button y positions
+    const rowHeight = this.betBtnsArray.length > columns ? this.betBtnsArray[columns].y - this.betBtnsArray[0].y : 80;
+
+    // landscape uses 2 rows (last row index = 1), portrait/desktop uses 3 rows (last row index = 2)
+    const lastRowIndex = DeviceProxy.config.isDesktop || DeviceProxy.config.isPortrait ? 2 : 1;
+    const lastRowY = lastRowIndex * rowHeight;
+    const btnsInLastRow = this.betBtnsArray.filter((btn) => btn.y === lastRowY);
+
+    if (btnsInLastRow.length > 0) {
+      // last row has buttons — place maxBetBtn at the last column
+      this.maxBetBtn.x = (columns - 1) * gap;
+      this.maxBetBtn.y = lastRowY;
+    } else {
+      // last row is empty — center maxBetBtn
+      this.maxBetBtn.x = ((columns - 1) * gap) / 2;
+      this.maxBetBtn.y = lastRowY;
+    }
+
+    // fixed grid width keeps container position stable regardless of button count
+    const fixedGridWidth = columns * gap;
+    this.btnContainer.x = (this.betPanelBg.width - fixedGridWidth) / 2 + this.betBtnsArray[0].width / 2;
     this.stakeContainer.x = (this.betPanelBg.width - this.stakeContainer.width) / 2;
     this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height * 0.92;
 
