@@ -14,6 +14,7 @@ import ReelSymbol from '@core/views/slotmachine/ReelSymbol';
 import { STATES } from '@core/states/StateConstants';
 import { Power3, Power1, Sine } from 'gsap/gsap-core';
 import { gsap } from 'gsap';
+import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 
 type BlastSymbol = {
   reelIndex: number;
@@ -53,6 +54,8 @@ export default class SlotReelCascade extends SlotReel {
     this.totalSymbols = this.reelsData.noOfReels * this.reelsData.noOfRows;
     EventHandler.addEventListener(SlotEvents.BLAST_SYMBOLS, this.showBlastAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.CASCADE_SYMBOLS, this.showNewSymbolsCascadeIn.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.LOWPAY_SYMBOL_CONVERSION, this.showLowpaySymbolConversion.bind(this));
   }
 
   protected startSpin(): void {
@@ -448,6 +451,41 @@ export default class SlotReelCascade extends SlotReel {
       }
     }
     EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND);
+  }
+
+  protected showLowpaySymbolConversion(data?: {
+    changedPositions?: Array<[number, number]>;
+    selectedHigh?: string;
+    selectedLow?: string;
+  }) {
+    const changedPositions = data?.changedPositions ?? [];
+    const selectedHigh = data?.selectedHigh;
+    const targetSymbolData = selectedHigh ? this.reelsData.symbolsData[selectedHigh] : null;
+
+    if (!changedPositions.length || !targetSymbolData) {
+      this.allSymbolsConverted();
+      return;
+    }
+
+    let convertedCount = 0;
+    const totalSymbolsToConvert = changedPositions.length;
+
+    const onSymbolConverted = () => {
+      convertedCount++;
+      if (convertedCount >= totalSymbolsToConvert) {
+        this.allSymbolsConverted();
+      }
+    };
+
+    for (let i = 0; i < totalSymbolsToConvert; i++) {
+      const [column, row] = changedPositions[i] ?? [];
+      const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
+      symbol.playSymbolConversion(targetSymbolData, column, onSymbolConverted);
+    }
+  }
+
+  protected allSymbolsConverted() {
+    StateManager.doNextStep();
   }
 
   protected onVallCCNewSymbolFinalStepComplete(symb: ReelSymbolSprite): void {

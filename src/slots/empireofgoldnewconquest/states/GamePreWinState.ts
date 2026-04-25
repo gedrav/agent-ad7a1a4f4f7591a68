@@ -13,11 +13,12 @@ class GamePreWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     const result = appModel.getReelModifiersData();
-    if (result && result.type == 'addWildFeatureTriggered') {
+    if (result && result.type == 'symbolChangeApplied') {
       const data: any = {};
-      data.wildPositions = result.wildPositions;
-      data.numberOfWilds = result.numberOfWilds;
-      EventHandler.dispatchEvent('SHOW_WILD_BLAST', data);
+      data.changedPositions = result.changedPositions;
+      data.selectedHigh = result.selectedHigh;
+      data.selectedLow = result.selectedLow;
+      EventHandler.dispatchEvent(SlotEvents.LOWPAY_SYMBOL_CONVERSION, data);
     } else {
       StateManager.next();
     }
