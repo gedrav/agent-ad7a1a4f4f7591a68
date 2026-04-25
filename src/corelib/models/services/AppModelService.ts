@@ -361,15 +361,21 @@ class AppModelService {
   }
 
   public getTotalBet(isAnte: boolean = false): number {
-    if (isAnte) {
-      return (
-        this.gameInfo?.betsArray[this.gameInfo.betPos] *
-        this.gameInfo?.creditValue *
-        this.gameInfo?.anteBet *
-        this.getSelectedLines()
-      );
+    if (this.gameInfo.betsArray.length > 0) {
+      if (isAnte) {
+        if (this.gameInfo.betsArray.length > 0) {
+          return (
+            this.gameInfo?.betsArray[this.gameInfo.betPos] *
+            this.gameInfo?.creditValue *
+            this.gameInfo?.anteBet *
+            this.getSelectedLines()
+          );
+        }
+      } else {
+        return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
+      }
     } else {
-      return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
+      return 0;
     }
   }
 
