@@ -330,6 +330,11 @@ class AppModelService {
     return null;
   }
   public getCascadeReelsView(): any {
+    if (this.gameResult?.reelModifiers && this.gameResult?.reelModifiers.length > 0) {
+      if (this.gameResult?.reelModifiers[0]?.initialReelView) {
+        return this.gameResult?.reelModifiers[0]?.initialReelView;
+      }
+    }
     return this.gameResult.cascadeData[this.tumbleIndex].reelView;
   }
   public getIsDevMode(): boolean {

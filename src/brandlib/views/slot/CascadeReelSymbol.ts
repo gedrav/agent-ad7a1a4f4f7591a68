@@ -1,12 +1,7 @@
-import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { appModel } from '@core/models/services/AppModelService';
-import { ColorMatrixFilter } from 'pixi.js';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { Sine } from 'gsap';
-import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 export default class CascadeReelSymbol extends ReelSymbolSpine {
@@ -89,6 +84,14 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
     } else {
       super.showBlastAnim();
     }
+  }
+
+  public playSymbolConversion(data: any, reelno: number, onComplete?: () => void): void {
+    this.showBlastAnim(() => {
+      this.setNewSymbol(data, reelno);
+      this.setNormalTexture();
+      onComplete?.();
+    });
   }
 
   protected onExplosionAnimComplete(data: { animation: { name: string } }): void {
