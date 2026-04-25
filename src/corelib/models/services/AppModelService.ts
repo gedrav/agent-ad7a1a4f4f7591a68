@@ -233,6 +233,14 @@ class AppModelService {
       this.setUnfinishedInfo();
     }
   }
+
+  public isConfigError(): boolean {
+    let isError = false;
+    if (this.gameInfo.betsArray.length == 0 || this.gameInfo.betPos == -1) {
+      isError = true;
+    }
+    return isError;
+  }
   public getPaytableData(): any {
     return this.gameInfo.paytable;
   }

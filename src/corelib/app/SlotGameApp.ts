@@ -255,11 +255,21 @@ class SlotGameApp {
               this.onSplashDestroyed();
             }, 50);
           }
+          this.checkForConfigError();
           this.loadLazyFiles();
         } else {
         }
       } else {
       }
+    }
+  }
+  protected checkForConfigError(): void {
+    if (appModel.isConfigError()) {
+      const data: any = {};
+      data.title = Util.getContent('infoText');
+      data.message = Util.getContent('configError');
+      data.callback = this.refreshGame.bind(this);
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
   }
 
