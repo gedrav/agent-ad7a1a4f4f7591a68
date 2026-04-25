@@ -244,7 +244,6 @@ export class BetPanelView extends ResponsiveChildrenView {
 
     // fixed grid width keeps container position stable regardless of button count
     const fixedGridWidth = columns * gap;
-    console.log('fixedGridWidth', fixedGridWidth, this.betBtnsArray);
     this.btnContainer.x = (this.betPanelBg.width - fixedGridWidth) / 2 + this.betBtnsArray[0].width / 2;
     this.stakeContainer.x = (this.betPanelBg.width - this.stakeContainer.width) / 2;
     this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height * 0.92;

@@ -75,7 +75,6 @@ class ShowSpinWinStateCommand extends StateCommand {
     return isMaxCapReached;
   }
   protected goToNextStep(): void {
-    console.log('go to next step');
     StateManager.next();
   }
   protected handleNext(): void {}

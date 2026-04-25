@@ -98,7 +98,6 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.addChild(this.menuComp);
   }
   protected showFSPopup(): void {
-    console.log('showFSPopup -- ', this.popupComp);
     this.addChild(this.popupComp);
   }
   protected showBetPanel(): void {
