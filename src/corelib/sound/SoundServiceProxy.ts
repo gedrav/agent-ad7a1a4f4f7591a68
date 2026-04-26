@@ -65,6 +65,7 @@ class SoundServiceProxy {
     let file1: string, file2: string;
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const refObj: any = this;
+    console.log(' load sounds -- ', list.length);
     if (this.totalFiles > 0) {
       let langstring = '';
 

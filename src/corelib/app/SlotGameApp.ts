@@ -218,7 +218,6 @@ class SlotGameApp {
     this.checkToCreateSplash();
     console.log('splash assets loaded load primary');
     await AssetLoader.loadPrimary();
-    console.log('primary assets loaded');
   }
   protected checkToCreateSplash() {
     if (this.gameInitReceived && this.splashAssetsLoaded) {
