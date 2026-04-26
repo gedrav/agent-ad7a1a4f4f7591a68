@@ -26,6 +26,7 @@ export class SplashPreloaderComp extends ResponsiveChildrenView {
   protected onLoadProgress(progress: number): void {
     this.bar.scale.x = progress / 100;
     this.circle2.x = this.bar.x + this.bar.width;
+    console.log('22222 -- ', progress);
   }
   public removePreloader(): void {
     this.preloader?.destroy();

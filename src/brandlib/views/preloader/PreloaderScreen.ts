@@ -29,6 +29,7 @@ export class PreloaderScreen extends ResponsiveChildrenView {
 
   protected onLoadProgress(progress: number): void {
     this.bar.scale.x = progress / 100;
+    console.log('11111111111 -- ', progress);
     this.circle2.x = this.bar.x + this.bar.width;
   }
   public removePreloader(): void {
