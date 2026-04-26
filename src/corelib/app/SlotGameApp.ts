@@ -235,7 +235,6 @@ class SlotGameApp {
   }
   protected onSoundsLoaded() {
     this.soundsLoaded = true;
-    console.log('sounds loaded');
     this.checkToCreateGame();
   }
   protected createView(): void {
@@ -255,8 +254,7 @@ class SlotGameApp {
             setTimeout(this.handleNextStep.bind(this), 50);
           }
           this.checkForConfigError();
-          console.log('view created');
-          //setTimeout(this.loadLazyFiles.bind(this), 100);
+          setTimeout(this.loadLazyFiles.bind(this), 100);
         } else {
         }
       } else {
