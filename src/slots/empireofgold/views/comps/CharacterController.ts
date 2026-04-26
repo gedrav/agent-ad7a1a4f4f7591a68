@@ -9,16 +9,27 @@ export class CharacterController extends StandardView {
   private idleListenerAttached = false;
   private readonly idleMix = 0.3;
   private readonly idleAnims = ['idle', 'idle2'];
-  private readonly winAnims = ['win', 'win4'];
+  private readonly winAnims = ['win'];
+  private readonly failAnims = ['fall'];
 
   constructor(config) {
     super(config);
     this.kingAnim = this.elementsList['kingAnim'];
     EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.playRandomWinAnimations.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.playWinAnimationForBigWin.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.onFSStart.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFSEnd.bind(this));
+
     this.playIdleAnimations();
   }
 
+  protected onFSStart(): void {
+    this.kingAnim.setSkin('free_spin');
+  }
+  protected onFSEnd(): void {
+    this.kingAnim.setSkin('main');
+  }
   private playIdleAnimations(): void {
     this.idleLoopsRemaining = this.getRandomIdleLoopCount();
 
