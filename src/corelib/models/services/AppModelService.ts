@@ -335,7 +335,7 @@ class AppModelService {
         return this.gameResult?.reelModifiers[0]?.initialReelView;
       }
     }
-    return this.gameResult.cascadeData[this.tumbleIndex].reelView;
+    return this.gameResult?.cascadeData[this.tumbleIndex]?.reelView;
   }
   public getIsDevMode(): boolean {
     return this.gameInfo.devMode;
