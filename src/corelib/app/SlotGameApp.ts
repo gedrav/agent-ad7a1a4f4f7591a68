@@ -208,15 +208,12 @@ class SlotGameApp {
       this.preloader = new PreloaderScreen(PRELOADER_CONFIG);
       this.appContainer.addChild(this.preloader);
       this.resize();
-      console.log('preloader loaded');
       await AssetLoader.loadSplash();
-      console.log('splash loaded');
     }
   }
   protected async onSplashAssetsLoaded() {
     this.splashAssetsLoaded = true;
     this.checkToCreateSplash();
-    console.log('splash assets loaded load primary');
     await AssetLoader.loadPrimary();
   }
   protected checkToCreateSplash() {
@@ -234,25 +231,20 @@ class SlotGameApp {
   async onPrimaryAssetsLoaded() {
     this.assetsLoaded = true;
     appModel.primaryAssetsLoaded = true;
-    console.log('primary assets loaded, load sounds');
     await AssetLoader.loadSounds();
-    console.log('sounds loaded after async');
   }
   protected onSoundsLoaded() {
     this.soundsLoaded = true;
-    console.log('sounds loaded method');
     this.checkToCreateGame();
   }
   protected createView(): void {
     // overridden in game
   }
   protected checkToCreateGame(): void {
-    console.log('check to create game ', this.gameInitReceived, this.assetsLoaded, this.soundsLoaded);
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
           this.createView();
-          console.log('create view');
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
           if (appModel.getPreferences()?.showIntro !== false) {
@@ -263,7 +255,6 @@ class SlotGameApp {
           }
           this.checkForConfigError();
           setTimeout(this.loadLazyFiles.bind(this), 100);
-          console.log('set interval for loading lazy files');
         } else {
         }
       } else {
@@ -286,20 +277,17 @@ class SlotGameApp {
   protected createSplash() {}
 
   protected loadLazyFiles() {
-    console.log('load lazy files');
     AssetLoader.loadSecondarySounds();
     AssetLoader.loadSecondary();
   }
   protected onSecondaryAssetsLoaded() {
     appModel.secondaryAssetsLoaded = true;
-    console.log('secondary assets loaded, load features');
     setTimeout(() => {
       EventHandler.dispatchEvent(AppEvents.SECONDARY_ASSETS_LOADED);
       AssetLoader.loadFeatures();
     }, 100);
   }
   async onFeatureAssetsLoaded() {
-    console.log('feature assets loaded');
     appModel.featureAssetsLoaded = true;
   }
 

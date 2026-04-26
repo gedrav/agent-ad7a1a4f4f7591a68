@@ -65,7 +65,6 @@ class SoundServiceProxy {
     let file1: string, file2: string;
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const refObj: any = this;
-    console.log(' load sounds -- ', this.totalFiles);
     if (this.totalFiles > 0) {
       let langstring = '';
 
@@ -118,13 +117,10 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       const loaded = Math.round(((this.loadingIndex + 1) / this.totalFiles) * 100);
       const progress = 80 + Math.round(loaded * 0.2);
-      console.log('sound load progress == ', progress);
       EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
     }
-    console.log('handle sound loaded == ', this.loadingIndex, this.totalFiles);
     if (this.loadingIndex >= this.totalFiles - 1) {
       if (!this.isSoundPresent) {
-        console.log('sound loading completed');
         EventHandler.dispatchEvent(AppEvents.SOUNDS_LOADING_COMPLETE);
         this.isSoundPresent = true;
       }

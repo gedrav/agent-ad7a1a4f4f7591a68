@@ -7,7 +7,7 @@ export const GAME_SOUND_CONFIG = {
     FADE_TIME: 1000,
   },
   soundFiles: [
-    /*{
+    {
       name: 'musMainBGM',
       type: 'game',
       soundType: 'ambient',
@@ -25,7 +25,7 @@ export const GAME_SOUND_CONFIG = {
       playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
       volume: 1,
       fadeOutDuration: 1000,
-    },*/
+    },
   ],
   lazySoundFiles: [
     {

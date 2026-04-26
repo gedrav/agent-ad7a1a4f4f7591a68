@@ -19,6 +19,16 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 1000,
     },
     {
+      name: 'genericButtonSound',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
+      volume: 1,
+      fadeOutDuration: 1000,
+    },
+  ],
+  lazySoundFiles: [
+    {
       name: 'FBGM',
       type: 'game',
       soundType: 'ambient',
@@ -29,16 +39,6 @@ export const GAME_SOUND_CONFIG = {
       fadeInDuration: 250,
       fadeOutDuration: 1000,
     },
-    {
-      name: 'genericButtonSound',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
-      volume: 1,
-      fadeOutDuration: 1000,
-    },
-  ],
-  lazySoundFiles: [
     {
       name: 'WIN 1',
       type: 'game',
