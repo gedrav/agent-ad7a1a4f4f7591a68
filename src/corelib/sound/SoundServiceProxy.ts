@@ -119,8 +119,10 @@ class SoundServiceProxy {
       const progress = 80 + Math.round(loaded * 0.2);
       EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
     }
+    console.log('SOUND LOADED == ', this.loadingIndex, this.totalFiles);
     if (this.loadingIndex >= this.totalFiles - 1) {
       if (!this.isSoundPresent) {
+        console.log('SOUND LOADED COMPLETE');
         EventHandler.dispatchEvent(AppEvents.SOUNDS_LOADING_COMPLETE);
         this.isSoundPresent = true;
       }
