@@ -236,7 +236,7 @@ class SlotGameApp {
     appModel.primaryAssetsLoaded = true;
     console.log('primary assets loaded, load sounds');
     await AssetLoader.loadSounds();
-    console.log('sounds loaded');
+    console.log('sounds loaded after async');
   }
   protected onSoundsLoaded() {
     this.soundsLoaded = true;
@@ -252,6 +252,7 @@ class SlotGameApp {
       if (!appModel.isErrorOccurred) {
         if (!this.isViewCreated) {
           this.createView();
+          console.log('create view');
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
           if (appModel.getPreferences()?.showIntro !== false) {
