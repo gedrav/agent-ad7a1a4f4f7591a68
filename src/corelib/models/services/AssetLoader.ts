@@ -282,7 +282,6 @@ class AssetLoaderClass {
 
     if (progress) {
       this.progressPercentage += progress;
-      console.log('progress', progress);
       EventHandler.dispatchEvent(AppEvents.LOAD_PROGRESS, progress);
     }
   }
