@@ -259,20 +259,19 @@ class SlotGameApp {
           } else {
             EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
             this.removePreloader();
-            setTimeout(() => {
-              this.onSplashDestroyed();
-            }, 50);
+            setTimeout(this.handleNextStep.bind(this), 50);
           }
           this.checkForConfigError();
-          setTimeout(() => {
-            console.log('load lazy files');
-            this.loadLazyFiles();
-          }, 100);
+          setTimeout(this.loadLazyFiles.bind(this), 100);
+          console.log('set interval for loading lazy files');
         } else {
         }
       } else {
       }
     }
+  }
+  protected handleNextStep() {
+    this.onSplashDestroyed();
   }
   protected checkForConfigError(): void {
     if (appModel.isConfigError()) {
@@ -287,17 +286,20 @@ class SlotGameApp {
   protected createSplash() {}
 
   protected loadLazyFiles() {
+    console.log('load lazy files');
     AssetLoader.loadSecondarySounds();
     AssetLoader.loadSecondary();
   }
-  async onSecondaryAssetsLoaded() {
+  protected onSecondaryAssetsLoaded() {
     appModel.secondaryAssetsLoaded = true;
+    console.log('secondary assets loaded, load features');
     setTimeout(() => {
       EventHandler.dispatchEvent(AppEvents.SECONDARY_ASSETS_LOADED);
+      AssetLoader.loadFeatures();
     }, 100);
-    await AssetLoader.loadFeatures();
   }
   async onFeatureAssetsLoaded() {
+    console.log('feature assets loaded');
     appModel.featureAssetsLoaded = true;
   }
 

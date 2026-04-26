@@ -90,12 +90,12 @@ class AssetLoaderClass {
   public async loadPrimary() {
     await this.loadBundles(LOAD_CONSTANTS.PRIMARY);
   }
-  public async loadSecondary() {
-    await this.loadBundles(LOAD_CONSTANTS.SECONDARY);
+  public loadSecondary() {
+    this.loadBundles(LOAD_CONSTANTS.SECONDARY);
   }
-  public async loadFeatures() {
+  public loadFeatures() {
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
-    await this.loadBundles(LOAD_CONSTANTS.FEATURES);
+    this.loadBundles(LOAD_CONSTANTS.FEATURES);
   }
   public async loadBundle(bundle: string) {
     await this.loadBundles(bundle);
