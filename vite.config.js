@@ -4,8 +4,16 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { compression } from 'vite-plugin-compression2';
 import path from 'node:path';
 
+// Uncomment ONE game to run/build it:
+const defaultGameNames = [
+  // "empireofgold",
+  // "empireofgoldnewconquest",
+  "royale81",
+  // "sweetsalonroyale"
+];
+
 // SINGLE CONTROL POINT (with env override)
-const GAME_ID = process.env.GAME_ID || 'royale81';
+const GAME_ID = process.env.GAME_ID || defaultGameNames[0] || 'royale81';
 const BUILD_OUTPUT_ROOT = process.env.BUILD_OUTPUT_ROOT
   ? path.resolve(__dirname, process.env.BUILD_OUTPUT_ROOT)
   : path.resolve(__dirname, '../feg_games_build');
@@ -60,6 +68,7 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       port: 8002,
+      open: true,
       fs: {
         allow: [path.resolve(__dirname), ASSETS_ROOT, GAME_ASSETS_ROOT, COMMON_ASSETS_ROOT],
       },
