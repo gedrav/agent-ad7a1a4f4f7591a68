@@ -16,6 +16,7 @@ import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig'
 import { FS_TOTAL_MULTI_CONFIG } from './FsTotalMultiplierConfig';
 import { CharacterController } from '@game/views/comps/CharacterController';
 import { WinValueComp } from '@game/views/comps/WinValueComp';
+import EOGNCMultiplierSlotReelCascade from '@game/views/slot/EOGNCMultiplierSlotReelCascade';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -37,7 +38,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: MultiplierSlotReelCascade,
+      class: EOGNCMultiplierSlotReelCascade,
       winController: WinController,
       x: 220,
       y: 120,
