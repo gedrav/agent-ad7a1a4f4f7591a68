@@ -7,7 +7,7 @@ export const WIN_COLLECTOR_CONFIG: any = {
   class: WinCollectorComp,
   x: 0,
   y: 800,
-  px: 1000,
+  px: 50,
   py: 0,
   lx: 0,
   ly: 800,

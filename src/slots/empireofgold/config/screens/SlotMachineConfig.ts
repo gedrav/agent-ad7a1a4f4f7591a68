@@ -336,7 +336,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
             Landscape: { scale: 0.7, x: 1840, y: 800 },
-            Portrait: { scale: 0.7, x: 855, y: -150 },
+            Portrait: { scale: 0.7, x: 1400, y: -20 },
           },
         },
         { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1160 },
