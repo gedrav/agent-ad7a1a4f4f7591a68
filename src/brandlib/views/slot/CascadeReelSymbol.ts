@@ -89,7 +89,6 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
   public playSymbolConversion(data: any, reelno: number, onComplete?: () => void): void {
     this.showBlastAnim(() => {
       this.setNewSymbol(data, reelno);
-      this.setNormalTexture();
       onComplete?.();
     });
   }
