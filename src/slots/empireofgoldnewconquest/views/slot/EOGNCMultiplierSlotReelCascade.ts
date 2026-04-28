@@ -5,55 +5,61 @@ import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotRe
 import { StateManager } from '@core/states/StateManagerService';
 
 export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCascade {
+  private symBlastCompleteCount = 0;
+  private newSymAppearanceCompleteCount = 0;
+  private totalSymbolsToConvert = 0;
+  private changedPositions: Array<[number, number]> = [];
+  private targetSymbolData: any = null;
+
   constructor(configData: any) {
     super(configData);
 
-    EventHandler.addEventListener(SlotEvents.LOWPAY_SYMBOL_CONVERSION, this.showLowPaySymbolConversion.bind(this));
+    EventHandler.addEventListener(SlotEvents.LOWPAY_SYMBOL_CONVERSION, this.showSymbolConversion.bind(this));
   }
 
-  protected showLowPaySymbolConversion(data?: {
+  protected showSymbolConversion(data?: {
     changedPositions?: Array<[number, number]>;
     selectedHigh?: string;
     selectedLow?: string;
   }) {
-    const changedPositions = data?.changedPositions ?? [];
+    this.changedPositions = data?.changedPositions ?? [];
     const selectedHigh = data?.selectedHigh;
-    const targetSymbolData = selectedHigh ? this.reelsData.symbolsData[selectedHigh] : null;
+    this.targetSymbolData = selectedHigh ? this.reelsData.symbolsData[selectedHigh] : null;
 
-    if (!changedPositions.length || !targetSymbolData) {
+    if (!this.changedPositions.length || !this.targetSymbolData) {
       this.allSymbolsConverted();
       return;
     }
 
-    let convertedCount = 0;
-    const totalSymbolsToConvert = changedPositions.length;
+    this.symBlastCompleteCount = 0;
+    this.newSymAppearanceCompleteCount = 0;
+    this.totalSymbolsToConvert = this.changedPositions.length;
 
-    const symbolsToUpdate: CascadeReelSymbol[] = [];
-
-    const onSymbolConverted = () => {
-      convertedCount++;
-      if (convertedCount === totalSymbolsToConvert) {
-        symbolsToUpdate.forEach((sym) => {
-          sym.setNormalTexture();
-        });
-        this.allSymbolsConverted();
-      }
-    };
-
-    for (let i = 0; i < totalSymbolsToConvert; i++) {
-      const [column, row] = changedPositions[i] ?? [];
+    for (let i = 0; i < this.totalSymbolsToConvert; i++) {
+      const [column, row] = this.changedPositions[i];
       const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
+      symbol.playSymbolConversion(this.onSymbolConverted.bind(this));
+    }
+  }
 
-      if (symbol) {
-        symbolsToUpdate.push(symbol);
-        symbol.playSymbolConversion(targetSymbolData, column, onSymbolConverted);
-      }
+  private onSymbolConverted(): void {
+    this.symBlastCompleteCount++;
+    if (this.symBlastCompleteCount === this.totalSymbolsToConvert) {
+      this.changedPositions.forEach(([column, row], index) => {
+        const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
+        symbol.showNewSymbAfterConversion(this.targetSymbolData, column, this.onNewSymbolAppeared.bind(this));
+      });
+    }
+  }
+
+  protected onNewSymbolAppeared(): void {
+    this.newSymAppearanceCompleteCount++;
+    if (this.newSymAppearanceCompleteCount === this.totalSymbolsToConvert) {
+      this.allSymbolsConverted();
     }
   }
 
   protected allSymbolsConverted() {
-    setTimeout(() => {
-      StateManager.doNextStep();
-    }, 0);
+    StateManager.doNextStep();
   }
 }
