@@ -10,7 +10,7 @@ import { Util } from '@core/utils/UtilService';
 import { CascadeReelWinTicker } from '../comps/CascadeReelWinTicker';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { FsTotalMultiplierComp } from '../comps/FsTotalMultiplierComp';
-import { Power1, Power2, Back } from 'gsap/gsap-core';
+import { Back } from 'gsap/gsap-core';
 
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
   private cascadeReelWinTicker: CascadeReelWinTicker;
