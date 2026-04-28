@@ -1,6 +1,5 @@
 import { GAME_BG_CONFIG } from '@game/config/screens/GameBGConfig';
 import { SLOT_MACHINE_CONFIG } from '@game/config/screens/SlotMachineConfig';
-import { FS_POPUP_CONFIG } from '@game/config/screens/FSPopupConfig';
 import { createControlPanelConfig } from '@brand/config/ControlPanelConfig';
 import { MODAL_VIEW_CONFIG } from '@brand/config/ModalConfig';
 import { BET_PANEL_CONFIG } from '@brand/config/BetPanelConfig';
