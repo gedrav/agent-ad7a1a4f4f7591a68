@@ -214,6 +214,7 @@ class AppModelService {
     this.gameInfo.betsArray = [];
     const len = data.playerInfo.possibleBets.length;
     if (len > 0) {
+      data.playerInfo.possibleBets.sort((a: number, b: number) => a - b);
       for (let i = 0; i < len; i++) {
         const totalbet = this.getTotalBetTemp(data.playerInfo.possibleBets[i]);
         if (totalbet >= data.playerInfo.minBet && totalbet <= data.playerInfo.maxBet) {

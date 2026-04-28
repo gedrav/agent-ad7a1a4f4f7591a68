@@ -2,6 +2,8 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { StandardView } from '@core/pixiwrapper/StandardView';
+import { appModel } from '@core/models/services/AppModelService';
+import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class CharacterController extends StandardView {
   private kingAnim: PixSpine;
@@ -9,16 +11,28 @@ export class CharacterController extends StandardView {
   private idleListenerAttached = false;
   private readonly idleMix = 0.3;
   private readonly idleAnims = ['idle', 'idle2'];
-  private readonly winAnims = ['win', 'win4'];
+  private readonly winAnims = ['win2'];
+  private readonly bigWinAnims = ['win'];
+  private readonly failAnims = ['fall'];
 
   constructor(config) {
     super(config);
     this.kingAnim = this.elementsList['kingAnim'];
     EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.playRandomWinAnimations.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.playWinAnimationForBigWin.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.onFSStart.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFSEnd.bind(this));
+
     this.playIdleAnimations();
   }
 
+  protected onFSStart(): void {
+    this.kingAnim.setSkin('free_spin');
+  }
+  protected onFSEnd(): void {
+    this.kingAnim.setSkin('main');
+  }
   private playIdleAnimations(): void {
     this.idleLoopsRemaining = this.getRandomIdleLoopCount();
 
@@ -56,13 +70,24 @@ export class CharacterController extends StandardView {
   }
 
   private playRandomWinAnimations(): void {
-    const randomAnim = this.winAnims[Math.floor(Math.random() * this.winAnims.length)];
-    this.kingAnim.playAnimation({
-      state: randomAnim,
-      loop: false,
-      defaultMix: this.idleMix,
-      reset: false,
-    });
+    const winType = appModel.getWinType();
+    if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
+      const randomAnim = this.winAnims[Math.floor(Math.random() * this.winAnims.length)];
+      this.kingAnim.playAnimation({
+        state: randomAnim,
+        loop: false,
+        defaultMix: this.idleMix,
+        reset: false,
+      });
+    } else {
+      const randomAnim = this.bigWinAnims[Math.floor(Math.random() * this.bigWinAnims.length)];
+      this.kingAnim.playAnimation({
+        state: randomAnim,
+        loop: false,
+        defaultMix: this.idleMix,
+        reset: false,
+      });
+    }
   }
 
   private playWinAnimationForBigWin(): void {}

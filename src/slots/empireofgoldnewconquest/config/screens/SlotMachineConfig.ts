@@ -320,7 +320,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        /*{
+        {
           name: 'character',
           type: 'Comp',
           class: CharacterController,
@@ -328,7 +328,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             {
               name: 'kingAnim',
               type: 'Spine',
-              spineName: 'character',
+              spineName: 'king_character',
               defaultState: 'idle',
               loop: true,
               defaultSkin: 'main',
@@ -337,9 +337,9 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
             Landscape: { scale: 0.7, x: 1840, y: 800 },
-            Portrait: { scale: 0.7, x: 855, y: -150 },
+            Portrait: { scale: 0.7, x: 1400, y: -20 },
           },
-        },*/
+        },
         { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1160 },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
