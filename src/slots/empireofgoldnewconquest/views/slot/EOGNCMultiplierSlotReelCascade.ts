@@ -52,8 +52,9 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
   }
 
   protected allSymbolsConverted() {
-    setTimeout(() => {
+    console.log('all symbols converted');
+    /*setTimeout(() => {
       StateManager.doNextStep();
-    }, 0);
+    }, 0);*/
   }
 }
