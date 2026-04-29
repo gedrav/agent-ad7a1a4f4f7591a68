@@ -316,7 +316,7 @@ export const SPLASH_CONFIG: any = {
     {
       name: 'gameTitle',
       type: 'Spine',
-      spineName: 'EOG_Logo_Anim',
+      spineName: 'Logo_Anim',
       defaultState: 'Idle',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {

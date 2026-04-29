@@ -8,7 +8,7 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Spine',
-      spineName: 'BG_king',
+      spineName: 'EOG_NC_BGS',
       defaultState: 'day',
       loop: true,
       boundingBox: { width: 1540, height: 1540 },
@@ -22,7 +22,7 @@ export const GAME_BG_CONFIG: any = {
       name: 'freegameBG',
       type: 'Spine',
       unload: false,
-      spineName: 'BG_king',
+      spineName: 'EOG_NC_BGS',
       defaultState: 'night',
       loop: true,
       boundingBox: { width: 1540, height: 1540 },

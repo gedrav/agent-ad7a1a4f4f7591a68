@@ -300,8 +300,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             {
               name: 'reelFrame',
               type: 'Spine',
-              spineName: 'reels_frame',
-              defaultState: 'loop',
+              spineName: 'EOG_NC_Frame',
+              defaultState: 'Idle',
               loop: true,
               boundingBox: { width: 1700, height: 1350 },
               x: 0,
@@ -348,21 +348,21 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'gameTitle',
           type: 'Spine',
-          spineName: 'EOG_Logo_Anim',
+          spineName: 'Logo_Anim',
           defaultState: 'Idle',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              scale: 0.7,
+              scale: 0.4,
               x: 852,
-              y: -34,
+              y: -20,
             },
             Landscape: {
-              scale: 0.6,
+              scale: 0.5,
               x: 862,
               y: -30,
             },
-            Portrait: { scale: 0.6, x: 862, y: -30 },
+            Portrait: { scale: 0.5, x: 862, y: -30 },
           },
         },
         {
