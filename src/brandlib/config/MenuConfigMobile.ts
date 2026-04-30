@@ -18,19 +18,22 @@ export const MENU_CONFIG_MOBILE: any = {
   Elements: [
     {
       name: 'menubg',
-      type: 'Graphics',
+      type: 'NineSliceSprite',
+      image: 'popupbg',
+      nineSlice: [32, 32, 32, 32],
       width: 600,
       height: 840,
       radius: 32,
       color: 0x000000,
-      layoutData: {
+      layoutData1: {
         Portrait: { fitToScreen: true },
         Landscape: { fitToScreen: true },
       },
     },
     {
       name: 'topbar',
-      type: 'Graphics',
+      type: 'Sprite',
+      image: 'topbarMenu',
       width: 600,
       height: 40,
       color: 0x454c5d,
@@ -70,10 +73,10 @@ export const MENU_CONFIG_MOBILE: any = {
       name: 'closeBtn',
       type: 'Button',
       options: {
-        defaultView: 'closeIconBtn',
-        hoverView: 'closeIconBtn',
-        pressedView: 'closeIconBtn',
-        disabledView: 'closeIconBtn',
+        defaultView: 'closeBtnMenu',
+        hoverView: 'closeBtnMenu',
+        pressedView: 'closeBtnMenu',
+        disabledView: 'closeBtnMenu',
         animations: CoreUIConfig.noScalebuttonStates,
       },
       layoutData: {

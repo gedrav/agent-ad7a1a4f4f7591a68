@@ -33,7 +33,10 @@ export class MenuCompMobile extends MenuComp {
 
   protected resizeView() {
     this.menubg.scale.set(1);
-    this.menubg.height = UIUtil.getGameHeight();
+    this.menubg.width = UIUtil.getGameWidth() * 1.6;
+    this.menubg.height = UIUtil.getGameHeight() * 1.6;
+    this.menubg.x = UIUtil.getGameWidth() / 2 - this.menubg.width / 2;
+    this.menubg.y = UIUtil.getGameHeight() / 2 - this.menubg.height / 2;
 
     super.resizeView();
 
