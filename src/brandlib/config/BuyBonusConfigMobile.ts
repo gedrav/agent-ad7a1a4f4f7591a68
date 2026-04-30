@@ -65,10 +65,10 @@ export const BUY_BONUS_CONFIG_MOBILE = {
       type: 'Button',
       soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
-        defaultView: 'closeIconBtn',
-        hoverView: 'closeIconBtn',
-        pressedView: 'closeIconBtn',
-        disabledView: 'closeIconBtn',
+        defaultView: 'closeBtnMenu',
+        hoverView: 'closeBtnMenu',
+        pressedView: 'closeBtnMenu',
+        disabledView: 'closeBtnMenu',
         animations: CoreUIConfig.noScalebuttonStates,
       },
       layoutData: {
