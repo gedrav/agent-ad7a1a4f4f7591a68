@@ -5,11 +5,11 @@ export const WIN_COLLECTOR_CONFIG: any = {
   name: 'winCollector',
   type: 'Comp',
   class: WinCollectorComp,
-  x: 0,
+  x: 6,
   y: 800,
   px: 50,
   py: 0,
-  lx: 0,
+  lx: 8,
   ly: 800,
   scale: 0.9,
   Elements: [
