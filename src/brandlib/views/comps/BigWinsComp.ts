@@ -8,7 +8,6 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { UIUtil } from '@core/utils/UIUtilService';
-import { GameProxy } from '@core/models/GameConfigProxy';
 import 'pixi.js/prepare';
 
 const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.GIGANTIC_WIN, CONSTANTS.UNBELIEVABLE_WIN];
