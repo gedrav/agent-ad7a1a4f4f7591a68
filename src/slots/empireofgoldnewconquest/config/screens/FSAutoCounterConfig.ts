@@ -5,7 +5,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
   type: 'Comp',
   class: FSAutoCounterComp,
   x: 180,
-  y: 1280,
+  y: 1320,
   Elements: [
     { name: 'bg', type: 'Graphics', width: 1280, height: 80, alpha: 0, color: 0xff0000 },
     { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 0, y: 0 },

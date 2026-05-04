@@ -65,19 +65,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 310, y: 190 },
+            reelContainerPos: { x: 310, y: 245 },
             reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
             symbolScale: 0.8,
           },
           Portrait: {
-            reelContainerPos: { x: 310, y: 190 },
+            reelContainerPos: { x: 310, y: 245 },
             reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
             symbolScale: 0.8,
           },
           Landscape: {
-            reelContainerPos: { x: 310, y: 190 },
+            reelContainerPos: { x: 310, y: 245 },
             reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
             symbolScale: 0.8,
@@ -340,7 +340,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Portrait: { scale: 0.7, x: 1400, y: -20 },
           },
         },
-        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1160 },
+        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1200 },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FS_TOTAL_MULTI_CONFIG,
@@ -355,7 +355,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 0.4,
               x: 852,
-              y: -20,
+              y: -14,
             },
             Landscape: {
               scale: 0.5,
@@ -371,7 +371,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           width: 1300,
           height: 1050,
           x: 197,
-          y: 86,
+          y: 144,
           color: 0xffff00,
         },
         {
