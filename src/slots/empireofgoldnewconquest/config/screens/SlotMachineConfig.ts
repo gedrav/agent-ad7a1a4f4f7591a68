@@ -362,7 +362,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               x: 862,
               y: -30,
             },
-            Portrait: { scale: 0.5, x: 862, y: -30 },
+            Portrait: { scale: 0.36, x: 876, y: -2 },
           },
         },
         {

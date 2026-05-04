@@ -6,8 +6,8 @@ export const FS_TOTAL_MULTI_CONFIG: any = {
   class: FsTotalMultiplierComp,
   x: 86,
   y: -120,
-  px: 158,
-  py: -120,
+  px: 1308,
+  py: -36,
   lx: 86,
   ly: -120,
   Elements: [

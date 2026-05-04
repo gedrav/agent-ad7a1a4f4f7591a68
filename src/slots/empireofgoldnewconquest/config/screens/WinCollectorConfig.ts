@@ -1,5 +1,4 @@
 import { WinCollectorComp } from '@game/views/comps/WinCollectorComp';
-import { UIConfig } from '../UIConfig';
 
 export const WIN_COLLECTOR_CONFIG: any = {
   name: 'winCollector',
@@ -8,7 +7,7 @@ export const WIN_COLLECTOR_CONFIG: any = {
   x: 6,
   y: 800,
   px: 50,
-  py: 0,
+  py: 86,
   lx: 8,
   ly: 800,
   scale: 0.9,
