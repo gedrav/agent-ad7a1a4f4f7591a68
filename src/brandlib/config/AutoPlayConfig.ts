@@ -118,7 +118,7 @@ export const AUTOPLAY_CONFIG = {
               selectedStateColor: 0xffffff,
             },
           },
-          x: 136,
+          x: 133,
           y: 80,
         },
         {
@@ -156,7 +156,7 @@ export const AUTOPLAY_CONFIG = {
               selectedStateColor: 0xffffff,
             },
           },
-          x: 272,
+          x: 268,
           y: 80,
         },
 
@@ -195,7 +195,7 @@ export const AUTOPLAY_CONFIG = {
               selectedStateColor: 0xffffff,
             },
           },
-          x: 408,
+          x: 398,
           y: 80,
         },
 
