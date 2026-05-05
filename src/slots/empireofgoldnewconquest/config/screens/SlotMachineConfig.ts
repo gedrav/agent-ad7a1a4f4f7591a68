@@ -41,11 +41,11 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: EOGNCMultiplierSlotReelCascade,
       winController: WinController,
       x: 220,
-      y: 120,
+      y: 64,
       px: -150,
-      py: 490,
+      py: 438,
       lx: 220,
-      ly: 120,
+      ly: 64,
       data: {
         symbolClass: CascadeReelSymbol,
         noOfReels: 6,
@@ -337,7 +337,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
             Landscape: { scale: 0.7, x: 1840, y: 800 },
-            Portrait: { scale: 0.7, x: 1400, y: -20 },
+            Portrait: { scale: 0.7, x: 1400, y: 38 },
           },
         },
         { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1200 },
@@ -353,16 +353,16 @@ export const SLOT_MACHINE_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              scale: 0.4,
+              scale: 0.3,
               x: 852,
-              y: -14,
+              y: 11,
             },
             Landscape: {
-              scale: 0.5,
+              scale: 0.3,
               x: 862,
-              y: -30,
+              y: 12,
             },
-            Portrait: { scale: 0.36, x: 876, y: -2 },
+            Portrait: { scale: 0.3, x: 876, y: 9 },
           },
         },
         {

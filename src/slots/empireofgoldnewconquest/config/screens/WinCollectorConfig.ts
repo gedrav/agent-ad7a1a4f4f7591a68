@@ -7,7 +7,7 @@ export const WIN_COLLECTOR_CONFIG: any = {
   x: 6,
   y: 800,
   px: 50,
-  py: 86,
+  py: 38,
   lx: 8,
   ly: 800,
   scale: 0.9,
