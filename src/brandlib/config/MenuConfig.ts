@@ -6,7 +6,6 @@ import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
-import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
 import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
 import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
 import { ShowHideSplashCommand } from '@core/commands/action/ShowHideSplashCommand';
