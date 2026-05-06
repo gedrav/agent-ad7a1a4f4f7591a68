@@ -14,7 +14,7 @@ export const GAME_SOUND_CONFIG = {
       loop: true,
       playEvents: ['PLAY_BG_SOUND', 'RESUME_BG_SOUND'],
       stopEvents: ['STOP_BG_SOUND'],
-      volume: 1,
+      volume: 0.6,
       fadeInDuration: 250,
       fadeOutDuration: 2000,
     },

@@ -203,7 +203,7 @@ class SlotGameApp {
   protected async onPreloaderLoaded() {
     GameProxy.updateCommonConfig();
     ContentProxy.initiate();
-    console.log('C' + GameProxy.config.coreVersion + '_G' + GameProxy.config.gameVersion);
+    console.log('Version: ' + import.meta.env.VITE_GAME_VERSION + '_' + GameProxy.config.gameVersion);
     if (!this.initErrorOccured) {
       this.preloader = new PreloaderScreen(PRELOADER_CONFIG);
       this.appContainer.addChild(this.preloader);
