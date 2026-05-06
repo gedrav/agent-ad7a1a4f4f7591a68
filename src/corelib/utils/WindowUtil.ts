@@ -70,7 +70,7 @@ export class WindowUtil {
     window.getMaxPayout = () => Util.formatCurrency(getData()?.playerInfo?.maxPayout);
     window.getMaxBBPayout = () => Util.formatCurrency(getData()?.playerInfo?.bbMaxWin);
     window.getGameInitData = getData;
-    window.getGameVersion = () => GameProxy.config.gameVersion;
+    window.getGameVersion = () => import.meta.env.VITE_GAME_VERSION + '_' + GameProxy.config.gameVersion;
     window.getIsSoundOn = () => {
       return SoundFactory.sfxState;
     };

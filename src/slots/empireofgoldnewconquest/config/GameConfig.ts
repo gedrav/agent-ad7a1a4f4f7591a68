@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.26',
+  gameVersion: '0.014',
   gameId: 'empireofgoldnewconquest',
   gameName: 'Empire of Gold: New Conquest',
   uiConfig: UIConfig,
@@ -19,8 +19,6 @@ export const GAME_CONFIG = {
   creditValue: 20,
   anteBetMultiplier: 1.25,
   totalLines: 1,
-  initURL: 'init',
-  spinURL: 'spin',
   isConsoleActive: true,
   unloadAssets: ['splashAssets'],
   FontFaces: {

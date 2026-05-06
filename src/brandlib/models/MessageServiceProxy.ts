@@ -59,15 +59,15 @@ export class MessageServiceProxy extends AbstractProxy {
 
   public requestGameInit() {
     const gameinitObj = this.getGameInitRequestObject();
-    this.communicationService.getServerResponse('gameinit', gameinitObj, GameProxy.config.initURL, 'POST');
+    this.communicationService.getServerResponse('gameinit', gameinitObj, 'init', 'POST');
   }
   async requestSpinResult(isBuyBonus = false) {
     const spinRequest = this.getSpinRequestObject(isBuyBonus);
-    await this.communicationService.getServerResponse('spinresult', spinRequest, GameProxy.config.spinURL, 'POST');
+    await this.communicationService.getServerResponse('spinresult', spinRequest, 'spin', 'POST');
   }
   async requestBonusData(name, selection = '') {
     const bonusRequest = this.getBonusRequestObject(name, selection);
-    await this.communicationService.getServerResponse('featureResult', bonusRequest, GameProxy.config.bonusURL, 'POST');
+    await this.communicationService.getServerResponse('featureResult', bonusRequest, 'feature', 'POST');
   }
 
   getGameInitRequestObject() {
