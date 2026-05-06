@@ -15,7 +15,7 @@ export const FS_POPUP_CONFIG = {
       style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1100 },
       anchor: { x: 0.5, y: 0.5 },
       x: 565,
-      y: 75,
+      y: 95,
     },
     {
       name: 'messageText1',
@@ -67,7 +67,7 @@ export const FS_POPUP_CONFIG = {
         toUpperCase: true,
       },
       x: 565,
-      y: 575,
+      y: 565,
     },
   ],
   layoutData: {
