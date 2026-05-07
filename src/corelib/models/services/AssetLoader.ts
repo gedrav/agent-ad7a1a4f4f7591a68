@@ -91,7 +91,6 @@ class AssetLoaderClass {
 
   public async loadPrimary() {
     await this.loadBundles(LOAD_CONSTANTS.PRIMARY);
-    this.preloadHtml();
   }
   public loadSecondary() {
     this.loadBundles(LOAD_CONSTANTS.SECONDARY);
@@ -100,6 +99,7 @@ class AssetLoaderClass {
   public loadFeatures() {
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
     this.loadBundles(LOAD_CONSTANTS.FEATURES);
+    this.preloadHtml();
   }
   private preloadHtml() {
     preloadRulesPanel().catch((err) => {
