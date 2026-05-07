@@ -7,6 +7,7 @@ import { AppEvents } from '@core/events/AppEvents';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { appModel } from '@core/models/services/AppModelService';
+import { preloadRulesPanel } from '@common/panel/ts/SlotRuleLoader';
 
 class AssetLoaderClass {
   private commonFontPath: string;
@@ -101,26 +102,9 @@ class AssetLoaderClass {
     this.preloadHtml();
   }
   private preloadHtml() {
-    const rulesPath = (window as any).getGameRulesPath?.();
-    const historyPath = (window as any).getCommonHistoryPath?.();
-
-    if (rulesPath) {
-      fetch(rulesPath)
-        .then((r) => r.text())
-        .then((html) => {
-          (window as any)._cachedRulesHtml = html;
-        })
-        .catch(() => {});
-    }
-
-    if (historyPath) {
-      fetch(historyPath)
-        .then((r) => r.text())
-        .then((html) => {
-          (window as any)._cachedHistoryHtml = html;
-        })
-        .catch(() => {});
-    }
+    preloadRulesPanel().catch((err) => {
+      console.error('Failed to preload rules panel', err);
+    });
   }
   public async loadBundle(bundle: string) {
     await this.loadBundles(bundle);
