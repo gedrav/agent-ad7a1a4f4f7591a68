@@ -420,6 +420,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           padY: 15,
           gap: 12,
           visible: false,
+          isMobileOnly: true,
           Elements: [
             {
               name: 'betValueBg',

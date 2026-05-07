@@ -5,7 +5,6 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
-import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class BetValueComp extends ResponsiveView {
   private bg: PixResponsiveGraphics;
@@ -29,10 +28,6 @@ export class BetValueComp extends ResponsiveView {
   }
 
   protected onBetUpdate(value: number = null): void {
-    if (DeviceProxy.config.isDesktop) {
-      this.visible = false;
-      return;
-    }
     const bet = value == null ? appModel.getTotalBet(true) : value;
     this.setValue(Util.formatCurrency(bet));
     this.visible = true;
