@@ -91,10 +91,10 @@ class AssetLoaderClass {
 
   public async loadPrimary() {
     await this.loadBundles(LOAD_CONSTANTS.PRIMARY);
+    this.preloadHtml();
   }
   public loadSecondary() {
     this.loadBundles(LOAD_CONSTANTS.SECONDARY);
-    this.preloadHtml();
   }
 
   public loadFeatures() {
