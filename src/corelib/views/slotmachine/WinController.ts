@@ -195,8 +195,10 @@ export default class WinController {
         }
       }
     } else {
-      clearTimeout(this.timeoutId);
-      this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
+      if (!appModel.isCascadeGame()) {
+        clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
+      }
     }
   }
   protected notifySpinWinDone(): void {
