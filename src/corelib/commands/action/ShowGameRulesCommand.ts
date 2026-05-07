@@ -9,10 +9,6 @@ class ShowGameRulesCmd extends ActionCommand {
     super.execute(data);
     GameProxy.config.exterPageOpened = true;
     EventHandler.dispatchEvent(SlotEvents.HIDE_MENU);
-    setTimeout(this.loadRules.bind(this), 50);
-  }
-
-  protected loadRules() {
     loadGameRulesPanel();
   }
 }
