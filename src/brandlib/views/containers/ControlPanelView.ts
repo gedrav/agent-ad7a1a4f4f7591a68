@@ -136,9 +136,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     GameProxy.config.isLongPressTriggered = true;
     const action: ActionCommand = AutoplayClickCommand;
     action.execute(this.spinBtn);
-    setTimeout(() => {
-      GameProxy.config.isLongPressTriggered = false;
-    }, 500);
   }
   protected startPress(): void {
     GameProxy.config.isLongPressTriggered = false;
@@ -164,6 +161,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       longPressTimer = null;
     }
     this.longPressSprite.scale.set(0.95);
+    GameProxy.config.isLongPressTriggered = false;
   }
   protected addKeyboardEvents(): void {
     window.addEventListener('keyup', this.handleKeyUp.bind(this));
