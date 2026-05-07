@@ -94,12 +94,12 @@ class AssetLoaderClass {
   }
   public loadSecondary() {
     this.loadBundles(LOAD_CONSTANTS.SECONDARY);
+    this.preloadHtml();
   }
 
   public loadFeatures() {
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
     this.loadBundles(LOAD_CONSTANTS.FEATURES);
-    this.preloadHtml();
   }
   private preloadHtml() {
     preloadRulesPanel().catch((err) => {
