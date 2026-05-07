@@ -63,6 +63,7 @@ export class BuyBonusButtonComp extends StandardView {
     this.interactive = false;
     const flt: ColorMatrixFilter = new ColorMatrixFilter();
     flt.greyscale(0.32, true);
+    flt.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
     this.filters = [flt];
   }
 

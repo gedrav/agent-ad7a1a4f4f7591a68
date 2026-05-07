@@ -6,6 +6,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
+import { ColorMatrixFilter } from 'pixi.js';
 
 export class BuyBonusButtonComp extends StandardView {
   protected bbBetValue: any;
@@ -54,13 +55,16 @@ export class BuyBonusButtonComp extends StandardView {
   private enableBtn(): void {
     if (!GameProxy.config.isAnteEnabled) {
       this.interactive = true;
-      this.alpha = 1;
+      this.filters = null;
     }
   }
 
   private disableBtn(): void {
     this.interactive = false;
-    this.alpha = 0.6;
+    const flt: ColorMatrixFilter = new ColorMatrixFilter();
+    flt.greyscale(0.32, true);
+    flt.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
+    this.filters = [flt];
   }
 
   protected onBuyBonusClicked(): void {
