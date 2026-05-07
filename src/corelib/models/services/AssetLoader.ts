@@ -13,6 +13,7 @@ class AssetLoaderClass {
   private soundConfig: any;
   private langFontPath: string;
   private progressPercentage: number;
+
   get bundles(): any[] {
     return this._bundles;
   }
@@ -93,9 +94,33 @@ class AssetLoaderClass {
   public loadSecondary() {
     this.loadBundles(LOAD_CONSTANTS.SECONDARY);
   }
+
   public loadFeatures() {
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
     this.loadBundles(LOAD_CONSTANTS.FEATURES);
+    this.preloadHtml();
+  }
+  private preloadHtml() {
+    const rulesPath = (window as any).getGameRulesPath?.();
+    const historyPath = (window as any).getCommonHistoryPath?.();
+
+    if (rulesPath) {
+      fetch(rulesPath)
+        .then((r) => r.text())
+        .then((html) => {
+          (window as any)._cachedRulesHtml = html;
+        })
+        .catch(() => {});
+    }
+
+    if (historyPath) {
+      fetch(historyPath)
+        .then((r) => r.text())
+        .then((html) => {
+          (window as any)._cachedHistoryHtml = html;
+        })
+        .catch(() => {});
+    }
   }
   public async loadBundle(bundle: string) {
     await this.loadBundles(bundle);
