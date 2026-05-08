@@ -17,9 +17,9 @@ export class BetValueComp extends ResponsiveView {
 
   constructor(config: any) {
     super(config);
-    this.padX = config.padX ?? 30;
+    this.padX = config.padX ?? 40;
     this.padY = config.padY ?? 15;
-    this.gap = config.gap ?? 12;
+    this.gap = config.gap ?? 30;
     this.bg = this.elementsList['betValueBg'];
     this.labelText = this.elementsList['betLabelText'];
     this.valueText = this.elementsList['betValueText'];
