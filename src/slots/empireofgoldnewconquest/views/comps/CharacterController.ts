@@ -57,7 +57,11 @@ export class CharacterController extends StandardView {
             reset: false,
           });
         }
-      } else if (animName === this.idleAnims[1] || this.winAnims.includes(animName)) {
+      } else if (
+        animName === this.idleAnims[1] ||
+        this.winAnims.includes(animName) ||
+        this.bigWinAnims.includes(animName)
+      ) {
         this.idleLoopsRemaining = this.getRandomIdleLoopCount();
         this.kingAnim.playAnimation({
           state: this.idleAnims[0],

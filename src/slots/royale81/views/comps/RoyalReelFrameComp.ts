@@ -17,6 +17,7 @@ export class RoyalReelFrameComp extends ReelFrameComp {
     super(config);
     this.reelFrameAnim = this.elementsList['reelFrameAnim'];
     EventHandler.addEventListener(SlotEvents.BIG_WIN_ANIM_COMPLETED, this.onBigWinCompleted.bind(this));
+    EventHandler.addEventListener(SlotEvents.CLEAR_WINS, this.onBigWinCompleted.bind(this));
   }
 
   public showWin(): void {

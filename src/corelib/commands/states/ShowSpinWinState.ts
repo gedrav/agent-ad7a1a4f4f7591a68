@@ -35,7 +35,12 @@ class ShowSpinWinStateCommand extends StateCommand {
     }
   }
   checkToActivateButtons(): void {
-    if (!appModel.getIsFeatureTriggered() && !appModel.getIsAutoSession() && !appModel.isTumbleRemaining()) {
+    if (
+      !appModel.getIsFeatureTriggered() &&
+      !appModel.getIsAutoSession() &&
+      !appModel.isTumbleRemaining() &&
+      !appModel.getIsMaxCapReached()
+    ) {
       EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     }
   }

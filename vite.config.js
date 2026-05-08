@@ -8,7 +8,7 @@ import path from 'node:path';
 const defaultGameNames = [
   "empireofgold",
   //'empireofgoldnewconquest',
-  //"royale81",
+  // "royale81",
   // "sweetsalonroyale"
 ];
 

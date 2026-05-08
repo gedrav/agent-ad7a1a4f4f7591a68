@@ -12,6 +12,7 @@ import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { RoyalReelFrameComp } from '@game/views/comps/RoyalReelFrameComp';
+import { BetValueComp } from '@brand/views/comps/BetValueComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -263,6 +264,43 @@ export const SLOT_MACHINE_CONFIG: any = {
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
               style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
+            },
+          ],
+        },
+        {
+          name: 'betValueContainer',
+          type: 'Comp',
+          class: BetValueComp,
+          x: 816,
+          y: 510,
+          padX: 40,
+          padY: 15,
+          gap: 30,
+          visible: false,
+          isMobileOnly: true,
+          Elements: [
+            {
+              name: 'betValueBg',
+              type: 'ResponsiveGraphics',
+              alpha: 0.8,
+              width: 180,
+              height: 70,
+              radius: 16,
+              color: 0x000000,
+            },
+            {
+              name: 'betLabelText',
+              type: 'Text',
+              content: 'BetText',
+              toUpperCase: true,
+              anchor: { x: 0, y: 0.5 },
+              style: { fontFamily: 'commonFont', fontSize: 44, fill: 0xffd700, fontWeight: 700 },
+            },
+            {
+              name: 'betValueText',
+              type: 'Text',
+              anchor: { x: 0, y: 0.5 },
+              style: { fontFamily: 'commonFont', fontSize: 44, fill: 0xffffff, fontWeight: 700 },
             },
           ],
         },
