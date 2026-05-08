@@ -7,16 +7,21 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 import { ColorMatrixFilter } from 'pixi.js';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixText } from '@core/pixiwrapper/PixText';
 
 export class BuyBonusButtonComp extends StandardView {
-  protected bbBetValue: any;
-  protected bbBg: any;
+  protected bbBetValue: PixText;
+  protected bbBtnText: PixText;
+  protected bbBg: PixSprite;
+  private flt: ColorMatrixFilter;
 
   constructor(config: any) {
     super(config);
 
     this.bbBg = this.elementsList['bbBg'];
     this.bbBetValue = this.elementsList['bbBetValue'];
+    this.bbBtnText = this.elementsList['bbBtnText'];
     this.setupInteraction();
     this.updateBBBetValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
@@ -55,16 +60,22 @@ export class BuyBonusButtonComp extends StandardView {
   private enableBtn(): void {
     if (!GameProxy.config.isAnteEnabled) {
       this.interactive = true;
-      this.filters = null;
+      this.bbBg.filters = null;
+      this.bbBetValue.alpha = 1;
+      this.bbBtnText.alpha = 1;
     }
   }
 
   private disableBtn(): void {
     this.interactive = false;
-    const flt: ColorMatrixFilter = new ColorMatrixFilter();
-    flt.greyscale(0.32, true);
-    flt.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
-    this.filters = [flt];
+    if (!this.flt) {
+      this.flt = new ColorMatrixFilter();
+      this.flt.greyscale(0.32, true);
+      this.flt.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
+    }
+    this.bbBg.filters = [this.flt]; //applying filter on bg only and not on whole object as that will result in observable jerk in both text while toggling
+    this.bbBetValue.alpha = 0.6;
+    this.bbBtnText.alpha = 0.6;
   }
 
   protected onBuyBonusClicked(): void {
