@@ -11,15 +11,23 @@ export class CharacterController extends StandardView {
   private idleListenerAttached = false;
   private readonly idleMix = 0.3;
   private readonly idleAnims = ['idle', 'idle2'];
-  private readonly winAnims = ['win2'];
-  private readonly bigWinAnims = ['win'];
-  private readonly failAnims = ['fall'];
+  private readonly noWinAnims = ['fall'];
+  private readonly smallWinAnims = ['win'];
+  private readonly normalWinAnims = ['win1', 'win2'];
+  private readonly highPayWinAnims = ['win3'];
+  private readonly bigWinAnims = ['win4'];
+  private noWinSpinCount = 0;
+  private noWinThreshold: number;
 
   constructor(config) {
     super(config);
     this.kingAnim = this.elementsList['kingAnim'];
+    this.noWinThreshold = this.getRandomNoWinThreshold();
     EventHandler.addEventListener(SlotEvents.SHOW_TUMBLE_WIN, this.playRandomWinAnimations.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.playWinAnimationForBigWin.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.START_SPIN, this.resetCharacterAnimation.bind(this));
+    EventHandler.addEventListener(SlotEvents.REELSPIN_COMPLETED, this.playRandomNoWinAnimaions.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.onFSStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFSEnd.bind(this));
@@ -59,7 +67,10 @@ export class CharacterController extends StandardView {
         }
       } else if (
         animName === this.idleAnims[1] ||
-        this.winAnims.includes(animName) ||
+        this.noWinAnims.includes(animName) ||
+        this.smallWinAnims.includes(animName) ||
+        this.normalWinAnims.includes(animName) ||
+        this.highPayWinAnims.includes(animName) ||
         this.bigWinAnims.includes(animName)
       ) {
         this.idleLoopsRemaining = this.getRandomIdleLoopCount();
@@ -73,10 +84,29 @@ export class CharacterController extends StandardView {
     });
   }
 
+  private playRandomNoWinAnimaions(): void {
+    if (appModel.getSpinWin() > 0) return;
+    this.noWinSpinCount++;
+    if (this.noWinSpinCount < this.noWinThreshold) return;
+
+    this.noWinSpinCount = 0;
+    this.noWinThreshold = this.getRandomNoWinThreshold();
+
+    const randomAnim = this.noWinAnims[Math.floor(Math.random() * this.noWinAnims.length)];
+    this.kingAnim.playAnimation({
+      state: randomAnim,
+      loop: false,
+      defaultMix: this.idleMix,
+      reset: false,
+    });
+  }
+
   private playRandomWinAnimations(): void {
-    const winType = appModel.getWinType();
-    if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
-      const randomAnim = this.winAnims[Math.floor(Math.random() * this.winAnims.length)];
+    // playing if tumble happens
+    const tumbleData: any[] = appModel.getSpinBlastData();
+    const doesWinContainHPSymb = tumbleData.some((e) => e.symbol.includes('H'));
+    if (doesWinContainHPSymb) {
+      const randomAnim = this.highPayWinAnims[Math.floor(Math.random() * this.highPayWinAnims.length)];
       this.kingAnim.playAnimation({
         state: randomAnim,
         loop: false,
@@ -84,20 +114,57 @@ export class CharacterController extends StandardView {
         reset: false,
       });
     } else {
-      const randomAnim = this.bigWinAnims[Math.floor(Math.random() * this.bigWinAnims.length)];
-      this.kingAnim.playAnimation({
-        state: randomAnim,
-        loop: false,
-        defaultMix: this.idleMix,
-        reset: false,
-      });
+      const winType = appModel.getSingleCascadeWinType();
+      if (winType === CONSTANTS.BELOW_TOTALBET_WIN) {
+        const randomAnim = this.smallWinAnims[Math.floor(Math.random() * this.smallWinAnims.length)];
+        this.kingAnim.playAnimation({
+          state: randomAnim,
+          loop: false,
+          defaultMix: this.idleMix,
+          reset: false,
+        });
+      } else {
+        const randomAnim = this.normalWinAnims[Math.floor(Math.random() * this.normalWinAnims.length)];
+        this.kingAnim.playAnimation({
+          state: randomAnim,
+          loop: false,
+          defaultMix: this.idleMix,
+          reset: false,
+        });
+      }
     }
   }
 
-  private playWinAnimationForBigWin(): void {}
+  private playWinAnimationForBigWin(): void {
+    // playing while showing the big win animation
+    const winType = appModel.getWinType();
+    if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) return;
+    const randomAnim = this.bigWinAnims[Math.floor(Math.random() * this.bigWinAnims.length)];
+    this.kingAnim.playAnimation({
+      state: randomAnim,
+      loop: false,
+      defaultMix: this.idleMix,
+      reset: false,
+    });
+  }
+
+  private resetCharacterAnimation(): void {
+    this.idleLoopsRemaining = this.getRandomIdleLoopCount();
+    this.kingAnim.playAnimation({
+      state: this.idleAnims[0],
+      loop: true,
+      defaultMix: this.idleMix,
+      reset: false,
+    });
+  }
 
   private getRandomIdleLoopCount(): number {
     // 2-4 loops before idle2 plays once.
     return 2 + Math.floor(Math.random() * 3);
+  }
+
+  private getRandomNoWinThreshold(): number {
+    // 3-6 no-win spins before no-win anim plays.
+    return 3 + Math.floor(Math.random() * 4);
   }
 }

@@ -261,7 +261,6 @@ export default class SlotReelCascade extends SlotReel {
     }
     const tumbleData = appModel.getSpinBlastData();
     const blastPositions = Util.combineBlastPoisitions(tumbleData);
-    console.log('aaaaaaa', blastPositions);
     const len = blastPositions.length;
     this.totalBlasts = len;
     this.blastIndex = 0;

@@ -523,6 +523,42 @@ class AppModelService {
     return CONSTANTS.STANDARD_WIN;
   }
 
+  public getSingleCascadeWinType(): string {
+    // this function is intended only to determine the win type for a single cascade.
+    const win = this.getTumbleSpinWin();
+    const bet = this.getTotalBet();
+    const bigwinValues = GameProxy.config.bigWinValues;
+
+    // Safety: if config is missing or empty, fall back to simple logic
+    if (!Array.isArray(bigwinValues) || bigwinValues.length < 1) {
+      return win <= bet ? CONSTANTS.BELOW_TOTALBET_WIN : CONSTANTS.STANDARD_WIN;
+    }
+
+    // Define thresholds from smallest "big" to largest
+    // Assumes bigwinValues[0] < bigwinValues[1] < bigwinValues[2] < bigwinValues[3]
+    const thresholds = [
+      { multiplier: bigwinValues[0], type: CONSTANTS.BIG_WIN },
+      { multiplier: bigwinValues[1], type: CONSTANTS.MEGA_WIN },
+      { multiplier: bigwinValues[2], type: CONSTANTS.GIGANTIC_WIN },
+      { multiplier: bigwinValues[3], type: CONSTANTS.UNBELIEVABLE_WIN },
+    ];
+
+    if (win <= bet) {
+      return CONSTANTS.BELOW_TOTALBET_WIN;
+    }
+
+    // Check from highest threshold to lowest
+    for (let i = thresholds.length - 1; i >= 0; i--) {
+      const { multiplier, type } = thresholds[i];
+      if (win >= bet * multiplier) {
+        return type;
+      }
+    }
+
+    // Win is >= bet but below first bigWin threshold
+    return CONSTANTS.STANDARD_WIN;
+  }
+
   // ---------------------------------- Autoplay methods -----------------------------------------
 
   // WHEN: Called by AutoPlayConfirmBtnCommand when user starts autoplay
