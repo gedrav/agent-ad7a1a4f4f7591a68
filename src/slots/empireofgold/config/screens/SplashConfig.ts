@@ -217,7 +217,7 @@ export const SPLASH_CONFIG: any = {
             style: {
               fontFamily: 'gameFont1',
               fontWeight: 700,
-              fill: [0xffed54, 0xf5a100],
+              fill: ['0xfff000', '0xffa200'],
               stroke: 0x000000,
               strokeThickness: 2,
               fontSize: 40,
