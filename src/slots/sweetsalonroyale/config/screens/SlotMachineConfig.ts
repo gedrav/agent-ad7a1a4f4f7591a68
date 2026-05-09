@@ -62,7 +62,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 310, y: 190 },
+            reelContainerPos: { x: 332, y: 190 },
             reelPositionX: [0, 216, 434, 650, 870, 1080],
             symbolHeight: 210,
             symbolScale: 0.8,
@@ -296,13 +296,10 @@ export const SLOT_MACHINE_CONFIG: any = {
           Elements: [
             {
               name: 'reelFrame',
-              type: 'Spine',
-              spineName: 'reels_frame',
-              defaultState: 'loop',
-              loop: true,
-              boundingBox: { width: 1700, height: 1350 },
-              x: 0,
-              y: 0,
+              type: 'Sprite',
+              image: 'reels_frame',
+              x: 192,
+              y: 56,
             },
           ],
         },
@@ -317,28 +314,25 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1160 },
+        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 206, y: 1160 },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
         {
           name: 'gameTitle',
-          type: 'Spine',
-          spineName: 'EOG_Logo_Anim',
-          defaultState: 'Idle',
+          type: 'Sprite',
+          image: 'gameLogo',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              scale: 0.7,
               x: 852,
               y: -34,
             },
             Landscape: {
-              scale: 0.6,
               x: 862,
               y: -30,
             },
-            Portrait: { scale: 0.6, x: 862, y: -30 },
+            Portrait: { x: 862, y: -30 },
           },
         },
         {

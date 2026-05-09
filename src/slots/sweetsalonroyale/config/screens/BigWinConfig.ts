@@ -44,8 +44,8 @@ export const BIG_WIN_CONFIG = {
     {
       name: 'guideRect',
       type: 'Graphics',
-      width: 1300,
-      height: 1080,
+      width: 1280,
+      height: 1050,
       color: 0x000000,
       alpha: 0,
     },
@@ -82,7 +82,15 @@ export const BIG_WIN_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: {
+      refComponent: 'guideRect',
+      widthPerc: 1,
+      maxScale: 1,
+      hAlign: 'center',
+      vAlign: 'middle',
+      hPaddingPerc: 0.012,
+      vPaddingPerc: -0.018,
+    },
     Landscape: {
       refComponent: 'guideRect',
       widthPerc: 1,

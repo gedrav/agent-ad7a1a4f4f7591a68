@@ -10,6 +10,7 @@ export class CharacterController extends StandardView {
   private idleLoopsRemaining = 0;
   private idleListenerAttached = false;
   private readonly idleMix = 0.3;
+  private readonly normalWinMix = 0.05;
   private readonly idleAnims = ['idle', 'idle2'];
   private readonly noWinAnims = ['fall'];
   private readonly smallWinAnims = ['win'];
@@ -128,7 +129,7 @@ export class CharacterController extends StandardView {
         this.kingAnim.playAnimation({
           state: randomAnim,
           loop: false,
-          defaultMix: this.idleMix,
+          defaultMix: this.normalWinMix,
           reset: false,
         });
       }

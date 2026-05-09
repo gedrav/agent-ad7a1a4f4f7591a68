@@ -8,8 +8,8 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Spine',
-      spineName: 'BG_king',
-      defaultState: 'day',
+      spineName: 'BG',
+      defaultState: 'main',
       loop: true,
       boundingBox: { width: 1540, height: 1540 },
       layoutData: {
@@ -22,8 +22,8 @@ export const GAME_BG_CONFIG: any = {
       name: 'freegameBG',
       type: 'Spine',
       unload: false,
-      spineName: 'BG_king',
-      defaultState: 'night',
+      spineName: 'BG',
+      defaultState: 'bonus',
       loop: true,
       boundingBox: { width: 1540, height: 1540 },
       layoutData: {

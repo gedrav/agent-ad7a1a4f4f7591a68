@@ -6,7 +6,6 @@ const PRELOADER: AssetBundle = {
   assets: [
     { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
     { TYPE: 'content', NAME: 'gameContent.json' },
-    // { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
@@ -26,7 +25,7 @@ const SPLASH: AssetBundle = {
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'EOG_Logo_Anim', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -34,7 +33,7 @@ const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
-    { TYPE: 'game', NAME: 'BG_king', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
