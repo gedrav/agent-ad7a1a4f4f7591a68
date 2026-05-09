@@ -3,6 +3,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import { StateManager } from '@core/states/StateManagerService';
+import { appModel } from '@core/models/services/AppModelService';
 
 export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCascade {
   private symBlastCompleteCount = 0;
@@ -13,17 +14,16 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
 
   constructor(configData: any) {
     super(configData);
-
-    EventHandler.addEventListener(SlotEvents.LOWPAY_SYMBOL_CONVERSION, this.showSymbolConversion.bind(this));
+    EventHandler.addEventListener(
+      SlotEvents.CHARACTER_SYMBOL_CONVERSION_ANIM_COMPLETE,
+      this.showSymbolConversion.bind(this),
+    );
   }
 
-  protected showSymbolConversion(data?: {
-    changedPositions?: Array<[number, number]>;
-    selectedHigh?: string;
-    selectedLow?: string;
-  }) {
-    this.changedPositions = data?.changedPositions ?? [];
-    const selectedHigh = data?.selectedHigh;
+  protected showSymbolConversion() {
+    const result = appModel.getReelModifiersData();
+    this.changedPositions = result?.changedPositions ?? [];
+    const selectedHigh = result?.selectedHigh;
     this.targetSymbolData = selectedHigh ? this.reelsData.symbolsData[selectedHigh] : null;
 
     if (!this.changedPositions.length || !this.targetSymbolData) {

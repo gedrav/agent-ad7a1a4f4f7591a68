@@ -16,6 +16,7 @@ export class CharacterController extends StandardView {
   private readonly normalWinAnims = ['win1', 'win2'];
   private readonly highPayWinAnims = ['win3'];
   private readonly bigWinAnims = ['win4'];
+  private readonly symbolConversionAnims = ['Lifting_Sword'];
   private noWinSpinCount = 0;
   private noWinThreshold: number;
 
@@ -28,6 +29,7 @@ export class CharacterController extends StandardView {
 
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.resetCharacterAnimation.bind(this));
     EventHandler.addEventListener(SlotEvents.REELSPIN_COMPLETED, this.playRandomNoWinAnimaions.bind(this));
+    EventHandler.addEventListener(SlotEvents.LOWPAY_SYMBOL_CONVERSION, this.playAnimBeforeSymbolConversion.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.onFSStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFSEnd.bind(this));
@@ -54,7 +56,9 @@ export class CharacterController extends StandardView {
     this.idleListenerAttached = true;
     this.kingAnim.addEventListener('complete', (entry: any) => {
       const animName = entry?.animation?.name;
-
+      if (this.symbolConversionAnims.includes(animName)) {
+        EventHandler.dispatchEvent(SlotEvents.CHARACTER_SYMBOL_CONVERSION_ANIM_COMPLETE);
+      }
       if (animName === this.idleAnims[0]) {
         this.idleLoopsRemaining--;
         if (this.idleLoopsRemaining <= 0) {
@@ -71,7 +75,8 @@ export class CharacterController extends StandardView {
         this.smallWinAnims.includes(animName) ||
         this.normalWinAnims.includes(animName) ||
         this.highPayWinAnims.includes(animName) ||
-        this.bigWinAnims.includes(animName)
+        this.bigWinAnims.includes(animName) ||
+        this.symbolConversionAnims.includes(animName)
       ) {
         this.idleLoopsRemaining = this.getRandomIdleLoopCount();
         this.kingAnim.playAnimation({
@@ -140,6 +145,17 @@ export class CharacterController extends StandardView {
     const winType = appModel.getWinType();
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) return;
     const randomAnim = this.bigWinAnims[Math.floor(Math.random() * this.bigWinAnims.length)];
+    this.kingAnim.playAnimation({
+      state: randomAnim,
+      loop: false,
+      defaultMix: this.idleMix,
+      reset: false,
+    });
+  }
+
+  private playAnimBeforeSymbolConversion(): void {
+    //play before symbol conversion animation
+    const randomAnim = this.symbolConversionAnims[Math.floor(Math.random() * this.symbolConversionAnims.length)];
     this.kingAnim.playAnimation({
       state: randomAnim,
       loop: false,
