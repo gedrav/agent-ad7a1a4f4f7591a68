@@ -104,7 +104,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
-      name: 'spinClicked',
+      name: 'spin clicked',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_SPIN_CLICKED_SOUND'],
@@ -112,10 +112,10 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 1000,
     },
     {
-      name: 'spinClicked',
+      name: 'stop spin clicked',
       type: 'game',
       loop: false,
-      playEvents: ['STOP_SPIN_CLICKED_SOUND'],
+      playEvents: ['PLAY_STOP_SPIN_CLICKED_SOUND'],
       volume: 1,
       fadeOutDuration: 1000,
     },

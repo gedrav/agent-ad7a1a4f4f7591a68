@@ -116,9 +116,9 @@ export const SPLASH_CONFIG: any = {
       type: 'Sprite',
       image: 'splashbg',
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
       },
     },
 
@@ -315,12 +315,11 @@ export const SPLASH_CONFIG: any = {
     },
     {
       name: 'gameTitle',
-      type: 'Spine',
-      spineName: 'EOG_Logo_Anim',
-      defaultState: 'Idle',
+      type: 'Sprite',
+      image: 'gameLogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.2, maxScale: 1, hAlign: 'center', vPosition: 0.12 },
         Portrait: {
           widthPerc: 0.6,
           heightPerc: 0.12,

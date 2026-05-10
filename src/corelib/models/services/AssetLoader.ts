@@ -7,12 +7,14 @@ import { AppEvents } from '@core/events/AppEvents';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { appModel } from '@core/models/services/AppModelService';
+import { preloadRulesPanel } from '@common/panel/ts/SlotRuleLoader';
 
 class AssetLoaderClass {
   private commonFontPath: string;
   private soundConfig: any;
   private langFontPath: string;
   private progressPercentage: number;
+
   get bundles(): any[] {
     return this._bundles;
   }
@@ -93,9 +95,16 @@ class AssetLoaderClass {
   public loadSecondary() {
     this.loadBundles(LOAD_CONSTANTS.SECONDARY);
   }
+
   public loadFeatures() {
     const allBundles = this.assetsManifest.bundles.map((item: any) => item.name);
     this.loadBundles(LOAD_CONSTANTS.FEATURES);
+    this.preloadHtml();
+  }
+  private preloadHtml() {
+    preloadRulesPanel().catch((err) => {
+      console.error('Failed to preload rules panel', err);
+    });
   }
   public async loadBundle(bundle: string) {
     await this.loadBundles(bundle);

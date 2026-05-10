@@ -6,7 +6,7 @@ export const BIG_WIN_CONFIG = {
   type: 'Comp',
   class: BigWinsComp,
   data: {
-    backgroundAlpha: 0.2,
+    backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: 'big_start', idle: 'big_idle' },
       MEGA_WIN: { start: 'mega_start', idle: 'mega_idle' },
@@ -81,7 +81,14 @@ export const BIG_WIN_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
+    Desktop: {
+      refComponent: 'guideRect',
+      widthPerc: 1,
+      maxScale: 1,
+      hAlign: 'center',
+      vAlign: 'middle',
+      vPaddingPerc: -0.02,
+    },
     Landscape: {
       refComponent: 'guideRect',
       widthPerc: 1,
@@ -89,13 +96,14 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      vPaddingPerc: -0.02,
     },
     Portrait: {
       refComponent: 'guideRect',
       widthPerc: 0.96,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: 0.1,
+      vPaddingPerc: 0.08,
     },
   },
 };
