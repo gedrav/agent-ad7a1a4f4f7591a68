@@ -409,7 +409,6 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_FEATURE_TRIGGER_SOUND'],
-      matchParam: 'SC',
       volume: 0.5,
       fadeOutDuration: 100,
     },
