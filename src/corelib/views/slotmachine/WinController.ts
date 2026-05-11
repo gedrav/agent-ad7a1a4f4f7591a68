@@ -276,9 +276,15 @@ export default class WinController {
     }
   }
   protected getReelPosition(value: number): any {
-    const reel = value % this.noOfReels; // which column
-    const row = Math.floor(value / this.noOfReels); // which row
-    return { reel: reel, row: row };
+    if (Array.isArray(value)) {
+      const reel = value[0];
+      const row = value[1];
+      return { reel: reel, row: row };
+    } else {
+      const reel = value % this.noOfReels; // which column
+      const row = Math.floor(value / this.noOfReels); // which row
+      return { reel: reel, row: row };
+    }
   }
 
   private clearTumbleWinTexts(): void {
