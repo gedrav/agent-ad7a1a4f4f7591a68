@@ -254,6 +254,7 @@ class AppModelService {
     } else {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet / this.gameInfo.creditValue);
     }
+    this.tumbleIndex = 0;
 
     console.log(this.gameInfo.betsArray, this.unfinishedData.bet, this.gameInfo.betPos, this.unfinishedData.ante);
     this.featureName = this.unfinishedData.nextFeature;
