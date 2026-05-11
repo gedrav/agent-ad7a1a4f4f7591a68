@@ -438,5 +438,21 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
+    {
+      name: 'Ante bet button',
+      type: 'game',
+      loop: false,
+      playEvents: ['UPDATE_ANTE_BET_STATUS'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'Buy bonus button',
+      type: 'game',
+      loop: false,
+      playEvents: ['SHOW_BUY_BONUS_VIEW'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
   ],
 };
