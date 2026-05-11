@@ -41,6 +41,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'EOG_NC_Frame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'king_character', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Fire_ball_FX', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'explosion1', ASSETTYPE: 'spine' },
   ],
 };

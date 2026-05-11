@@ -6,8 +6,6 @@ import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
-import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
-import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import WinController from '@core/views/slotmachine/WinController';
 import { WIN_COLLECTOR_CONFIG } from './WinCollectorConfig';
 import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
@@ -18,6 +16,7 @@ import { CharacterController } from '@game/views/comps/CharacterController';
 import { WinValueComp } from '@game/views/comps/WinValueComp';
 import EOGNCMultiplierSlotReelCascade from '@game/views/slot/EOGNCMultiplierSlotReelCascade';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
+import EOGNCCascadeReelSymbol from '@game/views/slot/EOGNCCascadeReelSymbol';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -48,7 +47,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lx: 220,
       ly: 64,
       data: {
-        symbolClass: CascadeReelSymbol,
+        symbolClass: EOGNCCascadeReelSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,
@@ -113,6 +112,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             winAnim: 'win',
             blastAnim: 'cluster',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 1,
             explosion: {
@@ -127,6 +127,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             winAnim: 'win',
             blastAnim: 'cluster',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 1,
             explosion: {
@@ -141,6 +142,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             winAnim: 'win',
             blastAnim: 'cluster',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 1,
             explosion: {
@@ -155,6 +157,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             winAnim: 'win',
             blastAnim: 'cluster',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 1,
             explosion: {

@@ -17,7 +17,7 @@ export class CharacterController extends StandardView {
   private readonly normalWinAnims = ['win1', 'win2'];
   private readonly highPayWinAnims = ['win3'];
   private readonly bigWinAnims = ['win4'];
-  private readonly symbolConversionAnims = ['Lifting_Sword'];
+  private readonly symbolConversionAnims = ['Feature'];
   private noWinSpinCount = 0;
   private noWinThreshold: number;
 
@@ -55,6 +55,12 @@ export class CharacterController extends StandardView {
 
     if (this.idleListenerAttached) return;
     this.idleListenerAttached = true;
+    this.kingAnim.addEventListener('event', (param: any) => {
+      const event = param?.data?.name;
+      if (event === 'DISPATCH_FIREBALL') {
+        EventHandler.dispatchEvent(SlotEvents.INITIATE_SYMBOL_CONVERSION);
+      }
+    });
     this.kingAnim.addEventListener('complete', (entry: any) => {
       const animName = entry?.animation?.name;
       if (animName === this.idleAnims[0]) {
@@ -160,9 +166,6 @@ export class CharacterController extends StandardView {
       defaultMix: this.idleMix,
       reset: false,
     });
-    setTimeout(() => {
-      EventHandler.dispatchEvent(SlotEvents.CHARACTER_SYMBOL_CONVERSION_ANIM_COMPLETE);
-    }, 1000); // Assuming the symbol conversion animation is 1 second long. Adjust as needed.
   }
 
   private resetCharacterAnimation(): void {
