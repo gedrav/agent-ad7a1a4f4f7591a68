@@ -332,7 +332,7 @@ class AppModelService {
   }
   public getCascadeReelsView(): any {
     if (this.gameResult?.reelModifiers && this.gameResult?.reelModifiers.length > 0) {
-      if (this.gameResult?.reelModifiers[0]?.initialReelView) {
+      if (this.gameResult?.reelModifiers[0]?.initialReelView && this.tumbleIndex === 0) {
         return this.gameResult?.reelModifiers[0]?.initialReelView;
       }
     }

@@ -57,9 +57,6 @@ export class CharacterController extends StandardView {
     this.idleListenerAttached = true;
     this.kingAnim.addEventListener('complete', (entry: any) => {
       const animName = entry?.animation?.name;
-      if (this.symbolConversionAnims.includes(animName)) {
-        EventHandler.dispatchEvent(SlotEvents.CHARACTER_SYMBOL_CONVERSION_ANIM_COMPLETE);
-      }
       if (animName === this.idleAnims[0]) {
         this.idleLoopsRemaining--;
         if (this.idleLoopsRemaining <= 0) {
@@ -163,6 +160,9 @@ export class CharacterController extends StandardView {
       defaultMix: this.idleMix,
       reset: false,
     });
+    setTimeout(() => {
+      EventHandler.dispatchEvent(SlotEvents.CHARACTER_SYMBOL_CONVERSION_ANIM_COMPLETE);
+    }, 1000); // Assuming the symbol conversion animation is 1 second long. Adjust as needed.
   }
 
   private resetCharacterAnimation(): void {

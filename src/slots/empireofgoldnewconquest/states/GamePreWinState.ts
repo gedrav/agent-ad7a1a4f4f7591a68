@@ -9,11 +9,7 @@ class GamePreWinStateCommand extends StateCommand {
     super.execute(data);
     const result = appModel.getReelModifiersData();
     if (result && result.type == 'symbolChangeApplied') {
-      const data: any = {};
-      data.changedPositions = result.changedPositions;
-      data.selectedHigh = result.selectedHigh;
-      data.selectedLow = result.selectedLow;
-      EventHandler.dispatchEvent(SlotEvents.LOWPAY_SYMBOL_CONVERSION, data);
+      EventHandler.dispatchEvent(SlotEvents.LOWPAY_SYMBOL_CONVERSION);
     } else {
       StateManager.next();
     }
