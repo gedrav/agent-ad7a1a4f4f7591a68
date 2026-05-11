@@ -79,15 +79,15 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
     }
   }
 
-  private onFireballArrived(totalFireballs: number): void {
+  private async onFireballArrived(totalFireballs: number): Promise<void> {
     this.fireballArrivedCount++;
     if (this.fireballArrivedCount === totalFireballs) {
+      await Util.addDelays(150);
       this.onAllFireballsArrived();
     }
   }
 
   private async onAllFireballsArrived() {
-    const total = this.fireballSpines.length;
     for (const spine of this.fireballSpines) {
       spine.addEventListener('complete', (entry: any) => {
         const animName = entry?.animation?.name;
