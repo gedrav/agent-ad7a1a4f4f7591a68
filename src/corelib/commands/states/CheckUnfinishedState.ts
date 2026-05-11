@@ -11,6 +11,9 @@ class CheckUnfinishedStateCommand extends StateCommand {
     super.execute(data);
     if (appModel.getIsUnfinishedGame()) {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+      if (appModel.getIsAnteBetOn()) {
+        EventHandler.dispatchEvent(SlotEvents.UPDATE_UNFINISHED_ANTE_BET);
+      }
       EventHandler.dispatchEvent(SlotEvents.RENDER_UNFINISHED_REEL);
       if (appModel.getIsFeatureTriggered()) {
         const fType = appModel.getUnfinishedFeatureType();

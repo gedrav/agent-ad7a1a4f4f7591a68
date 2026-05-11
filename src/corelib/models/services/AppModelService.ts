@@ -246,6 +246,9 @@ class AppModelService {
   public getPaytableData(): any {
     return this.gameInfo.paytable;
   }
+  public getIsAnteBetOn(): boolean {
+    return this.unfinishedData?.ante;
+  }
   public setUnfinishedInfo(): void {
     this.gameResult = this.unfinishedData;
     if (this.unfinishedData.ante) {
