@@ -237,6 +237,7 @@ class AppModelService {
 
   public isConfigError(): boolean {
     let isError = false;
+    console.log(this.gameInfo.betsArray.length, this.gameInfo.betPos);
     if (this.gameInfo.betsArray.length == 0 || this.gameInfo.betPos == -1) {
       isError = true;
     }
@@ -247,7 +248,14 @@ class AppModelService {
   }
   public setUnfinishedInfo(): void {
     this.gameResult = this.unfinishedData;
-    this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet / this.gameInfo.creditValue);
+    if (this.unfinishedData.ante) {
+      const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier / this.gameInfo.creditValue;
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
+    } else {
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet / this.gameInfo.creditValue);
+    }
+
+    console.log(this.gameInfo.betsArray, this.unfinishedData.bet, this.gameInfo.betPos, this.unfinishedData.ante);
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
     this.fsInfo.currentFreespin =

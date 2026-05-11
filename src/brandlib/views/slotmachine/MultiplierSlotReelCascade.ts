@@ -36,6 +36,46 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.isFallingIn = false;
     super.startSpin();
   }
+  protected renderUnfinishedReel(): void {
+    if (appModel.isCascadeGame()) {
+      const reelsview = appModel.getUnfinishedCascadeReel();
+      console.log(reelsview);
+      for (let k = 0; k < this.reelsData.noOfReels; k++) {
+        if (this.reelsData.isFixedSymbol) {
+          for (let j = 0; j < this.reelsData.noOfRows; j++) {
+            const isBonusSymbol = reelsview[k][j]?.includes('BN');
+            if (isBonusSymbol) {
+              const multiplierVal = appModel.getSymbMultiplierValue(k, j);
+              const currentSymb = this.symbolsArray[k][j] as CascadeReelSymbol;
+              currentSymb.setRewardData(multiplierVal);
+              const multiplierSymb = this.getCorrespondingMultiplierSymbol(
+                multiplierVal,
+                this.reelsData.symbMultipliers,
+              );
+              this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+            } else {
+              this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j]], k);
+            }
+          }
+        } else {
+          for (let j = 1; j <= this.reelsData.noOfRows; j++) {
+            this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
+          }
+        }
+      }
+      this.showIdleAnim(false);
+    } else {
+      const reelsview = appModel.getUnfinishedReel();
+      for (let k = 0; k < this.reelsData.noOfReels; k++) {
+        for (let j = 1; j <= this.reelsData.noOfRows; j++) {
+          const symb = reelsview[k][j - 1];
+          this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
+        }
+      }
+    }
+
+    this.showIdleAnim(false);
+  }
   protected stopSpinQuick(): void {
     this.quickSpinStarted = true;
     this.isStopSpinButtonClick = false;
