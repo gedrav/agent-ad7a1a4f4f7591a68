@@ -51,7 +51,7 @@ export default class WinController {
           this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation();
         }
       }
-      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND);
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions?.length);
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(this.notifyFeatureTriggerAnimDone.bind(this), 2000);
     }
