@@ -24,6 +24,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
 
   protected createExtraElements(): void {
     this.destroySpine();
+    if (!appModel.secondaryAssetsLoaded) return;
     if (!this.configData.data.spineName) return;
     this.spine = this.pool.acquire(this.configData.data);
     this.spine.stopAnimation();

@@ -12,9 +12,9 @@ export const GAME_BG_CONFIG: any = {
       defaultState: 'main',
       freespinState: 'bonus',
       loop: true,
-      boundingBox: { width: 1540, height: 1540 },
+      boundingBox: { width: 1550, height: 1550 },
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen1: true },
         Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
         Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
       },

@@ -5,11 +5,11 @@ export const ANTE_BET_CONFIG: any = {
   type: 'Comp',
   class: AnteBetComp,
   x: 8,
-  y: 778,
+  y: 700,
   px: 1132,
   py: 1890,
   lx: 0,
-  ly: 440,
+  ly: 700,
   scale: 0.9,
   pScale: 1.14,
   Elements: [

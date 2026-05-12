@@ -23,13 +23,13 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xffff00,
-      width: 1900,
+      width: 1880,
       height: 1400,
       lWidth: 2140,
       lHeight: 1520,
       pWidth: 1400,
       pHeight: 1900,
-      alpha: 1,
+      alpha: 0,
     },
 
     {
@@ -67,13 +67,13 @@ export const SLOT_MACHINE_CONFIG: any = {
             symbolHeight: 210,
           },
           Portrait: {
-            reelContainerPos: { x: 310, y: 190 },
-            reelPositionX: [0, 216, 434, 650, 870, 1080],
+            reelContainerPos: { x: 142, y: 202 },
+            reelPositionX: [0, 216, 434, 650, 870, 1086],
             symbolHeight: 210,
           },
           Landscape: {
-            reelContainerPos: { x: 310, y: 190 },
-            reelPositionX: [0, 216, 434, 650, 870, 1080],
+            reelContainerPos: { x: 142, y: 202 },
+            reelPositionX: [0, 216, 434, 650, 870, 1086],
             symbolHeight: 210,
           },
         },
@@ -88,12 +88,12 @@ export const SLOT_MACHINE_CONFIG: any = {
         symbolsData: {
           SC: {
             name: 'SC',
-            // spineName: 'scatter',
-            // idleAnim: 'idle',
-            // landing: 'landing',
-            // winAnim: 'win',
-            // winAnim2: 'win2',
-            animScale: 0.7,
+            spineName: 'scatter',
+            idleAnim: 'idle',
+            landing: 'landing',
+            winAnim: 'win',
+            winAnim2: 'win2',
+            animScale: 0.4,
             explosion: {
               type: 'Spine',
               spineName: 'explosion1',
@@ -306,7 +306,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 206, y: 1160 },
+        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 0, y: 1160 },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
@@ -317,8 +317,9 @@ export const SLOT_MACHINE_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              x: 852,
-              y: -34,
+              scale: 0.6,
+              x: 677,
+              y: 27,
             },
             Landscape: {
               x: 862,
@@ -412,7 +413,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     BUY_BONUS_BTN_CONFIG,
     ANTE_BET_CONFIG,
-    BIG_WIN_CONFIG,
+    //BIG_WIN_CONFIG,
   ],
   layoutData: {
     Desktop: {
