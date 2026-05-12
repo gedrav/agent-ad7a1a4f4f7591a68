@@ -396,7 +396,11 @@ class AppModelService {
   }
 
   public getTotalBetTemp(value: number): number {
-    return value * this.gameInfo?.creditValue * this.getSelectedLines();
+    if (GameProxy.config.anteBetMultiplier) {
+      return value * this.gameInfo?.creditValue * this.getSelectedLines() * GameProxy.config.anteBetMultiplier;
+    } else {
+      return value * this.gameInfo?.creditValue * this.getSelectedLines();
+    }
   }
 
   public getAllBets(): number[] {
