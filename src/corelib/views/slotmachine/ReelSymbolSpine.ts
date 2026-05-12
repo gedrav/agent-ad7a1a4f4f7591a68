@@ -88,7 +88,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
 
   public showWinning(onComplete?: () => void): void {
     if (!appModel.secondaryAssetsLoaded) {
-      super.showWinning();
+      super.showWinning(onComplete);
       return;
     }
     if (this.configData.data.winAnim) {
@@ -96,7 +96,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
       this.playSpineAnimation(this.configData.data.winAnim, false);
       const name: string = this.configData.data.name ?? '';
     } else {
-      super.showWinning();
+      super.showWinning(onComplete);
     }
   }
 

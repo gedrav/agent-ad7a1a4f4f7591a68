@@ -137,6 +137,9 @@ export default class ReelSymbolSprite extends ReelSymbol {
       repeat: -1,
       yoyo: true,
     });
+    setTimeout(() => {
+      onComplete?.();
+    }, 2000);
   }
 
   public cleanUpSymbolWin(): void {

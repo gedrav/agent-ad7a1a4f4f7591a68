@@ -70,7 +70,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
 
   public showBlastAnim(onComplete?: () => void): void {
     if (!appModel.secondaryAssetsLoaded) {
-      super.showBlastAnim();
+      super.showBlastAnim(onComplete);
       return;
     }
     if (this.configData.data.blastAnim) {
@@ -82,7 +82,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
       this.spineAnimCompleteCallback = onComplete;
       this.playSpineAnimation(this.configData.data.blastAnim, false);
     } else {
-      super.showBlastAnim();
+      super.showBlastAnim(onComplete);
     }
   }
 
