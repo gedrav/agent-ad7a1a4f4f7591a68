@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 class ChangeTotalBetCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
+    console.log('ChangeTotalBetCommand', data);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET_TEMP, data);
   }
 }

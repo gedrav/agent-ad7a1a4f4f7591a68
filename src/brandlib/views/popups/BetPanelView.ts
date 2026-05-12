@@ -71,6 +71,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.CONFIRM_BET, this.onConfirmBet.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBetPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET_TEMP, this.onTempBetUpdate.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET_INCR_DECR_TEMP, this.onTempBetIncrDecrUpdate.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideBetPanel.bind(this));
 
     this.betPanelBg = this.elementsList['betPanelBg'];
@@ -137,17 +138,14 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.resizeView();
   }
 
+  protected onTempBetIncrDecrUpdate(data: number): void {
+    this.tempBetPos = this.tempBetPos + data;
+    this.updateBetPanel();
+  }
   protected onTempBetUpdate(data: any): void {
     const allBets = appModel.getAllBets();
-    if (typeof data === 'number' && data !== 1 && data !== -1) {
-      // direct bet value from ChangeTotalBetCommand
-      const pos = allBets.indexOf(data);
-      if (pos !== -1) this.tempBetPos = pos;
-    } else {
-      // +1 or -1 from IncrementDecrementBetCommand
-      const next = this.tempBetPos + data;
-      if (next >= 0 && next < allBets.length) this.tempBetPos = next;
-    }
+    const pos = allBets.indexOf(data);
+    if (pos !== -1) this.tempBetPos = pos;
     this.updateBetPanel();
   }
 
