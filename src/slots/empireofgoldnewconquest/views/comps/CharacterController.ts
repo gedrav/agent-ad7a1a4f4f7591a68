@@ -166,6 +166,7 @@ export class CharacterController extends StandardView {
       defaultMix: this.idleMix,
       reset: false,
     });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_CHARACTER_ANIMATION_SOUND);
   }
 
   private resetCharacterAnimation(): void {

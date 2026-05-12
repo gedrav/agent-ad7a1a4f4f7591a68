@@ -76,6 +76,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
         onInterrupt: this.onFireballArrived.bind(this, totalFireballs),
         onComplete: this.onFireballArrived.bind(this, totalFireballs),
       });
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FIREBALL_RELEASE_SOUND);
       index++;
     }
   }
@@ -105,6 +106,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
       spine.addEventListener('complete', (entry: any) => {
         const animName = entry?.animation?.name;
         if (animName === 'Blast') {
+          EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_APPEAR_SOUND);
           spine.playAnimation({ state: 'Appear', loop: false });
         } else if (animName === 'Appear') {
           this.onNewSymbolAppeared();
@@ -112,6 +114,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
       });
       this.makeSymbolsDisappear();
       spine.playAnimation({ state: 'Blast', loop: false });
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_DISAPPEAR_SOUND);
     }
   }
 
