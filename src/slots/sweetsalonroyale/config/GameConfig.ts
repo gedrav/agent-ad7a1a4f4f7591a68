@@ -24,7 +24,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     commonFontBold: 'Oswald Bold',
-    gameFont1: 'NewRocker Regular',
+    gameFont1: 'Lobster-Regular',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],

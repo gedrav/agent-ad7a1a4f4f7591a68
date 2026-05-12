@@ -29,7 +29,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lHeight: 1520,
       pWidth: 1400,
       pHeight: 1900,
-      alpha: 0,
+      alpha: 1,
     },
 
     {
@@ -288,10 +288,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           Elements: [
             {
               name: 'reelFrame',
-              type: 'Sprite',
-              image: 'reels_frame',
-              x: 192,
-              y: 56,
+              type: 'Spine',
+              spineName: 'reel',
+              defaultState: 'animation',
+              x: 1000,
+              y: 600,
             },
           ],
         },

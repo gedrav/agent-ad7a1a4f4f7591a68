@@ -23,13 +23,13 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xffff00,
-      width: 2140,
-      height: 1520,
+      width: 1900,
+      height: 1400,
       lWidth: 2140,
       lHeight: 1520,
       pWidth: 1400,
       pHeight: 1900,
-      alpha: 0,
+      alpha: 1,
     },
 
     {
@@ -37,8 +37,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: MultiplierSlotReelCascade,
       winController: WinController,
-      x: 220,
-      y: 120,
+      x: 260,
+      y: 32,
       px: -150,
       py: 490,
       lx: 220,
@@ -62,8 +62,8 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 332, y: 190 },
-            reelPositionX: [0, 216, 434, 650, 870, 1080],
+            reelContainerPos: { x: 142, y: 202 },
+            reelPositionX: [0, 216, 434, 650, 870, 1086],
             symbolHeight: 210,
           },
           Portrait: {
@@ -284,14 +284,14 @@ export const SLOT_MACHINE_CONFIG: any = {
           type: 'Comp',
           class: ReelFrameComp,
           x: 0,
-          y: 0,
+          y: 56,
           Elements: [
             {
               name: 'reelFrame',
               type: 'Sprite',
               image: 'reels_frame',
-              x: 192,
-              y: 56,
+              x: 0,
+              y: 0,
             },
           ],
         },
@@ -330,11 +330,11 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'maskRect',
           type: 'Graphics',
-          width: 1300,
+          width: 1340,
           height: 1050,
-          x: 197,
+          x: 20,
           y: 86,
-          color: 0xffff00,
+          color: 0xff0000,
         },
         {
           name: 'winSymbolsContainer',

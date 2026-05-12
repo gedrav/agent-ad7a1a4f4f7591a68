@@ -4,7 +4,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
   name: 'buyBonusComp',
   type: 'Comp',
   class: BuyBonusButtonComp,
-  x: 164,
+  x: 8,
   y: 430,
   px: 140,
   py: 1900,

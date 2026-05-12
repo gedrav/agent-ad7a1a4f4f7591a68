@@ -4,7 +4,7 @@ export const ANTE_BET_CONFIG: any = {
   name: 'anteBetComp',
   type: 'Comp',
   class: AnteBetComp,
-  x: 164,
+  x: 8,
   y: 778,
   px: 1132,
   py: 1890,

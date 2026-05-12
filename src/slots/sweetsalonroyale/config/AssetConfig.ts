@@ -14,7 +14,7 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'NewRocker-Regular.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'Lobster-Regular.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
   ],
 };
@@ -37,15 +37,15 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'reels_frame', ASSETTYPE: 'spine' },
+    //{ TYPE: 'game', NAME: 'reels_frame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'explosion1', ASSETTYPE: 'spine' },
+    //{ TYPE: 'game', NAME: 'explosion1', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
-    { TYPE: 'game', NAME: 'text', ASSETTYPE: 'spine' },
+    /*{ TYPE: 'game', NAME: 'text', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'bigwins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'scatter', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'red_cake', ASSETTYPE: 'spine' },
@@ -57,7 +57,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'grape', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'lemon', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'strawberry', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'multiplayer', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'multiplayer', ASSETTYPE: 'spine' },*/
   ],
 };
 /*const FREESPIN: AssetBundle = {

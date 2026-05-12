@@ -23,6 +23,11 @@ export class BGView extends ResponsiveChildrenView {
     this.showMainGameBG();
   }
   protected showMainGameBG() {
+    if (this.maingameBG.configData.freespinState) {
+      this.currentBG = 'main';
+      this.maingameBG.playAnimation({ state: this.maingameBG.configData.defaultState, loop: true });
+      return;
+    }
     if (this.currentBG === 'free' && this.freegameBG.configData.unload) {
       this.unloadFSBG();
     }
@@ -33,6 +38,11 @@ export class BGView extends ResponsiveChildrenView {
     this.maingameBG.visible = true;
   }
   protected showFreeGameBG() {
+    if (this.maingameBG.configData.freespinState) {
+      this.currentBG = 'free';
+      this.maingameBG.playAnimation({ state: this.maingameBG.configData.freespinState, loop: true });
+      return;
+    }
     this.currentBG = 'free';
     if (this.freegameBG.configData.unload) {
       this.loadFSBG();
