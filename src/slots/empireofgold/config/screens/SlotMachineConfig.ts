@@ -32,7 +32,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lHeight: 1520,
       pWidth: 1400,
       pHeight: 1900,
-      alpha: 1,
+      alpha: 0,
     },
 
     {
