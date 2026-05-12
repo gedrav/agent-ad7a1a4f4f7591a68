@@ -258,7 +258,6 @@ class AppModelService {
     }
     this.tumbleIndex = 0;
 
-    console.log(this.gameInfo.betsArray, this.unfinishedData.bet, this.gameInfo.betPos, this.unfinishedData.ante);
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
     this.fsInfo.currentFreespin =
@@ -397,7 +396,11 @@ class AppModelService {
   }
 
   public getTotalBetTemp(value: number): number {
-    return value * this.gameInfo?.creditValue * this.getSelectedLines();
+    if (GameProxy.config.anteBetMultiplier) {
+      return value * this.gameInfo?.creditValue * this.getSelectedLines() * GameProxy.config.anteBetMultiplier;
+    } else {
+      return value * this.gameInfo?.creditValue * this.getSelectedLines();
+    }
   }
 
   public getAllBets(): number[] {
@@ -853,6 +856,7 @@ class AppModelService {
     return (this.getTotalBet() / this.gameInfo.creditValue) * multi;
   }
   public getSymbMultiplierValue(reel: number, row: number) {
+    console.log(this.tumbleIndex, this.gameResult.cascadeData[this.tumbleIndex]);
     const multiplierPositions = this.gameResult.cascadeData[this.tumbleIndex]?.multiplierPositions;
     return (
       multiplierPositions.find((item) => item.position[0] === reel && item.position[1] === row)?.multiplier ?? null

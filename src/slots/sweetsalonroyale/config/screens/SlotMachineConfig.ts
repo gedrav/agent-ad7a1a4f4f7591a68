@@ -332,9 +332,9 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'maskRect',
           type: 'Graphics',
           width: 1340,
-          height: 1050,
+          height: 1048,
           x: 20,
-          y: 86,
+          y: 90,
           color: 0xff0000,
         },
         {

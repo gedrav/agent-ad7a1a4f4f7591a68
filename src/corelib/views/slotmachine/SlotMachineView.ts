@@ -34,7 +34,7 @@ export class SlotMachineView extends ResponsiveChildrenView {
   }
   protected showTumbleWin(): void {
     this.slotReel.showTumbleWin();
-    this.bigWinsComp.showTumbleWin();
+    this.bigWinsComp?.showTumbleWin();
   }
   protected clearSpinWin(): void {
     this.slotReel.clearSpinWin();
