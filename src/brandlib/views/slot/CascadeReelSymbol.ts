@@ -14,7 +14,7 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
     this.createMultiplierText();
   }
   protected createExplosion(): void {
-    if (this.configData.data.explosion2) {
+    if (this.configData.data.explosion) {
       this.explosionMovie = UIUtil.getElement(this.configData.data.explosion);
       this.explosionMovie.stopAnimation();
       this.explosionMovie.addEventListener('complete', this.onExplosionAnimComplete.bind(this));
