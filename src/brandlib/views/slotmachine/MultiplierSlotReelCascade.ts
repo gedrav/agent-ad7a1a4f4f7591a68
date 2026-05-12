@@ -39,7 +39,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected renderUnfinishedReel(): void {
     if (appModel.isCascadeGame()) {
       const reelsview = appModel.getUnfinishedCascadeReel();
-      console.log(reelsview);
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         if (this.reelsData.isFixedSymbol) {
           for (let j = 0; j < this.reelsData.noOfRows; j++) {

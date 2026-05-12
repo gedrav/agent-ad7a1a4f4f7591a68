@@ -237,7 +237,6 @@ class AppModelService {
 
   public isConfigError(): boolean {
     let isError = false;
-    console.log(this.gameInfo.betsArray.length, this.gameInfo.betPos);
     if (this.gameInfo.betsArray.length == 0 || this.gameInfo.betPos == -1) {
       isError = true;
     }

@@ -895,7 +895,7 @@ class UIUtilService {
           element.rotation = Util.getRadians(layout.rotation);
         }
         if (layout.fitToScreen) {
-          this.doFullScreen(element, layout.refComponent);
+          this.doFullScreen(element, layout.refComponent, layout);
         } else {
           this.scaleElement(element, layout);
         }
@@ -1717,7 +1717,7 @@ class UIUtilService {
     }
   }
 
-  public doFullScreen(element: any, refComponent: any = null): void {
+  public doFullScreen(element: any, refComponent: any = null, layout): void {
     let refElement;
     if (element.parent && refComponent) {
       refElement = element.parent.elementsList[refComponent];
@@ -1759,7 +1759,7 @@ class UIUtilService {
       element.scale.set(1);
       const wsc: number = refElement.getWidth() / element.getWidth();
       const hsc: number = refElement.getHeight() / element.getHeight();
-      element.scale.set(Math.max(wsc, hsc));
+      element.scale.set(Math.max(wsc, hsc) * Util.getDefaultValue(layout?.fullScreenScale, 1));
     }
   }
 
