@@ -14,7 +14,7 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1100 },
       anchor: { x: 0.5, y: 0.5 },
-      x: 565,
+      x: 474,
       y: 95,
     },
     {
@@ -30,7 +30,7 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 565,
+      x: 474,
       y: 320,
     },
     {
@@ -46,7 +46,7 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 565,
+      x: 474,
       y: 360,
     },
     {
@@ -66,7 +66,7 @@ export const FS_POPUP_CONFIG = {
         style: { fontFamily: 'gameFont1', fill: 0xffffff, fontSize: 60 },
         toUpperCase: true,
       },
-      x: 565,
+      x: 474,
       y: 565,
     },
   ],
