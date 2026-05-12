@@ -29,7 +29,7 @@ export class PixSpine extends StandardView {
         this.configData.boundingBox.height,
         0xff0000,
       );
-      //this.guideRect.alpha = 0;
+      this.guideRect.alpha = 0;
       this.spineAnim.x = this.guideRect.width / 2 + Util.getDefaultValue(this.configData.boundingBox.xPadding, 0);
       this.spineAnim.y = this.guideRect.height / 2 + Util.getDefaultValue(this.configData.boundingBox.yPadding, 0);
       this.addChildAt(this.guideRect, 0);
