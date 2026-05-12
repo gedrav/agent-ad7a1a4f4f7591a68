@@ -1,18 +1,11 @@
 import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { Util } from '@core/utils/UtilService';
 
 export default class EOGNCCascadeReelSymbol extends CascadeReelSymbol {
-  public showAppearingAnim(data: any, column: number, callback: () => void): void {
+  public async showAppearingAnim(data: any, column: number, callback: () => void): Promise<void> {
     this.setNewSymbol(data, column);
-    this.symbol.alpha = 0;
-    AnimationProxy.animateTween(this.symbol, {
-      duration: 0.5,
-      alpha: 1,
-      onComplete: this.onNewSymbolAppeared.bind(this, callback),
-    });
-  }
-
-  private onNewSymbolAppeared(callback: () => void): void {
+    this.playSpineAnimation(this.configData.data.appearAnim, false);
+    await Util.addDelays(1000); // added as a safeguard for playing appear anim fully
     callback();
   }
 }

@@ -14,8 +14,8 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 type ChangedPosition = [column: number, row: number];
 
-const lStats = { x: 1614, y: 694, scale: 0 };
-const pStats = { x: 1110, y: -178, scale: 0 };
+const lStats = { x: 1614, y: 694, scale: 0.6 };
+const pStats = { x: 1110, y: -178, scale: 0.6 };
 const FIREBALL_TRAVEL_DURATION = 1;
 
 export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCascade {
@@ -24,6 +24,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
   private targetSymbolData: any = null;
   private fireballSpines: PixSpine[] = [];
   private fireballArrivedCount = 0;
+  private appearAnimIndex = 0;
 
   constructor(configData: any) {
     super(configData);
@@ -44,7 +45,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
     this.newSymAppearanceCompleteCount = 0;
     this.totalSymbolsToConvert = changedPositions.length;
     const totalFireballs = changedPositions.length;
-
+    let index = 0;
     for (const [column, row] of changedPositions) {
       const symbol = this.symbolsArray?.[column]?.[row] as EOGNCCascadeReelSymbol;
       if (!symbol) continue;
@@ -60,40 +61,51 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
         spine.y = lStats.y;
         spine.scale.set(lStats.scale);
       }
-      spine.rotation = Math.PI / 2;
-      spine.playAnimation({ state: 'Fire_ball', loop: true });
+      spine.playAnimation({ state: 'Fire_ball_static', loop: true });
       this.addChild(spine);
       this.fireballSpines.push(spine);
 
       AnimationProxy.animateTween(spine, {
         x: pos.x,
         y: pos.y,
+        delay: index * 0.05,
         scaleX: 1,
         scaleY: 1,
-        rotation: 0,
         duration: FIREBALL_TRAVEL_DURATION,
         ease: 'power2.in',
         onInterrupt: this.onFireballArrived.bind(this, totalFireballs),
         onComplete: this.onFireballArrived.bind(this, totalFireballs),
       });
+      index++;
     }
   }
 
   private async onFireballArrived(totalFireballs: number): Promise<void> {
+    this.fireballSpines[this.fireballArrivedCount].playAnimation({
+      state: 'Fire_ball_start',
+      defaultMix: 0.01,
+      reset: false,
+      loop: false,
+    });
     this.fireballArrivedCount++;
     if (this.fireballArrivedCount === totalFireballs) {
-      await Util.addDelays(150);
+      await Util.addDelays(500); // added delay to show fireball animation over symbol
       this.onAllFireballsArrived();
     }
   }
 
   private async onAllFireballsArrived() {
     for (const spine of this.fireballSpines) {
+      spine.addEventListener('event', (param: any) => {
+        const event = param?.data?.name;
+        if (event === 'SYMBOL_APPEAR') {
+          this.makeSymbolsAppear();
+        }
+      });
       spine.addEventListener('complete', (entry: any) => {
         const animName = entry?.animation?.name;
         if (animName === 'Blast') {
           spine.playAnimation({ state: 'Appear', loop: false });
-          this.makeSymbolsAppear();
         } else if (animName === 'Appear') {
           this.onNewSymbolAppeared();
         }
@@ -119,14 +131,10 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
     const result = appModel.getReelModifiersData();
     const changedPositions: ChangedPosition[] = result?.changedPositions ?? [];
     if (!changedPositions.length) return;
-
-    console.log('aaaaaaaa', this.targetSymbolData);
-    for (let i = 0; i < changedPositions.length; i++) {
-      const [column, row] = changedPositions[i];
-      const symbol = this.symbolsArray?.[column]?.[row] as EOGNCCascadeReelSymbol;
-      symbol.visible = true;
-      symbol.showAppearingAnim(this.targetSymbolData, column, this.onNewSymbolAppeared.bind(this));
-    }
+    const [column, row] = changedPositions[this.appearAnimIndex++];
+    const symbol = this.symbolsArray?.[column]?.[row] as EOGNCCascadeReelSymbol;
+    symbol.visible = true;
+    symbol.showAppearingAnim(this.targetSymbolData, column, this.onNewSymbolAppeared.bind(this));
   }
   protected onNewSymbolAppeared(): void {
     this.newSymAppearanceCompleteCount++;
@@ -141,14 +149,16 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
   }
 
   private clearFireballSpines() {
-    for (const s of this.fireballSpines) {
-      AnimationProxy.killTweensOf(s);
-      s.removeEventListners?.();
-      s.destroySpine?.();
-      s.destroy();
+    for (const spine of this.fireballSpines) {
+      AnimationProxy.killTweensOf(spine);
+      this.removeChild(spine);
+      spine.removeEventListners?.();
+      spine.destroySpine?.();
+      spine.destroy();
     }
     this.fireballSpines = [];
     this.fireballArrivedCount = 0;
+    this.appearAnimIndex = 0;
     this.targetSymbolData = null;
   }
 }
