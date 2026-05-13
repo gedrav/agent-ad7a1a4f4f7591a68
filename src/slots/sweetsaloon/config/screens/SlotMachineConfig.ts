@@ -418,7 +418,7 @@ export const SLOT_MACHINE_CONFIG: any = {
   layoutData: {
     Desktop: {
       widthPerc: 0.94,
-      heightPerc: 1,
+      heightPerc: 0.9,
       hAlign: 'center',
       vAlign: 'middle',
       vPaddingPerc: 0,
