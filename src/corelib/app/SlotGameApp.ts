@@ -80,7 +80,7 @@ class SlotGameApp {
     if (isIOSMobile) {
       const lowEndIOS = /iPhone/.test(navigator.userAgent); // refine if needed
       await this.app.init({
-        resolution: 1, //Math.min(Math.ceil(window.devicePixelRatio), 1),
+        resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         antialias: false,
