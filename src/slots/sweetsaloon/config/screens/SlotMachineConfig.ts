@@ -39,10 +39,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: WinController,
       x: 260,
       y: 32,
-      px: -150,
+      px: 16,
       py: 490,
-      lx: 220,
-      ly: 120,
+      lx: 385,
+      ly: 30,
       data: {
         symbolClass: CascadeReelSymbol,
         noOfReels: 6,
@@ -322,10 +322,10 @@ export const SLOT_MACHINE_CONFIG: any = {
               y: 27,
             },
             Landscape: {
-              x: 862,
+              x: 672,
               y: -30,
             },
-            Portrait: { x: 862, y: -30 },
+            Portrait: { x: 685, y: -30 },
           },
         },
         {
