@@ -14,7 +14,7 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'NewRocker-Regular.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'Lobster-Regular.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
   ],
 };
@@ -45,19 +45,20 @@ const PRIMARY: AssetBundle = {
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
+    { TYPE: 'game', NAME: 'winpanel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'text', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'bigwins', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'wins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'scatter', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'red_cake', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'purple_cake', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'muffin', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'green_cake', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'eclair', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'berry', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'grape', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'lemon', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'strawberry', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'multiplayer', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'cupcake', ASSETTYPE: 'spine' }, //H1
+    { TYPE: 'game', NAME: 'cookies', ASSETTYPE: 'spine' }, //H2
+    { TYPE: 'game', NAME: 'pie', ASSETTYPE: 'spine' }, //H3
+    { TYPE: 'game', NAME: 'cake', ASSETTYPE: 'spine' }, //H4
+    { TYPE: 'game', NAME: 'low_green', ASSETTYPE: 'spine' }, //L1
+    { TYPE: 'game', NAME: 'low_red', ASSETTYPE: 'spine' }, //L2
+    { TYPE: 'game', NAME: 'low_yellow', ASSETTYPE: 'spine' }, //L3
+    { TYPE: 'game', NAME: 'low_spin', ASSETTYPE: 'spine' }, //L4
+    { TYPE: 'game', NAME: 'cookie', ASSETTYPE: 'spine' }, //L5
+    { TYPE: 'game', NAME: 'Candy_multiplier', ASSETTYPE: 'spine' },
   ],
 };
 /*const FREESPIN: AssetBundle = {

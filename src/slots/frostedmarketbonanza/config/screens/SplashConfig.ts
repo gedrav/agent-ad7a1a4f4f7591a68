@@ -116,9 +116,9 @@ export const SPLASH_CONFIG: any = {
       type: 'Sprite',
       image: 'splashbg',
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
 
