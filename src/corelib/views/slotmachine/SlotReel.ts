@@ -629,8 +629,8 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (this.reelsIndexes[reelno] > reelSymbols.length - 1) {
       this.reelsIndexes[reelno] = 0;
     }
-    //return 'H1';
-    return symbol;
+    return 'L5';
+    // return symbol;
   }
   protected getNextSymbol(reelno: number) {
     const symbol = this.getNextSymbolName(reelno);

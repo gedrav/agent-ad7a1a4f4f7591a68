@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.002',
+  gameVersion: '0.024',
   gameId: 'frostedmarketbonanza',
   gameName: 'Frosted Market Bonanza',
   uiConfig: UIConfig,
@@ -24,7 +24,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     commonFontBold: 'Oswald Bold',
-    gameFont1: 'NewRocker Regular',
+    gameFont1: 'Lobster Regular',
     bitmapFont: 'bitmapFont',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
