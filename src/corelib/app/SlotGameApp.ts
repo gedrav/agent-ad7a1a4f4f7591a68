@@ -80,22 +80,22 @@ class SlotGameApp {
     if (isIOSMobile) {
       const lowEndIOS = /iPhone/.test(navigator.userAgent); // refine if needed
       await this.app.init({
-        resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
+        resolution: 1, //Math.min(Math.ceil(window.devicePixelRatio), 1),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         antialias: false,
         autoDensity: true,
         roundPixels: true,
-        powerPreference: 'low-power',
+        /*powerPreference: 'low-power',
         preferWebGLVersion: 1, // A/B test this on iOS
         backgroundAlpha: 1,
         textureGCActive: true,
         textureGCCheckCountMax: 300,
-        textureGCMaxIdle: 600,
+        textureGCMaxIdle: 600,*/
       });
       if (lowEndIOS) {
-        this.app.ticker.maxFPS = 30;
-        this.app.ticker.minFPS = 24;
+        /*this.app.ticker.maxFPS = 30;
+        this.app.ticker.minFPS = 24;*/
       }
     } else {
       await this.app.init({
