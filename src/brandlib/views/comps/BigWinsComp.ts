@@ -27,6 +27,7 @@ export class BigWinsComp extends ResponsiveView {
   private animCompleteListener: { complete: (entry) => void };
   private winTickerBW: WinTicker;
   private bigWinTextAnim: PixSpine;
+  private bigWinPanelAnim: PixSpine;
 
   constructor(config) {
     super(config);
@@ -55,18 +56,30 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinAnim.stopAnimation();
       this.bigWinAnim.visible = false;
       this.guideRect.alpha = 0;
-      //this.bigWinAnim.update(0);
       this.bigWinAnim.addEventListener('complete', this.onAnimComplete.bind(this));
     }
     if (this.configData.data.bigWinTextAnim) {
       this.bigWinTextAnim = UIUtil.getElement(this.configData.data.bigWinTextAnim);
-      //this.bigWinTextAnim.update(0);
       this.addChild(this.bigWinAnim, this.bigWinTextAnim, this.winTicker, this.winTickerBW, this.skipRect);
     }
-    //GameProxy.config.app.render();
+    if (this.configData.data.bigWinPanelAnim) {
+      this.bigWinPanelAnim = UIUtil.getElement(this.configData.data.bigWinPanelAnim);
+      this.addChild(
+        this.bigWinPanelAnim,
+        this.bigWinAnim,
+        this.bigWinTextAnim,
+        this.winTicker,
+        this.winTickerBW,
+        this.skipRect,
+      );
+    }
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim.stopAnimation();
       this.bigWinTextAnim.visible = false;
+    }
+    if (this.bigWinPanelAnim) {
+      this.bigWinPanelAnim.stopAnimation();
+      this.bigWinPanelAnim.visible = false;
     }
   }
 
@@ -102,6 +115,13 @@ export class BigWinsComp extends ResponsiveView {
           defaultMix: 0,
         });
       }
+      if (this.bigWinPanelAnim) {
+        this.bigWinPanelAnim.playAnimation({
+          state: this.configData.data.panelAnimations[this.currentState].idle,
+          loop: false,
+          defaultMix: 0,
+        });
+      }
       this.playCurrentBigWinSound();
 
       this.winTickerBW.skipToFinalValue();
@@ -124,6 +144,7 @@ export class BigWinsComp extends ResponsiveView {
   public async showSpinWin() {
     const winType = appModel.getWinType();
     //const winType: string = CONSTANTS.UNBELIEVABLE_WIN;
+    console.log('showSpinWin', winType);
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);
@@ -171,6 +192,16 @@ export class BigWinsComp extends ResponsiveView {
         }
         if (this.bigWinTextAnim) {
           this.bigWinTextAnim.visible = true;
+        }
+        if (this.bigWinPanelAnim) {
+          this.bigWinPanelAnim.visible = true;
+        }
+        if (this.bigWinPanelAnim) {
+          this.bigWinPanelAnim.playAnimation({
+            state: this.configData.data.panelAnimations[this.currentState].idle,
+            loop: true,
+            defaultMix: 0,
+          });
         }
         this.showWinTickerType('bigwin');
         this.winTickerBW.countUpValue(appModel.getSpinWin(), this.totalDuration);
@@ -228,6 +259,10 @@ export class BigWinsComp extends ResponsiveView {
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim?.stopAnimation();
       this.bigWinTextAnim.visible = false;
+    }
+    if (this.bigWinPanelAnim) {
+      this.bigWinPanelAnim?.stopAnimation();
+      this.bigWinPanelAnim.visible = false;
     }
   }
   public showLineWin(): void {}

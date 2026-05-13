@@ -9,7 +9,7 @@ const defaultGameNames = [
   //"empireofgold",
   //'empireofgoldnewconquest',
   // "royale81",
-  'sweetsalonroyale',
+  'sweetsaloon',
   //'frostedmarketbonanza'
 ];
 

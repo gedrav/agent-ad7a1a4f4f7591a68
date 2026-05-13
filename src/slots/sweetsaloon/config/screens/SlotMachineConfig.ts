@@ -413,7 +413,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     BUY_BONUS_BTN_CONFIG,
     ANTE_BET_CONFIG,
-    //BIG_WIN_CONFIG,
+    BIG_WIN_CONFIG,
   ],
   layoutData: {
     Desktop: {

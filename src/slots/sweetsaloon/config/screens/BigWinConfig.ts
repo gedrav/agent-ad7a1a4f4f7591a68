@@ -10,23 +10,29 @@ export const BIG_WIN_CONFIG = {
     backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: 'big_start', idle: 'big_idle' },
-      MEGA_WIN: { start: 'mega_start', idle: 'mega_idle' },
-      GIGANTIC_WIN: { start: 'gigantic_start', idle: 'gigantic_idle' },
-      UNBELIEVABLE_WIN: { start: 'unbelievable_start', idle: 'unbelievable_idle' },
+      MEGA_WIN: { start: 'meg_start', idle: 'meg_idle' },
+      GIGANTIC_WIN: { start: 'gig_start', idle: 'gig_idle' },
+      UNBELIEVABLE_WIN: { start: 'unb_start', idle: 'unb_idle' },
     },
     textAnimations: {
       BIG_WIN: { start: 'big_start', idle: 'big_idle' },
-      MEGA_WIN: { start: 'mega_start', idle: 'mega_idle' },
-      GIGANTIC_WIN: { start: 'gigantic_start', idle: 'gigantic_idle' },
-      UNBELIEVABLE_WIN: { start: 'unbelievable_start', idle: 'unbelievable_idle' },
+      MEGA_WIN: { start: 'meg_start', idle: 'meg_idle' },
+      GIGANTIC_WIN: { start: 'gig_start', idle: 'gig_idle' },
+      UNBELIEVABLE_WIN: { start: 'unb_start', idle: 'unb_idle' },
+    },
+    panelAnimations: {
+      BIG_WIN: { start: 'idle', idle: 'idle' },
+      MEGA_WIN: { start: 'idle', idle: 'idle' },
+      GIGANTIC_WIN: { start: 'idle', idle: 'idle' },
+      UNBELIEVABLE_WIN: { start: 'idle', idle: 'idle' },
     },
     bigWinAnim: {
       name: 'bigWinAnim',
       dontCreateView: true,
       type: 'Spine',
-      spineName: 'bigwins',
+      spineName: 'wins',
       loop: true,
-      scale: 0.5,
+      scale: 0.75,
       x: 650,
       y: 500,
     },
@@ -39,6 +45,15 @@ export const BIG_WIN_CONFIG = {
       x: 650,
       y: 600,
     },
+    bigWinPanelAnim: {
+      name: 'bigWinPanelAnim',
+      dontCreateView: true,
+      type: 'Spine',
+      spineName: 'panel',
+      loop: true,
+      x: 650,
+      y: 600,
+    },
   },
   Elements: [
     {
@@ -46,7 +61,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Graphics',
       width: 1280,
       height: 1050,
-      color: 0x000000,
+      color: 0xff0000,
       alpha: 0,
     },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
@@ -54,7 +69,7 @@ export const BIG_WIN_CONFIG = {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 650,
+      x: 640,
       y: 465,
       Elements: [
         {
@@ -69,7 +84,7 @@ export const BIG_WIN_CONFIG = {
       name: 'winTickerBW',
       type: 'Comp',
       class: WinTicker,
-      x: 650,
+      x: 640,
       y: 900,
       Elements: [
         {
@@ -88,8 +103,8 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      hPaddingPerc: 0.012,
-      vPaddingPerc: -0.018,
+      hPaddingPerc: 0,
+      vPaddingPerc: -0.036,
     },
     Landscape: {
       refComponent: 'guideRect',
