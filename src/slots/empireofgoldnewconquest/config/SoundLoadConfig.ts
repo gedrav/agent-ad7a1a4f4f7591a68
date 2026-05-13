@@ -138,7 +138,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
-      name: 'smallSymbolsDrop',
+      name: 'SYMBOL DROP SFX',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND'],
