@@ -27,9 +27,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       height: 1400,
       lWidth: 2140,
       lHeight: 1520,
-      pWidth: 1400,
-      pHeight: 1900,
-      alpha: 0,
+      pWidth: 1360,
+      pHeight: 1500,
+      alpha: 1,
     },
 
     {
@@ -39,8 +39,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: WinController,
       x: 260,
       y: 32,
-      px: 16,
-      py: 490,
+      px: -20,
+      py: 110,
       lx: 385,
       ly: 30,
       data: {
