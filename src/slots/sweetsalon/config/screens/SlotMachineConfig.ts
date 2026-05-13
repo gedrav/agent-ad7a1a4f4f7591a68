@@ -29,7 +29,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lHeight: 1520,
       pWidth: 1360,
       pHeight: 1500,
-      alpha: 1,
+      alpha: 0,
     },
 
     {
@@ -39,10 +39,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: WinController,
       x: 260,
       y: 32,
-      px: -20,
+      px: -5,
       py: 110,
       lx: 385,
-      ly: 30,
+      ly: 135,
       data: {
         symbolClass: CascadeReelSymbol,
         noOfReels: 6,
