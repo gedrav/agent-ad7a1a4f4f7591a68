@@ -6,6 +6,8 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { Point } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
+import { AppEvents } from '@core/events/AppEvents';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class GameSlotMachineView extends SlotMachineView {
   private potAnim: PixSpine;
@@ -21,9 +23,13 @@ export class GameSlotMachineView extends SlotMachineView {
       { x: 0, y: -210, angle: 0 },
     ],
   };
-  private skipWildAnim: boolean = true;
   private gameTitle: PixSpine;
   private movingSymbolArray: ReelSymbolSprite[] = [];
+  private activeTweens: gsap.core.Tween[] = [];
+  private currentSymbolPositions: Array<[number, number]> | null = null;
+  private wildBlastSoundTimeout: number | null = null;
+  private skipInProgress: boolean = false;
+  private stateAdvanced: boolean = false;
 
   constructor(config: any) {
     super(config);
@@ -34,6 +40,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.startGameLogoAnimation();
     EventHandler.addEventListener('SHOW_WILD_BLAST', this.showWildBlast.bind(this));
     EventHandler.addEventListener('SHOW_WILD_BLAST_ANTICIPATION', this.showWildBlastAnticipation.bind(this));
+    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.onResizeInterrupt.bind(this));
   }
 
   protected onPotAnimCompleted(data: any): void {
@@ -68,31 +75,26 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected resizeComponents(): void {}
 
-  protected skipWildAnimation() {
-    this.skipWildAnim = true;
-  }
-
   protected showWildBlast(data: any): void {
-    this.skipWildAnim = false;
     const symbolPositions: Array<[number, number]> = data.wildPositions;
-    const numberOfWilds = symbolPositions.length;
-
     if (!symbolPositions) return;
 
-    if (!this.skipWildAnim) {
-      this.potAnim.stopAnimation();
-      this.potAnim.playAnimation({ state: 'Win_anim' });
-      this.playSymbolComingOut(symbolPositions);
-      EventHandler.dispatchEvent('PLAY_POT_SHAKE_SOUND');
-      setTimeout(() => EventHandler.dispatchEvent(`PLAY_WILD_BLAST_${numberOfWilds}`), 1166);
-    } else {
-      symbolPositions.forEach((position) => this.replaceWildOnReels(position));
-    }
+    const numberOfWilds = symbolPositions.length;
+    this.stateAdvanced = false;
+    this.potAnim.stopAnimation();
+    this.potAnim.playAnimation({ state: 'Win_anim' });
+    this.playSymbolComingOut(symbolPositions);
+    EventHandler.dispatchEvent('PLAY_POT_SHAKE_SOUND');
+    this.wildBlastSoundTimeout = window.setTimeout(() => {
+      EventHandler.dispatchEvent(`PLAY_WILD_BLAST_${numberOfWilds}`);
+      this.wildBlastSoundTimeout = null;
+    }, 1166);
   }
 
   protected playSymbolComingOut(symbolPositions: Array<[number, number]>) {
     if (!symbolPositions || symbolPositions.length < 1) return;
 
+    this.currentSymbolPositions = symbolPositions;
     const potAnimIndex = this.slotReel.children.indexOf(this.potAnim);
     const numberOfWilds = symbolPositions.length;
     const wildConfig = this.wildConfig[numberOfWilds];
@@ -118,21 +120,23 @@ export class GameSlotMachineView extends SlotMachineView {
       this.movingSymbolArray.push(movingSymbol);
       this.slotReel.addChildAt(movingSymbol, potAnimIndex - 1);
 
-      AnimationProxy.animateTween(movingSymbol, {
+      const tween = AnimationProxy.animateTween(movingSymbol, {
         duration: totalDuration - delay,
         delay: delay,
         x: this.potAnim.x + wildPosition.x,
         y: this.potAnim.y + wildPosition.y,
         rotation: finalRotation,
         onComplete: () => {
+          this.removeActiveTween(tween);
           this.playSymbolMoveTween(index, symbolPositions);
         },
       });
+      this.activeTweens.push(tween);
     });
   }
 
   protected playSymbolMoveTween(index: number, symbolPositions: Array<[number, number]>) {
-    const potAnimIndex = this.slotReel.children.indexOf(this.gameTitle);
+    const gameTitleIndex = this.slotReel.children.indexOf(this.gameTitle);
     const numberOfWilds = symbolPositions.length;
     const reelPosition = symbolPositions[index];
     const movingSymbol = this.movingSymbolArray[index];
@@ -143,14 +147,14 @@ export class GameSlotMachineView extends SlotMachineView {
     const c1 = new Point(this.potAnim.x, controlPointYOffset);
     const c2 = new Point(end.x * 0.5, controlPointYOffset);
 
-    movingSymbol.scale.set(0.8);
-    this.slotReel.addChildAt(movingSymbol, potAnimIndex + 1);
+    this.slotReel.addChildAt(movingSymbol, gameTitleIndex + 1);
 
-    AnimationProxy.animateTween(movingSymbol, {
+    const tween = AnimationProxy.animateTween(movingSymbol, {
       duration: 1,
       delay: 0.25 * index,
       rotation: 0,
       onComplete: () => {
+        this.removeActiveTween(tween);
         EventHandler.dispatchEvent(`PLAY_WILD_LAND_${index + 1}`);
         this.replaceWildOnReels(reelPosition);
         this.slotReel.removeChild(movingSymbol);
@@ -158,14 +162,12 @@ export class GameSlotMachineView extends SlotMachineView {
       },
       onUpdate: function () {
         const t = this.progress();
-        if (this.skipWildAnim) {
-          movingSymbol.visible = false;
-        }
         const beizerPoint = getBezierPoint(t, startPoint, c1, c2, end);
         movingSymbol.position.copyFrom(beizerPoint);
         movingSymbol.scale.set(lerp(0.8, 1, t));
       },
     });
+    this.activeTweens.push(tween);
   }
 
   protected replaceWildOnReels(position: [number, number]) {
@@ -175,9 +177,51 @@ export class GameSlotMachineView extends SlotMachineView {
   protected onFinalSymbolTween(index: number, numberOfWilds: number) {
     if (index === numberOfWilds - 1) {
       this.movingSymbolArray = [];
+      this.currentSymbolPositions = null;
       this.potAnim.playAnimation({ state: 'idle', loop: true });
-      setTimeout(() => StateManager.doNextStep(), 600); // If no delay is added the WILD symbol doesnt animate on line win
+      setTimeout(() => this.advanceState(), 600); // If no delay is added the WILD symbol doesnt animate on line win
     }
+  }
+
+  protected advanceState(): void {
+    if (this.stateAdvanced) return;
+    this.stateAdvanced = true;
+    StateManager.doNextStep();
+  }
+
+  protected removeActiveTween(tween: gsap.core.Tween): void {
+    const i = this.activeTweens.indexOf(tween);
+    if (i !== -1) this.activeTweens.splice(i, 1);
+  }
+
+  protected onResizeInterrupt(): void {
+    if (DeviceProxy.config.isDesktop) return;
+    if (this.skipInProgress) return;
+    if (!this.currentSymbolPositions || this.movingSymbolArray.length === 0) return;
+
+    this.skipInProgress = true;
+
+    if (this.wildBlastSoundTimeout != null) {
+      clearTimeout(this.wildBlastSoundTimeout);
+      this.wildBlastSoundTimeout = null;
+    }
+
+    this.activeTweens.forEach((t) => t.kill());
+    this.activeTweens = [];
+
+    const positions = this.currentSymbolPositions;
+    const numberOfWilds = positions.length;
+
+    this.movingSymbolArray.forEach((sprite, i) => {
+      this.replaceWildOnReels(positions[i]);
+      if (sprite.parent) sprite.parent.removeChild(sprite);
+    });
+
+    EventHandler.dispatchEvent(`PLAY_WILD_LAND_${numberOfWilds}`);
+
+    this.onFinalSymbolTween(numberOfWilds - 1, numberOfWilds);
+
+    this.skipInProgress = false;
   }
 
   protected getSymbolPositions(x: number, y: number) {
