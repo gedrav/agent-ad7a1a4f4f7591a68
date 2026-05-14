@@ -49,7 +49,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   private bbButtonsArray: PixFancyButton[];
   private gameLogo: PixSprite | PixSpine;
   private infoBtn: PixFancyButton;
-  private homeBtn: PixFancyButton;
+  private brandLogo: PixSprite;
   private _slotView: SlotMachineView;
   constructor(config: any) {
     super(config);
@@ -68,16 +68,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.stopSpinBtn = this.elementsList['stopSpinBtn'];
     this.stopAutoBtn = this.elementsList['stopAutoBtn'];
     this.betBtn = this.elementsList['betBtn'];
-    this.homeBtn = this.elementsList['homeBtn'];
+    this.brandLogo = this.elementsList['brandLogo'];
 
     if (!appModel.getIsCheatMode()) {
       this.removeChild(this.cheatBtn);
     }
 
     // Hide home button if getHomeURL is null or empty
-    if (!appModel.getHomeURL()) {
-      this.removeChild(this.homeBtn);
-    }
 
     this.longPressSprite = UIUtil.getSprite('longPressText');
     this.spinBtn.addChild(this.longPressSprite);
@@ -258,7 +255,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.betBtn.enabled = true;
     this.menuBtn.enabled = true;
     this.infoBtn.enabled = true;
-    this.homeBtn.enabled = true;
 
     // Enable buy bonus buttons
     if (this.bbButtonsArray) {
@@ -270,7 +266,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.betBtn.enabled = false;
     this.menuBtn.enabled = false;
     this.infoBtn.enabled = false;
-    this.homeBtn.enabled = false;
 
     // Disable buy bonus buttons during spins
     if (this.bbButtonsArray) {
@@ -465,13 +460,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.homeBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.homeBtn, {
-      hAlign: 'left',
-      hPaddingPerc: hPaddingPerc,
-    });
-    UIUtil.alignVertical(this.homeBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
-
     UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.soundOnBtn, {
       hAlign: 'left',
@@ -563,13 +551,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
       hPaddingPerc: -smallBtnHPaddingPerc,
     });
     UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
-
-    UIUtil.setRelativeScale(this.homeBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.homeBtn, {
-      hAlign: 'left',
-      hPaddingPerc: hPaddingPerc,
-    });
-    UIUtil.alignVertical(this.homeBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
     UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.soundOnBtn, {
@@ -745,13 +726,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.homeBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.homeBtn, {
-      hAlign: 'left',
-      hPaddingPerc: hPaddingPerc,
-    });
-    UIUtil.alignVertical(this.homeBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
-
     UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.soundOnBtn, {
       hAlign: 'left',
@@ -851,13 +825,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
       hPaddingPerc: -smallBtnHPaddingPerc,
     });
     UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
-
-    UIUtil.setRelativeScale(this.homeBtn, 1, 1, this.menuBtn, 1, 0.4);
-    UIUtil.alignHorizontal(this.homeBtn, {
-      hAlign: 'left',
-      hPaddingPerc: hPaddingPerc,
-    });
-    UIUtil.alignVertical(this.homeBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
     UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.soundOnBtn, {
