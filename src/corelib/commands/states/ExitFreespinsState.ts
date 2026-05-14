@@ -15,19 +15,24 @@ class ExitFreespinsStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
 
-    const fswin = appModel.getTotalFreespinWinAmount();
-    const obj: any = {};
-    obj.title = Util.getContent('CongratTitle');
-    obj.message1 = Util.parseMessage(Util.getContent('FSExitText'), [
-      Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
-    ]);
     if (appModel.getIsMaxCapReached()) {
-      obj.message1 = Util.parseMessage(Util.getContent('FSExitTextForMaxCapReached'), [
+      const obj: any = {};
+      obj.title = Util.getContent('infoText');
+      obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
         Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
       ]);
+      obj.callback = this.exitFreespin.bind(this);
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    } else {
+      const obj: any = {};
+      obj.title = Util.getContent('CongratTitle');
+      obj.message1 = Util.parseMessage(Util.getContent('FSExitText'), [
+        Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
+      ]);
+      obj.callbackFunction = this.exitFreespin.bind(this);
+      EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
     }
-    obj.callbackFunction = this.exitFreespin.bind(this);
-    EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
+
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, false);
