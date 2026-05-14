@@ -340,7 +340,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           ],
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
-            Landscape: { scale: 0.7, x: 1840, y: 800 },
+            Landscape: { scale: 0.7, x: 1840, y: 900 },
             Portrait: { scale: 0.7, x: 1400, y: 38 },
           },
         },

@@ -14,7 +14,8 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 type ChangedPosition = [column: number, row: number];
 
-const lStats = { x: 1614, y: 694, scale: 0.6 };
+const dStats = { x: 1614, y: 694, scale: 0.6 };
+const lStats = { x: 1554, y: 694, scale: 0.6 };
 const pStats = { x: 1110, y: -178, scale: 0.6 };
 const FIREBALL_TRAVEL_DURATION = 1;
 
@@ -52,14 +53,20 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
 
       const spine = UIUtil.getSpineAnim('Fire_ball_FX', { spineName: 'Fire_ball_FX' });
       const pos = this.toLocal(symbol.getGlobalPosition());
-      if (DeviceProxy.config.isPortrait) {
-        spine.x = pStats.x;
-        spine.y = pStats.y;
-        spine.scale.set(pStats.scale);
+      if (DeviceProxy.config.isDesktop) {
+        spine.x = dStats.x;
+        spine.y = dStats.y;
+        spine.scale.set(dStats.scale);
       } else {
-        spine.x = lStats.x;
-        spine.y = lStats.y;
-        spine.scale.set(lStats.scale);
+        if (DeviceProxy.config.isPortrait) {
+          spine.x = pStats.x;
+          spine.y = pStats.y;
+          spine.scale.set(pStats.scale);
+        } else {
+          spine.x = lStats.x;
+          spine.y = lStats.y;
+          spine.scale.set(lStats.scale);
+        }
       }
       spine.playAnimation({ state: 'Fire_ball_static', loop: true });
       this.addChild(spine);
