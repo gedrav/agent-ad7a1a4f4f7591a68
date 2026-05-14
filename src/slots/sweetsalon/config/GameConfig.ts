@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.026',
+  gameVersion: '0.027',
   gameId: 'sweetsalonroyale',
   gameName: 'Sweet Salon',
   uiConfig: UIConfig,
