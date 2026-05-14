@@ -57,18 +57,8 @@ export class BuyBonusView extends ResponsiveChildrenView {
     this.upStakeBtn.enabled = appModel.getBetPos() < appModel.getAllBets().length - 1;
   }
   protected resizeView(): void {
-    if (DeviceProxy.config.isDesktop) {
-      this.buyBonusBg.width = this.buyBonusBg.configData.width;
-      this.buyBonusBg.height = this.buyBonusBg.configData.height;
-    } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.buyBonusBg.width = this.buyBonusBg.configData.pWidth;
-        this.buyBonusBg.height = this.buyBonusBg.configData.pHeight;
-      } else {
-        this.buyBonusBg.width = this.buyBonusBg.configData.lWidth;
-        this.buyBonusBg.height = this.buyBonusBg.configData.lHeight;
-      }
-    }
+    this.buyBonusBg.width = this.buyBonusBg.configData.width;
+    this.buyBonusBg.height = this.buyBonusBg.configData.height;
     super.resizeView();
   }
 
