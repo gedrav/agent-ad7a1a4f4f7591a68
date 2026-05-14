@@ -14,7 +14,11 @@ const PRELOADER: AssetBundle = {
 };
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
-  assets: [{ TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' }],
+  assets: [
+    { TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
+  ],
 };
 
 const SPLASH: AssetBundle = {
@@ -22,8 +26,6 @@ const SPLASH: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
   ],
 };
 
