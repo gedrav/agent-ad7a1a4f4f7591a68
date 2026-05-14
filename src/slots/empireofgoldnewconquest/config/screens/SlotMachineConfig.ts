@@ -26,7 +26,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xffff00,
-      width: 2140,
+      width: 2284,
       height: 1520,
       lWidth: 2140,
       lHeight: 1520,
@@ -40,7 +40,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: EOGNCMultiplierSlotReelCascade,
       winController: WinController,
-      x: 220,
+      x: 292,
       y: 64,
       px: -150,
       py: 438,
@@ -459,7 +459,7 @@ export const SLOT_MACHINE_CONFIG: any = {
   ],
   layoutData: {
     Desktop: {
-      widthPerc: 0.8,
+      widthPerc: 0.86,
       heightPerc: 1,
       hAlign: 'center',
       vAlign: 'middle',
