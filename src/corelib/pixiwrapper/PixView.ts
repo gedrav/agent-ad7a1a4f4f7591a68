@@ -65,9 +65,8 @@ export class PixView extends PIXI.Container {
   }
 
   async unloadBundle() {
-    if (this.configData.requiredBundle && this.configData.unloadAssets) {
-      await AssetLoader.unloadBundle(this.configData.requiredBundle);
-    }
+    console.log('unloading bundle -- ', this.configData.requiredBundle);
+    await AssetLoader.unloadBundle(this.configData.requiredBundle);
   }
 
   async createLazyView() {

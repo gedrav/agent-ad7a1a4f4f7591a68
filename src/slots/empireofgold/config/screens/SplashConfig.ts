@@ -6,6 +6,7 @@ import { Point } from 'pixi.js';
 import { SplashButton } from '@brand/views/comps/SplashButton';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = { sk: { fontSize: 45 } };
 
@@ -14,6 +15,8 @@ export const SPLASH_CONFIG: any = {
   type: 'Comp',
   class: SplashView,
   itemsDesktopScale: 1,
+  unloadAssets: true,
+  requiredBundle: LOAD_CONSTANTS.SPLASH,
 
   contents: [
     {

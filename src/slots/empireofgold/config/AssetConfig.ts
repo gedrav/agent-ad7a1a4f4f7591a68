@@ -17,6 +17,8 @@ const COMMON: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'NewRocker-Regular.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'EOG_Logo_Anim', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -25,8 +27,6 @@ const SPLASH: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'EOG_Logo_Anim', ASSETTYPE: 'spine' },
   ],
 };
 

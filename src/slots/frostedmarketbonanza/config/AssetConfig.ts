@@ -16,6 +16,8 @@ const COMMON: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'Lobster-Regular.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -24,8 +26,6 @@ const SPLASH: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'splashBG', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'splashAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
   ],
 };
 
