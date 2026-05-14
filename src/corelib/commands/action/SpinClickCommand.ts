@@ -7,12 +7,14 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { RequestFullscreenCommand } from './RequestFullscreenCommand';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class SpinClickCmd extends ActionCommand {
   public async execute(data: any = null) {
     super.execute(data);
 
     if (appModel.getIsSpinStartPossible()) {
+      clearTimeout(GameProxy.config.idleTimeoutId);
       StateManager.goToState(STATES.SPIN_START_STATE);
       const isDesktop = DeviceProxy.config.isDesktop;
       const isTablet = DeviceProxy.config.isTablet;

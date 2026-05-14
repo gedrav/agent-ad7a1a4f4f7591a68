@@ -2,6 +2,7 @@ import { StateCommand } from '@core/commands/core/StateCommand';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class GameIdleStateCommand extends StateCommand {
   private intervalId: any;
@@ -16,10 +17,14 @@ class GameIdleStateCommand extends StateCommand {
         this.showLineWin();
         //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
       } else {
-        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+        GameProxy.config.idleTimeoutId = setTimeout(() => {
+          EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+        }, 1000);
       }
     } else {
-      EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+      GameProxy.config.idleTimeoutId = setTimeout(() => {
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+      }, 1000);
     }
   }
   public doNextStep(data: any = null) {
