@@ -65,7 +65,6 @@ export class PixView extends PIXI.Container {
   }
 
   async unloadBundle() {
-    console.log('unloading bundle -- ', this.configData.requiredBundle);
     await AssetLoader.unloadBundle(this.configData.requiredBundle);
   }
 
