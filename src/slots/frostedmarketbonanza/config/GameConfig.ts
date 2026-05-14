@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.024',
+  gameVersion: '0.006',
   gameId: 'frostedmarketbonanza',
   gameName: 'Frosted Market Bonanza',
   uiConfig: UIConfig,
