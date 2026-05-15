@@ -84,7 +84,7 @@ export default class WinController {
               const winAmountText: any = new this.reelsData.winValueComponent();
               winAmountText.showValue(Util.formatCurrencyNoSymbol(symbWinAmount));
               winAmountText.x = sym.x;
-              winAmountText.y = sym.y + this.symbolsArray[pos.reel][pos.row].height / 2 - winAmountText.height / 2;
+              winAmountText.y = sym.y + this.reelsData.symbolHeight / 2 - winAmountText.height / 2;
               winAmountText.scale.set(1);
               if (maxWid && winAmountText.width > maxWid) {
                 const sc = maxWid / winAmountText.width;
@@ -94,7 +94,7 @@ export default class WinController {
               this.tumbleWinAmountTexts.push(winAmountText);
               AnimationProxy.animateTween(winAmountText, {
                 delay: 1,
-                y: winAmountText.y - this.symbolsArray[pos.reel][pos.row].height * 0.7,
+                y: winAmountText.y - this.reelsData.symbolHeight * 0.7,
                 alpha: 0.25,
                 duration: 1,
                 ease: 'Power2.easeOut',
