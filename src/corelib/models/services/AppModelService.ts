@@ -254,10 +254,10 @@ class AppModelService {
   public setUnfinishedInfo(): void {
     this.gameResult = this.unfinishedData;
     if (this.unfinishedData.ante) {
-      const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier / this.gameInfo.creditValue;
+      const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier;
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
     } else {
-      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet / this.gameInfo.creditValue);
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }
     this.tumbleIndex = 0;
 
