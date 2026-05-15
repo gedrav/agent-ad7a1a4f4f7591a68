@@ -681,8 +681,8 @@ class AppModelService {
 
   public getBBRTP(): { name: string; rtp: string }[] {
     return [
-      { name: 'Free Spins', rtp: '99%' },
-      { name: 'Super Spins', rtp: '97.3%' },
+      // { name: 'Free Spins', rtp: '99%' },
+      // { name: 'Super Free Spins', rtp: '97.3%' },
     ];
   }
 
