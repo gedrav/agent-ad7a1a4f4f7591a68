@@ -145,7 +145,6 @@ export class MessageServiceProxy extends AbstractProxy {
         }
       }
     }
-    console.log('aaaaaaaa', finalObj);
     return this.encryptObject(finalObj);
   }
 
