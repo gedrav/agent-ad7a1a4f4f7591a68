@@ -213,20 +213,20 @@ class AppModelService {
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.betsArray = [];
     const len = data.playerInfo.possibleBets.length;
+    const totalBetsArray: number[] = [];
     if (len > 0) {
       data.playerInfo.possibleBets.sort((a: number, b: number) => a - b);
       for (let i = 0; i < len; i++) {
         const totalbet = this.getTotalBetTemp(data.playerInfo.possibleBets[i]);
         if (totalbet >= data.playerInfo.minBet && totalbet <= data.playerInfo.maxBet) {
           this.gameInfo.betsArray.push(data.playerInfo.possibleBets[i]);
+          totalBetsArray.push(totalbet);
         }
       }
     }
 
     this.gameInfo.betPos =
-      this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet) > -1
-        ? this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet)
-        : 0;
+      totalBetsArray.indexOf(data.playerInfo.defaultBet) > -1 ? totalBetsArray.indexOf(data.playerInfo.defaultBet) : 0;
 
     this.gameInfo.paytable = data.gameInfo.payTable;
     this.unfinishedData = data.unfinishedInfo;
