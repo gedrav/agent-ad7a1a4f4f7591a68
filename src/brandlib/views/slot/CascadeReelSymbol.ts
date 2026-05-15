@@ -74,15 +74,18 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
       return;
     }
     if (this.configData.data.blastAnim) {
-      this.addChildAt(this.explosionMovie, 0);
-      this.explosionMovie.visible = true;
-      const state = this.configData.data.explosion.defaultState;
-      const loop: boolean = false;
-      this.explosionMovie.playAnimation({ state, loop });
+      if (this.explosionMovie) {
+        this.addChildAt(this.explosionMovie, 0);
+        this.explosionMovie.visible = true;
+        const state = this.configData.data.explosion.defaultState;
+        const loop: boolean = false;
+        this.explosionMovie.playAnimation({ state, loop });
+      }
       this.spineAnimCompleteCallback = onComplete;
       this.playSpineAnimation(this.configData.data.blastAnim, false);
     } else {
-      super.showBlastAnim(onComplete);
+      // if no blast anim in config then we dont show any blast anim and directly call the oncomplete
+      onComplete();
     }
   }
 

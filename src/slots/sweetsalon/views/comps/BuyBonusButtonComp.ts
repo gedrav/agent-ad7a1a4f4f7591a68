@@ -25,6 +25,7 @@ export class BuyBonusButtonComp extends StandardView {
     this.setupInteraction();
     this.updateBBBetValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_BB_STATE, this.updateBBBetValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_ANTE_BET_STATUS, this.onAnteBetStatusUpdate.bind(this));
@@ -47,6 +48,7 @@ export class BuyBonusButtonComp extends StandardView {
         this.bbBetValue.scale.set((this.bbBg.width * 0.8) / this.bbBetValue.width);
       }
     }
+    this.enableBtn();
   }
 
   protected setupInteraction(): void {
@@ -73,7 +75,7 @@ export class BuyBonusButtonComp extends StandardView {
       this.flt.greyscale(0.32, true);
       this.flt.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
     }
-    this.bbBg.filters = [this.flt]; //applying filter on bg only and not on whole object as that will result in little jerk in both text while toggling
+    this.bbBg.filters = [this.flt]; //applying filter on bg only and not on whole object as that will result in observable jerk in both text while toggling
     this.bbBetValue.alpha = 0.6;
     this.bbBtnText.alpha = 0.6;
   }

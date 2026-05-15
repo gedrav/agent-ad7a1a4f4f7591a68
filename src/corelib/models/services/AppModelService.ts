@@ -217,17 +217,19 @@ class AppModelService {
     if (len > 0) {
       data.playerInfo.possibleBets.sort((a: number, b: number) => a - b);
       for (let i = 0; i < len; i++) {
-        const totalbet = this.getTotalBetTemp(data.playerInfo.possibleBets[i]);
-        const totalbetWithoutAnte = this.getTotalBetTempWithoutAnte(data.playerInfo.possibleBets[i]);
-        if (totalbet >= data.playerInfo.minBet && totalbet <= data.playerInfo.maxBet) {
+        if (
+          data.playerInfo.possibleBets[i] >= data.playerInfo.minBet &&
+          data.playerInfo.possibleBets[i] <= data.playerInfo.maxBet
+        ) {
           this.gameInfo.betsArray.push(data.playerInfo.possibleBets[i]);
-          totalBetsArray.push(totalbetWithoutAnte);
         }
       }
     }
 
     this.gameInfo.betPos =
-      totalBetsArray.indexOf(data.playerInfo.defaultBet) > -1 ? totalBetsArray.indexOf(data.playerInfo.defaultBet) : 0;
+      this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet) > -1
+        ? this.gameInfo.betsArray.indexOf(data.playerInfo.defaultBet)
+        : 0;
 
     this.gameInfo.paytable = data.gameInfo.payTable;
     this.unfinishedData = data.unfinishedInfo;
@@ -252,10 +254,10 @@ class AppModelService {
   public setUnfinishedInfo(): void {
     this.gameResult = this.unfinishedData;
     if (this.unfinishedData.ante) {
-      const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier / this.gameInfo.creditValue;
+      const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier;
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
     } else {
-      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet / this.gameInfo.creditValue);
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }
     this.tumbleIndex = 0;
 
@@ -360,12 +362,10 @@ class AppModelService {
   }
 
   public getMinBet(): number {
-    return this.gameInfo.betsArray[0] * this.gameInfo?.creditValue * this.getSelectedLines();
+    return this.gameInfo.betsArray[0];
   }
   public getMaxBet(): number {
-    return (
-      this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1] * this.gameInfo?.creditValue * this.getSelectedLines()
-    );
+    return this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1];
   }
   public setAnteBet(value: number): void {
     this.gameInfo.anteBet = value;
@@ -381,15 +381,10 @@ class AppModelService {
     if (this.gameInfo.betsArray.length > 0) {
       if (isAnte) {
         if (this.gameInfo.betsArray.length > 0) {
-          return (
-            this.gameInfo?.betsArray[this.gameInfo.betPos] *
-            this.gameInfo?.creditValue *
-            this.gameInfo?.anteBet *
-            this.getSelectedLines()
-          );
+          return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.anteBet;
         }
       } else {
-        return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.creditValue * this.getSelectedLines();
+        return this.gameInfo?.betsArray[this.gameInfo.betPos];
       }
     } else {
       return 0;
@@ -398,20 +393,17 @@ class AppModelService {
 
   public getTotalBetTemp(value: number): number {
     if (GameProxy.config.anteBetMultiplier) {
-      return value * this.gameInfo?.creditValue * this.getSelectedLines() * GameProxy.config.anteBetMultiplier;
+      return value * GameProxy.config.anteBetMultiplier;
     } else {
-      return value * this.gameInfo?.creditValue * this.getSelectedLines();
+      return value;
     }
-  }
-  public getTotalBetTempWithoutAnte(value: number): number {
-    return value * this.gameInfo?.creditValue * this.getSelectedLines();
   }
 
   public getAllBets(): number[] {
     const bets: number[] = [];
     const len = this.gameInfo.betsArray.length;
     for (let k = 0; k < len; k++) {
-      bets.push(this.gameInfo?.betsArray[k] * this.gameInfo?.creditValue * this.getSelectedLines());
+      bets.push(this.gameInfo?.betsArray[k]);
     }
 
     return bets;
@@ -806,10 +798,7 @@ class AppModelService {
     return this.gameResult?.cascadeData && this.gameResult.cascadeData.length > 0;
   }
   public toCollectMultiplier(): boolean {
-    if (this.getIsFreeSpinsSession()) {
-      return this.gameResult?.freeSpinMultiplier !== this.gameResult?.prevFreeSpinMultiplier;
-    }
-    return this.gameResult?.multiplier && this.gameResult?.cascadeData?.length > 1;
+    return this.gameResult?.multiplierPositions.length > 0 && this.gameResult?.cascadeData?.length > 1;
   }
 
   public getScatterPay(): number {
@@ -864,7 +853,7 @@ class AppModelService {
     return this.gameResult;
   }
   public getSymbolPayoutValue(multi: number): number {
-    return (this.getTotalBet() / this.gameInfo.creditValue) * multi;
+    return (this.getTotalBet() / (this.gameInfo.creditValue * this.gameInfo.selectedLines)) * multi;
   }
   public getSymbMultiplierValue(reel: number, row: number) {
     const multiplierPositions = this.gameResult.cascadeData[this.tumbleIndex]?.multiplierPositions;
