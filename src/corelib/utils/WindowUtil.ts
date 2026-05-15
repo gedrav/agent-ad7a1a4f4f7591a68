@@ -51,6 +51,7 @@ declare global {
     getMaxExposure: () => number;
     getCachedGameContent: () => any;
     getCachedCommonContent: () => any;
+    getBBRtp: () => any;
   }
 }
 
@@ -116,5 +117,6 @@ export class WindowUtil {
     window.getMaxExposure = () => appModel.maxExposure();
     window.getCachedGameContent = () => ContentProxy.content;
     window.getCachedCommonContent = () => ContentProxy.content;
+    window.getBBRtp = () => appModel.getBBRTP();
   }
 }
