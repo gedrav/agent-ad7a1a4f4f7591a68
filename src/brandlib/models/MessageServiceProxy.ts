@@ -137,11 +137,15 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.extraData.forceSymbolChange = true;
           finalObj.extraData.forceSymbolChangeLow = 'L5';
           finalObj.extraData.forceSymbolChangeHigh = 'H3';
+        } else if (GameProxy.config.cheatObject.forceBonusMultiplier) {
+          finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+          finalObj.extraData.combination = cheatObj.combination;
         } else {
           finalObj.extraData.combination = cheatObj;
         }
       }
     }
+    console.log('aaaaaaaa', finalObj);
     return this.encryptObject(finalObj);
   }
 
