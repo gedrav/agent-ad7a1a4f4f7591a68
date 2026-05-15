@@ -8,6 +8,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { Sine } from 'gsap/gsap-core';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { ColorMatrixFilter } from 'pixi.js';
 
 export class AnteBetComp extends StandardView {
   protected betAmnt: any;
@@ -50,10 +51,21 @@ export class AnteBetComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_UNFINISHED_ANTE_BET, this.setForUnfinished.bind(this));
     this.disableBtn();
   }
+  protected setForUnfinished(): void {
+    this.onToggleClicked();
+  }
   private updateValue() {
-    this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+    if (appModel.getTotalBet() * GameProxy.config.anteBetMultiplier > appModel.getMaxBet()) {
+      this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+      this.disableBtn();
+      this.setDeselected();
+    } else {
+      this.enableBtn();
+      this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+    }
   }
 
   protected setupToggle(): void {
@@ -66,6 +78,30 @@ export class AnteBetComp extends StandardView {
     this.cursor = 'pointer';
     UIUtil.addInteraction(this, this.onToggleClicked.bind(this));
     this.updateToggleVisuals(false);
+    if (GameProxy.config.isAnteEnabled) {
+      this.toggleBtn.filters = null;
+    } else {
+      const flt: ColorMatrixFilter = new ColorMatrixFilter();
+      flt.greyscale(0.5, true);
+      this.toggleBtn.filters = [flt];
+    }
+  }
+  protected setDeselected(): void {
+    GameProxy.config.isAnteEnabled = false;
+    this.updateToggleVisuals(true);
+    if (GameProxy.config.isAnteEnabled) {
+      appModel.setAnteBet(GameProxy.config.anteBetMultiplier);
+    } else {
+      appModel.setAnteBet(1);
+    }
+    if (GameProxy.config.isAnteEnabled) {
+      this.toggleBtn.filters = null;
+    } else {
+      const flt: ColorMatrixFilter = new ColorMatrixFilter();
+      flt.greyscale(0.5, true);
+      this.toggleBtn.filters = [flt];
+    }
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_BB_STATE);
   }
 
   protected onToggleClicked(): void {
@@ -75,6 +111,13 @@ export class AnteBetComp extends StandardView {
       appModel.setAnteBet(GameProxy.config.anteBetMultiplier);
     } else {
       appModel.setAnteBet(1);
+    }
+    if (GameProxy.config.isAnteEnabled) {
+      this.toggleBtn.filters = null;
+    } else {
+      const flt: ColorMatrixFilter = new ColorMatrixFilter();
+      flt.greyscale(0.5, true);
+      this.toggleBtn.filters = [flt];
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_ANTE_BET_STATUS);
@@ -86,7 +129,7 @@ export class AnteBetComp extends StandardView {
     const tickTargetX = GameProxy.config.isAnteEnabled ? this.toggleTick.configData.x : this.toggleTick.x;
     const onAlpha = GameProxy.config.isAnteEnabled ? 1 : 0;
     const offAlpha = GameProxy.config.isAnteEnabled ? 0 : 1;
-    const frameTint = GameProxy.config.isAnteEnabled ? 0x028d09 : 0x950c00;
+    const frameTint = GameProxy.config.isAnteEnabled ? 0x028d09 : 0xcccccc;
     this.anteFrameGold.visible = GameProxy.config.isAnteEnabled;
     this.anteFrameSilver.visible = !GameProxy.config.isAnteEnabled;
 

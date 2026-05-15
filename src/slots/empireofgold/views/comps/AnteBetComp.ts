@@ -101,6 +101,7 @@ export class AnteBetComp extends StandardView {
       flt.greyscale(0.5, true);
       this.toggleBtn.filters = [flt];
     }
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_BB_STATE);
   }
 
   protected onToggleClicked(): void {
