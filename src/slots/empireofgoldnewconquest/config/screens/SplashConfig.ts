@@ -8,7 +8,15 @@ import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfS
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
-const fontMLProps = { sk: { fontSize: 45 } };
+const fontMLProps = {
+  cs: { fontSize: 64 },
+  sk: { fontSize: 64 },
+  ro: { fontSize: 60 },
+  hr: { fontSize: 64 },
+  cnr: { fontSize: 64 },
+  pl: { fontSize: 62 },
+  lt: { fontSize: 62 },
+};
 
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
@@ -30,7 +38,6 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -39,6 +46,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 68,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -61,6 +69,7 @@ export const SPLASH_CONFIG: any = {
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
+        fontMLProps: fontMLProps,
         destroy: true,
         style: {
           fontFamily: 'gameFont1',
@@ -70,6 +79,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 68,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -100,6 +110,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 68,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
