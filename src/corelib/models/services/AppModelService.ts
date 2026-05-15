@@ -798,10 +798,7 @@ class AppModelService {
     return this.gameResult?.cascadeData && this.gameResult.cascadeData.length > 0;
   }
   public toCollectMultiplier(): boolean {
-    if (this.getIsFreeSpinsSession()) {
-      return this.gameResult?.freeSpinMultiplier !== this.gameResult?.prevFreeSpinMultiplier;
-    }
-    return this.gameResult?.multiplier && this.gameResult?.cascadeData?.length > 1;
+    return this.gameResult?.multiplierPositions.length > 0 && this.gameResult?.cascadeData?.length > 1;
   }
 
   public getScatterPay(): number {
