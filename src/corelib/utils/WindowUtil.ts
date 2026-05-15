@@ -21,6 +21,8 @@ declare global {
   interface Window {
     getHistoryPageURL: () => string;
     getMaxPayout: () => string;
+    getMinBet: () => string;
+    getMaxBet: () => string;
     getMaxBBPayout: () => string;
     getGameInitData: () => any;
     getGameVersion: () => string;
@@ -70,6 +72,8 @@ export class WindowUtil {
     };
     window.getMaxPayout = () => Util.formatCurrency(getData()?.playerInfo?.maxPayout);
     window.getMaxBBPayout = () => Util.formatCurrency(getData()?.playerInfo?.bbMaxWin);
+    window.getMinBet = () => Util.formatCurrency(getData()?.playerInfo?.minBet);
+    window.getMaxBet = () => Util.formatCurrency(getData()?.playerInfo?.maxBet);
     window.getGameInitData = getData;
     window.getGameVersion = () => import.meta.env.VITE_GAME_VERSION + '_' + GameProxy.config.gameVersion;
     window.getIsSoundOn = () => {
