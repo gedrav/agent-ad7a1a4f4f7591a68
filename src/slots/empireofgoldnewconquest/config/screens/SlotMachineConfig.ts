@@ -55,6 +55,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelHeight: 1200,
         landingSymbols: ['SC', 'BN_G', 'BN_B', 'BN_P', 'BN_R'],
         reelsConfig: ReelsConfig,
+        hasFSTotalMultiplier: true,
         multiplierTextConfig: {
           name: 'multiplierVal',
           type: 'BitmapText',
