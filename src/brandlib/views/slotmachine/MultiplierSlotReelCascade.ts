@@ -27,7 +27,9 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));
 
-    this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
+    if (this.configData.data.hasFSTotalMultiplier) {
+      this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
+    }
   }
   public restartIdleAnim(): void {
     this.showIdleAnim(true);
@@ -276,7 +278,12 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
 
   protected showMultiplierCollection(): void {
     if (appModel.getIsFreeSpinsSession()) {
-      this.createFsTotalMultiplier();
+      if (this.configData.data.hasFSTotalMultiplier) {
+        this.createFsTotalMultiplier();
+      } else {
+        this.cascadeReelWinTicker.setupForAnimation();
+        this.createMultipliersToAnimate();
+      }
     } else {
       this.cascadeReelWinTicker.setupForAnimation();
       this.createMultipliersToAnimate();
@@ -306,7 +313,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected createMultipliersToAnimate() {
     const multiplierPos = appModel.getMultiplierPositionData();
     this.totalMultiplierCount = multiplierPos.length;
-    this.createMultiplierAt(0);
+    this.createMultiplierAt(0); // passing "0" here since in case of multiple multiplier in same cascade then while animating if create all at once then jerk was showing. hence create the first then once it moves completely then create the other and animate.
     this.animateMultiplier();
   }
 
@@ -377,7 +384,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   }
 
   protected onUpdateFsTotalMulti() {
-    this.fsTotalMultiComp.updateMultiplier();
+    this.fsTotalMultiComp?.updateMultiplier();
   }
 
   protected resetSlotReelVal() {

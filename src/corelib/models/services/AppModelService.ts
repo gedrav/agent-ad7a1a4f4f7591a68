@@ -798,7 +798,11 @@ class AppModelService {
     return this.gameResult?.cascadeData && this.gameResult.cascadeData.length > 0;
   }
   public toCollectMultiplier(): boolean {
-    return this.gameResult?.multiplierPositions.length > 0 && this.gameResult?.cascadeData?.length > 1;
+    return (
+      this.gameResult?.multiplierPositions &&
+      this.gameResult?.multiplierPositions.length > 0 &&
+      this.gameResult?.cascadeData?.length > 1
+    );
   }
 
   public getScatterPay(): number {
