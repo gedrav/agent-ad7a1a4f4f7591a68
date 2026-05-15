@@ -58,7 +58,14 @@ export class AnteBetComp extends StandardView {
     this.onToggleClicked();
   }
   private updateValue() {
-    this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+    if (appModel.getTotalBet() * GameProxy.config.anteBetMultiplier > appModel.getMaxBet()) {
+      this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+      this.disableBtn();
+      this.setDeselected();
+    } else {
+      this.enableBtn();
+      this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+    }
   }
 
   protected setupToggle(): void {
@@ -71,6 +78,22 @@ export class AnteBetComp extends StandardView {
     this.cursor = 'pointer';
     UIUtil.addInteraction(this, this.onToggleClicked.bind(this));
     this.updateToggleVisuals(false);
+    if (GameProxy.config.isAnteEnabled) {
+      this.toggleBtn.filters = null;
+    } else {
+      const flt: ColorMatrixFilter = new ColorMatrixFilter();
+      flt.greyscale(0.5, true);
+      this.toggleBtn.filters = [flt];
+    }
+  }
+  protected setDeselected(): void {
+    GameProxy.config.isAnteEnabled = false;
+    this.updateToggleVisuals(true);
+    if (GameProxy.config.isAnteEnabled) {
+      appModel.setAnteBet(GameProxy.config.anteBetMultiplier);
+    } else {
+      appModel.setAnteBet(1);
+    }
     if (GameProxy.config.isAnteEnabled) {
       this.toggleBtn.filters = null;
     } else {
