@@ -55,7 +55,6 @@ export class BetPanelView extends ResponsiveChildrenView {
   private stakeText: any;
   private btnContainer: PixView;
   private betPanelBg: PixNineSpliceSprite;
-  private maxBetBtn: PixToggleButton;
   private titleText: PixText;
   private cancelBtn: PixFancyButton;
   private setBtn: PixFancyButton;
@@ -63,6 +62,7 @@ export class BetPanelView extends ResponsiveChildrenView {
   private stakebg: PixSprite;
   private stakeContainer: PixView;
   private minmaxbetText: PixText;
+  private minmaxbetBG: PixSprite;
 
   constructor(config: any) {
     super(config);
@@ -84,6 +84,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.stakebg = this.stakeContainer.elementsList['stakebg'];
     this.cancelBtn = this.elementsList['cancelBtn'];
     this.setBtn = this.elementsList['setBtn'];
+    this.minmaxbetBG = this.stakeContainer.elementsList['minmaxbetBG'];
     this.minmaxbetText = this.stakeContainer.elementsList['minmaxbetText'];
     this.minmaxbetText.text = Util.parseMessage(Util.getContent('minMaxBetText'), [
       Util.formatCurrency(appModel.getMinBet()),
@@ -96,7 +97,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     const len = totalBetsArray.length;
     if (len > 0) {
       // Use however many bets come from BE, capped at 11 (max btn is the 12th)
-      const noOfBtns: number = Math.min(len, 11);
+      const noOfBtns: number = totalBetsArray.length;
       for (let i = 0; i < noOfBtns; i++) {
         const btn = UIUtil.getElement(btnConfig);
         if (btn) {
@@ -111,14 +112,6 @@ export class BetPanelView extends ResponsiveChildrenView {
         }
       }
     }
-    this.maxBetBtn = UIUtil.getElement(btnConfig);
-    if (this.maxBetBtn.textView) {
-      this.maxBetBtn.updateText(Util.getContent('maxBet'));
-      this.maxBetBtn.textView.anchor.set(0.5, 0.5);
-      this.maxBetBtn.setData(totalBetsArray[totalBetsArray.length - 1]);
-    }
-    this.btnContainer.addChild(this.maxBetBtn);
-    this.maxBetBtn.setSelected(false);
 
     this.positionButtons();
     UIUtil.stopPropagation(this);
@@ -166,7 +159,6 @@ export class BetPanelView extends ResponsiveChildrenView {
     }
     this.downStakeBtn.enabled = this.tempBetPos > 0;
     this.upStakeBtn.enabled = this.tempBetPos < allBets.length - 1;
-    this.maxBetBtn.setSelected(this.tempBetPos === allBets.length - 1);
   }
 
   protected positionButtons() {
@@ -174,7 +166,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     let columns: number = 0;
     let gap = 160;
     if (DeviceProxy.config.isDesktop) {
-      columns = 4;
+      columns = 6;
       gap = 160;
       let rowIndex: number = 0;
       let colIndex: number = 0;
@@ -220,6 +212,8 @@ export class BetPanelView extends ResponsiveChildrenView {
       this.betPanelBg.scale.set(1);
     }
 
+    this.betPanelBg.width = this.btnContainer.width * 1.16;
+
     this.titleText.x = this.betPanelBg.width / 2;
 
     // derive rowHeight from actual button y positions
@@ -230,16 +224,6 @@ export class BetPanelView extends ResponsiveChildrenView {
     const lastRowY = lastRowIndex * rowHeight;
     const btnsInLastRow = this.betBtnsArray.filter((btn) => btn.y === lastRowY);
 
-    if (btnsInLastRow.length > 0) {
-      // last row has buttons — place maxBetBtn at the last column
-      this.maxBetBtn.x = (columns - 1) * gap;
-      this.maxBetBtn.y = lastRowY;
-    } else {
-      // last row is empty — center maxBetBtn
-      this.maxBetBtn.x = ((columns - 1) * gap) / 2;
-      this.maxBetBtn.y = lastRowY;
-    }
-
     // fixed grid width keeps container position stable regardless of button count
     const fixedGridWidth = columns * gap;
     this.btnContainer.x = (this.betPanelBg.width - fixedGridWidth) / 2 + this.betBtnsArray[0].width / 2;
@@ -249,33 +233,12 @@ export class BetPanelView extends ResponsiveChildrenView {
     this.cancelBtn.x = this.betPanelBg.width * 0.48 - this.cancelBtn.width * 0.5;
     this.setBtn.x = this.betPanelBg.width * 0.52 + this.setBtn.width * 0.5;
 
-    if (DeviceProxy.config.isDesktop) {
-      this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.25;
-    } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height * 1.25;
-      } else {
-        this.cancelBtn.y = this.betPanelBg.height - this.cancelBtn.height;
-      }
-    }
-
+    this.cancelBtn.y = this.stakeContainer.y + this.stakeContainer.height + this.minmaxbetBG.height * 1.5;
     this.setBtn.y = this.cancelBtn.y;
+    this.betPanelBg.height = this.setBtn.y + this.setBtn.height * 1.5;
   }
 
   protected resizeView() {
-    if (DeviceProxy.config.isDesktop) {
-      this.betPanelBg.width = this.betPanelBg.configData.width;
-      this.betPanelBg.height = this.betPanelBg.configData.height;
-    } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.betPanelBg.width = this.betPanelBg.configData.pWidth;
-        this.betPanelBg.height = this.betPanelBg.configData.pHeight;
-      } else {
-        this.betPanelBg.width = this.betPanelBg.configData.lWidth;
-        this.betPanelBg.height = this.betPanelBg.configData.lHeight;
-      }
-    }
-
     this.positionButtons();
     super.resizeView();
   }
