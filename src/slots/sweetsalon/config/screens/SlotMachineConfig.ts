@@ -88,11 +88,11 @@ export const SLOT_MACHINE_CONFIG: any = {
         symbolsData: {
           SC: {
             name: 'SC',
-            spineName: 'scatter',
+            spineName: 'Scatter',
             idleAnim: 'idle',
             landing: 'landing',
             winAnim: 'win_idle',
-            animScale: 0.4,
+            animScale: 0.42,
           },
           H1: {
             name: 'H1',

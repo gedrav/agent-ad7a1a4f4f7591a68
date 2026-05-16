@@ -47,7 +47,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'panel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'text', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'wins', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'scatter', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Scatter', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'red_cake', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'purple_cake', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'muffin', ASSETTYPE: 'spine' },
