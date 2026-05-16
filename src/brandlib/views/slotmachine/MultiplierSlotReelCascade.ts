@@ -12,6 +12,10 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { FsTotalMultiplierComp } from '../comps/FsTotalMultiplierComp';
 import { Back } from 'gsap/gsap-core';
 
+/*****************************************************************************************************************
+data.symbMultipliers // to check if have different assets for different multiplier values (ex: EOG both versions).
+data.hasFSTotalMultiplier // to check if game has a concept of total multiplier during fs (ex: EOG both versions).
+******************************************************************************************************************/
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
   private cascadeReelWinTicker: CascadeReelWinTicker;
   private fsTotalMultiComp: FsTotalMultiplierComp;
@@ -49,11 +53,15 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
               const multiplierVal = appModel.getSymbMultiplierValue(k, j);
               const currentSymb = this.symbolsArray[k][j] as CascadeReelSymbol;
               currentSymb.setRewardData(multiplierVal);
-              const multiplierSymb = this.getCorrespondingMultiplierSymbol(
-                multiplierVal,
-                this.reelsData.symbMultipliers,
-              );
-              this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+              if (this.reelsData.symbMultipliers) {
+                const multiplierSymb = this.getCorrespondingMultiplierSymbol(
+                  multiplierVal,
+                  this.reelsData.symbMultipliers,
+                );
+                this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+              } else {
+                this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j]], k);
+              }
             } else {
               this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j]], k);
             }
@@ -103,8 +111,12 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
           const multiplierVal = appModel.getSymbMultiplierValue(k, i);
           const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
           currentSymb.setRewardData(multiplierVal);
-          const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
-          symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+          if (this.reelsData.symbMultipliers) {
+            const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
+            symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+          } else {
+            symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
+          }
         } else {
           symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
         }
@@ -143,7 +155,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected getNewSymbolsIn(): void {
     this.isStopSpinButtonClick = false;
     this.isFallingIn = true;
-    //EventHandler.dispatchEvent(SlotEvents.DISABLE_STOPSPIN_BUTTON);
     let index = 0;
     let rowIndex = 0;
     let symb;
@@ -161,8 +172,12 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
           const multiplierVal = appModel.getSymbMultiplierValue(k, i);
           const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
           currentSymb.setRewardData(multiplierVal);
-          const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
-          symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+          if (this.reelsData.symbMultipliers) {
+            const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
+            symb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+          } else {
+            symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
+          }
         } else {
           symb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
         }
@@ -236,8 +251,15 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
             const multiplierVal = appModel.getSymbMultiplierValue(k, i);
             const currentSymb = this.symbolsArray[k][i] as CascadeReelSymbol;
             currentSymb.setRewardData(multiplierVal);
-            const multiplierSymb = this.getCorrespondingMultiplierSymbol(multiplierVal, this.reelsData.symbMultipliers);
-            currentSymb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+            if (this.reelsData.symbMultipliers) {
+              const multiplierSymb = this.getCorrespondingMultiplierSymbol(
+                multiplierVal,
+                this.reelsData.symbMultipliers,
+              );
+              currentSymb.setNewSymbol(this.reelsData.symbolsData[multiplierSymb], k);
+            } else {
+              currentSymb.setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
+            }
           } else {
             this.symbolsArray[k][i].setNewSymbol(this.reelsData.symbolsData[reelsView[k][i]], k);
           }
