@@ -24,7 +24,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 650,
+      textY: 720,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -56,7 +56,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 650,
+      textY: 720,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -87,7 +87,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 650,
+      textY: 720,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -118,9 +118,9 @@ export const SPLASH_CONFIG: any = {
       type: 'Sprite',
       image: 'splashbg',
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
       },
     },
 
@@ -278,7 +278,7 @@ export const SPLASH_CONFIG: any = {
             style: {
               fontFamily: 'commonFont',
               fontWeight: 400,
-              fill: 0x000000,
+              fill: 0xfbd033,
               fontSize: 40,
               anchor: { x: 0, y: 0.5 },
             },

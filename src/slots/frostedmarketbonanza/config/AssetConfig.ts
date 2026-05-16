@@ -39,7 +39,6 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'reel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'explosion1', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
@@ -57,8 +56,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'low_red', ASSETTYPE: 'spine' }, //L2
     { TYPE: 'game', NAME: 'low_yellow', ASSETTYPE: 'spine' }, //L3
     { TYPE: 'game', NAME: 'low_spin', ASSETTYPE: 'spine' }, //L4
-    { TYPE: 'game', NAME: 'cookie', ASSETTYPE: 'spine' }, //L5
-    { TYPE: 'game', NAME: 'Candy_multiplier', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'low_candy', ASSETTYPE: 'spine' }, //L5
   ],
 };
 /*const FREESPIN: AssetBundle = {
