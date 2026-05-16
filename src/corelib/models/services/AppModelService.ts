@@ -7,7 +7,14 @@ import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
 import { type } from 'node:os';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
+type ParamsObject = Record<string, number>;
+
+type ParamItem = {
+  name: string;
+  value: number;
+};
 class AppModelService {
+  private rtpInfo: any;
   get featureAssetsLoaded(): boolean {
     return this._featureAssetsLoaded;
   }
@@ -200,6 +207,7 @@ class AppModelService {
     this.funMode = false;
     this.gameInfo = {};
     this.fsInfo = {};
+    this.rtpInfo = data.rtp;
 
     this.playerInfo = data.playerInfo;
     this.gameInfo.devMode = data.gameInfo.devMode;
@@ -664,18 +672,23 @@ class AppModelService {
   }
 
   public getRTP(): number {
-    return 97;
+    return this.rtpInfo.base;
   }
 
   public maxExposure(): number {
     return 10000;
   }
 
-  public getBBRTP(): { name: string; rtp: string }[] {
-    return [
-      // { name: 'Free Spins', rtp: '99%' },
-      // { name: 'Super Free Spins', rtp: '97.3%' },
-    ];
+  protected getParamsExceptBase = (data: ParamsObject): { name: string; rtp: number }[] => {
+    return Object.entries(data)
+      .filter(([key]) => key !== 'base')
+      .map(([key, value]) => ({
+        name: Util.getContent(key),
+        rtp: value,
+      }));
+  };
+  public getBBRTP(): { name: string; rtp: number }[] {
+    return this.getParamsExceptBase(this.rtpInfo);
   }
 
   // WHEN: Called if external code needs full autoplay config
