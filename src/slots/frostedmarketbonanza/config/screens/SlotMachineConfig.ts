@@ -92,7 +92,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             landing: 'landing',
             winAnim: 'win',
-            winAnim2: 'win2',
             animScale: 0.41,
             explosion: {
               type: 'Spine',
@@ -105,7 +104,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cupcake',
             // idleAnim: 'idle',
             // winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.76,
             explosion: {
@@ -119,7 +117,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cookies',
             // idleAnim: 'idle',
             // winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.77,
             explosion: {
@@ -133,7 +130,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'pie',
             // idleAnim: 'idle',
             // winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.68,
             explosion: {
@@ -147,7 +143,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cake',
             // idleAnim: 'idle',
             // winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.68,
             explosion: {
@@ -161,7 +156,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_green',
             idleAnim: 'idle',
             winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.71,
             explosion: {
@@ -175,7 +169,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_red',
             idleAnim: 'idle',
             winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.72,
             explosion: {
@@ -189,7 +182,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_yellow',
             idleAnim: 'idle',
             winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.7,
             explosion: {
@@ -203,7 +195,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_spin',
             idleAnim: 'idle',
             winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.73,
             explosion: {
@@ -217,7 +208,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cookie',
             idleAnim: 'idle',
             winAnim: 'win',
-            // blastAnim: 'disappearing',
             isBonusSymbol: false,
             animScale: 0.72,
             explosion: {

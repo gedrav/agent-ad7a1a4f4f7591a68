@@ -28,12 +28,12 @@ export class WinValueComp extends StandardView {
         fontFamily: 'bitmapFont',
         fill: 0xffffff,
         fontSize: 150,
-        letterSpacing: -20,
+        letterSpacing: 0,
       },
     };
     this.text = UIUtil.getElement(tConfig);
     this.addChild(this.text);
-    this.text.y = -18;
+    this.text.y = -30;
     this.bg.alpha = 0.8;
   }
 
