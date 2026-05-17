@@ -83,15 +83,16 @@ class SlotGameApp {
         resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
+        preference: 'webgl',
         antialias: false,
-        autoDensity: true,
+        autoDensity: false,
         roundPixels: true,
         powerPreference: 'low-power',
         preferWebGLVersion: 1, // A/B test this on iOS
         backgroundAlpha: 1,
         textureGCActive: true,
         textureGCCheckCountMax: 300,
-        textureGCMaxIdle: 600,
+        textureGCMaxIdle: 900,
       });
       if (lowEndIOS) {
         /*this.app.ticker.maxFPS = 30;
