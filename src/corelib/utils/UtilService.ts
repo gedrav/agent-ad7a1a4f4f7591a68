@@ -114,7 +114,7 @@ class UtilService {
       } else {
         str = new Intl.NumberFormat(appModel.language, {
           style: 'currency',
-          currencyDisplay: 'narrowSymbol',
+          currencyDisplay: 'symbol',
           currency: appModel.currency,
           minimumFractionDigits: decimal,
           maximumFractionDigits: decimal,
