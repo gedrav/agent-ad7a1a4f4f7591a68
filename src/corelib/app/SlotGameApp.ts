@@ -86,12 +86,12 @@ class SlotGameApp {
         antialias: false,
         autoDensity: true,
         roundPixels: true,
-        /*powerPreference: 'low-power',
+        powerPreference: 'low-power',
         preferWebGLVersion: 1, // A/B test this on iOS
         backgroundAlpha: 1,
         textureGCActive: true,
         textureGCCheckCountMax: 300,
-        textureGCMaxIdle: 600,*/
+        textureGCMaxIdle: 600,
       });
       if (lowEndIOS) {
         /*this.app.ticker.maxFPS = 30;
