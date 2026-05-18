@@ -195,7 +195,7 @@ export class BetPanelView extends ResponsiveChildrenView {
           }
         }
       } else {
-        columns = 6;
+        columns = 10;
         gap = 160;
         let rowIndex: number = 0;
         let colIndex: number = 0;
@@ -228,7 +228,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     const fixedGridWidth = columns * gap;
     this.btnContainer.x = (this.betPanelBg.width - fixedGridWidth) / 2 + this.betBtnsArray[0].width / 2;
     this.stakeContainer.x = (this.betPanelBg.width - this.stakeContainer.width) / 2;
-    this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height * 0.92;
+    this.stakeContainer.y = this.btnContainer.y + this.btnContainer.height - this.betBtnsArray[0].height * 0.25;
 
     this.cancelBtn.x = this.betPanelBg.width * 0.48 - this.cancelBtn.width * 0.5;
     this.setBtn.x = this.betPanelBg.width * 0.52 + this.setBtn.width * 0.5;
