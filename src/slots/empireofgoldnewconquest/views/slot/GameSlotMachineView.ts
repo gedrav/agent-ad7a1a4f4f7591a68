@@ -31,7 +31,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
   protected showTumbleWin(): void {
     super.showTumbleWin();
-    this.gameTitle.playAnimation({ state: 'Idle', loop: false });
+    this.gameTitle.playAnimation({ state: 'Win', loop: false });
   }
   protected startGameLogoAnimation(): void {
     this.gameTitle.playAnimation({ state: 'Idle', loop: false });

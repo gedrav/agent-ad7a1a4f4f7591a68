@@ -9,13 +9,13 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  cs: { fontSize: 64 },
-  sk: { fontSize: 64 },
-  ro: { fontSize: 60 },
-  hr: { fontSize: 64 },
-  cnr: { fontSize: 64 },
-  pl: { fontSize: 62 },
-  lt: { fontSize: 62 },
+  cs: { fontSize: 58 },
+  sk: { fontSize: 58 },
+  ro: { fontSize: 58 },
+  hr: { fontSize: 60 },
+  cnr: { fontSize: 60 },
+  pl: { fontSize: 58 },
+  lt: { fontSize: 58 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -103,6 +103,7 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
