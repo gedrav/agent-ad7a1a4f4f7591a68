@@ -97,7 +97,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           H1: {
             name: 'H1',
             spineName: 'red_cake',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.666,
@@ -106,7 +106,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           H2: {
             name: 'H2',
             spineName: 'purple_cake',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.664,
@@ -115,7 +115,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           H3: {
             name: 'H3',
             spineName: 'muffin',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.668,
@@ -124,7 +124,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           H4: {
             name: 'H4',
             spineName: 'green_cake',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.666,
@@ -133,7 +133,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           L1: {
             name: 'L1',
             spineName: 'plum',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.58,
@@ -142,7 +142,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           L2: {
             name: 'L2',
             spineName: 'berry',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.572,
@@ -151,7 +151,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           L3: {
             name: 'L3',
             spineName: 'grape',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.592,
@@ -160,7 +160,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           L4: {
             name: 'L4',
             spineName: 'lemon',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.61,
@@ -169,7 +169,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           L5: {
             name: 'L5',
             spineName: 'strawberry',
-            idleAnim: 'idle',
+            idleAnim: 'idle2',
             winAnim: 'win-disapp-boom',
             isBonusSymbol: false,
             animScale: 0.61,
