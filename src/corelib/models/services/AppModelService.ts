@@ -688,7 +688,6 @@ class AppModelService {
       }));
   };
   public getBBRTP(): { name: string; rtp: number }[] {
-    console.log(this.getParamsExceptBase(this.rtpInfo));
     return this.getParamsExceptBase(this.rtpInfo);
   }
 
