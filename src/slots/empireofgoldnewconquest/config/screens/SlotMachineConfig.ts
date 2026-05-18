@@ -358,16 +358,16 @@ export const SLOT_MACHINE_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              scale: 0.3,
+              scale: 0.6,
               x: 852,
               y: 11,
             },
             Landscape: {
-              scale: 0.3,
+              scale: 0.6,
               x: 862,
               y: 12,
             },
-            Portrait: { scale: 0.3, x: 876, y: 9 },
+            Portrait: { scale: 0.6, x: 876, y: 9 },
           },
         },
         {
