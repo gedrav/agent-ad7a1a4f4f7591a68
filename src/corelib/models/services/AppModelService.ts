@@ -490,6 +490,12 @@ class AppModelService {
     return this.playerInfo?.bbBetMultiplierSettings?.[featureType] || 100;
   }
 
+  public getIsBuyBonusAvailable(): any {
+    if (this.playerInfo && this.playerInfo.buyFeature != undefined) {
+      return this.playerInfo.buyFeature;
+    }
+  }
+
   // ---------------------------------- All set methods -----------------------------------------
   public setTotalBet(value: number) {
     this.gameInfo.betPos = this.getAllBets().indexOf(value);

@@ -207,6 +207,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'showSplashText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
     {
@@ -236,6 +237,7 @@ export const MENU_CONFIG: any = {
         type: 'Text',
         content: 'hideSplashText',
         style: { fontFamily: 'commonFont', fontSize: 36, fill: 0xffffff, fontWeight: 700, align: 'left' },
+        fontMLProps: GLOBAL_MENU_BTN_ML_PROPS,
       },
     },
   ],

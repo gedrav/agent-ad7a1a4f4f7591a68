@@ -8,6 +8,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { BuyBonusButtonComp } from '../comps/BuyBonusButtonComp';
 import { Util } from '@core/utils/UtilService';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class GameSlotMachineView extends SlotMachineView {
   private buyBonusComp: BuyBonusButtonComp;
@@ -22,10 +23,17 @@ export class GameSlotMachineView extends SlotMachineView {
     this.gameTitle = this.slotReel.elementsList['gameTitle'];
     this.tumbleSlotReel = this.elementsList['slotReel'];
     this.startGameLogoAnimation();
-
+    this.checkToAddBBComp();
     EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_ELEMENTS, this.showMainGameElements.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_MAINGAME_ELEMENTS, this.hideMainGameElements.bind(this));
   }
+
+  private checkToAddBBComp() {
+    if (!appModel.getIsBuyBonusAvailable()) {
+      this.removeChild(this.buyBonusComp);
+    }
+  }
+
   protected showTumbleWin(): void {
     super.showTumbleWin();
     this.gameTitle.playAnimation({ state: 'Win', loop: false });
