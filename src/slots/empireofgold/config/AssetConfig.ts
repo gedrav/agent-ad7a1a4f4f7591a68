@@ -59,7 +59,6 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'low_3', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'low_4', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'low_5', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'multiplayer', ASSETTYPE: 'spine' },
   ],
 };
 /*const FREESPIN: AssetBundle = {
