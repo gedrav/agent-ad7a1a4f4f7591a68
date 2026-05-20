@@ -31,10 +31,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (this.configData.data.animScale) {
       this.spine.scale.set(this.configData.data.animScale);
     }
-    this.animCompleteListener = {
-      complete: (entry) => this.onAnimComplete(entry),
-    };
-    this.spine.addEventListener('complete', this.onAnimComplete.bind(this));
+    this.animCompleteListener = this.spine.addEventListener('complete', this.onAnimComplete.bind(this));
     this.addChild(this.spine);
     this.setSpineVisible(false);
   }

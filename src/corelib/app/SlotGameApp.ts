@@ -1,4 +1,4 @@
-import { Application, Container, Renderer, Sprite, TextStyle } from 'pixi.js';
+import { Application, Container, Renderer, Sprite, TextStyle, TextureSource } from 'pixi.js';
 import { WindowUtil } from '@core/utils/WindowUtil';
 import { InitErrorPopup } from '@brand/views/popups/InitErrorPopup';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -47,6 +47,11 @@ class SlotGameApp {
   private animBound: (time: number) => void;
   private rafId: number | null = null;
   private isTabSuspended: boolean;
+  private boundResize: () => void;
+  private boundVisibilityChange: () => void;
+  private boundContextLost: (e: Event) => void;
+  private boundContextRestored: () => void;
+  private boundEventHandlers: Array<{ event: string; handler: (data?: any) => void }> = [];
 
   constructor() {}
 
@@ -99,20 +104,30 @@ class SlotGameApp {
         this.app.ticker.minFPS = 24;*/
       }
     } else {
+      // Cap DPR at 2 on desktop too. On Retina 4K/5K, uncapped DPR (3x) makes
+      // the WebGL backbuffer 200-400MB on its own — invisible visual gain,
+      // huge memory cost. Capping at 2 keeps sharpness and slashes GPU memory.
       await this.app.init({
-        resolution: isIOSMobile ? Math.min(Math.ceil(window.devicePixelRatio), 2) : Math.ceil(window.devicePixelRatio),
+        resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         antialias: true,
         autoDensity: true,
         roundPixels: true,
-        powerPreference: isIOSMobile ? 'low-power' : 'high-performance',
+        powerPreference: 'high-performance',
       });
     }
 
     GameProxy.config.app = this.app;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.LINEAR;
-    BaseTexture.defaultOptions.anisotropicLevel = isIOSMobile ? 0 : 16;
+    // anisotropicLevel: 16 was excessive — visual diff vs 4 is invisible on
+    // slot art, and high levels increase sample cost and per-texture memory.
+    // Cap at 4 on desktop, 0 on iOS.
+    BaseTexture.defaultOptions.anisotropicLevel = isIOSMobile ? 0 : 4;
+    // Disable automatic mipmap generation. Mipmaps add ~33% GPU memory per
+    // texture and slot atlases display near 1:1 — no minification quality
+    // gain to justify the cost. Saves ~150 MB GPU on cascade games.
+    TextureSource.defaultOptions.autoGenerateMipmaps = false;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
     if (__SHOW_STATS__) {
       // show FPS monitoring panel when enabled via config
@@ -127,8 +142,12 @@ class SlotGameApp {
     }
 
     GameProxy.config.renderer = this.app.renderer;
-    window.addEventListener('resize', this.resize.bind(this));
-    document.addEventListener('visibilitychange', this.visibilityChange.bind(this));
+    this.boundResize = this.resize.bind(this);
+    this.boundVisibilityChange = this.visibilityChange.bind(this);
+    window.addEventListener('resize', this.boundResize);
+    document.addEventListener('visibilitychange', this.boundVisibilityChange);
+
+    this.attachWebGLContextHandlers();
 
     window.stopPixiApp = () => this.stopPixiApp();
     window.startPixiApp = () => this.startPixiApp();
@@ -185,13 +204,72 @@ class SlotGameApp {
   }
 
   protected addEvents(): void {
-    EventHandler.addEventListener(AppEvents.BUNDLE_LOADED, this.onBundleLoaded.bind(this));
-    EventHandler.addEventListener(SlotEvents.SPLASH_START_CLICKED, this.onSplashStartClicked.bind(this));
-    EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
-    EventHandler.addEventListener(SlotEvents.SPLASH_DESTROYED, this.onSplashDestroyed.bind(this));
-    EventHandler.addEventListener(AppEvents.SOUNDS_LOADING_COMPLETE, this.onSoundsLoaded.bind(this));
-    EventHandler.addEventListener(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit.bind(this));
-    EventHandler.addEventListener(SlotEvents.CHECK_TO_RESUME_SOUND, this.checkForIOSAudiioResume.bind(this));
+    this.bindEvent(AppEvents.BUNDLE_LOADED, this.onBundleLoaded);
+    this.bindEvent(SlotEvents.SPLASH_START_CLICKED, this.onSplashStartClicked);
+    this.bindEvent(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError);
+    this.bindEvent(SlotEvents.SPLASH_DESTROYED, this.onSplashDestroyed);
+    this.bindEvent(AppEvents.SOUNDS_LOADING_COMPLETE, this.onSoundsLoaded);
+    this.bindEvent(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit);
+    this.bindEvent(SlotEvents.CHECK_TO_RESUME_SOUND, this.checkForIOSAudiioResume);
+  }
+
+  private bindEvent(event: string, method: (...args: any[]) => void): void {
+    const handler = method.bind(this);
+    EventHandler.addEventListener(event, handler);
+    this.boundEventHandlers.push({ event, handler });
+  }
+
+  private attachWebGLContextHandlers(): void {
+    const canvas: HTMLCanvasElement | undefined = this.app?.canvas as HTMLCanvasElement;
+    if (!canvas) return;
+    this.boundContextLost = (e: Event) => {
+      // iOS Safari kills the WebGL context under GPU memory pressure. Default
+      // browser behavior loses the context permanently; preventDefault keeps it
+      // recoverable so the restored handler can rebuild GPU state.
+      e.preventDefault();
+      console.warn('[SlotGameApp] WebGL context lost');
+      EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.app?.stop();
+    };
+    this.boundContextRestored = () => {
+      console.warn('[SlotGameApp] WebGL context restored — reloading to rebuild GPU state');
+      // PixiJS v8 cannot reliably re-upload all textures/spines after a context
+      // loss on iOS Safari. A reload is the safest recovery path and prevents
+      // the indefinite black-screen state users currently experience.
+      window.location.reload();
+    };
+    canvas.addEventListener('webglcontextlost', this.boundContextLost as EventListener, false);
+    canvas.addEventListener('webglcontextrestored', this.boundContextRestored, false);
+  }
+
+  public destroy(): void {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+    if (this.boundResize) {
+      window.removeEventListener('resize', this.boundResize);
+    }
+    if (this.boundVisibilityChange) {
+      document.removeEventListener('visibilitychange', this.boundVisibilityChange);
+    }
+    const canvas: HTMLCanvasElement | undefined = this.app?.canvas as HTMLCanvasElement;
+    if (canvas) {
+      if (this.boundContextLost) {
+        canvas.removeEventListener('webglcontextlost', this.boundContextLost as EventListener);
+      }
+      if (this.boundContextRestored) {
+        canvas.removeEventListener('webglcontextrestored', this.boundContextRestored);
+      }
+    }
+    for (const { event, handler } of this.boundEventHandlers) {
+      EventHandler.removeEventListener(event, handler);
+    }
+    this.boundEventHandlers.length = 0;
   }
   protected onGameInit(): void {
     this.gameInitReceived = true;
@@ -293,11 +371,17 @@ class SlotGameApp {
   }
 
   protected async onSplashStartClicked() {
-    this.splashComp?.removeSplash();
     if (this.splashComp) {
-      this.appContainer.removeChild(this.splashComp);
-      this.splashComp.destroy();
+      // Await full async teardown so AssetLoader.unloadBundle('SPLASH')
+      // completes before we proceed. Previously this was fire-and-forget,
+      // causing destroyElements() to race against an immediate sync destroy()
+      // and risk skipping the bundle unload.
+      const splash = this.splashComp;
       this.splashComp = null;
+      await splash.removeSplash();
+      this.appContainer.removeChild(splash);
+      // destroyElements() already destroys when unloadAssets is set, so no
+      // explicit destroy() here.
     }
     if (this.isViewCreated) {
       this.makeGameVisible();

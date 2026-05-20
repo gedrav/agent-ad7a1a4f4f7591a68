@@ -315,6 +315,13 @@ class AssetLoaderClass {
   }
   public async unloadBundle(bundle: string) {
     await Assets.unloadBundle(bundle);
+    // Drop from loadedBundles so a future loadBundles() call actually reloads
+    // it from disk instead of skipping (which would leave referenced sprites
+    // pointing at freed GPU textures).
+    const idx = this.loadedBundles.indexOf(bundle);
+    if (idx !== -1) {
+      this.loadedBundles.splice(idx, 1);
+    }
   }
 }
 

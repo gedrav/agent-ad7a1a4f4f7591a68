@@ -51,6 +51,7 @@ export class SpinePool {
     const free = entries.find((e) => !e.inUse);
     if (free) {
       free.inUse = true;
+      free.spine.setAutoUpdate(true);
       return free.spine;
     }
 
@@ -58,6 +59,7 @@ export class SpinePool {
       const entry: PoolEntry = { spine: this.createSpine(data), inUse: true };
       entries.push(entry);
       this.pool.set(data.name, entries);
+      entry.spine.setAutoUpdate(true);
       return entry.spine;
     }
 
@@ -73,7 +75,8 @@ export class SpinePool {
     if (this.temporarySpines.has(spine)) {
       this.temporarySpines.delete(spine);
       spine.stopAnimation();
-      spine.destroy();
+      spine.removeEventListners();
+      spine.destroySpine();
       return;
     }
 
@@ -84,6 +87,11 @@ export class SpinePool {
     if (!entry) return;
 
     spine.stopAnimation();
+    // Clear listeners so the next acquirer starts with a clean state and
+    // callbacks don't stack across reuse cycles.
+    spine.removeEventListners();
+    // Detach from Ticker.shared while idle in the pool to avoid wasted update work.
+    spine.setAutoUpdate(false);
     entry.inUse = false;
   }
 
