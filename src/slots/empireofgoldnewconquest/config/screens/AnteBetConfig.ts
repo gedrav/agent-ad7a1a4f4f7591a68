@@ -61,7 +61,7 @@ export const ANTE_BET_CONFIG: any = {
         fill: 0xffffff,
         wordWrap: true,
         breakWords: true,
-        wordWrapWidth: 300,
+        wordWrapWidth: 260,
         fontWeight: 'bold',
         align: 'center',
       },
