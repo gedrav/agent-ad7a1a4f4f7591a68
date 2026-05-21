@@ -275,6 +275,7 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinTextAnim.visible = false;
     }
     if (this.bigWinText) {
+      AnimationProxy.killTweensOf(this.bigWinText);
       this.bigWinText.visible = false;
       this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates.BIG_WIN);
     }
@@ -316,13 +317,25 @@ export class BigWinsComp extends ResponsiveView {
         this.bigWinText,
         0.2,
         { scaleX: 0, scaleY: 0 },
-        { scaleX: targetScale, scaleY: targetScale },
+        {
+          scaleX: targetScale,
+          scaleY: targetScale,
+          onComplete: () => {
+            AnimationProxy.animateTween(this.bigWinText, {
+              scaleX: targetScale * 0.95,
+              scaleY: targetScale * 0.95,
+              repeat: -1,
+              yoyo: true,
+              duration: 0.5,
+            });
+          },
+        },
       );
       return;
     }
 
     AnimationProxy.animateTween(this.bigWinText, {
-      duration: 0.2,
+      duration: 0.25,
       scaleX: 0.1,
       scaleY: 0.1,
       onComplete: () => {
@@ -330,9 +343,18 @@ export class BigWinsComp extends ResponsiveView {
         const targetScale = this.resizeBigwinText();
         this.bigWinText.scale.set(targetScale * 0.5);
         AnimationProxy.animateTween(this.bigWinText, {
-          duration: 0.2,
+          duration: 0.25,
           scaleX: targetScale,
           scaleY: targetScale,
+          onComplete: () => {
+            AnimationProxy.animateTween(this.bigWinText, {
+              scaleX: targetScale * 0.95,
+              scaleY: targetScale * 0.95,
+              repeat: -1,
+              yoyo: true,
+              duration: 0.5,
+            });
+          },
         });
       },
     });
