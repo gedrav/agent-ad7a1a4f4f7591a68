@@ -124,6 +124,7 @@ export class BigWinsComp extends ResponsiveView {
       }
       if (this.bigWinText) {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+        this.resizedBigwinText();
       }
       if (this.bigWinPanelAnim) {
         this.bigWinPanelAnim.playAnimation({
@@ -291,7 +292,6 @@ export class BigWinsComp extends ResponsiveView {
         defaultMix: 0,
       });
     }
-
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim.playAnimation({
         state: this.configData.data.textAnimations[this.currentState].start,
@@ -300,42 +300,45 @@ export class BigWinsComp extends ResponsiveView {
       });
     }
     if (this.bigWinText) {
-      AnimationProxy.killTweensOf(this.bigWinText);
-      if (this.currentLevel === 0) {
-        this.bigWinText.alpha = 1;
-        AnimationProxy.animateFromTo(
-          this.bigWinText,
-          0.2,
-          {
-            scaleX: 0,
-            scaleY: 0,
-          },
-          {
-            scaleX: 1,
-            scaleY: 1,
-          },
-        );
-        return;
-      }
-
-      AnimationProxy.animateTween(this.bigWinText, {
-        duration: 0.2,
-        scaleX: 0.1,
-        scaleY: 0.1,
-        onComplete: () => {
-          this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
-          this.bigWinText.scale.set(0.5);
-
-          AnimationProxy.animateTween(this.bigWinText, {
-            duration: 0.2,
-            scaleX: 1,
-            scaleY: 1,
-          });
-        },
-      });
+      this.animateBigWinText();
     }
     this.playCurrentBigWinSound();
   }
+
+  protected animateBigWinText(): void {
+    AnimationProxy.killTweensOf(this.bigWinText);
+
+    if (this.currentLevel === 0) {
+      this.bigWinText.alpha = 1;
+      this.bigWinText.scale.set(1);
+      const targetScale = this.resizedBigwinText();
+      AnimationProxy.animateFromTo(
+        this.bigWinText,
+        0.2,
+        { scaleX: 0, scaleY: 0 },
+        { scaleX: targetScale, scaleY: targetScale },
+      );
+      return;
+    }
+
+    AnimationProxy.animateTween(this.bigWinText, {
+      duration: 0.2,
+      scaleX: 0.1,
+      scaleY: 0.1,
+      onComplete: () => {
+        this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+        this.bigWinText.scale.set(1);
+        const targetScale = this.resizedBigwinText();
+        this.bigWinText.scale.set(targetScale * 0.5);
+        AnimationProxy.animateTween(this.bigWinText, {
+          duration: 0.2,
+          scaleX: targetScale,
+          scaleY: targetScale,
+        });
+      },
+    });
+  }
+
   protected playCurrentBigWinSound(): void {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
@@ -458,6 +461,7 @@ export class BigWinsComp extends ResponsiveView {
       this.checkForNextAnim();
     }
   }
+
   protected checkForNextAnim() {
     this.currentLevel++;
     if (this.currentLevel >= this.targetLevel) {
@@ -470,5 +474,11 @@ export class BigWinsComp extends ResponsiveView {
       }
       EventHandler.dispatchEvent(STATES[this.currentLevel] + 'START');
     }
+  }
+  protected resizedBigwinText(): number {
+    if (!this.bigWinText || !this.guideRect) return 1;
+    const maxWidth = this.guideRect.width * 0.9;
+    const scaleX = this.bigWinText.width > maxWidth ? maxWidth / this.bigWinText.width : 1;
+    return scaleX;
   }
 }
