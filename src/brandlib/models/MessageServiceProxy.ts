@@ -129,16 +129,14 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.extraData.forceWildsAdded = 3;
         } else if (GameProxy.config.cheatObject == 'LowToHighConversion') {
           finalObj.extraData.forceSymbolChange = true;
-        } else if (GameProxy.config.cheatObject == 'L1ToH1') {
-          finalObj.extraData.forceSymbolChange = true;
-          finalObj.extraData.forceSymbolChangeLow = 'L1';
-          finalObj.extraData.forceSymbolChangeHigh = 'H1';
-        } else if (GameProxy.config.cheatObject == 'L5ToH3') {
-          finalObj.extraData.forceSymbolChange = true;
-          finalObj.extraData.forceSymbolChangeLow = 'L5';
-          finalObj.extraData.forceSymbolChangeHigh = 'H3';
         } else if (GameProxy.config.cheatObject.forceBonusMultiplier) {
           finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+          finalObj.extraData.combination = cheatObj.combination;
+        } else if (GameProxy.config.cheatObject.forceSymbolConversion) {
+          finalObj.extraData.forceSymbolConversion = cheatObj.forceSymbolConversion;
+          finalObj.extraData.combination = cheatObj.combination;
+        } else if (GameProxy.config.cheatObject.forceNudgeFeature) {
+          finalObj.extraData.forceNudgeFeature = cheatObj.forceNudgeFeature;
           finalObj.extraData.combination = cheatObj.combination;
         } else {
           finalObj.extraData.combination = cheatObj;

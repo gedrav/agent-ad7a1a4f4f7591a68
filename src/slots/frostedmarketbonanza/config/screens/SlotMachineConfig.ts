@@ -7,13 +7,13 @@ import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
-import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotReelCascade';
 import WinController from '@core/views/slotmachine/WinController';
 import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
 import { WinValueComp } from '@game/views/comps/WinValueComp';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
+import FMBMultiplierSlotReelCascade from '@slots/frostedmarketbonanza/views/slot/FMBMultiplierSlotReelCascade';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -35,7 +35,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: MultiplierSlotReelCascade,
+      class: FMBMultiplierSlotReelCascade,
       winController: WinController,
       x: 260,
       y: 90,
@@ -99,6 +99,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cupcake',
             idleAnim: 'idle',
             winAnim: 'win',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 0.77,
           },
@@ -107,6 +108,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cookies',
             idleAnim: 'idle',
             winAnim: 'win',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 0.78,
           },
@@ -115,6 +117,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'pie',
             idleAnim: 'idle',
             winAnim: 'win',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 0.78,
           },
@@ -123,6 +126,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'cake',
             idleAnim: 'idle',
             winAnim: 'win',
+            appearAnim: 'appear',
             isBonusSymbol: false,
             animScale: 0.78,
           },
@@ -130,7 +134,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             name: 'L1',
             spineName: 'low_green',
             idleAnim: 'idle',
-            winAnim: 'win',
+            winAnim: 'win2',
+            disapperAnim: 'win',
             isBonusSymbol: false,
             animScale: 0.71,
           },
@@ -138,7 +143,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             name: 'L2',
             spineName: 'low_red',
             idleAnim: 'idle',
-            winAnim: 'win',
+            winAnim: 'win2',
+            disapperAnim: 'win',
             isBonusSymbol: false,
             animScale: 0.72,
           },
@@ -146,7 +152,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             name: 'L3',
             spineName: 'low_yellow',
             idleAnim: 'idle',
-            winAnim: 'win',
+            winAnim: 'win2',
+            disapperAnim: 'win',
             isBonusSymbol: false,
             animScale: 0.7,
           },
@@ -154,7 +161,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             name: 'L4',
             spineName: 'low_spin',
             idleAnim: 'idle',
-            winAnim: 'win',
+            winAnim: 'win2',
+            disapperAnim: 'win',
             isBonusSymbol: false,
             animScale: 0.73,
           },
@@ -162,7 +170,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             name: 'L5',
             spineName: 'low_candy',
             idleAnim: 'idle',
-            winAnim: 'win',
+            winAnim: 'win2',
+            disapperAnim: 'win',
             isBonusSymbol: false,
             animScale: 0.7,
           },

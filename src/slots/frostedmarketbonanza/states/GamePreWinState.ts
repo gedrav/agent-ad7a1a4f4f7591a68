@@ -13,11 +13,10 @@ class GamePreWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     const result = appModel.getReelModifiersData();
-    if (result && result.type == 'addWildFeatureTriggered') {
-      const data: any = {};
-      data.wildPositions = result.wildPositions;
-      data.numberOfWilds = result.numberOfWilds;
-      EventHandler.dispatchEvent('SHOW_WILD_BLAST', data);
+    if (result && result.type == 'nudgeFeature') {
+      EventHandler.dispatchEvent(SlotEvents.NUDGE_FEATURE_ACTIVATED);
+    } else if (result && result.type == 'symbolConversionApplied') {
+      EventHandler.dispatchEvent(SlotEvents.INITIATE_SYMBOL_CONVERSION);
     } else {
       StateManager.next();
     }

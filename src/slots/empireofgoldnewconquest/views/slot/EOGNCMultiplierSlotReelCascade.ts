@@ -9,7 +9,6 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
-import EOGNCCascadeReelSymbol from './EOGNCCascadeReelSymbol';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 type ChangedPosition = [column: number, row: number];
@@ -48,7 +47,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
     const totalFireballs = changedPositions.length;
     let index = 0;
     for (const [column, row] of changedPositions) {
-      const symbol = this.symbolsArray?.[column]?.[row] as EOGNCCascadeReelSymbol;
+      const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
       if (!symbol) continue;
 
       const spine = UIUtil.getSpineAnim('Fire_ball_FX', { spineName: 'Fire_ball_FX' });
@@ -132,7 +131,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
 
     for (let i = 0; i < changedPositions.length; i++) {
       const [column, row] = changedPositions[i];
-      const symbol = this.symbolsArray?.[column]?.[row] as EOGNCCascadeReelSymbol;
+      const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
       symbol.visible = false;
     }
   }
@@ -142,7 +141,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
     const changedPositions: ChangedPosition[] = result?.changedPositions ?? [];
     if (!changedPositions.length) return;
     const [column, row] = changedPositions[this.appearAnimIndex++];
-    const symbol = this.symbolsArray?.[column]?.[row] as EOGNCCascadeReelSymbol;
+    const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
     symbol.visible = true;
     symbol.showAppearingAnim(this.targetSymbolData, column, this.onNewSymbolAppeared.bind(this));
   }

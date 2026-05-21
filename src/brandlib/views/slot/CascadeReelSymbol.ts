@@ -3,6 +3,7 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { appModel } from '@core/models/services/AppModelService';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { Util } from '@core/utils/UtilService';
 
 export default class CascadeReelSymbol extends ReelSymbolSpine {
   private multiplierVal: PixText;
@@ -92,5 +93,19 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
   protected onExplosionAnimComplete(data: { animation: { name: string } }): void {
     this.explosionMovie.stopAnimation();
     this.removeChild(this.explosionMovie);
+  }
+
+  //symbol conversion methods
+  public async showDisappearingAnim(callback: () => void): Promise<void> {
+    this.playSpineAnimation(this.configData.data.disapperAnim, false);
+    await Util.addDelays(1000); // added as a safeguard for playing appear anim fully
+    callback();
+  }
+
+  public async showAppearingAnim(data: any, column: number, callback: () => void): Promise<void> {
+    this.setNewSymbol(data, column);
+    this.playSpineAnimation(this.configData.data.appearAnim, false);
+    await Util.addDelays(1000); // added as a safeguard for playing appear anim fully
+    callback();
   }
 }
