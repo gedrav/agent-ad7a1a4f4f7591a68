@@ -290,6 +290,7 @@ export class BigWinsComp extends ResponsiveView {
         defaultMix: 0,
       });
     }
+
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim.playAnimation({
         state: this.configData.data.textAnimations[this.currentState].start,
@@ -298,14 +299,32 @@ export class BigWinsComp extends ResponsiveView {
       });
     }
     if (this.bigWinText) {
-      this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
-      this.bigWinText.scale.set(0);
-      this.bigWinText.alpha = 0;
+      AnimationProxy.killTweensOf(this.bigWinText);
+
+      if (this.currentLevel === 0) {
+        this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+        this.bigWinText.alpha = 1;
+        this.bigWinText.scale.set(1);
+        return;
+      }
+
       AnimationProxy.animateTween(this.bigWinText, {
         duration: 0.2,
-        scaleX: 1,
-        scaleY: 1,
-        alpha: 1,
+        scaleX: 0.5,
+        scaleY: 0.5,
+        alpha: 0,
+        onComplete: () => {
+          this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+          this.bigWinText.scale.set(0.5);
+          this.bigWinText.alpha = 0;
+
+          AnimationProxy.animateTween(this.bigWinText, {
+            duration: 0.2,
+            scaleX: 1,
+            scaleY: 1,
+            alpha: 1,
+          });
+        },
       });
     }
     this.playCurrentBigWinSound();
