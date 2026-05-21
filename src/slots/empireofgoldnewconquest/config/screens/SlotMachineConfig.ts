@@ -16,7 +16,7 @@ import { CharacterController } from '@game/views/comps/CharacterController';
 import { WinValueComp } from '@game/views/comps/WinValueComp';
 import EOGNCMultiplierSlotReelCascade from '@game/views/slot/EOGNCMultiplierSlotReelCascade';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
-import EOGNCCascadeReelSymbol from '@game/views/slot/EOGNCCascadeReelSymbol';
+import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -47,7 +47,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       lx: 220,
       ly: 64,
       data: {
-        symbolClass: EOGNCCascadeReelSymbol,
+        symbolClass: CascadeReelSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,

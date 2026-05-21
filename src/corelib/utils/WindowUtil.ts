@@ -64,7 +64,7 @@ export class WindowUtil {
     window.formatCurrency = (value) => Util.formatCurrency(value);
     window.getBalance = () => appModel.getBalance();
     window.getToken = () => appModel.getToken();
-    window.getExternalHistoryURL = () => GameProxy.config?.externalHistoryAPIURL;
+    window.getExternalHistoryURL = () => GameProxy.config?.externalHistoryURL;
     window.getHistoryURL = () => GameProxy.config?.historyAPIURL;
     window.getSpecificContent = (str) => Util.getContent(str);
     window.setCheatValue = (cheat) => {

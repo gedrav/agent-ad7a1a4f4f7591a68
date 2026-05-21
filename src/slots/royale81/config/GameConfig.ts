@@ -65,5 +65,4 @@ export const GAME_CONFIG = {
       },
     ],
   },
-  externalHistoryAPIURL: 'https://feg-external-dev.pixentech.com/external/report/betHistory/',
 };
