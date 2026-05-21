@@ -2,6 +2,7 @@ import { StandardView } from '@core/pixiwrapper/StandardView';
 import { AnimationStateListener, Spine } from '@esotericsoftware/spine-pixi-v8';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class PixSpine extends StandardView {
   protected anchor: any;
@@ -34,6 +35,13 @@ export class PixSpine extends StandardView {
       this.spineAnim.y = this.guideRect.height / 2 + Util.getDefaultValue(this.configData.boundingBox.yPadding, 0);
       this.addChildAt(this.guideRect, 0);
     }
+    this.uploadToGPU();
+  }
+
+  private async uploadToGPU() {
+    this.spineAnim.skeleton.setToSetupPose();
+    this.spineAnim.update(0);
+    await GameProxy.config.renderer.prepare.upload(this.spineAnim);
   }
 
   public setAnimationSpeed(num: number): void {}
