@@ -29,14 +29,11 @@ export const BIG_WIN_CONFIG = {
       x: 650,
       y: 500,
     },
-    bigWinTextAnim: {
-      name: 'bigWinTextAnim',
-      dontCreateView: true,
-      type: 'Spine',
-      spineName: 'text',
-      loop: true,
-      x: 650,
-      y: 600,
+    bigWinTextStates: {
+      BIG_WIN: 'bigWinText',
+      MEGA_WIN: 'megaWinText',
+      GIGANTIC_WIN: 'giganticWinText',
+      UNBELIEVABLE_WIN: 'unbelievableWinText',
     },
   },
   Elements: [
@@ -49,6 +46,7 @@ export const BIG_WIN_CONFIG = {
       alpha: 0,
     },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 650, y: 140, scale: 0.9 },
     {
       name: 'winTicker',
       type: 'Comp',

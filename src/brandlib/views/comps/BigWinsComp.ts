@@ -9,6 +9,8 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { UIUtil } from '@core/utils/UIUtilService';
 import 'pixi.js/prepare';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.GIGANTIC_WIN, CONSTANTS.UNBELIEVABLE_WIN];
 export class BigWinsComp extends ResponsiveView {
@@ -28,11 +30,16 @@ export class BigWinsComp extends ResponsiveView {
   private winTickerBW: WinTicker;
   private bigWinTextAnim: PixSpine;
   private bigWinPanelAnim: PixSpine;
+  private bigWinText: PixSprite;
 
   constructor(config) {
     super(config);
     this.winTicker = this.elementsList['winTicker'];
     this.winTickerBW = this.elementsList['winTickerBW'];
+    this.bigWinText = this.elementsList['bigWinText'];
+    if (this.bigWinText) {
+      this.bigWinText.visible = false;
+    }
     this.winTicker?.reset();
     this.winTickerBW?.reset();
     this.showWinTickerType();
@@ -115,6 +122,9 @@ export class BigWinsComp extends ResponsiveView {
           defaultMix: 0,
         });
       }
+      if (this.bigWinText) {
+        this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+      }
       if (this.bigWinPanelAnim) {
         this.bigWinPanelAnim.playAnimation({
           state: this.configData.data.panelAnimations[this.currentState].idle,
@@ -192,6 +202,9 @@ export class BigWinsComp extends ResponsiveView {
         if (this.bigWinTextAnim) {
           this.bigWinTextAnim.visible = true;
         }
+        if (this.bigWinText) {
+          this.bigWinText.visible = true;
+        }
         if (this.bigWinPanelAnim) {
           this.bigWinPanelAnim.visible = true;
         }
@@ -259,6 +272,9 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinTextAnim?.stopAnimation();
       this.bigWinTextAnim.visible = false;
     }
+    if (this.bigWinText) {
+      this.bigWinText.visible = false;
+    }
     if (this.bigWinPanelAnim) {
       this.bigWinPanelAnim?.stopAnimation();
       this.bigWinPanelAnim.visible = false;
@@ -279,6 +295,17 @@ export class BigWinsComp extends ResponsiveView {
         state: this.configData.data.textAnimations[this.currentState].start,
         loop: false,
         defaultMix: 0,
+      });
+    }
+    if (this.bigWinText) {
+      this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+      this.bigWinText.scale.set(0);
+      this.bigWinText.alpha = 0;
+      AnimationProxy.animateTween(this.bigWinText, {
+        duration: 0.2,
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
       });
     }
     this.playCurrentBigWinSound();
@@ -310,6 +337,13 @@ export class BigWinsComp extends ResponsiveView {
               loop: false,
               reset: false,
               defaultMix: 0.15,
+            });
+          } else if (this.bigWinText) {
+            AnimationProxy.animateTween(this.bigWinText, {
+              duration: 0.2,
+              scaleX: 0.1,
+              scaleY: 0.1,
+              alpha: 0,
             });
           } else {
             this.notifyWinDone();
@@ -358,6 +392,14 @@ export class BigWinsComp extends ResponsiveView {
           loop: false,
           reset: false,
           defaultMix: 0.15,
+        });
+      }
+      if (this.bigWinText) {
+        AnimationProxy.animateTween(this.bigWinText, {
+          duration: 0.2,
+          scaleX: 0.1,
+          scaleY: 0.1,
+          alpha: 0,
         });
       }
     } else {
