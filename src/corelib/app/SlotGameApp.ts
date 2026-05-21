@@ -83,7 +83,6 @@ class SlotGameApp {
 
     this.app = new Application();
     if (isIOSMobile) {
-      const lowEndIOS = /iPhone/.test(navigator.userAgent); // refine if needed
       await this.app.init({
         resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
         backgroundColor: GameProxy.config.gameBGColor,
@@ -102,10 +101,6 @@ class SlotGameApp {
         gcMaxUnusedTime: 8_000,
         gcFrequency: 2_000,
       });
-      if (lowEndIOS) {
-        /*this.app.ticker.maxFPS = 30;
-        this.app.ticker.minFPS = 24;*/
-      }
     } else {
       // Cap DPR at 2 on desktop too. On Retina 4K/5K, uncapped DPR (3x) makes
       // the WebGL backbuffer 200-400MB on its own — invisible visual gain,
