@@ -20,6 +20,7 @@ class GameConfigProxy extends AbstractProxy {
       externalURL: import.meta.env.VITE_EXTERNAL_URL,
       historyURL: import.meta.env.VITE_HISTORY_URL,
       historyAPIURL: import.meta.env.VITE_HISTORY_API_URL,
+      externalHistoryURL: import.meta.env.VITE_EXTERNAL_HISTORY_URL,
     };
     this.updateConfig(urlConfig);
   }
