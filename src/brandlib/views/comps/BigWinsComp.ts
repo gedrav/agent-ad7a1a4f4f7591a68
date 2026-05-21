@@ -124,7 +124,8 @@ export class BigWinsComp extends ResponsiveView {
       }
       if (this.bigWinText) {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
-        this.resizedBigwinText();
+        const targetScale = this.resizeBigwinText();
+        this.bigWinText.scale.set(targetScale);
       }
       if (this.bigWinPanelAnim) {
         this.bigWinPanelAnim.playAnimation({
@@ -310,8 +311,7 @@ export class BigWinsComp extends ResponsiveView {
 
     if (this.currentLevel === 0) {
       this.bigWinText.alpha = 1;
-      this.bigWinText.scale.set(1);
-      const targetScale = this.resizedBigwinText();
+      const targetScale = this.resizeBigwinText();
       AnimationProxy.animateFromTo(
         this.bigWinText,
         0.2,
@@ -327,8 +327,7 @@ export class BigWinsComp extends ResponsiveView {
       scaleY: 0.1,
       onComplete: () => {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
-        this.bigWinText.scale.set(1);
-        const targetScale = this.resizedBigwinText();
+        const targetScale = this.resizeBigwinText();
         this.bigWinText.scale.set(targetScale * 0.5);
         AnimationProxy.animateTween(this.bigWinText, {
           duration: 0.2,
@@ -475,8 +474,9 @@ export class BigWinsComp extends ResponsiveView {
       EventHandler.dispatchEvent(STATES[this.currentLevel] + 'START');
     }
   }
-  protected resizedBigwinText(): number {
+  protected resizeBigwinText(): number {
     if (!this.bigWinText || !this.guideRect) return 1;
+    this.bigWinText.scale.set(1);
     const maxWidth = this.guideRect.width * 0.9;
     const scaleX = this.bigWinText.width > maxWidth ? maxWidth / this.bigWinText.width : 1;
     return scaleX;
