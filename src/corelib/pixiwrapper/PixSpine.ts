@@ -7,6 +7,7 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 export class PixSpine extends StandardView {
   protected anchor: any;
   private spineAnim: any;
+  private stateListeners: AnimationStateListener[] = [];
 
   constructor(configData: any) {
     super(configData);
@@ -51,25 +52,36 @@ export class PixSpine extends StandardView {
     this.spineAnim.skeleton.setSlotsToSetupPose(); //resets all slot attachments (images, meshes, etc.) on the skeleton back to what's defined in the current skin's setup pose.
   }
 
-  addEventListener(event: string, callback: any) {
+  addEventListener(event: string, callback: any): AnimationStateListener | null {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that: PixSpine = this;
+    let listener: AnimationStateListener | null = null;
     if (event === 'complete') {
-      this.spineAnim.state.addListener({
+      listener = {
         complete: function (entry) {
           callback(entry, that);
         },
-      });
+      };
     } else if (event === 'event') {
-      this.spineAnim.state.addListener({
+      listener = {
         event: function (entry, event) {
           callback(event, that);
         },
-      });
+      };
     }
+    if (listener) {
+      this.spineAnim.state.addListener(listener);
+      this.stateListeners.push(listener);
+    }
+    return listener;
   }
+
   removeEventListners() {
-    //this.spineAnim.state.removeListener();
+    if (!this.spineAnim) return;
+    for (const listener of this.stateListeners) {
+      this.spineAnim.state.removeListener(listener);
+    }
+    this.stateListeners.length = 0;
   }
 
   /*public prepareAnimation(options: any = null) {
@@ -132,6 +144,11 @@ export class PixSpine extends StandardView {
     //this.spineAnim.state.clearTracks();
     this.spineAnim.skeleton.setToSetupPose();
   }
+
+  public setAutoUpdate(enabled: boolean): void {
+    if (!this.spineAnim) return;
+    this.spineAnim.autoUpdate = enabled;
+  }
   public getWidth(): number {
     if (this.configData.boundingBox) {
       return this.configData.boundingBox.width * this.scale.x;
@@ -147,7 +164,10 @@ export class PixSpine extends StandardView {
     }
   }
   public removeSpineEvent(listener: AnimationStateListener): void {
+    if (!this.spineAnim || !listener) return;
     this.spineAnim.state.removeListener(listener);
+    const idx = this.stateListeners.indexOf(listener);
+    if (idx !== -1) this.stateListeners.splice(idx, 1);
   }
   public destroySpine() {
     if (!this.spineAnim) return;
@@ -158,6 +178,7 @@ export class PixSpine extends StandardView {
     // 2) Stop animations + remove AnimationState listeners (prevents leaks)
     this.spineAnim.state.clearTracks();
     this.spineAnim.state.clearListeners();
+    this.stateListeners.length = 0;
 
     // 3) If you attached Pixi objects to slots, remove them
     this.spineAnim.removeSlotObjects?.();

@@ -3,6 +3,7 @@ import { PixText } from '@core/pixiwrapper/PixText';
 
 export class TimerView extends ResponsiveView {
   private clockText: PixText;
+  private clockIntervalId: any = null;
   constructor(configData: any) {
     super(configData);
     this.clockText = this.elementsList['clockTxt'];
@@ -11,7 +12,18 @@ export class TimerView extends ResponsiveView {
 
   startClock() {
     this.showTime();
-    setInterval(this.showTime.bind(this), 1000);
+    if (this.clockIntervalId !== null) {
+      clearInterval(this.clockIntervalId);
+    }
+    this.clockIntervalId = setInterval(this.showTime.bind(this), 1000);
+  }
+
+  public destroyView(): void {
+    if (this.clockIntervalId !== null) {
+      clearInterval(this.clockIntervalId);
+      this.clockIntervalId = null;
+    }
+    super.destroyView?.();
   }
 
   showTime() {

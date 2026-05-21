@@ -30,6 +30,9 @@ const ANIMATED_GLOW_TARGET = {
 };
 
 export default class ReelSymbolSprite extends ReelSymbol {
+  private activeGlowFilter: GlowFilter | null = null;
+  private winningTimeoutId: any = null;
+
   constructor(configData: SymbolConfig) {
     super(configData);
     this.createSymbol();
@@ -54,6 +57,15 @@ export default class ReelSymbolSprite extends ReelSymbol {
   protected handleGameProp(): void {}
 
   public destroySymbol(): void {
+    if (this.winningTimeoutId !== null) {
+      clearTimeout(this.winningTimeoutId);
+      this.winningTimeoutId = null;
+    }
+    if (this.activeGlowFilter) {
+      AnimationProxy.killTweensOf(this.activeGlowFilter);
+      this.activeGlowFilter.destroy?.();
+      this.activeGlowFilter = null;
+    }
     this.symbol?.destroy();
   }
 
@@ -137,16 +149,35 @@ export default class ReelSymbolSprite extends ReelSymbol {
       repeat: -1,
       yoyo: true,
     });
-    setTimeout(() => {
+    if (this.winningTimeoutId !== null) {
+      clearTimeout(this.winningTimeoutId);
+    }
+    this.winningTimeoutId = setTimeout(() => {
+      this.winningTimeoutId = null;
       onComplete?.();
     }, 2000);
   }
 
   public cleanUpSymbolWin(): void {
-    this.symbol.filters = null;
+    if (this.winningTimeoutId !== null) {
+      clearTimeout(this.winningTimeoutId);
+      this.winningTimeoutId = null;
+    }
+    this.disposeGlowFilter();
     this.symbol.tint = 0xffffff;
     AnimationProxy.killTweensOf(this.symbol);
     this.symbol.scale.set(this.getDefaultScale());
+  }
+
+  private disposeGlowFilter(): void {
+    if (this.activeGlowFilter) {
+      AnimationProxy.killTweensOf(this.activeGlowFilter);
+      this.symbol.filters = null;
+      this.activeGlowFilter.destroy?.();
+      this.activeGlowFilter = null;
+    } else {
+      this.symbol.filters = null;
+    }
   }
 
   public showBlastAnim(onComplete?: () => void): void {
@@ -191,10 +222,11 @@ export default class ReelSymbolSprite extends ReelSymbol {
   // -------------------------
 
   private applyGlowAnimation(overrides: Partial<GlowFilter>): void {
-    this.symbol.filters = null;
+    this.disposeGlowFilter();
     this.symbol.scale.set(this.getDefaultScale());
 
     const glowFilter = new GlowFilter(DEFAULT_GLOW_CONFIG);
+    this.activeGlowFilter = glowFilter;
     this.symbol.filters = [glowFilter];
 
     AnimationProxy.animateTween(glowFilter, {

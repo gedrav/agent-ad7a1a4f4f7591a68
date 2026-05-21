@@ -47,6 +47,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected reelsIndexes: number[];
   protected maskRect: PixGraphics;
   protected ticker: Ticker;
+  protected tickerHandler: (ticker: Ticker) => void;
   protected winController: WinController;
   protected quickSpinStarted: boolean;
   protected speedFactor: number;
@@ -125,7 +126,35 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.ticker = new Ticker();
     //this.ticker.stop();
     //this.ticker.start();
-    this.ticker.add(this.spinReel.bind(this));
+    this.tickerHandler = this.spinReel.bind(this);
+    this.ticker.add(this.tickerHandler);
+  }
+
+  public destroyView(): void {
+    if (this.idleAnimTimeoutId) {
+      clearTimeout(this.idleAnimTimeoutId);
+      this.idleAnimTimeoutId = null;
+    }
+    if (this.payoutTimeoutId) {
+      clearTimeout(this.payoutTimeoutId);
+      this.payoutTimeoutId = null;
+    }
+    if (this.timeoutIds) {
+      for (const id of this.timeoutIds) clearTimeout(id);
+      this.timeoutIds.length = 0;
+    }
+    if (this.timeoutIds2) {
+      for (const id of this.timeoutIds2) clearTimeout(id);
+      this.timeoutIds2.length = 0;
+    }
+    if (this.ticker) {
+      this.ticker.stop();
+      if (this.tickerHandler) {
+        this.ticker.remove(this.tickerHandler);
+      }
+      this.ticker.destroy();
+    }
+    super.destroyView?.();
   }
 
   protected updateUIForAutoStart(): void {}

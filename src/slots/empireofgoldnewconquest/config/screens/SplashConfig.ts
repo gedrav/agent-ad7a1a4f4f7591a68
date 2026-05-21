@@ -11,7 +11,7 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 const fontMLProps = {
   cs: { fontSize: 58 },
   sk: { fontSize: 58 },
-  ro: { fontSize: 58 },
+  ro: { fontSize: 50 },
   hr: { fontSize: 60 },
   cnr: { fontSize: 60 },
   pl: { fontSize: 58 },
@@ -37,6 +37,7 @@ export const SPLASH_CONFIG: any = {
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
+        fontMLProps: fontMLProps,
         destroy: true,
         style: {
           fontFamily: 'gameFont1',

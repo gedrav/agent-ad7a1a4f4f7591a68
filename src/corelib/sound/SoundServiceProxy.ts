@@ -92,6 +92,16 @@ class SoundServiceProxy {
           // '_' +
           GameProxy.config.gameVersion;
 
+        // Unload any prior Howl registered under this name before overwriting
+        // — otherwise the previous Web Audio buffer is orphaned and leaks
+        // (1MB+ per sound on iOS) when sounds reload (language switch etc.).
+        const existing = this.soundLibrary[list[k].name];
+        if (existing) {
+          this.removeFromGroup(this.ambientSounds, existing);
+          this.removeFromGroup(this.sfxSounds, existing);
+          existing.unload?.();
+        }
+
         this.soundLibrary[list[k].name] = new Howl({
           src: [file2, file1],
           autoplay: false,
@@ -217,6 +227,24 @@ class SoundServiceProxy {
     if (this.isAmbientSoundOn) {
       Howler.mute(false);
     }
+  }
+
+  public unloadAllSounds(): void {
+    for (const name in this.soundLibrary) {
+      const instance = this.soundLibrary[name];
+      instance?.unload?.();
+    }
+    this.soundLibrary = {};
+    this.ambientSounds.length = 0;
+    this.sfxSounds.length = 0;
+    this._ambientPlaying = null;
+    this._lastAmbientSoundName = null;
+    this.isSoundPresent = false;
+  }
+
+  private removeFromGroup(group: any[], instance: any): void {
+    const idx = group.indexOf(instance);
+    if (idx !== -1) group.splice(idx, 1);
   }
 }
 

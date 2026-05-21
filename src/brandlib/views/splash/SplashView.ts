@@ -316,8 +316,8 @@ export class SplashView extends ResponsiveChildrenView {
   }
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
-  public removeSplash(): void {
-    this.onFadedOut();
+  public removeSplash(): Promise<void> {
+    return this.onFadedOut();
   }
 
   protected async onFadedOut(): Promise<void> {

@@ -26,7 +26,6 @@ export const BIG_WIN_CONFIG = {
       type: 'Spine',
       spineName: 'bigwins',
       loop: true,
-      scale: 0.5,
       x: 650,
       y: 500,
     },
