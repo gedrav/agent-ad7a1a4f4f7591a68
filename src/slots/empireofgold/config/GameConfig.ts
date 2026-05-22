@@ -29,7 +29,8 @@ export const GAME_CONFIG = {
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen2',
-  bigWinValues: [20, 50, 100, 500],
+  bigWinValues1: [25, 50, 100, 500],
+  bigWinValues: [10, 20, 30, 50],
   buyBonusData1: {
     features: [
       {
