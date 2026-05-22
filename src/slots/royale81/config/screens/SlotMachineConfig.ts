@@ -7,12 +7,12 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
-import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { RoyalReelFrameComp } from '@game/views/comps/RoyalReelFrameComp';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
+import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',

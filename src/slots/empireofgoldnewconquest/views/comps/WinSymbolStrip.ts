@@ -50,6 +50,11 @@ export class WinSymbolStrip extends StandardView {
       const scaleFactor = (this.stripBg.height * 0.8) / this.symbImage.height;
       this.symbImage.scale.set(scaleFactor);
     }
+    this.winvalueText.style.fontSize = this.winvalueText?.configData?.style?.fontSize;
+    if (this.winvalueText.width > this.stripBg.width * 0.52) {
+      const scaleFactor = (this.stripBg.width * 0.52) / this.winvalueText.width;
+      this.winvalueText.style.fontSize = (this.winvalueText?.configData?.style?.fontSize as number) * scaleFactor;
+    }
   }
 
   public destroy(options?: DestroyOptions): void {
