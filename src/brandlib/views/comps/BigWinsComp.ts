@@ -133,7 +133,6 @@ export class BigWinsComp extends ResponsiveView {
       if (this.bigWinText) {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
         const targetScale = this.resizeBigwinText();
-        console.log('targetScale cccc', targetScale);
         this.bigWinText.scale.set(targetScale);
       }
       if (this.bigWinPanelAnim) {
@@ -321,7 +320,6 @@ export class BigWinsComp extends ResponsiveView {
     if (this.currentLevel === 0) {
       this.bigWinText.alpha = 1;
       const targetScale = this.resizeBigwinText();
-      console.log('targetScale aaaaaa', targetScale);
       AnimationProxy.animateFromTo(
         this.bigWinText,
         0.2,
@@ -350,7 +348,6 @@ export class BigWinsComp extends ResponsiveView {
       onComplete: () => {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
         const targetScale = this.resizeBigwinText();
-        console.log('targetScale bbbbb', targetScale);
         this.bigWinText.scale.set(targetScale * 0.5);
         AnimationProxy.animateTween(this.bigWinText, {
           duration: 0.25,
