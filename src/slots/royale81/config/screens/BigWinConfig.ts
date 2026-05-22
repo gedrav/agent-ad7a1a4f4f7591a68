@@ -21,6 +21,7 @@ export const BIG_WIN_CONFIG = {
       x: 755,
       y: 560,
     },
+    bigWinTextScales: [0.6, 0.65, 0.7, 0.7],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
       SUPER_WIN: 'superWinText',
@@ -31,7 +32,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 750, y: 450, scale: 0.9 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 750, y: 450 },
     {
       name: 'winTicker',
       type: 'Comp',
