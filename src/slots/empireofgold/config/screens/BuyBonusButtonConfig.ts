@@ -31,7 +31,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 104,
+      y: 115,
     },
     {
       name: 'bbBetValue',
@@ -48,7 +48,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 145,
-      y: 220,
+      y: 250,
     },
   ],
 };
