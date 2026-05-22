@@ -12,7 +12,8 @@ import 'pixi.js/prepare';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
-const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.GIGANTIC_WIN, CONSTANTS.UNBELIEVABLE_WIN];
+let bigWinTextScales: number[] = [0.8, 0.8, 0.9, 1];
+const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.SUPER_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.EPIC_WIN];
 export class BigWinsComp extends ResponsiveView {
   protected winTicker: WinTicker;
   protected bigWinAnim: PixSpine;
@@ -39,6 +40,9 @@ export class BigWinsComp extends ResponsiveView {
     this.bigWinText = this.elementsList['bigWinText'];
     if (this.bigWinText) {
       this.bigWinText.visible = false;
+    }
+    if (this.configData.data.bigWinTextScales) {
+      bigWinTextScales = this.configData.data.bigWinTextScales;
     }
     this.winTicker?.reset();
     this.winTickerBW?.reset();
@@ -69,6 +73,7 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinTextAnim = UIUtil.getElement(this.configData.data.bigWinTextAnim);
       this.addChild(this.bigWinAnim, this.bigWinTextAnim, this.winTicker, this.winTickerBW, this.skipRect);
     }
+
     if (this.configData.data.bigWinPanelAnim) {
       this.bigWinPanelAnim = UIUtil.getElement(this.configData.data.bigWinPanelAnim);
       this.addChild(
@@ -87,6 +92,9 @@ export class BigWinsComp extends ResponsiveView {
     if (this.bigWinPanelAnim) {
       this.bigWinPanelAnim.stopAnimation();
       this.bigWinPanelAnim.visible = false;
+    }
+    if (this.bigWinText) {
+      this.addChild(this.bigWinText);
     }
   }
 
@@ -125,6 +133,7 @@ export class BigWinsComp extends ResponsiveView {
       if (this.bigWinText) {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
         const targetScale = this.resizeBigwinText();
+        console.log('targetScale cccc', targetScale);
         this.bigWinText.scale.set(targetScale);
       }
       if (this.bigWinPanelAnim) {
@@ -155,7 +164,6 @@ export class BigWinsComp extends ResponsiveView {
 
   public async showSpinWin() {
     const winType = appModel.getWinType();
-    //const winType: string = CONSTANTS.UNBELIEVABLE_WIN;
     if (winType === CONSTANTS.BELOW_TOTALBET_WIN || winType === CONSTANTS.STANDARD_WIN) {
       const duration = 2000;
       clearTimeout(this.winTimerId);
@@ -178,15 +186,15 @@ export class BigWinsComp extends ResponsiveView {
           this.targetLevel = 1;
           this.totalDuration = 4000;
           break;
-        case CONSTANTS.MEGA_WIN:
+        case CONSTANTS.SUPER_WIN:
           this.targetLevel = 2;
           this.totalDuration = 6000;
           break;
-        case CONSTANTS.GIGANTIC_WIN:
+        case CONSTANTS.MEGA_WIN:
           this.targetLevel = 3;
           this.totalDuration = 8000;
           break;
-        case CONSTANTS.UNBELIEVABLE_WIN:
+        case CONSTANTS.EPIC_WIN:
           this.targetLevel = 4;
           this.totalDuration = 10000;
           break;
@@ -313,6 +321,7 @@ export class BigWinsComp extends ResponsiveView {
     if (this.currentLevel === 0) {
       this.bigWinText.alpha = 1;
       const targetScale = this.resizeBigwinText();
+      console.log('targetScale aaaaaa', targetScale);
       AnimationProxy.animateFromTo(
         this.bigWinText,
         0.2,
@@ -341,6 +350,7 @@ export class BigWinsComp extends ResponsiveView {
       onComplete: () => {
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
         const targetScale = this.resizeBigwinText();
+        console.log('targetScale bbbbb', targetScale);
         this.bigWinText.scale.set(targetScale * 0.5);
         AnimationProxy.animateTween(this.bigWinText, {
           duration: 0.25,
@@ -365,12 +375,12 @@ export class BigWinsComp extends ResponsiveView {
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
     if (this.currentState === CONSTANTS.BIG_WIN) {
       EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_SOUND);
+    } else if (this.currentState === CONSTANTS.SUPER_WIN) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SUPER_WIN_SOUND);
     } else if (this.currentState === CONSTANTS.MEGA_WIN) {
       EventHandler.dispatchEvent(SlotEvents.PLAY_MEGA_WIN_SOUND);
-    } else if (this.currentState === CONSTANTS.GIGANTIC_WIN) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_GIGANTIC_WIN_SOUND);
-    } else if (this.currentState === CONSTANTS.UNBELIEVABLE_WIN) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_UNBELIEVABLE_WIN_SOUND);
+    } else if (this.currentState === CONSTANTS.EPIC_WIN) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_EPIC_WIN_SOUND);
     }
   }
   protected onAnimComplete(data: { animation: { name: string } }): void {
@@ -499,8 +509,9 @@ export class BigWinsComp extends ResponsiveView {
   protected resizeBigwinText(): number {
     if (!this.bigWinText || !this.guideRect) return 1;
     this.bigWinText.scale.set(1);
-    const maxWidth = this.guideRect.width * 0.9;
-    const scaleX = this.bigWinText.width > maxWidth ? maxWidth / this.bigWinText.width : 1;
+    const maxWidth = this.guideRect.width * 0.96;
+    const scaleX =
+      (this.bigWinText.width > maxWidth ? maxWidth / this.bigWinText.width : 1) * bigWinTextScales[this.currentLevel];
     return scaleX;
   }
 }

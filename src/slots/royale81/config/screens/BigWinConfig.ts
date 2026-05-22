@@ -8,9 +8,9 @@ export const BIG_WIN_CONFIG = {
   data: {
     animations: {
       BIG_WIN: { start: 'Big_win_Start', idle: 'Big_win_idle', end: 'Big_win_End' },
-      MEGA_WIN: { start: 'Mega_win_Start', idle: 'Mega_win_idle', end: 'Mega_win_End' },
-      GIGANTIC_WIN: { start: 'GIG_win_Start', idle: 'GIG_win_idle', end: 'GIG_win_End' },
-      UNBELIEVABLE_WIN: { start: 'UNB_win_Start', idle: 'UNB_win_idle', end: 'UNB_win_End' },
+      SUPER_WIN: { start: 'Mega_win_Start', idle: 'Mega_win_idle', end: 'Mega_win_End' },
+      MEGA_WIN: { start: 'GIG_win_Start', idle: 'GIG_win_idle', end: 'GIG_win_End' },
+      EPIC_WIN: { start: 'UNB_win_Start', idle: 'UNB_win_idle', end: 'UNB_win_End' },
     },
     bigWinAnim: {
       name: 'bigWinAnim',

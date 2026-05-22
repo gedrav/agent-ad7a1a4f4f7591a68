@@ -526,9 +526,9 @@ class AppModelService {
     // Assumes bigwinValues[0] < bigwinValues[1] < bigwinValues[2] < bigwinValues[3]
     const thresholds = [
       { multiplier: bigwinValues[0], type: CONSTANTS.BIG_WIN },
-      { multiplier: bigwinValues[1], type: CONSTANTS.MEGA_WIN },
-      { multiplier: bigwinValues[2], type: CONSTANTS.GIGANTIC_WIN },
-      { multiplier: bigwinValues[3], type: CONSTANTS.UNBELIEVABLE_WIN },
+      { multiplier: bigwinValues[1], type: CONSTANTS.SUPER_WIN },
+      { multiplier: bigwinValues[2], type: CONSTANTS.MEGA_WIN },
+      { multiplier: bigwinValues[3], type: CONSTANTS.EPIC_WIN },
     ];
 
     if (win <= bet) {
@@ -562,9 +562,9 @@ class AppModelService {
     // Assumes bigwinValues[0] < bigwinValues[1] < bigwinValues[2] < bigwinValues[3]
     const thresholds = [
       { multiplier: bigwinValues[0], type: CONSTANTS.BIG_WIN },
-      { multiplier: bigwinValues[1], type: CONSTANTS.MEGA_WIN },
-      { multiplier: bigwinValues[2], type: CONSTANTS.GIGANTIC_WIN },
-      { multiplier: bigwinValues[3], type: CONSTANTS.UNBELIEVABLE_WIN },
+      { multiplier: bigwinValues[1], type: CONSTANTS.SUPER_WIN },
+      { multiplier: bigwinValues[2], type: CONSTANTS.MEGA_WIN },
+      { multiplier: bigwinValues[3], type: CONSTANTS.EPIC_WIN },
     ];
 
     if (win <= bet) {

@@ -10,15 +10,9 @@ export const BIG_WIN_CONFIG = {
     backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: 'big_start', idle: 'big_idle' },
-      MEGA_WIN: { start: 'mega_start', idle: 'mega_idle' },
-      GIGANTIC_WIN: { start: 'gigantic_start', idle: 'gigantic_idle' },
-      UNBELIEVABLE_WIN: { start: 'unbelievable_start', idle: 'unbelievable_idle' },
-    },
-    textAnimations: {
-      BIG_WIN: { start: 'big_start', idle: 'big_idle' },
-      MEGA_WIN: { start: 'mega_start', idle: 'mega_idle' },
-      GIGANTIC_WIN: { start: 'gigantic_start', idle: 'gigantic_idle' },
-      UNBELIEVABLE_WIN: { start: 'unbelievable_start', idle: 'unbelievable_idle' },
+      SUPER_WIN: { start: 'mega_start', idle: 'mega_idle' },
+      MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic_idle' },
+      EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable_idle' },
     },
     bigWinAnim: {
       name: 'bigWinAnim',
@@ -29,11 +23,12 @@ export const BIG_WIN_CONFIG = {
       x: 650,
       y: 500,
     },
+    bigWinTextScales: [0.75, 0.8, 0.85, 0.9],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
+      SUPER_WIN: 'superWinText',
       MEGA_WIN: 'megaWinText',
-      GIGANTIC_WIN: 'giganticWinText',
-      UNBELIEVABLE_WIN: 'unbelievableWinText',
+      EPIC_WIN: 'epicWinText',
     },
   },
   Elements: [
