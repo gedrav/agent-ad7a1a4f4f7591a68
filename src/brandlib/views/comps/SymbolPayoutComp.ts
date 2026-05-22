@@ -42,6 +42,9 @@ export class SymbolPayoutComp extends StandardView {
         EventHandler.dispatchEvent(SlotEvents.HIDE_SYMBOL_PAYOUT);
       }
     }
+
+    this.fitInfoText();
+
     if (symbolAtLeft) {
       this.infoText.x = this.bg.width - this.infoText.width - this.bg.width * this.configData.textXPadding;
     } else {
@@ -52,5 +55,23 @@ export class SymbolPayoutComp extends StandardView {
 
   public getXPadding(): number {
     return this.configData.xPadding;
+  }
+
+  private fitInfoText(): void {
+    const baseFontSize = this.infoText.style.fontSize;
+    const minFontSize = 16;
+
+    const padding = this.bg.width * this.configData.textXPadding;
+    const maxWidth = this.bg.width * 0.5 - padding;
+
+    this.infoText.style.wordWrap = false;
+    this.infoText.style.wordWrapWidth = maxWidth;
+
+    if (this.infoText.width > maxWidth) {
+      const ratio = maxWidth / this.infoText.width;
+      const newFontSize = Math.max(minFontSize, Math.floor(baseFontSize * ratio));
+
+      this.infoText.style.fontSize = newFontSize;
+    }
   }
 }
