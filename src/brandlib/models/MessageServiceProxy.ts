@@ -138,6 +138,9 @@ export class MessageServiceProxy extends AbstractProxy {
         } else if (GameProxy.config.cheatObject.forceNudgeFeature) {
           finalObj.extraData.forceNudgeFeature = cheatObj.forceNudgeFeature;
           finalObj.extraData.combination = cheatObj.combination;
+          if (GameProxy.config.cheatObject.forceNudgeReels) {
+            finalObj.extraData.forceNudgeReels = cheatObj.forceNudgeReels;
+          }
         } else {
           finalObj.extraData.combination = cheatObj;
         }
