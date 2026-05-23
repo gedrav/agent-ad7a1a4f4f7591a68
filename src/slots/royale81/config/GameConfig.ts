@@ -15,7 +15,6 @@ export const GAME_CONFIG = {
   gameId: 'royale81',
   gameName: 'Royale 81',
   uiConfig: UIConfig,
-  gameAssetVersion: '0.01',
   creditValue: 20,
   totalLines: 1,
   isConsoleActive: true,

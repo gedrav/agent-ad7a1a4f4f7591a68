@@ -15,7 +15,6 @@ export const GAME_CONFIG = {
   gameId: 'sweetsalon',
   gameName: 'Sweet Salon',
   uiConfig: UIConfig,
-  gameAssetVersion: '0.01',
   creditValue: 20,
   anteBetMultiplier: 1.25,
   totalLines: 1,
