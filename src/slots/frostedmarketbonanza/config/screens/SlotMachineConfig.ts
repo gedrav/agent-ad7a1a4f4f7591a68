@@ -62,19 +62,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 172, y: 272 },
-            reelPositionX: [0, 216, 434, 650, 870, 1086],
-            symbolHeight: 210,
+            reelContainerPos: { x: 180, y: 286 },
+            reelPositionX: [0, 210, 424, 640, 860, 1076],
+            symbolHeight: 200,
           },
           Portrait: {
-            reelContainerPos: { x: 142, y: 202 },
-            reelPositionX: [0, 216, 434, 650, 870, 1086],
-            symbolHeight: 210,
+            reelContainerPos: { x: 180, y: 286 },
+            reelPositionX: [0, 210, 424, 640, 860, 1076],
+            symbolHeight: 200,
           },
           Landscape: {
-            reelContainerPos: { x: 142, y: 202 },
-            reelPositionX: [0, 216, 434, 650, 870, 1086],
-            symbolHeight: 210,
+            reelContainerPos: { x: 180, y: 286 },
+            reelPositionX: [0, 210, 424, 640, 860, 1076],
+            symbolHeight: 200,
           },
         },
         initialReel: [
