@@ -10,21 +10,15 @@ export const BIG_WIN_CONFIG = {
     backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: 'big_start', idle: 'big_idle' },
-      MEGA_WIN: { start: 'meg_start', idle: 'meg_idle' },
-      GIGANTIC_WIN: { start: 'gig_start', idle: 'gig_idle' },
-      UNBELIEVABLE_WIN: { start: 'unb_start', idle: 'unb_idle' },
-    },
-    textAnimations: {
-      BIG_WIN: { start: 'big_start', idle: 'big_idle' },
-      MEGA_WIN: { start: 'meg_start', idle: 'meg_idle' },
-      GIGANTIC_WIN: { start: 'gig_start', idle: 'gig_idle' },
-      UNBELIEVABLE_WIN: { start: 'unb_start', idle: 'unb_idle' },
+      SUPER_WIN: { start: 'meg_start', idle: 'meg_idle' },
+      MEGA_WIN: { start: 'gig_start', idle: 'gig_idle' },
+      EPIC_WIN: { start: 'unb_start', idle: 'unb_idle' },
     },
     panelAnimations: {
       BIG_WIN: { start: 'idle', idle: 'idle' },
+      SUPER_WIN: { start: 'idle', idle: 'idle' },
       MEGA_WIN: { start: 'idle', idle: 'idle' },
-      GIGANTIC_WIN: { start: 'idle', idle: 'idle' },
-      UNBELIEVABLE_WIN: { start: 'idle', idle: 'idle' },
+      EPIC_WIN: { start: 'idle', idle: 'idle' },
     },
     bigWinAnim: {
       name: 'bigWinAnim',
@@ -36,15 +30,6 @@ export const BIG_WIN_CONFIG = {
       x: 650,
       y: 450,
     },
-    bigWinTextAnim: {
-      name: 'bigWinTextAnim',
-      dontCreateView: true,
-      type: 'Spine',
-      spineName: 'text',
-      loop: true,
-      x: 650,
-      y: 630,
-    },
     bigWinPanelAnim: {
       name: 'bigWinPanelAnim',
       dontCreateView: true,
@@ -53,6 +38,13 @@ export const BIG_WIN_CONFIG = {
       loop: true,
       x: 642,
       y: 480,
+    },
+    bigWinTextScales: [0.8, 0.85, 0.9, 1],
+    bigWinTextStates: {
+      BIG_WIN: 'bigWinText',
+      SUPER_WIN: 'superWinText',
+      MEGA_WIN: 'megaWinText',
+      EPIC_WIN: 'epicWinText',
     },
   },
   Elements: [
@@ -65,6 +57,7 @@ export const BIG_WIN_CONFIG = {
       alpha: 0,
     },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 650, y: 140 },
     {
       name: 'winTicker',
       type: 'Comp',

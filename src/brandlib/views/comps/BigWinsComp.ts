@@ -76,14 +76,6 @@ export class BigWinsComp extends ResponsiveView {
 
     if (this.configData.data.bigWinPanelAnim) {
       this.bigWinPanelAnim = UIUtil.getElement(this.configData.data.bigWinPanelAnim);
-      this.addChild(
-        this.bigWinPanelAnim,
-        this.bigWinAnim,
-        this.bigWinTextAnim,
-        this.winTicker,
-        this.winTickerBW,
-        this.skipRect,
-      );
     }
     if (this.bigWinTextAnim) {
       this.bigWinTextAnim.stopAnimation();
@@ -93,8 +85,26 @@ export class BigWinsComp extends ResponsiveView {
       this.bigWinPanelAnim.stopAnimation();
       this.bigWinPanelAnim.visible = false;
     }
+    if (this.bigWinPanelAnim) {
+      this.addChild(this.bigWinPanelAnim);
+    }
+    if (this.bigWinAnim) {
+      this.addChild(this.bigWinAnim);
+    }
+    if (this.bigWinTextAnim) {
+      this.addChild(this.bigWinTextAnim);
+    }
+    if (this.winTicker) {
+      this.addChild(this.winTicker);
+    }
+    if (this.winTickerBW) {
+      this.addChild(this.winTickerBW);
+    }
     if (this.bigWinText) {
       this.addChild(this.bigWinText);
+    }
+    if (this.skipRect) {
+      this.addChild(this.skipRect);
     }
   }
 

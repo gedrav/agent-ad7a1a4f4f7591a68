@@ -39,13 +39,13 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'reel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
+    { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
     { TYPE: 'game', NAME: 'winpanel', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'text', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'wins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'scatter', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'cupcake', ASSETTYPE: 'spine' }, //H1
