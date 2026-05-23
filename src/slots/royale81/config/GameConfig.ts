@@ -28,42 +28,5 @@ export const GAME_CONFIG = {
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  bigWinValues1: [25, 50, 100, 500],
-  bigWinValues: [10, 20, 30, 50],
-  buyBonusData1: {
-    features: [
-      {
-        btn: {
-          name: 'bbBtn1',
-          type: 'Button',
-          action: {
-            press: BuyBonusClickCommand,
-          },
-          data: { id: 'FG1' },
-          options: {
-            defaultView: 'buyBonusBtn',
-            hoverView: 'buyBonusBtn',
-            pressedView: 'buyBonusBtn',
-            disabledView: 'buyBonusBtn',
-            textOffset: new Point(0, 2),
-            animations: CoreUIConfig.spinButtonStates,
-          },
-          textConfig: {
-            name: 'bbBtn',
-            type: 'Text',
-            content: 'BuyText',
-            style: {
-              fontFamily: 'commonFont',
-              fill: 0xffffff,
-              fontSize: 36,
-              fontWeight: 'bold',
-              wordWrap: true,
-              wordWrapWidth: 200,
-              align: 'center',
-            },
-          },
-        },
-      },
-    ],
-  },
+  bigWinValues: [25, 50, 100, 500],
 };
