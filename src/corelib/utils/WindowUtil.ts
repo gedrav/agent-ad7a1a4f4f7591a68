@@ -54,6 +54,7 @@ declare global {
     getCachedGameContent: () => any;
     getCachedCommonContent: () => any;
     getBBRtp: () => any;
+    isFunMode: () => boolean;
   }
 }
 
@@ -122,5 +123,6 @@ export class WindowUtil {
     window.getCachedGameContent = () => ContentProxy.content;
     window.getCachedCommonContent = () => ContentProxy.content;
     window.getBBRtp = () => appModel.getBBRTP();
+    window.isFunMode = () => appModel.funMode;
   }
 }
