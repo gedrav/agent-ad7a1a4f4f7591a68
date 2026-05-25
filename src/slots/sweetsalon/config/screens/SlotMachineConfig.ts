@@ -280,7 +280,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'betValueContainer',
           type: 'Comp',
           class: BetValueComp,
-          x: 725,
+          x: 688,
           y: 630,
           padX: 40,
           padY: 15,
