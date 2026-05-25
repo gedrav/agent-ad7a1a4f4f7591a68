@@ -16,7 +16,7 @@ class GamePreWinStateCommand extends StateCommand {
     if (result && result.type == 'nudgeFeature') {
       EventHandler.dispatchEvent(SlotEvents.NUDGE_FEATURE_ACTIVATED);
     } else if (result && result.type == 'symbolConversionApplied') {
-      EventHandler.dispatchEvent(SlotEvents.INITIATE_SYMBOL_CONVERSION);
+      EventHandler.dispatchEvent(SlotEvents.LOWPAY_SYMBOL_CONVERSION);
     } else {
       StateManager.next();
     }

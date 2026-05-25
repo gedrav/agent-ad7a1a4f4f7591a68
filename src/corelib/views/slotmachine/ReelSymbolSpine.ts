@@ -18,8 +18,8 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   // Setup & teardown
   // -------------------------
   public setNewSymbol(data: any, reelno: number): void {
-    super.setNewSymbol(data, reelno);
     this.destroySpine();
+    super.setNewSymbol(data, reelno);
   }
 
   protected createExtraElements(): void {
