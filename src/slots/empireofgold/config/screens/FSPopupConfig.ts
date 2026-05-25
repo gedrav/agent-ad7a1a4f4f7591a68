@@ -12,7 +12,7 @@ export const FS_POPUP_CONFIG = {
       name: 'titleText',
       type: 'Text',
       contentText: '',
-      style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1000 },
+      style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1100 },
       anchor: { x: 0.5, y: 0.5 },
       x: 565,
       y: 95,
