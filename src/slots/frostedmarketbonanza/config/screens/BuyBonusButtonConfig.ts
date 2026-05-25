@@ -8,11 +8,11 @@ export const BUY_BONUS_BTN_CONFIG: any = {
   y: 475,
   px: 140,
   py: 1530,
-  lx: 117,
+  lx: 90,
   ly: 480,
   scale: 0.9,
   pScale: 1,
-  lScale: 0.9,
+  lScale: 1,
   data: { id: 'FG1' },
   Elements: [
     { name: 'bbBg', type: 'Sprite', image: 'bbBtn' },
