@@ -112,7 +112,7 @@ export const BIG_WIN_CONFIG = {
       widthPerc: 0.96,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: 0.1,
+      vPaddingPerc: -0.019,
     },
   },
 };

@@ -8,7 +8,7 @@ export const ANTE_BET_CONFIG: any = {
   y: 700,
   px: 1132,
   py: 1480,
-  lx: 20,
+  lx: 70,
   ly: 770,
   scale: 0.9,
   pScale: 1,
