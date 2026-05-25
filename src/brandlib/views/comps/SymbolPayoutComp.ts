@@ -32,18 +32,21 @@ export class SymbolPayoutComp extends StandardView {
               i + 1 + 'x: ' + Util.formatCurrency(appModel.getSymbolPayoutValue(data[i])) + (i == len - 1 ? '' : '\n');
           }
         }
+        this.infoText.style.wordWrap = false;
         this.infoText.text = result;
+        this.fitInfoText();
       }
     } else {
       const str = Util.getContent(symbol + 'payoutContent');
       if (str && str.length > 0) {
+        this.infoText.style.fontSize = this.infoText.style.fontSize;
+        this.infoText.style.wordWrap = true;
+        this.infoText.style.wordWrapWidth = this.infoText.style.wordWrapWidth;
         this.infoText.text = str;
       } else {
         EventHandler.dispatchEvent(SlotEvents.HIDE_SYMBOL_PAYOUT);
       }
     }
-
-    this.fitInfoText();
 
     if (symbolAtLeft) {
       this.infoText.x = this.bg.width - this.infoText.width - this.bg.width * this.configData.textXPadding;
@@ -59,16 +62,16 @@ export class SymbolPayoutComp extends StandardView {
 
   private fitInfoText(): void {
     const baseFontSize = this.infoText.style.fontSize;
+
     const minFontSize = 16;
 
     const padding = this.bg.width * this.configData.textXPadding;
-    const maxWidth = this.bg.width * 0.5 - padding;
 
-    this.infoText.style.wordWrap = false;
-    this.infoText.style.wordWrapWidth = maxWidth;
+    const maxWidth = this.bg.width * 0.5 - padding;
 
     if (this.infoText.width > maxWidth) {
       const ratio = maxWidth / this.infoText.width;
+
       const newFontSize = Math.max(minFontSize, Math.floor(baseFontSize * ratio));
 
       this.infoText.style.fontSize = newFontSize;
