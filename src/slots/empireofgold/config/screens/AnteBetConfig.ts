@@ -89,7 +89,7 @@ export const ANTE_BET_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'commonFontBold',
-            fontSize: 45,
+            fontSize: 35,
             fill: 0xffffff,
             wordWrap: true,
             wordWrapWidth: 212,
@@ -108,7 +108,7 @@ export const ANTE_BET_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'commonFontBold',
-            fontSize: 45,
+            fontSize: 35,
             fill: 0x3dffb1,
             wordWrap: true,
             wordWrapWidth: 212,
