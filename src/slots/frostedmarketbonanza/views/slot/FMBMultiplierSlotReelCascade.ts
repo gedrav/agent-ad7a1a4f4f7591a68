@@ -28,6 +28,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     EventHandler.addEventListener(SlotEvents.NUDGE_FEATURE_ACTIVATED, this.nudgeReelAndDropNewSymbol.bind(this));
   }
 
+  //conversion methods----------------------------------
   protected setupForSymbolConversion() {
     const result = appModel.getReelModifiersData();
     const selectedHigh = result?.selectedHigh;
@@ -77,7 +78,9 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     this.targetSymbolData = null;
     StateManager.doNextStep();
   }
+  //-------------------------------------------------------
 
+  //Nudge methods---------------------------
   private nudgeReelAndDropNewSymbol() {
     const result = appModel.getReelModifiersData();
     const nudgedReelIndices: number[][] = result?.nudgedReelIndices ?? [];

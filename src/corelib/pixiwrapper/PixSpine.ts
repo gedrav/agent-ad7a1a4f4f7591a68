@@ -45,7 +45,9 @@ export class PixSpine extends StandardView {
     await GameProxy.config.renderer.prepare.upload(this.spineAnim);
   }
 
-  public setAnimationSpeed(num: number): void {}
+  public setAnimationSpeed(num: number): void {
+    if (this.spineAnim?.state) this.spineAnim.state.timeScale = num;
+  }
 
   setSkin(name: string): void {
     this.spineAnim.skeleton.setSkinByName(name);
