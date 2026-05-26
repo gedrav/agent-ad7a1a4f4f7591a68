@@ -1,4 +1,4 @@
-import { AnteBetComp } from '@game/views/comps/AnteBetComp';
+import { AnteBetComp } from '@brand/views/comps/AnteBetComp';
 
 export const ANTE_BET_CONFIG: any = {
   name: 'anteBetComp',
