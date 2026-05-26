@@ -330,7 +330,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'gameTitle',
           type: 'Spine',
           spineName: 'Logo_Anim',
-          defaultState: 'Idle',
+          defaultState: 'idle',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {

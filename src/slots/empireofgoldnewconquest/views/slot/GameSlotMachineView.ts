@@ -42,7 +42,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.gameTitle.playAnimation({ state: 'Win', loop: false });
   }
   protected startGameLogoAnimation(): void {
-    this.gameTitle.playAnimation({ state: 'Idle', loop: false });
+    this.gameTitle.playAnimation({ state: 'idle', loop: false });
     setTimeout(
       () => {
         this.startGameLogoAnimation();

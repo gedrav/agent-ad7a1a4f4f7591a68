@@ -332,7 +332,7 @@ export const SPLASH_CONFIG: any = {
       name: 'gameTitle',
       type: 'Spine',
       spineName: 'Logo_Anim',
-      defaultState: 'Idle',
+      defaultState: 'idle',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
         Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
