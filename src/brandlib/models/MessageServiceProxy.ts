@@ -162,6 +162,18 @@ export class MessageServiceProxy extends AbstractProxy {
       finalObj.betPerLine = appModel.getBetPerLine();
     } else {
     }
+    if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
+      const cheatObj = GameProxy.config.cheatObject;
+      if (cheatObj.length <= 0) {
+        finalObj.combination = 'none';
+      } else {
+        if (GameProxy.config.cheatObject.forceBonusMultiplier) {
+          finalObj.extraData = {};
+          finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+          finalObj.extraData.combination = cheatObj.combination;
+        }
+      }
+    }
     return this.encryptObject(finalObj);
   }
 
