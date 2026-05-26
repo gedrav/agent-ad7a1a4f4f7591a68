@@ -14,6 +14,7 @@ import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig'
 import { WinValueComp } from '@game/views/comps/WinValueComp';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import FMBMultiplierSlotReelCascade from '@slots/frostedmarketbonanza/views/slot/FMBMultiplierSlotReelCascade';
+import { ArtilleryComp } from '@slots/frostedmarketbonanza/views/comps/ArtilleryComp';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -25,10 +26,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xffff00,
       width: 1955,
       height: 1526,
-      lWidth: 2140,
-      lHeight: 1520,
-      pWidth: 1400,
-      pHeight: 1900,
+      lWidth: 2200,
+      lHeight: 1600,
+      pWidth: 1450,
+      pHeight: 1600,
       alpha: 0,
     },
 
@@ -39,10 +40,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: WinController,
       x: 260,
       y: 90,
-      px: -150,
-      py: 490,
-      lx: 220,
-      ly: 120,
+      px: 5,
+      py: 110,
+      lx: 375,
+      ly: 135,
       data: {
         symbolClass: CascadeReelSymbol,
         noOfReels: 6,
@@ -135,7 +136,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_green',
             idleAnim: 'idle',
             winAnim: 'win2',
-            disapperAnim: 'win',
+            disapperAnim: 'win3',
             isBonusSymbol: false,
             animScale: 0.71,
           },
@@ -144,7 +145,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_red',
             idleAnim: 'idle',
             winAnim: 'win2',
-            disapperAnim: 'win',
+            disapperAnim: 'win3',
             isBonusSymbol: false,
             animScale: 0.72,
           },
@@ -153,7 +154,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_yellow',
             idleAnim: 'idle',
             winAnim: 'win2',
-            disapperAnim: 'win',
+            disapperAnim: 'win3',
             isBonusSymbol: false,
             animScale: 0.7,
           },
@@ -162,7 +163,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_spin',
             idleAnim: 'idle',
             winAnim: 'win2',
-            disapperAnim: 'win',
+            disapperAnim: 'win3',
             isBonusSymbol: false,
             animScale: 0.73,
           },
@@ -171,7 +172,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'low_candy',
             idleAnim: 'idle',
             winAnim: 'win2',
-            disapperAnim: 'win',
+            disapperAnim: 'win3',
             isBonusSymbol: false,
             animScale: 0.7,
           },
@@ -218,21 +219,42 @@ export const SLOT_MACHINE_CONFIG: any = {
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
         {
+          name: 'artilleryComp',
+          type: 'Comp',
+          class: ArtilleryComp,
+          Elements: [
+            {
+              name: 'artilleryL',
+              type: 'Spine',
+              spineName: 'Cannon_spine',
+              defaultState: '',
+              scale: { x: -0.9, y: 0.9 },
+            },
+            {
+              name: 'artilleryR',
+              type: 'Spine',
+              spineName: 'Cannon_spine',
+              defaultState: '',
+              scale: 0.9,
+              x: 406,
+            },
+          ],
+          layoutData: {
+            Desktop: {
+              x: 506,
+            },
+          },
+        },
+        {
           name: 'gameTitle',
           type: 'Sprite',
           image: 'gameLogo',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
-              scale: 0.9,
-              x: 677,
+              x: 710,
               y: 38,
             },
-            Landscape: {
-              x: 862,
-              y: -30,
-            },
-            Portrait: { x: 862, y: -30 },
           },
         },
         {
@@ -283,8 +305,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'betValueContainer',
           type: 'Comp',
           class: BetValueComp,
-          x: 852,
-          y: 610,
+          x: 710,
+          y: 680,
           padX: 40,
           padY: 15,
           gap: 30,

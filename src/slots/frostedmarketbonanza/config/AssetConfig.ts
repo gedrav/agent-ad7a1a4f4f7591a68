@@ -33,6 +33,7 @@ const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
+    { TYPE: 'game', NAME: 'Cannon_spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
