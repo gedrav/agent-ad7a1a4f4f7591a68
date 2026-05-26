@@ -1,5 +1,7 @@
 import { FSAutoCounterComp } from '@brand/views/comps/FSAutoCounterComp';
 
+const fontMLProps = { ro: { fontSize: 34 }, cs: { fontSize: 34 } };
+
 export const FSAUTO_COUNTER_CONFIG: any = {
   name: 'fsAutoCounterComp',
   type: 'Comp',
@@ -17,9 +19,10 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
-        mFontSize: 36,
+        mFontSize: 34,
         fill: 0xffd82c,
         fontWeight: 'bold',
+        fontMLProps: fontMLProps,
       },
     },
     {
@@ -31,9 +34,10 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
-        mFontSize: 36,
+        mFontSize: 34,
         fill: 0xffd82c,
         fontWeight: 'bold',
+        fontMLProps: fontMLProps,
       },
     },
   ],
