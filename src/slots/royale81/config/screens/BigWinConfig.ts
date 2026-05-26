@@ -55,12 +55,12 @@ export const BIG_WIN_CONFIG = {
       x: 755,
       y: 950,
       Elements: [
-        { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 50 },
+        { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 40 },
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'bitmapFontBW', fontSize: 250, fill: 0xffffff },
+          style: { fontFamily: 'bitmapFontBW', fontSize: 200, fill: 0xffffff },
         },
       ],
     },
