@@ -34,16 +34,15 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
     if (multiplier) {
       this.clearRewardData();
       this.multiplierVal.text = `${multiplier}x`;
-      this.resizeMultiplier();
     }
   }
 
   public resizeMultiplier() {
-    this.multiplierVal.style.fontSize = this.multiplierVal.configData.style.fontSize;
+    /*this.multiplierVal.style.fontSize = this.multiplierVal.configData.style.fontSize;
     if (this.multiplierVal.width > this.symbol.width * 0.41) {
       const factor = (this.symbol.width * 0.41) / this.multiplierVal.width;
       this.multiplierVal.style.fontSize = this.multiplierVal.configData.style.fontSize * factor;
-    }
+    }*/
   }
 
   public setNormalTexture(): void {
