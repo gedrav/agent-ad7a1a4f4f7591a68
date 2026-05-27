@@ -6,7 +6,7 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import SlotReelTumble from '@core/views/slotmachine/SlotReelTumble';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { BuyBonusButtonComp } from '../comps/BuyBonusButtonComp';
+import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { CharacterController } from '../comps/CharacterController';
 import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
