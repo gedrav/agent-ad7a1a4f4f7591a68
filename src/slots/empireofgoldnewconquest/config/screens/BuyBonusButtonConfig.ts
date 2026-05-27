@@ -1,4 +1,4 @@
-import { BuyBonusButtonComp } from '@game/views/comps/BuyBonusButtonComp';
+import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 
 export const BUY_BONUS_BTN_CONFIG: any = {
   name: 'buyBonusComp',
