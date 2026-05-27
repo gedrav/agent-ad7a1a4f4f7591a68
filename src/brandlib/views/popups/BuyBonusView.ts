@@ -77,6 +77,7 @@ export class BuyBonusView extends ResponsiveChildrenView {
   }
 
   protected async showBuyBonusView(bbId: any) {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     GameProxy.config.selectedBB = bbId;
     this.updateBuyBonusPanel();
