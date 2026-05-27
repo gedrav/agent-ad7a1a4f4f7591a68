@@ -1,5 +1,7 @@
 import { AnteBetComp } from '@brand/views/comps/AnteBetComp';
 
+const fontMLProps = { cs: { fontSize: 24 } };
+
 export const ANTE_BET_CONFIG: any = {
   name: 'anteBetComp',
   type: 'Comp',
@@ -87,6 +89,7 @@ export const ANTE_BET_CONFIG: any = {
           x: 170,
           y: 39,
           anchor: { x: 0.5, y: 0.5 },
+          fontMLProps: fontMLProps,
           style: {
             fontFamily: 'commonFontBold',
             fontSize: 35,
@@ -106,6 +109,7 @@ export const ANTE_BET_CONFIG: any = {
           y: 39,
           alpha: 0,
           anchor: { x: 0.5, y: 0.5 },
+          fontMLProps: fontMLProps,
           style: {
             fontFamily: 'commonFontBold',
             fontSize: 35,

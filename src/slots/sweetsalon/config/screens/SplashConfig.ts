@@ -24,7 +24,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 720,
+      textY: 725,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -39,6 +39,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 60,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -56,7 +57,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 720,
+      textY: 725,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -70,6 +71,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 60,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -87,7 +89,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 720,
+      textY: 725,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -100,6 +102,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 60,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -331,8 +334,8 @@ export const SPLASH_CONFIG: any = {
           vPaddingPerc: 0.05,
         },
         Landscape: {
-          widthPerc: 0.36,
-          heightPerc: 0.12,
+          widthPerc: 0.45,
+          heightPerc: 0.15,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',
