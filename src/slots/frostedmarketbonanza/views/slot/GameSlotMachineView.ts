@@ -1,5 +1,4 @@
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
-import { AnteBetComp } from '@game/views/comps/AnteBetComp';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
@@ -9,6 +8,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
+import { AnteBetComp } from '@brand/views/comps/AnteBetComp';
 
 export class GameSlotMachineView extends SlotMachineView {
   private buyBonusComp: BuyBonusButtonComp;
