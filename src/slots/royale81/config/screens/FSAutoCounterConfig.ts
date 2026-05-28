@@ -6,16 +6,16 @@ export const FSAUTO_COUNTER_CONFIG: any = {
   name: 'fsAutoCounterComp',
   type: 'Comp',
   class: FSAutoCounterComp,
-  x: 180,
-  y: 930,
+  x: 103,
+  y: 1005,
   Elements: [
-    { name: 'bg', type: 'Graphics', width: 1240, height: 60, alpha: 0 },
+    { name: 'tickerbg', type: 'Sprite', image: 'r81_pannel', x: 0, y: 0 },
     {
       name: 'spinsText',
       type: 'Text',
       anchor: { x: 0, y: 0.5 },
-      x: 10,
-      y: 30,
+      x: 80,
+      y: 45,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
@@ -29,8 +29,8 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       name: 'winningsText',
       type: 'Text',
       anchor: { x: 1, y: 0.5 },
-      x: 1230,
-      y: 30,
+      x: 1320,
+      y: 45,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
