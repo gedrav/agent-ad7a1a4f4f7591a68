@@ -15,6 +15,7 @@ import { WinValueComp } from '@game/views/comps/WinValueComp';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import FMBMultiplierSlotReelCascade from '@slots/frostedmarketbonanza/views/slot/FMBMultiplierSlotReelCascade';
 import { ArtilleryComp } from '@slots/frostedmarketbonanza/views/comps/ArtilleryComp';
+import { FMBReelFrameComp } from '@slots/frostedmarketbonanza/views/comps/FMBReelFrameComp';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -186,12 +187,12 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'reelFrame',
           type: 'Comp',
-          class: ReelFrameComp,
+          class: FMBReelFrameComp,
           x: -40,
           y: 56,
           Elements: [
             {
-              name: 'reelFrame',
+              name: 'reelFrameAnim',
               type: 'Spine',
               spineName: 'reel',
               defaultState: 'animation',

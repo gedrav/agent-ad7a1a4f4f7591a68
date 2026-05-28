@@ -18,7 +18,7 @@ export class ReelFrameComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.SHOW_FREEGAME_BG, this.showFreeGameReel.bind(this));
   }
   protected showMainGameReel(): void {
-    this.reelFrame.visible = true;
+    if (this.reelFrame) this.reelFrame.visible = true;
     if (this.reelFrameFS) {
       this.reelFrameFS.visible = false;
     }
