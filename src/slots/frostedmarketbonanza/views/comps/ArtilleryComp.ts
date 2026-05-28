@@ -105,6 +105,7 @@ export class ArtilleryComp extends StandardView {
 
   private launchSnowball(shot: Shot): void {
     const { sb, target } = shot;
+    sb.scale.set(0);
     sb.visible = true;
     if (!target) {
       this.onSnowballLanded();
@@ -115,7 +116,7 @@ export class ArtilleryComp extends StandardView {
       duration: 0.2,
       x: local.x,
       y: local.y,
-      scale: 2,
+      scale: 1,
       ease: Power4.easeOut,
       onComplete: () => this.onSnowballLanded(),
     });
