@@ -8,7 +8,7 @@ import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfS
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
-const fontMLProps = { sk: { fontSize: 45 } };
+const fontMLProps = { sk: { fontSize: 45 }, lt: { fontSize: 47 }, hr: { fontSize: 47 } };
 
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
@@ -32,6 +32,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
+          letterSpacing: 1,
           fontFamily: 'gameFont1',
           fontWeight: 700,
           breakWords: true,
@@ -63,7 +64,9 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
+          letterSpacing: 1,
           fontFamily: 'gameFont1',
           fontWeight: 700,
           breakWords: true,
@@ -95,7 +98,9 @@ export const SPLASH_CONFIG: any = {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
+          letterSpacing: 1,
           fontFamily: 'gameFont1',
           fontWeight: 700,
           fill: [0xffed54, 0xf5a100],
