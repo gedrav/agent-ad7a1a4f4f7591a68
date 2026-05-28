@@ -15,7 +15,7 @@ class CheckUnfinishedStateCommand extends StateCommand {
         EventHandler.dispatchEvent(SlotEvents.UPDATE_UNFINISHED_ANTE_BET);
       }
       EventHandler.dispatchEvent(SlotEvents.RENDER_UNFINISHED_REEL);
-      EventHandler.dispatchEvent(SlotEvents.DISALBE_ANTE_BUTTON);
+      EventHandler.dispatchEvent(SlotEvents.DISALBE_ANTE_BB_BUTTON);
       if (appModel.getIsFeatureTriggered()) {
         const fType = appModel.getUnfinishedFeatureType();
         if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
