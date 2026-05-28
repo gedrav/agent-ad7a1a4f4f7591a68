@@ -361,10 +361,11 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   protected animateFsTotalMultiplier(totalMultiText: PixText) {
     const multiplierPos = GameProxy.config.reelWintickerMultiplier.toGlobal(this);
     const multiplierPosLocal = this.toLocal(multiplierPos);
+    const duration = appModel.turboMode ? 0.4 : 0.6;
     AnimationProxy.animateTween(totalMultiText, {
       x: multiplierPosLocal.x - this.x,
       y: multiplierPosLocal.y - this.y,
-      duration: 0.6,
+      duration: duration,
       ease: 'Linear.easeOut',
       onComplete: this.fsTotalMultiplierWentUp.bind(this, totalMultiText),
     });
@@ -375,10 +376,11 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     const multiplierPos = GameProxy.config.reelWintickerMultiplier.toGlobal(this);
     const multiplierPosLocal = this.toLocal(multiplierPos);
     const multiText = this.multiplierTextArr[this.multiplierAnimCount];
+    const duration = appModel.turboMode ? 0.4 : 0.6;
     AnimationProxy.animateTween(multiText, {
       x: multiplierPosLocal.x - this.x,
       y: multiplierPosLocal.y - this.y,
-      duration: 0.6,
+      duration: duration,
       ease: 'Linear.easeOut',
       onComplete: this.onMultiplierWentUp.bind(this),
     });

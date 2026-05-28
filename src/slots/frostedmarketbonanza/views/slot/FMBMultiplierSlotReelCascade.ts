@@ -106,7 +106,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       return;
     }
     const SHAKE_STEP = 0.1;
-    const SHAKE_REPEAT = 9; // odd to repeat+1 & even to ends back at base
+    const SHAKE_REPEAT = 5; // odd to repeat+1 & even to ends back at base
     const amplitude = this.reelsData.symbolHeight * 0.12;
     let shakeTotal = 0;
     let shakeDone = 0;
