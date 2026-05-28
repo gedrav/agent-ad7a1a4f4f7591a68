@@ -177,6 +177,7 @@ export class AutoplayView extends ResponsiveChildrenView {
 
   // Reset to defaults and show autoplay panel
   protected async showAutoPlayPanel() {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.resetAutoplayView();
     this.resizeView();

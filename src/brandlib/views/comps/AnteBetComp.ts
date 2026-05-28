@@ -123,7 +123,7 @@ export class AnteBetComp extends StandardView {
       this.toggleBtn.filters = [flt];
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
-    EventHandler.dispatchEvent(SlotEvents.UPDATE_ANTE_BET_STATUS);
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_ANTE_BET_STATUS, GameProxy.config.isAnteEnabled);
   }
 
   protected updateToggleVisuals(animate: boolean): void {

@@ -141,9 +141,10 @@ export class BigWinsComp extends ResponsiveView {
         });
       }
       if (this.bigWinText) {
+        AnimationProxy.killTweensOf(this.bigWinText);
         this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
-        const targetScale = this.resizeBigwinText();
-        this.bigWinText.scale.set(targetScale);
+        this.bigWinText.alpha = 1;
+        this.pulseBigWinText();
       }
       if (this.bigWinPanelAnim) {
         this.bigWinPanelAnim.playAnimation({
@@ -319,63 +320,53 @@ export class BigWinsComp extends ResponsiveView {
       });
     }
     if (this.bigWinText) {
-      this.animateBigWinText();
+      this.growBigWinText();
     }
     this.playCurrentBigWinSound();
   }
 
-  protected animateBigWinText(): void {
+  // methods for bigWinText animation----------------
+  protected growBigWinText(): void {
     AnimationProxy.killTweensOf(this.bigWinText);
-
-    if (this.currentLevel === 0) {
-      this.bigWinText.alpha = 1;
-      const targetScale = this.resizeBigwinText();
-      AnimationProxy.animateFromTo(
-        this.bigWinText,
-        0.2,
-        { scaleX: 0, scaleY: 0 },
-        {
-          scaleX: targetScale,
-          scaleY: targetScale,
-          onComplete: () => {
-            AnimationProxy.animateTween(this.bigWinText, {
-              scaleX: targetScale * 0.95,
-              scaleY: targetScale * 0.95,
-              repeat: -1,
-              yoyo: true,
-              duration: 0.5,
-            });
-          },
-        },
-      );
-      return;
-    }
-
-    AnimationProxy.animateTween(this.bigWinText, {
-      duration: 0.25,
-      scaleX: 0.1,
-      scaleY: 0.1,
-      onComplete: () => {
-        this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
-        const targetScale = this.resizeBigwinText();
-        this.bigWinText.scale.set(targetScale * 0.5);
-        AnimationProxy.animateTween(this.bigWinText, {
-          duration: 0.25,
-          scaleX: targetScale,
-          scaleY: targetScale,
-          onComplete: () => {
-            AnimationProxy.animateTween(this.bigWinText, {
-              scaleX: targetScale * 0.95,
-              scaleY: targetScale * 0.95,
-              repeat: -1,
-              yoyo: true,
-              duration: 0.5,
-            });
-          },
-        });
+    this.bigWinText.texture = UIUtil.getTexture(this.configData.data.bigWinTextStates[this.currentState]);
+    this.bigWinText.alpha = 1;
+    const targetScale = this.resizeBigwinText();
+    AnimationProxy.animateFromTo(
+      this.bigWinText,
+      0.2,
+      { scaleX: 0, scaleY: 0 },
+      {
+        scaleX: targetScale,
+        scaleY: targetScale,
+        onComplete: () => this.pulseBigWinText(),
       },
+    );
+  }
+
+  protected pulseBigWinText(): void {
+    AnimationProxy.killTweensOf(this.bigWinText);
+    const targetScale = this.resizeBigwinText();
+    this.bigWinText.scale.set(targetScale);
+    AnimationProxy.animateTween(this.bigWinText, {
+      scaleX: targetScale * 0.95,
+      scaleY: targetScale * 0.95,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.5,
     });
   }
+
+  protected shrinkBigWinText(): void {
+    AnimationProxy.killTweensOf(this.bigWinText);
+    AnimationProxy.animateTween(this.bigWinText, {
+      duration: 0.4,
+      scaleX: 0,
+      scaleY: 0,
+      alpha: 0,
+    });
+  }
+
+  //---------------------------------------------------
 
   protected playCurrentBigWinSound(): void {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
@@ -405,14 +396,11 @@ export class BigWinsComp extends ResponsiveView {
               reset: false,
               defaultMix: 0.15,
             });
-          } else if (this.bigWinText) {
-            AnimationProxy.animateTween(this.bigWinText, {
-              duration: 0.2,
-              scaleX: 0.1,
-              scaleY: 0.1,
-              alpha: 0,
-            });
-          } else {
+          }
+          if (this.bigWinText) {
+            this.shrinkBigWinText();
+          }
+          if (!this.bigWinAnim && !this.bigWinTextAnim && !this.bigWinText) {
             this.notifyWinDone();
           }
         } else {
@@ -462,12 +450,7 @@ export class BigWinsComp extends ResponsiveView {
         });
       }
       if (this.bigWinText) {
-        AnimationProxy.animateTween(this.bigWinText, {
-          duration: 0.2,
-          scaleX: 0.1,
-          scaleY: 0.1,
-          alpha: 0,
-        });
+        this.shrinkBigWinText();
       }
     } else {
       this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
@@ -494,6 +477,9 @@ export class BigWinsComp extends ResponsiveView {
             defaultMix: 0.15,
           });
         }
+      }
+      if (this.bigWinText && this.configData.data.animations[this.currentState].end) {
+        this.shrinkBigWinText();
       }
     } else {
       this.checkForNextAnim();

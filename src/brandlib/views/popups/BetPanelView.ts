@@ -124,6 +124,7 @@ export class BetPanelView extends ResponsiveChildrenView {
   }
 
   protected async showBetPanel() {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.tempBetPos = appModel.getBetPos();
     this.updateBetPanel();
