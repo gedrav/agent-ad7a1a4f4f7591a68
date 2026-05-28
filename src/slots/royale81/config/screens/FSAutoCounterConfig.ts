@@ -15,7 +15,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       type: 'Text',
       anchor: { x: 0, y: 0.5 },
       x: 80,
-      y: 45,
+      y: 40,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
@@ -30,7 +30,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       type: 'Text',
       anchor: { x: 1, y: 0.5 },
       x: 1320,
-      y: 45,
+      y: 40,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 28,
