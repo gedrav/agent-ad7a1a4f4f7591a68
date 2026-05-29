@@ -26,7 +26,7 @@ export const FS_POPUP_CONFIG = {
         fontSize: 60,
         fill: 0xffffff,
         wordWrap: true,
-        wordWrapWidth: 880,
+        wordWrapWidth: 750,
         letterSpacing: 2,
         align: 'center',
       },
