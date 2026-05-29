@@ -132,7 +132,8 @@ class UtilService {
     let str = '';
     if (Intl) {
       str = new Intl.NumberFormat('en', {
-        currency: 'USD',
+        style: 'currency',
+        currency: appModel.currency,
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
         useGrouping: true,
