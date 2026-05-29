@@ -147,6 +147,22 @@ class UtilService {
     return str;
   }
 
+  public getCurrencySymbol(): string {
+    const lang = appModel.language ? appModel.language : 'en';
+    const curr = appModel.currency ? appModel.currency : 'USD';
+    if (Intl) {
+      const currencyPart = new Intl.NumberFormat(lang, {
+        style: 'currency',
+        currencyDisplay: 'symbol',
+        currency: curr,
+      })
+        .formatToParts(0)
+        .find((part) => part.type === 'currency');
+      return currencyPart?.value ?? curr;
+    }
+    return curr;
+  }
+
   public getDegrees(radians: number): number {
     const pi = Math.PI;
     return radians * (180 / pi);

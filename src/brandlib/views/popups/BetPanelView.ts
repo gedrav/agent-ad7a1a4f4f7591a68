@@ -165,9 +165,9 @@ export class BetPanelView extends ResponsiveChildrenView {
   }
 
   protected updateTitleText(): void {
-    const title = Util.getContent('betPanelTitle');
-    const currency = appModel.currency ? appModel.currency : 'USD';
-    this.titleText.text = currency ? `${title} (${currency})` : title.toUpperCase();
+    const title = Util.getContent('betPanelTitle').toUpperCase();
+    const currency = Util.getCurrencySymbol();
+    this.titleText.text = currency ? `${title} (${currency})` : title;
   }
 
   protected positionButtons() {

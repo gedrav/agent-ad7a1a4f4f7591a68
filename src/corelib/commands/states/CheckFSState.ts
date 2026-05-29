@@ -18,9 +18,7 @@ class CheckFSStateCommand extends StateCommand {
         this.exitState();
       }
     } else {
-      if (appModel.getCurrentFreeSpinWin() > 0) {
-        await Clock.wait(500);
-      }
+      await Clock.wait(500);
       StateManager.goToState(STATES.EXIT_FREESPINS_STATE);
     }
   }
