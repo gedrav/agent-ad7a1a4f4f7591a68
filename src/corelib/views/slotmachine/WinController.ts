@@ -131,7 +131,7 @@ export default class WinController {
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
     this.winSymbolIndex++;
     if (this.winSymbolIndex === this.totalWinSymbols) {
-      setTimeout(this.notifySpinWinDone.bind(this), 0);
+      this.notifySpinWinDone();
     }
   }
 
