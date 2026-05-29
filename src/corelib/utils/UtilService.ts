@@ -129,11 +129,13 @@ class UtilService {
   }
 
   public formatCurrencyNoSymbol(num: number, decimal = 2) {
+    const lang = appModel.language ? appModel.language : 'en';
+    const curr = appModel.currency ? appModel.currency : 'USD';
     let str = '';
     if (Intl) {
-      str = new Intl.NumberFormat('en', {
+      str = new Intl.NumberFormat(lang, {
         style: 'currency',
-        currency: appModel.currency,
+        currency: curr,
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
         useGrouping: true,
