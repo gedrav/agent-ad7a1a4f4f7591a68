@@ -134,7 +134,6 @@ class UtilService {
     let str = '';
     if (Intl) {
       str = new Intl.NumberFormat(lang, {
-        style: 'currency',
         currency: curr,
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
