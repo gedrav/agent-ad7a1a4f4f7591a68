@@ -14,8 +14,7 @@ export class FMBReelFrameComp extends ReelFrameComp {
   }
 
   public playNudgeReelLoop(): void {
-    //todo: change animation once spine fixes
-    this.reelFrameAnim.playAnimation({ state: 'animation', loop: true });
+    this.reelFrameAnim.playAnimation({ state: 'Nudge_reel', loop: true });
   }
 
   public playIdleLoop(): void {

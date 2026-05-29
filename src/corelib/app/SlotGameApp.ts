@@ -1,4 +1,4 @@
-import { Application, Container, Renderer, Sprite, TextStyle, TextureSource } from 'pixi.js';
+import { Application, Container, Renderer, Sprite, TextStyle, TextureSource, loadTextures } from 'pixi.js';
 import { WindowUtil } from '@core/utils/WindowUtil';
 import { InitErrorPopup } from '@brand/views/popups/InitErrorPopup';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -127,6 +127,14 @@ class SlotGameApp {
     // gain to justify the cost. Saves ~150 MB GPU on cascade games.
     TextureSource.defaultOptions.autoGenerateMipmaps = false;
     TextStyle.defaultTextStyle.fontFamily = 'sans-serif';
+    // v8 defaults to createImageBitmap, which retains a decoded raw-pixel
+    // ImageBitmap on the JS heap alongside the GPU copy — doubling memory per
+    // texture vs v6. Switch to HTMLImageElement so the browser owns the decoded
+    // bitmap and frees it after GPU upload. preferWorkers must also be off,
+    // since workers require createImageBitmap.
+    loadTextures.config.preferCreateImageBitmap = false;
+    loadTextures.config.preferWorkers = false;
+
     if (__SHOW_STATS__) {
       // show FPS monitoring panel when enabled via config
       const stats = new Stats();
@@ -502,6 +510,10 @@ class SlotGameApp {
     EventHandler.dispatchEvent(AppEvents.ON_FOCUS_CHANGE, false);
     this.isTabSuspended = true;
     this.app.stop();
+    // Drop the pool of reusable RenderTargets when the tab is backgrounded.
+    // They get re-created on demand when the tab returns; meanwhile we free
+    // 30-80 MB of GPU memory for whatever the user switches to.
+    (this.app.renderer as any).texturePool?.clear?.();
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
