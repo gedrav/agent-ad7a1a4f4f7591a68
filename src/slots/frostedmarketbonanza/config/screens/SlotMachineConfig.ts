@@ -60,7 +60,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           x: -8,
           y: -30,
-          style: { fontFamily: 'bitmapFont', fill: 0xffffff, fontSize: 140, letterSpacing: -10 },
+          style: { fontFamily: 'bitmapFont', fill: 0xffffff, fontSize: 120, letterSpacing: -10 },
         },
         deviceLayout: {
           Desktop: {

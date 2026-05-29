@@ -391,7 +391,14 @@ class UIUtilService {
 
     if (cloneData.fontMLProps !== undefined) {
       if (cloneData.fontMLProps[appModel.language] !== undefined) {
-        cloneData.style.fontSize = cloneData.fontMLProps[appModel.language].fontSize;
+        const langProps = cloneData.fontMLProps[appModel.language];
+        if (langProps.fontSize !== undefined) {
+          cloneData.style.fontSize = langProps.fontSize;
+        }
+
+        if (langProps.mFontSize !== undefined) {
+          cloneData.style.mFontSize = langProps.mFontSize;
+        }
       }
     }
 
@@ -426,14 +433,21 @@ class UIUtilService {
     }
     cloneData.style.fontFamily = GameProxy.config.FontFaces[cloneData.style.fontFamily];
 
-    if (cloneData.style.mFontSize != undefined && DeviceProxy.config.isDevice) {
-      cloneData.style.fontSize = cloneData.style.mFontSize;
-    }
-
     if (cloneData.fontMLProps != undefined) {
       if (cloneData.fontMLProps[appModel.language] != undefined) {
-        cloneData.style.fontSize = cloneData.fontMLProps[appModel.language].fontSize;
+        const langProps = cloneData.fontMLProps[appModel.language];
+        if (langProps.fontSize != undefined) {
+          cloneData.style.fontSize = langProps.fontSize;
+        }
+        const mFontSize = langProps.mFontSize ?? langProps.mfontSize;
+        if (mFontSize != undefined) {
+          cloneData.style.mFontSize = mFontSize;
+        }
       }
+    }
+
+    if (cloneData.style.mFontSize != undefined && DeviceProxy.config.isDevice) {
+      cloneData.style.fontSize = cloneData.style.mFontSize;
     }
     if (Array.isArray(cloneData.style.fill)) {
       const colorStops: any[] = cloneData.style.fill;

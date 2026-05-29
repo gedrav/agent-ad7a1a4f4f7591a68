@@ -90,6 +90,7 @@ export class BetPanelView extends ResponsiveChildrenView {
       Util.formatCurrency(appModel.getMinBet()),
       Util.formatCurrency(appModel.getMaxBet()),
     ]);
+    this.updateTitleText();
 
     const totalBetsArray = Util.cloneArray(appModel.getAllBets());
 
@@ -127,6 +128,7 @@ export class BetPanelView extends ResponsiveChildrenView {
     EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.tempBetPos = appModel.getBetPos();
+    this.updateTitleText();
     this.updateBetPanel();
     this.visible = true;
     this.resizeView();
@@ -160,6 +162,12 @@ export class BetPanelView extends ResponsiveChildrenView {
     }
     this.downStakeBtn.enabled = this.tempBetPos > 0;
     this.upStakeBtn.enabled = this.tempBetPos < allBets.length - 1;
+  }
+
+  protected updateTitleText(): void {
+    const title = Util.getContent('betPanelTitle').toUpperCase();
+    const currency = Util.getCurrencySymbol();
+    this.titleText.text = currency ? `${title} (${currency})` : title;
   }
 
   protected positionButtons() {

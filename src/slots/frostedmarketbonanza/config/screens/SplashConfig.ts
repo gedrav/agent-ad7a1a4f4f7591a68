@@ -8,7 +8,7 @@ import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfS
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
-const fontMLProps = { sk: { fontSize: 45 } };
+const fontMLProps = { sk: { fontSize: 45 }, pl: { fontSize: 49, mFontSize: 50 } };
 
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
@@ -24,7 +24,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 720,
+      textY: 760,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
@@ -39,6 +39,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -56,12 +57,13 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 720,
+      textY: 760,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -70,6 +72,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -87,12 +90,13 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 720,
+      textY: 760,
       textAreaHeight: 240,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
+        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -100,6 +104,7 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -331,8 +336,8 @@ export const SPLASH_CONFIG: any = {
           vPaddingPerc: 0.05,
         },
         Landscape: {
-          widthPerc: 0.36,
-          heightPerc: 0.12,
+          widthPerc: 0.47,
+          heightPerc: 0.17,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',

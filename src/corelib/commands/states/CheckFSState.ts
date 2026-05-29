@@ -18,6 +18,7 @@ class CheckFSStateCommand extends StateCommand {
         this.exitState();
       }
     } else {
+      await Clock.wait(1000);
       StateManager.goToState(STATES.EXIT_FREESPINS_STATE);
     }
   }
