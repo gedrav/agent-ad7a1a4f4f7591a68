@@ -1,0 +1,63 @@
+Game Backend (feg_slot_be)
+
+- 1000 - Internal server error (default/unhandled)
+- 2001 - Invalid/missing RGS token
+- 2002 - RGS init request failed
+- 2004 - RGS lastSpin request failed
+- 2005 - RGS updateRound request failed
+- 2006 - RGS bet request failed
+- 2007 - RGS win request failed
+- 4001 - Invalid input (bad args / empty weight table)
+- 4002 - Division by zero in game math
+- 5001 - Game configuration not found
+- 5002 - Strategy fallback not implemented
+
+---
+RGS Backend (feg_rgs_be)
+
+Session:
+- 2300 - Session expired. Please relogin
+- 2301 - Another active session already open
+
+Validation:
+- 2400 - API body validation error
+- 2401 - Init validation error
+- 2402 - Bet validation error
+- 2403 - Win validation error
+- 2404 - UpdateRound validation error
+- 2405 - LastSpin validation error
+- 2433 - Bet amount not valid
+- 2429 - Bet below minimum allowed
+- 2430 - Bet above maximum allowed
+
+Platform/Config:
+- 2406 - Platform request URL not configured
+- 2407 - Player not found from platform
+- 2408 - Error on init from platform
+- 2409 - Unhandled init error from platform
+- 2410 - Unhandled bet error from platform
+- 2411 - Unhandled win error from platform
+- 2412 - Unhandled refund error from platform
+- 2413 - Invalid bet response from platform
+- 2414 - Bet error from platform
+- 2415 - Invalid win response from platform
+- 2416 - Win error from platform
+- 2417 - Platform not found
+- 2418 - Operator not found
+- 2419 - Brand not found
+- 2420 - Game is inactive. Please contact support
+- 2421 - Platform response is empty
+
+Round State:
+- 2422 - Round already completed
+- 2423 - Duplicate bet
+- 2424 - No round found
+- 2425 - Round completed. Win cannot be credited
+- 2426 - Credit status mismatch
+- 2427 - Last round completed. Cannot update round
+
+Other:
+- 2000 - Internal server error (RGS)
+- 2428 - Strategy not found
+- 2431 - Unhandled win error
+- 2432 - Feature not found for game

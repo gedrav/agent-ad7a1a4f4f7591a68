@@ -24,6 +24,7 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { BaseTexture, SCALE_MODES } from '@pixi/core';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
+import { ERROR_CODES } from '@brand/utils/ErrorCodes';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -414,13 +415,25 @@ class SlotGameApp {
       this.initErrorOccured = true;
       this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
       this.appContainer.addChild(this.errorPopup);
-      this.errorPopup.showMessage(obj.data?.message);
+      obj.data.extensions.code = 9999;
+      let msg = obj?.data?.extensions?.code
+        ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
+        : obj?.data?.message;
+      if (!msg) {
+        msg = Util.getContent('generic_error');
+      }
+      this.errorPopup.showMessage(msg);
       this.removePreloader();
     } else {
       appModel.resetGameResult();
       const data: any = {};
       data.title = Util.getContent('infoText');
-      data.message = obj.data?.message;
+      data.message = obj?.data?.extensions?.code
+        ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
+        : obj?.data?.message;
+      if (!data.msg) {
+        data.msg = Util.getContent('generic_error');
+      }
       data.callback = this.refreshGame.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
