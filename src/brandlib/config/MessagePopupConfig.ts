@@ -57,7 +57,20 @@ export const MESSAGE_POPUP_CONFIG = {
         style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
       },
       x: 356,
-      y: 670,
+      y: 650,
+    },
+    {
+      name: 'codeText',
+      type: 'Text',
+      contentText: 'aaaaa',
+      style: {
+        fontFamily: 'commonFont',
+        fontSize: 24,
+        fill: 0xd9d9d9,
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 356,
+      y: 720,
     },
   ],
   layoutData: {

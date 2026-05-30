@@ -6,6 +6,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { Util } from '@core/utils/UtilService';
 
 export class MessagePopupView extends ResponsiveChildrenView {
   private closeBtn: any;
@@ -13,6 +14,7 @@ export class MessagePopupView extends ResponsiveChildrenView {
   private messageText: PixText;
   private panelBG: PixSprite;
   private callback: any;
+  private codeText: PixText;
 
   constructor(config: any) {
     super(config);
@@ -21,6 +23,7 @@ export class MessagePopupView extends ResponsiveChildrenView {
     this.closeBtn = this.elementsList['closeBtn'];
     this.titleText = this.elementsList['titleText'];
     this.messageText = this.elementsList['messageText'];
+    this.codeText = this.elementsList['codeText'];
 
     this.panelBG = this.elementsList['panelBG'];
     this.messageText.y = this.panelBG.height / 2;
@@ -34,6 +37,7 @@ export class MessagePopupView extends ResponsiveChildrenView {
     GameProxy.config.isPopupOpened = true;
     this.titleText.text = data.title;
     this.messageText.text = data.message;
+    this.codeText.text = data.code ? Util.getContent('codeTextTitle') + data.code.toString() : '';
     this.callback = data.callback;
   }
 

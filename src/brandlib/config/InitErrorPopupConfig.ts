@@ -53,7 +53,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
           name: 'refreshBtn',
           type: 'Button',
           x: 500,
-          y: 700,
+          y: 680,
           action: {
             press: RefreshGameCommand,
           },
@@ -69,6 +69,18 @@ export const INIT_ERROR_POPUP_CONFIG = {
             disabledView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0xcccccc }),
             animations: CoreUIConfig.buttonStates,
           },
+        },
+        {
+          name: 'codeText',
+          type: 'Text',
+          style: {
+            fontFamily: 'commonFont',
+            fontSize: 24,
+            fill: 0xd9d9d9,
+          },
+          anchor: { x: 0.5, y: 0.5 },
+          x: 500,
+          y: 770,
         },
       ],
       layoutData: {

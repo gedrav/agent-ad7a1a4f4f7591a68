@@ -415,14 +415,13 @@ class SlotGameApp {
       this.initErrorOccured = true;
       this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
       this.appContainer.addChild(this.errorPopup);
-      obj.data.extensions.code = 9999;
       let msg = obj?.data?.extensions?.code
         ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
         : obj?.data?.message;
       if (!msg) {
         msg = Util.getContent('generic_error');
       }
-      this.errorPopup.showMessage(msg);
+      this.errorPopup.showMessage(msg, obj.data.extensions.code);
       this.removePreloader();
     } else {
       appModel.resetGameResult();
@@ -434,6 +433,7 @@ class SlotGameApp {
       if (!data.msg) {
         data.msg = Util.getContent('generic_error');
       }
+      data.code = obj?.data?.extensions?.code;
       data.callback = this.refreshGame.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
