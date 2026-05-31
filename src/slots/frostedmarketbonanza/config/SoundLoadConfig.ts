@@ -40,6 +40,14 @@ export const GAME_SOUND_CONFIG = {
   ],
   lazySoundFiles: [
     {
+      name: 'ERROR POP UP',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_MSG_POPUP_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
       name: 'Bet button on',
       type: 'game',
       loop: false,

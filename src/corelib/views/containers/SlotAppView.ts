@@ -110,6 +110,7 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.addChild(this.buyBonusView);
   }
   protected showMessagePopup(data: any): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_MSG_POPUP_SOUND);
     this.addChild(this.messagePopupView);
   }
 }
