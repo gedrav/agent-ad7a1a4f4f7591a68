@@ -91,7 +91,8 @@ export class ArtilleryComp extends StandardView {
   private fireShot(spine: PixSpine, shot: Shot): void {
     this.aimAtTarget(spine, shot.target);
     this.playOnceThen(spine, 'Fire', () => this.fireRandomly());
-    spine.setAnimationSpeed(1.2);
+    const timeScale = appModel.turboMode ? 2.4 : 1.2;
+    spine.setAnimationSpeed(timeScale);
     this.launchSnowball(shot);
   }
 
@@ -112,8 +113,9 @@ export class ArtilleryComp extends StandardView {
       return;
     }
     const local = this.toLocal(target.toGlobal(new Point(0, 0)));
+    const duration = appModel.turboMode ? 0.1 : 0.2;
     AnimationProxy.animateTween(sb, {
-      duration: 0.2,
+      duration: duration,
       x: local.x,
       y: local.y,
       scale: 1,
