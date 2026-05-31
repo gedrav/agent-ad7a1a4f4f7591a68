@@ -12,10 +12,12 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { StateManager } from '@core/states/StateManagerService';
 import ReelSymbol from '@core/views/slotmachine/ReelSymbol';
 import { STATES } from '@core/states/StateConstants';
-import { Power3, Power1, Sine } from 'gsap/gsap-core';
-import { gsap } from 'gsap';
-import CascadeReelSymbol from '@brand/views/slot/CascadeReelSymbol';
+import { Power1 } from 'gsap/gsap-core';
 
+/***********************************************************************************************
+data.onlyWinAnim - decides wether the blast and win are combined in a single animation 
+data.blastAftWinDelay - delay to dispatch blast sound trigger event after win
+************************************************************************************************/
 type BlastSymbol = {
   reelIndex: number;
   rowIndex: number;
@@ -249,6 +251,8 @@ export default class SlotReelCascade extends SlotReel {
 
   protected onSymbolFinallySettled(symb: ReelSymbol): void {
     this.symbolFallingIndex++;
+    if (this.symbolFallingIndex % this.reelsData.noOfRows === 0)
+      EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_SYMBOL_FILL_IN);
     if (this.symbolFallingIndex == this.totalSymbols) {
       StateManager.doNextStep();
     }
@@ -274,10 +278,13 @@ export default class SlotReelCascade extends SlotReel {
         this.showSymbolBlast(this.symbolsArray[arr[0]][arr[1]], k * 50);
       }
     }
-    const len1 = tumbleData.length;
-    if (len1 > 0) {
-      for (let k = 0; k < len1; k++) {
-        EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND, tumbleData[k].symbol);
+    //below is only for if win animation and blast animation are in two seperate animation
+    if (!this.configData.data.onlyWinAnim) {
+      const len1 = tumbleData.length;
+      if (len1 > 0) {
+        for (let k = 0; k < len1; k++) {
+          EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND, tumbleData[k].symbol);
+        }
       }
     }
   }

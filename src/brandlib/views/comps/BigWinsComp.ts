@@ -255,7 +255,8 @@ export class BigWinsComp extends ResponsiveView {
   protected notifyWinDone(): void {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
+    if (appModel.getIsFreeSpinsSession()) EventHandler.dispatchEvent(SlotEvents.RESUME_FS_BG_SOUND);
+    else EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     this.winState = false;
     this.skipRect.visible = false;
     this.isSkipping = false;
@@ -273,7 +274,8 @@ export class BigWinsComp extends ResponsiveView {
     if (this.winState) {
       EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
       EventHandler.dispatchEvent(SlotEvents.STOP_COUNT_UP_SOUND);
-      EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
+      if (appModel.getIsFreeSpinsSession()) EventHandler.dispatchEvent(SlotEvents.RESUME_FS_BG_SOUND);
+      else EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     }
     this.winState = false;
     this.skipRect.visible = false;
@@ -371,6 +373,7 @@ export class BigWinsComp extends ResponsiveView {
   protected playCurrentBigWinSound(): void {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+    EventHandler.dispatchEvent(SlotEvents.STOP_FS_BG_SOUND);
     if (this.currentState === CONSTANTS.BIG_WIN) {
       EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_SOUND);
     } else if (this.currentState === CONSTANTS.SUPER_WIN) {

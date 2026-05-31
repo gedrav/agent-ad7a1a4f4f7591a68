@@ -60,7 +60,7 @@ export default class WinController {
     clearTimeout(this.timeoutId);
     StateManager.doNextStep();
   }
-  public showTumbleWin(): void {
+  public async showTumbleWin(): Promise<void> {
     this.winSymbolIndex = 0;
     this.totalWinSymbols = 0;
     if (appModel.isCascadeGame()) {
@@ -122,6 +122,17 @@ export default class WinController {
             (appModel.tumbleIndex + 1) % Util.getDefaultValue(GameProxy.config.cascadeTumbleSoundCount, 6),
           );
         }
+        //below is only for if win animation and blast animation are included in single animation
+        if (this.reelsData.onlyWinAnim) {
+          const delay = this.reelsData.blastAftWinDelay ? this.reelsData.blastAftWinDelay : 500;
+          await Util.addDelays(delay);
+          const len1 = tumbleData.length;
+          if (len1 > 0) {
+            for (let k = 0; k < len1; k++) {
+              EventHandler.dispatchEvent(SlotEvents.PLAY_TUMBLE_BLAST_SOUND, tumbleData[k].symbol);
+            }
+          }
+        }
       } else {
         this.notifySpinWinDone();
       }
@@ -158,6 +169,7 @@ export default class WinController {
         }
         const positions: number[] = appModel.getFeatureTriggerPositions();
         if (positions && positions.length > 0) {
+          EventHandler.dispatchEvent(SlotEvents.PLAY_SCATTER_WIN_SOUND, positions.length);
           const len = positions.length;
           for (let j = 0; j < len; j++) {
             const pos = this.getReelPosition(positions[j]);
