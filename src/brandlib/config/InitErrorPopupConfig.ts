@@ -58,7 +58,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
             press: RefreshGameCommand,
           },
           textConfig: {
-            contentText: 'Refresh',
+            content: 'refresh',
             style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, fontWeight: 'bold' },
             anchor: { x: 0.5, y: 0.5 },
           },

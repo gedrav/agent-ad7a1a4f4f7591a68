@@ -6,7 +6,6 @@ import {
   FillGradient,
   Graphics,
   Mesh,
-  NineSliceSprite,
   PointData,
   Sprite,
   Text,
