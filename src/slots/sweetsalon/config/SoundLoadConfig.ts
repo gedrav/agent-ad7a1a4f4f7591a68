@@ -276,7 +276,7 @@ export const GAME_SOUND_CONFIG = {
       loop: true,
       playEvents: ['PLAY_COUNT_UP_SOUND'],
       stopEvents: ['STOP_COUNT_UP_SOUND'],
-      volume: 0.5,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {
@@ -284,7 +284,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['STOP_COUNT_UP_SOUND'],
-      volume: 0.5,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {
@@ -309,7 +309,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParams: ['BN'],
-      volume: 0.5,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {
@@ -317,7 +317,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_MULTIPLIER_TRAILING_SOUND'],
-      volume: 0.5,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {
@@ -325,7 +325,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_MULTIPLIER_TOTAL_WIN_SOUND'],
-      volume: 0.5,
+      volume: 1,
       fadeOutDuration: 100,
     },
     {

@@ -46,13 +46,15 @@ export const SLOT_MACHINE_CONFIG: any = {
       lx: 375,
       ly: 135,
       data: {
+        onlyWinAnim: true,
+        blastAftWinDelay: 400,
         symbolClass: CascadeReelSymbol,
         noOfReels: 6,
         noOfRows: 5,
         isFixedSymbol: true,
         winValueComponent: WinValueComp,
         reelHeight: 1200,
-        landingSymbols: ['SC', 'BN_G', 'BN_B', 'BN_P', 'BN_R'],
+        landingSymbols: ['SC', 'BN'],
         reelsConfig: ReelsConfig,
         multiplierTextConfig: {
           name: 'multiplierVal',
