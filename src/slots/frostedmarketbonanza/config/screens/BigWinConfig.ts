@@ -84,7 +84,7 @@ export const BIG_WIN_CONFIG = {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'bitmapFont', fontSize: 400, fill: 0xffffff, letterSpacing: -30 },
+          style: { fontFamily: 'bitmapFont', fontSize: 300, fill: 0xffffff, letterSpacing: -30 },
         },
       ],
     },

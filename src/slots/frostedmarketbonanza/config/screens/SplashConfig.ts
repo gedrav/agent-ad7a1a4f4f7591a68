@@ -8,7 +8,7 @@ import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfS
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
-const fontMLProps = { sk: { fontSize: 45 }, pl: { fontSize: 49, mFontSize: 50 } };
+const fontMLProps = { sk: { fontSize: 45 }, pl: { fontSize: 49, mFontSize: 50 }, ro: { fontSize: 49, mFontSize: 50 } };
 
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
