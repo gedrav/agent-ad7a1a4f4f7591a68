@@ -8,9 +8,9 @@ import path from 'node:path';
 const defaultGameNames = [
   // "empireofgold",
   //'empireofgoldnewconquest',
-  "royale81",
+  // "royale81",
   // 'sweetsalon',
-  // 'frostedmarketbonanza'
+  'frostedmarketbonanza'
 ];
 
 // SINGLE CONTROL POINT (with env override)
