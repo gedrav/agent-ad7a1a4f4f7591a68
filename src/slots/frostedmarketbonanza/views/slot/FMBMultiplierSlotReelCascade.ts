@@ -5,8 +5,8 @@ import MultiplierSlotReelCascade from '@brand/views/slotmachine/MultiplierSlotRe
 import { StateManager } from '@core/states/StateManagerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { Back } from 'gsap/gsap-core';
 import { Util } from '@core/utils/UtilService';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 type ChangedPosition = [column: number, row: number];
 
@@ -90,51 +90,15 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       StateManager.doNextStep();
       return;
     }
-    const REEL_STAGGER = 0.25; // 250ms between consecutive reels
+    const REEL_STAGGER = 0.35; // 350ms between consecutive reels
     this.nudgeReelsCompleteCount = 0;
     this.darkenNonNudgeReels();
-    // kick off each reel staggered; each reel drops its new symbol the moment its own shake ends
     this.nudgeReels.forEach((reel, order) => {
-      this.nudgeReel(reel, order * REEL_STAGGER);
+      this.shiftReelDown(reel, order * REEL_STAGGER);
     });
   }
 
-  private nudgeReel(reel: number, delay: number) {
-    const column = this.symbolsArray?.[reel];
-    if (!column || !column.length) {
-      this.shiftReelDown(reel);
-      return;
-    }
-    const SHAKE_STEP = 0.1;
-    const SHAKE_REPEAT = 5; // odd to repeat+1 & even to ends back at base
-    const amplitude = this.reelsData.symbolHeight * 0.12;
-    let shakeTotal = 0;
-    let shakeDone = 0;
-    for (const symbol of column) {
-      if (!symbol) continue;
-      shakeTotal++;
-      const baseY = symbol.y;
-      AnimationProxy.animateTween(symbol, {
-        y: baseY + amplitude,
-        duration: SHAKE_STEP,
-        delay,
-        repeat: SHAKE_REPEAT,
-        yoyo: true,
-        ease: 'sine.inOut',
-        onComplete: () => {
-          symbol.y = baseY;
-          if (++shakeDone === shakeTotal) {
-            this.shiftReelDown(reel); // this reel's nudge done -> drop new symbol now
-          }
-        },
-      });
-    }
-    if (shakeTotal === 0) {
-      this.shiftReelDown(reel);
-    }
-  }
-
-  private shiftReelDown(reel: number) {
+  private shiftReelDown(reel: number, delay = 0) {
     const finalReelView = appModel.gameResult?.cascadeData?.[0]?.reelView; // taking 0 bcoz the reelmodifier original reel will come at first index of cascade
     const symbolHeight = this.configData.data.symbolHeight;
     const column = this.symbolsArray?.[reel];
@@ -143,31 +107,58 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       return;
     }
 
-    const newTopSymbol = column.pop() as CascadeReelSymbol;
-    column.unshift(newTopSymbol);
+    // logic to keep the bottom symbol untill the new one slides in
     const newTopName = finalReelView[reel]?.[0];
-    newTopSymbol.resetScale();
-    newTopSymbol.setNormalTexture();
-    newTopSymbol.setNewSymbol(this.reelsData.symbolsData[newTopName], reel);
+    const newTopSymbol = this.createNudgeTopSymbol(reel, newTopName);
     newTopSymbol.y = -symbolHeight;
+    column.unshift(newTopSymbol);
 
     let shiftTotal = 0;
     let shiftDone = 0;
-    // drop every symbol down by one cell
     for (let i = 0; i < column.length; i++) {
       shiftTotal++;
       AnimationProxy.animateTween(column[i], {
         y: i * symbolHeight,
-        duration: 0.32,
-        ease: Back.easeOut.config(0.6),
+        duration: 0.6,
+        delay,
+        ease: 'power1.inOut',
         onComplete: () => {
-          if (++shiftDone === shiftTotal) this.onReelNudgeComplete();
+          if (++shiftDone === shiftTotal) {
+            this.removeExitedBottomSymbol(reel);
+            this.onReelNudgeComplete();
+          }
         },
       });
     }
     if (shiftTotal === 0) {
       this.onReelNudgeComplete();
     }
+  }
+
+  private createNudgeTopSymbol(reel: number, symbolName: string): CascadeReelSymbol {
+    const data: any = {
+      ...this.reelsData.symbolsData[symbolName],
+      reelNumber: reel,
+      multiplierTextConfig: this.reelsData.multiplierTextConfig,
+    };
+    const symbol = new this.reelsData.symbolClass({ data }) as CascadeReelSymbol;
+    if (this.reelsData.symbolScale) symbol.scale.set(this.reelsData.symbolScale);
+    symbol.x = this.reelsData.reelPositionX[reel];
+    symbol.resetScale();
+    symbol.setNormalTexture();
+    symbol.setNewSymbol(this.reelsData.symbolsData[symbolName], reel);
+    this.symbolsContainer.addChild(symbol);
+    UIUtil.addInteraction(symbol, this.onSymbolClicked.bind(this, symbol));
+    return symbol;
+  }
+
+  // cleanup for the old bottom symbol
+  private removeExitedBottomSymbol(reel: number): void {
+    const column = this.symbolsArray?.[reel];
+    if (!column || !column.length) return;
+    const exited = column.pop() as CascadeReelSymbol;
+    exited.destroySymbol();
+    exited.destroyView();
   }
 
   private async onReelNudgeComplete() {
