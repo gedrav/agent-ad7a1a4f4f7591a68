@@ -14,7 +14,7 @@ import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 export class MenuCompMobile extends MenuComp {
   private topbar: PixGraphics;
   private closeBtn: PixFancyButton;
-  private menubg: PixSprite;
+  private menubg: PixGraphics;
   constructor(config: any) {
     super(config);
     this.topbar = this.elementsList['topbar'];

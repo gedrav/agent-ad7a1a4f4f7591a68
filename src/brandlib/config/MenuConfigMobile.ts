@@ -4,9 +4,6 @@ import { ShowGameRulesCommand } from '@core/commands/action/ShowGameRulesCommand
 import { ShowHistoryCommand } from '@core/commands/action/ShowHistoryCommand';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeCommand';
-import { TransactionHistoryCommand } from '@core/commands/action/TransactionHistoryCommand';
-import { ShowDespoitCommand } from '@core/commands/action/ShowDepositCommand';
-import { ShowPromotionCommand } from '@core/commands/action/ShowPromotionCommand';
 import { MenuButton } from '@brand/views/comps/MenuButton';
 import { ShowHideSplashCommand } from '@core/commands/action/ShowHideSplashCommand';
 
@@ -18,16 +15,14 @@ export const MENU_CONFIG_MOBILE: any = {
   Elements: [
     {
       name: 'menubg',
-      type: 'NineSliceSprite',
-      image: 'popupbg',
-      nineSlice: [32, 32, 32, 32],
-      width: 600,
-      height: 840,
-      radius: 32,
-      color: 0x000000,
-      layoutData1: {
-        Portrait: { fitToScreen: true },
-        Landscape: { fitToScreen: true },
+      type: 'Graphics',
+      width: 1284,
+      height: 2154,
+      color: 0x161616,
+      alpha: 1,
+      layoutData: {
+        Portrait: { heightPercForce: 1, widthPercForce: 1, hAlign: 'left', vAlign: 'top' },
+        Landscape: { heightPercForce: 1, widthPercForce: 1, hAlign: 'left', vAlign: 'top' },
       },
     },
     {
@@ -105,6 +100,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: HomeClickedCommand,
         },
@@ -139,6 +135,7 @@ export const MENU_CONFIG_MOBILE: any = {
       class: MenuButton,
       btnConfig: {
         data: false,
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: SoundStateChangeCommand,
         },
@@ -173,6 +170,7 @@ export const MENU_CONFIG_MOBILE: any = {
       class: MenuButton,
       btnConfig: {
         data: true,
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: SoundStateChangeCommand,
         },
@@ -205,6 +203,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: ShowGameRulesCommand,
         },
@@ -237,6 +236,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: ShowHistoryCommand,
         },
@@ -269,6 +269,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: ShowHideSplashCommand,
         },
@@ -303,6 +304,7 @@ export const MENU_CONFIG_MOBILE: any = {
       class: MenuButton,
       visible: false,
       btnConfig: {
+        soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: ShowHideSplashCommand,
         },
