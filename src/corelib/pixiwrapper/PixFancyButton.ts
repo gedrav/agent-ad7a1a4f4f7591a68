@@ -21,6 +21,10 @@ export class PixFancyButton extends FancyButton {
     for (const p in configData) {
       this.configData[p] = configData[p];
     }
+    // Play click sound on pointer-down for instant feedback bcoz onPress
+    // (pointertap) only fires after release + tap-detection, which feels
+    // delayed on touch. Action still runs on onPress.
+    this.onDown.connect(this.playClickSound.bind(this));
     this.onPress.connect(this.onButtonPress.bind(this));
 
     if (this.configData.options?.animations?.disabled?.props?.faded) {
@@ -42,7 +46,17 @@ export class PixFancyButton extends FancyButton {
   }
 
   public click(): void {
+    this.playClickSound();
     this.onButtonPress();
+  }
+
+  protected playClickSound(): void {
+    if (this.configData?.disablePlayClickSound) {
+      return;
+    }
+    if (this.configData?.soundEvent) {
+      EventHandler.dispatchEvent(this.configData?.soundEvent);
+    }
   }
 
   public addActionCommand(actionCommand: ActionCommand): void {
@@ -56,9 +70,6 @@ export class PixFancyButton extends FancyButton {
     if (this.configData?.action?.press) {
       const action: ActionCommand = this.configData.action.press;
       action?.execute(this.configData.data, this);
-    }
-    if (this.configData?.soundEvent) {
-      EventHandler.dispatchEvent(this.configData?.soundEvent);
     }
   }
 

@@ -23,6 +23,7 @@ class CheckFSStateCommand extends StateCommand {
     }
   }
   public doNextStep(): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
     obj.message1 = Util.parseMessage(Util.getContent('FSRetriggerText'), [appModel.getFSRetriggerCount()]);

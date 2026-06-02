@@ -243,16 +243,19 @@ export default class SlotReelCascade extends SlotReel {
   }
   protected onSymbolCameIn(symb: ReelSymbol): void {
     symb.showLanding();
-    if (this.reelsData.landingSymbols.includes(symb.getSymbolName())) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symb.getSymbolName());
-    }
     this.onSymbolFinallySettled(symb);
   }
 
   protected onSymbolFinallySettled(symb: ReelSymbol): void {
     this.symbolFallingIndex++;
-    if (this.symbolFallingIndex % this.reelsData.noOfRows === 0)
+    // Fire as the FIRST symbol of each reel lands
+    if ((this.symbolFallingIndex - 1) % this.reelsData.noOfRows === 0)
       EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_SYMBOL_FILL_IN);
+    // Stop reel spin SFX as the first symbol settles in the last reel
+    // no need to wait for the whole grid.
+    if (this.symbolFallingIndex == (this.reelsData.noOfReels - 1) * this.reelsData.noOfRows + 1) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
+    }
     if (this.symbolFallingIndex == this.totalSymbols) {
       StateManager.doNextStep();
     }
@@ -467,7 +470,9 @@ export default class SlotReelCascade extends SlotReel {
   }
 
   protected checkForSymbolDistanceCovered(symb: ReelSymbol, tween: gsap.core.Tween): void {
-    if (tween.progress() > 0.5) {
+    // Fire as soon as the symbol enters the visible reel area
+    // its bottom edge crosses the viewport top.
+    if (symb.y > -this.reelsData.symbolHeight) {
       tween.eventCallback('onUpdate', null);
       this.checkForLanding(symb);
     }
@@ -475,9 +480,13 @@ export default class SlotReelCascade extends SlotReel {
   protected checkForLanding(symb?: ReelSymbol): void {
     const pos = this.reelsData.landingSymbols.indexOf(symb.getSymbolName());
     if (pos > -1) {
+      // Ascending variant (Nth landing of this symbol, e.g. SC1, SC2, ...).
       const param = symb.getSymbolName() + this.landingSymbolsIndex[pos];
       EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, param);
       this.landingSymbolsIndex[pos]++;
+      // Plain-name variant (e.g. BN_G, H1) — moved here from onSymbolCameIn so
+      // the landing sound plays as the symbol comes into view, not at settle.
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symb.getSymbolName());
     }
   }
 }

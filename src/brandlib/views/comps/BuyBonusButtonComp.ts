@@ -57,7 +57,14 @@ export class BuyBonusButtonComp extends StandardView {
     UIUtil.setHandCursor(this, true);
     this.eventMode = 'static';
     this.cursor = 'pointer';
+    // Play click sound on press for instant feedback; the action stays on
+    // release (addInteraction = touchend/mouseup), which otherwise feels delayed.
+    UIUtil.addDownInteraction(this, this.playClickSound.bind(this));
     UIUtil.addInteraction(this, this.onBuyBonusClicked.bind(this));
+  }
+
+  protected playClickSound(): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_BUY_BONUS_CLICKED_SOUND);
   }
 
   private enableBtn(): void {

@@ -138,6 +138,9 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       name: 'spinBtn',
       type: 'Button',
       soundEvent: 'PLAY_SPIN_CLICKED_SOUND',
+      // since moved the event to pointer down so in case of spin btn
+      // needed to prevent otherwise dual events will be dispatched
+      disablePlayClickSound: true,
       options: {
         defaultView: 'spinBtn',
         hoverView: 'spinBtn',

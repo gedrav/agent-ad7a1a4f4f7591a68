@@ -19,17 +19,6 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 500,
     },
     {
-      name: 'FBGM',
-      type: 'game',
-      soundType: 'ambient',
-      loop: true,
-      playEvents: ['PLAY_FS_BG_SOUND', 'RESUME_FS_BG_SOUND'],
-      stopEvents: ['STOP_FS_BG_SOUND'],
-      volume: 0.56,
-      fadeInDuration: 250,
-      fadeOutDuration: 500,
-    },
-    {
       name: 'UI BUTTON CLICK',
       type: 'game',
       loop: false,
@@ -39,6 +28,7 @@ export const GAME_SOUND_CONFIG = {
     },
   ],
   lazySoundFiles: [
+    // common sound across all games
     {
       name: 'ERROR POP UP',
       type: 'game',
@@ -46,6 +36,18 @@ export const GAME_SOUND_CONFIG = {
       playEvents: ['PLAY_GENERIC_MSG_POPUP_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
+    },
+    // game level sounds
+    {
+      name: 'FBGM',
+      type: 'game',
+      soundType: 'ambient',
+      loop: true,
+      playEvents: ['PLAY_FS_BG_SOUND', 'RESUME_FS_BG_SOUND'],
+      stopEvents: ['STOP_FS_BG_SOUND'],
+      volume: 0.56,
+      fadeInDuration: 250,
+      fadeOutDuration: 500,
     },
     {
       name: 'Bet button on',
@@ -265,7 +267,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_CASCADE_NEW_SYMBOLS_IN_SOUND'],
-      stopEvents: [],
+      stopEvents: ['STOP_REEL_SPIN_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
     },
@@ -301,7 +303,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SPIN_CLICKED_SOUND'],
       volume: 1,
-      fadeOutDuration: 1000,
+      fadeOutDuration: 100,
     },
     {
       name: 'SPIN BUTTON STOP SFX',
@@ -309,7 +311,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_STOP_SPIN_CLICKED_SOUND'],
       volume: 1,
-      fadeOutDuration: 1000,
+      fadeOutDuration: 100,
     },
     {
       name: 'Multiplier land',
@@ -389,7 +391,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC1',
-      volume: 1,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -398,7 +400,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC2',
-      volume: 1,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -407,7 +409,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC3',
-      volume: 1,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -416,7 +418,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC4',
-      volume: 1,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -425,7 +427,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC5',
-      volume: 1,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -434,7 +436,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParam: 'SC6',
-      volume: 1,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -442,8 +444,8 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_FEATURE_TRIGGER_SOUND', 'PLAY_SCATTER_WIN_SOUND'],
-      matchParam: 4,
-      volume: 0.5,
+      matchParams: [3, 4],
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -452,7 +454,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_FEATURE_TRIGGER_SOUND', 'PLAY_SCATTER_WIN_SOUND'],
       matchParam: 5,
-      volume: 0.5,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -461,7 +463,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_FEATURE_TRIGGER_SOUND', 'PLAY_SCATTER_WIN_SOUND'],
       matchParam: 6,
-      volume: 0.5,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
@@ -476,7 +478,7 @@ export const GAME_SOUND_CONFIG = {
       name: 'BUY BONUS BUTTON',
       type: 'game',
       loop: false,
-      playEvents: ['SHOW_BUY_BONUS_VIEW'],
+      playEvents: ['PLAY_BUY_BONUS_CLICKED_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
     },

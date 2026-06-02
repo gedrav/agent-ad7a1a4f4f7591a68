@@ -168,11 +168,17 @@ class SoundServiceProxy {
       if (instance.playing() && !sObj.dontStopInstances) {
         instance.stop();
       }
-      instance.volume(Util.getDefaultValue(sObj.volume, 1));
+      const volume = Util.getDefaultValue(sObj.volume, 1);
+      instance.volume(volume);
       instance.loop(Util.getDefaultValue(sObj.loop, false));
       const duration = sObj.fadeInDuration ? sObj.fadeInDuration : 0;
       instance.play();
-      instance.fade(0, sObj.volume, duration);
+      // Only fade-in when a duration is configured. Calling fade(0, vol, 0)
+      // resets volume to 0 and ramps on howler's internal step tick, clipping
+      // the attack — sounds delayed/muffled on instant SFX like button clicks.
+      if (duration > 0) {
+        instance.fade(0, volume, duration);
+      }
     }
 
     return instance;

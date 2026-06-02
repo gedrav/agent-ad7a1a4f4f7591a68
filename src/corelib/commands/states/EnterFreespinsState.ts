@@ -14,6 +14,7 @@ class EnterFreespinsStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
+    EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startFreeSpinsSession(true);
@@ -32,7 +33,6 @@ class EnterFreespinsStateCommand extends StateCommand {
 
     obj.callbackFunction = this.enterFreespin.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);

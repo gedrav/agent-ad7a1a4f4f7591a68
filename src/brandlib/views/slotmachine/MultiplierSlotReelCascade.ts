@@ -141,11 +141,14 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
           this.symbolsArray[k][i].y = finalY - ENTER_DISTANCE;
         }
 
-        AnimationProxy.animateTween(this.symbolsArray[k][i], {
+        const tween = AnimationProxy.animateTween(this.symbolsArray[k][i], {
           duration: ENTER_DURATION / 2,
           delay,
           y: finalY,
           ease: Back.easeOut.config(0.6),
+          onUpdate: () => {
+            this.checkForSymbolDistanceCovered(this.symbolsArray[k][i], tween);
+          },
           onComplete: this.onSymbolCameIn.bind(this, this.symbolsArray[k][i]),
         });
       }
@@ -153,6 +156,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
   }
 
   protected getNewSymbolsIn(): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_IN_SOUND);
     this.isStopSpinButtonClick = false;
     this.isFallingIn = true;
     let index = 0;
@@ -224,7 +228,6 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
         }
       }
     }
-    EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_IN_SOUND);
   }
 
   protected showNewSymbolsCascadeIn() {
