@@ -504,10 +504,13 @@ export class BigWinsComp extends ResponsiveView {
   }
   protected resizeBigwinText(): number {
     if (!this.bigWinText || !this.guideRect) return 1;
-    this.bigWinText.scale.set(1);
+
+    const baseScale = bigWinTextScales[this.currentLevel];
+
+    this.bigWinText.scale.set(baseScale);
+
     const maxWidth = this.guideRect.width * 0.96;
-    const scaleX =
-      (this.bigWinText.width > maxWidth ? maxWidth / this.bigWinText.width : 1) * bigWinTextScales[this.currentLevel];
-    return scaleX;
+
+    return this.bigWinText.width > maxWidth ? baseScale * (maxWidth / this.bigWinText.width) : baseScale;
   }
 }
