@@ -421,7 +421,7 @@ class SlotGameApp {
       if (!msg) {
         msg = Util.getContent('generic_error');
       }
-      this.errorPopup.showMessage(msg, obj.data.extensions.code);
+      this.errorPopup.showMessage(msg, obj?.data?.extensions?.code);
       this.removePreloader();
     } else {
       appModel.resetGameResult();
