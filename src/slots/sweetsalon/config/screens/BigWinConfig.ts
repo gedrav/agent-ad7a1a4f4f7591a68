@@ -39,7 +39,7 @@ export const BIG_WIN_CONFIG = {
       x: 642,
       y: 480,
     },
-    bigWinTextScales: [0.8, 0.85, 0.9, 1],
+    bigWinTextScales: [0.85, 0.9, 0.95, 1.05],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
       SUPER_WIN: 'superWinText',
