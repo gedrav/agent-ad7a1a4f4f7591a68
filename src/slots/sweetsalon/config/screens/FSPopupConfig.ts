@@ -53,6 +53,7 @@ export const FS_POPUP_CONFIG = {
     {
       name: 'okBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'popupBtn',
         hoverView: 'popupBtn',
