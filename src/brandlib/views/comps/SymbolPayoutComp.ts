@@ -23,6 +23,7 @@ export class SymbolPayoutComp extends StandardView {
     const pays = appModel.getPaytableData();
     const data = pays[symbol];
     if (data) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SYMB_PAYOUT_SOUND);
       let result: string = '';
       const len = data.length;
       if (len > 0) {
@@ -39,6 +40,7 @@ export class SymbolPayoutComp extends StandardView {
     } else {
       const str = Util.getContent(symbol + 'payoutContent');
       if (str && str.length > 0) {
+        EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SYMB_PAYOUT_SOUND);
         this.infoText.style.fontSize = this.infoText.style.fontSize;
         this.infoText.style.wordWrap = true;
         this.infoText.style.wordWrapWidth = this.infoText.style.wordWrapWidth;

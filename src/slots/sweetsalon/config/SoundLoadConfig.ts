@@ -37,6 +37,23 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
+    {
+      name: 'Symbol pop up',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_SYMB_PAYOUT_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'SLIDER SFX',
+      type: 'game',
+      loop: false,
+      singleton: true,
+      playEvents: ['PLAY_GENERIC_SLIDER_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
     // game level sounds
     {
       name: 'FBGM',

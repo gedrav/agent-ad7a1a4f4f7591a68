@@ -151,6 +151,10 @@ class SoundServiceProxy {
     const instance = this.soundLibrary[sObj.name];
     //console.log('PLAY SOUND == ', sObj.name);
     if (instance) {
+      // singleton: if already playing, ignore new trigger and let current finish
+      if (sObj.singleton && instance.playing()) {
+        return instance;
+      }
       if (sObj.type == 'ambient') {
         if (this._ambientPlaying == instance) {
           return instance;

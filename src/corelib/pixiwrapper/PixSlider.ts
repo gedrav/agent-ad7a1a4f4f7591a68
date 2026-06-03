@@ -1,6 +1,8 @@
 import { Slider } from '@pixi/ui';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 
 export class PixSlider extends Slider {
   set configData(value: any) {
@@ -11,6 +13,7 @@ export class PixSlider extends Slider {
   declare protected sliderOptions: any;
   private labelText: any;
   private initialValue: number;
+  private lastSoundValue: number;
 
   constructor(sliderData: any, configData: any) {
     if (sliderData.valueTextStyle?.fontFamily && GameProxy.config.FontFaces) {
@@ -21,6 +24,7 @@ export class PixSlider extends Slider {
     this.sliderOptions = sliderData;
     this.configData = {};
     this.initialValue = sliderData.value || 0;
+    this.lastSoundValue = this.initialValue;
 
     // cloning
     for (const p in configData) {
@@ -142,6 +146,11 @@ export class PixSlider extends Slider {
   }
 
   protected onSliderUpdate(value: number): void {
+    // Valid movement = value actually changed; emit slider sound once per step
+    if (value !== this.lastSoundValue) {
+      this.lastSoundValue = value;
+      EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SLIDER_SOUND);
+    }
     if (this.sliderOptions.valueTextStyle && this.value1Text) {
       const color =
         value === 0 ? this.sliderOptions.valueTextStyle.initialColor : this.sliderOptions.valueTextStyle.updatedColor;
