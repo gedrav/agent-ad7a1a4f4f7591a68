@@ -187,6 +187,14 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
       Elements: [
         {
+          name: 'reelBg',
+          type: 'Sprite',
+          image: 'reelBg',
+          x: 79,
+          y: 175,
+        },
+        { name: 'symbolsContainer', type: 'Container' },
+        {
           name: 'reelFrame',
           type: 'Comp',
           class: FMBReelFrameComp,
@@ -197,7 +205,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'reelFrameAnim',
               type: 'Spine',
               spineName: 'reel',
-              defaultState: 'animation',
+              defaultState: 'animation_no_bg',
               loop: true,
               scale: 0.9,
               boundingBox: { width: 1700, height: 1350 },
@@ -206,7 +214,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
-        { name: 'symbolsContainer', type: 'Container' },
         {
           name: 'modalRect',
           type: 'Graphics',

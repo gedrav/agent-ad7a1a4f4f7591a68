@@ -18,6 +18,6 @@ export class FMBReelFrameComp extends ReelFrameComp {
   }
 
   public playIdleLoop(): void {
-    this.reelFrameAnim.playAnimation({ state: 'animation', loop: true });
+    this.reelFrameAnim.playAnimation({ state: 'animation_no_bg', loop: true });
   }
 }
