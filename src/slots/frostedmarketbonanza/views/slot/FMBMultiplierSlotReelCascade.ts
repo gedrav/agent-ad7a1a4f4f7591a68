@@ -39,28 +39,12 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     for (const [column, row] of changedPositions) {
       const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
       if (!symbol) continue;
-      symbol.showDisappearingAnim(this.onSymbolsDisapper.bind(this));
-    }
-  }
-
-  private onSymbolsDisapper() {
-    this.disAppearAnimIndex++;
-    if (this.disAppearAnimIndex === this.totalSymbolsToConvert) {
-      this.makeSymbolsAppear();
-    }
-  }
-
-  private makeSymbolsAppear() {
-    const result = appModel.getReelModifiersData();
-    const changedPositions: ChangedPosition[] = result?.changedPositions ?? [];
-    if (!changedPositions.length) return;
-    changedPositions.forEach((pos, index) => {
-      const [column, row] = changedPositions[index];
-      const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
       symbol.visible = true;
       symbol.showAppearingAnim(this.targetSymbolData, column, this.onNewSymbolAppeared.bind(this));
-    });
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_APPEAR_SOUND);
+    }
   }
+
   protected onNewSymbolAppeared(): void {
     this.newSymAppearanceCompleteCount++;
     if (this.newSymAppearanceCompleteCount === this.totalSymbolsToConvert) {

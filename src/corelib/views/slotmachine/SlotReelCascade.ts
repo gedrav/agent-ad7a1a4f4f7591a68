@@ -272,7 +272,6 @@ export default class SlotReelCascade extends SlotReel {
     this.totalBlasts = len;
     this.blastIndex = 0;
     if (len > 0) {
-      EventHandler.dispatchEvent('PLAY_SYMBOL_DISAPPEAR_SOUND');
       for (let k = 0; k < len; k++) {
         const arr: Array<number> = blastPositions[k];
         if (this.explodedSymbolsIndexes[arr[0]].indexOf(arr[1]) <= -1) {

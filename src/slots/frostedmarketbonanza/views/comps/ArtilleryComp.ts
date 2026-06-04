@@ -89,6 +89,7 @@ export class ArtilleryComp extends StandardView {
   }
 
   private fireShot(spine: PixSpine, shot: Shot): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_SHOT_RELEASE_SOUND);
     this.aimAtTarget(spine, shot.target);
     this.playOnceThen(spine, 'Fire', () => this.fireRandomly());
     const timeScale = appModel.turboMode ? 2.4 : 1.2;
@@ -109,7 +110,7 @@ export class ArtilleryComp extends StandardView {
     sb.scale.set(0);
     sb.visible = true;
     if (!target) {
-      this.onSnowballLanded();
+      this.onSnowballLanded(target);
       return;
     }
     const local = this.toLocal(target.toGlobal(new Point(0, 0)));
@@ -118,20 +119,23 @@ export class ArtilleryComp extends StandardView {
       duration: duration,
       x: local.x,
       y: local.y,
-      scale: 1,
+      scale: 1.1,
       ease: Power4.easeOut,
-      onComplete: () => this.onSnowballLanded(),
+      onComplete: () => this.onSnowballLanded(target),
     });
   }
 
-  private onSnowballLanded(): void {
+  private onSnowballLanded(target?: any): void {
+    if (target) target.visible = false;
     if (++this.landedCount === this.totalShots) this.burstAll();
   }
 
   private async burstAll(): Promise<void> {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_DISAPPEAR_SOUND);
     await Util.addDelays(250);
     EventHandler.dispatchEvent(SlotEvents.INITIATE_SYMBOL_CONVERSION);
     for (const sb of this.snowballs) {
+      sb.scale.set(0.9);
       this.playOnceThen(sb, 'Snow_ball_burst', () => this.onBurstDone());
     }
   }

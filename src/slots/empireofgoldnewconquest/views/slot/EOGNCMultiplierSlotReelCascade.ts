@@ -82,7 +82,7 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
         onInterrupt: this.onFireballArrived.bind(this, totalFireballs),
         onComplete: this.onFireballArrived.bind(this, totalFireballs),
       });
-      EventHandler.dispatchEvent(SlotEvents.PLAY_FIREBALL_RELEASE_SOUND);
+      EventHandler.dispatchEvent(SlotEvents.PLAY_SHOT_RELEASE_SOUND);
       index++;
     }
   }

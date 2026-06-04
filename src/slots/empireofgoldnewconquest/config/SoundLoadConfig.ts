@@ -510,7 +510,7 @@ export const GAME_SOUND_CONFIG = {
       name: 'Fire ball release',
       type: 'game',
       loop: false,
-      playEvents: ['PLAY_FIREBALL_RELEASE_SOUND'],
+      playEvents: ['PLAY_SHOT_RELEASE_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
     },
