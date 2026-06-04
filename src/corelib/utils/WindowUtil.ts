@@ -3,14 +3,17 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { ContentProxy } from '@core/models/ContentServiceProxy';
+import { AssetLoader } from '@core/models/services/AssetLoader';
 
 declare const __GAME_ID__: string;
 const GAME_PATH_PREFIX = `/src/slots/${__GAME_ID__}/`;
 let historyRulesAudio: HTMLAudioElement | null = null;
 
-function getHistoryRulesAudio(): HTMLAudioElement {
+function getHistoryRulesAudio(): HTMLAudioElement | null {
   if (!historyRulesAudio) {
-    historyRulesAudio = new Audio('assets/sounds/mp3/genericButtonSound.mp3');
+    const soundPath = AssetLoader.getHistoryRulesSoundPath();
+    if (!soundPath) return null;
+    historyRulesAudio = new Audio(soundPath);
     historyRulesAudio.preload = 'auto';
   }
 
@@ -83,6 +86,7 @@ export class WindowUtil {
     window.playHistoryRulesSound = function () {
       if (window.getIsSoundOn()) {
         const audio = getHistoryRulesAudio();
+        if (!audio) return;
         audio.pause();
         audio.currentTime = 0;
         void audio.play().catch((err) => {

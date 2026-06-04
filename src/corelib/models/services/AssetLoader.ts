@@ -308,6 +308,15 @@ class AssetLoaderClass {
     }
   }
 
+  // Resolve the raw mp3 path of the sound a game flags with `isHistoryRulesSound`
+  // in its SoundLoadConfig. The history/rules HTML pages can't reach the howler
+  // sound library, so they play this file via a plain HTMLAudioElement.
+  public getHistoryRulesSoundPath(): string | null {
+    const all = [...(this.soundConfig?.soundFiles ?? []), ...(this.soundConfig?.lazySoundFiles ?? [])];
+    const entry = all.find((s: any) => s.isHistoryRulesSound);
+    return entry ? `${this.soundPath}mp3/${entry.name}.mp3` : null;
+  }
+
   public async unloadAsset(assetName: string) {
     if (Assets.cache.has(assetName)) {
       await Assets.unload(assetName);

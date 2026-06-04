@@ -23,6 +23,7 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
+      isHistoryRulesSound: true,
       volume: 1,
       fadeOutDuration: 1000,
     },
