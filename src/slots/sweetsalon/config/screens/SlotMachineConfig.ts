@@ -224,15 +224,15 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: {
               scale: 0.6,
-              x: 677,
+              x: 680,
               y: 27,
             },
             Landscape: {
-              x: 672,
+              x: 678,
               y: -30,
               scale: 1,
             },
-            Portrait: { scale: 1.4, x: 685, y: -30 },
+            Portrait: { scale: 1.4, x: 678, y: -30 },
           },
         },
         {
