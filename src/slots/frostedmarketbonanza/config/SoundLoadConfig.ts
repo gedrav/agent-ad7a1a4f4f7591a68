@@ -337,7 +337,8 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       playEvents: ['PLAY_SYMBOL_LANDING_SOUND'],
       matchParams: ['BN'],
-      volume: 1,
+      dontStopInstances: true,
+      volume: 0.8,
       fadeOutDuration: 100,
     },
     {
