@@ -41,6 +41,7 @@ export const GAME_SOUND_CONFIG = {
       name: 'Symbol pop up',
       type: 'game',
       loop: false,
+      singleton: true,
       playEvents: ['PLAY_GENERIC_SYMB_PAYOUT_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
@@ -52,7 +53,6 @@ export const GAME_SOUND_CONFIG = {
       singleton: true,
       playEvents: ['PLAY_GENERIC_SLIDER_SOUND'],
       volume: 1,
-      fadeOutDuration: 100,
     },
     // game level sounds
     {
