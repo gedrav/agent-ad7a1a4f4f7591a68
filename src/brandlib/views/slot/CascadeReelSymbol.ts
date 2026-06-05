@@ -102,6 +102,10 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
   }
 
   public async showAppearingAnim(data: any, column: number, callback: () => void): Promise<void> {
+    if (!appModel.secondaryAssetsLoaded) {
+      super.showAppearingAnim(data, column, callback);
+      return;
+    }
     this.setNewSymbol(data, column);
     this.playSpineAnimation(this.configData.data.appearAnim, false);
     await Util.addDelays(1000); // added as a safeguard for playing appear anim fully

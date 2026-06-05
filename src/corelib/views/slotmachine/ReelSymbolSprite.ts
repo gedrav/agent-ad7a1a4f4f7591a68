@@ -191,6 +191,16 @@ export default class ReelSymbolSprite extends ReelSymbol {
     });
   }
 
+  public showAppearingAnim(data: any, column: number, callback: () => void): void {
+    this.setNewSymbol(data, column);
+    this.symbol.alpha = 0;
+    AnimationProxy.animateTween(this.symbol, {
+      duration: 0.5,
+      alpha: 1,
+      onComplete: () => callback?.(),
+    });
+  }
+
   public replaceSymbol(data: any, reelno: number, onComplete?: () => void): void {
     this.setNewSymbol(data, reelno);
     this.symbol.scale.set(0);
