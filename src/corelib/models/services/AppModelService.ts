@@ -385,7 +385,8 @@ class AppModelService {
     return this.gameInfo.creditValue;
   }
 
-  public getTotalBet(isAnte: boolean = false): number {
+  public getTotalBet(): number {
+    const isAnte = GameProxy.config.isAnteEnabled;
     if (this.gameInfo.betsArray.length > 0) {
       if (isAnte) {
         if (this.gameInfo.betsArray.length > 0) {

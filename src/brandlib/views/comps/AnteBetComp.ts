@@ -60,13 +60,22 @@ export class AnteBetComp extends StandardView {
   }
   private updateValue() {
     if (appModel.getTotalBet() * GameProxy.config.anteBetMultiplier > appModel.getMaxBet()) {
-      this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+      if (GameProxy.config.isAnteEnabled) {
+        this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());
+      } else {
+        this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+      }
+
       this.fitBetAmountText();
       this.disableBtn();
       this.setDeselected();
     } else {
       this.enableBtn();
-      this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+      if (GameProxy.config.isAnteEnabled) {
+        this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());
+      } else {
+        this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
+      }
       this.fitBetAmountText();
     }
   }
