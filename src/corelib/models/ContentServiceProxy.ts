@@ -4,6 +4,7 @@ import { AbstractProxy } from '@core/models/AbstractProxy';
 class ContentServiceProxy extends AbstractProxy {
   private _content!: any;
   private _textConfig!: any;
+  private _loaded = false;
 
   constructor() {
     super();
@@ -15,6 +16,11 @@ class ContentServiceProxy extends AbstractProxy {
     const data = (Cache as any)._cache;
     this.setContent(data.get('gameContent.json'));
     this.updateContent(data.get('commonContent.json'));
+    this._loaded = true;
+  }
+
+  public get isLoaded(): boolean {
+    return this._loaded;
   }
 
   public setContent(data: any) {

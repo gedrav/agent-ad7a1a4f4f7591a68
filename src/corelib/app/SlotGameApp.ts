@@ -43,6 +43,7 @@ class SlotGameApp {
   private isViewCreated: boolean = false;
   protected appContainer: any;
   private errorPopup: InitErrorPopup;
+  private pendingInitErrorObj: any = null;
   private isFirstTime: boolean;
   private soundsLoaded: boolean = false;
   private animBound: (time: number) => void;
@@ -290,6 +291,12 @@ class SlotGameApp {
     GameProxy.updateCommonConfig();
     ContentProxy.initiate();
     console.log('Version: ' + import.meta.env.VITE_GAME_VERSION + '_' + GameProxy.config.gameVersion);
+    if (this.pendingInitErrorObj) {
+      // Error arrived before content loaded; render it now that text is available.
+      this.displayInitError(this.pendingInitErrorObj);
+      this.pendingInitErrorObj = null;
+      return;
+    }
     if (!this.initErrorOccured) {
       this.preloader = new PreloaderScreen(PRELOADER_CONFIG);
       this.appContainer.addChild(this.preloader);
@@ -413,16 +420,14 @@ class SlotGameApp {
     //Logger.logObj(obj, 'server error');
     if (obj.msgName == 'gameinit') {
       this.initErrorOccured = true;
-      this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
-      this.appContainer.addChild(this.errorPopup);
-      let msg = obj?.data?.extensions?.code
-        ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
-        : obj?.data?.message;
-      if (!msg) {
-        msg = Util.getContent('generic_error');
+      // gameinit error can arrive before commonContent.json/gameContent.json
+      // finish loading (PRELOADER bundle). Without content, getContent returns
+      // empty and the popup shows blank text. Defer until content is ready.
+      if (ContentProxy.isLoaded) {
+        this.displayInitError(obj);
+      } else {
+        this.pendingInitErrorObj = obj;
       }
-      this.errorPopup.showMessage(msg, obj?.data?.extensions?.code);
-      this.removePreloader();
     } else {
       appModel.resetGameResult();
       const data: any = {};
@@ -438,6 +443,19 @@ class SlotGameApp {
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
   }
+  private displayInitError(obj: any): void {
+    this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
+    this.appContainer.addChild(this.errorPopup);
+    let msg = obj?.data?.extensions?.code
+      ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
+      : obj?.data?.message;
+    if (!msg) {
+      msg = Util.getContent('generic_error');
+    }
+    this.errorPopup.showMessage(msg, obj?.data?.extensions?.code);
+    this.removePreloader();
+  }
+
   protected refreshGame(): void {
     RefreshGameCommand.execute();
   }
