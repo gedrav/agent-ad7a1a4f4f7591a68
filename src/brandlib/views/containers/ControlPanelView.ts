@@ -763,7 +763,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   protected resizeForDesktopPortrait(): void {
     const hPaddingPerc: number = 0.005;
     const vPaddingPerc: number = 0.008;
-    const bigBtnVPaddingPerc: number = 0.08;
+    const bigBtnVPaddingPerc: number = 0.032;
     const midBtnPaddingPerc: number = 0.1;
     const smallBtnHPaddingPerc: number = 0.04;
 
