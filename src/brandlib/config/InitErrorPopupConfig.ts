@@ -39,11 +39,10 @@ export const INIT_ERROR_POPUP_CONFIG = {
           type: 'Text',
           style: {
             fontFamily: 'commonFont',
-            fontSize: 30,
+            fontSize: 60,
             fill: 0xd9d9d9,
             wordWrap: true,
             wordWrapWidth: 800,
-            lineHeight: 30,
           },
           anchor: { x: 0.5, y: 0.5 },
           x: 500,
@@ -75,7 +74,7 @@ export const INIT_ERROR_POPUP_CONFIG = {
           type: 'Text',
           style: {
             fontFamily: 'commonFont',
-            fontSize: 24,
+            fontSize: 28,
             fill: 0xd9d9d9,
           },
           anchor: { x: 0.5, y: 0.5 },
