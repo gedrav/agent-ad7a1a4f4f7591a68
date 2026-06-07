@@ -447,8 +447,8 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'nexus-token', variable: 'NEXUS_TOKEN')]) {
           sh '''
-            ln -sf /usr/bin/node-22 /usr/local/bin/node
-            ln -sf /usr/bin/npm-22 /usr/local/bin/npm
+            node --version
+            npm --version
             NEXUS_HOST=$(echo "$NEXUS_URL" | sed 's|https://||;s|http://||')
             npm config set registry $NEXUS_URL/repository/npmjs_org/
             npm config set strict-ssl false
