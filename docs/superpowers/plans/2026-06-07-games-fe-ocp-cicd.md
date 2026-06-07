@@ -431,6 +431,7 @@ pipeline {
   }
 
   environment {
+    PATH            = "$HOME/.local/bin:$PATH"
     QUAY_REGISTRY   = 'registry.svc.ifortuna.cz/gaming-studio/feg-slot-games-fe'
     IMAGE_TAG       = "${GIT_COMMIT[0..11]}"
     BB_ASSETS_URL   = 'ssh://git@app-bitb-shared.o.dc1.cz.ipa.ifortuna.cz:7999/gs/feg_games_assets.git'
@@ -453,9 +454,11 @@ pipeline {
             npm config set registry $NEXUS_URL/repository/npmjs_org/
             npm config set strict-ssl false
             npm config set //${NEXUS_HOST}/repository/npmjs_org/:_auth $NEXUS_TOKEN
+            mkdir -p "$HOME/.local/bin"
             curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
             chmod 700 get_helm.sh
-            VERIFY_CHECKSUM=false ./get_helm.sh
+            VERIFY_CHECKSUM=false USE_SUDO=false HELM_INSTALL_DIR="$HOME/.local/bin" ./get_helm.sh
+            helm version
             git config --global --add safe.directory '*'
             git remote set-url origin $BB_SSH_URL
           '''
