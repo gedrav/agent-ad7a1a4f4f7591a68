@@ -1,0 +1,6 @@
+FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.26-ubi10
+
+COPY feg_slot_build/ /usr/share/nginx/html/
+COPY infra/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 8080
