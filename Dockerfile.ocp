@@ -1,4 +1,4 @@
-FROM image-registry.openshift-image-registry.svc:5000/gaming-studio/nginx:1.26-ubi10
+FROM registry.svc.ifortuna.cz/gaming-studio/nginx-126-ubi10:1.26
 
 COPY feg_slot_build/ /usr/share/nginx/html/
 COPY infra/nginx/default.conf /etc/nginx/conf.d/default.conf
