@@ -17,6 +17,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@esotericsoftware/spine-core": "^4.2.90",
     "@esotericsoftware/spine-pixi-v8": "^4.2.90",
     "@pixi/assets": "^7.4.2",
     "@pixi/core": "^7.4.2",
@@ -42,14 +43,6 @@
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
-    "@assetpack/cli": "^0.7.0",
-    "@assetpack/plugin-compress": "^0.7.0",
-    "@assetpack/plugin-ffmpeg": "^0.7.0",
-    "@assetpack/plugin-json": "^0.7.0",
-    "@assetpack/plugin-manifest": "^0.7.0",
-    "@assetpack/plugin-mipmap": "^0.7.0",
-    "@assetpack/plugin-texture-packer": "^0.7.0",
-    "@assetpack/plugin-webfont": "^0.7.0",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
     "eslint": "^9.13.0",
