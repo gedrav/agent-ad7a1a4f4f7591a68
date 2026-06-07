@@ -17,8 +17,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@esotericsoftware/spine-core": "^4.2.90",
-    "@esotericsoftware/spine-pixi-v8": "^4.2.90",
+    "@esotericsoftware/spine-core": "4.2.100",
+    "@esotericsoftware/spine-pixi-v8": "4.2.100",
     "@pixi/assets": "^7.4.2",
     "@pixi/core": "^7.4.2",
     "@pixi/display": "^7.4.2",
