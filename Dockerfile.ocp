@@ -1,4 +1,4 @@
-FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.26-ubi10
+FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx@sha256:6e794094d7581ca5b7aa603c692f14a1224b899a9481db5391ad3e5a42ec8d76
 
 COPY feg_slot_build/ /usr/share/nginx/html/
 COPY infra/nginx/default.conf /etc/nginx/conf.d/default.conf
