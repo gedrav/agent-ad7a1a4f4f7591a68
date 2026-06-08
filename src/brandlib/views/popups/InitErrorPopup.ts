@@ -23,6 +23,7 @@ export class InitErrorPopup extends ResponsiveChildrenView {
     this.errorText.text = str ? str : '';
     UIUtil.updateWordWrapWidth(this.errorText, this.bg.width * 0.88);
     this.codeText.text = code ? Util.getContent('codeTextTitle') + code.toString() : '';
+
     setTimeout(() => {
       this.visible = true;
       this.errorText.text = str ? str + ' ' : '';
