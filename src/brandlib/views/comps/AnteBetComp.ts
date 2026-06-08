@@ -59,7 +59,8 @@ export class AnteBetComp extends StandardView {
     this.onToggleClicked();
   }
   private updateValue() {
-    if (appModel.getTotalBet() * GameProxy.config.anteBetMultiplier > appModel.getMaxBet()) {
+    const multiplier = GameProxy.config.isAnteEnabled ? 1 : GameProxy.config.anteBetMultiplier;
+    if (appModel.getTotalBet() * multiplier > appModel.getMaxBet()) {
       if (GameProxy.config.isAnteEnabled) {
         this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet());
       } else {
