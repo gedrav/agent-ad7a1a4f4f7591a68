@@ -17,7 +17,6 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
   private disAppearAnimIndex = 0;
   private nudgeReels: number[] = [];
   private nudgeReelsCompleteCount = 0;
-  private symbolsRaisedForConversion = false;
 
   constructor(configData: any) {
     super(configData);
@@ -38,7 +37,6 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     }
     this.newSymAppearanceCompleteCount = 0;
     this.totalSymbolsToConvert = changedPositions.length;
-    this.raiseSymbolsAboveArtillery();
     for (const [column, row] of changedPositions) {
       const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
       if (!symbol) continue;
@@ -54,25 +52,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       this.allSymbolsConverted();
     }
   }
-  // lift symbols above the artillery layer so the new symbol's appear anim is
-  // visible while the snowball burst plays in parallel (burst renders behind the symbol)
-  private raiseSymbolsAboveArtillery(): void {
-    if (this.symbolsRaisedForConversion) return;
-    const artillery = this.elementsList?.['artilleryComp'];
-    if (!artillery || !this.symbolsContainer) return;
-    this.swapChildren(this.symbolsContainer, artillery);
-    this.symbolsRaisedForConversion = true;
-  }
-
-  private restoreSymbolsBelowArtillery(): void {
-    if (!this.symbolsRaisedForConversion) return;
-    const artillery = this.elementsList?.['artilleryComp'];
-    if (artillery && this.symbolsContainer) this.swapChildren(this.symbolsContainer, artillery);
-    this.symbolsRaisedForConversion = false;
-  }
-
   protected allSymbolsConverted() {
-    this.restoreSymbolsBelowArtillery();
     this.disAppearAnimIndex = 0;
     this.totalSymbolsToConvert = 0;
     this.newSymAppearanceCompleteCount = 0;
