@@ -39,7 +39,8 @@ export const INIT_ERROR_POPUP_CONFIG = {
           type: 'Text',
           style: {
             fontFamily: 'commonFont',
-            fontSize: 60,
+            fontSize: 32,
+            mFontSize: 50,
             fill: 0xd9d9d9,
             wordWrap: true,
             wordWrapWidth: 800,
@@ -47,27 +48,6 @@ export const INIT_ERROR_POPUP_CONFIG = {
           anchor: { x: 0.5, y: 0.5 },
           x: 500,
           y: 400,
-        },
-        {
-          name: 'refreshBtn',
-          type: 'Button',
-          x: 500,
-          y: 680,
-          action: {
-            press: RefreshGameCommand,
-          },
-          textConfig: {
-            content: 'refresh',
-            style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, fontWeight: 'bold' },
-            anchor: { x: 0.5, y: 0.5 },
-          },
-          options: {
-            defaultView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x0f0f0f }),
-            hoverView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x252525 }),
-            pressedView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0x0f0f0f }),
-            disabledView: UIUtil.getRoundedRectangle({ width: 300, height: 90, radius: 10, color: 0xcccccc }),
-            animations: CoreUIConfig.buttonStates,
-          },
         },
         {
           name: 'codeText',

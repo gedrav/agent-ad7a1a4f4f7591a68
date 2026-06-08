@@ -39,6 +39,9 @@ export class MessagePopupView extends ResponsiveChildrenView {
     this.messageText.text = data.message;
     this.codeText.text = data.code ? Util.getContent('codeTextTitle') + data.code.toString() : '';
     this.callback = data.callback;
+    if (data.code == 2300) {
+      this.removeChild(this.closeBtn);
+    }
   }
 
   protected async closeMessagePopup() {

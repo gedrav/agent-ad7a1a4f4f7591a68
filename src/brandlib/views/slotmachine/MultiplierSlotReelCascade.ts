@@ -100,6 +100,9 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     const ENTER_DISTANCE = this.configData.data.reelHeight + this.configData.data.symbolHeight;
 
     const reelsView = appModel.getCascadeReelsView();
+    if (!reelsView) {
+      return;
+    }
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       index = k * 0.2;
       rowIndex = 0;
