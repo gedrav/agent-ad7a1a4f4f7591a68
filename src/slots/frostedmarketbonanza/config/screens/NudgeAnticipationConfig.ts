@@ -1,0 +1,63 @@
+import { NudgeAnticipationComp } from '@slots/frostedmarketbonanza/views/comps/NudgeAnticipationComp';
+
+export const NUDGE_ANTICIPATION_CONFIG: any = {
+  name: 'nudgeAnticipation',
+  type: 'Comp',
+  class: NudgeAnticipationComp,
+  Elements: [
+    {
+      name: `nudgeAnticipation1`,
+      type: 'Spine',
+      spineName: 'nudge_feature_spien',
+      scale: 0.9,
+      x: 176,
+      y: 690,
+      visible: true,
+    },
+    {
+      name: `nudgeAnticipation2`,
+      type: 'Spine',
+      spineName: 'nudge_feature_spien',
+      scale: 0.9,
+      x: 392,
+      y: 690,
+      visible: true,
+    },
+    {
+      name: `nudgeAnticipation3`,
+      type: 'Spine',
+      spineName: 'nudge_feature_spien',
+      scale: 0.9,
+      x: 606,
+      y: 690,
+      visible: true,
+    },
+    {
+      name: `nudgeAnticipation4`,
+      type: 'Spine',
+      spineName: 'nudge_feature_spien',
+      scale: 0.9,
+      x: 822,
+      y: 690,
+      visible: true,
+    },
+    {
+      name: `nudgeAnticipation5`,
+      type: 'Spine',
+      spineName: 'nudge_feature_spien',
+      scale: 0.9,
+      x: 1038,
+      y: 690,
+      visible: true,
+    },
+    {
+      name: `nudgeAnticipation6`,
+      type: 'Spine',
+      spineName: 'nudge_feature_spien',
+      scale: 0.9,
+      x: 1254,
+      y: 690,
+      visible: true,
+    },
+  ],
+};

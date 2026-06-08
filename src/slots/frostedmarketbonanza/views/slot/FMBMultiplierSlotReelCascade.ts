@@ -17,11 +17,13 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
   private disAppearAnimIndex = 0;
   private nudgeReels: number[] = [];
   private nudgeReelsCompleteCount = 0;
+  private symbolsRaisedForConversion = false;
 
   constructor(configData: any) {
     super(configData);
     EventHandler.addEventListener(SlotEvents.INITIATE_SYMBOL_CONVERSION, this.setupForSymbolConversion.bind(this));
     EventHandler.addEventListener(SlotEvents.NUDGE_FEATURE_ACTIVATED, this.nudgeReelAndDropNewSymbol.bind(this));
+    EventHandler.addEventListener(SlotEvents.NUDGE_REEL_DROP, this.onNudgeReelDrop.bind(this));
   }
 
   //conversion methods----------------------------------
@@ -36,6 +38,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     }
     this.newSymAppearanceCompleteCount = 0;
     this.totalSymbolsToConvert = changedPositions.length;
+    this.raiseSymbolsAboveArtillery();
     for (const [column, row] of changedPositions) {
       const symbol = this.symbolsArray?.[column]?.[row] as CascadeReelSymbol;
       if (!symbol) continue;
@@ -51,7 +54,25 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       this.allSymbolsConverted();
     }
   }
+  // lift symbols above the artillery layer so the new symbol's appear anim is
+  // visible while the snowball burst plays in parallel (burst renders behind the symbol)
+  private raiseSymbolsAboveArtillery(): void {
+    if (this.symbolsRaisedForConversion) return;
+    const artillery = this.elementsList?.['artilleryComp'];
+    if (!artillery || !this.symbolsContainer) return;
+    this.swapChildren(this.symbolsContainer, artillery);
+    this.symbolsRaisedForConversion = true;
+  }
+
+  private restoreSymbolsBelowArtillery(): void {
+    if (!this.symbolsRaisedForConversion) return;
+    const artillery = this.elementsList?.['artilleryComp'];
+    if (artillery && this.symbolsContainer) this.swapChildren(this.symbolsContainer, artillery);
+    this.symbolsRaisedForConversion = false;
+  }
+
   protected allSymbolsConverted() {
+    this.restoreSymbolsBelowArtillery();
     this.disAppearAnimIndex = 0;
     this.totalSymbolsToConvert = 0;
     this.newSymAppearanceCompleteCount = 0;
@@ -65,21 +86,18 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     const result = appModel.getReelModifiersData();
     const nudgedReelIndices: number[][] = result?.nudgedReelIndices ?? [];
     this.nudgeReels = [...new Set(nudgedReelIndices.map((pair) => pair[0]))];
-    this.nudgeAllReels();
-  }
-
-  private nudgeAllReels() {
     if (!this.nudgeReels.length) {
       EventHandler.dispatchEvent(SlotEvents.NUDGE_COMPLETED);
       StateManager.doNextStep();
       return;
     }
-    const REEL_STAGGER = 0.35; // 350ms between consecutive reels
     this.nudgeReelsCompleteCount = 0;
     this.darkenNonNudgeReels();
-    this.nudgeReels.forEach((reel, order) => {
-      this.shiftReelDown(reel, order * REEL_STAGGER);
-    });
+    // per-reel symbol drop is driven by NUDGE_REEL_DROP (fired by NudgeAnticipationComp after its anticipation)
+  }
+
+  private onNudgeReelDrop(reel: number) {
+    this.shiftReelDown(reel);
   }
 
   private shiftReelDown(reel: number, delay = 0) {
@@ -87,7 +105,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     const symbolHeight = this.configData.data.symbolHeight;
     const column = this.symbolsArray?.[reel];
     if (!column || !column.length || !finalReelView) {
-      this.onReelNudgeComplete();
+      this.onReelSettled(reel);
       return;
     }
 
@@ -109,14 +127,20 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
         onComplete: () => {
           if (++shiftDone === shiftTotal) {
             this.removeExitedBottomSymbol(reel);
-            this.onReelNudgeComplete();
+            this.onReelSettled(reel);
           }
         },
       });
     }
     if (shiftTotal === 0) {
-      this.onReelNudgeComplete();
+      this.onReelSettled(reel);
     }
+  }
+
+  // reel finished dropping/settling -> hide its anticipation + count toward completion
+  private onReelSettled(reel: number) {
+    EventHandler.dispatchEvent(SlotEvents.NUDGE_REEL_SETTLED, reel);
+    this.onReelNudgeComplete();
   }
 
   private createNudgeTopSymbol(reel: number, symbolName: string): CascadeReelSymbol {

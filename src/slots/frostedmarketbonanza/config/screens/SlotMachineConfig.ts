@@ -1,7 +1,6 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
-import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
@@ -16,6 +15,7 @@ import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import FMBMultiplierSlotReelCascade from '@slots/frostedmarketbonanza/views/slot/FMBMultiplierSlotReelCascade';
 import { ArtilleryComp } from '@slots/frostedmarketbonanza/views/comps/ArtilleryComp';
 import { FMBReelFrameComp } from '@slots/frostedmarketbonanza/views/comps/FMBReelFrameComp';
+import { NUDGE_ANTICIPATION_CONFIG } from './NudgeAnticipationConfig';
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
   type: 'Comp',
@@ -187,14 +187,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
       Elements: [
         {
-          name: 'reelBg',
-          type: 'Sprite',
-          image: 'reelBg',
-          x: 79,
-          y: 175,
-        },
-        { name: 'symbolsContainer', type: 'Container' },
-        {
           name: 'reelFrame',
           type: 'Comp',
           class: FMBReelFrameComp,
@@ -205,7 +197,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'reelFrameAnim',
               type: 'Spine',
               spineName: 'reel',
-              defaultState: 'animation_no_bg',
+              defaultState: 'animation',
               loop: true,
               scale: 0.9,
               boundingBox: { width: 1700, height: 1350 },
@@ -214,6 +206,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
+        NUDGE_ANTICIPATION_CONFIG,
+        { name: 'symbolsContainer', type: 'Container' },
         {
           name: 'modalRect',
           type: 'Graphics',
