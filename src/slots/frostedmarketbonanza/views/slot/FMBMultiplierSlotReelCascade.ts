@@ -52,11 +52,12 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       this.allSymbolsConverted();
     }
   }
-  protected allSymbolsConverted() {
+  protected async allSymbolsConverted() {
     this.disAppearAnimIndex = 0;
     this.totalSymbolsToConvert = 0;
     this.newSymAppearanceCompleteCount = 0;
     this.targetSymbolData = null;
+    await Util.addDelays(200); // padding for all conversion to be completed
     StateManager.doNextStep();
   }
   //-------------------------------------------------------

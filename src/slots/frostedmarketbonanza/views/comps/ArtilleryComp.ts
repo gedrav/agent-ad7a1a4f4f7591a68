@@ -132,8 +132,8 @@ export class ArtilleryComp extends StandardView {
 
   private async burstAll(): Promise<void> {
     EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_DISAPPEAR_SOUND);
-    await Util.addDelays(250);
     EventHandler.dispatchEvent(SlotEvents.INITIATE_SYMBOL_CONVERSION);
+    await Util.addDelays(350);
     for (const sb of this.snowballs) {
       sb.scale.set(0.9);
       this.playOnceThen(sb, 'Snow_ball_burst', () => this.onBurstDone());
