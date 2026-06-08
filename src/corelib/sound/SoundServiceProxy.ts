@@ -216,14 +216,23 @@ class SoundServiceProxy {
     }
     return obj;
   }
-  public resumeAudioContext() {
+  public async resumeAudioContext(delay = 250): Promise<void> {
     if (!this.isSoundPresent) {
       return;
     }
+    await Util.addDelays(delay);
     if (Howler.ctx && Howler.ctx.state && Howler.ctx.state === 'suspended') {
-      Howler.ctx.resume().catch((e) => {
+      try {
+        await Howler.ctx.resume();
+      } catch (e) {
         console.error('Failed to resume audio context on gesture:', e);
-      });
+        // Device not ready yet (iOS "Failed to start the audio device"). Retry
+        // by calling again with a longer delay, capped at 1000ms so it can't
+        // loop forever — delays step 250 -> 500 -> 750 -> 1000 then stop.
+        if (delay <= 1000) {
+          await this.resumeAudioContext(delay + 250);
+        }
+      }
     }
   }
 
