@@ -165,7 +165,6 @@ export class AutoplayView extends ResponsiveChildrenView {
     const obj: any = {};
     obj.selectedSpins = this.selectedSpins;
     obj.spendingLimit = this.spendingLimitSlider?.getValue() || 0;
-    console.log(appModel.getTotalBet(), obj.spendingLimit);
     if (obj.spendingLimit < appModel.getTotalBet() && obj.spendingLimit > 0) {
       const obj: any = {};
       obj.title = Util.getContent('infoText');
