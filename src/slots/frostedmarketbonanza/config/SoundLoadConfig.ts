@@ -501,6 +501,7 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
+    // for symbol transformation
     {
       name: 'NEW SYMBOL APPEAR SFX',
       type: 'game',
@@ -522,6 +523,23 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_SHOT_RELEASE_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    // for nudge feature
+    {
+      name: 'Anticipation',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_NUDGE_ANTICIPATION_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'Symbol drop',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_SYMBOL_DROP_AFTER_NUDGE_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
     },

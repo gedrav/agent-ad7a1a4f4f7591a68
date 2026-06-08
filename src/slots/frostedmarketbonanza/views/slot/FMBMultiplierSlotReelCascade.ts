@@ -121,6 +121,8 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
   // reel finished dropping/settling -> hide its anticipation + count toward completion
   private onReelSettled(reel: number) {
     EventHandler.dispatchEvent(SlotEvents.NUDGE_REEL_SETTLED, reel);
+    // new symbol drop SFX
+    EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_DROP_AFTER_NUDGE_SOUND);
     this.onReelNudgeComplete();
   }
 

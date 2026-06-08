@@ -46,6 +46,7 @@ export class NudgeAnticipationComp extends StandardView {
     if (startDelay) await Util.addDelays(startDelay);
     spine.visible = true;
     spine.playAnimation({ state: 'Loop', loop: true });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_NUDGE_ANTICIPATION_SOUND);
     await Util.addDelays(ANTICIPATION_DURATION);
     EventHandler.dispatchEvent(SlotEvents.NUDGE_REEL_DROP, reel);
     spine.playAnimation({ state: 'Slide', loop: false });
