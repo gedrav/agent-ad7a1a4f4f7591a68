@@ -1,4 +1,4 @@
-FROM registry.svc.ifortuna.cz/gaming-studio/nginx-126-ubi10:1.26
+FROM registry.svc.ifortuna.cz/base-images/ubi9-nginx:01062026
 
 COPY feg_slot_build/ /opt/app-root/src/
 COPY infra/nginx/default.conf /opt/app-root/etc/nginx.default.d/default.conf

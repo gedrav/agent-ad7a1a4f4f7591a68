@@ -87,22 +87,13 @@ pipeline {
     stage('Push TST Image') {
       when { branch 'main' }
       steps {
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'quay-push-credentials',
-            usernameVariable: 'QUAY_USER',
-            passwordVariable: 'QUAY_PASS'
-          )
-        ]) {
+        withVault(vaultSecrets: [[path: 'gaming-studio/docker-config', secretValues: [
+          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config']
+        ]]]) {
           container('buildah') {
             sh '''
-              buildah login --tls-verify=false \
-                -u "$QUAY_USER" -p "$QUAY_PASS" \
-                registry.svc.ifortuna.cz
-              buildah login --tls-verify=false \
-                -u serviceaccount \
-                -p "$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
-                image-registry.openshift-image-registry.svc:5000
+              mkdir -p ~/.docker
+              echo "$DOCKER_CONFIG_B64" | base64 -d > ~/.docker/config.json
               buildah build-using-dockerfile \
                 -f Dockerfile.ocp \
                 --tls-verify=false \
@@ -110,6 +101,7 @@ pipeline {
               buildah push \
                 --tls-verify=false \
                 ${QUAY_REGISTRY}:${IMAGE_TAG}-dev
+              rm -f ~/.docker/config.json
             '''
           }
         }
@@ -173,22 +165,13 @@ pipeline {
         }
       }
       steps {
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'quay-push-credentials',
-            usernameVariable: 'QUAY_USER',
-            passwordVariable: 'QUAY_PASS'
-          )
-        ]) {
+        withVault(vaultSecrets: [[path: 'gaming-studio/docker-config', secretValues: [
+          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config']
+        ]]]) {
           container('buildah') {
             sh '''
-              buildah login --tls-verify=false \
-                -u "$QUAY_USER" -p "$QUAY_PASS" \
-                registry.svc.ifortuna.cz
-              buildah login --tls-verify=false \
-                -u serviceaccount \
-                -p "$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
-                image-registry.openshift-image-registry.svc:5000
+              mkdir -p ~/.docker
+              echo "$DOCKER_CONFIG_B64" | base64 -d > ~/.docker/config.json
               buildah build-using-dockerfile \
                 -f Dockerfile.ocp \
                 --tls-verify=false \
@@ -196,6 +179,7 @@ pipeline {
               buildah push \
                 --tls-verify=false \
                 ${QUAY_REGISTRY}:${IMAGE_TAG}-stg
+              rm -f ~/.docker/config.json
             '''
           }
         }
@@ -258,22 +242,13 @@ pipeline {
         }
       }
       steps {
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'quay-push-credentials',
-            usernameVariable: 'QUAY_USER',
-            passwordVariable: 'QUAY_PASS'
-          )
-        ]) {
+        withVault(vaultSecrets: [[path: 'gaming-studio/docker-config', secretValues: [
+          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config']
+        ]]]) {
           container('buildah') {
             sh '''
-              buildah login --tls-verify=false \
-                -u "$QUAY_USER" -p "$QUAY_PASS" \
-                registry.svc.ifortuna.cz
-              buildah login --tls-verify=false \
-                -u serviceaccount \
-                -p "$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
-                image-registry.openshift-image-registry.svc:5000
+              mkdir -p ~/.docker
+              echo "$DOCKER_CONFIG_B64" | base64 -d > ~/.docker/config.json
               buildah build-using-dockerfile \
                 -f Dockerfile.ocp \
                 --tls-verify=false \
@@ -281,6 +256,7 @@ pipeline {
               buildah push \
                 --tls-verify=false \
                 ${QUAY_REGISTRY}:${IMAGE_TAG}-prod
+              rm -f ~/.docker/config.json
             '''
           }
         }
