@@ -1,7 +1,7 @@
-FROM registry.svc.ifortuna.cz/base-images/ubi9-nginx:01062026
+FROM registry.svc.ifortuna.cz/base-images/ubi9-nginx:latest
 
 COPY feg_slot_build/ /usr/share/nginx/html/
-COPY infra/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY infra/nginx/default.conf /etc/nginx/default.d/default.conf
 
 EXPOSE 8080
 
