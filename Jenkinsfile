@@ -87,8 +87,8 @@ pipeline {
     stage('Push TST Image') {
       when { branch 'main' }
       steps {
-        withVault(vaultSecrets: [[$class: 'VaultSecret', path: 'jenkins/gaming-studio', secretValues: [
-          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config-new']
+        withVault(vaultSecrets: [[path: 'gaming-studio/docker-config', secretValues: [
+          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config']
         ]]]) {
           container('buildah') {
             sh '''
@@ -165,8 +165,8 @@ pipeline {
         }
       }
       steps {
-        withVault(vaultSecrets: [[$class: 'VaultSecret', path: 'jenkins/gaming-studio', secretValues: [
-          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config-new']
+        withVault(vaultSecrets: [[path: 'gaming-studio/docker-config', secretValues: [
+          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config']
         ]]]) {
           container('buildah') {
             sh '''
@@ -242,8 +242,8 @@ pipeline {
         }
       }
       steps {
-        withVault(vaultSecrets: [[$class: 'VaultSecret', path: 'jenkins/gaming-studio', secretValues: [
-          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config-new']
+        withVault(vaultSecrets: [[path: 'gaming-studio/docker-config', secretValues: [
+          [$class: 'VaultSecretValue', envVar: 'DOCKER_CONFIG_B64', vaultKey: 'docker-config']
         ]]]) {
           container('buildah') {
             sh '''
