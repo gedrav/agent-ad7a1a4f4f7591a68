@@ -1,8 +1,8 @@
 FROM registry.svc.ifortuna.cz/base-images/ubi9-nginx:01062026
 
-COPY feg_slot_build/ /opt/app-root/src/
-COPY infra/nginx/default.conf /opt/app-root/etc/nginx.default.d/default.conf
+COPY feg_slot_build/ /usr/share/nginx/html/
+COPY infra/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 
-CMD ["/usr/libexec/s2i/run"]
+CMD ["nginx", "-g", "daemon off;"]
