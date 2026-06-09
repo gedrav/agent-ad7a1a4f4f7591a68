@@ -35,7 +35,7 @@ export const MESSAGE_POPUP_CONFIG = {
       x: 356,
       y: 350,
       content: '',
-      style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, align: 'center' },
+      style: { fontFamily: 'commonFont', fontSize: 32, fill: 0xffffff, align: 'center', lineHeight: 40 },
     },
     {
       name: 'closeBtn',

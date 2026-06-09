@@ -9,15 +9,5 @@ export class FMBReelFrameComp extends ReelFrameComp {
   constructor(config: any) {
     super(config);
     this.reelFrameAnim = this.elementsList['reelFrameAnim'];
-    EventHandler.addEventListener(SlotEvents.NUDGE_FEATURE_ACTIVATED, this.playNudgeReelLoop.bind(this));
-    EventHandler.addEventListener(SlotEvents.NUDGE_COMPLETED, this.playIdleLoop.bind(this));
-  }
-
-  public playNudgeReelLoop(): void {
-    this.reelFrameAnim.playAnimation({ state: 'Nudge_reel', loop: true });
-  }
-
-  public playIdleLoop(): void {
-    this.reelFrameAnim.playAnimation({ state: 'animation_no_bg', loop: true });
   }
 }

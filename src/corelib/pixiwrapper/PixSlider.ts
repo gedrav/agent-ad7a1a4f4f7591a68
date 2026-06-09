@@ -14,6 +14,8 @@ export class PixSlider extends Slider {
   private labelText: any;
   private initialValue: number;
   private lastSoundValue: number;
+  private soundStopTimer: ReturnType<typeof setTimeout> | null = null;
+  private soundStopDelay: number = 250;
 
   constructor(sliderData: any, configData: any) {
     if (sliderData.valueTextStyle?.fontFamily && GameProxy.config.FontFaces) {
@@ -25,6 +27,7 @@ export class PixSlider extends Slider {
     this.configData = {};
     this.initialValue = sliderData.value || 0;
     this.lastSoundValue = this.initialValue;
+    if (typeof sliderData.soundStopDelay === 'number') this.soundStopDelay = sliderData.soundStopDelay;
 
     // cloning
     for (const p in configData) {
@@ -150,6 +153,12 @@ export class PixSlider extends Slider {
     if (value !== this.lastSoundValue) {
       this.lastSoundValue = value;
       EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SLIDER_SOUND);
+      // Debounce: stop slider sound once movement idles for soundStopDelay ms
+      if (this.soundStopTimer) clearTimeout(this.soundStopTimer);
+      this.soundStopTimer = setTimeout(() => {
+        this.soundStopTimer = null;
+        EventHandler.dispatchEvent(SlotEvents.STOP_GENERIC_SLIDER_SOUND);
+      }, this.soundStopDelay);
     }
     if (this.sliderOptions.valueTextStyle && this.value1Text) {
       const color =

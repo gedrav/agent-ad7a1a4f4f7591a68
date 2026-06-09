@@ -53,6 +53,7 @@ export const GAME_SOUND_CONFIG = {
       loop: false,
       singleton: true,
       playEvents: ['PLAY_GENERIC_SLIDER_SOUND'],
+      stopEvents: ['STOP_GENERIC_SLIDER_SOUND'],
       volume: 1,
     },
     // game level sounds

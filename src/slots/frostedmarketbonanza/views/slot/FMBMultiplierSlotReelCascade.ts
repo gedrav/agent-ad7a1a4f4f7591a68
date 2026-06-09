@@ -22,6 +22,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     super(configData);
     EventHandler.addEventListener(SlotEvents.INITIATE_SYMBOL_CONVERSION, this.setupForSymbolConversion.bind(this));
     EventHandler.addEventListener(SlotEvents.NUDGE_FEATURE_ACTIVATED, this.nudgeReelAndDropNewSymbol.bind(this));
+    EventHandler.addEventListener(SlotEvents.NUDGE_REEL_DROP, this.onNudgeReelDrop.bind(this));
   }
 
   //conversion methods----------------------------------
@@ -51,11 +52,12 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
       this.allSymbolsConverted();
     }
   }
-  protected allSymbolsConverted() {
+  protected async allSymbolsConverted() {
     this.disAppearAnimIndex = 0;
     this.totalSymbolsToConvert = 0;
     this.newSymAppearanceCompleteCount = 0;
     this.targetSymbolData = null;
+    await Util.addDelays(200); // padding for all conversion to be completed
     StateManager.doNextStep();
   }
   //-------------------------------------------------------
@@ -65,21 +67,18 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     const result = appModel.getReelModifiersData();
     const nudgedReelIndices: number[][] = result?.nudgedReelIndices ?? [];
     this.nudgeReels = [...new Set(nudgedReelIndices.map((pair) => pair[0]))];
-    this.nudgeAllReels();
-  }
-
-  private nudgeAllReels() {
     if (!this.nudgeReels.length) {
       EventHandler.dispatchEvent(SlotEvents.NUDGE_COMPLETED);
       StateManager.doNextStep();
       return;
     }
-    const REEL_STAGGER = 0.35; // 350ms between consecutive reels
     this.nudgeReelsCompleteCount = 0;
     this.darkenNonNudgeReels();
-    this.nudgeReels.forEach((reel, order) => {
-      this.shiftReelDown(reel, order * REEL_STAGGER);
-    });
+    // per-reel symbol drop is driven by NUDGE_REEL_DROP (fired by NudgeAnticipationComp after its anticipation)
+  }
+
+  private onNudgeReelDrop(reel: number) {
+    this.shiftReelDown(reel);
   }
 
   private shiftReelDown(reel: number, delay = 0) {
@@ -87,7 +86,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     const symbolHeight = this.configData.data.symbolHeight;
     const column = this.symbolsArray?.[reel];
     if (!column || !column.length || !finalReelView) {
-      this.onReelNudgeComplete();
+      this.onReelSettled(reel);
       return;
     }
 
@@ -109,14 +108,22 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
         onComplete: () => {
           if (++shiftDone === shiftTotal) {
             this.removeExitedBottomSymbol(reel);
-            this.onReelNudgeComplete();
+            this.onReelSettled(reel);
           }
         },
       });
     }
     if (shiftTotal === 0) {
-      this.onReelNudgeComplete();
+      this.onReelSettled(reel);
     }
+  }
+
+  // reel finished dropping/settling -> hide its anticipation + count toward completion
+  private onReelSettled(reel: number) {
+    EventHandler.dispatchEvent(SlotEvents.NUDGE_REEL_SETTLED, reel);
+    // new symbol drop SFX
+    EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_DROP_AFTER_NUDGE_SOUND);
+    this.onReelNudgeComplete();
   }
 
   private createNudgeTopSymbol(reel: number, symbolName: string): CascadeReelSymbol {

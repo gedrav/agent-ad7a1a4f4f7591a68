@@ -52,6 +52,7 @@ export class PixSpine extends StandardView {
   setSkin(name: string): void {
     this.spineAnim.skeleton.setSkinByName(name);
     this.spineAnim.skeleton.setSlotsToSetupPose(); //resets all slot attachments (images, meshes, etc.) on the skeleton back to what's defined in the current skin's setup pose.
+    this.spineAnim.update(0);
   }
 
   addEventListener(event: string, callback: any): AnimationStateListener | null {
@@ -86,23 +87,6 @@ export class PixSpine extends StandardView {
     this.stateListeners.length = 0;
   }
 
-  /*public prepareAnimation(options: any = null) {
-    options = options || {};
-    if (options.state == undefined) {
-      options.state = this.configData.defaultState;
-    }
-
-    this.spineAnim.state.data.defaultMix = Util.getDefaultValue(options.defaultMix, 1);
-    this.spineAnim.state.setEmptyAnimation(0, 0);
-    this.spineAnim.state.clearTracks();
-    this.spineAnim.skeleton.setToSetupPose();
-    this.spineAnim.state.timeScale = 1;
-    this.spineAnim.state.tracks = [];
-    options.trackIndex = 0;
-    this.spineAnim.state.setAnimation(options.trackIndex, options.state, options.loop);
-    this.spineAnim.state.timeScale = 0;
-  }*/
-
   public playAnimation(options: any = null) {
     options = options || {};
     if (options.state == undefined) {
@@ -132,6 +116,7 @@ export class PixSpine extends StandardView {
       this.spineAnim.state.timeScale = 0;
       this.spineAnim.skeleton.setToSetupPose();
     }
+    this.spineAnim.update(0);
   }
   public playReverseAnimation(): void {
     //this.spineAnim.state.timeScale = -1;
@@ -145,6 +130,7 @@ export class PixSpine extends StandardView {
     //this.spineAnim.state.setEmptyAnimation(0, 0);
     //this.spineAnim.state.clearTracks();
     this.spineAnim.skeleton.setToSetupPose();
+    this.spineAnim.update(0);
   }
 
   public setAutoUpdate(enabled: boolean): void {

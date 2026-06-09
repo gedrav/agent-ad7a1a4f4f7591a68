@@ -247,10 +247,10 @@ export const SPLASH_CONFIG: any = {
           name: 'showIntroBtn',
           type: 'Comp',
           class: SplashButton,
-          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
           btnConfig: {
             type: 'PixToggleButton',
             scale: 1,
+            soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
             action: {
               press: AutoPlayNoOfSpinsBtnCommand,
             },
