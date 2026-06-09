@@ -417,7 +417,6 @@ class SlotGameApp {
   }
 
   protected onServerError(obj: any): void {
-    //Logger.logObj(obj, 'server error');
     if (obj.msgName == 'gameinit') {
       this.initErrorOccured = true;
       // gameinit error can arrive before commonContent.json/gameContent.json
@@ -432,13 +431,16 @@ class SlotGameApp {
       appModel.resetGameResult();
       const data: any = {};
       data.title = Util.getContent('infoText');
-      data.message = obj?.data?.extensions?.code
-        ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
-        : obj?.data?.message;
+      data.message = obj?.data?.extensions?.code ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code]) : null;
       if (!data.msg) {
-        data.msg = Util.getContent('generic_error');
+        if (obj.data.extensions) {
+          data.message = Util.getContent('generic_error');
+        } else {
+          data.message = Util.getContent('networkDisconnectedMessage');
+          EventHandler.dispatchEvent(SlotEvents.STOP_REEL_FOR_ERROR);
+        }
       }
-      data.code = obj?.data?.extensions?.code;
+      data.code = obj?.data?.extensions?.code ? obj?.data?.extensions?.code : 9999;
       data.callback = this.refreshGame.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }

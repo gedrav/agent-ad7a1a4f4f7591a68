@@ -177,7 +177,20 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.recreateAnimations();
   }
   protected stopReelForError(): void {
-    setTimeout(this.stopSpinQuick.bind(this), 200);
+    this.ticker.stop();
+    this.quickSpinStarted = true;
+
+    // Get final symbols from server response
+    // Stop all reels immediately
+    for (let k = 0; k < this.symbolsArray.length; k++) {
+      for (let j = 0; j < this.symbolsArray[k].length; j++) {
+        AnimationProxy.killTweensOf(this.symbolsArray[k][j]);
+        this.symbolsArray[k][j].destroySymbol();
+        this.symbolsArray[k][j].destroy();
+      }
+    }
+    this.symbolsArray = [];
+    this.createReel();
   }
   createFinalReelSymbols(): void {
     if (this.reelsData.isFixedSymbol) {
