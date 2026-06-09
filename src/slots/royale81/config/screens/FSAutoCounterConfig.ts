@@ -14,7 +14,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       name: 'spinsText',
       type: 'Text',
       anchor: { x: 0, y: 0.5 },
-      x: 80,
+      x: 25,
       y: 40,
       style: {
         fontFamily: 'gameFont1',
@@ -29,7 +29,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       name: 'winningsText',
       type: 'Text',
       anchor: { x: 1, y: 0.5 },
-      x: 1320,
+      x: 1365,
       y: 40,
       style: {
         fontFamily: 'gameFont1',
