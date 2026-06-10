@@ -46,6 +46,7 @@ export class ReelTickerComp extends StandardView {
     this.visible = false;
   }
   protected showTicker(): void {
+    this.tickerText1.visible = this.tickerText2.visible = false;
     this.visible = true;
   }
 
