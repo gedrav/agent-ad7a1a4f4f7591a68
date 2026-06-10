@@ -43,8 +43,14 @@ export class ReelWinTicker extends StandardView {
   protected clearSpinWin(): void {
     this.visible = false;
     this.totalWin = 0;
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
   }
   protected toggleVisibility(data: { show: boolean }): void {
     this.visible = data.show;
+    if (this.visible) {
+      EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
+    }
   }
 }

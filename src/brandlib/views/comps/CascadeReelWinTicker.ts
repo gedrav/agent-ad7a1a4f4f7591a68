@@ -44,6 +44,7 @@ export class CascadeReelWinTicker extends ReelWinTicker {
     }
 
     this.visible = true;
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
   }
 
   protected positionElements() {
