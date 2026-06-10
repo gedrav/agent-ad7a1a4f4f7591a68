@@ -32,21 +32,25 @@ export class ReelTickerComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
 
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideTicker.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.showTicker.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.showTickerOnNoWin.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideTicker.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.showTicker.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.showTickerOnNoWin.bind(this));
 
     this.tickerText1.x = this.bg.width / 2;
     this.tickerText2.x = this.bg.width / 2;
     this.showFirstTicker();
   }
 
+  protected showTickerOnNoWin(): void {
+    this.showTicker();
+  }
+
   protected hideTicker(): void {
     this.visible = false;
   }
   protected showTicker(): void {
-    this.tickerText1.visible = this.tickerText2.visible = false;
+    this.tickerText1.visible = this.tickerText2.visible = true;
     this.visible = true;
   }
 

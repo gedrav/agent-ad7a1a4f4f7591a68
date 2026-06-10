@@ -19,6 +19,7 @@ export const GAME_CONFIG = {
   totalLines: 1,
   isConsoleActive: true,
   unloadAssets: ['splashAssets'],
+  showWinInReelView: true,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'bookosb',
