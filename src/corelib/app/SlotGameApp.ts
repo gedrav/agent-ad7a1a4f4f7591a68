@@ -51,6 +51,9 @@ class SlotGameApp {
   private isTabSuspended: boolean;
   private boundResize: () => void;
   private boundVisibilityChange: () => void;
+  private boundOnline: () => void;
+  private boundOffline: () => void;
+  protected isNetworkOnline: boolean = navigator.onLine;
   private boundContextLost: (e: Event) => void;
   private boundContextRestored: () => void;
   private boundEventHandlers: Array<{ event: string; handler: (data?: any) => void }> = [];
@@ -430,6 +433,7 @@ class SlotGameApp {
     } else {
       appModel.resetGameResult();
       const data: any = {};
+      let isOfflineError = false;
       data.title = Util.getContent('infoText');
       data.message = obj?.data?.extensions?.code ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code]) : null;
       if (!data.msg) {
@@ -437,11 +441,14 @@ class SlotGameApp {
           data.message = Util.getContent('generic_error');
         } else {
           data.message = Util.getContent('networkDisconnectedMessage');
+          isOfflineError = !this.isOnline();
           EventHandler.dispatchEvent(SlotEvents.STOP_REEL_FOR_ERROR);
         }
       }
       data.code = obj?.data?.extensions?.code ? obj?.data?.extensions?.code : 9999;
-      data.callback = this.refreshGame.bind(this);
+      if (!isOfflineError) {
+        data.callback = this.refreshGame.bind(this);
+      }
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
   }
@@ -529,6 +536,10 @@ class SlotGameApp {
       }
       this.startPixiApp();
     }
+  }
+
+  public isOnline(): boolean {
+    return navigator.onLine;
   }
 
   protected checkForIOSAudiioResume(): void {

@@ -7,6 +7,9 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
+import { appModel } from '@core/models/services/AppModelService';
+import { StateManager } from '@core/states/StateManagerService';
+import { STATES } from '@core/states/StateConstants';
 
 export class MessagePopupView extends ResponsiveChildrenView {
   private closeBtn: any;
@@ -49,6 +52,10 @@ export class MessagePopupView extends ResponsiveChildrenView {
     this.parent.removeChild(this);
     if (this.callback) {
       this.callback();
+    }
+    if (appModel.getIsFreeSpinsSession()) {
+      StateManager.goToState(STATES.CHECK_FS_STATE);
+      return;
     }
   }
   protected resizeView() {
