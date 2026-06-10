@@ -35,7 +35,7 @@ export const BIG_WIN_CONFIG = {
     {
       name: 'guideRect',
       type: 'Graphics',
-      width: 1300,
+      width: 1348,
       height: 1080,
       color: 0x000000,
       alpha: 0,
@@ -80,7 +80,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.02,
+      vPaddingPerc: 0.02,
     },
     Landscape: {
       refComponent: 'guideRect',
@@ -89,14 +89,14 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.02,
+      vPaddingPerc: 0.01,
     },
     Portrait: {
       refComponent: 'guideRect',
       widthPerc: 0.96,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: 0.08,
+      vPaddingPerc: 0.12,
     },
   },
 };
