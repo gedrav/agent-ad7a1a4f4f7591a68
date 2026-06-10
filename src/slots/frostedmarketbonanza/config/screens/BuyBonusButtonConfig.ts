@@ -7,7 +7,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
   x: 0,
   y: 475,
   px: 140,
-  py: 1530,
+  py: 1430,
   lx: 90,
   ly: 480,
   scale: 0.9,
