@@ -17,6 +17,7 @@ export class ReelWinTicker extends StandardView {
     EventHandler.addEventListener(SlotEvents.SKIP_REELTICKER_WIN, this.skipToFinalValue.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.TOGGLE_REELTICKER_WIN, this.toggleVisibility.bind(this));
+    EventHandler.addEventListener(SlotEvents.CLEAR_WINS_FS, this.clearSpinWinAfterFS.bind(this));
   }
   //removed skip event listener, if needed then exrend the class}
   protected showSpinWin(data: any): void {
@@ -39,6 +40,10 @@ export class ReelWinTicker extends StandardView {
   }
   protected skipToFinalValue(): void {
     this.winTicker.skipToFinalValue();
+  }
+  protected clearSpinWinAfterFS(): void {
+    this.visible = false;
+    this.totalWin = 0;
   }
   protected clearSpinWin(): void {
     this.visible = false;

@@ -10,7 +10,6 @@ class ExitFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_EXIT_POPUP_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
     if (appModel.getIsAutoSession()) {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_START);
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
@@ -32,6 +31,7 @@ class ExitFreespinsStateCommand extends StateCommand {
       ]);
       obj.callbackFunction = this.exitFreespin.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
     }
 
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, true);
@@ -46,6 +46,7 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent('STOP_FREESPIN_BG_MUSIC');
     EventHandler.dispatchEvent(SlotEvents.STOP_FS_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
+    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
     StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
   }
 }

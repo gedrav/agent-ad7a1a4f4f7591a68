@@ -25,6 +25,8 @@ export class FSAutoCounterComp extends StandardView {
 
     EventHandler.addEventListener(SlotEvents.REEL_WIN_TICKER_VISIBLE, this.hideComp.bind(this));
     EventHandler.addEventListener(SlotEvents.REEL_WIN_TICKER_HIDDEN, this.showComp.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.CLEAR_WINS_FS, this.showComp.bind(this));
   }
   protected hideComp() {
     this.visible = false;
