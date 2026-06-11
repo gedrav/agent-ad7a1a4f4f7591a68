@@ -33,7 +33,7 @@ export class ReelTickerComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideTicker.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideForFeature.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.showForFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.showForFeature.bind(this));
 
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideForFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.showForFeature.bind(this));
