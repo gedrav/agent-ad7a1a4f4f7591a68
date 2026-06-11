@@ -15,18 +15,28 @@ pipeline {
   }
 
   environment {
-    PATH            = "$HOME/.local/bin:$PATH"
-    QUAY_REGISTRY   = 'registry.svc.ifortuna.cz/gaming-studio/feg-slot-games-fe'
     IMAGE_TAG       = "${GIT_COMMIT[0..11]}"
     BB_ASSETS_URL   = 'ssh://git@app-bitb-shared.o.dc1.cz.ipa.ifortuna.cz:7999/gs/feg_games_assets.git'
-    BB_SSH_URL      = 'ssh://git@app-bitb-shared.o.dc1.cz.ipa.ifortuna.cz:7999/gs/feg_games_src.git'
-    http_proxy      = 'http://10.0.68.20:3128'
-    https_proxy     = 'http://10.0.68.20:3128'
-    no_proxy        = 'nexus.svc.ifortuna.cz,registry.svc.ifortuna.cz,image-registry.openshift-image-registry.svc,*.svc.cluster.local,*.svc'
     GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no'
+    PATH            = "$HOME/.local/bin:$PATH"
   }
 
   stages {
+
+    stage('Load Config') {
+      steps {
+        configFileProvider([configFile(fileId: 'gaming-studio-global-env', variable: 'PROPS_FILE')]) {
+          script {
+            def props         = readProperties file: env.PROPS_FILE
+            env.QUAY_REGISTRY = "${props.QUAY_REGISTRY_BASE}/feg-slot-games-fe"
+            env.http_proxy    = props.PROXY_URL
+            env.https_proxy   = props.PROXY_URL
+            env.no_proxy      = props.NO_PROXY_LIST
+            env.BB_SSH_URL    = "${props.BB_BASE_SSH_URL}/feg_games_src.git"
+          }
+        }
+      }
+    }
 
     stage('Setup') {
       steps {
