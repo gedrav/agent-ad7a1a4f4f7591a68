@@ -6,6 +6,10 @@ pipeline {
     }
   }
 
+  options {
+    disableConcurrentBuilds()
+  }
+
   parameters {
     choice(
       name: 'DEPLOY_TARGET',
