@@ -23,6 +23,24 @@ pipeline {
 
   stages {
 
+    stage('Validate') {
+      steps {
+        script {
+          if (env.BRANCH_NAME ==~ /hotfix\/.*/) {
+            sshagent(credentials: ['jenkins-secret-bitbucket']) {
+              sh 'git fetch --depth=100 origin "+refs/tags/last-prod-deploy:refs/tags/last-prod-deploy"'
+            }
+            def prodCommit = sh(script: 'git rev-parse last-prod-deploy', returnStdout: true).trim()
+            def branchBase  = sh(script: "git merge-base HEAD ${prodCommit}", returnStdout: true).trim()
+            if (branchBase != prodCommit) {
+              error("Hotfix branch must be created from last-prod-deploy tag (${prodCommit.take(12)}). Branch diverged from: ${branchBase.take(12)}")
+            }
+            echo "Hotfix base verified: branched from last-prod-deploy (${prodCommit.take(12)})"
+          }
+        }
+      }
+    }
+
     stage('Load Config') {
       steps {
         configFileProvider([configFile(fileId: 'gaming-studio-global-env', variable: 'PROPS_FILE')]) {
@@ -107,10 +125,10 @@ pipeline {
               buildah build-using-dockerfile \
                 -f Dockerfile.ocp \
                 --tls-verify=false \
-                -t ${QUAY_REGISTRY}:${IMAGE_TAG}-dev .
+                -t ${QUAY_REGISTRY}:${IMAGE_TAG}-tst .
               buildah push \
                 --tls-verify=false \
-                ${QUAY_REGISTRY}:${IMAGE_TAG}-dev
+                ${QUAY_REGISTRY}:${IMAGE_TAG}-tst
               rm -f ~/.docker/config.json
             '''
           }
@@ -138,8 +156,9 @@ pipeline {
             HTTP_PROXY="" HTTPS_PROXY="" http_proxy="" https_proxy="" \
             helm upgrade --install feg-slot-games-fe ./infra/helm/feg-slot-games-fe \
               -f ./infra/helm/feg-slot-games-fe/values-tst.yaml \
-              --set image.tag=${IMAGE_TAG}-dev \
+              --set image.tag=${IMAGE_TAG}-tst \
               --set packName=feg-slot-games-fe \
+              --kube-context 'gaming-studio-shared/tst-ocp4-bm' \
               --namespace gaming-studio-shared
             rm -f "$WORKSPACE/kubeconfig-tst"
           '''
@@ -223,8 +242,15 @@ pipeline {
               -f ./infra/helm/feg-slot-games-fe/values-stg.yaml \
               --set image.tag=${IMAGE_TAG}-stg \
               --set packName=feg-slot-games-fe \
-              --namespace gaming-studio-stg
+              --kube-context 'gaming-studio-shared/stg-ocp4-bm' \
+              --namespace gaming-studio-shared
             rm -f "$WORKSPACE/kubeconfig-stg"
+          '''
+        }
+        sshagent(credentials: ['jenkins-secret-bitbucket']) {
+          sh '''
+            git tag -f last-stg-deploy
+            git push origin last-stg-deploy --force
           '''
         }
       }
@@ -300,7 +326,8 @@ pipeline {
               -f ./infra/helm/feg-slot-games-fe/values-prod.yaml \
               --set image.tag=${IMAGE_TAG}-prod \
               --set packName=feg-slot-games-fe \
-              --namespace gaming-studio-prod
+              --kube-context 'gaming-studio-shared/sharedprd-ocp4-bm' \
+              --namespace gaming-studio-shared
             rm -f "$WORKSPACE/kubeconfig-prod"
           '''
         }
