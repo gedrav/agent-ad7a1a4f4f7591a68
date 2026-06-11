@@ -17,7 +17,7 @@ class CheckAutoSpinStateCommand extends StateCommand {
         setTimeout(() => StateManager.goToState('SPIN_START_STATE'), 250);
       } else {
         appModel.resetAutoplayData();
-        EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_ENDED);
+        EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
         StateManager.goToState('IDLE_STATE');
         /*const obj: any = {};
         obj.title = Util.getContent('infoText');
@@ -26,7 +26,7 @@ class CheckAutoSpinStateCommand extends StateCommand {
       }
     } else {
       if (GameProxy.config.isAutoStopped) {
-        EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_ENDED);
+        EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
         GameProxy.config.isAutoStopped = false;
       }
       StateManager.goToState('IDLE_STATE');

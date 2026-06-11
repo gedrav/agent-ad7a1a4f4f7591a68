@@ -46,7 +46,7 @@ export class AutoplayView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_CANCEL_CLICKED, this.hideAutoPlayPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.MODAL_VIEW_CLICKED, this.hideAutoPlayPanel.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_CONFIRM_BTN_CLICKED, this.onOkClicked.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.resetAutoplayView.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.resetAutoplayView.bind(this));
 
     this.autoPanelBg = this.elementsList['autoPanelBg'];
     this.titleText = this.elementsList['titleText'];
