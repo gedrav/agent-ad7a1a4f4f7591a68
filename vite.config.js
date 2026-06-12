@@ -6,8 +6,8 @@ import path from 'node:path';
 
 // Uncomment ONE game to run/build it:
 const defaultGameNames = [
-  'royale81',
-  //"empireofgold",
+  //'royale81',
+  "empireofgold",
   //'empireofgoldnewconquest',
   //'sweetsalon',
   //'frostedmarketbonanza'

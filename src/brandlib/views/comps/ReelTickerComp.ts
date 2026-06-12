@@ -5,6 +5,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class ReelTickerComp extends StandardView {
   private tickerText1: PixText;
@@ -47,6 +48,9 @@ export class ReelTickerComp extends StandardView {
     this.renderable = false;
   }
   protected showForFeature(): void {
+    if (appModel.getIsAutoSession()) {
+      return;
+    }
     this.renderable = true;
   }
 
