@@ -46,6 +46,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       data: {
         onlyWinAnim: true,
         blastAftWinDelay: 600,
+        hasScatterMultiplier: true,
         symbolClass: CascadeReelSymbol,
         noOfReels: 6,
         noOfRows: 5,
