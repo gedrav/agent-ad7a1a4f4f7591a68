@@ -34,6 +34,7 @@ class ExitFreespinsStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
     }
 
+    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, true);
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, false);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);

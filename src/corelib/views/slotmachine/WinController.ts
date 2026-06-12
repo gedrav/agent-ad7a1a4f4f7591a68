@@ -140,6 +140,9 @@ export default class WinController {
   }
 
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
+    if (this.totalWinSymbols > 0) {
+      symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
+    }
     this.winSymbolIndex++;
     if (this.winSymbolIndex === this.totalWinSymbols) {
       this.notifySpinWinDone();
@@ -219,6 +222,15 @@ export default class WinController {
   }
   protected notifySpinWinDone(): void {
     clearTimeout(this.timeoutId);
+    //visible true for all symbol after win anim completion
+    const len1 = this.symbolsArray.length;
+    for (let i = 0; i < len1; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        this.symbolsArray[i][j].visible = true;
+      }
+    }
+    //---------------------------------------------------
     StateManager.doNextStep();
   }
 

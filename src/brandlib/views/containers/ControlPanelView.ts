@@ -3,13 +3,11 @@ import { BalanceComp } from '@core/views/comps/BalanceComp';
 import { BetComp } from '@core/views/comps/BetComp';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { PixText } from '@core/pixiwrapper/PixText';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { UIUtil } from '@core/utils/UIUtilService';
-import { Util } from '@core/utils/UtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { ActionCommand } from '@core/commands/core/ActionCommand';
@@ -96,9 +94,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.DISABLE_STOPSPIN_BUTTON, this.disableStopSpinButton.bind(this));
 
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.updateUIForAutoStart.bind(this));
-    //EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_COUNT, this.updateUIAutoCount.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.onAutoplayEnded.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.onAutoplayEnded.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_FORCE_STOP, this.onAutoplayEnded.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_COUNT, this.updateUIFreeSpinsCount.bind(this));
@@ -124,7 +121,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.spinBtn.on('pointerout', this.cancelPress.bind(this));
     this.spinBtn.on('pointercancel', this.cancelPress.bind(this));
   }
-  protected onFullScreenModeChange(flag: boolean): void {
+  protected onFullScreenModeChange(): void {
     if (DeviceProxy.config.isDevice) {
       return;
     }
@@ -220,7 +217,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateBalanceForSpin(): void {
-    this.updateBalance(appModel.getBalance() - appModel.getTotalBet(true));
+    this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
     appModel.setAfterSpinBalance();
   }
   protected updateBalanceForBBSpin(): void {
@@ -231,7 +228,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.balanceComp.updateValue(value == undefined ? appModel.getBalance() : value);
   }
   protected updateTotalbet(value: number = null) {
-    this.betComp.updateValue(value == undefined ? appModel.getTotalBet(true) : value);
+    this.betComp.updateValue(value == undefined ? appModel.getTotalBet() : value);
   }
   protected onSoundStateChanged(flag: boolean): void {
     this.soundOnBtn.visible = flag;

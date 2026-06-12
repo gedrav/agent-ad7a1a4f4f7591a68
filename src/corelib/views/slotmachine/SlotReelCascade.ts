@@ -294,12 +294,22 @@ export default class SlotReelCascade extends SlotReel {
     symbol.showBlastAnim(() => this.onBlastAnimComplete(symbol));
   }
   protected onBlastAnimComplete(symbol: ReelSymbolSprite): void {
+    symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
     this.blastIndex++;
     if (this.blastIndex == this.totalBlasts) {
       this.enterCascadeExistingSymbols();
     }
   }
   protected enterCascadeExistingSymbols(): void {
+    //visible true for all symbol after blast anim completion
+    const len1 = this.symbolsArray.length;
+    for (let i = 0; i < len1; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        this.symbolsArray[i][j].visible = true;
+      }
+    }
+    //---------------------------------------------------
     this.moveArray = [];
     for (let p = 0; p < this.reelsData.noOfReels; p++) {
       const marr = [0, 0, 0, 0, 0];

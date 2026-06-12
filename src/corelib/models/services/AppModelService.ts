@@ -2,9 +2,6 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
-import { settings } from '@pixi/core';
-import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
-import { type } from 'node:os';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 type ParamsObject = Record<string, number>;
