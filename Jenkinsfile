@@ -1,3 +1,5 @@
+def notify = null
+
 pipeline {
   agent {
     kubernetes {
@@ -47,7 +49,10 @@ pipeline {
 
     stage('Load Config') {
       steps {
-        configFileProvider([configFile(fileId: 'gaming-studio-global-env', variable: 'PROPS_FILE')]) {
+        configFileProvider([
+          configFile(fileId: 'gaming-studio-global-env', variable: 'PROPS_FILE'),
+          configFile(fileId: 'gaming-studio-notify',     variable: 'NOTIFY_SCRIPT')
+        ]) {
           script {
             def props         = readProperties file: env.PROPS_FILE
             env.QUAY_REGISTRY = "${props.QUAY_REGISTRY_BASE}/feg-slot-games-fe"
@@ -55,6 +60,7 @@ pipeline {
             env.https_proxy   = props.PROXY_URL
             env.no_proxy      = props.NO_PROXY_LIST
             env.BB_SSH_URL    = "${props.BB_BASE_SSH_URL}/feg_games_src.git"
+            notify            = load(env.NOTIFY_SCRIPT)
           }
         }
       }
@@ -174,6 +180,19 @@ pipeline {
           '''
         }
       }
+      post {
+        success {
+          script {
+            notify.teams('teams-webhook-nonprod', 'Deployed', 'good', 'TST', "${env.IMAGE_TAG}-tst")
+          }
+        }
+        failure {
+          script {
+            currentBuild.description = 'teams-notified'
+            notify.teams('teams-webhook-nonprod', 'Deploy Failed', 'attention', 'TST', "${env.IMAGE_TAG}-tst")
+          }
+        }
+      }
     }
 
     // ── release/*: STG ────────────────────────────────────────────
@@ -256,6 +275,19 @@ pipeline {
             git tag -f last-stg-deploy
             git push origin last-stg-deploy --force
           '''
+        }
+      }
+      post {
+        success {
+          script {
+            notify.teams('teams-webhook-nonprod', 'Deployed', 'good', 'STG', "${env.IMAGE_TAG}-stg")
+          }
+        }
+        failure {
+          script {
+            currentBuild.description = 'teams-notified'
+            notify.teams('teams-webhook-nonprod', 'Deploy Failed', 'attention', 'STG', "${env.IMAGE_TAG}-stg")
+          }
         }
       }
     }
@@ -342,13 +374,30 @@ pipeline {
           '''
         }
       }
+      post {
+        success {
+          script {
+            notify.teams('teams-webhook-prod', 'Deployed', 'good', 'PROD', "${env.IMAGE_TAG}-prod")
+          }
+        }
+        failure {
+          script {
+            currentBuild.description = 'teams-notified'
+            notify.teams('teams-webhook-prod', 'Deploy Failed', 'attention', 'PROD', "${env.IMAGE_TAG}-prod")
+          }
+        }
+      }
     }
 
   }
 
   post {
     failure {
-      echo "Pipeline failed on branch ${env.BRANCH_NAME} at commit ${env.GIT_COMMIT}"
+      script {
+        if (currentBuild.description != 'teams-notified') {
+          notify?.teams('teams-webhook-nonprod', 'Pipeline Failed', 'attention', 'Build')
+        }
+      }
     }
   }
 }
