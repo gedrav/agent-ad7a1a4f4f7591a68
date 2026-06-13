@@ -10,8 +10,8 @@ const defaultGameNames = [
   // "empireofgold",
   //'empireofgoldnewconquest',
   //'sweetsalon',
-  //'frostedmarketbonanza',
-  'bookofstorms'
+  'frostedmarketbonanza',
+  // 'bookofstorms'
 ];
 
 // SINGLE CONTROL POINT (with env override)
