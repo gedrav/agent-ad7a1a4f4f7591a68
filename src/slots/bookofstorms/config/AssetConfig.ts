@@ -16,8 +16,8 @@ const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
     { TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
   ],
 };
 

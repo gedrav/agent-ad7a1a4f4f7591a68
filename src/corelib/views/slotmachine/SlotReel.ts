@@ -213,7 +213,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   public restartIdleAnim(): void {
-    this.showIdleAnim(true);
+    //this.showIdleAnim(true);
   }
 
   protected showIdleAnim(flag: boolean = true): void {

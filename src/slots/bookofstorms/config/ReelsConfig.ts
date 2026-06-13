@@ -21,7 +21,6 @@ export const ReelsConfig: any = {
       'H1',
       'L5',
       'H2',
-
       'L1',
       'WD',
       'H1',
@@ -43,7 +42,6 @@ export const ReelsConfig: any = {
       'H1',
       'L5',
       'H2',
-
       'L1',
     ],
     [

@@ -318,10 +318,9 @@ export const SPLASH_CONFIG: any = {
     },
     {
       name: 'gameTitle',
-      type: 'Spine',
-      spineName: 'R81_Logo_Spine',
-      defaultState: 'Static',
-      boundingBox: { width: 560, height: 200 },
+      type: 'Sprite',
+      image: 'gamelogo',
+      anchor: { x: 0.5, y: 0.5 },
       layoutData: {
         Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
         Portrait: {
