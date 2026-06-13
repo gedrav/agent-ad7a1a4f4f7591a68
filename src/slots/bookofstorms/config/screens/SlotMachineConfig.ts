@@ -12,8 +12,6 @@ import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
-import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -24,7 +22,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 1760,
+      width: 1610,
       height: 1190,
       alpha: 0,
     },
@@ -34,7 +32,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: SlotReelStandard,
       winController: GameWinController,
-      x: 210,
+      x: 30,
       y: 0,
       data: {
         symbolClass: ReelSymbolSpine,
@@ -288,7 +286,6 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
-    BUY_BONUS_BTN_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

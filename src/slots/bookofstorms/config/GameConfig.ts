@@ -1,4 +1,8 @@
 import { UIConfig } from '@game/config/UIConfig';
+import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { Point } from 'pixi.js';
+import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
+import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
 export const GAME_CONFIG = {
   gameDesktopWidth: 2424,
@@ -28,4 +32,44 @@ export const GAME_CONFIG = {
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
+  buyBonusData: {
+    features: [
+      {
+        btn: {
+          name: 'bbBtn1',
+          type: 'Button',
+          action: {
+            press: BuyBonusClickCommand,
+          },
+          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
+          data: { id: 'FG1' },
+          options: {
+            defaultView: 'bbBtn',
+            hoverView: 'bbBtn',
+            pressedView: 'bbBtn',
+            disabledView: 'bbBtn',
+            textOffset: new Point(0, 0),
+            animations: CoreUIConfig.spinButtonStates,
+          },
+          textConfig: {
+            name: 'bbBtn',
+            type: 'Text',
+            content: 'buyFreeSpinTitle',
+            style: {
+              fontFamily: 'gameFont1',
+              fill: [0xffffff],
+              fontSize: 60,
+              fontWeight: 'bold',
+              stroke: 0xfcb610,
+              strokeThickness: 2,
+              wordWrap: true,
+              wordWrapWidth: 200,
+              align: 'center',
+            },
+            toUpperCase: true,
+          },
+        },
+      },
+    ],
+  },
 };
