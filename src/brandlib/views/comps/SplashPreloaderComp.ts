@@ -14,20 +14,23 @@ export class SplashPreloaderComp extends ResponsiveChildrenView {
   private preloader: PixAnimatedSprite;
   private bar: PixGraphics;
   private circle2: PixGraphics;
+  private disposeLoadProgress: () => void;
 
   constructor(config: any) {
     super(config);
     this.loadingText = this.elementsList['loadingText'];
     this.bar = this.elementsList['progressBar'].elementsList['bar'];
     this.circle2 = this.elementsList['progressBar'].elementsList['circle2'];
-    EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
+    this.disposeLoadProgress = EventHandler.bind(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
   }
 
   protected onLoadProgress(progress: number): void {
+    if (!this.bar) return;
     this.bar.scale.x = progress / 100;
     this.circle2.x = this.bar.x + this.bar.width;
   }
   public removePreloader(): void {
+    this.disposeLoadProgress?.();
     this.preloader?.destroy();
     this.elementsList['progressBar'].destroy();
     this.loadingText?.destroy(true);
