@@ -12,6 +12,8 @@ import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
+import { BUY_BONUS_BTN_CONFIG } from '@game/config/screens/BuyBonusButtonConfig';
+import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -22,8 +24,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 1512,
-      height: 1110,
+      width: 1760,
+      height: 1190,
       alpha: 0,
     },
 
@@ -32,7 +34,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: SlotReelStandard,
       winController: GameWinController,
-      x: 0,
+      x: 210,
       y: 0,
       data: {
         symbolClass: ReelSymbolSpine,
@@ -43,21 +45,21 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 208, y: 306 },
-            reelPositionX: [0, 274, 547, 819, 1094],
+            reelContainerPos: { x: 214, y: 306 },
+            reelPositionX: [0, 280, 560, 840, 1120],
             symbolHeight: 276,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 208, y: 298 },
-            reelPositionX: [0, 274, 547, 819, 1094],
-            symbolHeight: 249,
+            reelContainerPos: { x: 214, y: 306 },
+            reelPositionX: [0, 280, 560, 840, 1120],
+            symbolHeight: 276,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 208, y: 298 },
-            reelPositionX: [0, 274, 547, 819, 1094],
-            symbolHeight: 249,
+            reelContainerPos: { x: 214, y: 306 },
+            reelPositionX: [0, 280, 560, 840, 1120],
+            symbolHeight: 276,
             symbolScale: 1,
           },
         },
@@ -75,7 +77,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1.05,
+            animScale: 1.075,
           },
           H1: {
             name: 'H1',
@@ -83,7 +85,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1.05,
+            animScale: 1.075,
           },
           H2: {
             name: 'H2',
@@ -91,7 +93,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1.05,
+            animScale: 1.075,
           },
           H3: {
             name: 'H3',
@@ -99,7 +101,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1.05,
+            animScale: 1.075,
           },
           H4: {
             name: 'H4',
@@ -107,7 +109,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1.05,
+            animScale: 1.075,
           },
           L1: {
             name: 'L1',
@@ -116,7 +118,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim1: 'win',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1,
+            animScale: 0.8,
           },
           L2: {
             name: 'L2',
@@ -124,7 +126,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1,
+            animScale: 0.8,
           },
           L3: {
             name: 'L3',
@@ -132,7 +134,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1,
+            animScale: 0.8,
           },
           L4: {
             name: 'L4',
@@ -140,7 +142,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1,
+            animScale: 0.8,
           },
           L5: {
             name: 'L5',
@@ -148,26 +150,17 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 1,
+            animScale: 0.8,
           },
         },
       },
       Elements: [
         {
           name: 'reelstripBG',
-          type: 'Comp',
-          class: ReelStripBG,
+          type: 'Sprite',
+          image: 'reelframebg',
           x: 0,
           y: 100,
-          Elements: [
-            {
-              name: 'bg',
-              type: 'Sprite',
-              image: 'reelframebg',
-              x: 0,
-              y: 0,
-            },
-          ],
         },
         { name: 'symbolsContainer', type: 'Container' },
         {
@@ -180,7 +173,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             {
               name: 'reelFrame',
               type: 'Sprite',
-              image: 'reels_frame',
+              image: 'ReelFrame',
               x: 0,
               y: 0,
             },
@@ -197,7 +190,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 60, y: 990, scale: 1 },
+        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 26, y: 1060, scale: 1 },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
@@ -220,7 +213,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Portrait: { scale: 0.8, x: 580, y: -10 },
           },
         },
-        { name: 'maskRect', type: 'Graphics', width: 1380, height: 826, x: 66, y: 166, color: 0xffff00 },
+        { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 166, color: 0xffff00 },
         {
           name: 'winSymbolsContainer',
           type: 'Container',
@@ -295,6 +288,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
+    BUY_BONUS_BTN_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

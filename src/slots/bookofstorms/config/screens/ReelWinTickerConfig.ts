@@ -5,22 +5,22 @@ export const REEL_WIN_TICKER_CONFIG: any = {
   name: 'reelWinTicker',
   type: 'Comp',
   class: ReelWinTicker,
-  x: 180,
-  y: 1020,
+  x: 70,
+  y: 1082,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1240, height: 60, color: 0xffff00, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1410, height: 80, color: 0xffff00, alpha: 0 },
     {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 620,
-      y: 26,
+      x: 705,
+      y: 40,
       Elements: [
         {
           name: 'valueText',
           type: 'Text',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'gameFont1', fontSize: 36, mFontSize: 50, fill: 0xfde35c },
+          style: { fontFamily: 'gameFont1', fontSize: 36, mFontSize: 50, fill: 0xc0e3fb },
         },
       ],
     },

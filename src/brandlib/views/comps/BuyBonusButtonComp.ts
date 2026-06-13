@@ -46,6 +46,7 @@ export class BuyBonusButtonComp extends StandardView {
       this.bbBetValue.scale.set(1);
       const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
       this.bbBetValue.text = Util.formatCurrency((appModel.getTotalBet() * multiplier) / factor);
+      console.log(this.bbBetValue);
       if (this.bbBetValue.width > this.bbBg.width * 0.8) {
         this.bbBetValue.scale.set((this.bbBg.width * 0.8) / this.bbBetValue.width);
       }
