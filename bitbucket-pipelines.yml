@@ -114,7 +114,8 @@ pipelines:
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:staging
             - curl -sL https://aka.ms/downloadazcopy-v10-linux | tar -xz --wildcards '*/azcopy' --strip-components=1
             - AZCOPY_SPA_CLIENT_SECRET="$AZURE_CLIENT_SECRET" ./azcopy login --service-principal --application-id "$AZURE_CLIENT_ID" --tenant-id "$AZURE_TENANT_ID"
-            - ./azcopy sync ../feg_slot_build "https://$SLOT_FE_STORAGE_ACCOUNT.blob.core.windows.net/\$web" --recursive --delete-destination=true
+            - ./azcopy sync ../feg_slot_build "https://$SLOT_FE_STORAGE_ACCOUNT.blob.core.windows.net/\$web" --recursive --delete-destination=true --exclude-pattern="index.html" --cache-control="public, max-age=31536000, immutable"
+            - ./azcopy copy "../feg_slot_build/index.html" "https://$SLOT_FE_STORAGE_ACCOUNT.blob.core.windows.net/\$web/index.html" --cache-control="no-cache, no-store, must-revalidate" --overwrite=true
             - |
               if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
                 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
