@@ -7,14 +7,14 @@ export const FSAUTO_COUNTER_CONFIG: any = {
   type: 'Comp',
   class: FSAutoCounterComp,
   x: 80,
-  y: 1082,
+  y: 1090,
   Elements: [
     {
       name: 'spinsText',
       type: 'Text',
       anchor: { x: 0, y: 0.5 },
       x: 0,
-      y: 40,
+      y: 34,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 32,
@@ -29,7 +29,7 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       type: 'Text',
       anchor: { x: 1, y: 0.5 },
       x: 1385,
-      y: 40,
+      y: 34,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 32,

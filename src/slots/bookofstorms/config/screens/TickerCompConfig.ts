@@ -6,11 +6,11 @@ export const TICKER_COMP_CONFIG: any = {
   class: ReelTickerComp,
   tickerDelay: 3000,
   x: 70,
-  y: 1082,
+  y: 1090,
   content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
   contentYPadding: 0,
   Elements: [
-    { name: 'bg', type: 'Graphics', width: 1410, height: 80, alpha: 0 },
+    { name: 'bg', type: 'Graphics', width: 1410, height: 70, alpha: 0 },
     {
       name: 'textCont',
       type: 'Container',
@@ -41,6 +41,6 @@ export const TICKER_COMP_CONFIG: any = {
         },
       ],
     },
-    { name: 'maskRect', type: 'Graphics', color: 0xff0000, width: 1480, height: 80, x: 0, y: 0 },
+    { name: 'maskRect', type: 'Graphics', color: 0xff0000, width: 1410, height: 70, x: 0, y: 0 },
   ],
 };
