@@ -59,6 +59,7 @@ pipelines:
               --destination '$web'
               --auth-mode login
               --overwrite
+              --max-connections 16
               --output none
             - |
               if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
@@ -97,6 +98,7 @@ pipelines:
               --destination '$web'
               --auth-mode login
               --overwrite
+              --max-connections 16
               --output none
             - |
               if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
@@ -132,6 +134,7 @@ pipelines:
               --destination '$web'
               --auth-mode login
               --overwrite
+              --max-connections 16
               --output none
             - |
               if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
@@ -168,6 +171,7 @@ pipelines:
               --destination '$web'
               --auth-mode login
               --overwrite
+              --max-connections 16
               --output none
             - >
               az afd endpoint purge
