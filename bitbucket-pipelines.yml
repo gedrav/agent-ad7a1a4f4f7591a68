@@ -21,8 +21,11 @@ definitions:
     #   SLOT_FE_CDN_PROFILE      - AFD profile name (optional, skip purge if unset)
     #   SLOT_FE_CDN_ENDPOINT     - AFD endpoint name (optional, skip purge if unset)
     #
-    # Required deployment environment variables (staging - SWA):
-    #   SWA_DEPLOYMENT_TOKEN     - Azure SWA deployment token (pulumi output feSlotDeploymentToken)
+    # Required deployment environment variables (staging):
+    #   SLOT_FE_STORAGE_ACCOUNT  - Storage account name (fegslotfestaging)
+    #   SLOT_FE_CDN_RG           - Resource group (feg-slot-rg-staging)
+    #   SLOT_FE_CDN_PROFILE      - AFD profile name (feg-slot-afd-staging)
+    #   SLOT_FE_CDN_ENDPOINT     - AFD endpoint name (feg-slot-fe-staging)
     # -----------------------------------------------------------------
 
 # -----------------------------------------------------------------
@@ -119,14 +122,26 @@ pipelines:
               ../feg_games_assets
             - npm ci
             - BUILD_OUTPUT_ROOT=../feg_slot_build npm run build:staging
-            - cp staticwebapp.config.json ../feg_slot_build/
-            - npx --yes @azure/static-web-apps-cli@2 deploy ../feg_slot_build --deployment-token "$SWA_DEPLOYMENT_TOKEN" --env production --verbose || exit 1
-            # -- Blob Storage + AFD (uncomment when staging infra migrated) --
-            # - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-            # - az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
-            # - az account set --subscription "$AZURE_SUBSCRIPTION_ID"
-            # - az storage blob upload-batch --account-name "$SLOT_FE_STORAGE_ACCOUNT" --source ../feg_slot_build --destination '$web' --auth-mode login --overwrite --output none
-            # - az afd endpoint purge --resource-group "$SLOT_FE_CDN_RG" --profile-name "$SLOT_FE_CDN_PROFILE" --endpoint-name "$SLOT_FE_CDN_ENDPOINT" --content-paths '/*' --no-wait
+            - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+            - az login --service-principal --username "$AZURE_CLIENT_ID" --password "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+            - az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+            - >
+              az storage blob upload-batch
+              --account-name "$SLOT_FE_STORAGE_ACCOUNT"
+              --source ../feg_slot_build
+              --destination '$web'
+              --auth-mode login
+              --overwrite
+              --output none
+            - |
+              if [ -n "$SLOT_FE_CDN_PROFILE" ] && [ -n "$SLOT_FE_CDN_ENDPOINT" ]; then
+                az afd endpoint purge \
+                  --resource-group "$SLOT_FE_CDN_RG" \
+                  --profile-name "$SLOT_FE_CDN_PROFILE" \
+                  --endpoint-name "$SLOT_FE_CDN_ENDPOINT" \
+                  --content-paths '/*' \
+                  --no-wait
+              fi
 
     deploy-prod:
       - step:
