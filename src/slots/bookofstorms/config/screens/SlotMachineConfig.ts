@@ -9,9 +9,9 @@ import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
-import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
+import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -201,7 +201,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 754,
-              y: 80,
+              y: 114,
             },
             Landscape: {
               scale: 0.8,
@@ -286,6 +286,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
+    //BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {
