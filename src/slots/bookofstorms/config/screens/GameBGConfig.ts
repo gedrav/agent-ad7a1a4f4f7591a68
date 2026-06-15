@@ -9,8 +9,9 @@ export const GAME_BG_CONFIG: any = {
       name: 'maingameBG',
       type: 'Spine',
       spineName: 'bg',
-      defaultState: 'animation',
       defaultSkin: 'day',
+      defaultState: 'animation',
+      freespinState: 'animation',
       loop: true,
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {

@@ -12,6 +12,7 @@ import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
+import { BookSlotReel } from '@game/views/slot/BookSloReel';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -24,16 +25,20 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xff0000,
       width: 1610,
       height: 1190,
+      pWidth: 1420,
+      pHeight: 1200,
       alpha: 0,
     },
 
     {
       name: 'slotReel',
       type: 'Comp',
-      class: SlotReelStandard,
+      class: BookSlotReel,
       winController: GameWinController,
       x: 30,
       y: 0,
+      px: -65,
+      py: 0,
       data: {
         symbolClass: ReelSymbolSpine,
         noOfReels: 5,
@@ -200,15 +205,15 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: {
               scale: 1,
-              x: 754,
+              x: 780,
               y: 114,
             },
             Landscape: {
               scale: 0.8,
-              x: 580,
-              y: -10,
+              x: 775,
+              y: 106,
             },
-            Portrait: { scale: 0.8, x: 580, y: -10 },
+            Portrait: { scale: 0.8, x: 775, y: 105 },
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 166, color: 0xffff00 },
@@ -286,7 +291,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
-    BOOK_OPEN_CONFIG,
+    // BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {
