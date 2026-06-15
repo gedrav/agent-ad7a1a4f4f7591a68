@@ -171,11 +171,6 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.extraData = {};
           finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
           finalObj.extraData.combination = cheatObj.combination;
-        } else {
-          // todo: will remove this whole else block once qa is done
-          finalObj.extraData = {};
-          finalObj.extraData.combination = cheatObj;
-          // ----------------------------------------------------------
         }
       }
     }
