@@ -286,7 +286,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
-    //BOOK_OPEN_CONFIG,
+    BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {
@@ -296,7 +296,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       hAlign: 'center',
       vAlign: 'middle',
       maxScale: 1,
-      vPaddingPerc: -0.02,
+      vPaddingPerc: 0.02,
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },

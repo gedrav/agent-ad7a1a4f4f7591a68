@@ -22,6 +22,7 @@ export class PreloaderScreen extends ResponsiveChildrenView {
     this.bar = this.elementsList['progressBar'].elementsList['bar'];
     this.circle2 = this.elementsList['progressBar'].elementsList['circle2'];
     this.visible = false;
+    this.bar.scale.x = 0;
     this.disposeLoadProgress = EventHandler.bind(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
     setTimeout(() => {
       this.visible = true;
