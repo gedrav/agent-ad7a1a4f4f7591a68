@@ -38,7 +38,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 755,
-      y: 465,
+      y: 400,
       Elements: [
         {
           name: 'valueText',
@@ -53,7 +53,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 755,
-      y: 950,
+      y: 795,
       Elements: [
         // { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 40 },
         {

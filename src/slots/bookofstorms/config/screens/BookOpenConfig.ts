@@ -1,5 +1,3 @@
-import { WinTicker } from '@core/views/comps/WinTicker';
-import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
 import { BookOpenComp } from '@game/views/comps/BookOpenComp';
 
 export const BOOK_OPEN_CONFIG = {
