@@ -27,6 +27,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       height: 1190,
       pWidth: 1420,
       pHeight: 1200,
+      lWidth: 1420,
+      lHeight: 1200,
       alpha: 0,
     },
 
@@ -39,6 +41,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       y: 0,
       px: -65,
       py: 0,
+      lx: -65,
+      ly: 0,
       data: {
         symbolClass: ReelSymbolSpine,
         noOfReels: 5,
