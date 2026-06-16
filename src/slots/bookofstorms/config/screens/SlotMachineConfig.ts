@@ -28,8 +28,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       pWidth: 1420,
       pHeight: 1200,
       lWidth: 1420,
-      lHeight: 1200,
-      alpha: 0,
+      lHeight: 1140,
+      alpha: 1,
     },
 
     {
@@ -175,7 +175,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           type: 'Comp',
           class: ReelFrameComp,
           x: 0,
-          y: 100,
+          y: 46,
           Elements: [
             {
               name: 'reelFrame',
@@ -210,7 +210,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 780,
-              y: 114,
+              y: 60,
             },
             Landscape: {
               scale: 0.8,
@@ -295,7 +295,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
-    //BOOK_OPEN_CONFIG,
+    BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

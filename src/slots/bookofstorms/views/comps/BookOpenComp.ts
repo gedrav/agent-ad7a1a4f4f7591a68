@@ -11,7 +11,7 @@ export class BookOpenComp extends StandardView {
 
   constructor(config: any) {
     super(config);
-    setTimeout(this.playBookAnimation.bind(this), 1000);
+    setTimeout(this.playBookAnimation.bind(this, 'H2'), 1000);
   }
 
   async onSecondaryAssetsLoaded() {
@@ -47,6 +47,7 @@ export class BookOpenComp extends StandardView {
     this.bookRight.y = this.guideRect.height / 2;
     this.bookRight.visible = false;
     this.bookRight.addEventListener('complete', this.onRightBookAnimEnd.bind(this));
+    this.bookRight.addEventListener('event', this.onRightBookChangeSkin.bind(this));
 
     // Apply the runtime patches to inject missing right pages into custom skins
     this.patchSpineDataAtRuntime(this.mainBook);
@@ -160,9 +161,6 @@ export class BookOpenComp extends StandardView {
     this.bookRightStatic.setSkin(this.nextSymbol);
     this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
     this.bookRight.playAnimation({ state: 'flipping', loop: false });
-    setTimeout(() => {
-      this.bookRight.setSkin(this.getRandomSkin());
-    }, 750);
   }
 
   protected onRightBookAnimEnd(data: any): void {
@@ -171,5 +169,9 @@ export class BookOpenComp extends StandardView {
     if (data.animation.name === 'flipping') {
       //this.startNextFlip();
     }
+  }
+  protected onRightBookChangeSkin(data: any): void {
+    console.log('aaaaaaaaaaaaaa == ', data);
+    this.bookRight.setSkin(this.getRandomSkin());
   }
 }
