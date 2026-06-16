@@ -1,10 +1,10 @@
-import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
+import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
-  class: FSPopupComp,
+  class: BookOfStormsFSPopupComp,
   Elements: [
     // { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
     { name: 'popupbg', type: 'Sprite', image: 'popup1' },

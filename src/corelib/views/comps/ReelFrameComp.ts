@@ -1,9 +1,5 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
-import { PixText } from '@core/pixiwrapper/PixText';
-import { Util } from '@core/utils/UtilService';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { UIUtil } from '@core/utils/UIUtilService';
-import { GlowFilter } from 'pixi-filters';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 

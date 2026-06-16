@@ -11,7 +11,7 @@ export const GAME_BG_CONFIG: any = {
       spineName: 'bg',
       defaultSkin: 'day',
       defaultState: 'animation',
-      freespinState: 'animation',
+      freespinSkin: 'night',
       loop: true,
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {
