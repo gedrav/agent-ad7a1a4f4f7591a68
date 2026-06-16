@@ -4,7 +4,7 @@ export const BOOK_OPEN_CONFIG = {
   name: 'bookOpenComp',
   type: 'Comp',
   class: BookOpenComp,
-  Elements: [{ name: 'guideRect', type: 'Graphics', width: 1610, height: 1190, color: 0xffff00, x: 0, y: 0, alpha: 0 }],
+  Elements: [{ name: 'guideRect', type: 'Graphics', width: 1610, height: 1190, color: 0xffff00, x: 0, y: 0, alpha: 1 }],
   layoutData: {
     Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
     Landscape: {
