@@ -28,7 +28,7 @@ export class BGView extends ResponsiveChildrenView {
       this.maingameBG.playAnimation({ state: this.maingameBG.configData.defaultState, loop: true });
       return;
     }
-    if (this.currentBG === 'free' && this.freegameBG.configData.unload) {
+    if (this.currentBG === 'free' && this.freegameBG?.configData?.unload) {
       this.unloadFSBG();
     }
     this.currentBG = 'main';
