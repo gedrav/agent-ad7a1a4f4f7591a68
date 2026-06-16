@@ -11,7 +11,7 @@ export class BookOpenComp extends StandardView {
 
   constructor(config: any) {
     super(config);
-    setTimeout(this.playBookAnimation.bind(this, 'H2'), 1000);
+    setTimeout(this.playBookAnimation.bind(this, 'eagle'), 1000);
   }
 
   async onSecondaryAssetsLoaded() {
@@ -122,12 +122,16 @@ export class BookOpenComp extends StandardView {
   private currentSymbol: string = '';
   private nextSymbol: string = '';
   private nextLeftSymbol: string = '';
+  private currentTurn: number = 0;
+  private targetTurns: number = 9;
 
   private getRandomSkin(): string {
     return this.availableSkins[Math.floor(Math.random() * this.availableSkins.length)];
   }
 
-  protected playBookAnimation(): void {
+  protected playBookAnimation(targetSkin: string): void {
+    this.nextLeftSymbol = targetSkin;
+    this.currentTurn = 0;
     this.mainBook.visible = true;
 
     this.currentSymbol = this.getRandomSkin();
@@ -137,7 +141,7 @@ export class BookOpenComp extends StandardView {
     this.mainBook.playAnimation({ state: 'open_static', loop: false });
     this.bookLeft.setSkin(this.currentSymbol);
     this.bookRight.setSkin(this.currentSymbol);
-    this.bookRightStatic.setSkin(this.currentSymbol);
+    this.bookRightStatic.setSkin(this.nextSymbol);
 
     this.bookLeft.playAnimation({ state: 'static_left', loop: false });
     this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
@@ -158,20 +162,35 @@ export class BookOpenComp extends StandardView {
   }
 
   private startNextFlip(): void {
-    this.bookRightStatic.setSkin(this.nextSymbol);
     this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
     this.bookRight.playAnimation({ state: 'flipping', loop: false });
+
+    if (this.currentTurn > 0) {
+      this.bookRight.setSkin(this.nextSymbol);
+    }
+
+    this.nextSymbol = this.getRandomSkin();
+    this.bookRightStatic.setSkin(this.nextSymbol);
   }
 
   protected onRightBookAnimEnd(data: any): void {
     console.log('right book anim end -- ', data);
-
     if (data.animation.name === 'flipping') {
-      //this.startNextFlip();
+      this.bookLeft.setSkin(this.currentSymbol);
+      this.currentTurn++;
+      if (this.currentTurn <= this.targetTurns) {
+        this.startNextFlip();
+      } else {
+        this.bookRight.visible = false;
+      }
     }
   }
   protected onRightBookChangeSkin(data: any): void {
-    console.log('aaaaaaaaaaaaaa == ', data);
-    this.bookRight.setSkin(this.getRandomSkin());
+    if (this.currentTurn === this.targetTurns) {
+      this.currentSymbol = this.nextLeftSymbol;
+    } else {
+      this.currentSymbol = this.getRandomSkin();
+    }
+    this.bookRight.setSkin(this.currentSymbol);
   }
 }
