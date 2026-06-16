@@ -59,6 +59,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Mask', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Q', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'StormSeeker', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'book_win_frame', ASSETTYPE: 'spine' },
   ],
 };
 const FREESPIN: AssetBundle = {

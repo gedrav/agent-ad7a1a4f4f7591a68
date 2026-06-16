@@ -296,7 +296,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
-    // BOOK_OPEN_CONFIG,
+    BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
     // TRANSITION_ANIM_CONFIG,
   ],
