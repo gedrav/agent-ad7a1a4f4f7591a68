@@ -13,6 +13,7 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
+import { TRANSITION_ANIM_CONFIG } from './TransitionAnimConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -24,12 +25,12 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 1610,
-      height: 1190,
+      height: 1140,
       pWidth: 1420,
-      pHeight: 1200,
-      lWidth: 1420,
+      pHeight: 1150,
+      lWidth: 1610,
       lHeight: 1140,
-      alpha: 1,
+      alpha: 0,
     },
 
     {
@@ -41,7 +42,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       y: 0,
       px: -65,
       py: 0,
-      lx: -65,
+      lx: 30,
       ly: 0,
       data: {
         symbolClass: ReelSymbolSpine,
@@ -52,19 +53,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 214, y: 306 },
+            reelContainerPos: { x: 214, y: 258 },
             reelPositionX: [0, 280, 560, 840, 1120],
             symbolHeight: 276,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 214, y: 306 },
+            reelContainerPos: { x: 214, y: 258 },
             reelPositionX: [0, 280, 560, 840, 1120],
             symbolHeight: 276,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 214, y: 306 },
+            reelContainerPos: { x: 214, y: 258 },
             reelPositionX: [0, 280, 560, 840, 1120],
             symbolHeight: 276,
             symbolScale: 1,
@@ -167,7 +168,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           type: 'Sprite',
           image: 'reelframebg',
           x: 0,
-          y: 100,
+          y: 50,
         },
         { name: 'symbolsContainer', type: 'Container' },
         {
@@ -175,7 +176,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           type: 'Comp',
           class: ReelFrameComp,
           x: 0,
-          y: 46,
+          y: 50,
           Elements: [
             {
               name: 'reelFrame',
@@ -197,7 +198,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 26, y: 1060, scale: 1 },
+        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 26, y: 1005, scale: 1 },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
@@ -210,17 +211,17 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 780,
-              y: 60,
+              y: 58,
             },
             Landscape: {
-              scale: 0.8,
-              x: 775,
-              y: 106,
+              scale: 0.9,
+              x: 780,
+              y: 58,
             },
-            Portrait: { scale: 0.8, x: 775, y: 105 },
+            Portrait: { scale: 0.9, x: 775, y: 56 },
           },
         },
-        { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 166, color: 0xffff00 },
+        { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 118, color: 0xffff00 },
         {
           name: 'winSymbolsContainer',
           type: 'Container',
@@ -295,8 +296,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       ],
     },
-    BOOK_OPEN_CONFIG,
+    // BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
+    TRANSITION_ANIM_CONFIG,
   ],
   layoutData: {
     Desktop: {

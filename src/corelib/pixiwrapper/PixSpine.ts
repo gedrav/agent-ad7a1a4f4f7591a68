@@ -101,7 +101,7 @@ export class PixSpine extends StandardView {
       this.spineAnim.skeleton.setToSetupPose();
       this.spineAnim.state.tracks = [];
     }
-    this.spineAnim.state.timeScale = 0.2;
+    this.spineAnim.state.timeScale = 1;
     options.trackIndex = Util.getDefaultValue(options.trackIndex, 0);
     this.spineAnim.state.setAnimation(options.trackIndex, options.state, options.loop);
     if (options.nextState) {
