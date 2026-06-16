@@ -46,7 +46,6 @@ const PRIMARY: AssetBundle = {
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
-    // { TYPE: 'game', NAME: 'book_open', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'book_feature', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'bigWins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: '10', ASSETTYPE: 'spine' },
