@@ -4,6 +4,7 @@ import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
+import { STATES } from '@core/states/StateConstants';
 
 class BOSEnterFreeSpinStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -43,7 +44,7 @@ class BOSEnterFreeSpinStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
 
-    StateManager.next();
+    StateManager.goToState(STATES.SHOW_TRANSITION_ANIM);
   }
 }
 

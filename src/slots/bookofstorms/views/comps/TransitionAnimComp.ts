@@ -21,25 +21,25 @@ export class TransitionAnimComp extends StandardView {
       name: 'transitionSpine',
       type: 'Spine',
       spineName: 'Transition',
-      defaultState: 'horisontal',
     });
 
     this.addChild(this.transitionAnim);
-    this.transitionAnim.visible = false;
     this.transitionAnim.addEventListener('complete', this.onTransitionComplete.bind(this));
     this.transitionAnim.x = this.guideRect.width / 2;
     this.transitionAnim.y = this.guideRect.height / 2;
   }
 
   private onShowTransition(): void {
-    if (!this.transitionAnim) return;
+    if (!this.transitionAnim) {
+      //in case asset was not loaded and transitionAnim was not created
+      this.onTransitionComplete();
+      return;
+    }
     this.visible = true;
-    this.transitionAnim.visible = true;
     this.transitionAnim.playAnimation({ state: 'horisontal', loop: false, defaultMix: 0 });
   }
 
   private onTransitionComplete(): void {
-    this.transitionAnim.visible = false;
     this.visible = false;
     StateManager.doNextStep();
   }
