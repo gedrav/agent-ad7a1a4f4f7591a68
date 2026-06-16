@@ -11,7 +11,7 @@ export class BookOpenComp extends StandardView {
 
   constructor(config: any) {
     super(config);
-    setTimeout(this.playBookAnimation.bind(this, 'eagle'), 1000);
+    setTimeout(this.playBookAnimation.bind(this, 'H2'), 1000);
   }
 
   async onSecondaryAssetsLoaded() {
@@ -119,6 +119,19 @@ export class BookOpenComp extends StandardView {
   }
 
   private availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
+
+  private symbolToSkinMap: { [key: string]: string } = {
+    H1: 'man',
+    H2: 'eagle',
+    H3: 'mask',
+    H4: 'castle',
+    L1: 'A',
+    L2: 'K',
+    L3: 'Q',
+    L4: 'J',
+    L5: '10',
+  };
+
   private currentSymbol: string = '';
   private nextSymbol: string = '';
   private nextLeftSymbol: string = '';
@@ -129,8 +142,14 @@ export class BookOpenComp extends StandardView {
     return this.availableSkins[Math.floor(Math.random() * this.availableSkins.length)];
   }
 
-  protected playBookAnimation(targetSkin: string): void {
-    this.nextLeftSymbol = targetSkin;
+  protected playBookAnimation(targetSymbolCode: string): void {
+    if (!this.mainBook) {
+      console.warn('Assets not loaded yet, waiting...');
+      setTimeout(this.playBookAnimation.bind(this, targetSymbolCode), 500);
+      return;
+    }
+    this.nextLeftSymbol = this.symbolToSkinMap[targetSymbolCode] || targetSymbolCode;
+
     this.currentTurn = 0;
     this.mainBook.visible = true;
 
