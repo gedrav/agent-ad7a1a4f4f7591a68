@@ -43,6 +43,12 @@ export class BGView extends ResponsiveChildrenView {
       this.maingameBG.playAnimation({ state: this.maingameBG.configData.freespinState, loop: true });
       return;
     }
+    if (this.maingameBG.configData.freespinSkin) {
+      this.currentBG = 'free';
+      this.maingameBG.setSkin(this.maingameBG.configData.freespinSkin);
+      return;
+    }
+
     this.currentBG = 'free';
     if (this.freegameBG.configData.unload) {
       this.loadFSBG();
