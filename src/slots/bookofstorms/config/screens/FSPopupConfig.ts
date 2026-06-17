@@ -1,5 +1,6 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
+import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
@@ -17,6 +18,7 @@ export const FS_POPUP_CONFIG = {
       x: 745,
       y: 250,
     },
+    BOOK_OPEN_CONFIG,
     {
       name: 'messageText1',
       type: 'Text',
