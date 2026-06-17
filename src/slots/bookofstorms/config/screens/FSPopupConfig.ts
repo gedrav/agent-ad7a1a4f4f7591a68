@@ -8,7 +8,13 @@ export const FS_POPUP_CONFIG = {
   class: BookOfStormsFSPopupComp,
   Elements: [
     // { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
-    { name: 'popupbg', type: 'Sprite', image: 'popup1' },
+    {
+      name: 'popupbg',
+      type: 'NineSliceSprite',
+      image: 'popup1',
+      nineSlice: [200, 200, 200, 200],
+      height: 1200,
+    },
     {
       name: 'titleText',
       type: 'Text',

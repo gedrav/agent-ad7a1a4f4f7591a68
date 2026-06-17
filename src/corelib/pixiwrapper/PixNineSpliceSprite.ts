@@ -7,6 +7,14 @@ export class PixNineSpliceSprite extends PIXI.NineSliceSprite {
   constructor(texture: Texture) {
     super(texture);
   }
+  protected checkForDimension() {
+    if (this.configData.width != undefined) {
+      this.width = this.configData.width;
+    }
+    if (this.configData.height != undefined) {
+      this.height = this.configData.height;
+    }
+  }
   public setAnimationSpeed(num: number): void {}
 
   public playAnimation(options: any = null) {}
@@ -21,6 +29,7 @@ export class PixNineSpliceSprite extends PIXI.NineSliceSprite {
         this._configData[p] = data[p];
       }
     }
+    this.checkForDimension();
   }
 
   public get configData() {
