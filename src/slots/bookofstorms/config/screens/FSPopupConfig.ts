@@ -1,5 +1,6 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
+import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
@@ -7,7 +8,13 @@ export const FS_POPUP_CONFIG = {
   class: BookOfStormsFSPopupComp,
   Elements: [
     // { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 0 },
-    { name: 'popupbg', type: 'Sprite', image: 'popup1' },
+    {
+      name: 'popupbg',
+      type: 'NineSliceSprite',
+      image: 'popup1',
+      nineSlice: [200, 200, 200, 200],
+      height: 1200,
+    },
     {
       name: 'titleText',
       type: 'Text',
@@ -17,6 +24,7 @@ export const FS_POPUP_CONFIG = {
       x: 745,
       y: 250,
     },
+    BOOK_OPEN_CONFIG,
     {
       name: 'messageText1',
       type: 'Text',

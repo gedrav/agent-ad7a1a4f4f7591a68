@@ -12,7 +12,7 @@ export class BookOpenComp extends StandardView {
 
   constructor(config: any) {
     super(config);
-    setTimeout(this.playBookAnimation.bind(this, 'L3'), 1000);
+    //setTimeout(this.playBookAnimation.bind(this, 'L3'), 1000);
   }
 
   async onSecondaryAssetsLoaded() {
@@ -60,76 +60,15 @@ export class BookOpenComp extends StandardView {
     this.addChild(this.winFrameComp);
     this.winFrameComp.x = 645;
     this.winFrameComp.y = 595;
+    this.winFrameComp.scale.set(1.1);
     this.winFrameComp.visible = false;
     this.winFrameComp.addEventListener('complete', this.onWinFrameAnimComplete.bind(this));
 
     // Apply the runtime patches to inject missing right pages into custom skins
-    this.patchSpineDataAtRuntime(this.mainBook);
-    this.patchSpineDataAtRuntime(this.bookLeft);
-    this.patchSpineDataAtRuntime(this.bookRight);
-    this.patchSpineDataAtRuntime(this.bookRightStatic);
-  }
-
-  private patchSpineDataAtRuntime(spineObj: PixSpine) {
-    try {
-      const spineAnim = (spineObj as any).spineAnim;
-      if (!spineAnim || !spineAnim.skeleton || !spineAnim.skeleton.data) {
-        console.warn('patchSpineDataAtRuntime: spineAnim missing');
-        return;
-      }
-
-      const data = spineAnim.skeleton.data;
-      const defaultSkin = data.findSkin('default');
-
-      let slotIndexR = -1;
-      let slotIndexL = -1;
-      for (let i = 0; i < data.slots.length; i++) {
-        if (data.slots[i].name === 'symbol_r') slotIndexR = i;
-        if (data.slots[i].name === 'symbol_l') slotIndexL = i;
-      }
-
-      if (!defaultSkin || slotIndexR < 0 || slotIndexL < 0) {
-        console.warn('patchSpineDataAtRuntime: slots/skin missing', {
-          defaultSkin: !!defaultSkin,
-          slotIndexR,
-          slotIndexL,
-        });
-        return;
-      }
-
-      const baseSymbolR =
-        defaultSkin.getAttachment(slotIndexR, 'symbol_r') || defaultSkin.getAttachment(slotIndexR, 'symb_null');
-      if (!baseSymbolR) {
-        console.warn('patchSpineDataAtRuntime: baseSymbolR missing in default skin');
-        return;
-      }
-
-      for (const skin of data.skins) {
-        if (skin.name === 'default') continue;
-
-        // Ensure the left slot also has the 'symb_null' name available
-        const symbolLMesh = skin.getAttachment(slotIndexL, 'symbol_l') || skin.getAttachment(slotIndexL, 'symb_null');
-        if (symbolLMesh && !skin.getAttachment(slotIndexL, 'symb_null')) {
-          skin.setAttachment(slotIndexL, 'symb_null', symbolLMesh);
-        }
-
-        const existing = skin.getAttachment(slotIndexR, 'symbol_r') || skin.getAttachment(slotIndexR, 'symb_null');
-        if (!existing) {
-          const newMesh = (baseSymbolR as any).copy();
-          if (symbolLMesh && (symbolLMesh as any).region) {
-            newMesh.region = (symbolLMesh as any).region;
-            if (typeof newMesh.updateRegion === 'function') newMesh.updateRegion();
-            skin.setAttachment(slotIndexR, 'symbol_r', newMesh);
-            skin.setAttachment(slotIndexR, 'symb_null', newMesh);
-            console.log(`patchSpineDataAtRuntime: Successfully patched skin ${skin.name}`);
-          } else {
-            console.warn(`patchSpineDataAtRuntime: Skin ${skin.name} missing symbol_l mesh or region`);
-          }
-        }
-      }
-    } catch (e: any) {
-      console.error('patchSpineDataAtRuntime Error:', e);
-    }
+    this.mainBook.patchSpineDataAtRuntime();
+    this.bookLeft.patchSpineDataAtRuntime();
+    this.bookRight.patchSpineDataAtRuntime();
+    this.bookRightStatic.patchSpineDataAtRuntime();
   }
 
   private availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
@@ -156,7 +95,7 @@ export class BookOpenComp extends StandardView {
     return this.availableSkins[Math.floor(Math.random() * this.availableSkins.length)];
   }
 
-  protected playBookAnimation(targetSymbolCode: string): void {
+  public playBookAnimation(targetSymbolCode: string): void {
     if (!this.mainBook) {
       console.warn('Assets not loaded yet, waiting...');
       setTimeout(this.playBookAnimation.bind(this, targetSymbolCode), 500);
@@ -183,7 +122,6 @@ export class BookOpenComp extends StandardView {
   }
 
   protected onMainBookAnimEnd(data: any): void {
-    console.log('main book anim end -- ', data);
     if (data.animation.name === 'start') {
       this.mainBook.playAnimation({ state: 'open', loop: false });
     } else if (data.animation.name === 'open') {
@@ -207,7 +145,6 @@ export class BookOpenComp extends StandardView {
   }
 
   protected onRightBookAnimEnd(data: any): void {
-    console.log('right book anim end -- ', data);
     if (data.animation.name === 'flipping') {
       this.bookLeft.setSkin(this.currentSymbol);
       this.currentTurn++;
@@ -234,4 +171,6 @@ export class BookOpenComp extends StandardView {
       this.winFrameComp.playAnimation({ state: 'loop', loop: true });
     }
   }
+
+  public cleanBookComp(): void {}
 }
