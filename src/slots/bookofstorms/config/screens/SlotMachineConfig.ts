@@ -297,7 +297,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       ],
     },
     BIG_WIN_CONFIG,
-    //TRANSITION_ANIM_CONFIG,
+    TRANSITION_ANIM_CONFIG,
   ],
   layoutData: {
     Desktop: {
