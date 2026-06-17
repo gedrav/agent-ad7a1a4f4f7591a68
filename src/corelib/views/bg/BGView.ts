@@ -23,12 +23,17 @@ export class BGView extends ResponsiveChildrenView {
     this.showMainGameBG();
   }
   protected showMainGameBG() {
+    if (this.maingameBG.configData.freespinSkin) {
+      this.currentBG = 'main';
+      this.maingameBG.setSkin(this.maingameBG.configData.defaultSkin);
+      return;
+    }
     if (this.maingameBG.configData.freespinState) {
       this.currentBG = 'main';
       this.maingameBG.playAnimation({ state: this.maingameBG.configData.defaultState, loop: true });
       return;
     }
-    if (this.currentBG === 'free' && this.freegameBG.configData.unload) {
+    if (this.currentBG === 'free' && this.freegameBG?.configData?.unload) {
       this.unloadFSBG();
     }
     this.currentBG = 'main';
