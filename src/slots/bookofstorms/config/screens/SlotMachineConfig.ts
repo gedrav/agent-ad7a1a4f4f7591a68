@@ -13,7 +13,6 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
-import { TRANSITION_ANIM_CONFIG } from './TransitionAnimConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -298,7 +297,6 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     //BOOK_OPEN_CONFIG,
     BIG_WIN_CONFIG,
-    TRANSITION_ANIM_CONFIG,
   ],
   layoutData: {
     Desktop: {

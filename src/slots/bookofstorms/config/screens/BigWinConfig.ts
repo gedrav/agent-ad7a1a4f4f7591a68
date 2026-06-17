@@ -7,10 +7,10 @@ export const BIG_WIN_CONFIG = {
   class: BigWinsComp,
   data: {
     animations: {
-      BIG_WIN: { start: 'big_start', idle: 'big', end: 'big' },
-      SUPER_WIN: { start: 'mega_start', idle: 'mega', end: 'mega' },
-      MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic', end: 'gigantic' },
-      EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable', end: 'unbelievable' },
+      BIG_WIN: { start: 'big_start', idle: 'big' },
+      SUPER_WIN: { start: 'mega_start', idle: 'mega' },
+      MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic' },
+      EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable' },
     },
     bigWinAnim: {
       name: 'bigWinAnim',
@@ -32,7 +32,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 750, y: 450 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 750, y: 250 },
     {
       name: 'winTicker',
       type: 'Comp',
@@ -66,22 +66,31 @@ export const BIG_WIN_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, hAlign: 'center', vAlign: 'middle' },
-    Landscape: {
+    Desktop: {
       refComponent: 'guideRect',
       widthPerc: 1,
-      heightPerc: 0.9,
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      vPaddingPerc: -0.05,
     },
-    Portrait: {
+    Landscape: {
       refComponent: 'guideRect',
-      widthPerc: 0.9,
+      widthPerc: 1,
       heightPerc: 1,
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      vPaddingPerc: -0.05,
+    },
+    Portrait: {
+      refComponent: 'guideRect',
+      widthPerc: 1,
+      heightPerc: 1,
+      maxScale: 1,
+      hAlign: 'center',
+      vAlign: 'middle',
+      vPaddingPerc: -0.05,
     },
   },
 };

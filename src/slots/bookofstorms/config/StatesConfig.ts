@@ -18,7 +18,9 @@ import { BookShowSpinWinState } from '@game/states/BookShowSpinWinState';
 import { BookShowSymbolExpansionState } from '@game/states/BookShowSymbolExpansionState';
 import { BookShowSymbolAfterExpansionState } from '@game/states/BookShowSymbolAfterExpansionState';
 import { BOSEnterFreespinsState } from '@game/states/BOSEnterFreeSpinState';
-import { ShowFSTransitionState } from '@game/states/ShowFSTransitionState';
+import { ShowFSEnterTransitionState } from '@game/states/ShowFSEnterTransitionState';
+import { BOSExitFreespinsState } from '@game/states/BOSExitFreeSpinState';
+import { ShowFSExitTransitionState } from '@game/states/ShowFSExitTransitionState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -38,11 +40,12 @@ export const STATES_CONFIG: any = [
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
   { name: STATES.ENTER_FREESPINS_STATE, state: BOSEnterFreespinsState },
-  { name: STATES.SHOW_TRANSITION_ANIM, state: ShowFSTransitionState },
+  { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: ShowFSEnterTransitionState },
 
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
-  { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
+  { name: STATES.EXIT_FREESPINS_STATE, state: BOSExitFreespinsState },
+  { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: ShowFSExitTransitionState },
 
   { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
 ];

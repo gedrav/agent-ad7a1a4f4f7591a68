@@ -1,4 +1,3 @@
-import { ShowFSTransitionState } from '@game/states/ShowFSTransitionState';
 import { TransitionAnimComp } from '@game/views/comps/TransitionAnimComp';
 
 export const TRANSITION_ANIM_CONFIG = {
@@ -9,19 +8,29 @@ export const TRANSITION_ANIM_CONFIG = {
     {
       name: 'guideRect',
       type: 'Graphics',
-      width: 4000,
-      height: 500,
-      pWidth: 1420,
-      pHeight: 4000,
-      lWidth: 1610,
-      lHeight: 1140,
+      width: 1400,
+      height: 700,
       color: 0xffff00,
       alpha: 0,
     },
+    {
+      name: 'transitionAnimHor',
+      type: 'Spine',
+      spineName: 'Transition',
+      defaultState: 'horisontal',
+      scale: 1,
+    },
+    {
+      name: 'transitionAnimVer',
+      type: 'Spine',
+      spineName: 'Transition',
+      defaultState: 'vertical',
+      scale: 1,
+    },
   ],
   layoutData: {
-    Desktop: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-    Portrait: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-    Landscape: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+    Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+    Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+    Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
   },
 };
