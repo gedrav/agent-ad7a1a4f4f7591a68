@@ -1,6 +1,7 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
 import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
+import { scaleBy } from '@pixi/particle-emitter/lib/ParticleUtils';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
@@ -22,9 +23,15 @@ export const FS_POPUP_CONFIG = {
       style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1000 },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 250,
+      y: 230,
     },
-    BOOK_OPEN_CONFIG,
+    {
+      ...BOOK_OPEN_CONFIG,
+      layoutData: undefined,
+      scale: 1,
+      x: -60,
+      y: 92,
+    },
     {
       name: 'messageText1',
       type: 'Text',
@@ -40,7 +47,21 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 495,
+      y: 390,
+    },
+    {
+      name: 'expandingSymbolText',
+      type: 'Text',
+      content: 'expandingSymbolText',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 50,
+        fill: 0xffff00,
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 745,
+      y: 920,
     },
     {
       name: 'messageText2',
@@ -56,7 +77,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 588,
+      y: 1070,
     },
     {
       name: 'okBtn',
@@ -88,11 +109,11 @@ export const FS_POPUP_CONFIG = {
         toUpperCase: true,
       },
       x: 745,
-      y: 790,
+      y: 1310,
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.6, maxScale: 1 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.5 },
     Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.7 },
   },
