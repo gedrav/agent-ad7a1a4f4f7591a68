@@ -30,7 +30,7 @@ export const FS_POPUP_CONFIG = {
       layoutData: undefined,
       scale: 1,
       x: -60,
-      y: 155,
+      y: 92,
     },
     {
       name: 'messageText1',
@@ -47,7 +47,21 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 350,
+      y: 390,
+    },
+    {
+      name: 'expandingSymbolText',
+      type: 'Text',
+      content: 'expandingSymbolText',
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 50,
+        fill: 0xffff00,
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 745,
+      y: 920,
     },
     {
       name: 'messageText2',
@@ -63,7 +77,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 1100,
+      y: 1070,
     },
     {
       name: 'okBtn',
