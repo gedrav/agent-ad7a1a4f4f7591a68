@@ -44,7 +44,7 @@ class BOSEnterFreeSpinStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
 
-    StateManager.goToState(STATES.SHOW_TRANSITION_ANIM);
+    StateManager.goToState(STATES.SHOW_FS_ENTRY_TRANSITION_ANIM);
   }
 }
 

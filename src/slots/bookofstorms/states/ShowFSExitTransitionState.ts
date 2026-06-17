@@ -4,7 +4,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 
-class ShowFSTransitionStateCommand extends StateCommand {
+class ShowFSExitTransitionStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.SHOW_TRANSITION_ANIM);
@@ -12,8 +12,8 @@ class ShowFSTransitionStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
-    StateManager.goToState(STATES.FS_SPIN_START_STATE);
+    StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
   }
 }
 
-export const ShowFSTransitionState = new ShowFSTransitionStateCommand();
+export const ShowFSExitTransitionState = new ShowFSExitTransitionStateCommand();

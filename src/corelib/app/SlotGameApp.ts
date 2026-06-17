@@ -36,6 +36,7 @@ class SlotGameApp {
   protected splashComp: any;
   protected lastTickTime: number;
   protected gameAppScreen: any;
+  protected transitionAnimComp: any;
   private assetsLoaded: boolean;
   private gameInitReceived: boolean;
   protected initErrorOccured: boolean = false;
@@ -336,6 +337,7 @@ class SlotGameApp {
   protected createView(): void {
     // overridden in game
   }
+  protected createTransitionView(): void {}
   protected checkToCreateGame(): void {
     if (this.gameInitReceived && this.assetsLoaded && this.soundsLoaded) {
       if (!appModel.isErrorOccurred) {
@@ -381,6 +383,7 @@ class SlotGameApp {
     setTimeout(() => {
       EventHandler.dispatchEvent(AppEvents.SECONDARY_ASSETS_LOADED);
       AssetLoader.loadFeatures();
+      this.createTransitionView();
     }, 100);
   }
   async onFeatureAssetsLoaded() {
