@@ -13,7 +13,7 @@ export class BookOfStormsFSPopupComp extends FSPopupComp {
     this.popupbg = this.elementsList['popupbg'];
   }
   protected updateMessagePositions(data: any): void {
-    const symbol = appModel.featureResult?.bookSymbol;
+    const symbol = appModel.featureResult?.bookSymbol || 'H2';
 
     if (data.message2 && this.messageText2.visible !== false) {
       this.messageText2.text = data.message2;
