@@ -8,10 +8,11 @@ export class BookOpenComp extends StandardView {
   private bookLeft: PixSpine;
   private bookRight: PixSpine;
   private bookRightStatic: PixSpine;
+  private winFrameComp: PixSpine;
 
   constructor(config: any) {
     super(config);
-    setTimeout(this.playBookAnimation.bind(this, 'H2'), 1000);
+    setTimeout(this.playBookAnimation.bind(this, 'L3'), 1000);
   }
 
   async onSecondaryAssetsLoaded() {
@@ -48,6 +49,19 @@ export class BookOpenComp extends StandardView {
     this.bookRight.visible = false;
     this.bookRight.addEventListener('complete', this.onRightBookAnimEnd.bind(this));
     this.bookRight.addEventListener('event', this.onRightBookChangeSkin.bind(this));
+
+    const config1: any = {
+      name: 'winFrame',
+      type: 'Spine',
+      spineName: 'book_win_frame',
+      defaultState: 'start',
+    };
+    this.winFrameComp = UIUtil.getElement(config1);
+    this.addChild(this.winFrameComp);
+    this.winFrameComp.x = 645;
+    this.winFrameComp.y = 595;
+    this.winFrameComp.visible = false;
+    this.winFrameComp.addEventListener('complete', this.onWinFrameAnimComplete.bind(this));
 
     // Apply the runtime patches to inject missing right pages into custom skins
     this.patchSpineDataAtRuntime(this.mainBook);
@@ -200,7 +214,9 @@ export class BookOpenComp extends StandardView {
       if (this.currentTurn <= this.targetTurns) {
         this.startNextFlip();
       } else {
-        this.bookRight.visible = false;
+        //this.bookRight.visible = false;
+        this.winFrameComp.visible = true;
+        this.winFrameComp.playAnimation({ state: 'start', loop: false });
       }
     }
   }
@@ -211,5 +227,11 @@ export class BookOpenComp extends StandardView {
       this.currentSymbol = this.getRandomSkin();
     }
     this.bookRight.setSkin(this.currentSymbol);
+  }
+
+  protected onWinFrameAnimComplete(data: any): void {
+    if (data.animation.name === 'start') {
+      this.winFrameComp.playAnimation({ state: 'loop', loop: true });
+    }
   }
 }
