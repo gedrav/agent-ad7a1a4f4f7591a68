@@ -1,6 +1,7 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
 import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
+import { scaleBy } from '@pixi/particle-emitter/lib/ParticleUtils';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
@@ -16,9 +17,15 @@ export const FS_POPUP_CONFIG = {
       style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1000 },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 250,
+      y: 205,
     },
-    BOOK_OPEN_CONFIG,
+    {
+      ...BOOK_OPEN_CONFIG,
+      layoutData: undefined,
+      scale: 0.85,
+      x: 61,
+      y: -18,
+    },
     {
       name: 'messageText1',
       type: 'Text',
@@ -34,7 +41,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 495,
+      y: 280,
     },
     {
       name: 'messageText2',
@@ -50,7 +57,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 745,
-      y: 588,
+      y: 690,
     },
     {
       name: 'okBtn',
@@ -82,7 +89,7 @@ export const FS_POPUP_CONFIG = {
         toUpperCase: true,
       },
       x: 745,
-      y: 790,
+      y: 830,
     },
   ],
   layoutData: {

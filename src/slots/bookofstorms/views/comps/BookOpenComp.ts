@@ -58,7 +58,7 @@ export class BookOpenComp extends StandardView {
     };
     this.winFrameComp = UIUtil.getElement(config1);
     this.addChild(this.winFrameComp);
-    this.winFrameComp.x = 645;
+    this.winFrameComp.x = 693;
     this.winFrameComp.y = 595;
     this.winFrameComp.scale.set(1.1);
     this.winFrameComp.visible = false;
@@ -172,5 +172,11 @@ export class BookOpenComp extends StandardView {
     }
   }
 
-  public cleanBookComp(): void {}
+  public cleanBookComp(): void {
+    if (this.mainBook) this.mainBook.visible = false;
+    if (this.bookLeft) this.bookLeft.visible = false;
+    if (this.bookRight) this.bookRight.visible = false;
+    if (this.bookRightStatic) this.bookRightStatic.visible = false;
+    if (this.winFrameComp) this.winFrameComp.visible = false;
+  }
 }
