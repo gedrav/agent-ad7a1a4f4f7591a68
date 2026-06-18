@@ -55,6 +55,20 @@ export class PixSpine extends StandardView {
     this.spineAnim.update(0);
   }
 
+  // Slots bound to skinRequired bones not declared by the current skin keep an inactive bone.
+  // The animation skips them (applyAttachmentTimeline returns early for inactive bones), so they
+  // render frozen at their setup-pose attachment. Clear those so they stay hidden until a skin
+  // that activates their bone re-shows + animates them.
+  public hideInactiveBoneSlots(): void {
+    const slots = this.spineAnim?.skeleton?.slots;
+    if (!slots) return;
+    for (const slot of slots) {
+      if (!slot.bone.active && slot.getAttachment()) {
+        slot.setAttachment(null);
+      }
+    }
+  }
+
   addEventListener(event: string, callback: any): AnimationStateListener | null {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that: PixSpine = this;

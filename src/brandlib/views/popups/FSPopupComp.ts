@@ -7,8 +7,8 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class FSPopupComp extends ResponsiveChildrenView {
-  private okBtn: any;
-  private titleText: PixText;
+  protected okBtn: any;
+  protected titleText: PixText;
   protected messageText1: PixText;
   protected messageText2: PixText;
   private panelBG: PixSprite;
