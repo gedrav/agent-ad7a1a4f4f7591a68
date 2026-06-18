@@ -38,6 +38,8 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
 
   protected destroySpine(): void {
     this.symbol.visible = true;
+    super.cleanUpSymbolWin();
+
     if (!this.spine) return;
 
     if (this.animCompleteListener) {
@@ -122,10 +124,10 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
     const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);
+    const callback = this.spineAnimCompleteCallback;
     if (!this.spine) return;
     this.spine.stopAnimation();
     this.spine.visible = false;
-    const callback = this.spineAnimCompleteCallback;
     this.spineAnimCompleteCallback = null;
     this.destroySpine();
     if (callback) {
