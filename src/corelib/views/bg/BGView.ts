@@ -26,6 +26,7 @@ export class BGView extends ResponsiveChildrenView {
     if (this.maingameBG.configData.freespinSkin) {
       this.currentBG = 'main';
       this.maingameBG.setSkin(this.maingameBG.configData.defaultSkin);
+      (this.maingameBG as PixSpine).hideInactiveBoneSlots();
       return;
     }
     if (this.maingameBG.configData.freespinState) {
@@ -51,6 +52,7 @@ export class BGView extends ResponsiveChildrenView {
     if (this.maingameBG.configData.freespinSkin) {
       this.currentBG = 'free';
       this.maingameBG.setSkin(this.maingameBG.configData.freespinSkin);
+      (this.maingameBG as PixSpine).hideInactiveBoneSlots();
       return;
     }
 
