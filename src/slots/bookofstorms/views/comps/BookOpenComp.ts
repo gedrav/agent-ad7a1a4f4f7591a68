@@ -1,8 +1,8 @@
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
-import { Skin } from '@esotericsoftware/spine-pixi-v8';
 import { Util } from '@core/utils/UtilService';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class BookOpenComp extends StandardView {
   private mainBook: PixSpine;
@@ -102,7 +102,25 @@ export class BookOpenComp extends StandardView {
       setTimeout(this.playBookAnimation.bind(this, targetSymbolCode), 500);
       return;
     }
+
     this.nextLeftSymbol = this.symbolToSkinMap[targetSymbolCode] || targetSymbolCode;
+
+    // Resuming  unfinished free spin session with last page
+    if (appModel.getIsFreeSpinsSession() && appModel.getIsUnfinishedFreespins()) {
+      this.targetTurns = 0;
+      this.currentTurn = 0;
+      this.nextSymbol = this.nextLeftSymbol;
+
+      this.bookLeft.visible = true;
+      this.bookRight.visible = true;
+      this.bookRightStatic.visible = true;
+
+      this.startNextFlip();
+
+      this.emit('BOOK_ANIMATION_COMPLETE');
+
+      return;
+    }
 
     this.targetTurns = Util.getRandomRange(0, 4) + 8;
     this.currentTurn = 0;
@@ -113,6 +131,7 @@ export class BookOpenComp extends StandardView {
 
     this.mainBook.setSkin(this.currentSymbol);
     this.mainBook.playAnimation({ state: 'open_static', loop: false });
+
     this.bookLeft.setSkin(this.currentSymbol);
     this.bookRight.setSkin(this.currentSymbol);
     this.bookRightStatic.setSkin(this.nextSymbol);
@@ -120,6 +139,7 @@ export class BookOpenComp extends StandardView {
     this.bookLeft.playAnimation({ state: 'static_left', loop: false });
     this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
     this.bookRight.playAnimation({ state: 'static_right', loop: false });
+
     this.mainBook.playAnimation({ state: 'start', loop: false });
   }
 
@@ -156,6 +176,7 @@ export class BookOpenComp extends StandardView {
         //this.bookRight.visible = false;
         this.winFrameComp.visible = true;
         this.winFrameComp.playAnimation({ state: 'start', loop: false });
+        this.emit('BOOK_ANIMATION_COMPLETE');
       }
     }
   }

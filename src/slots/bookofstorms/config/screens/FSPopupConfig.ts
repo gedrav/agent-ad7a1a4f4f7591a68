@@ -1,36 +1,31 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
 import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
-import { scaleBy } from '@pixi/particle-emitter/lib/ParticleUtils';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
   class: BookOfStormsFSPopupComp,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1296, height: 1028, color: 0xff0000, alpha: 1 },
+    { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
     {
       name: 'popupbg',
       type: 'NineSliceSprite',
       image: 'popup1',
       nineSlice: [200, 200, 200, 200],
-      height: 1200,
+      anchor: { x: 0.5, y: 0.5 },
+      width: 1106,
+      x: 448,
+      y: 540,
     },
     {
       name: 'titleText',
       type: 'Text',
       contentText: '',
-      style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1000 },
+      style: { fontFamily: 'gameFont1', fontSize: 70, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1000 },
       anchor: { x: 0.5, y: 0.5 },
-      x: 745,
-      y: 230,
-    },
-    {
-      ...BOOK_OPEN_CONFIG,
-      layoutData: undefined,
-      scale: 1,
-      x: -60,
-      y: 92,
+      x: 450,
+      y: 160,
     },
     {
       name: 'messageText1',
@@ -38,16 +33,23 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 70,
+        fontSize: 50,
         fill: 0xffffff,
         wordWrap: true,
-        wordWrapWidth: 1000,
+        wordWrapWidth: 900,
         letterSpacing: 2,
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 745,
-      y: 390,
+      x: 450,
+      y: 270,
+    },
+    {
+      ...BOOK_OPEN_CONFIG,
+      layoutData: undefined,
+      scale: 1,
+      x: -402,
+      y: -87,
     },
     {
       name: 'expandingSymbolText',
@@ -55,13 +57,13 @@ export const FS_POPUP_CONFIG = {
       content: 'expandingSymbolText',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 50,
+        fontSize: 45,
         fill: 0xffff00,
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 745,
-      y: 920,
+      x: 450,
+      y: 743,
     },
     {
       name: 'messageText2',
@@ -69,15 +71,15 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 70,
+        fontSize: 50,
         fill: 0xffffff,
         wordWrap: true,
         wordWrapWidth: 1000,
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 745,
-      y: 1070,
+      x: 450,
+      y: 842,
     },
     {
       name: 'okBtn',
@@ -90,6 +92,7 @@ export const FS_POPUP_CONFIG = {
         disabledView: 'button',
         animations: CoreUIConfig.buttonStates,
       },
+      scale: 0.9,
       textConfig: {
         name: 'okBtnTxt',
         type: 'Text',
@@ -108,8 +111,8 @@ export const FS_POPUP_CONFIG = {
         },
         toUpperCase: true,
       },
-      x: 745,
-      y: 1310,
+      x: 450,
+      y: 994,
     },
   ],
   layoutData: {
