@@ -144,6 +144,7 @@ export default class WinController {
       symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
     }
     this.winSymbolIndex++;
+    console.log('winSymbolIndex', this.winSymbolIndex);
     if (this.winSymbolIndex === this.totalWinSymbols) {
       this.notifySpinWinDone();
     }
@@ -216,6 +217,7 @@ export default class WinController {
     } else {
       if (!appModel.isCascadeGame()) {
         clearTimeout(this.timeoutId);
+        console.log('showSpinWin settimeout of 2000');
         this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
       }
     }

@@ -246,7 +246,6 @@ export class PixSpine extends StandardView {
             if (typeof newMesh.updateRegion === 'function') newMesh.updateRegion();
             skin.setAttachment(slotIndexR, 'symbol_r', newMesh);
             skin.setAttachment(slotIndexR, 'symb_null', newMesh);
-            console.log(`patchSpineDataAtRuntime: Successfully patched skin ${skin.name}`);
           } else {
             console.warn(`patchSpineDataAtRuntime: Skin ${skin.name} missing symbol_l mesh or region`);
           }

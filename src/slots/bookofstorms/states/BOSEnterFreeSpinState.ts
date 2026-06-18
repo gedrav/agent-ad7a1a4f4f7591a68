@@ -25,7 +25,7 @@ class BOSEnterFreeSpinStateCommand extends StateCommand {
     const isUnfinishedFreespins = appModel.getIsUnfinishedFreespins();
 
     obj.message1 = Util.parseMessage(Util.getContent('FSEntryText'), [appModel.getTotalFreespins()]);
-
+    obj.entryPopUp = true;
     if (isUnfinishedFreespins) {
       const remainingCount = appModel.getTotalFreespins() - appModel.getCurrentFreeSpin() + 1;
       obj.message2 = Util.parseMessage(Util.getContent('FSRemainingText'), [remainingCount]);
