@@ -14,7 +14,6 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
-import { BookShowSpinWinState } from '@game/states/BookShowSpinWinState';
 import { BookShowSymbolExpansionState } from '@game/states/BookShowSymbolExpansionState';
 import { BookShowSymbolAfterExpansionState } from '@game/states/BookShowSymbolAfterExpansionState';
 import { BOSEnterFreespinsState } from '@game/states/BOSEnterFreeSpinState';
@@ -29,7 +28,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
-  { name: STATES.SHOW_PRE_EXPANSION_WIN_STATE, state: BookShowSpinWinState },
+  { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
   { name: STATES.SHOW_SYMBOL_EXPANSION_STATE, state: BookShowSymbolExpansionState },
   { name: STATES.SHOW_POST_EXPANSION_WIN_STATE, state: BookShowSymbolAfterExpansionState },
 
