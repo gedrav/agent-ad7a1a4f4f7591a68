@@ -23,6 +23,7 @@ export class ReelWinTicker extends StandardView {
     if (this.totalWin == 0) {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
+      // EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
     }
     if (appModel.getIsAutoSession() && !appModel.isCascadeGame()) {
       return;

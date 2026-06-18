@@ -109,13 +109,27 @@ export class BookOpenComp extends StandardView {
     if (appModel.getIsFreeSpinsSession() && appModel.getIsUnfinishedFreespins()) {
       this.targetTurns = 0;
       this.currentTurn = 0;
-      this.nextSymbol = this.nextLeftSymbol;
+      this.currentSymbol = this.nextLeftSymbol;
+
+      this.mainBook.visible = true;
+      this.mainBook.setSkin(this.currentSymbol);
+      this.mainBook.playAnimation({ state: 'open_static', loop: false });
 
       this.bookLeft.visible = true;
       this.bookRight.visible = true;
       this.bookRightStatic.visible = true;
 
-      this.startNextFlip();
+      this.bookLeft.setSkin(this.currentSymbol);
+      this.bookRight.setSkin(this.currentSymbol);
+      this.bookLeft.playAnimation({ state: 'static_left', loop: false });
+      this.bookRight.playAnimation({ state: 'static_right', loop: false });
+
+      this.nextSymbol = this.getRandomSkin();
+      this.bookRightStatic.setSkin(this.nextSymbol);
+      this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
+
+      this.winFrameComp.visible = true;
+      this.winFrameComp.playAnimation({ state: 'start', loop: false });
 
       this.emit('BOOK_ANIMATION_COMPLETE');
 

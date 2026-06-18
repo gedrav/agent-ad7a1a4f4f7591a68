@@ -19,9 +19,9 @@ export const BIG_WIN_CONFIG = {
       spineName: 'bigWins',
       loop: true,
       x: 755,
-      y: 560,
+      y: 590,
     },
-    bigWinTextScales: [0.6, 0.65, 0.7, 0.7],
+    bigWinTextScales: [0.75, 0.7, 0.7, 0.7],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
       SUPER_WIN: 'superWinText',
@@ -32,7 +32,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1510, height: 932, color: 0xffff00, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 750, y: 250 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 755, y: 155 },
     {
       name: 'winTicker',
       type: 'Comp',
@@ -53,7 +53,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 755,
-      y: 795,
+      y: 825,
       Elements: [
         // { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 40 },
         {
@@ -72,7 +72,6 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.05,
     },
     Landscape: {
       refComponent: 'guideRect',
@@ -81,7 +80,6 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.05,
     },
     Portrait: {
       refComponent: 'guideRect',
@@ -90,7 +88,6 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.05,
     },
   },
 };

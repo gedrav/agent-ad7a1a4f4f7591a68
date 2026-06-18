@@ -11,6 +11,8 @@ class ShowSpinWinStateCommand extends StateCommand {
   private completedIndex: number;
   public async execute(data: any = null) {
     super.execute(data);
+    appModel.isSymbolExpanded = false;
+
     this.checkToActivateButtons();
     if (appModel.isCascadeGame()) {
       const winType = appModel.getWinType();
