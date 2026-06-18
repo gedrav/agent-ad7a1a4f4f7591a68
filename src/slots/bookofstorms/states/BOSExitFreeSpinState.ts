@@ -29,6 +29,7 @@ class BOSExitFreespinsStateCommand extends StateCommand {
       obj.message1 = Util.parseMessage(Util.getContent('FSExitText'), [
         Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
       ]);
+      obj.entryPopUp = false;
       obj.callbackFunction = this.exitFreespin.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);

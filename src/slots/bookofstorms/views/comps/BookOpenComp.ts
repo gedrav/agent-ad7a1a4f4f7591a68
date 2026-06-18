@@ -2,6 +2,7 @@ import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { Skin } from '@esotericsoftware/spine-pixi-v8';
+import { Util } from '@core/utils/UtilService';
 
 export class BookOpenComp extends StandardView {
   private mainBook: PixSpine;
@@ -103,6 +104,7 @@ export class BookOpenComp extends StandardView {
     }
     this.nextLeftSymbol = this.symbolToSkinMap[targetSymbolCode] || targetSymbolCode;
 
+    this.targetTurns = Util.getRandomRange(0, 4) + 8;
     this.currentTurn = 0;
     this.mainBook.visible = true;
 
