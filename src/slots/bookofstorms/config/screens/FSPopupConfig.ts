@@ -117,7 +117,7 @@ export const FS_POPUP_CONFIG = {
   ],
   layoutData: {
     Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
-    Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.5 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.7 },
+    Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.92, heightPerc: 0.8 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.88 },
   },
 };
