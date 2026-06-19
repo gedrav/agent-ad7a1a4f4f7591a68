@@ -27,22 +27,22 @@ export class BookOfStormsFSPopupComp extends FSPopupComp {
 
     if (data.entryPopUp) {
       this.okBtn.enabled = false;
-
       this.popupbg.height = 1200;
       this.bookOpenComp.visible = true;
       this.bookOpenComp.cleanBookComp();
       this.bookOpenComp.playBookAnimation(symbol);
+      this.expandingSymbolText.visible = true;
 
       // positions for expanded popup
       this.messageText1.y = 270;
-      this.expandingSymbolText.y = 743;
+      this.expandingSymbolText.y = 730;
       this.messageText2.y = 842;
       this.okBtn.y = 994;
 
       //positioning when there is no message2
       if (!data.message2) {
-        console.log('xxxxxx');
         this.popupbg.height = 1150;
+
         this.titleText.y = 200;
         this.messageText1.y = 317;
         this.bookOpenComp.y = -29;
@@ -57,7 +57,7 @@ export class BookOfStormsFSPopupComp extends FSPopupComp {
 
       this.titleText.y = 322;
       this.messageText1.y = 535;
-      UIUtil.updateWordWrapWidth(this.messageText1, 800);
+      UIUtil.updateWordWrapWidth(this.messageText1, 790);
       this.expandingSymbolText.visible = false;
       this.okBtn.y = 842;
     }

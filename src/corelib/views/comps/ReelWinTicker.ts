@@ -25,7 +25,7 @@ export class ReelWinTicker extends StandardView {
       this.winTicker.reset();
       // EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
     }
-    if (appModel.getIsAutoSession() && !appModel.isCascadeGame()) {
+    if ((appModel.getIsAutoSession() && !appModel.isCascadeGame()) || appModel.getIsFreeSpinsSession()) {
       return;
     }
     this.totalWin += data.value;
