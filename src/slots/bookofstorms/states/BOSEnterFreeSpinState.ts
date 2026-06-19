@@ -15,7 +15,7 @@ class BOSEnterFreeSpinStateCommand extends StateCommand {
   public doNextStep(data: any = null) {
     super.doNextStep(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
+    // EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();
@@ -44,6 +44,8 @@ class BOSEnterFreeSpinStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_START);
+    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_COUNT);
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
 
