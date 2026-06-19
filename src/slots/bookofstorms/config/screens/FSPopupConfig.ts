@@ -49,7 +49,7 @@ export const FS_POPUP_CONFIG = {
       layoutData: undefined,
       scale: 1,
       x: -402,
-      y: -87,
+      y: -62,
     },
     {
       name: 'expandingSymbolText',
@@ -63,7 +63,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 450,
-      y: 743,
+      y: 730,
     },
     {
       name: 'messageText2',
