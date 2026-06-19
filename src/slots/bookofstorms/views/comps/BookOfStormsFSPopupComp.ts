@@ -38,6 +38,17 @@ export class BookOfStormsFSPopupComp extends FSPopupComp {
       this.expandingSymbolText.y = 743;
       this.messageText2.y = 842;
       this.okBtn.y = 994;
+
+      //positioning when there is no message2
+      if (!data.message2) {
+        console.log('xxxxxx');
+        this.popupbg.height = 1150;
+        this.titleText.y = 200;
+        this.messageText1.y = 317;
+        this.bookOpenComp.y = -29;
+        this.expandingSymbolText.y = 805;
+        this.okBtn.y = 969;
+      }
     } else {
       this.okBtn.enabled = true;
 
