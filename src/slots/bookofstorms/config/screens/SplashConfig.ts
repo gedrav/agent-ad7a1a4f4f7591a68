@@ -329,7 +329,7 @@ export const SPLASH_CONFIG: any = {
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',
-          vPaddingPerc: 0.05,
+          vPaddingPerc: 0.1,
         },
         Landscape: {
           widthPerc: 0.36,
