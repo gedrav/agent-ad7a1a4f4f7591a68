@@ -6,11 +6,12 @@ import path from 'node:path';
 
 // Uncomment ONE game to run/build it:
 const defaultGameNames = [
+  //'royale81',
   // "empireofgold",
-  'empireofgoldnewconquest',
-  // "royale81",
-  //  'sweetsalon',
-  // 'frostedmarketbonanza'
+  //'empireofgoldnewconquest',
+  //'sweetsalon',
+  //'frostedmarketbonanza',
+  'bookofstorms'
 ];
 
 // SINGLE CONTROL POINT (with env override)

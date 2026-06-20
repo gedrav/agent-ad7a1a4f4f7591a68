@@ -5,6 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { StateManager } from '@core/states/StateManagerService';
+import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 
@@ -12,6 +13,8 @@ export class CascadeReelWinTicker extends ReelWinTicker {
   protected xText: PixText;
   protected multiplierText: PixText;
   protected multiplierTextVal: number = 0;
+  protected scatterPayoutText: PixText;
+  protected scatterPayoutVal: number = 0;
 
   constructor(config) {
     super(config);
@@ -44,6 +47,7 @@ export class CascadeReelWinTicker extends ReelWinTicker {
     }
 
     this.visible = true;
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
   }
 
   protected positionElements() {
@@ -62,6 +66,59 @@ export class CascadeReelWinTicker extends ReelWinTicker {
     this.multiplierText.x = this.xText.x + this.xText.width;
     this.multiplierText.y = centerY;
   }
+
+  // below part is for scatter payout animation
+  public setupForScatterPayout(value: number) {
+    this.updateScatterPayoutComponents(value);
+    this.animateScatterPayout();
+  }
+
+  protected updateScatterPayoutComponents(value: number) {
+    this.scatterPayoutVal = value;
+    if (this.scatterPayoutText) {
+      this.scatterPayoutText.text = ` + ${Util.formatCurrency(value)}`;
+    } else {
+      const textConfig = {
+        name: 'scatterPayoutValue',
+        type: 'Text',
+        anchor: { x: 0, y: 0.5 },
+        style: { fontFamily: 'commonFontBold', fontSize: 48, mFontSize: 50, fill: 0xfde35c },
+      };
+      this.scatterPayoutText = UIUtil.getElement(textConfig);
+      this.scatterPayoutText.text = ` + ${Util.formatCurrency(value)}`;
+      this.scatterPayoutText.anchor.set(0.5, 0.5);
+      this.addChild(this.scatterPayoutText);
+    }
+    // place wrt ticker: vertically centered on ticker, just to its right
+    this.scatterPayoutText.x = this.winTicker.x + this.winTicker.width / 2 + this.scatterPayoutText.width / 2;
+    this.scatterPayoutText.y = this.winTicker.y;
+    this.scatterPayoutText.alpha = 1;
+  }
+
+  public async animateScatterPayout(): Promise<void> {
+    if (!this.scatterPayoutText) {
+      return;
+    }
+    const xPos = this.winTicker.x;
+    await Util.addDelays(400);
+    AnimationProxy.animateTween(this.scatterPayoutText, {
+      x: xPos,
+      alpha: 0,
+      duration: 0.4,
+      ease: 'Linear.easeOut',
+      onComplete: this.onScatterPayoutMoveDone.bind(this),
+    });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_MULTIPLIER_TOTAL_WIN_SOUND);
+  }
+
+  protected onScatterPayoutMoveDone() {
+    this.totalWin += this.scatterPayoutVal;
+    this.winTicker.showSpinValue(this.totalWin, true, true);
+    this.scatterPayoutText.text = '';
+    this.scatterPayoutText.alpha = 0;
+    this.emit(SlotEvents.SCATTER_PAYOUT_ANIM_COMPLETED);
+  }
+  //--------------------------------------------
 
   public setupForAnimation() {
     this.positionElements();

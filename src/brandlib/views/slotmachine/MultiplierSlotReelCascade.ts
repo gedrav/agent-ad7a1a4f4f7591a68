@@ -15,6 +15,7 @@ import { Back } from 'gsap/gsap-core';
 /*****************************************************************************************************************
 data.symbMultipliers // to check if have different assets for different multiplier values (ex: EOG both versions).
 data.hasFSTotalMultiplier // to check if game has a concept of total multiplier during fs (ex: EOG both versions).
+data.hasScatterMultiplier // to check if the scatter payout also needs to be multiplied with the landed multiplier (ex: FMB & SS).
 ******************************************************************************************************************/
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
   private cascadeReelWinTicker: CascadeReelWinTicker;
@@ -28,11 +29,14 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     this.multiplierTextArr = [];
     this.cascadeReelWinTicker = this.elementsList['reelWinTicker'];
     this.fsTotalMultiComp = this.elementsList['fsTotalMultiComp'];
-    EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.showMultiplierCollection.bind(this));
+    EventHandler.addEventListener(SlotEvents.COLLECT_MULTIPLIER, this.checkForInitialSetupForMultiplierAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.resetSlotReelVal.bind(this));
 
     if (this.configData.data.hasFSTotalMultiplier) {
       this.cascadeReelWinTicker.on(SlotEvents.UPDATE_TOTAL_MULTIPLIER, this.onUpdateFsTotalMulti.bind(this));
+    }
+    if (this.configData.data.hasScatterMultiplier) {
+      this.cascadeReelWinTicker.on(SlotEvents.SCATTER_PAYOUT_ANIM_COMPLETED, this.showMultiplierCollection.bind(this)); // scatter payout is animated then animate the multipliers
     }
   }
   public restartIdleAnim(): void {
@@ -304,6 +308,21 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     EventHandler.dispatchEvent(SlotEvents.PLAY_CASCADE_NEW_SYMBOLS_AFTER_TUMBLE_IN_SOUND);
   }
 
+  // to show scatter payout animation
+  protected checkForInitialSetupForMultiplierAnim() {
+    const scatterPayout = appModel.getScatterPay();
+    if (this.reelsData.hasScatterMultiplier && scatterPayout) {
+      this.showScatterPayoutAnim();
+    } else {
+      this.showMultiplierCollection();
+    }
+  }
+  private showScatterPayoutAnim() {
+    this.cascadeReelWinTicker.setupForScatterPayout(appModel.getScatterPay());
+  }
+  // -------------------------------------------------------
+
+  //show multiplier animation
   protected showMultiplierCollection(): void {
     if (appModel.getIsFreeSpinsSession()) {
       if (this.configData.data.hasFSTotalMultiplier) {
@@ -425,6 +444,7 @@ export default class MultiplierSlotReelCascade extends SlotReelCascade {
     });
     this.multiplierTextArr = [];
   }
+  //-------------------------------------------
 
   //overriding these methods to pass multiplierTextConfig to symbols in cascade
   protected getRandomSymbol(reelno: number) {

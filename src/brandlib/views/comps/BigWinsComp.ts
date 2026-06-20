@@ -11,6 +11,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import 'pixi.js/prepare';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 let bigWinTextScales: number[] = [0.8, 0.8, 0.9, 1];
 const STATES: string[] = [CONSTANTS.BIG_WIN, CONSTANTS.SUPER_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.EPIC_WIN];
@@ -262,7 +263,10 @@ export class BigWinsComp extends ResponsiveView {
     this.isSkipping = false;
     clearTimeout(this.timeoutId);
     clearTimeout(this.winTimerId);
-    EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: true });
+    if (!GameProxy.config.showWinInReelView) {
+      EventHandler.dispatchEvent(SlotEvents.TOGGLE_REELTICKER_WIN, { show: true });
+    }
+
     EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
       value: appModel.getSpinWin(),
       duration: 0,

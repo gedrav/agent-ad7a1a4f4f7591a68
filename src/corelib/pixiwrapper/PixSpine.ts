@@ -55,6 +55,20 @@ export class PixSpine extends StandardView {
     this.spineAnim.update(0);
   }
 
+  // Slots bound to skinRequired bones not declared by the current skin keep an inactive bone.
+  // The animation skips them (applyAttachmentTimeline returns early for inactive bones), so they
+  // render frozen at their setup-pose attachment. Clear those so they stay hidden until a skin
+  // that activates their bone re-shows + animates them.
+  public hideInactiveBoneSlots(): void {
+    const slots = this.spineAnim?.skeleton?.slots;
+    if (!slots) return;
+    for (const slot of slots) {
+      if (!slot.bone.active && slot.getAttachment()) {
+        slot.setAttachment(null);
+      }
+    }
+  }
+
   addEventListener(event: string, callback: any): AnimationStateListener | null {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that: PixSpine = this;
@@ -179,5 +193,66 @@ export class PixSpine extends StandardView {
     this.removeChild(this.spineAnim);
     this.parent?.removeChild(this);
     this.spineAnim.destroy({ children: true }); // D
+  }
+
+  public patchSpineDataAtRuntime() {
+    try {
+      const spineAnim = (this as any).spineAnim;
+      if (!spineAnim || !spineAnim.skeleton || !spineAnim.skeleton.data) {
+        console.warn('patchSpineDataAtRuntime: spineAnim missing');
+        return;
+      }
+
+      const data = spineAnim.skeleton.data;
+      const defaultSkin = data.findSkin('default');
+
+      let slotIndexR = -1;
+      let slotIndexL = -1;
+      for (let i = 0; i < data.slots.length; i++) {
+        if (data.slots[i].name === 'symbol_r') slotIndexR = i;
+        if (data.slots[i].name === 'symbol_l') slotIndexL = i;
+      }
+
+      if (!defaultSkin || slotIndexR < 0 || slotIndexL < 0) {
+        console.warn('patchSpineDataAtRuntime: slots/skin missing', {
+          defaultSkin: !!defaultSkin,
+          slotIndexR,
+          slotIndexL,
+        });
+        return;
+      }
+
+      const baseSymbolR =
+        defaultSkin.getAttachment(slotIndexR, 'symbol_r') || defaultSkin.getAttachment(slotIndexR, 'symb_null');
+      if (!baseSymbolR) {
+        console.warn('patchSpineDataAtRuntime: baseSymbolR missing in default skin');
+        return;
+      }
+
+      for (const skin of data.skins) {
+        if (skin.name === 'default') continue;
+
+        // Ensure the left slot also has the 'symb_null' name available
+        const symbolLMesh = skin.getAttachment(slotIndexL, 'symbol_l') || skin.getAttachment(slotIndexL, 'symb_null');
+        if (symbolLMesh && !skin.getAttachment(slotIndexL, 'symb_null')) {
+          skin.setAttachment(slotIndexL, 'symb_null', symbolLMesh);
+        }
+
+        const existing = skin.getAttachment(slotIndexR, 'symbol_r') || skin.getAttachment(slotIndexR, 'symb_null');
+        if (!existing) {
+          const newMesh = (baseSymbolR as any).copy();
+          if (symbolLMesh && (symbolLMesh as any).region) {
+            newMesh.region = (symbolLMesh as any).region;
+            if (typeof newMesh.updateRegion === 'function') newMesh.updateRegion();
+            skin.setAttachment(slotIndexR, 'symbol_r', newMesh);
+            skin.setAttachment(slotIndexR, 'symb_null', newMesh);
+          } else {
+            console.warn(`patchSpineDataAtRuntime: Skin ${skin.name} missing symbol_l mesh or region`);
+          }
+        }
+      }
+    } catch (e: any) {
+      console.error('patchSpineDataAtRuntime Error:', e);
+    }
   }
 }

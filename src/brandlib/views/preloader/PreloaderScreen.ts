@@ -14,6 +14,7 @@ export class PreloaderScreen extends ResponsiveChildrenView {
   private preloader: PixAnimatedSprite;
   private bar: PixGraphics;
   private circle2: PixGraphics;
+  private disposeLoadProgress: () => void;
 
   constructor(config: any) {
     super(config);
@@ -21,17 +22,20 @@ export class PreloaderScreen extends ResponsiveChildrenView {
     this.bar = this.elementsList['progressBar'].elementsList['bar'];
     this.circle2 = this.elementsList['progressBar'].elementsList['circle2'];
     this.visible = false;
-    EventHandler.addEventListener(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
+    this.bar.scale.x = 0;
+    this.disposeLoadProgress = EventHandler.bind(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
     setTimeout(() => {
       this.visible = true;
     }, 100);
   }
 
   protected onLoadProgress(progress: number): void {
+    if (!this.bar) return;
     this.bar.scale.x = progress / 100;
     this.circle2.x = this.bar.x + this.bar.width;
   }
   public removePreloader(): void {
+    this.disposeLoadProgress?.();
     this.preloader?.destroy();
     this.elementsList['progressBar'].destroy();
     this.loadingText?.destroy(true);

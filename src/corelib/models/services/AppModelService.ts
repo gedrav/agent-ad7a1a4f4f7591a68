@@ -2,9 +2,6 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
-import { settings } from '@pixi/core';
-import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
-import { type } from 'node:os';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 type ParamsObject = Record<string, number>;
@@ -64,6 +61,8 @@ class AppModelService {
   private _lightningStopOnBonus: boolean;
   private _secondaryAssetsLoaded: boolean;
   private _featureAssetsLoaded: boolean;
+  public isSymbolExpanded: boolean = false;
+  public bookSymbol: string | null = null;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
@@ -268,6 +267,9 @@ class AppModelService {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }
     this.tumbleIndex = 0;
+    if (this.featureResult?.bookSymbol) {
+      this.bookSymbol = this.featureResult.bookSymbol;
+    }
 
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
@@ -299,6 +301,9 @@ class AppModelService {
         this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
         this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
+        if (this.featureResult.bookSymbol) {
+          this.bookSymbol = this.featureResult.bookSymbol;
+        }
       }
     }
   }
@@ -310,9 +315,20 @@ class AppModelService {
       data.result.featureResults[data.result.featureResults.length - 1].spinResults[
         data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
       ];
+    if (this.featureResult.bookSymbol) {
+      this.bookSymbol = this.featureResult.bookSymbol;
+    }
     this.featureResult = data.result.featureResults[data.result.featureResults.length - 1];
-    this.featureResult.featureTriggerPositions =
-      this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
+
+    if (this.isCascadeGame()) {
+      this.featureResult.featureTriggerPositions =
+        this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
+    } else {
+      if (this.gameResult.featureTriggerPositions) {
+        this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
+      }
+    }
+
     this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
     this.fsInfo.totalFreespins = data.result.featureResults[data.result.featureResults.length - 1].totalCount;
     this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
@@ -441,14 +457,40 @@ class AppModelService {
     if (this.gameResult?.cascadeData?.length > 0) {
       return this.gameResult.cascadeData[this.tumbleIndex].blustSymbols;
     }
+    if (this.isSymbolExpanded) {
+      const expansionData = this.getSymbolExpansionData();
+      return expansionData?.expandedWinLines || [];
+    }
     // Fall back to traditional winLines
     return this.gameResult?.winLines || [];
   }
+
   public getSpinWin(): number {
     if (this.isCascadeGame()) {
       return this.getTotalCascadeWin();
     }
-    return this.gameResult.spinWin;
+    // If the game has a symbol expansion feature but the symbols haven't expanded yet (Phase 1),
+    // return the normalWin. This ensures that win counters and Big Win presentations evaluate
+    // the correct pre-expansion win amount.
+    if (this.getSymbolExpansionData() && !this.isSymbolExpanded) {
+      return this.getNormalWin();
+    }
+
+    return this.gameResult?.spinWin || 0;
+  }
+
+  public getReelModifiers(): any[] {
+    return this.gameResult?.reelModifiers || [];
+  }
+  public getSymbolExpansionData(): any {
+    const modifiers = this.getReelModifiers();
+    if (modifiers && modifiers.length > 0) {
+      return modifiers.find((mod: any) => mod.type === 'symbolExpansion');
+    }
+    return null;
+  }
+  public getNormalWin(): number {
+    return this.gameResult?.normalWin || 0;
   }
 
   public getTotalBaseWin(): number {

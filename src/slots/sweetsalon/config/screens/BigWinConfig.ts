@@ -96,8 +96,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      hPaddingPerc: 0,
-      vPaddingPerc: -0.036,
+      vPaddingPerc: -0.008,
     },
     Landscape: {
       refComponent: 'guideRect',
@@ -106,13 +105,14 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      vPaddingPerc: 0.03,
     },
     Portrait: {
       refComponent: 'guideRect',
       widthPerc: 0.96,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.019,
+      vPaddingPerc: 0.02,
     },
   },
 };

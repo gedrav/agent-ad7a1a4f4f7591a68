@@ -5,6 +5,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class ReelTickerComp extends StandardView {
   private tickerText1: PixText;
@@ -28,18 +29,31 @@ export class ReelTickerComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onSpinEnd.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
-
     EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
-
-    /*EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideTicker.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.showTicker.bind(this));
-
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideTicker.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_ENDED, this.showTicker.bind(this));*/
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideTicker.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideForFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.showForFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.showTicker.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideForFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.showForFeature.bind(this));
 
     this.tickerText1.x = this.bg.width / 2;
     this.tickerText2.x = this.bg.width / 2;
     this.showFirstTicker();
+  }
+
+  protected hideForFeature(): void {
+    this.renderable = false;
+  }
+  protected showForFeature(): void {
+    if (appModel.getIsAutoSession()) {
+      return;
+    }
+    this.renderable = true;
+    this.visible = true;
   }
 
   protected hideTicker(): void {
@@ -50,13 +64,13 @@ export class ReelTickerComp extends StandardView {
   }
 
   protected showSpinWin(data: any): void {
-    this.tickerText1.visible = this.tickerText2.visible = false;
     this.totalWin += data.value;
+    this.hideTicker();
   }
   protected clearSpinWin(): void {
     clearTimeout(this.timeoutId);
     this.totalWin = 0;
-    this.tickerText1.visible = this.tickerText2.visible = true;
+    this.showTicker();
   }
   protected onSpinStart(): void {
     clearTimeout(this.timeoutId);

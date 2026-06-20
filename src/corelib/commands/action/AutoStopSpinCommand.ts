@@ -10,7 +10,7 @@ class AutoStopSpinCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
     appModel.resetAutoplayData();
-    EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
+    EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_FORCE_STOP);
     GameProxy.config.isAutoStopped = true;
   }
 }

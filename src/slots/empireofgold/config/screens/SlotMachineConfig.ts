@@ -27,11 +27,11 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xffff00,
       width: 2140,
-      height: 1520,
+      height: 1440,
       lWidth: 2140,
-      lHeight: 1520,
+      lHeight: 1440,
       pWidth: 1400,
-      pHeight: 1900,
+      pHeight: 1820,
       alpha: 0,
     },
 
@@ -336,10 +336,10 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
             Landscape: {
               scale: 0.6,
-              x: 862,
+              x: 852,
               y: -30,
             },
-            Portrait: { scale: 0.6, x: 862, y: -30 },
+            Portrait: { scale: 0.6, x: 848, y: -30 },
           },
         },
         {

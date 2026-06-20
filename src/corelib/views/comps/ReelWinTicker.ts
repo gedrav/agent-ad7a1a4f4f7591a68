@@ -23,8 +23,9 @@ export class ReelWinTicker extends StandardView {
     if (this.totalWin == 0) {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
+      // EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
     }
-    if (appModel.getIsAutoSession() && !appModel.isCascadeGame()) {
+    if ((appModel.getIsAutoSession() && !appModel.isCascadeGame()) || appModel.getIsFreeSpinsSession()) {
       return;
     }
     this.totalWin += data.value;
@@ -40,11 +41,21 @@ export class ReelWinTicker extends StandardView {
   protected skipToFinalValue(): void {
     this.winTicker.skipToFinalValue();
   }
-  protected clearSpinWin(): void {
+  protected clearSpinWinAfterFS(): void {
     this.visible = false;
     this.totalWin = 0;
   }
+  protected clearSpinWin(): void {
+    this.visible = false;
+    this.totalWin = 0;
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
+  }
   protected toggleVisibility(data: { show: boolean }): void {
     this.visible = data.show;
+    if (this.visible) {
+      EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
+    }
   }
 }

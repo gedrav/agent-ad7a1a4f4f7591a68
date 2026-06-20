@@ -23,12 +23,18 @@ export class BGView extends ResponsiveChildrenView {
     this.showMainGameBG();
   }
   protected showMainGameBG() {
+    if (this.maingameBG.configData.freespinSkin) {
+      this.currentBG = 'main';
+      this.maingameBG.setSkin(this.maingameBG.configData.defaultSkin);
+      (this.maingameBG as PixSpine).hideInactiveBoneSlots();
+      return;
+    }
     if (this.maingameBG.configData.freespinState) {
       this.currentBG = 'main';
       this.maingameBG.playAnimation({ state: this.maingameBG.configData.defaultState, loop: true });
       return;
     }
-    if (this.currentBG === 'free' && this.freegameBG.configData.unload) {
+    if (this.currentBG === 'free' && this.freegameBG?.configData?.unload) {
       this.unloadFSBG();
     }
     this.currentBG = 'main';
@@ -43,6 +49,13 @@ export class BGView extends ResponsiveChildrenView {
       this.maingameBG.playAnimation({ state: this.maingameBG.configData.freespinState, loop: true });
       return;
     }
+    if (this.maingameBG.configData.freespinSkin) {
+      this.currentBG = 'free';
+      this.maingameBG.setSkin(this.maingameBG.configData.freespinSkin);
+      (this.maingameBG as PixSpine).hideInactiveBoneSlots();
+      return;
+    }
+
     this.currentBG = 'free';
     if (this.freegameBG.configData.unload) {
       this.loadFSBG();

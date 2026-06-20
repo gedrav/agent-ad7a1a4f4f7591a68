@@ -1,9 +1,16 @@
 import WinController from '@core/views/slotmachine/WinController';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { ReelStripBG } from '@game/views/comps/ReelStripBG';
 
 export default class GameWinController extends WinController {
+  private reelStripBG: ReelStripBG;
+
   public showLineWin(): void {
+    if (!this.reelStripBG) {
+      this.reelStripBG = this.slotReel?.elementsList['reelstripBG'];
+    }
+
     if (!appModel.isCascadeGame() && appModel.getWinDataLength() > 0) {
       this.fadeOutAllSymbols();
       this.winSymbolIndex = 0;
@@ -26,8 +33,19 @@ export default class GameWinController extends WinController {
             this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;
             this.lineWinAmountComp.y = this.symbolsArray[pos.reel][pos.row + 1].y + this.winSymbolsContainer.y;
             this.lineWinAmountComp.showWin(currentLineWin.winAmount, multiplier);
-            if (this.lineWinAmountComp.width / 2 > this.slotReel.slotGuideRect.x) {
-              this.lineWinAmountComp.x = this.slotReel.slotGuideRect.x + this.lineWinAmountComp.width / 2;
+
+            if (this.reelStripBG) {
+              const reelStripBGBounds = this.reelStripBG.getBounds();
+              const localLeftEdge = this.lineWinAmountComp.parent.toLocal({
+                x: reelStripBGBounds.x,
+                y: 0,
+              }).x;
+
+              const winAmountLeftEdge = this.lineWinAmountComp.x - this.lineWinAmountComp.width / 2;
+
+              if (winAmountLeftEdge < localLeftEdge) {
+                this.lineWinAmountComp.x = localLeftEdge + this.lineWinAmountComp.width / 2;
+              }
             }
           }
         }

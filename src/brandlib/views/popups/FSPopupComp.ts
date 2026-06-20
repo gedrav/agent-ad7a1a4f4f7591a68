@@ -7,10 +7,10 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class FSPopupComp extends ResponsiveChildrenView {
-  private okBtn: any;
-  private titleText: PixText;
-  private messageText1: PixText;
-  private messageText2: PixText;
+  protected okBtn: any;
+  protected titleText: PixText;
+  protected messageText1: PixText;
+  protected messageText2: PixText;
   private panelBG: PixSprite;
   private callbackFunction: any;
   private timeoutId: any;
@@ -34,6 +34,15 @@ export class FSPopupComp extends ResponsiveChildrenView {
     this.visible = true;
     this.titleText.text = data.title;
 
+    this.updateMessagePositions(data);
+
+    clearTimeout(this.timeoutId);
+    // this.timeoutId = setTimeout(this.onTimerEnd.bind(this), 5000);
+    this.messageText1.text = data.message1;
+    this.callbackFunction = data.callbackFunction;
+  }
+
+  protected updateMessagePositions(data: any): void {
     // Adjust messageText1 position based on unfinished case
     if (data.message2 && this.messageText2.visible !== false) {
       this.messageText1.y = 260; // Unfinished case
@@ -41,11 +50,8 @@ export class FSPopupComp extends ResponsiveChildrenView {
     } else {
       this.messageText1.y = 330; // Normal case
     }
-    clearTimeout(this.timeoutId);
-    // this.timeoutId = setTimeout(this.onTimerEnd.bind(this), 5000);
-    this.messageText1.text = data.message1;
-    this.callbackFunction = data.callbackFunction;
   }
+
   protected onTimerEnd(): void {
     this.onCloseClicked();
   }

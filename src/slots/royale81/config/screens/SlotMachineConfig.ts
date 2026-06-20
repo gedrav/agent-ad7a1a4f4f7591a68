@@ -23,9 +23,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 1300,
-      height1: 1050,
-      height: 1110,
+      width: 1400,
+      height: 1060,
       alpha: 0,
     },
 
@@ -34,7 +33,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: SlotReelStandard,
       winController: GameWinController,
-      x: -150,
+      x: -100,
       y: 10,
       data: {
         symbolClass: ReelSymbolSpine,
@@ -175,8 +174,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
-        { name: '81waysLeft', type: 'Sprite', image: '81ways', x: 274, y: 70 },
-        { name: '81waysRight', type: 'Sprite', image: '81ways', x: 1234, y: 70 },
+        { name: '81waysLeft', type: 'Sprite', image: '81ways', x: 274, y: 40, scale: 1.2 },
+        { name: '81waysRight', type: 'Sprite', image: '81ways', x: 1234, y: 40, scale: 1.2 },
         {
           name: 'modalRect',
           type: 'Graphics',

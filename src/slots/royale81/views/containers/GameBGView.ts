@@ -1,6 +1,5 @@
 import { BGView } from '@core/views/bg/BGView';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 export class GameBGView extends BGView {
   constructor(config: any) {
