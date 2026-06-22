@@ -339,7 +339,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
             this.bbButtonsArray[k].y =
               this.turboBtn.y - k * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
           } else {
-            UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.14, 0.14, 1);
+            UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.18, 0.18, 1);
             this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
           }
         }
