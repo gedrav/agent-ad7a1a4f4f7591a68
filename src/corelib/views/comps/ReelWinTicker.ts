@@ -8,6 +8,7 @@ import { appModel } from '@core/models/services/AppModelService';
 export class ReelWinTicker extends StandardView {
   protected winTicker: WinTicker;
   protected totalWin: number;
+  private storedData: any;
 
   constructor(config) {
     super(config);
@@ -20,15 +21,26 @@ export class ReelWinTicker extends StandardView {
 
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.onAutoplayEnded.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_FORCE_STOP, this.onAutoplayEnded.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.onFreeSpinsEnded.bind(this));
   }
   protected onAutoplayEnded(): void {}
+  protected onFreeSpinsEnded(): void {}
+  protected updateUIForFreeSpinsStart(): void {
+    this.visible = false;
+  }
   //removed skip event listener, if needed then exrend the class}
   protected showSpinWin(data: any): void {
+    this.storedData = data;
     if (this.totalWin == 0) {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
     }
-    if (appModel.getIsAutoSession() || appModel.getIsFreeSpinsSession()) {
+    if (appModel.getIsAutoSession()) {
+      return;
+    }
+    if (appModel.getIsFreeSpinsSession() && appModel.getCurrentFreeSpin() < appModel.getTotalFreespins()) {
       return;
     }
 
