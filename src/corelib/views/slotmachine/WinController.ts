@@ -55,6 +55,8 @@ export default class WinController {
       EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions?.length);
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(this.notifyFeatureTriggerAnimDone.bind(this), 2000);
+    } else {
+      this.notifyFeatureTriggerAnimDone();
     }
   }
   protected notifyFeatureTriggerAnimDone(): void {
@@ -212,6 +214,8 @@ export default class WinController {
               }
             }
           }
+        } else {
+          this.notifySpinWinDone();
         }
       }
     } else {

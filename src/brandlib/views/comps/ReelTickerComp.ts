@@ -30,12 +30,9 @@ export class ReelTickerComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onSpinEnd.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_REELTICKER_WIN, this.showSpinWin.bind(this));
-    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideTicker.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideTicker.bind(this));
 
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.hideForFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.showForFeature.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.showTicker.bind(this));
 
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideForFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.showForFeature.bind(this));
@@ -49,11 +46,7 @@ export class ReelTickerComp extends StandardView {
     this.renderable = false;
   }
   protected showForFeature(): void {
-    if (appModel.getIsAutoSession()) {
-      return;
-    }
     this.renderable = true;
-    this.visible = true;
   }
 
   protected hideTicker(): void {

@@ -508,6 +508,10 @@ class AppModelService {
     return !!this.unfinishedData;
   }
 
+  public clearUnfinishedData(): void {
+    this.unfinishedData = null;
+  }
+
   public getUnfinishedFeatureType(): string {
     return this.unfinishedData.nextFeature;
   }
