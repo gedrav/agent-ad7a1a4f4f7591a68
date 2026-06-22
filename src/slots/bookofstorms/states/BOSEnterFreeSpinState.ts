@@ -14,7 +14,11 @@ class BOSEnterFreeSpinStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
+    if (appModel.getIsUnfinishedFreespins()) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_UNFINISHED_INTRO);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
+    }
     // EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startFreeSpinsSession(true);
