@@ -70,6 +70,16 @@ export class BookOpenComp extends StandardView {
     this.bookLeft.patchSpineDataAtRuntime();
     this.bookRight.patchSpineDataAtRuntime();
     this.bookRightStatic.patchSpineDataAtRuntime();
+
+    this.checkPendingAnimation();
+  }
+
+  private checkPendingAnimation(): void {
+    if (this.pendingSymbolCode) {
+      console.log('checkkkkkkk');
+      this.playBookAnimation(this.pendingSymbolCode);
+      this.pendingSymbolCode = null;
+    }
   }
 
   private availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
@@ -89,17 +99,19 @@ export class BookOpenComp extends StandardView {
   private currentSymbol: string = '';
   private nextSymbol: string = '';
   private nextLeftSymbol: string = '';
+  private pendingSymbolCode: string | null = null;
   private currentTurn: number = 0;
   private targetTurns: number = 9;
 
-  private getRandomSkin(): string {
-    return this.availableSkins[Math.floor(Math.random() * this.availableSkins.length)];
+  private getRandomSkin(excludeSkin?: string): string {
+    const skins = excludeSkin ? this.availableSkins.filter((s) => s !== excludeSkin) : this.availableSkins;
+    return skins[Math.floor(Math.random() * skins.length)];
   }
 
   public playBookAnimation(targetSymbolCode: string): void {
     if (!this.mainBook) {
-      console.warn('Assets not loaded yet, waiting...');
-      //setTimeout(this.playBookAnimation.bind(this, targetSymbolCode), 500);
+      console.warn('Assets not loaded yet, queuing animation...');
+      this.pendingSymbolCode = targetSymbolCode;
       return;
     }
 
@@ -120,11 +132,12 @@ export class BookOpenComp extends StandardView {
       this.bookRightStatic.visible = true;
 
       this.bookLeft.setSkin(this.currentSymbol);
-      this.bookRight.setSkin(this.currentSymbol);
       this.bookLeft.playAnimation({ state: 'static_left', loop: false });
+
+      this.nextSymbol = this.getRandomSkin(this.currentSymbol);
+      this.bookRight.setSkin(this.nextSymbol);
       this.bookRight.playAnimation({ state: 'static_right', loop: false });
 
-      this.nextSymbol = this.getRandomSkin();
       this.bookRightStatic.setSkin(this.nextSymbol);
       this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
 
@@ -144,7 +157,6 @@ export class BookOpenComp extends StandardView {
     this.nextSymbol = this.getRandomSkin();
 
     this.mainBook.setSkin(this.currentSymbol);
-    this.mainBook.playAnimation({ state: 'open_static', loop: false });
 
     this.bookLeft.setSkin(this.currentSymbol);
     this.bookRight.setSkin(this.currentSymbol);
@@ -174,9 +186,15 @@ export class BookOpenComp extends StandardView {
 
     if (this.currentTurn > 0) {
       this.bookRight.setSkin(this.nextSymbol);
+    } else {
+      this.bookRight.setSkin(this.currentSymbol);
     }
 
-    this.nextSymbol = this.getRandomSkin();
+    if (this.currentTurn === this.targetTurns) {
+      this.nextSymbol = this.getRandomSkin(this.nextLeftSymbol);
+    } else {
+      this.nextSymbol = this.getRandomSkin();
+    }
     this.bookRightStatic.setSkin(this.nextSymbol);
   }
 
