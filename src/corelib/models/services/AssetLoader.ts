@@ -120,7 +120,13 @@ class AssetLoaderClass {
         if (this.assetConfig[i]?.assets?.length > 0) {
           this.assetConfig[i].assets.forEach((item: any) => {
             const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
-            if (ASSETTYPE === 'svg' || ASSETTYPE === 'png' || ASSETTYPE === 'jpg' || ASSETTYPE == 'gif') {
+            if (
+              ASSETTYPE === 'svg' ||
+              ASSETTYPE === 'png' ||
+              ASSETTYPE === 'jpg' ||
+              ASSETTYPE == 'gif' ||
+              ASSETTYPE == 'webp'
+            ) {
               if (TYPE == 'common') {
                 data.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
               } else if (TYPE == 'lang') {

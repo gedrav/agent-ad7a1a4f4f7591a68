@@ -39,6 +39,7 @@ export class TransitionAnimComp extends ResponsiveChildrenView {
   }
 
   private playTransitionAnim(): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_TRANSISTION_SOUND);
     this.transitionAnimHor.playAnimation({ state: 'horisontal', loop: false, defaultMix: 0 });
     this.transitionAnimVer.playAnimation({ state: 'vertical', loop: false, defaultMix: 0 });
 

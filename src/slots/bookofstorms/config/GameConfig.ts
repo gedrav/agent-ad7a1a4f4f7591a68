@@ -12,7 +12,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.066',
+  gameVersion: '0.072',
   gameId: 'bookofstorms',
   gameName: 'Book Of Storms',
   uiConfig: UIConfig,
@@ -50,6 +50,7 @@ export const GAME_CONFIG = {
             disabledView: 'bbBtn',
             textOffset: new Point(0, 0),
             animations: CoreUIConfig.spinButtonStates,
+            padding: 50,
           },
           textConfig: {
             name: 'bbBtn',
@@ -58,7 +59,7 @@ export const GAME_CONFIG = {
             style: {
               fontFamily: 'gameFont1',
               fill: [0xffffff],
-              fontSize: 60,
+              fontSize: 80,
               fontWeight: 'bold',
               stroke: 0xfcb610,
               strokeThickness: 2,

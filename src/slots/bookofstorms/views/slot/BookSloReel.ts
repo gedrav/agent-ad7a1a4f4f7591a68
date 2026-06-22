@@ -93,6 +93,8 @@ export class BookSlotReel extends SlotReelStandard {
                   const targetSymbol = this.symbolsArray[reelIndex][r + 1];
                   targetSymbol.setNewSymbol(specialSymbolConfig, reelIndex);
 
+                  EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_EXPANSION);
+
                   AnimationProxy.animateTween(targetSymbol.scale, {
                     duration: 0.6,
                     x: this.reelsData.symbolScale,

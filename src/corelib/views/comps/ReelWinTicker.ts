@@ -8,6 +8,7 @@ import { appModel } from '@core/models/services/AppModelService';
 export class ReelWinTicker extends StandardView {
   protected winTicker: WinTicker;
   protected totalWin: number;
+  private storedData: any;
 
   constructor(config) {
     super(config);
@@ -17,17 +18,32 @@ export class ReelWinTicker extends StandardView {
     EventHandler.addEventListener(SlotEvents.SKIP_REELTICKER_WIN, this.skipToFinalValue.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, this.clearSpinWin.bind(this));
     EventHandler.addEventListener(SlotEvents.TOGGLE_REELTICKER_WIN, this.toggleVisibility.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.onAutoplayEnded.bind(this));
+    EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_FORCE_STOP, this.onAutoplayEnded.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.updateUIForFreeSpinsStart.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, this.onFreeSpinsEnded.bind(this));
+  }
+  protected onAutoplayEnded(): void {}
+  protected onFreeSpinsEnded(): void {}
+  protected updateUIForFreeSpinsStart(): void {
+    this.visible = false;
   }
   //removed skip event listener, if needed then exrend the class}
   protected showSpinWin(data: any): void {
+    this.storedData = data;
     if (this.totalWin == 0) {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
-      // EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
     }
-    if ((appModel.getIsAutoSession() && !appModel.isCascadeGame()) || appModel.getIsFreeSpinsSession()) {
+    if (appModel.getIsAutoSession()) {
       return;
     }
+    if (appModel.getIsFreeSpinsSession() && appModel.getCurrentFreeSpin() < appModel.getTotalFreespins()) {
+      return;
+    }
+
     this.totalWin += data.value;
     if (data.duration == 0) {
       const flag: boolean = !appModel.isCascadeGame() || !appModel.getIsFreeSpinsSession();
@@ -35,15 +51,10 @@ export class ReelWinTicker extends StandardView {
     } else {
       this.winTicker.countUpValue(this.totalWin, data.duration, true);
     }
-
     this.visible = true;
   }
   protected skipToFinalValue(): void {
     this.winTicker.skipToFinalValue();
-  }
-  protected clearSpinWinAfterFS(): void {
-    this.visible = false;
-    this.totalWin = 0;
   }
   protected clearSpinWin(): void {
     this.visible = false;
