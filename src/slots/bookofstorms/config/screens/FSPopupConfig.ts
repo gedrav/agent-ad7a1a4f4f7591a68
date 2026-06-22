@@ -89,7 +89,7 @@ export const FS_POPUP_CONFIG = {
         defaultView: 'button',
         hoverView: 'button',
         pressedView: 'button',
-        disabledView: 'okBtn_Inactive',
+        disabledView: 'button',
         animations: CoreUIConfig.buttonStates,
       },
       scale: 0.9,
