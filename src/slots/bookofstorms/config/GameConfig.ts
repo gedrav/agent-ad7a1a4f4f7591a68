@@ -4,6 +4,16 @@ import { Point } from 'pixi.js';
 import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
+const BB_BTN = {
+  cs: { fontSize: 40 },
+  pl: { fontSize: 40 },
+  lt: { fontSize: 32 },
+  cnr: { fontSize: 40 },
+  hr: { fontSize: 40 },
+  sk: { fontSize: 40 },
+  ro: { fontSize: 40 },
+};
+
 export const GAME_CONFIG = {
   gameDesktopWidth: 2424,
   gameDesktopHeight: 1300,
@@ -67,6 +77,7 @@ export const GAME_CONFIG = {
               align: 'center',
             },
             toUpperCase: true,
+            fontMLProps: BB_BTN,
           },
         },
       },
