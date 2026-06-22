@@ -99,7 +99,7 @@ export class BookOpenComp extends StandardView {
   public playBookAnimation(targetSymbolCode: string): void {
     if (!this.mainBook) {
       console.warn('Assets not loaded yet, waiting...');
-      setTimeout(this.playBookAnimation.bind(this, targetSymbolCode), 500);
+      //setTimeout(this.playBookAnimation.bind(this, targetSymbolCode), 500);
       return;
     }
 
