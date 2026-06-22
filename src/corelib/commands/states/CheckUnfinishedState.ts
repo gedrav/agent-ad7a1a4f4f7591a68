@@ -18,10 +18,15 @@ class CheckUnfinishedStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.DISALBE_ANTE_BB_BUTTON);
       if (appModel.getIsFeatureTriggered()) {
         const fType = appModel.getUnfinishedFeatureType();
-        if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
-          StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
+        if (appModel.secondaryAssetsLoaded) {
+          if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
+            StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
+          } else {
+            console.log('feature but not FS, handle now');
+          }
         } else {
-          console.log('feature but not FS, handle now');
+          appModel.waitingForFeature = true;
+          EventHandler.dispatchEvent(SlotEvents.SHOW_SECONDARY_LOADING_SCREEN);
         }
       } else {
         console.log('Unfinished but no feature data');

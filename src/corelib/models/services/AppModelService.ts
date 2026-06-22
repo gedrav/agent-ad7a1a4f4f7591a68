@@ -3,6 +3,8 @@ import { Util } from '@core/utils/UtilService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
+import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
+import { settings } from '@pixi/core';
 
 type ParamsObject = Record<string, number>;
 
@@ -11,7 +13,15 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get waitingForFeature(): boolean {
+    return this._waitingForFeature;
+  }
+
+  set waitingForFeature(value: boolean) {
+    this._waitingForFeature = value;
+  }
   private rtpInfo: any;
+  private _waitingForFeature: boolean = false;
   get featureAssetsLoaded(): boolean {
     return this._featureAssetsLoaded;
   }

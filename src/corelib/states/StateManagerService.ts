@@ -39,6 +39,9 @@ class StateManagerService {
   public doNextStep(data: any = null): void {
     this._currentState.state.doNextStep(data);
   }
+  public executeAgain(data: any = null): void {
+    this._currentState.state.execute(data);
+  }
 
   public goToState(stateName: string, data: any = null) {
     this._currentState.state.destroy();

@@ -233,5 +233,6 @@ export class BookOpenComp extends StandardView {
     if (this.bookRight) this.bookRight.visible = false;
     if (this.bookRightStatic) this.bookRightStatic.visible = false;
     if (this.winFrameComp) this.winFrameComp.visible = false;
+    this.pendingSymbolCode = null;
   }
 }

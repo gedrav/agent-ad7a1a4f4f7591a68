@@ -8,6 +8,9 @@ export class StateCommand {
     }
   }
   public doNextStep(data: any = null): void {}
+  public executeAgain(data: any = null): void {
+    this.execute(data);
+  }
 
   public async destroy(data: any = null) {}
 }
