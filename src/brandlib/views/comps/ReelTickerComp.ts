@@ -53,7 +53,9 @@ export class ReelTickerComp extends StandardView {
       return;
     }
     this.renderable = true;
-    this.visible = true;
+    if (appModel.getSpinWin() == 0) {
+      this.visible = true;
+    }
   }
 
   protected hideTicker(): void {
