@@ -10,9 +10,9 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
   cs: { fontSize: 39 },
-  lt: { mFontSize: 40, fontSize: 34 },
-  pl: { mFontSize: 40, fontSize: 34 },
-  sk: { mFontSize: 40, fontSize: 45 },
+  lt: { fontSize: 34 },
+  pl: { fontSize: 34 },
+  sk: { fontSize: 45 },
   ro: { fontSize: 40 },
 };
 
@@ -45,7 +45,6 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
-          mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -78,7 +77,6 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
-          mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -111,7 +109,6 @@ export const SPLASH_CONFIG: any = {
           stroke: 0x000000,
           strokeThickness: 2,
           fontSize: 50,
-          mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
