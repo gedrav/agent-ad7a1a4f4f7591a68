@@ -23,9 +23,10 @@ export class SecondaryWaitingView extends ResponsiveChildrenView {
 
   protected onSecondaryAssetsLoaded() {
     super.onSecondaryAssetsLoaded();
-    this.visible = false;
     if (appModel.waitingForFeature) {
       StateManager.executeAgain();
     }
+    this.destroyView();
+    this.destroy();
   }
 }

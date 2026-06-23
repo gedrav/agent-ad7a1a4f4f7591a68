@@ -36,7 +36,16 @@ export const SECONDARY_WAITING_SCREEN_CONFIG = {
           radius: 24,
         },
         {
-          name: 'errorText',
+          name: 'loader',
+          type: 'Sprite',
+          image: 'loader_anim',
+          x: 500,
+          y: 160,
+          anchor: { x: 0.5, y: 0.5 },
+          scale: 0.5,
+        },
+        {
+          name: 'msgText',
           type: 'Text',
           content: 'secondaryWaitingText',
           style: {
@@ -46,6 +55,7 @@ export const SECONDARY_WAITING_SCREEN_CONFIG = {
             fill: 0xd9d9d9,
             wordWrap: true,
             wordWrapWidth: 800,
+            align: 'center',
           },
           anchor: { x: 0.5, y: 0.5 },
           x: 500,
@@ -54,8 +64,8 @@ export const SECONDARY_WAITING_SCREEN_CONFIG = {
       ],
       layoutData: {
         Desktop: { widthPerc: 0.4, heightPerc: 0.4, hAlign: 'center', vAlign: 'middle' },
-        Portrait: { widthPerc: 0.8, heightPerc: 0.5, hAlign: 'center', vAlign: 'middle' },
-        Landscape: { widthPerc: 0.5, heightPerc: 0.8, hAlign: 'center', vAlign: 'middle' },
+        Portrait: { widthPerc: 0.9, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle' },
+        Landscape: { widthPerc: 0.5, heightPerc: 0.5, hAlign: 'center', vAlign: 'middle' },
       },
     },
   ],
