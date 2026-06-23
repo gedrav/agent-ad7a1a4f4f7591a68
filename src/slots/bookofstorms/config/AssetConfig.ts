@@ -42,12 +42,12 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
-    { TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Transition', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'book_feature', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'bigWins', ASSETTYPE: 'spine' },

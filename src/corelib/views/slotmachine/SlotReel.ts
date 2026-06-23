@@ -21,11 +21,23 @@ import { AppEvents } from '@core/events/AppEvents';
 import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 import { ReelTickerComp } from '@brand/views/comps/ReelTickerComp';
 import { FSAutoCounterComp } from '@brand/views/comps/FSAutoCounterComp';
+import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 const reelSpinStartGap = 100;
 const customEase = Elastic.easeOut.config(1.4, 0.6);
 
 export default class SlotReel extends ResponsiveChildrenView {
+  protected scatterAnticipArray: number[][] = [];
+  protected currentReel: number = 0;
+  protected anticipationRunning = [];
+  protected symbolPassedCounterArray = [];
+  protected stopStarted = [];
+  protected startAnticipationReel = [];
+  protected reelsCompleted = [];
+  protected totalSymbols: number;
+  protected anticipationElementArray: PixSpine[] = [];
+  protected anticipationContainer: PixView;
+
   protected symbolsArray: ReelSymbolSprite[][] = [];
   protected reelSpinningState: number[];
   protected spinStarted: boolean = false;
@@ -69,6 +81,7 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   constructor(configData: any) {
     super(configData);
+    this.anticipationContainer = this.elementsList['anticipationContainer'];
     this.symbolsContainer = this.elementsList['symbolsContainer'];
     this.winSymbolsContainer = this.elementsList['winSymbolsContainer'];
     this.lineWinAmountComp = this.elementsList['lineWinAmountComp'];
@@ -128,6 +141,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     //this.ticker.start();
     this.tickerHandler = this.spinReel.bind(this);
     this.ticker.add(this.tickerHandler);
+    this.createAnticipations();
   }
 
   public destroyView(): void {
@@ -327,6 +341,14 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected startSpin(): void {
+    this.anticipationRunning = [];
+    this.symbolPassedCounterArray = [];
+    this.stopStarted = [];
+    this.startAnticipationReel = [];
+    this.reelsCompleted = [];
+    this.currentReel = 0;
+    this.totalSymbols = 0;
+
     this.setSymbolsClickable(false);
     this.showIdleAnim(false);
     this.resetSpinParams();
@@ -341,6 +363,12 @@ export default class SlotReel extends ResponsiveChildrenView {
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       this.stopIndex[k] = this.reelsData.noOfRows + 1;
       this.reelSpinningState[k] = 0;
+      this.anticipationRunning[k] = false;
+      this.stopStarted[k] = false;
+      this.reelSpinningState[k] = -1;
+      this.reelsCompleted[k] = false;
+      this.symbolPassedCounterArray[k] = 0;
+      this.startAnticipationReel[k] = false;
     }
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       this.timeoutIds2[k] = setTimeout(
@@ -419,6 +447,13 @@ export default class SlotReel extends ResponsiveChildrenView {
       lastSymbol.y = symbols[0].y - this.reelsData.symbolHeight;
       symbols.splice(symbols.length - 1, 1);
       symbols.unshift(lastSymbol);
+      if (this.anticipationRunning[reelno]) {
+        this.symbolPassedCounterArray[reelno]++;
+        this.checkToStopReelStrip(reelno);
+      } else if (this.currentReel == reelno) {
+        this.symbolPassedCounterArray[reelno] += 1;
+        this.checkToStopReelStrip(reelno);
+      }
     }
   }
 
@@ -432,13 +467,8 @@ export default class SlotReel extends ResponsiveChildrenView {
       this.stopSpinQuick();
       return;
     }
-    const reels = appModel.getReelsView();
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.timeoutIds[k] = setTimeout(
-        this.stopReelStrip.bind(this, k),
-        appModel.turboMode ? this.reelStopGap * k * 0.25 : this.reelStopGap * k,
-      );
-    }
+    this.createScatterAnticipationArray();
+    this.checkToStopReelStrip(0);
   }
   protected stopReelStrip(reelno: number): void {
     if (this.quickSpinStarted) {
@@ -486,11 +516,13 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     const lastSymbol = symbols[1];
     if (lastSymbol.y > this.maxDownY) {
+      this.currentReel = reelno + 1;
       this.reelSpinningState[reelno] = 5;
     }
   }
 
   protected showFinalJerk(reelno: number): void {
+    this.destroyAnticipation(reelno);
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
@@ -526,6 +558,7 @@ export default class SlotReel extends ResponsiveChildrenView {
 
     this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
+      this.hideAllAnticipation();
       const len = this.timeoutIds.length;
       for (let k = 0; k < len; k++) {
         clearTimeout(this.timeoutIds[k]);
@@ -607,6 +640,146 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   // ---------------- end of spin --------------------
+  // check reelstop
+  public checkToStopReelStrip(reelno: number) {
+    if (reelno == 0) {
+      if (
+        this.symbolPassedCounterArray[reelno] >=
+          GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount - this.totalSymbols &&
+        this.spinResponseReceived
+      ) {
+        if (!this.stopStarted[reelno]) {
+          this.stopStarted[reelno] = true;
+          this.reelSpinningState[reelno] = 3;
+        }
+      }
+    } else {
+      let totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols;
+      if (DeviceProxy.isDevice()) {
+        if (DeviceProxy.config.isPortrait) {
+          totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols - 1;
+        } else {
+          totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols;
+        }
+      }
+      if (
+        this.symbolPassedCounterArray[reelno] >= totalcount &&
+        this.currentReel == reelno &&
+        this.spinResponseReceived
+      ) {
+        const nofScatter = this.getNumberOfScatter(reelno);
+        if (!this.anticipationRunning[reelno] && nofScatter && nofScatter[0] > 1) {
+          EventHandler.dispatchEvent('PLAY_ANTICIPATION_SOUND');
+          this.showNextAnticipation(reelno);
+          // this.startAnticipationSymbolCount[reelno] = true;
+          this.anticipationRunning[reelno] = true;
+          this.symbolPassedCounterArray[reelno] = 0;
+          // this.destroyAnticipation(reelno);
+          return;
+        }
+        if (!this.stopStarted[reelno] && this.reelSpinningState[reelno] == 2) {
+          this.reelSpinningState[reelno] = 3;
+          this.stopStarted[reelno] = true;
+        }
+      }
+    }
+  }
+  //  ------------------------------ anticipation -----------------------------
+  protected createScatterAnticipationArray() {
+    const len = appModel.getReelsView().length;
+    let totalScatters = 0;
+    this.scatterAnticipArray[0] = [0];
+    for (let k = 0; k < len; k++) {
+      this.scatterAnticipArray[k] = [];
+      const reel = appModel.getReelsView()[k - 1];
+      if (reel) {
+        const symbLen = reel.length;
+        const scattersLen = this.configData.data.anticipationSymbols.length;
+        if (scattersLen) {
+          for (let p = 0; p < scattersLen; p++) {
+            for (let i = 1; i < symbLen - 1; i++) {
+              const landinglen = this.configData.data.anticipationSymbols.length;
+              if (landinglen) {
+                for (let j = 0; j < landinglen; j++) {
+                  if (reel[i] === this.configData.data.anticipationSymbols[j]) {
+                    totalScatters++;
+                  }
+                }
+              }
+            }
+            this.scatterAnticipArray[k].push(totalScatters);
+          }
+        }
+      }
+    }
+  }
+  // create anticipation
+  protected createAnticipations() {
+    if (this.reelsData.anticipationConfig) {
+      const len = this.reelsData.anticipationConfig.totalElements;
+      for (let k = 0; k < len; k++) {
+        if (k === 0) {
+          this.anticipationElementArray.push(null);
+          continue;
+        }
+        const element = UIUtil.getElement(this.reelsData.anticipationConfig.element);
+        this.anticipationContainer.addChild(element);
+        element.stopAnimation();
+        element.visible = false;
+        this.anticipationElementArray.push(element);
+        this.anticipationContainer.addChild(element);
+      }
+      this.addChild(this.anticipationContainer);
+    }
+  }
+  // stop anticipations
+  protected destroyAnticipation(reelno) {
+    if (this.anticipationElementArray && this.anticipationElementArray[reelno]) {
+      AnimationProxy.animateTween(this.anticipationElementArray[reelno], {
+        duration: this.jerkDuration * 0.5,
+        alpha: 0,
+        onComplete: this.hideAnticipationStrip.bind(this, reelno),
+      });
+    }
+  }
+  protected hideAnticipationStrip(reelno) {
+    if (this.configData.anticipationConfig) {
+      this.anticipationElementArray[reelno].stopAnimation();
+      this.anticipationElementArray[reelno].visible = false;
+      this.anticipationElementArray[reelno].alpha = 1;
+    }
+  }
+  protected hideAllAnticipation() {
+    this.anticipationElementArray.forEach((el) => {
+      if (el === null) return;
+      el.visible = false;
+      el.stopAnimation();
+    });
+  }
+
+  protected showNextAnticipation(reelno: number) {
+    console.log('SHOW NEXT ANTICIPATION');
+    this.anticipationRunning[reelno] = true;
+    this.anticipationElementArray.forEach((anticipation, index) => {
+      if (index >= reelno) {
+        anticipation.alpha = 1;
+        anticipation.visible = true;
+        anticipation.playAnimation({ state: 'animation', loop: true });
+      }
+    });
+  }
+  protected getNumberOfScatter(reelno): number[] {
+    if (appModel.turboMode || this.reelsData.anticipationConfig == null) {
+      return [0];
+    }
+    if (this.scatterAnticipArray && this.scatterAnticipArray[reelno] != undefined) {
+      return this.scatterAnticipArray[reelno];
+    } else {
+      return [0];
+    }
+  }
+  //--------------------end of anticipation
+
   protected onSymbolClicked(symb: ReelSymbolSprite): void {
     //if (appModel.gameResult && appModel.getSpinWin() > 0) return;
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
@@ -748,6 +921,10 @@ export default class SlotReel extends ResponsiveChildrenView {
       this.symbolsContainer.y = this.reelsData.reelContainerPos.y;
       this.winSymbolsContainer.x = this.reelsData.reelContainerPos.x;
       this.winSymbolsContainer.y = this.reelsData.reelContainerPos.y;
+      if (this.anticipationContainer) {
+        this.anticipationContainer.x = this.reelsData.reelContainerPos.x;
+        this.anticipationContainer.y = this.reelsData.reelContainerPos.y;
+      }
     }
   }
 
@@ -780,5 +957,41 @@ export default class SlotReel extends ResponsiveChildrenView {
       this.slotGuideRect.y = local.y;
     }
     super.resizeView();
+    this.setAnticipationPosition();
+  }
+  setAnticipationPosition() {
+    if (DeviceProxy.isDevice()) {
+      if (DeviceProxy.config.isPortrait) {
+        this.anticipationElementArray.forEach((element, index) => {
+          if (element === null) return;
+          const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
+          element.x = anticipationConfig.px;
+          element.y = anticipationConfig.py;
+          if (anticipationConfig.pScale) {
+            element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+          }
+        });
+      } else {
+        this.anticipationElementArray.forEach((element, index) => {
+          if (element === null) return;
+          const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
+          element.x = anticipationConfig.lx;
+          element.y = anticipationConfig.ly;
+          if (anticipationConfig.pScale) {
+            element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+          }
+        });
+      }
+    } else {
+      this.anticipationElementArray.forEach((element, index) => {
+        if (element === null) return;
+        const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
+        element.x = anticipationConfig.x;
+        element.y = anticipationConfig.y;
+        if (anticipationConfig.scale) {
+          element.scale.set(anticipationConfig.scale.x, anticipationConfig.scale.y);
+        }
+      });
+    }
   }
 }

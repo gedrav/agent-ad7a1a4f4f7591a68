@@ -29,6 +29,12 @@ export const GAME_CONFIG = {
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
   },
+  reelSpinSettings: {
+    firstReelSymbolPassCount: 8,
+    otherReelsSymbolPassCount: 5,
+    anticipationSymbolPassCount: 60,
+    endJerkDistance: 200,
+  },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
