@@ -5,7 +5,7 @@ export const JACKPOT_CONFIG: any = {
   type: 'Comp',
   class: JackpotComp,
   layoutData: {
-    Desktop: { scale: 1, x: 469, y: 176 },
+    Desktop: { scale: 1, x: 469, y: 100 },
     Portrait: { scale: 1, x: -65, y: -150 },
     Landscape: { scale: 1, x: 25, y: 30 },
   },
