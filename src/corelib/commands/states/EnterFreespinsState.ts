@@ -1,10 +1,10 @@
-import { STATES } from '@core/states/StateConstants';
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
+import { STATES } from '@core/states/StateConstants';
 
 class EnterFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -14,6 +14,11 @@ class EnterFreespinsStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
+    /*if (appModel.getIsUnfinishedFreespins()) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_UNFINISHED_INTRO);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
+    }*/
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_ENTRY_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
@@ -25,6 +30,7 @@ class EnterFreespinsStateCommand extends StateCommand {
     const isUnfinishedFreespins = appModel.getIsUnfinishedFreespins();
 
     obj.message1 = Util.parseMessage(Util.getContent('FSEntryText'), [appModel.getTotalFreespins()]);
+    obj.entryPopUp = true;
 
     const totalCount = appModel.getTotalFreespins();
     const remainingCount = totalCount - appModel.getCurrentFreeSpin() + 1;
@@ -46,7 +52,7 @@ class EnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
 
-    StateManager.goToState(STATES.FS_SPIN_START_STATE);
+    StateManager.goToState(STATES.SHOW_FS_ENTRY_TRANSITION_ANIM);
   }
 }
 

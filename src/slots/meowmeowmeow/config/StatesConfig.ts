@@ -44,7 +44,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
   { name: STATES.EXIT_FREESPINS_STATE, state: BOSExitFreespinsState },
-  { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: ShowFSExitTransitionState },
+  { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 
   { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
 ];

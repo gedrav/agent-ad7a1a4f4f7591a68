@@ -38,12 +38,12 @@ export const STATES_CONFIG: any = [
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
-  { name: STATES.ENTER_FREESPINS_STATE, state: BOSEnterFreespinsState },
+  { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
   { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: ShowFSEnterTransitionState },
 
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
-  { name: STATES.EXIT_FREESPINS_STATE, state: BOSExitFreespinsState },
+  { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
   { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: ShowFSExitTransitionState },
 
   { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },

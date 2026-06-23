@@ -29,6 +29,7 @@ class ExitFreespinsStateCommand extends StateCommand {
       obj.message1 = Util.parseMessage(Util.getContent('FSExitText'), [
         Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
       ]);
+      obj.entryPopUp = false;
       obj.callbackFunction = this.exitFreespin.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
@@ -44,11 +45,12 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins
     appModel.endFreeSpinsSession();
+    appModel.clearUnfinishedData();
     EventHandler.dispatchEvent('STOP_FREESPIN_BG_MUSIC');
     EventHandler.dispatchEvent(SlotEvents.STOP_FS_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
-    StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
+    StateManager.next();
   }
 }
 
