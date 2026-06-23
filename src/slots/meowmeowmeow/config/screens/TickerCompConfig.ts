@@ -5,8 +5,8 @@ export const TICKER_COMP_CONFIG: any = {
   type: 'Comp',
   class: ReelTickerComp,
   tickerDelay: 3000,
-  x: 70,
-  y: 1034,
+  x: 605,
+  y: 1381,
   content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
   contentYPadding: 0,
   Elements: [
