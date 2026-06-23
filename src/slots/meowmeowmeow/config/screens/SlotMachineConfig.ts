@@ -23,7 +23,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 2200,
+      width: 2170,
       height: 1486,
       pWidth: 1420,
       pHeight: 1150,
@@ -50,8 +50,8 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD', 'SC'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 640, y: 446 },
-            reelPositionX: [0, 325, 658, 986, 1320],
+            reelContainerPos: { x: 646, y: 544 },
+            reelPositionX: [0, 332, 662, 990, 1320],
             symbolHeight: 315,
             symbolScale: 1,
           },
@@ -69,13 +69,29 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
         },
         initialReel: [
-          ['WD', 'SC', 'WD'],
-          ['H1', 'L4', 'L2'],
-          ['L3', 'L4', 'L1'],
-          ['L2', 'L1', 'H4'],
-          ['H4', 'L1', 'H3'],
+          ['H1', 'L1', 'L3'],
+          ['SC', 'L2', 'L4'],
+          ['H2', 'WD', 'L5'],
+          ['H3', 'pot', 'paw_red'],
+          ['H4', 'paw_green', 'paw_blue'],
         ],
         symbolsData: {
+          paw_red: {
+            name: 'paw_red',
+            animScale: 0.65,
+          },
+          paw_blue: {
+            name: 'paw_blue',
+            animScale: 0.65,
+          },
+          paw_green: {
+            name: 'paw_green',
+            animScale: 0.65,
+          },
+          pot: {
+            name: 'pot',
+            animScale: 0.65,
+          },
           WD: {
             name: 'WD',
             spineName: 'Book', // Replace with 'Wild' when asset is ready
@@ -168,6 +184,17 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       },
       Elements: [
+        JACKPOT_CONFIG,
+
+        {
+          name: 'reelstripBG',
+          type: 'Sprite',
+          image: 'reelframebg',
+          x: 482,
+          y: 362,
+        },
+        { name: 'symbolsContainer', type: 'Container' },
+
         {
           name: 'reelFrame',
           type: 'Comp',
@@ -184,7 +211,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
-        { name: 'symbolsContainer', type: 'Container' },
 
         {
           name: 'modalRect',
@@ -202,7 +228,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           image: 'gamelogo',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
-            Desktop: { scale: 1, x: 800, y: 0 },
+            Desktop: { scale: 1, x: 1300, y: 103 },
             Landscape: { scale: 0.9, x: 780, y: -230 },
             Portrait: { scale: 0.9, x: 710, y: -350 },
           },
@@ -294,7 +320,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           ],
         },
         KITTIEBANK_CONFIG,
-        JACKPOT_CONFIG,
       ],
     },
 

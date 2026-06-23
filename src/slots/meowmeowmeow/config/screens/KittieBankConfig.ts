@@ -10,8 +10,8 @@ export const KITTIEBANK_CONFIG: any = {
     Landscape: { x: -300, y: 0 },
   },
   Elements: [
-    { name: 'mii', type: 'Sprite', image: 'MII', x: 75, y: 0 },
-    { name: 'mew', type: 'Sprite', image: 'MEW', x: 56, y: 448 },
+    { name: 'mii', type: 'Sprite', image: 'MII', x: 75, y: 36 },
+    { name: 'mew', type: 'Sprite', image: 'MEW', x: 56, y: 466 },
     { name: 'meow', type: 'Sprite', image: 'MEOW', x: 0, y: 938 },
   ],
 };
