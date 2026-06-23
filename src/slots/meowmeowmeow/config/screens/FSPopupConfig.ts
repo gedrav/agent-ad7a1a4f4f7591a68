@@ -1,11 +1,10 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
-import { BookOfStormsFSPopupComp } from '@game/views/comps/BookOfStormsFSPopupComp';
-import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
+import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
-  class: BookOfStormsFSPopupComp,
+  class: FSPopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
     {
@@ -45,7 +44,6 @@ export const FS_POPUP_CONFIG = {
       y: 270,
     },
     {
-      ...BOOK_OPEN_CONFIG,
       layoutData: undefined,
       scale: 1,
       x: -402,

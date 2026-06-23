@@ -4,14 +4,12 @@ import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BookOpenConfig } from '@game/config/screens/BookOpenConfig';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
 import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
@@ -25,26 +23,13 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 2800,
-      height: 1500,
+      width: 2200,
+      height: 1486,
       pWidth: 1420,
       pHeight: 1150,
       lWidth: 1610,
       lHeight: 1140,
       alpha: 0.9,
-    },
-    KITTIEBANK_CONFIG,
-    JACKPOT_CONFIG,
-    {
-      name: 'gameTitle',
-      type: 'Sprite',
-      image: 'gamelogo',
-      anchor: { x: 0.5, y: 0.5 },
-      layoutData: {
-        Desktop: { scale: 1, x: 1400, y: 100 },
-        Landscape: { scale: 0.9, x: 780, y: -230 },
-        Portrait: { scale: 0.9, x: 710, y: -350 },
-      },
     },
     {
       name: 'slotReel',
@@ -52,7 +37,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: BookSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 550, y: 300 },
+        Desktop: { x: 0, y: 0 },
         Portrait: { x: -65, y: 50 },
         Landscape: { x: 25, y: 150 },
       },
@@ -65,7 +50,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD', 'SC'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 200, y: 246 },
+            reelContainerPos: { x: 640, y: 446 },
             reelPositionX: [0, 325, 658, 986, 1320],
             symbolHeight: 315,
             symbolScale: 1,
@@ -187,8 +172,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           name: 'reelFrame',
           type: 'Comp',
           class: ReelFrameComp,
-          x: 0,
-          y: 0,
+          x: 450,
+          y: 300,
           Elements: [
             {
               name: 'reelFrame',
@@ -199,13 +184,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
-        // {
-        //   name: 'reelstripBG',
-        //   type: 'Sprite',
-        //   image: 'reelframebg',
-        //   x: 0,
-        //   y: 50,
-        // },
         { name: 'symbolsContainer', type: 'Container' },
 
         {
@@ -218,17 +196,27 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        // { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 26, y: 1005, scale: 1 },
+        {
+          name: 'gameTitle',
+          type: 'Sprite',
+          image: 'gamelogo',
+          anchor: { x: 0.5, y: 0.5 },
+          layoutData: {
+            Desktop: { scale: 1, x: 800, y: 0 },
+            Landscape: { scale: 0.9, x: 780, y: -230 },
+            Portrait: { scale: 0.9, x: 710, y: -350 },
+          },
+        },
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
         {
           name: 'maskRect',
           type: 'Graphics',
-          width: 1635,
-          height: 950,
-          x: 40,
-          y: 88,
+          width: 1666,
+          height: 975,
+          x: 474,
+          y: 364,
           color: 0xffff00,
           alpha: 1,
           visible: true,
@@ -305,8 +293,11 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
+        KITTIEBANK_CONFIG,
+        JACKPOT_CONFIG,
       ],
     },
+
     BIG_WIN_CONFIG,
   ],
   layoutData: {
