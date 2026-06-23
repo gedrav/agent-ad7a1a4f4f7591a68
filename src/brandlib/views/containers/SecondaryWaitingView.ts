@@ -4,6 +4,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { Container, Graphics, Ticker } from 'pixi.js';
 import { StateManager } from '@core/states/StateManagerService';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class SecondaryWaitingView extends ResponsiveChildrenView {
   private bg: PixSprite;
@@ -23,6 +24,8 @@ export class SecondaryWaitingView extends ResponsiveChildrenView {
   protected onSecondaryAssetsLoaded() {
     super.onSecondaryAssetsLoaded();
     this.visible = false;
-    StateManager.executeAgain();
+    if (appModel.waitingForFeature) {
+      StateManager.executeAgain();
+    }
   }
 }

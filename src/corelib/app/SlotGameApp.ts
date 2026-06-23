@@ -378,7 +378,7 @@ class SlotGameApp {
     AssetLoader.loadSecondarySounds();
     setTimeout(() => {
       AssetLoader.loadSecondary();
-    }, 10000);
+    }, 0);
   }
   protected onSecondaryAssetsLoaded() {
     appModel.secondaryAssetsLoaded = true;
