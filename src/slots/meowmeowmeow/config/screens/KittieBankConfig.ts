@@ -11,7 +11,7 @@ export const KITTIEBANK_CONFIG: any = {
   },
   Elements: [
     { name: 'mii', type: 'Sprite', image: 'MII', x: 75, y: 36 },
-    { name: 'mew', type: 'Sprite', image: 'MEW', x: 56, y: 470 },
+    { name: 'mew', type: 'Sprite', image: 'MEW', x: 56, y: 466 },
     { name: 'meow', type: 'Sprite', image: 'MEOW', x: 0, y: 938 },
   ],
 };

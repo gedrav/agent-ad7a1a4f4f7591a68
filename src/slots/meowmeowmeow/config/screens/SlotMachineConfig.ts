@@ -51,7 +51,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 646, y: 544 },
-            reelPositionX: [0, 325, 658, 986, 1320],
+            reelPositionX: [0, 332, 662, 990, 1320],
             symbolHeight: 315,
             symbolScale: 1,
           },
@@ -72,10 +72,26 @@ export const SLOT_MACHINE_CONFIG: any = {
           ['H1', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
           ['H2', 'WD', 'L5'],
-          ['L2', 'L1', 'H4'],
-          ['H4', 'L3', 'H3'],
+          ['H3', 'pot', 'paw_red'],
+          ['H4', 'paw_green', 'paw_blue'],
         ],
         symbolsData: {
+          paw_red: {
+            name: 'paw_red',
+            animScale: 0.65,
+          },
+          paw_blue: {
+            name: 'paw_blue',
+            animScale: 0.65,
+          },
+          paw_green: {
+            name: 'paw_green',
+            animScale: 0.65,
+          },
+          pot: {
+            name: 'pot',
+            animScale: 0.65,
+          },
           WD: {
             name: 'WD',
             spineName: 'Book', // Replace with 'Wild' when asset is ready
