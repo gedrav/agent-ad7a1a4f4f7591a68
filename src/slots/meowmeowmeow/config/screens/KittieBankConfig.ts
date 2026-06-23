@@ -1,0 +1,17 @@
+import { KittieBankComp } from '../../views/comps/KittieBankComp';
+
+export const KITTIEBANK_CONFIG: any = {
+  name: 'kittiebankContainer',
+  type: 'Comp',
+  class: KittieBankComp,
+  layoutData: {
+    Desktop: { x: 50, y: 80 },
+    Portrait: { x: -400, y: 0 },
+    Landscape: { x: -300, y: 0 },
+  },
+  Elements: [
+    { name: 'mii', type: 'Sprite', image: 'MII', x: 75, y: 0 },
+    { name: 'mew', type: 'Sprite', image: 'MEW', x: 56, y: 400 },
+    { name: 'meow', type: 'Sprite', image: 'MEOW', x: 0, y: 870 },
+  ],
+};
