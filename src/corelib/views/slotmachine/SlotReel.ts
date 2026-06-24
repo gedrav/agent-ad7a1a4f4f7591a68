@@ -781,7 +781,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected showNextAnticipation(reelno: number) {
-    console.log('SHOW NEXT ANTICIPATION');
     this.anticipationRunning[reelno] = true;
     this.anticipationElementArray.forEach((anticipation, index) => {
       if (index >= reelno) {
