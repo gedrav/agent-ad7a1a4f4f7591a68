@@ -32,7 +32,7 @@ export const GAME_CONFIG = {
   reelSpinSettings: {
     firstReelSymbolPassCount: 8,
     otherReelsSymbolPassCount: 5,
-    anticipationSymbolPassCount: 50,
+    anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
