@@ -63,6 +63,15 @@ export default class WinController {
     clearTimeout(this.timeoutId);
     StateManager.doNextStep();
   }
+  public showAnticipationScatterLand(reelno: number, anticipationSymbols: string[]): void {
+    for (let row = 0; row < this.noOfRows; row++) {
+      const symbol = this.symbolsArray[reelno][row + 1];
+      if (symbol && anticipationSymbols.includes(symbol.getSymbolName())) {
+        this.winSymbolsContainer.addChild(symbol);
+        symbol.showFeatureTriggerAnimation();
+      }
+    }
+  }
   public async showTumbleWin(): Promise<void> {
     this.winSymbolIndex = 0;
     this.totalWinSymbols = 0;

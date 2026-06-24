@@ -643,23 +643,32 @@ export default class SlotReel extends ResponsiveChildrenView {
   // check reelstop
   public checkToStopReelStrip(reelno: number) {
     if (reelno == 0) {
-      if (
-        this.symbolPassedCounterArray[reelno] >=
-          GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount - this.totalSymbols &&
-        this.spinResponseReceived
-      ) {
+      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 8;
+      if (this.symbolPassedCounterArray[reelno] >= symbolsCount - this.totalSymbols && this.spinResponseReceived) {
         if (!this.stopStarted[reelno]) {
           this.stopStarted[reelno] = true;
           this.reelSpinningState[reelno] = 3;
         }
       }
     } else {
-      let totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols;
+      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 5;
+      let totalcount = symbolsCount - this.totalSymbols;
       if (DeviceProxy.isDevice()) {
         if (DeviceProxy.config.isPortrait) {
-          totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols - 1;
+          totalcount = symbolsCount - this.totalSymbols - 1;
         } else {
-          totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols;
+          totalcount = symbolsCount - this.totalSymbols;
+        }
+      }
+      if (this.anticipationRunning[reelno]) {
+        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 40;
+        totalcount = symbolsCount - this.totalSymbols;
+        if (DeviceProxy.isDevice()) {
+          if (DeviceProxy.config.isPortrait) {
+            totalcount = symbolsCount - this.totalSymbols - 1;
+          } else {
+            totalcount = symbolsCount - this.totalSymbols;
+          }
         }
       }
       if (
@@ -765,6 +774,8 @@ export default class SlotReel extends ResponsiveChildrenView {
         anticipation.alpha = 1;
         anticipation.visible = true;
         anticipation.playAnimation({ state: 'animation', loop: true });
+      } else {
+        this.winController.showAnticipationScatterLand(index, this.reelsData.anticipationSymbols);
       }
     });
   }
