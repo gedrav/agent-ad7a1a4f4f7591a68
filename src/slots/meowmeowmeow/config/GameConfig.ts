@@ -16,15 +16,15 @@ export const GAME_CONFIG = {
   gameId: 'bookofstorms',
   gameName: 'Meow Meow Meow',
   uiConfig: UIConfig,
-  creditValue: 1,
-  totalLines: 9,
+  creditValue: 20,
+  totalLines: 1,
   anteBetMultiplier: 1.25,
   isConsoleActive: true,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Caudex',
+    gameFont1: 'BelweEF Bold',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
@@ -32,7 +32,13 @@ export const GAME_CONFIG = {
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
-  buyBonusData: {
+  reelSpinSettings: {
+    firstReelSymbolPassCount: 8,
+    otherReelsSymbolPassCount: 5,
+    anticipationSymbolPassCount: 60,
+    endJerkDistance: 200,
+  },
+  buyBonusData1: {
     features: [
       {
         btn: {

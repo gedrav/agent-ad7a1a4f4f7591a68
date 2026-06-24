@@ -694,7 +694,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       const reel = appModel.getReelsView()[k - 1];
       if (reel) {
         const symbLen = reel.length;
-        const scattersLen = this.configData.data.anticipationSymbols.length;
+        const scattersLen = this.configData.data.anticipationSymbols?.length;
         if (scattersLen) {
           for (let p = 0; p < scattersLen; p++) {
             for (let i = 1; i < symbLen - 1; i++) {

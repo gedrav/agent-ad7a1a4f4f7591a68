@@ -6,8 +6,8 @@ export const FSAUTO_COUNTER_CONFIG: any = {
   name: 'fsAutoCounterComp',
   type: 'Comp',
   class: FSAutoCounterComp,
-  x: 490,
-  y: 1292,
+  x: 42,
+  y: 1070,
   Elements: [
     {
       name: 'spinsText',
