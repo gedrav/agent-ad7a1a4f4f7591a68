@@ -533,7 +533,7 @@ export default class SlotReel extends ResponsiveChildrenView {
           EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symbols[k].getSymbolName());
         }
       }
-
+      this.showLandinAnimation(reelno);
       if (k == len - 1) {
         AnimationProxy.animateTween(symbols[k], {
           y: (k - 1) * this.reelsData.symbolHeight,
@@ -551,6 +551,20 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     if (reelno == this.reelsData.noOfReels - 2) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
+    }
+  }
+  public showLandinAnimation(reelno: number) {
+    const landingSymbol = this.reelsData.landingSymbols || [];
+    if (landingSymbol && landingSymbol.length) {
+      this.symbolsArray[reelno].forEach((symbol, index) => {
+        if (
+          index > 0 &&
+          index < this.symbolsArray[reelno].length &&
+          landingSymbol.indexOf(symbol.getSymbolName()) > -1
+        ) {
+          symbol.showLanding();
+        }
+      });
     }
   }
   protected onReelStripStopped(reelno: number): void {
@@ -643,23 +657,32 @@ export default class SlotReel extends ResponsiveChildrenView {
   // check reelstop
   public checkToStopReelStrip(reelno: number) {
     if (reelno == 0) {
-      if (
-        this.symbolPassedCounterArray[reelno] >=
-          GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount - this.totalSymbols &&
-        this.spinResponseReceived
-      ) {
+      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 8;
+      if (this.symbolPassedCounterArray[reelno] >= symbolsCount - this.totalSymbols && this.spinResponseReceived) {
         if (!this.stopStarted[reelno]) {
           this.stopStarted[reelno] = true;
           this.reelSpinningState[reelno] = 3;
         }
       }
     } else {
-      let totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols;
+      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 5;
+      let totalcount = symbolsCount - this.totalSymbols;
       if (DeviceProxy.isDevice()) {
         if (DeviceProxy.config.isPortrait) {
-          totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols - 1;
+          totalcount = symbolsCount - this.totalSymbols - 1;
         } else {
-          totalcount = GameProxy?.config?.reelSpinSettings.otherReelsSymbolPassCount - this.totalSymbols;
+          totalcount = symbolsCount - this.totalSymbols;
+        }
+      }
+      if (this.anticipationRunning[reelno]) {
+        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 40;
+        totalcount = symbolsCount - this.totalSymbols;
+        if (DeviceProxy.isDevice()) {
+          if (DeviceProxy.config.isPortrait) {
+            totalcount = symbolsCount - this.totalSymbols - 1;
+          } else {
+            totalcount = symbolsCount - this.totalSymbols;
+          }
         }
       }
       if (
