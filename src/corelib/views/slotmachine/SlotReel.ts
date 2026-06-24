@@ -533,7 +533,7 @@ export default class SlotReel extends ResponsiveChildrenView {
           EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symbols[k].getSymbolName());
         }
       }
-
+      this.showLandinAnimation(reelno);
       if (k == len - 1) {
         AnimationProxy.animateTween(symbols[k], {
           y: (k - 1) * this.reelsData.symbolHeight,
@@ -551,6 +551,20 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
     if (reelno == this.reelsData.noOfReels - 2) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
+    }
+  }
+  public showLandinAnimation(reelno: number) {
+    const landingSymbol = this.reelsData.landingSymbols || [];
+    if (landingSymbol && landingSymbol.length) {
+      this.symbolsArray[reelno].forEach((symbol, index) => {
+        if (
+          index > 0 &&
+          index < this.symbolsArray[reelno].length &&
+          landingSymbol.indexOf(symbol.getSymbolName()) > -1
+        ) {
+          symbol.showLanding();
+        }
+      });
     }
   }
   protected onReelStripStopped(reelno: number): void {
@@ -774,8 +788,6 @@ export default class SlotReel extends ResponsiveChildrenView {
         anticipation.alpha = 1;
         anticipation.visible = true;
         anticipation.playAnimation({ state: 'animation', loop: true });
-      } else {
-        this.winController.showAnticipationScatterLand(index, this.reelsData.anticipationSymbols);
       }
     });
   }
