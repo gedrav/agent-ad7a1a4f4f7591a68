@@ -145,7 +145,7 @@ export class MessageServiceProxy extends AbstractProxy {
           finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
           finalObj.extraData.combination = cheatObj.combination;
         } else {
-          // finalObj.extraData.combination = cheatObj;
+          finalObj.extraData.combination = cheatObj;
         }
       }
     }
