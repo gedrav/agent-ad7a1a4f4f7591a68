@@ -93,14 +93,14 @@ export const GAME_SOUND_CONFIG = {
     },
 
     //PLAY_WIN_SOUND
-    {
-      name: 'POT SHAKE SFX',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_POT_SHAKE_SOUND'],
-      volume: 1,
-      fadeOutDuration: 100,
-    },
+    // {
+    //   name: 'POT SHAKE SFX',
+    //   type: 'game',
+    //   loop: false,
+    //   playEvents: ['PLAY_POT_SHAKE_SOUND'],
+    //   volume: 1,
+    //   fadeOutDuration: 100,
+    // },
     {
       name: 'Wild Land Sfx',
       type: 'game',
@@ -155,6 +155,22 @@ export const GAME_SOUND_CONFIG = {
       type: 'game',
       loop: false,
       playEvents: ['PLAY_WILD_LAND_3'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'wildLand4',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_LAND_4'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'wildLand5',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_LAND_5'],
       volume: 1,
       fadeOutDuration: 100,
     },
