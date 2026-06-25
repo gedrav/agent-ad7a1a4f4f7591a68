@@ -226,6 +226,7 @@ export default class ReelSymbolSprite extends ReelSymbol {
 
   public showLanding(): void {}
   protected createExtraElements(): void {}
+  public clearCallBackAnimation(): void {}
 
   // -------------------------
   // Helpers

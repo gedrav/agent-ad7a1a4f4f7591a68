@@ -141,13 +141,8 @@ export class MessageServiceProxy extends AbstractProxy {
           if (GameProxy.config.cheatObject.forceNudgeReels) {
             finalObj.extraData.forceNudgeReels = cheatObj.forceNudgeReels;
           }
-        } else if (GameProxy.config.cheatObject.forceWildExpand) {
-          finalObj.extraData.forceWildExpand = cheatObj.forceWildExpand;
-          finalObj.extraData.combination = cheatObj.combination;
-        } else if (GameProxy.config.cheatObject.cheat && GameProxy.config.cheatObject.cheat.forceBookSymbol) {
-          finalObj.extraData.forceBookSymbol = cheatObj.cheat.forceBookSymbol;
-          finalObj.extraData.combination = cheatObj.combination;
-        } else if (typeof cheatObj === 'object' && !Array.isArray(cheatObj) && cheatObj.combination) {
+        } else if (GameProxy.config.cheatObject.forceBookSymbol) {
+          finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
           finalObj.extraData.combination = cheatObj.combination;
         } else {
           finalObj.extraData.combination = cheatObj;
@@ -178,6 +173,9 @@ export class MessageServiceProxy extends AbstractProxy {
         if (GameProxy.config.cheatObject.forceBonusMultiplier) {
           finalObj.extraData = {};
           finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+          finalObj.extraData.combination = cheatObj.combination;
+        } else if (GameProxy.config.cheatObject.freespincheat) {
+          finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj.combination;
         }
       }

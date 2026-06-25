@@ -126,7 +126,13 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     }
     this.spine.playAnimation({ state, loop });
   }
-
+  public clearCallBackAnimation() {
+    if (!this.spine) return;
+    this.spineAnimCompleteCallback = null;
+    this.spine.stopAnimation();
+    this.spine.visible = false;
+    this.destroySpine();
+  }
   protected onAnimComplete(data: { animation: { name: string } }): void {
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
