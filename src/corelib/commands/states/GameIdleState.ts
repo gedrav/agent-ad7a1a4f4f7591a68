@@ -6,6 +6,7 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 
 class GameIdleStateCommand extends StateCommand {
   private intervalId: any;
+  private lineWinCounter: number = 0;
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
@@ -14,9 +15,10 @@ class GameIdleStateCommand extends StateCommand {
     const winData = appModel.getWinData();
     if (!appModel.isCascadeGame()) {
       if (winData?.length > 0) {
-        if (GameProxy.config.dontShowWinAfterFS) {
+        /*if (GameProxy.config.dontShowWinAfterFS) {
           return;
-        }
+        }*/
+        this.lineWinCounter = 0;
         this.showLineWin();
         //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
       } else {
@@ -36,6 +38,13 @@ class GameIdleStateCommand extends StateCommand {
   }
 
   protected showLineWin(): void {
+    if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {
+      this.lineWinCounter++;
+    }
+    if (this.lineWinCounter > 4) {
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+      return;
+    }
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_LINE_WIN);
   }
