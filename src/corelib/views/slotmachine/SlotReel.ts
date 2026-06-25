@@ -657,7 +657,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   // check reelstop
   public checkToStopReelStrip(reelno: number) {
     if (reelno == 0) {
-      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 6;
+      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 5;
       if (this.symbolPassedCounterArray[reelno] >= symbolsCount - this.totalSymbols && this.spinResponseReceived) {
         if (!this.stopStarted[reelno]) {
           this.stopStarted[reelno] = true;
@@ -665,7 +665,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
     } else {
-      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 3;
+      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 2;
       let totalcount = symbolsCount - this.totalSymbols;
       if (DeviceProxy.isDevice()) {
         if (DeviceProxy.config.isPortrait) {
@@ -675,7 +675,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
       if (this.anticipationRunning[reelno]) {
-        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 40;
+        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 25;
         totalcount = symbolsCount - this.totalSymbols;
         if (DeviceProxy.isDevice()) {
           if (DeviceProxy.config.isPortrait) {

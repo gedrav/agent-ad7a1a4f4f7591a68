@@ -30,8 +30,8 @@ export const GAME_CONFIG = {
     bitmapFontBW: 'bitmapFontBW',
   },
   reelSpinSettings: {
-    firstReelSymbolPassCount: 6,
-    otherReelsSymbolPassCount: 3,
+    firstReelSymbolPassCount: 5,
+    otherReelsSymbolPassCount: 2,
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },
