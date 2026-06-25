@@ -41,7 +41,7 @@ class GameIdleStateCommand extends StateCommand {
     if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {
       this.lineWinCounter++;
     }
-    if (this.lineWinCounter > 4) {
+    if (this.lineWinCounter >= 4) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       return;
     }
