@@ -334,10 +334,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (this.reelsData.isFixedSymbol) {
       return;
     }
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.symbolsArray[k][0].visible = flag;
-      this.symbolsArray[k][this.symbolsArray[k].length - 1].visible = flag;
-    }
+    /*for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      // this.symbolsArray[k][0].visible = flag;
+      // this.symbolsArray[k][this.symbolsArray[k].length - 1].visible = flag;
+    }*/
   }
 
   protected startSpin(): void {
