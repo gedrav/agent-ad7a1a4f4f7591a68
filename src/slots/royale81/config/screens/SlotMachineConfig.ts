@@ -75,6 +75,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'Idle',
             winAnim: 'Win',
+            landingAnim: 'Idle',
           },
           H1: {
             name: 'H1',

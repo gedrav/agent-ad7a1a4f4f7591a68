@@ -61,8 +61,10 @@ export class BigWinsComp extends ResponsiveView {
 
   async onSecondaryAssetsLoaded() {
     super.onSecondaryAssetsLoaded();
-    this.bigWinAnim = UIUtil.getElement(this.configData.data.bigWinAnim);
-    this.addChild(this.bigWinAnim, this.winTicker, this.winTickerBW, this.skipRect);
+    if (this.configData.data.bigWinAnim) {
+      this.bigWinAnim = UIUtil.getElement(this.configData.data.bigWinAnim);
+      this.addChild(this.bigWinAnim, this.winTicker, this.winTickerBW, this.skipRect);
+    }
 
     if (this.bigWinAnim) {
       this.bigWinAnim.stopAnimation();

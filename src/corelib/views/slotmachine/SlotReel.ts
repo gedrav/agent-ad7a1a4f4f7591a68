@@ -334,10 +334,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (this.reelsData.isFixedSymbol) {
       return;
     }
-    for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      this.symbolsArray[k][0].visible = flag;
-      this.symbolsArray[k][this.symbolsArray[k].length - 1].visible = flag;
-    }
+    /*for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      // this.symbolsArray[k][0].visible = flag;
+      // this.symbolsArray[k][this.symbolsArray[k].length - 1].visible = flag;
+    }*/
   }
 
   protected startSpin(): void {
@@ -657,7 +657,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   // check reelstop
   public checkToStopReelStrip(reelno: number) {
     if (reelno == 0) {
-      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 8;
+      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 5;
       if (this.symbolPassedCounterArray[reelno] >= symbolsCount - this.totalSymbols && this.spinResponseReceived) {
         if (!this.stopStarted[reelno]) {
           this.stopStarted[reelno] = true;
@@ -665,7 +665,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
     } else {
-      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 5;
+      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 2;
       let totalcount = symbolsCount - this.totalSymbols;
       if (DeviceProxy.isDevice()) {
         if (DeviceProxy.config.isPortrait) {
@@ -675,7 +675,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
       if (this.anticipationRunning[reelno]) {
-        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 40;
+        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 25;
         totalcount = symbolsCount - this.totalSymbols;
         if (DeviceProxy.isDevice()) {
           if (DeviceProxy.config.isPortrait) {
@@ -781,7 +781,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected showNextAnticipation(reelno: number) {
-    console.log('SHOW NEXT ANTICIPATION');
     this.anticipationRunning[reelno] = true;
     this.anticipationElementArray.forEach((anticipation, index) => {
       if (index >= reelno) {

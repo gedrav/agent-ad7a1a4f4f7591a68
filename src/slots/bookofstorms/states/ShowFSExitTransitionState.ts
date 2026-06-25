@@ -12,7 +12,7 @@ class ShowFSExitTransitionStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
-    StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
+    StateManager.next();
   }
 }
 

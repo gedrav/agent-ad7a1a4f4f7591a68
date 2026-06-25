@@ -49,8 +49,4 @@ export class gameApp extends SlotGameApp {
       this.gameAppScreen.visible = true;
     }, 10);
   }
-  protected createTransitionView() {
-    this.transitionAnimComp = new TransitionAnimComp(TRANSITION_ANIM_CONFIG);
-    this.gameAppScreen.addChild(this.transitionAnimComp);
-  }
 }

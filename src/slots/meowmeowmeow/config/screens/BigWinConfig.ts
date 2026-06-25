@@ -12,7 +12,7 @@ export const BIG_WIN_CONFIG = {
       MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic' },
       EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable' },
     },
-    bigWinAnim: {
+    /*bigWinAnim: {
       name: 'bigWinAnim',
       dontCreateView: true,
       type: 'Spine',
@@ -21,7 +21,7 @@ export const BIG_WIN_CONFIG = {
       x: 755,
       y: 490,
       scale: 1.2,
-    },
+    },*/
     bigWinTextScales: [0.75, 0.7, 0.7, 0.7],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
@@ -72,23 +72,23 @@ export const BIG_WIN_CONFIG = {
       widthPerc: 1,
       maxScale: 1,
       x: 480,
-      y: 364,
+      y: 294,
     },
     Landscape: {
       refComponent: 'guideRect',
       widthPerc: 1,
       heightPerc: 1,
       maxScale: 1,
-      hAlign: 'center',
-      vAlign: 'middle',
+      x: 480,
+      y: 294,
     },
     Portrait: {
       refComponent: 'guideRect',
       widthPerc: 1,
       heightPerc: 1,
       maxScale: 1,
-      hAlign: 'center',
-      vAlign: 'middle',
+      x: 480,
+      y: 294,
     },
   },
 };
