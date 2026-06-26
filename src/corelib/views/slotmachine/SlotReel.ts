@@ -78,6 +78,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   public slotGuideRect: PixGraphics;
   protected timeoutIds: any[];
   private timeoutIds2: any[];
+  private landingSymbolsCount: any;
 
   constructor(configData: any) {
     super(configData);
@@ -281,6 +282,11 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.showIdleAnim(false);
   }
   protected createReel() {
+    this.landingSymbolsCount = {};
+    const landingSymbols = this.reelsData.landingSymbols;
+    landingSymbols.forEach((symbol, index) => {
+      this.landingSymbolsCount[symbol] = [index, 0];
+    });
     // Keep for backward compatibility, but recommend using setReels instead
     this.reelsIndexes = [];
     this.defaultReel = [];
@@ -366,6 +372,9 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.spinStarted = true;
     this.showHideExtraSymbols(true);
     this.stopIndex = [];
+    for (const name in this.landingSymbolsCount) {
+      this.landingSymbolsCount[name][1] = 0;
+    }
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       this.stopIndex[k] = this.reelsData.noOfRows + 1;
       this.reelSpinningState[k] = 0;
@@ -530,16 +539,23 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected showFinalJerk(reelno: number): void {
     this.destroyAnticipation(reelno);
     this.reelSpinningState[reelno] = 0;
+    console.log(this.landingSymbolsCount);
+
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
-    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
+
+    this.showLandinAnimation(reelno);
+    let landingSoundPlayed = false;
     for (let k = 0; k < len; k++) {
       if (k > 0 && k <= this.reelsData.noOfRows) {
-        if (this.reelsData.landingSymbols.includes(symbols[k].getSymbolName())) {
-          EventHandler.dispatchEvent(SlotEvents.PLAY_SYMBOL_LANDING_SOUND, symbols[k].getSymbolName());
+        const symbolName = symbols[k].getSymbolName();
+        if (this.landingSymbolsCount[symbolName]) {
+          const count = this.landingSymbolsCount[symbolName][1];
+          this.landingSymbolsCount[symbolName][1]++;
+          landingSoundPlayed = true;
+          EventHandler.dispatchEvent(`PLAY_SYMBOL_${symbolName}_LANDING_SOUND`, count + 1);
         }
       }
-      this.showLandinAnimation(reelno);
       if (k == len - 1) {
         AnimationProxy.animateTween(symbols[k], {
           y: (k - 1) * this.reelsData.symbolHeight,
@@ -554,6 +570,9 @@ export default class SlotReel extends ResponsiveChildrenView {
           ease: customEase,
         });
       }
+    }
+    if (!landingSoundPlayed) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     }
     if (reelno == this.reelsData.noOfReels - 2) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
@@ -784,6 +803,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       el.visible = false;
       el.stopAnimation();
     });
+    EventHandler.dispatchEvent('STOP_ANTICIPATION_SOUND');
   }
 
   protected showNextAnticipation(reelno: number) {
