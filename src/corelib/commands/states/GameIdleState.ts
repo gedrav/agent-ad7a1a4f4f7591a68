@@ -15,9 +15,10 @@ class GameIdleStateCommand extends StateCommand {
     const winData = appModel.getWinData();
     if (!appModel.isCascadeGame()) {
       if (winData?.length > 0) {
-        /*if (GameProxy.config.dontShowWinAfterFS) {
+        if (GameProxy.config.dontShowWinAfterFS) {
+          GameProxy.config.dontShowWinAfterFS = false;
           return;
-        }*/
+        }
         this.lineWinCounter = 0;
         this.showLineWin();
         //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
