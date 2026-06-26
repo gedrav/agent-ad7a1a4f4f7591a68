@@ -138,10 +138,10 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     const isWinAnim = this.animState?.toLowerCase().includes('win');
     const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);
     const callback = this.spineAnimCompleteCallback;
+    this.spineAnimCompleteCallback = null;
     if (!this.spine) return;
     this.spine.stopAnimation();
     this.spine.visible = false;
-    this.spineAnimCompleteCallback = null;
     this.destroySpine();
     if (callback) {
       callback();
