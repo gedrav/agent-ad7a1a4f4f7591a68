@@ -153,6 +153,7 @@ export default class WinController {
 
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
     if (this.totalWinSymbols > 0) {
+      console.log('SYMBOL ANIMATION');
       symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
     }
     this.winSymbolIndex++;
