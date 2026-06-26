@@ -5,6 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { STATES } from '@core/states/StateConstants';
 import { StateManager } from '@core/states/StateManagerService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class ExitFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -41,6 +42,7 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
   protected async exitFreespin() {
+    GameProxy.config.checkToShowWinAfterFS = GameProxy.config.dontShowWinAfterFS;
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins

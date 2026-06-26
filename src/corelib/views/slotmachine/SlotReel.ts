@@ -539,7 +539,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected showFinalJerk(reelno: number): void {
     this.destroyAnticipation(reelno);
     this.reelSpinningState[reelno] = 0;
-    console.log(this.landingSymbolsCount);
 
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;

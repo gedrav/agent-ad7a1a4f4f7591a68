@@ -15,8 +15,8 @@ class GameIdleStateCommand extends StateCommand {
     const winData = appModel.getWinData();
     if (!appModel.isCascadeGame()) {
       if (winData?.length > 0) {
-        if (GameProxy.config.dontShowWinAfterFS) {
-          GameProxy.config.dontShowWinAfterFS = false;
+        if (GameProxy.config.checkToShowWinAfterFS) {
+          GameProxy.config.checkToShowWinAfterFS = false;
           return;
         }
         this.lineWinCounter = 0;
