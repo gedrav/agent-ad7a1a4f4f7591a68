@@ -127,8 +127,8 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.spine.playAnimation({ state, loop });
   }
   public clearCallBackAnimation() {
-    if (!this.spine) return;
     this.spineAnimCompleteCallback = null;
+    if (!this.spine) return;
     this.spine.stopAnimation();
     this.spine.visible = false;
     this.destroySpine();
