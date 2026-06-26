@@ -207,6 +207,7 @@ export default class WinController {
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
           const doneSymbols = [];
+          console.log('AAAAAAAA');
           for (let i = 0; i < winDataLength; i++) {
             const winData = appModel.getWinData();
             const winningPos = winData[i].winningPosition;
