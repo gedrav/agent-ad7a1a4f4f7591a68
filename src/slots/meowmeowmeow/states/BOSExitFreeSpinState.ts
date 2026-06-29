@@ -5,6 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { STATES } from '@core/states/StateConstants';
 import { StateManager } from '@core/states/StateManagerService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class BOSExitFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -45,7 +46,6 @@ class BOSExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins
     appModel.endFreeSpinsSession();
-    appModel.clearUnfinishedData();
     EventHandler.dispatchEvent('STOP_FREESPIN_BG_MUSIC');
     EventHandler.dispatchEvent(SlotEvents.STOP_FS_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);

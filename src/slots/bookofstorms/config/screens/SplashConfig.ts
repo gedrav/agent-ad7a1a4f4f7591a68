@@ -9,11 +9,12 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  cs: { fontSize: 39 },
-  lt: { mFontSize: 40, fontSize: 34 },
-  pl: { mFontSize: 40, fontSize: 34 },
-  sk: { mFontSize: 40, fontSize: 45 },
-  ro: { fontSize: 40 },
+  en: { fontSize: 40 },
+  cs: { fontSize: 30 },
+  lt: { fontSize: 30 },
+  pl: { fontSize: 30 },
+  sk: { fontSize: 30 },
+  ro: { fontSize: 30 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -31,7 +32,7 @@ export const SPLASH_CONFIG: any = {
       image: 'screen1',
       content: 'splash1',
       textY: 490,
-      textAreaHeight: 190,
+      textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -63,8 +64,8 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 486,
-      textAreaHeight: 190,
+      textY: 490,
+      textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
@@ -96,8 +97,8 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 480,
-      textAreaHeight: 190,
+      textY: 490,
+      textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',

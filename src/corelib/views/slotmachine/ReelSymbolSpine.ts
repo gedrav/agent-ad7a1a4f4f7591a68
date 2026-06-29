@@ -56,7 +56,14 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.destroySpine();
     this.createExtraElements();
   }
-
+  public showLanding() {
+    if (!appModel.secondaryAssetsLoaded) {
+      return;
+    }
+    if (this.configData.data.landingAnim) {
+      this.playSpineAnimation(this.configData.data.landingAnim, false);
+    }
+  }
   public resetSymbol(): void {
     super.resetSymbol();
     this.destroySpine();
@@ -119,16 +126,22 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     }
     this.spine.playAnimation({ state, loop });
   }
-
+  public clearCallBackAnimation() {
+    this.spineAnimCompleteCallback = null;
+    if (!this.spine) return;
+    this.spine.stopAnimation();
+    this.spine.visible = false;
+    this.destroySpine();
+  }
   protected onAnimComplete(data: { animation: { name: string } }): void {
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
     const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);
     const callback = this.spineAnimCompleteCallback;
+    this.spineAnimCompleteCallback = null;
     if (!this.spine) return;
     this.spine.stopAnimation();
     this.spine.visible = false;
-    this.spineAnimCompleteCallback = null;
     this.destroySpine();
     if (callback) {
       callback();

@@ -8,6 +8,7 @@ import { AUTOPLAY_CONFIG } from '@brand/config/AutoPlayConfig';
 import { MESSAGE_POPUP_CONFIG } from '@brand/config/MessagePopupConfig';
 import { MENU_CONFIG } from '@brand/config/MenuConfig';
 import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
+import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -22,5 +23,6 @@ export const SLOT_GAME_APP_CONFIG: any = {
     BUY_BONUS_CONFIG,
     AUTOPLAY_CONFIG,
     MESSAGE_POPUP_CONFIG,
+    SECONDARY_WAITING_SCREEN_CONFIG,
   ],
 };

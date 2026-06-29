@@ -376,7 +376,9 @@ class SlotGameApp {
 
   protected loadLazyFiles() {
     AssetLoader.loadSecondarySounds();
-    AssetLoader.loadSecondary();
+    setTimeout(() => {
+      AssetLoader.loadSecondary();
+    }, 0);
   }
   protected onSecondaryAssetsLoaded() {
     appModel.secondaryAssetsLoaded = true;

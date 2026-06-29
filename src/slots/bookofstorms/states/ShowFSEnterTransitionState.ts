@@ -12,7 +12,7 @@ class ShowFSEnterTransitionStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
-    StateManager.goToState(STATES.FS_SPIN_START_STATE);
+    StateManager.next();
   }
 }
 

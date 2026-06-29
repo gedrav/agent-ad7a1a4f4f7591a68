@@ -140,7 +140,6 @@ class SoundServiceProxy {
   }
 
   public playSound(sObj: any): void {
-    //console.log('PLAY SOUND == ', sObj);
     if (!sObj) {
       return;
     }
@@ -149,7 +148,7 @@ class SoundServiceProxy {
     }
 
     const instance = this.soundLibrary[sObj.name];
-    //console.log('PLAY SOUND == ', sObj.name);
+    console.log('PLAY SOUND == ', sObj.name);
     if (instance) {
       // singleton: if already playing, ignore new trigger and let current finish
       if (sObj.singleton && instance.playing()) {
@@ -194,7 +193,7 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       return;
     }
-    // console.log('stop sound == ', sObj.name);
+    //console.log('stop sound == ', sObj.name);
     const instance = this.soundLibrary[sObj.name];
     if (instance?.playing()) {
       const duration = sObj.fadeOutDuration ? sObj.fadeOutDuration : 0;

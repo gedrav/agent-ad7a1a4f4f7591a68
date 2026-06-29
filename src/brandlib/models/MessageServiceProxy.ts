@@ -141,6 +141,9 @@ export class MessageServiceProxy extends AbstractProxy {
           if (GameProxy.config.cheatObject.forceNudgeReels) {
             finalObj.extraData.forceNudgeReels = cheatObj.forceNudgeReels;
           }
+        } else if (GameProxy.config.cheatObject.forceBookSymbol) {
+          finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
+          finalObj.extraData.combination = cheatObj.combination;
         } else {
           finalObj.extraData.combination = cheatObj;
         }
@@ -170,6 +173,9 @@ export class MessageServiceProxy extends AbstractProxy {
         if (GameProxy.config.cheatObject.forceBonusMultiplier) {
           finalObj.extraData = {};
           finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+          finalObj.extraData.combination = cheatObj.combination;
+        } else if (GameProxy.config.cheatObject.freespincheat) {
+          finalObj.extraData = {};
           finalObj.extraData.combination = cheatObj.combination;
         }
       }

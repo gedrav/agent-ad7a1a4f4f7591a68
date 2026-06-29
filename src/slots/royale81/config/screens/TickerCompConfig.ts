@@ -6,7 +6,7 @@ export const TICKER_COMP_CONFIG: any = {
   class: ReelTickerComp,
   tickerDelay: 3000,
   x: 180,
-  y: 930,
+  y: 925,
   content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
   contentYPadding: 0,
   Elements: [
