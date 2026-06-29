@@ -7,8 +7,8 @@ import { StateManager } from '@core/states/StateManagerService';
 import { appModel } from '@core/models/services/AppModelService';
 
 export class SecondaryWaitingView extends ResponsiveChildrenView {
-  private bg: PixSprite;
-  private ticker: Ticker;
+  private readonly bg: PixSprite;
+  private readonly ticker: Ticker;
 
   constructor(config) {
     super(config);

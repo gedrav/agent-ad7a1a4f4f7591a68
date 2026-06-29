@@ -8,8 +8,8 @@ import { Sine } from 'gsap/gsap-core';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class BuyBonusViewMobile extends BuyBonusView {
-  private topbar: PixGraphics;
-  private closeBtn: PixFancyButton;
+  private readonly topbar: PixGraphics;
+  private readonly closeBtn: PixFancyButton;
 
   constructor(config: any) {
     super(config);

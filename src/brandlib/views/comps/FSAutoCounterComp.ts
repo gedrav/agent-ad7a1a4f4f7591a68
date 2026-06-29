@@ -6,8 +6,8 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 
 export class FSAutoCounterComp extends StandardView {
-  private spinsText: PixText;
-  private winningsText: PixText;
+  private readonly spinsText: PixText;
+  private readonly winningsText: PixText;
   constructor(config) {
     super(config);
     this.visible = false;

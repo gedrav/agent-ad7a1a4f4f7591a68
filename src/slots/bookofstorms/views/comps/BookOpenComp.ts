@@ -83,9 +83,9 @@ export class BookOpenComp extends StandardView {
     }
   }
 
-  private availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
+  private readonly availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
 
-  private symbolToSkinMap: { [key: string]: string } = {
+  private readonly symbolToSkinMap: { [key: string]: string } = {
     H1: 'man',
     H2: 'eagle',
     H3: 'mask',

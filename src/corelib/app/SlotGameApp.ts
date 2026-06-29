@@ -52,12 +52,12 @@ class SlotGameApp {
   private isTabSuspended: boolean;
   private boundResize: () => void;
   private boundVisibilityChange: () => void;
-  private boundOnline: () => void;
-  private boundOffline: () => void;
+  private readonly boundOnline: () => void;
+  private readonly boundOffline: () => void;
   protected isNetworkOnline: boolean = navigator.onLine;
   private boundContextLost: (e: Event) => void;
   private boundContextRestored: () => void;
-  private boundEventHandlers: Array<{ event: string; handler: (data?: any) => void }> = [];
+  private readonly boundEventHandlers: Array<{ event: string; handler: (data?: any) => void }> = [];
 
   constructor() {}
 
@@ -232,7 +232,7 @@ class SlotGameApp {
   }
 
   private attachWebGLContextHandlers(): void {
-    const canvas: HTMLCanvasElement | undefined = this.app?.canvas as HTMLCanvasElement;
+    const canvas: HTMLCanvasElement | undefined = this.app?.canvas;
     if (!canvas) return;
     this.boundContextLost = (e: Event) => {
       // iOS Safari kills the WebGL context under GPU memory pressure. Default
@@ -269,7 +269,7 @@ class SlotGameApp {
     if (this.boundVisibilityChange) {
       document.removeEventListener('visibilitychange', this.boundVisibilityChange);
     }
-    const canvas: HTMLCanvasElement | undefined = this.app?.canvas as HTMLCanvasElement;
+    const canvas: HTMLCanvasElement | undefined = this.app?.canvas;
     if (canvas) {
       if (this.boundContextLost) {
         canvas.removeEventListener('webglcontextlost', this.boundContextLost as EventListener);

@@ -6,7 +6,7 @@ import { ColorMatrixFilter } from 'pixi.js';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 export class PixFancyButton extends FancyButton {
-  private toolTip: TooltipComp;
+  private readonly toolTip: TooltipComp;
 
   set configData(value: any) {
     this._configData = value;

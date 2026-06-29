@@ -9,8 +9,8 @@ import { WinTicker } from '@core/views/comps/WinTicker';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 
 export class FSInfoComp extends ResponsiveChildrenView {
-  private fsCountComp: FSCountComp;
-  private fsWinComp: WinTicker;
+  private readonly fsCountComp: FSCountComp;
+  private readonly fsWinComp: WinTicker;
 
   constructor(config) {
     super(config);

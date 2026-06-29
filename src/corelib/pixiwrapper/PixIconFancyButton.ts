@@ -7,8 +7,8 @@ import { TooltipComp } from '@brand/views/comps/TooltipComp';
 import { ColorMatrixFilter } from 'pixi.js';
 
 export class PixIconFancyButton extends FancyButton {
-  private icon: PixSprite;
-  private toolTip: TooltipComp;
+  private readonly icon: PixSprite;
+  private readonly toolTip: TooltipComp;
   set configData(value: any) {
     this._configData = value;
   }

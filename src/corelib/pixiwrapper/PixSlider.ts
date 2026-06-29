@@ -12,10 +12,10 @@ export class PixSlider extends Slider {
   public name: string;
   declare protected sliderOptions: any;
   private labelText: any;
-  private initialValue: number;
+  private readonly initialValue: number;
   private lastSoundValue: number;
   private soundStopTimer: ReturnType<typeof setTimeout> | null = null;
-  private soundStopDelay: number = 250;
+  private readonly soundStopDelay: number = 250;
 
   constructor(sliderData: any, configData: any) {
     if (sliderData.valueTextStyle?.fontFamily && GameProxy.config.FontFaces) {

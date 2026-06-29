@@ -5,7 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export class WinTicker extends StandardView {
-  private valueText: PixText;
+  private readonly valueText: PixText;
   private currentValue: number;
   private targetValue: number;
   private duration: number;

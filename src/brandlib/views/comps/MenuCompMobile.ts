@@ -12,9 +12,9 @@ import { appModel } from '@core/models/services/AppModelService';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 
 export class MenuCompMobile extends MenuComp {
-  private topbar: PixGraphics;
-  private closeBtn: PixFancyButton;
-  private menubg: PixGraphics;
+  private readonly topbar: PixGraphics;
+  private readonly closeBtn: PixFancyButton;
+  private readonly menubg: PixGraphics;
   constructor(config: any) {
     super(config);
     this.topbar = this.elementsList['topbar'];
@@ -51,7 +51,7 @@ export class MenuCompMobile extends MenuComp {
     if (!this.topbar) {
       return;
     }
-    const firstButton = this.getMenuButtons().find(Boolean) as any;
+    const firstButton = this.getMenuButtons().find(Boolean);
     const gap = firstButton?.height;
     const startY = this.topbar.y + this.topbar.height;
     this.layoutMenuButtons(startY, gap);

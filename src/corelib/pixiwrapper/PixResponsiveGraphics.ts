@@ -38,11 +38,9 @@ export class PixResponsiveGraphics extends ResponsiveView {
           wid = obj.pWidth;
           ht = obj.pHeight;
         }
-      } else {
-        if (obj.lWidth && obj.lHeight) {
-          wid = obj.lWidth;
-          ht = obj.lHeight;
-        }
+      } else if (obj.lWidth && obj.lHeight) {
+        wid = obj.lWidth;
+        ht = obj.lHeight;
       }
     }
     this.graphics = new PixGraphics().roundRect(obj.x, obj.y, wid, ht, obj.radius).fill(obj.color);

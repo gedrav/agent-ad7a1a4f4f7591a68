@@ -4,7 +4,7 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 export class FMBReelFrameComp extends ReelFrameComp {
-  private reelFrameAnim: PixSpine;
+  private readonly reelFrameAnim: PixSpine;
 
   constructor(config: any) {
     super(config);

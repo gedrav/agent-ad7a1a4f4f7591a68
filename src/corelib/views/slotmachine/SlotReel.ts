@@ -68,13 +68,13 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected symbolPayoutComp: SymbolPayoutComp;
   private currentPayoutSymbol: ReelSymbolSprite;
   private payoutTimeoutId: any;
-  private modalRect: PixGraphics;
+  private readonly modalRect: PixGraphics;
   protected spinResponseReceived: boolean;
   protected defaultReel: any[];
   private stopIndex: number[];
   protected reelWinTicker: ReelWinTicker;
-  private tickerComp: ReelTickerComp;
-  private fsAutoCounterComp: FSAutoCounterComp;
+  private readonly tickerComp: ReelTickerComp;
+  private readonly fsAutoCounterComp: FSAutoCounterComp;
   public slotGuideRect: PixGraphics;
   protected timeoutIds: any[];
   private timeoutIds2: any[];
@@ -579,7 +579,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   public showLandinAnimation(reelno: number) {
     const landingSymbol = this.reelsData.landingSymbols || [];
-    if (landingSymbol && landingSymbol.length) {
+    if (landingSymbol?.length) {
       this.symbolsArray[reelno].forEach((symbol, index) => {
         if (
           index > 0 &&
@@ -819,7 +819,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (appModel.turboMode || this.reelsData.anticipationConfig == null) {
       return [0];
     }
-    if (this.scatterAnticipArray && this.scatterAnticipArray[reelno] != undefined) {
+    if (this.scatterAnticipArray?.[reelno] != undefined) {
       return this.scatterAnticipArray[reelno];
     } else {
       return [0];
@@ -980,15 +980,13 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (const p in this.reelsData.deviceLayout.Desktop) {
         this.reelsData[p] = this.reelsData.deviceLayout.Desktop[p];
       }
+    } else if (DeviceProxy.config.isPortrait) {
+      for (const p in this.reelsData.deviceLayout.Portrait) {
+        this.reelsData[p] = this.reelsData.deviceLayout.Portrait[p];
+      }
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        for (const p in this.reelsData.deviceLayout.Portrait) {
-          this.reelsData[p] = this.reelsData.deviceLayout.Portrait[p];
-        }
-      } else {
-        for (const p in this.reelsData.deviceLayout.Landscape) {
-          this.reelsData[p] = this.reelsData.deviceLayout.Landscape[p];
-        }
+      for (const p in this.reelsData.deviceLayout.Landscape) {
+        this.reelsData[p] = this.reelsData.deviceLayout.Landscape[p];
       }
     }
     this.winController.reelsData = this.reelsData;

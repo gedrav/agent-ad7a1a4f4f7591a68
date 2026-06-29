@@ -22,8 +22,8 @@ let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
 const LONG_PRESS_DURATION = 500; // ms
 export class ControlPanelView extends ResponsiveChildrenView {
-  private slotGuideRect: PixGraphics;
-  private longPressSprite: PixSprite;
+  private readonly slotGuideRect: PixGraphics;
+  private readonly longPressSprite: PixSprite;
   get slotView(): SlotMachineView {
     return this._slotView;
   }
@@ -31,23 +31,23 @@ export class ControlPanelView extends ResponsiveChildrenView {
   set slotView(value: SlotMachineView) {
     this._slotView = value;
   }
-  private balanceComp: BalanceComp;
-  private betComp: BetComp;
-  private soundOnBtn: PixFancyButton;
-  private soundOffBtn: PixFancyButton;
-  private turboSelectedBtn: PixFancyButton;
-  private turboBtn: PixFancyButton;
-  private cheatBtn: PixFancyButton;
-  private stopAutoBtn: PixFancyButton;
-  private menuBtn: PixFancyButton;
-  private spinBtn: PixFancyButton;
-  private stopSpinBtn: PixFancyButton;
-  private betBtn: PixFancyButton;
+  private readonly balanceComp: BalanceComp;
+  private readonly betComp: BetComp;
+  private readonly soundOnBtn: PixFancyButton;
+  private readonly soundOffBtn: PixFancyButton;
+  private readonly turboSelectedBtn: PixFancyButton;
+  private readonly turboBtn: PixFancyButton;
+  private readonly cheatBtn: PixFancyButton;
+  private readonly stopAutoBtn: PixFancyButton;
+  private readonly menuBtn: PixFancyButton;
+  private readonly spinBtn: PixFancyButton;
+  private readonly stopSpinBtn: PixFancyButton;
+  private readonly betBtn: PixFancyButton;
   private clickOutsideHandler: any;
   private bbButtonsArray: PixFancyButton[];
   private gameLogo: PixSprite | PixSpine;
-  private infoBtn: PixFancyButton;
-  private brandLogo: PixSprite;
+  private readonly infoBtn: PixFancyButton;
+  private readonly brandLogo: PixSprite;
   private _slotView: SlotMachineView;
   constructor(config: any) {
     super(config);
@@ -123,7 +123,6 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected onFullScreenModeChange(): void {
     if (DeviceProxy.config.isDevice) {
-      return;
     }
   }
   protected onLongPress() {
@@ -333,15 +332,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
             this.bbButtonsArray[k].y =
               this.soundOnBtn.y - (k + 1) * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
           }
+        } else if (DeviceProxy.config.isPortrait) {
+          UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.16, 0.1, 1);
+          this.bbButtonsArray[k].y =
+            this.turboBtn.y - k * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
         } else {
-          if (DeviceProxy.config.isPortrait) {
-            UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.16, 0.1, 1);
-            this.bbButtonsArray[k].y =
-              this.turboBtn.y - k * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
-          } else {
-            UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.18, 0.18, 1);
-            this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
-          }
+          UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.18, 0.18, 1);
+          this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
         }
         if (DeviceProxy.config.isDevice && DeviceProxy.config.isPortrait) {
           if (
@@ -367,12 +364,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
       } else {
         this.resizeForDesktopLandscape();
       }
+    } else if (DeviceProxy.config.isPortrait) {
+      this.resizeForMobilePortrait();
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.resizeForMobilePortrait();
-      } else {
-        this.resizeForMobileLandscape();
-      }
+      this.resizeForMobileLandscape();
     }
     this.repositionView();
   }

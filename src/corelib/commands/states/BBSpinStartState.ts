@@ -9,7 +9,7 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
 
 class BBSpinStartStateCommand extends StateCommand {
-  private timeoutId: any;
+  private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);

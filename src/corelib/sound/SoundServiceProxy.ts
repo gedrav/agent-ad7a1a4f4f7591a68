@@ -220,7 +220,7 @@ class SoundServiceProxy {
       return;
     }
     await Util.addDelays(delay);
-    if (Howler.ctx && Howler.ctx.state && Howler.ctx.state === 'suspended') {
+    if (Howler.ctx?.state && Howler.ctx.state === 'suspended') {
       try {
         await Howler.ctx.resume();
       } catch (e) {

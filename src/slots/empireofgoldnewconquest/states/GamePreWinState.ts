@@ -4,11 +4,11 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 class GamePreWinStateCommand extends StateCommand {
-  private timeoutId: any;
+  private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
     const result = appModel.getReelModifiersData();
-    if (result && result.type == 'symbolChangeApplied') {
+    if (result?.type == 'symbolChangeApplied') {
       EventHandler.dispatchEvent(SlotEvents.LOWPAY_SYMBOL_CONVERSION);
     } else {
       StateManager.next();

@@ -6,7 +6,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class ModalView extends ResponsiveChildrenView {
-  private modalRect: PixGraphics;
+  private readonly modalRect: PixGraphics;
   private pressedOnModal = false;
   constructor(config: any) {
     super(config);

@@ -3,8 +3,8 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { Util } from '@core/utils/UtilService';
 
 export class TitleValueComp extends StandardView {
-  private valueText: PixText;
-  private titleText: PixText;
+  private readonly valueText: PixText;
+  private readonly titleText: PixText;
   constructor(config) {
     super(config);
     this.valueText = this.elementsList['valueText'];

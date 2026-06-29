@@ -18,8 +18,8 @@ data.hasFSTotalMultiplier // to check if game has a concept of total multiplier 
 data.hasScatterMultiplier // to check if the scatter payout also needs to be multiplied with the landed multiplier (ex: FMB & SS).
 ******************************************************************************************************************/
 export default class MultiplierSlotReelCascade extends SlotReelCascade {
-  private cascadeReelWinTicker: CascadeReelWinTicker;
-  private fsTotalMultiComp: FsTotalMultiplierComp;
+  private readonly cascadeReelWinTicker: CascadeReelWinTicker;
+  private readonly fsTotalMultiComp: FsTotalMultiplierComp;
   private multiplierTextArr: PixText[];
   private multiplierAnimCount: number = 0;
   private totalMultiplierCount: number = 0;

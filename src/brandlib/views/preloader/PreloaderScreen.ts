@@ -10,11 +10,11 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 
 export class PreloaderScreen extends ResponsiveChildrenView {
-  private loadingText: PixText;
-  private preloader: PixAnimatedSprite;
-  private bar: PixGraphics;
-  private circle2: PixGraphics;
-  private disposeLoadProgress: () => void;
+  private readonly loadingText: PixText;
+  private readonly preloader: PixAnimatedSprite;
+  private readonly bar: PixGraphics;
+  private readonly circle2: PixGraphics;
+  private readonly disposeLoadProgress: () => void;
 
   constructor(config: any) {
     super(config);

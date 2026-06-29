@@ -11,15 +11,15 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 export default class WinController {
-  private noOfRows: number;
-  private noOfReels: number;
+  private readonly noOfRows: number;
+  private readonly noOfReels: number;
   public symbolsContainer;
   public winSymbolsContainer;
   public lineWinAmountComp;
   public slotReel: SlotReel;
   public reelsData;
   private timeoutId: any;
-  private tumbleWinAmountTexts: PixText[] = [];
+  private readonly tumbleWinAmountTexts: PixText[] = [];
   protected winSymbolIndex: number;
   protected totalWinSymbols: number;
 
@@ -213,7 +213,7 @@ export default class WinController {
               for (let j = 0; j < winningPos.length; j++) {
                 const pos = this.getReelPosition(winData[i].winningPosition[j]);
                 const symb = this.symbolsArray[pos.reel][pos.row + 1];
-                if (doneSymbols.indexOf(symb) > -1) {
+                if (doneSymbols.includes(symb)) {
                 } else {
                   this.totalWinSymbols++;
                 }
@@ -227,11 +227,9 @@ export default class WinController {
           this.notifySpinWinDone();
         }
       }
-    } else {
-      if (!appModel.isCascadeGame()) {
-        clearTimeout(this.timeoutId);
-        this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
-      }
+    } else if (!appModel.isCascadeGame()) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
     }
   }
   protected notifySpinWinDone(): void {

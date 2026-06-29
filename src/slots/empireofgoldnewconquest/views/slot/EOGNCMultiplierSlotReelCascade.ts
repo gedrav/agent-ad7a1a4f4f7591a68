@@ -56,16 +56,14 @@ export default class EOGNCMultiplierSlotReelCascade extends MultiplierSlotReelCa
         spine.x = dStats.x;
         spine.y = dStats.y;
         spine.scale.set(dStats.scale);
+      } else if (DeviceProxy.config.isPortrait) {
+        spine.x = pStats.x;
+        spine.y = pStats.y;
+        spine.scale.set(pStats.scale);
       } else {
-        if (DeviceProxy.config.isPortrait) {
-          spine.x = pStats.x;
-          spine.y = pStats.y;
-          spine.scale.set(pStats.scale);
-        } else {
-          spine.x = lStats.x;
-          spine.y = lStats.y;
-          spine.scale.set(lStats.scale);
-        }
+        spine.x = lStats.x;
+        spine.y = lStats.y;
+        spine.scale.set(lStats.scale);
       }
       spine.playAnimation({ state: 'Fire_ball_static', loop: true });
       this.addChild(spine);

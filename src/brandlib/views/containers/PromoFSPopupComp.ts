@@ -11,15 +11,15 @@ import { Util } from '@core/utils/UtilService';
 import { StateManager } from '@core/states/StateManagerService';
 
 export class PromoFSPopupComp extends ResponsiveChildrenView {
-  private bg: PixSprite;
-  private panelBG: PixSprite;
-  private entryContainer: PixView;
-  private valueText1: PixText;
-  private promoBetValue: PixText;
-  private startBtn: PixFancyButton;
-  private exitContainer: PixView;
-  private valueText3: PixText;
-  private closeBtn: PixFancyButton;
+  private readonly bg: PixSprite;
+  private readonly panelBG: PixSprite;
+  private readonly entryContainer: PixView;
+  private readonly valueText1: PixText;
+  private readonly promoBetValue: PixText;
+  private readonly startBtn: PixFancyButton;
+  private readonly exitContainer: PixView;
+  private readonly valueText3: PixText;
+  private readonly closeBtn: PixFancyButton;
   constructor(config) {
     super(config);
     this.bg = this.elementsList['bg'];

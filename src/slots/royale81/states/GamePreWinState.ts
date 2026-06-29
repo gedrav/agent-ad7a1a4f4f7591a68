@@ -10,11 +10,11 @@ import { Clock } from '@core/utils/Clock';
 import { Util } from '@core/utils/UtilService';
 
 class GamePreWinStateCommand extends StateCommand {
-  private timeoutId: any;
+  private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
     const result = appModel.getReelModifiersData();
-    if (result && result.type == 'addWildFeatureTriggered') {
+    if (result?.type == 'addWildFeatureTriggered') {
       const data: any = {};
       data.wildPositions = result.wildPositions;
       data.numberOfWilds = result.numberOfWilds;

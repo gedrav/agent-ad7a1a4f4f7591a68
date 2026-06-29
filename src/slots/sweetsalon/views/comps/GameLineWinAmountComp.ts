@@ -4,8 +4,8 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { UIUtil } from '@core/utils/UIUtilService';
 
 export class GameLineWinAmountComp extends LineWinAmountComp {
-  private wildMultiplierText: PixText;
-  private multiplierImg: PixSprite;
+  private readonly wildMultiplierText: PixText;
+  private readonly multiplierImg: PixSprite;
 
   constructor(config) {
     super(config);
