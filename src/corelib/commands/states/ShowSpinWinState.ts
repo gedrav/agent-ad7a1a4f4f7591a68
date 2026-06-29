@@ -30,15 +30,13 @@ class ShowSpinWinStateCommand extends StateCommand {
           StateManager.next();
         }
       }
+    } else if (appModel.getSpinWin() > 0) {
+      this.completedIndex = 0;
+      EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
     } else {
-      if (appModel.getSpinWin() > 0) {
-        this.completedIndex = 0;
-        EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
-      } else {
-        const flag = this.checkForMaxCapWin();
-        if (!flag) {
-          StateManager.next();
-        }
+      const flag = this.checkForMaxCapWin();
+      if (!flag) {
+        StateManager.next();
       }
     }
   }
@@ -63,14 +61,12 @@ class ShowSpinWinStateCommand extends StateCommand {
           StateManager.next();
         }
       }
-    } else {
-      if (this.completedIndex === 2) {
-        EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-        this.checkForMaxCapWin();
-        const flag = this.checkForMaxCapWin();
-        if (!flag) {
-          StateManager.next();
-        }
+    } else if (this.completedIndex === 2) {
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+      this.checkForMaxCapWin();
+      const flag = this.checkForMaxCapWin();
+      if (!flag) {
+        StateManager.next();
       }
     }
   }

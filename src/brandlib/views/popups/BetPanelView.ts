@@ -49,20 +49,20 @@ const btnConfig: any = {
   },
 };
 export class BetPanelView extends ResponsiveChildrenView {
-  private betBtnsArray: PixToggleButton[] = [];
-  private upStakeBtn: any;
-  private downStakeBtn: any;
-  private stakeText: any;
-  private btnContainer: PixView;
-  private betPanelBg: PixNineSpliceSprite;
-  private titleText: PixText;
-  private cancelBtn: PixFancyButton;
-  private setBtn: PixFancyButton;
+  private readonly betBtnsArray: PixToggleButton[] = [];
+  private readonly upStakeBtn: any;
+  private readonly downStakeBtn: any;
+  private readonly stakeText: any;
+  private readonly btnContainer: PixView;
+  private readonly betPanelBg: PixNineSpliceSprite;
+  private readonly titleText: PixText;
+  private readonly cancelBtn: PixFancyButton;
+  private readonly setBtn: PixFancyButton;
   private tempBetPos: number = 0;
-  private stakebg: PixSprite;
-  private stakeContainer: PixView;
-  private minmaxbetText: PixText;
-  private minmaxbetBG: PixSprite;
+  private readonly stakebg: PixSprite;
+  private readonly stakeContainer: PixView;
+  private readonly minmaxbetText: PixText;
+  private readonly minmaxbetBG: PixSprite;
 
   constructor(config: any) {
     super(config);

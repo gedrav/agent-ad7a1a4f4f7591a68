@@ -6,9 +6,9 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class MenuButton extends ResponsiveChildrenView {
-  private btn: PixFancyButton;
-  private icon: PixSprite;
-  private text: PixText;
+  private readonly btn: PixFancyButton;
+  private readonly icon: PixSprite;
+  private readonly text: PixText;
 
   constructor(config) {
     super(config);

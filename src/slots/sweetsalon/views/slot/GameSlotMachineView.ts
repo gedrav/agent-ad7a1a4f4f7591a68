@@ -11,10 +11,10 @@ import { appModel } from '@core/models/services/AppModelService';
 import { AnteBetComp } from '@brand/views/comps/AnteBetComp';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private buyBonusComp: BuyBonusButtonComp;
-  private anteBetComp: AnteBetComp;
+  private readonly buyBonusComp: BuyBonusButtonComp;
+  private readonly anteBetComp: AnteBetComp;
   protected tumbleSlotReel: SlotReelTumble;
-  private gameTitle: PixSpine;
+  private readonly gameTitle: PixSpine;
 
   constructor(config: any) {
     super(config);

@@ -9,11 +9,11 @@ import { Util } from '@core/utils/UtilService';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 export class SplashButton extends ResponsiveChildrenView {
-  private btn: PixToggleButton;
-  private text: PixText;
-  private textContent: string;
-  private selectedTextContent: string;
-  private invisBtn: PixFancyButton;
+  private readonly btn: PixToggleButton;
+  private readonly text: PixText;
+  private readonly textContent: string;
+  private readonly selectedTextContent: string;
+  private readonly invisBtn: PixFancyButton;
 
   constructor(config) {
     super(config);

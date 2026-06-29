@@ -333,10 +333,8 @@ class AppModelService {
     if (this.isCascadeGame()) {
       this.featureResult.featureTriggerPositions =
         this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
-    } else {
-      if (this.gameResult.featureTriggerPositions) {
-        this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
-      }
+    } else if (this.gameResult.featureTriggerPositions) {
+      this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
     }
 
     this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
@@ -548,7 +546,7 @@ class AppModelService {
   }
 
   public getIsBuyBonusAvailable(): any {
-    if (this.playerInfo && this.playerInfo.buyFeature != undefined) {
+    if (this.playerInfo?.buyFeature != undefined) {
       return this.playerInfo.buyFeature;
     }
   }
@@ -562,10 +560,8 @@ class AppModelService {
       if (this.gameInfo.betPos < this.gameInfo.betsArray.length - 1) {
         this.gameInfo.betPos++;
       }
-    } else {
-      if (this.gameInfo.betPos > 0) {
-        this.gameInfo.betPos--;
-      }
+    } else if (this.gameInfo.betPos > 0) {
+      this.gameInfo.betPos--;
     }
   }
 
@@ -777,7 +773,7 @@ class AppModelService {
   }
 
   getbbBetMultiplierSettings(): any {
-    if (this.playerInfo && this.playerInfo.buyFeature != undefined && this.playerInfo.bbBetMultiplierSettings) {
+    if (this.playerInfo?.buyFeature != undefined && this.playerInfo.bbBetMultiplierSettings) {
       return this.playerInfo.bbBetMultiplierSettings;
     }
   }

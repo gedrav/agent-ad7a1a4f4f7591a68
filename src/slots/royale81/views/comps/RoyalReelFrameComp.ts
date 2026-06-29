@@ -6,7 +6,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class RoyalReelFrameComp extends ReelFrameComp {
-  private reelFrameAnim: PixSpine;
+  private readonly reelFrameAnim: PixSpine;
 
   constructor(config: any) {
     super(config);

@@ -12,11 +12,11 @@ import { appModel } from '@core/models/services/AppModelService';
 import { AnteBetComp } from '@brand/views/comps/AnteBetComp';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private buyBonusComp: BuyBonusButtonComp;
-  private anteBetComp: AnteBetComp;
-  private character: CharacterController;
+  private readonly buyBonusComp: BuyBonusButtonComp;
+  private readonly anteBetComp: AnteBetComp;
+  private readonly character: CharacterController;
   protected tumbleSlotReel: SlotReelTumble;
-  private gameTitle: PixSpine;
+  private readonly gameTitle: PixSpine;
 
   constructor(config: any) {
     super(config);
@@ -78,10 +78,8 @@ export class GameSlotMachineView extends SlotMachineView {
           this.slotReel.addChildAt(this.character, 1);
         }
         this.positionEdgeButtons();
-      } else {
-        if (this.character) {
-          this.slotReel.addChild(this.character);
-        }
+      } else if (this.character) {
+        this.slotReel.addChild(this.character);
       }
     }
   }

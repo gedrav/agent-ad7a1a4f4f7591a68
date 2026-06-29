@@ -5,7 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 class GameIdleStateCommand extends StateCommand {
-  private intervalId: any;
+  private readonly intervalId: any;
   private lineWinCounter: number = 0;
   public async execute(data: any = null) {
     super.execute(data);

@@ -35,7 +35,7 @@ export class PixToggleButton extends PixFancyButton {
       this.hoverView = UIUtil.getSprite(this.configData.options.hoverView);
       this.pressedView = UIUtil.getSprite(this.configData.options.pressedView);
     }
-    if (this.textView && this.configData.textConfig && this.configData.textConfig.style) {
+    if (this.textView && this.configData.textConfig?.style) {
       if (this.isSelected) {
         this.changeTextColor(this.configData.textConfig.style.selectedStateColor);
       } else {

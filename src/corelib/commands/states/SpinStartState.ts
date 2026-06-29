@@ -9,7 +9,7 @@ import { Clock } from '@core/utils/Clock';
 import { STATES } from '@core/states/StateConstants';
 
 class SpinStartStateCommand extends StateCommand {
-  private timeoutId: any;
+  private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);

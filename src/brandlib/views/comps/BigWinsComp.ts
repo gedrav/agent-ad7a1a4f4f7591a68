@@ -25,14 +25,14 @@ export class BigWinsComp extends ResponsiveView {
   protected currentState: string;
   protected timeoutId: any;
   protected intervalDelay: number;
-  private skipRect: PixGraphics;
+  private readonly skipRect: PixGraphics;
   private winState: boolean = false;
   private isSkipping: boolean = false;
-  private animCompleteListener: { complete: (entry) => void };
-  private winTickerBW: WinTicker;
+  private readonly animCompleteListener: { complete: (entry) => void };
+  private readonly winTickerBW: WinTicker;
   private bigWinTextAnim: PixSpine;
   private bigWinPanelAnim: PixSpine;
-  private bigWinText: PixSprite;
+  private readonly bigWinText: PixSprite;
 
   constructor(config) {
     super(config);

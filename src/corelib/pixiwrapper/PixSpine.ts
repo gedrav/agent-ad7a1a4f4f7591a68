@@ -6,8 +6,8 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class PixSpine extends StandardView {
   protected anchor: any;
-  private spineAnim: any;
-  private stateListeners: AnimationStateListener[] = [];
+  private readonly spineAnim: any;
+  private readonly stateListeners: AnimationStateListener[] = [];
 
   constructor(configData: any) {
     super(configData);
@@ -198,7 +198,7 @@ export class PixSpine extends StandardView {
   public patchSpineDataAtRuntime() {
     try {
       const spineAnim = (this as any).spineAnim;
-      if (!spineAnim || !spineAnim.skeleton || !spineAnim.skeleton.data) {
+      if (!spineAnim?.skeleton?.data) {
         console.warn('patchSpineDataAtRuntime: spineAnim missing');
         return;
       }
@@ -240,9 +240,9 @@ export class PixSpine extends StandardView {
 
         const existing = skin.getAttachment(slotIndexR, 'symbol_r') || skin.getAttachment(slotIndexR, 'symb_null');
         if (!existing) {
-          const newMesh = (baseSymbolR as any).copy();
-          if (symbolLMesh && (symbolLMesh as any).region) {
-            newMesh.region = (symbolLMesh as any).region;
+          const newMesh = baseSymbolR.copy();
+          if (symbolLMesh?.region) {
+            newMesh.region = symbolLMesh.region;
             if (typeof newMesh.updateRegion === 'function') newMesh.updateRegion();
             skin.setAttachment(slotIndexR, 'symbol_r', newMesh);
             skin.setAttachment(slotIndexR, 'symb_null', newMesh);

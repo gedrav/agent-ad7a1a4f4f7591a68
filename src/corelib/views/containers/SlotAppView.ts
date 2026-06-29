@@ -23,12 +23,12 @@ export class SlotAppView extends ResponsiveChildrenView {
   protected controlPanelView: ControlPanelView;
   protected timerView: TimerView;
   protected betPanelView: BetPanelView;
-  private autoplayView: AutoplayView;
-  private buyBonusView: BuyBonusView | BuyBonusViewMobile;
-  private messagePopupView: MessagePopupView;
-  private popupComp: FSPopupComp;
-  private menuComp: MenuComp | MenuCompMobile;
-  private modalView: ModalView;
+  private readonly autoplayView: AutoplayView;
+  private readonly buyBonusView: BuyBonusView | BuyBonusViewMobile;
+  private readonly messagePopupView: MessagePopupView;
+  private readonly popupComp: FSPopupComp;
+  private readonly menuComp: MenuComp | MenuCompMobile;
+  private readonly modalView: ModalView;
 
   constructor(config) {
     super(config);

@@ -8,13 +8,13 @@ import { ReelWinTicker } from '@core/views/comps/ReelWinTicker';
 import { appModel } from '@core/models/services/AppModelService';
 
 export class ReelTickerComp extends StandardView {
-  private tickerText1: PixText;
-  private tickerText2: PixText;
+  private readonly tickerText1: PixText;
+  private readonly tickerText2: PixText;
   protected tickerIndex: number;
-  private bg: any;
+  private readonly bg: any;
   private timeoutId: any;
   private textIndex: number;
-  private delayDuration: number;
+  private readonly delayDuration: number;
   private totalWin: number;
 
   constructor(config) {

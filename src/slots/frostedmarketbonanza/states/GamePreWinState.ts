@@ -9,13 +9,13 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
 
 class GamePreWinStateCommand extends StateCommand {
-  private timeoutId: any;
+  private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
     const result = appModel.getReelModifiersData();
-    if (result && result.type == 'nudgeFeature') {
+    if (result?.type == 'nudgeFeature') {
       EventHandler.dispatchEvent(SlotEvents.NUDGE_FEATURE_ACTIVATED);
-    } else if (result && result.type == 'symbolConversionApplied') {
+    } else if (result?.type == 'symbolConversionApplied') {
       EventHandler.dispatchEvent(SlotEvents.LOWPAY_SYMBOL_CONVERSION);
     } else {
       StateManager.next();

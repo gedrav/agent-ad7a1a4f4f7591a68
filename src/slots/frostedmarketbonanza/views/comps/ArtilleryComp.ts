@@ -84,7 +84,7 @@ export class ArtilleryComp extends StandardView {
     const side = this.pickRandomPendingSide();
     if (!side) return;
     const spine = this.getArtillery(side);
-    const shot = this.getQueue(side).pop()!;
+    const shot = this.getQueue(side).pop();
     this.fireShot(spine, shot);
   }
 
