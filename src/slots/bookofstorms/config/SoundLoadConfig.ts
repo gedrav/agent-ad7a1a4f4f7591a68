@@ -298,7 +298,7 @@ export const GAME_SOUND_CONFIG = {
     {
       name: 'bigWinIntro',
       type: 'game',
-      loop: true,
+      loop: false,
       playEvents: ['PLAY_BIG_WIN_SOUND'],
       stopEvents: ['STOP_BIG_WIN_SOUND'],
       volume: 1,
@@ -308,7 +308,7 @@ export const GAME_SOUND_CONFIG = {
     {
       name: 'megaIntro',
       type: 'game',
-      loop: true,
+      loop: false,
       playEvents: ['PLAY_SUPER_WIN_SOUND'],
       stopEvents: ['STOP_BIG_WIN_SOUND'],
       volume: 1,
@@ -318,7 +318,7 @@ export const GAME_SOUND_CONFIG = {
     {
       name: 'giganticIntro',
       type: 'game',
-      loop: true,
+      loop: false,
       playEvents: ['PLAY_MEGA_WIN_SOUND'],
       stopEvents: ['STOP_BIG_WIN_SOUND'],
       volume: 1,
@@ -328,7 +328,7 @@ export const GAME_SOUND_CONFIG = {
     {
       name: 'unbelievableIntro',
       type: 'game',
-      loop: true,
+      loop: false,
       playEvents: ['PLAY_EPIC_WIN_SOUND'],
       stopEvents: ['STOP_BIG_WIN_SOUND'],
       volume: 1,

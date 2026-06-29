@@ -6,6 +6,17 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 export default class GameWinController extends WinController {
   private maskRect: PixGraphics;
 
+  public showSpinWin(): void {
+    super.showSpinWin();
+
+    if (!appModel.isCascadeGame() && appModel.getWinDataLength() > 0) {
+      const winData = appModel.getWinData();
+      if (winData && winData.length > 0 && winData[0].symbol) {
+        EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_' + winData[0].symbol);
+      }
+    }
+  }
+
   public showLineWin(): void {
     if (!this.maskRect) {
       this.maskRect = this.slotReel?.elementsList['maskRect'];
@@ -45,7 +56,7 @@ export default class GameWinController extends WinController {
             }
           }
         }
-        EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_' + currentLineWin.symbol);
+        // EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_' + currentLineWin.symbol);
       }
     }
     appModel.lineWinIndex++;
