@@ -88,18 +88,18 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     }
   }
 
-  public showFeatureTriggerAnimation(onComplete?: () => void): void {
-    this.showWinning(onComplete);
+  public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
+    this.showWinning(onComplete, loop);
   }
 
-  public showWinning(onComplete?: () => void): void {
+  public showWinning(onComplete?: () => void, loop: boolean = false): void {
     if (!appModel.secondaryAssetsLoaded) {
-      super.showWinning(onComplete);
+      super.showWinning(onComplete, loop);
       return;
     }
     if (this.configData.data.winAnim) {
       this.spineAnimCompleteCallback = onComplete;
-      this.playSpineAnimation(this.configData.data.winAnim, false);
+      this.playSpineAnimation(this.configData.data.winAnim, loop);
       const name: string = this.configData.data.name ?? '';
     } else {
       super.showWinning(onComplete);
@@ -133,7 +133,10 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.spine.visible = false;
     this.destroySpine();
   }
-  protected onAnimComplete(data: { animation: { name: string } }): void {
+  protected onAnimComplete(data: { loop: boolean; animation: { name: string } }): void {
+    if (data.loop) {
+      return;
+    }
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
     const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);

@@ -23,10 +23,6 @@ class ShowSpinWinStateCommand extends StateCommand {
           winType !== CONSTANTS.STANDARD_WIN) ||
         appModel.getScatterPay() > 0
       ) {
-        if (GameProxy.config.dontShowAllWinForFeature && appModel.getIsFeatureTriggered()) {
-          StateManager.next();
-          return;
-        }
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
       } else {
@@ -36,6 +32,10 @@ class ShowSpinWinStateCommand extends StateCommand {
         }
       }
     } else if (appModel.getSpinWin() > 0) {
+      if (GameProxy.config.dontShowAllWinForFeature && appModel.getIsFeatureTriggered()) {
+        StateManager.next();
+        return;
+      }
       this.completedIndex = 0;
       EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
     } else {

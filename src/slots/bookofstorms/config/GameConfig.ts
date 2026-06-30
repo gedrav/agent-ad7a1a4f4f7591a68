@@ -21,6 +21,8 @@ export const GAME_CONFIG = {
   anteBetMultiplier: 1.25,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
+  dontShowAllWinForFeature: true,
+  featureTriggerDelay: 4000,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'Caudex',
