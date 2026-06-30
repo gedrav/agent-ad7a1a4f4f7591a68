@@ -143,6 +143,11 @@ export class MessageServiceProxy extends AbstractProxy {
       } else if (GameProxy.config.cheatObject.forceBookSymbol) {
         finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
         finalObj.extraData.combination = cheatObj.combination;
+      } else if (GameProxy.config.cheatObject.forceFeatureType) {
+        // Lightning_Trigger-style cheat: { forceFeatureType, forceWildCount, forceLightningWildCount }
+        finalObj.extraData.forceFeatureType = cheatObj.forceFeatureType;
+        finalObj.extraData.forceWildCount = cheatObj.forceWildCount;
+        finalObj.extraData.forceLightningWildCount = cheatObj.forceLightningWildCount;
       } else {
         finalObj.extraData.combination = cheatObj;
       }
