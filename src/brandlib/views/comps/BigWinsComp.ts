@@ -257,7 +257,10 @@ export class BigWinsComp extends ResponsiveView {
 
   protected notifyWinDone(): void {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
+    if (this.targetLevel > 0) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
+    }
+
     if (appModel.getIsFreeSpinsSession()) EventHandler.dispatchEvent(SlotEvents.RESUME_FS_BG_SOUND);
     else EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     this.winState = false;

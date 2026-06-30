@@ -40,7 +40,6 @@ export default class WinController {
   public showScatterTrigger(): void {
     const positions: number[] = appModel.getFeatureTriggerPositions();
     if (positions && positions.length > 0) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_SCATTER_WIN_SOUND, positions.length);
       const len = positions.length;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);

@@ -39,12 +39,12 @@ class GameIdleStateCommand extends StateCommand {
   }
 
   protected showLineWin(): void {
-    if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {
-      this.lineWinCounter++;
-    }
     if (this.lineWinCounter >= 4) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       return;
+    }
+    if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {
+      this.lineWinCounter++;
     }
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_LINE_WIN);

@@ -570,9 +570,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         });
       }
     }
-    if (!landingSoundPlayed) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
-    }
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     if (reelno == this.reelsData.noOfReels - 2) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
     }
