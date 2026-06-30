@@ -24,10 +24,7 @@ class GameConfigProxy extends AbstractProxy {
     };
     this.updateConfig(urlConfig);
   }
-  public updateCommonConfig(): void {
-    const data = (Cache as any)._cache;
-    this.updateConfig(data.get('commonConfig.json').gameConfig);
-  }
+
   public updateConfig(data: any): void {
     for (const p in data) {
       this._config[p] = data[p];

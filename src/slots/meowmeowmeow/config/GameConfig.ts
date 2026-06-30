@@ -19,7 +19,6 @@ export const GAME_CONFIG = {
   creditValue: 20,
   totalLines: 1,
   anteBetMultiplier: 1.25,
-  isConsoleActive: true,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   FontFaces: {

@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { Util } from '@core/utils/UtilService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class ShowSpinWinStateCommand extends StateCommand {
   private timeoutId: any;
@@ -22,6 +23,10 @@ class ShowSpinWinStateCommand extends StateCommand {
           winType !== CONSTANTS.STANDARD_WIN) ||
         appModel.getScatterPay() > 0
       ) {
+        if (GameProxy.config.dontShowAllWinForFeature && appModel.getIsFeatureTriggered()) {
+          StateManager.next();
+          return;
+        }
         this.completedIndex = 0;
         EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
       } else {

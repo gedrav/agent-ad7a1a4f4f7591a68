@@ -292,7 +292,6 @@ class SlotGameApp {
     this.checkToCreateGame();
   }
   protected async onPreloaderLoaded() {
-    GameProxy.updateCommonConfig();
     ContentProxy.initiate();
     console.log('Version: ' + import.meta.env.VITE_GAME_VERSION + '_' + GameProxy.config.gameVersion);
     if (this.pendingInitErrorObj) {

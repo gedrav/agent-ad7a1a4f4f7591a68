@@ -146,7 +146,6 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       return;
     }
-
     const instance = this.soundLibrary[sObj.name];
     console.log('PLAY SOUND == ', sObj.name);
     if (instance) {
@@ -193,7 +192,7 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       return;
     }
-    console.log('stop sound == ', sObj.name);
+    //console.log('stop sound == ', sObj.name);
     const instance = this.soundLibrary[sObj.name];
     if (instance?.playing()) {
       const duration = sObj.fadeOutDuration ? sObj.fadeOutDuration : 0;
