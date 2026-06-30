@@ -497,6 +497,13 @@ class AppModelService {
     }
     return null;
   }
+  public getLightningStrikeData(): any {
+    const modifiers = this.getReelModifiers();
+    if (modifiers && modifiers.length > 0) {
+      return modifiers.find((mod: any) => mod.type === 'lightningStrike');
+    }
+    return null;
+  }
   public getNormalWin(): number {
     return this.gameResult?.normalWin || 0;
   }

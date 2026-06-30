@@ -1008,20 +1008,32 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.anticipationElementArray.forEach((element, index) => {
           if (element === null) return;
           const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
-          element.x = anticipationConfig.px;
-          element.y = anticipationConfig.py;
-          if (anticipationConfig.pScale) {
-            element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+          if (DeviceProxy.config.isTablet && anticipationConfig.tpScale) {
+            element.x = anticipationConfig.tpx;
+            element.y = anticipationConfig.tpy;
+            element.scale.set(anticipationConfig.tpScale.x, anticipationConfig.tpScale.y);
+          } else {
+            element.x = anticipationConfig.px;
+            element.y = anticipationConfig.py;
+            if (anticipationConfig.pScale) {
+              element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+            }
           }
         });
       } else {
         this.anticipationElementArray.forEach((element, index) => {
           if (element === null) return;
           const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
-          element.x = anticipationConfig.lx;
-          element.y = anticipationConfig.ly;
-          if (anticipationConfig.pScale) {
-            element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+          if (DeviceProxy.config.isTablet && anticipationConfig.tpScale) {
+            element.x = anticipationConfig.tpx;
+            element.y = anticipationConfig.tpy;
+            element.scale.set(anticipationConfig.tpScale.x, anticipationConfig.tpScale.y);
+          } else {
+            element.x = anticipationConfig.lx;
+            element.y = anticipationConfig.ly;
+            if (anticipationConfig.pScale) {
+              element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+            }
           }
         });
       }

@@ -1,7 +1,6 @@
 import { UIConfig } from '@game/config/UIConfig';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
-import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
 export const GAME_CONFIG = {
