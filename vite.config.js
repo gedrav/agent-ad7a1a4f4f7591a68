@@ -14,7 +14,6 @@ const defaultGameNames = [
   //'bookofstorms',
   'meowmeowmeow',
   // 'bookofstormslightningwin'
-
 ];
 
 // SINGLE CONTROL POINT (with env override)

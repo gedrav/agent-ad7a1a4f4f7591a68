@@ -31,8 +31,8 @@ export const GAME_CONFIG = {
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
   reelSpinSettings: {
-    firstReelSymbolPassCount: 8,
-    otherReelsSymbolPassCount: 5,
+    firstReelSymbolPassCount: 5,
+    otherReelsSymbolPassCount: 2,
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },

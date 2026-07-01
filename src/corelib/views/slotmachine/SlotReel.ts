@@ -783,12 +783,12 @@ export default class SlotReel extends ResponsiveChildrenView {
       AnimationProxy.animateTween(this.anticipationElementArray[reelno], {
         duration: this.jerkDuration * 0.5,
         alpha: 0,
-        onComplete: this.hideAnticipationStrip.bind(this, reelno),
       });
+      this.hideAnticipationStrip(reelno);
     }
   }
   protected hideAnticipationStrip(reelno) {
-    if (this.configData.anticipationConfig) {
+    if (this.reelsData.anticipationConfig) {
       this.anticipationElementArray[reelno].stopAnimation();
       this.anticipationElementArray[reelno].visible = false;
       this.anticipationElementArray[reelno].alpha = 1;
@@ -939,7 +939,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.minSpeed = 70;
     this.speedFactor = 2;
     this.spinningSpeed = 0;
-    this.maxUpY = -120;
+    this.maxUpY = -60;
     this.maxDownY = 40;
     this.jerkDuration = 0.75;
     this.reelStopGap = 200;
