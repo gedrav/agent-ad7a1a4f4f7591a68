@@ -22,7 +22,7 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   dontShowAllWinForFeature: true,
-  featureTriggerDelay: 4000,
+  featureTriggerDelay: 3500,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'Caudex',

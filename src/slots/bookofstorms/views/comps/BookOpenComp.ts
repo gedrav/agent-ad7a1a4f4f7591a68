@@ -144,6 +144,7 @@ export class BookOpenComp extends StandardView {
 
       this.winFrameComp.visible = true;
       this.winFrameComp.playAnimation({ state: 'start', loop: false });
+      console.log('ssssssssssssssssssssssssssss');
       EventHandler.dispatchEvent('PLAY_BOOK_INTRO_END');
       this.emit('BOOK_ANIMATION_COMPLETE');
 

@@ -792,6 +792,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       this.anticipationElementArray[reelno].stopAnimation();
       this.anticipationElementArray[reelno].visible = false;
       this.anticipationElementArray[reelno].alpha = 1;
+      EventHandler.dispatchEvent('STOP_ANTICIPATION_SOUND');
     }
   }
   protected hideAllAnticipation() {
