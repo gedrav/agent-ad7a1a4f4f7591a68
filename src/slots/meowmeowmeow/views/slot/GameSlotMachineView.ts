@@ -5,9 +5,9 @@ export class GameSlotMachineView extends SlotMachineView {
   constructor(config: any) {
     super(config);
 
-    setTimeout(() => this.expandRowsTo4(), 5000);
-
-    setTimeout(() => this.reverseRowsTo3(), 10000);
+    // setTimeout(() => this.expandRowsTo4(), 5000);
+    //
+    // setTimeout(() => this.reverseRowsTo3(), 10000);
   }
 
   public expandRowsTo4(): void {
