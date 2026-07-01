@@ -155,7 +155,12 @@ export const GAME_SOUND_CONFIG = {
       name: 'uiPopUpSfx',
       type: 'game',
       loop: false,
-      playEvents: ['PLAY_GENERIC_POPUP_SOUND', 'PLAY_GENERIC_MSG_POPUP_SOUND', 'SHOW_MESSAGE_POPUP'],
+      playEvents: [
+        'PLAY_GENERIC_POPUP_SOUND',
+        'PLAY_GENERIC_MSG_POPUP_SOUND',
+        'SHOW_MESSAGE_POPUP',
+        'PLAY_FS_EXIT_POPUP_SOUND',
+      ],
       volume: 1,
       fadeOutDuration: 100,
     },
