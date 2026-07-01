@@ -939,7 +939,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.minSpeed = 70;
     this.speedFactor = 2;
     this.spinningSpeed = 0;
-    this.maxUpY = -120;
+    this.maxUpY = -60;
     this.maxDownY = 40;
     this.jerkDuration = 0.75;
     this.reelStopGap = 200;
