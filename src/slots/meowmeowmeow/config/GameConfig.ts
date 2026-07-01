@@ -12,7 +12,7 @@ export const GAME_CONFIG = {
   configPath: '/',
   gamePath: '/',
   gameVersion: '0.072',
-  gameId: 'bookofstorms',
+  gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
   uiConfig: UIConfig,
   creditValue: 20,
