@@ -148,6 +148,8 @@ export class MessageServiceProxy extends AbstractProxy {
         finalObj.extraData.forceFeatureType = cheatObj.forceFeatureType;
         finalObj.extraData.forceWildCount = cheatObj.forceWildCount;
         finalObj.extraData.forceLightningWildCount = cheatObj.forceLightningWildCount;
+      } else if (cheatObj.extraData) {
+        Object.assign(finalObj.extraData, cheatObj.extraData);
       } else {
         finalObj.extraData.combination = cheatObj;
       }
