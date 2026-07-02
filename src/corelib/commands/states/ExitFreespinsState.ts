@@ -42,7 +42,9 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
   protected async exitFreespin() {
-    GameProxy.config.checkToShowWinAfterFS = GameProxy.config.dontShowWinAfterFS;
+    if (GameProxy.config.dontShowWinAfterFS) {
+      GameProxy.config.checkToShowWinAfterFS = true;
+    }
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     // Update balance with final free spin wins
