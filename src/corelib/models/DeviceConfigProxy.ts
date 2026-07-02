@@ -52,7 +52,7 @@ class DeviceConfigProxy extends AbstractProxy {
     this._config.appResolution = this._config.pixelRatio;
     this._config.assetResolution = '@1x'; // to do for mobile diff res;
 
-    if (this._config.isDesktop) {
+    if (this._config.isDesktop || this._config.isTablet) {
       this._config.assetResolution = '@1x';
     } else {
       this._config.assetResolution = '@0.5x';
