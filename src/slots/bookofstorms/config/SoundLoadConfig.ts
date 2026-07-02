@@ -44,7 +44,7 @@ export const GAME_SOUND_CONFIG = {
   lazySoundFiles: [
     // common sound across all games
     {
-      name: 'errorPopUp',
+      name: 'ERROR POP UP',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_GENERIC_MSG_POPUP_SOUND'],
@@ -286,7 +286,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 250,
     },
     {
-      name: 'highValueAllWin',
+      name: 'HighValueAllWin',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_PREMIUM_WIN_SOUND'],
