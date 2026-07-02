@@ -194,10 +194,14 @@ class SoundServiceProxy {
     }
 
     const instance = this.soundLibrary[sObj.name];
-    if (instance?.playing() || instance.volume() > 0) {
+    // Only act on a sound that is actually playing. A freshly loaded Howl has
+    // default volume 1, so the old `volume() > 0` branch fired on a not-playing
+    // sound and scheduled a delayed stop() that then cut off the next play()
+    // triggered right after (STOP -> PLAY in the same call). See big win sound.
+    if (instance?.playing()) {
       const duration = sObj.fadeOutDuration ? sObj.fadeOutDuration : 0;
       //console.log('stop sound == ', sObj.name);
-      instance.fade(sObj.volume, 0, duration);
+      instance.fade(instance.volume(), 0, duration);
       setTimeout(() => {
         instance.stop();
       }, duration);

@@ -61,7 +61,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
-      name: 'sliderSfx',
+      name: 'SLIDER SFX',
       type: 'game',
       loop: false,
       singleton: true,
