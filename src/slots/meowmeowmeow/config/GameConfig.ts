@@ -15,7 +15,7 @@ export const GAME_CONFIG = {
   gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
   uiConfig: UIConfig,
-  creditValue: 20,
+  creditValue: 10,
   totalLines: 1,
   anteBetMultiplier: 1.25,
   unloadAssets: ['splashAssets'],
