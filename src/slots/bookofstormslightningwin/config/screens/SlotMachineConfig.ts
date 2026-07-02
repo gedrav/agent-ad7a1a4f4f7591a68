@@ -329,15 +329,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           type: 'Comp',
           class: WildTransitionComp,
           visible: false,
-          // Elements: [
-          //   {
-          //     name: 'wildTransitionAnim',
-          //     type: 'Spine',
-          //     spineName: 'wild_transition',
-          //     visible: true,
-          //     scale: 0.9,
-          //   },
-          // ],
         },
         {
           name: 'lineWinAmountComp',
