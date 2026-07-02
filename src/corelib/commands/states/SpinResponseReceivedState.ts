@@ -6,7 +6,7 @@ import { Clock } from '@core/utils/Clock';
 import { StateManager } from '@core/states/StateManagerService';
 
 class SpinResponseReceivedStateCommand extends StateCommand {
-  private timeoutId: any;
+  private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.SHOW_STOPSPIN_BUTTON);

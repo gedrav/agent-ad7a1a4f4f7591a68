@@ -6,8 +6,8 @@ import { AppEvents } from '@core/events/AppEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class DualSprite extends PixView {
-  private portraitBG: PixSprite;
-  private landscapeBG: PixSprite;
+  private readonly portraitBG: PixSprite;
+  private readonly landscapeBG: PixSprite;
 
   constructor(config: any) {
     super(config);

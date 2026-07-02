@@ -19,11 +19,11 @@ export class BuyBonusView extends ResponsiveChildrenView {
   protected titleText: PixText;
   protected cancelBtn: PixFancyButton;
   protected startBtn: PixFancyButton;
-  private bbCont: PixView;
-  private upStakeBtn: PixFancyButton;
-  private downStakeBtn: PixFancyButton;
-  private stakeText: any;
-  private stakeContainer: PixView;
+  private readonly bbCont: PixView;
+  private readonly upStakeBtn: PixFancyButton;
+  private readonly downStakeBtn: PixFancyButton;
+  private readonly stakeText: any;
+  private readonly stakeContainer: PixView;
 
   constructor(config: any) {
     super(config);

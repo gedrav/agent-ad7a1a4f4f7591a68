@@ -5,17 +5,17 @@ class LoggerService {
   constructor() {}
 
   public log(str: string): void {
-    if (GameProxy.config.isConsoleActive) {
+    if (import.meta.env.VITE_GAME_CONSOLE_ACTIVE === 'true') {
       console.log(Util.getCurrentTime(), ' :: ' + str);
     }
   }
   trace(str: string): void {
-    if (GameProxy.config.isConsoleActive) {
+    if (import.meta.env.VITE_GAME_CONSOLE_ACTIVE === 'true') {
       console.trace(str);
     }
   }
   warn(str: string) {
-    if (GameProxy.config.isConsoleActive) {
+    if (import.meta.env.VITE_GAME_CONSOLE_ACTIVE === 'true') {
       console.warn(str);
     }
   }
@@ -23,7 +23,7 @@ class LoggerService {
     console.clear();
   }
   logObj(obj: any, message: string = ''): void {
-    if (GameProxy.config.isConsoleActive) {
+    if (import.meta.env.VITE_GAME_CONSOLE_ACTIVE === 'true') {
       console.log(message + '', obj);
     }
   }

@@ -25,14 +25,14 @@ import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
 export class SplashView extends ResponsiveChildrenView {
-  private gameTitle: PixSprite | PixSpine;
-  private itemsArray: SplashItemComp[] = [];
-  private itemContainer: PixView;
-  private startBtn: PixFancyButton;
-  private soundBtn: PixToggleButton;
-  private showIntroBtn: SplashButton;
-  private controlsContainer: PixView;
-  private cGuideRect: PixGraphics;
+  private readonly gameTitle: PixSprite | PixSpine;
+  private readonly itemsArray: SplashItemComp[] = [];
+  private readonly itemContainer: PixView;
+  private readonly startBtn: PixFancyButton;
+  private readonly soundBtn: PixToggleButton;
+  private readonly showIntroBtn: SplashButton;
+  private readonly controlsContainer: PixView;
+  private readonly cGuideRect: PixGraphics;
   private preloaderComp: SplashPreloaderComp;
 
   constructor(config: any) {
@@ -118,28 +118,24 @@ export class SplashView extends ResponsiveChildrenView {
       this.guideRect.height = UIUtil.getGameHeight() * 0.5;
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
+    } else if (DeviceProxy.config.isPortrait) {
+      this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+      this.guideRect.height = UIUtil.getGameHeight() * 0.5;
+      this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
+      this.guideRect.y = UIUtil.getGameHeight() * 0.2;
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.guideRect.width = UIUtil.getGameWidth() * 0.96;
-        this.guideRect.height = UIUtil.getGameHeight() * 0.5;
-        this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
-        this.guideRect.y = UIUtil.getGameHeight() * 0.2;
-      } else {
-        this.guideRect.width = UIUtil.getGameWidth() * 0.96;
-        this.guideRect.height = UIUtil.getGameHeight() * 0.5;
-        this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
-        this.guideRect.y = UIUtil.getGameHeight() * 0.2;
-      }
+      this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+      this.guideRect.height = UIUtil.getGameHeight() * 0.5;
+      this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
+      this.guideRect.y = UIUtil.getGameHeight() * 0.2;
     }
 
     if (DeviceProxy.config.isPortrait) {
       this.alignForPortrait();
+    } else if (DeviceProxy.config.isDesktop) {
+      this.alignForDesktop();
     } else {
-      if (DeviceProxy.config.isDesktop) {
-        this.alignForDesktop();
-      } else {
-        this.alignForLandscape();
-      }
+      this.alignForLandscape();
     }
   }
 

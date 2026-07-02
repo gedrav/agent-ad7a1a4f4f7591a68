@@ -6,7 +6,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class FsTotalMultiplierComp extends ResponsiveChildrenView {
-  private multiplierValText: PixText;
+  private readonly multiplierValText: PixText;
   private totalmultiplierVal: number = 0;
 
   constructor(config) {

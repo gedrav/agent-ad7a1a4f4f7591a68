@@ -303,10 +303,14 @@ class AppModelService {
     this.gameResult = data.result;
     this.featureResult = null;
     if (data.result.featureResults) {
+      console.log('aaaaaaaaaaaaaaaaaa');
       this.featureResult = data.result.featureResults[data.result.featureResults?.length - 1];
+      console.log('bbbbbbbbbbbbbbbbbb -- ', data.result.featureResults.length, this.featureResult.featureType);
       if (data.result.featureResults.length && this.featureResult.featureType == CONSTANTS.FEATURE_TYPE_FREESPIN) {
+        console.log('cccccccccccc');
         this.featureName = data.result.featureResults[data.result.featureResults.length - 1].featureType;
         this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
+        console.log('stroing fs info data == ', this.fsInfo.currentFreespin);
         this.fsInfo.totalFreespins = data.result.featureResults[data.result.featureResults.length - 1].totalCount;
         this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
         this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
@@ -333,10 +337,8 @@ class AppModelService {
     if (this.isCascadeGame()) {
       this.featureResult.featureTriggerPositions =
         this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
-    } else {
-      if (this.gameResult.featureTriggerPositions) {
-        this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
-      }
+    } else if (this.gameResult.featureTriggerPositions) {
+      this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
     }
 
     this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
@@ -499,6 +501,13 @@ class AppModelService {
     }
     return null;
   }
+  public getLightningStrikeData(): any {
+    const modifiers = this.getReelModifiers();
+    if (modifiers && modifiers.length > 0) {
+      return modifiers.find((mod: any) => mod.type === 'lightningStrike');
+    }
+    return null;
+  }
   public getNormalWin(): number {
     return this.gameResult?.normalWin || 0;
   }
@@ -548,7 +557,7 @@ class AppModelService {
   }
 
   public getIsBuyBonusAvailable(): any {
-    if (this.playerInfo && this.playerInfo.buyFeature != undefined) {
+    if (this.playerInfo?.buyFeature != undefined) {
       return this.playerInfo.buyFeature;
     }
   }
@@ -562,10 +571,8 @@ class AppModelService {
       if (this.gameInfo.betPos < this.gameInfo.betsArray.length - 1) {
         this.gameInfo.betPos++;
       }
-    } else {
-      if (this.gameInfo.betPos > 0) {
-        this.gameInfo.betPos--;
-      }
+    } else if (this.gameInfo.betPos > 0) {
+      this.gameInfo.betPos--;
     }
   }
 
@@ -777,7 +784,7 @@ class AppModelService {
   }
 
   getbbBetMultiplierSettings(): any {
-    if (this.playerInfo && this.playerInfo.buyFeature != undefined && this.playerInfo.bbBetMultiplierSettings) {
+    if (this.playerInfo?.buyFeature != undefined && this.playerInfo.bbBetMultiplierSettings) {
       return this.playerInfo.bbBetMultiplierSettings;
     }
   }

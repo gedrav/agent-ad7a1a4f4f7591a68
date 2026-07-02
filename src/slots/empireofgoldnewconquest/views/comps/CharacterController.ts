@@ -6,7 +6,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class CharacterController extends StandardView {
-  private kingAnim: PixSpine;
+  private readonly kingAnim: PixSpine;
   private idleLoopsRemaining = 0;
   private idleListenerAttached = false;
   private readonly idleMix = 0.3;

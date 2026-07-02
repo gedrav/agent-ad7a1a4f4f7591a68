@@ -11,7 +11,7 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 export class PixView extends PIXI.Container {
   protected isDestroyed = false;
   private _configData: any;
-  private _configDataBackup: any;
+  private readonly _configDataBackup: any;
   public elementsList: { [key: string]: any };
   public guideRect: PixGraphics;
   protected viewCreated: boolean;
@@ -122,14 +122,14 @@ export class PixView extends PIXI.Container {
   }
 
   public getWidth(): number {
-    if (this.elementsList && this.elementsList['guideRect']) {
+    if (this.elementsList?.['guideRect']) {
       return this.elementsList['guideRect'].width * this.scale.x;
     } else {
       return this.width;
     }
   }
   public getHeight(): number {
-    if (this.elementsList && this.elementsList['guideRect']) {
+    if (this.elementsList?.['guideRect']) {
       return this.elementsList['guideRect'].height * this.scale.y;
     } else {
       return this.height;

@@ -68,13 +68,13 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected symbolPayoutComp: SymbolPayoutComp;
   private currentPayoutSymbol: ReelSymbolSprite;
   private payoutTimeoutId: any;
-  private modalRect: PixGraphics;
+  private readonly modalRect: PixGraphics;
   protected spinResponseReceived: boolean;
   protected defaultReel: any[];
   private stopIndex: number[];
   protected reelWinTicker: ReelWinTicker;
-  private tickerComp: ReelTickerComp;
-  private fsAutoCounterComp: FSAutoCounterComp;
+  private readonly tickerComp: ReelTickerComp;
+  private readonly fsAutoCounterComp: FSAutoCounterComp;
   public slotGuideRect: PixGraphics;
   protected timeoutIds: any[];
   private timeoutIds2: any[];
@@ -539,7 +539,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected showFinalJerk(reelno: number): void {
     this.destroyAnticipation(reelno);
     this.reelSpinningState[reelno] = 0;
-    console.log(this.landingSymbolsCount);
 
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
@@ -571,16 +570,14 @@ export default class SlotReel extends ResponsiveChildrenView {
         });
       }
     }
-    if (!landingSoundPlayed) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
-    }
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     if (reelno == this.reelsData.noOfReels - 2) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
     }
   }
   public showLandinAnimation(reelno: number) {
     const landingSymbol = this.reelsData.landingSymbols || [];
-    if (landingSymbol && landingSymbol.length) {
+    if (landingSymbol?.length) {
       this.symbolsArray[reelno].forEach((symbol, index) => {
         if (
           index > 0 &&
@@ -786,15 +783,16 @@ export default class SlotReel extends ResponsiveChildrenView {
       AnimationProxy.animateTween(this.anticipationElementArray[reelno], {
         duration: this.jerkDuration * 0.5,
         alpha: 0,
-        onComplete: this.hideAnticipationStrip.bind(this, reelno),
       });
+      this.hideAnticipationStrip(reelno);
     }
   }
   protected hideAnticipationStrip(reelno) {
-    if (this.configData.anticipationConfig) {
+    if (this.reelsData.anticipationConfig) {
       this.anticipationElementArray[reelno].stopAnimation();
       this.anticipationElementArray[reelno].visible = false;
       this.anticipationElementArray[reelno].alpha = 1;
+      EventHandler.dispatchEvent('STOP_ANTICIPATION_SOUND');
     }
   }
   protected hideAllAnticipation() {
@@ -820,7 +818,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (appModel.turboMode || this.reelsData.anticipationConfig == null) {
       return [0];
     }
-    if (this.scatterAnticipArray && this.scatterAnticipArray[reelno] != undefined) {
+    if (this.scatterAnticipArray?.[reelno] != undefined) {
       return this.scatterAnticipArray[reelno];
     } else {
       return [0];
@@ -941,7 +939,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.minSpeed = 70;
     this.speedFactor = 2;
     this.spinningSpeed = 0;
-    this.maxUpY = -120;
+    this.maxUpY = -60;
     this.maxDownY = 40;
     this.jerkDuration = 0.75;
     this.reelStopGap = 200;
@@ -981,15 +979,13 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (const p in this.reelsData.deviceLayout.Desktop) {
         this.reelsData[p] = this.reelsData.deviceLayout.Desktop[p];
       }
+    } else if (DeviceProxy.config.isPortrait) {
+      for (const p in this.reelsData.deviceLayout.Portrait) {
+        this.reelsData[p] = this.reelsData.deviceLayout.Portrait[p];
+      }
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        for (const p in this.reelsData.deviceLayout.Portrait) {
-          this.reelsData[p] = this.reelsData.deviceLayout.Portrait[p];
-        }
-      } else {
-        for (const p in this.reelsData.deviceLayout.Landscape) {
-          this.reelsData[p] = this.reelsData.deviceLayout.Landscape[p];
-        }
+      for (const p in this.reelsData.deviceLayout.Landscape) {
+        this.reelsData[p] = this.reelsData.deviceLayout.Landscape[p];
       }
     }
     this.winController.reelsData = this.reelsData;
@@ -1013,20 +1009,32 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.anticipationElementArray.forEach((element, index) => {
           if (element === null) return;
           const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
-          element.x = anticipationConfig.px;
-          element.y = anticipationConfig.py;
-          if (anticipationConfig.pScale) {
-            element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+          if (DeviceProxy.config.isTablet && anticipationConfig.tpScale) {
+            element.x = anticipationConfig.tpx;
+            element.y = anticipationConfig.tpy;
+            element.scale.set(anticipationConfig.tpScale.x, anticipationConfig.tpScale.y);
+          } else {
+            element.x = anticipationConfig.px;
+            element.y = anticipationConfig.py;
+            if (anticipationConfig.pScale) {
+              element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+            }
           }
         });
       } else {
         this.anticipationElementArray.forEach((element, index) => {
           if (element === null) return;
           const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
-          element.x = anticipationConfig.lx;
-          element.y = anticipationConfig.ly;
-          if (anticipationConfig.pScale) {
-            element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+          if (DeviceProxy.config.isTablet && anticipationConfig.tpScale) {
+            element.x = anticipationConfig.tpx;
+            element.y = anticipationConfig.tpy;
+            element.scale.set(anticipationConfig.tpScale.x, anticipationConfig.tpScale.y);
+          } else {
+            element.x = anticipationConfig.lx;
+            element.y = anticipationConfig.ly;
+            if (anticipationConfig.pScale) {
+              element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+            }
           }
         });
       }

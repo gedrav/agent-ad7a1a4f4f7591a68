@@ -146,7 +146,6 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       return;
     }
-
     const instance = this.soundLibrary[sObj.name];
     //console.log('PLAY SOUND == ', sObj.name);
     if (instance) {
@@ -193,14 +192,18 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       return;
     }
-    //console.log('stop sound == ', sObj.name);
+
     const instance = this.soundLibrary[sObj.name];
-    if (instance?.playing()) {
+    if (instance?.playing() || instance.volume() > 0) {
       const duration = sObj.fadeOutDuration ? sObj.fadeOutDuration : 0;
-      //const soundId = instance.play();
+      //console.log('stop sound == ', sObj.name);
       instance.fade(sObj.volume, 0, duration);
+      setTimeout(() => {
+        instance.stop();
+      }, duration);
     }
   }
+
   public resumeAmbientSound() {
     this.playSound(this.getSoundProps(this._lastAmbientSoundName));
   }
@@ -220,7 +223,7 @@ class SoundServiceProxy {
       return;
     }
     await Util.addDelays(delay);
-    if (Howler.ctx && Howler.ctx.state && Howler.ctx.state === 'suspended') {
+    if (Howler.ctx?.state && Howler.ctx.state === 'suspended') {
       try {
         await Howler.ctx.resume();
       } catch (e) {

@@ -8,10 +8,10 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 export class PixDynamicSprite extends PixView {
   public name: string;
   private sp: Sprite;
-  private intervalId: any;
+  private readonly intervalId: any;
   private boundingBox: PixGraphics;
   private lastImage: string;
-  private loader: PixSprite;
+  private readonly loader: PixSprite;
   private imageURL: string;
 
   constructor(configData: any) {
@@ -30,7 +30,7 @@ export class PixDynamicSprite extends PixView {
 
       this.boundingBox.visible = false;
     }
-    if (configData && configData.url) {
+    if (configData?.url) {
       this.showImage(configData.url, configData.toAddDate);
     }
   }
@@ -122,10 +122,8 @@ export class PixDynamicSprite extends PixView {
             error.message.includes('tainted')
           ) {
             console.warn('Likely a CORS error -- ', error);
-          } else {
-            if (this.configData.failureCallback != undefined) {
-              this.configData.failureCallback();
-            }
+          } else if (this.configData.failureCallback != undefined) {
+            this.configData.failureCallback();
           }
         });
     }
@@ -212,7 +210,7 @@ export class PixDynamicSprite extends PixView {
 
       this.boundingBox.visible = false;
     }
-    if (configData && configData.url) {
+    if (configData?.url) {
       this.showImage(configData.url, toAddDate, showLoader);
     }
   }

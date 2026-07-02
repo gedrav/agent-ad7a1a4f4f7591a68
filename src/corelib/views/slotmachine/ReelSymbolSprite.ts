@@ -135,11 +135,11 @@ export default class ReelSymbolSprite extends ReelSymbol {
     this.symbol.tint = 0x666666;
   }
 
-  public showFeatureTriggerAnimation(onComplete?: () => void): void {
+  public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
     this.applyGlowAnimation({ innerStrength: 30 });
   }
 
-  public showWinning(onComplete?: () => void): void {
+  public showWinning(onComplete?: () => void, loop: boolean = false): void {
     //this.applyGlowAnimation({ innerStrength: 2 });
     this.symbol.tint = 0xffffff;
     AnimationProxy.animateTween(this.symbol, {

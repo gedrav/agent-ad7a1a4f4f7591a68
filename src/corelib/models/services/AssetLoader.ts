@@ -287,11 +287,11 @@ class AssetLoaderClass {
 
   private async onLoadProgress(loadList: string, data: any) {
     let progress;
-    if (loadList[0].indexOf(LOAD_CONSTANTS.COMMON) > -1) {
+    if (loadList[0].includes(LOAD_CONSTANTS.COMMON)) {
       progress = Math.round(data * 0.05 * 100);
-    } else if (loadList[0].indexOf(LOAD_CONSTANTS.SPLASH) > -1) {
+    } else if (loadList[0].includes(LOAD_CONSTANTS.SPLASH)) {
       progress = 5 + Math.round(data * 0.15 * 100);
-    } else if (loadList[0].indexOf(LOAD_CONSTANTS.PRIMARY) > -1) {
+    } else if (loadList[0].includes(LOAD_CONSTANTS.PRIMARY)) {
       progress = 20 + Math.round(data * 0.6 * 100);
     }
 

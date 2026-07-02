@@ -8,8 +8,8 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
 export class SymbolPayoutComp extends StandardView {
-  private infoText: PixText;
-  private bg: PixSprite;
+  private readonly infoText: PixText;
+  private readonly bg: PixSprite;
   constructor(config) {
     super(config);
     this.infoText = this.elementsList['infoText'];

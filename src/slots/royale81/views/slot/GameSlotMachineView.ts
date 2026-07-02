@@ -10,8 +10,8 @@ import { AppEvents } from '@core/events/AppEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private potAnim: PixSpine;
-  private wildConfig = {
+  private readonly potAnim: PixSpine;
+  private readonly wildConfig = {
     1: [{ x: 0, y: -210, angle: 0 }],
     2: [
       { x: -76.5, y: -210, angle: -9 },
@@ -23,7 +23,7 @@ export class GameSlotMachineView extends SlotMachineView {
       { x: 0, y: -210, angle: 0 },
     ],
   };
-  private gameTitle: PixSpine;
+  private readonly gameTitle: PixSpine;
   private movingSymbolArray: ReelSymbolSprite[] = [];
   private activeTweens: gsap.core.Tween[] = [];
   private currentSymbolPositions: Array<[number, number]> | null = null;

@@ -12,28 +12,28 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { appModel } from '@core/models/services/AppModelService';
 
 export class AutoplayView extends ResponsiveChildrenView {
-  private valuesArray: number[];
-  private spinBtnsArray: any[] = [];
-  private autoPanelBg: PixResponsiveGraphics;
-  private autoCont: any;
-  private titleText: any;
-  private numberSelectionContainer: any;
-  private sliderContainer: any;
-  private cancelBtn: any;
-  private startBtn: any;
-  private numberOfSpinsText: any;
-  private btn1: any;
-  private btn2: any;
-  private btn3: any;
-  private btn4: any;
-  private btn5: any;
-  private stopSpinText: any;
-  private onAnyWin: any;
-  private onBonusWin: any;
-  private spendingLimitSlider: any;
-  private spendingLimitInput: Input;
-  private balanceIncreaseSlider: any;
-  private balanceDecreaseSlider: any;
+  private readonly valuesArray: number[];
+  private readonly spinBtnsArray: any[] = [];
+  private readonly autoPanelBg: PixResponsiveGraphics;
+  private readonly autoCont: any;
+  private readonly titleText: any;
+  private readonly numberSelectionContainer: any;
+  private readonly sliderContainer: any;
+  private readonly cancelBtn: any;
+  private readonly startBtn: any;
+  private readonly numberOfSpinsText: any;
+  private readonly btn1: any;
+  private readonly btn2: any;
+  private readonly btn3: any;
+  private readonly btn4: any;
+  private readonly btn5: any;
+  private readonly stopSpinText: any;
+  private readonly onAnyWin: any;
+  private readonly onBonusWin: any;
+  private readonly spendingLimitSlider: any;
+  private readonly spendingLimitInput: Input;
+  private readonly balanceIncreaseSlider: any;
+  private readonly balanceDecreaseSlider: any;
   private selectedSpins: number = 50;
   private _sliderUpdating: boolean = false; // guard: prevents slider onUpdate from overwriting input
   private _inputUpdating: boolean = false; // guard: prevents onChange re-entry when we set input.value
@@ -141,7 +141,7 @@ export class AutoplayView extends ResponsiveChildrenView {
     const betContainer = this.elementsList['numberSelectionContainer'];
     for (let i = 0; i < this.valuesArray.length; i++) {
       const btn = betContainer?.elementsList?.[`btn${i + 1}`];
-      if (btn && btn.textView) {
+      if (btn?.textView) {
         btn.updateText(this.valuesArray[i].toString());
         btn.setData(this.valuesArray[i]);
         btn.textView.anchor.set(0.5, 0.5);
@@ -215,14 +215,12 @@ export class AutoplayView extends ResponsiveChildrenView {
     if (DeviceProxy.config.isDesktop) {
       this.autoPanelBg.width = this.autoPanelBg.configData.width;
       this.autoPanelBg.height = this.autoPanelBg.configData.height;
+    } else if (DeviceProxy.config.isPortrait) {
+      this.autoPanelBg.width = this.autoPanelBg.configData.pWidth;
+      this.autoPanelBg.height = this.autoPanelBg.configData.pHeight;
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.autoPanelBg.width = this.autoPanelBg.configData.pWidth;
-        this.autoPanelBg.height = this.autoPanelBg.configData.pHeight;
-      } else {
-        this.autoPanelBg.width = this.autoPanelBg.configData.lWidth;
-        this.autoPanelBg.height = this.autoPanelBg.configData.lHeight;
-      }
+      this.autoPanelBg.width = this.autoPanelBg.configData.lWidth;
+      this.autoPanelBg.height = this.autoPanelBg.configData.lHeight;
     }
     this.numberSelectionContainer.x =
       (this.autoPanelBg.width - this.numberSelectionContainer.width) / 2 + this.btn1.width / 2;

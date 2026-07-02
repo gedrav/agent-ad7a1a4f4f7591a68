@@ -17,7 +17,6 @@ export const GAME_CONFIG = {
   uiConfig: UIConfig,
   creditValue: 20,
   totalLines: 1,
-  isConsoleActive: true,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   FontFaces: {

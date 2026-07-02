@@ -4,9 +4,7 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 const PRELOADER: AssetBundle = {
   name: LOAD_CONSTANTS.PRELOADER,
   assets: [
-    { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
     { TYPE: 'content', NAME: 'gameContent.json' },
-    // { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
@@ -45,6 +43,7 @@ const PRIMARY: AssetBundle = {
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
+    { TYPE: 'game', NAME: 'WDSymbolAnim', ASSETTYPE: 'spine' },
     //{ TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
   ],
 };

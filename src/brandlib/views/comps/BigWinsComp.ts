@@ -25,14 +25,14 @@ export class BigWinsComp extends ResponsiveView {
   protected currentState: string;
   protected timeoutId: any;
   protected intervalDelay: number;
-  private skipRect: PixGraphics;
+  private readonly skipRect: PixGraphics;
   private winState: boolean = false;
   private isSkipping: boolean = false;
-  private animCompleteListener: { complete: (entry) => void };
-  private winTickerBW: WinTicker;
+  private readonly animCompleteListener: { complete: (entry) => void };
+  private readonly winTickerBW: WinTicker;
   private bigWinTextAnim: PixSpine;
   private bigWinPanelAnim: PixSpine;
-  private bigWinText: PixSprite;
+  private readonly bigWinText: PixSprite;
 
   constructor(config) {
     super(config);
@@ -257,7 +257,10 @@ export class BigWinsComp extends ResponsiveView {
 
   protected notifyWinDone(): void {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
+    if (this.targetLevel > 0) {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
+    }
+
     if (appModel.getIsFreeSpinsSession()) EventHandler.dispatchEvent(SlotEvents.RESUME_FS_BG_SOUND);
     else EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     this.winState = false;

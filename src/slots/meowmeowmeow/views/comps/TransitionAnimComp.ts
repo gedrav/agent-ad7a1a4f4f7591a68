@@ -6,8 +6,8 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 
 export class TransitionAnimComp extends ResponsiveChildrenView {
-  private transitionAnimHor: PixSpine;
-  private transitionAnimVer: PixSpine;
+  private readonly transitionAnimHor: PixSpine;
+  private readonly transitionAnimVer: PixSpine;
 
   constructor(config: any) {
     super(config);

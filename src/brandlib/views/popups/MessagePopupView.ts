@@ -12,12 +12,12 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 
 export class MessagePopupView extends ResponsiveChildrenView {
-  private closeBtn: any;
-  private titleText: PixText;
-  private messageText: PixText;
-  private panelBG: PixSprite;
+  private readonly closeBtn: any;
+  private readonly titleText: PixText;
+  private readonly messageText: PixText;
+  private readonly panelBG: PixSprite;
   private callback: any;
-  private codeText: PixText;
+  private readonly codeText: PixText;
 
   constructor(config: any) {
     super(config);
@@ -55,21 +55,18 @@ export class MessagePopupView extends ResponsiveChildrenView {
     }
     if (appModel.getIsFreeSpinsSession()) {
       StateManager.goToState(STATES.CHECK_FS_STATE);
-      return;
     }
   }
   protected resizeView() {
     if (DeviceProxy.config.isDesktop) {
       this.panelBG.width = this.panelBG.configData.width;
       this.panelBG.height = this.panelBG.configData.height;
+    } else if (DeviceProxy.config.isPortrait) {
+      this.panelBG.width = this.panelBG.configData.pWidth;
+      this.panelBG.height = this.panelBG.configData.pHeight;
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        this.panelBG.width = this.panelBG.configData.pWidth;
-        this.panelBG.height = this.panelBG.configData.pHeight;
-      } else {
-        this.panelBG.width = this.panelBG.configData.lWidth;
-        this.panelBG.height = this.panelBG.configData.lHeight;
-      }
+      this.panelBG.width = this.panelBG.configData.lWidth;
+      this.panelBG.height = this.panelBG.configData.lHeight;
     }
     super.resizeView();
   }

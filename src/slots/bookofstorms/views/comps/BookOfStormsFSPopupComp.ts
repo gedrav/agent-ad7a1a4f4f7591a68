@@ -6,9 +6,9 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 
 export class BookOfStormsFSPopupComp extends FSPopupComp {
-  private bookOpenComp: BookOpenComp;
-  private popupbg: PixNineSpliceSprite;
-  private expandingSymbolText: PixText;
+  private readonly bookOpenComp: BookOpenComp;
+  private readonly popupbg: PixNineSpliceSprite;
+  private readonly expandingSymbolText: PixText;
 
   constructor(config: any) {
     super(config);

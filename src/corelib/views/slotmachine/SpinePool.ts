@@ -13,10 +13,10 @@ interface PoolEntry {
 
 export class SpinePool {
   private static instance: SpinePool;
-  private pool: Map<string, PoolEntry[]> = new Map();
+  private readonly pool: Map<string, PoolEntry[]> = new Map();
   // Tracks spines created when the pool is exhausted — not in entries[], so
   // release() can find and destroy them instead of silently leaking GPU memory.
-  private temporarySpines: Set<PixSpine> = new Set();
+  private readonly temporarySpines: Set<PixSpine> = new Set();
 
   static readonly MIN_SIZE = 5;
   static readonly MAX_SIZE = 30;
@@ -36,7 +36,7 @@ export class SpinePool {
         this.pool.set(data.name, []);
       }
 
-      const entries = this.pool.get(data.name)!;
+      const entries = this.pool.get(data.name);
       const toCreate = SpinePool.MIN_SIZE - entries.length;
 
       for (let i = 0; i < toCreate; i++) {

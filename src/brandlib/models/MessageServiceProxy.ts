@@ -7,8 +7,8 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 export class MessageServiceProxy extends AbstractProxy {
-  private isClientsSet: boolean = false;
-  private communicationService: HTTPService;
+  private readonly isClientsSet: boolean = false;
+  private readonly communicationService: HTTPService;
 
   constructor() {
     super();
@@ -82,7 +82,7 @@ export class MessageServiceProxy extends AbstractProxy {
     const finalObj: any = {};
     finalObj.gameId = GameProxy.config.gameId;
     finalObj.playerId = WrapperProxy.playerData.playerId;
-    finalObj.betAmount = appModel.getTotalBet(true);
+    finalObj.betAmount = appModel.getTotalBet();
     finalObj.token = WrapperProxy.playerData.newToken;
 
     if (GameProxy.config.dontSendBBRequest) {
@@ -103,50 +103,55 @@ export class MessageServiceProxy extends AbstractProxy {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
         finalObj.combination = 'none';
-      } else {
-        if (cheatObj[0] && typeof cheatObj[0] === 'object' && cheatObj[0].superScatterCheat) {
-          // special case: super scatter for olympus added
-          finalObj.superScatterCheat = cheatObj[0].superScatterCheat;
-          finalObj.combination = cheatObj[1].combination;
-        } else if (cheatObj[0] && typeof cheatObj[0] === 'object' && cheatObj[0].maxProgressiveMultiplier) {
-          // special case: max mulitplier 1024 for sugar frenzy added
-          finalObj.maxProgressiveMultiplier = true;
-        } else if (GameProxy.config.megaWaysGame) {
-          // for megways game cheat added
-          finalObj.cheat = {};
-          finalObj.cheat.reelType = cheatObj.reelType;
-          finalObj.cheat.reelStopPos = cheatObj.reelStopPos;
-          finalObj.cheat = JSON.stringify(finalObj.cheat);
-          finalObj.extraData.combination = cheatObj;
-        } else if (GameProxy.config.cheatObject == 'WildBurst1') {
-          finalObj.extraData.forceAddWildFeature = true;
-          finalObj.extraData.forceWildsAdded = 1;
-        } else if (GameProxy.config.cheatObject == 'WildBurst2') {
-          finalObj.extraData.forceAddWildFeature = true;
-          finalObj.extraData.forceWildsAdded = 2;
-        } else if (GameProxy.config.cheatObject == 'WildBurst3') {
-          finalObj.extraData.forceAddWildFeature = true;
-          finalObj.extraData.forceWildsAdded = 3;
-        } else if (GameProxy.config.cheatObject == 'LowToHighConversion') {
-          finalObj.extraData.forceSymbolChange = true;
-        } else if (GameProxy.config.cheatObject.forceBonusMultiplier) {
-          finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
-          finalObj.extraData.combination = cheatObj.combination;
-        } else if (GameProxy.config.cheatObject.forceSymbolConversion) {
-          finalObj.extraData.forceSymbolConversion = cheatObj.forceSymbolConversion;
-          finalObj.extraData.combination = cheatObj.combination;
-        } else if (GameProxy.config.cheatObject.forceNudgeFeature) {
-          finalObj.extraData.forceNudgeFeature = cheatObj.forceNudgeFeature;
-          finalObj.extraData.combination = cheatObj.combination;
-          if (GameProxy.config.cheatObject.forceNudgeReels) {
-            finalObj.extraData.forceNudgeReels = cheatObj.forceNudgeReels;
-          }
-        } else if (GameProxy.config.cheatObject.forceBookSymbol) {
-          finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
-          finalObj.extraData.combination = cheatObj.combination;
-        } else {
-          finalObj.extraData.combination = cheatObj;
+      } else if (cheatObj[0] && typeof cheatObj[0] === 'object' && cheatObj[0].superScatterCheat) {
+        // special case: super scatter for olympus added
+        finalObj.superScatterCheat = cheatObj[0].superScatterCheat;
+        finalObj.combination = cheatObj[1].combination;
+      } else if (cheatObj[0] && typeof cheatObj[0] === 'object' && cheatObj[0].maxProgressiveMultiplier) {
+        // special case: max mulitplier 1024 for sugar frenzy added
+        finalObj.maxProgressiveMultiplier = true;
+      } else if (GameProxy.config.megaWaysGame) {
+        // for megways game cheat added
+        finalObj.cheat = {};
+        finalObj.cheat.reelType = cheatObj.reelType;
+        finalObj.cheat.reelStopPos = cheatObj.reelStopPos;
+        finalObj.cheat = JSON.stringify(finalObj.cheat);
+        finalObj.extraData.combination = cheatObj;
+      } else if (GameProxy.config.cheatObject == 'WildBurst1') {
+        finalObj.extraData.forceAddWildFeature = true;
+        finalObj.extraData.forceWildsAdded = 1;
+      } else if (GameProxy.config.cheatObject == 'WildBurst2') {
+        finalObj.extraData.forceAddWildFeature = true;
+        finalObj.extraData.forceWildsAdded = 2;
+      } else if (GameProxy.config.cheatObject == 'WildBurst3') {
+        finalObj.extraData.forceAddWildFeature = true;
+        finalObj.extraData.forceWildsAdded = 3;
+      } else if (GameProxy.config.cheatObject == 'LowToHighConversion') {
+        finalObj.extraData.forceSymbolChange = true;
+      } else if (GameProxy.config.cheatObject.forceBonusMultiplier) {
+        finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+        finalObj.extraData.combination = cheatObj.combination;
+      } else if (GameProxy.config.cheatObject.forceSymbolConversion) {
+        finalObj.extraData.forceSymbolConversion = cheatObj.forceSymbolConversion;
+        finalObj.extraData.combination = cheatObj.combination;
+      } else if (GameProxy.config.cheatObject.forceNudgeFeature) {
+        finalObj.extraData.forceNudgeFeature = cheatObj.forceNudgeFeature;
+        finalObj.extraData.combination = cheatObj.combination;
+        if (GameProxy.config.cheatObject.forceNudgeReels) {
+          finalObj.extraData.forceNudgeReels = cheatObj.forceNudgeReels;
         }
+      } else if (GameProxy.config.cheatObject.forceBookSymbol) {
+        finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
+        finalObj.extraData.combination = cheatObj.combination;
+      } else if (GameProxy.config.cheatObject.forceFeatureType) {
+        // Lightning_Trigger-style cheat: { forceFeatureType, forceWildCount, forceLightningWildCount }
+        finalObj.extraData.forceFeatureType = cheatObj.forceFeatureType;
+        finalObj.extraData.forceWildCount = cheatObj.forceWildCount;
+        finalObj.extraData.forceLightningWildCount = cheatObj.forceLightningWildCount;
+      } else if (cheatObj.extraData) {
+        Object.assign(finalObj.extraData, cheatObj.extraData);
+      } else {
+        finalObj.extraData.combination = cheatObj;
       }
     }
     return this.encryptObject(finalObj);
@@ -169,15 +174,13 @@ export class MessageServiceProxy extends AbstractProxy {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
         finalObj.combination = 'none';
-      } else {
-        if (GameProxy.config.cheatObject.forceBonusMultiplier) {
-          finalObj.extraData = {};
-          finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
-          finalObj.extraData.combination = cheatObj.combination;
-        } else if (GameProxy.config.cheatObject.freespincheat) {
-          finalObj.extraData = {};
-          finalObj.extraData.combination = cheatObj.combination;
-        }
+      } else if (GameProxy.config.cheatObject.forceBonusMultiplier) {
+        finalObj.extraData = {};
+        finalObj.extraData.forceBonusMultiplier = cheatObj.forceBonusMultiplier;
+        finalObj.extraData.combination = cheatObj.combination;
+      } else if (GameProxy.config.cheatObject.freespincheat) {
+        finalObj.extraData = {};
+        finalObj.extraData.combination = cheatObj.combination;
       }
     }
     return this.encryptObject(finalObj);

@@ -5,11 +5,11 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
 export class ReelStripBG extends StandardView {
-  private bg1: PixSprite;
-  private bg2: PixSprite;
-  private bg3: PixSprite;
-  private bg4: PixSprite;
-  private totalStrips: number;
+  private readonly bg1: PixSprite;
+  private readonly bg2: PixSprite;
+  private readonly bg3: PixSprite;
+  private readonly bg4: PixSprite;
+  private readonly totalStrips: number;
 
   constructor(config: any) {
     super(config);

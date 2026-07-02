@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { Util } from '@core/utils/UtilService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class ShowSpinWinStateCommand extends StateCommand {
   private timeoutId: any;
@@ -30,15 +31,17 @@ class ShowSpinWinStateCommand extends StateCommand {
           StateManager.next();
         }
       }
+    } else if (appModel.getSpinWin() > 0) {
+      if (GameProxy.config.dontShowAllWinForFeature && appModel.getCurrentFreeSpin() == 1) {
+        StateManager.next();
+        return;
+      }
+      this.completedIndex = 0;
+      EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
     } else {
-      if (appModel.getSpinWin() > 0) {
-        this.completedIndex = 0;
-        EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_WIN);
-      } else {
-        const flag = this.checkForMaxCapWin();
-        if (!flag) {
-          StateManager.next();
-        }
+      const flag = this.checkForMaxCapWin();
+      if (!flag) {
+        StateManager.next();
       }
     }
   }
@@ -63,14 +66,12 @@ class ShowSpinWinStateCommand extends StateCommand {
           StateManager.next();
         }
       }
-    } else {
-      if (this.completedIndex === 2) {
-        EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-        this.checkForMaxCapWin();
-        const flag = this.checkForMaxCapWin();
-        if (!flag) {
-          StateManager.next();
-        }
+    } else if (this.completedIndex === 2) {
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+      this.checkForMaxCapWin();
+      const flag = this.checkForMaxCapWin();
+      if (!flag) {
+        StateManager.next();
       }
     }
   }

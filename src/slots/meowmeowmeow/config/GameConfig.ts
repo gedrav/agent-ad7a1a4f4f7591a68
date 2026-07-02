@@ -1,7 +1,6 @@
 import { UIConfig } from '@game/config/UIConfig';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
-import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
 export const GAME_CONFIG = {
@@ -13,13 +12,12 @@ export const GAME_CONFIG = {
   configPath: '/',
   gamePath: '/',
   gameVersion: '0.072',
-  gameId: 'bookofstorms',
+  gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
   uiConfig: UIConfig,
-  creditValue: 20,
+  creditValue: 10,
   totalLines: 1,
   anteBetMultiplier: 1.25,
-  isConsoleActive: true,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   FontFaces: {
@@ -33,8 +31,8 @@ export const GAME_CONFIG = {
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
   reelSpinSettings: {
-    firstReelSymbolPassCount: 8,
-    otherReelsSymbolPassCount: 5,
+    firstReelSymbolPassCount: 5,
+    otherReelsSymbolPassCount: 0,
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },

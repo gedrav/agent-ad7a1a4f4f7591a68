@@ -11,9 +11,9 @@ export class FSPopupComp extends ResponsiveChildrenView {
   protected titleText: PixText;
   protected messageText1: PixText;
   protected messageText2: PixText;
-  private panelBG: PixSprite;
+  private readonly panelBG: PixSprite;
   private callbackFunction: any;
-  private timeoutId: any;
+  private readonly timeoutId: any;
 
   constructor(config: any) {
     super(config);

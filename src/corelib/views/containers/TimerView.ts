@@ -2,7 +2,7 @@ import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixText } from '@core/pixiwrapper/PixText';
 
 export class TimerView extends ResponsiveView {
-  private clockText: PixText;
+  private readonly clockText: PixText;
   private clockIntervalId: any = null;
   constructor(configData: any) {
     super(configData);

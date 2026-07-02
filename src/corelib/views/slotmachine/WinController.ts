@@ -11,15 +11,15 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 export default class WinController {
-  private noOfRows: number;
-  private noOfReels: number;
+  private readonly noOfRows: number;
+  private readonly noOfReels: number;
   public symbolsContainer;
   public winSymbolsContainer;
   public lineWinAmountComp;
   public slotReel: SlotReel;
   public reelsData;
   private timeoutId: any;
-  private tumbleWinAmountTexts: PixText[] = [];
+  private readonly tumbleWinAmountTexts: PixText[] = [];
   protected winSymbolIndex: number;
   protected totalWinSymbols: number;
 
@@ -40,7 +40,6 @@ export default class WinController {
   public showScatterTrigger(): void {
     const positions: number[] = appModel.getFeatureTriggerPositions();
     if (positions && positions.length > 0) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_SCATTER_WIN_SOUND, positions.length);
       const len = positions.length;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);
@@ -49,12 +48,15 @@ export default class WinController {
           this.symbolsArray[pos.reel][pos.row].showFeatureTriggerAnimation();
         } else {
           this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation();
+          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation(null, true);
         }
       }
       EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions?.length);
       clearTimeout(this.timeoutId);
-      this.timeoutId = setTimeout(this.notifyFeatureTriggerAnimDone.bind(this), 2000);
+      this.timeoutId = setTimeout(
+        this.notifyFeatureTriggerAnimDone.bind(this),
+        Util.getDefaultValue(GameProxy.config.featureTriggerDelay, 4000),
+      );
     } else {
       this.notifyFeatureTriggerAnimDone();
     }
@@ -153,7 +155,6 @@ export default class WinController {
 
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
     if (this.totalWinSymbols > 0) {
-      console.log('SYMBOL ANIMATION');
       symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
     }
     this.winSymbolIndex++;
@@ -185,7 +186,7 @@ export default class WinController {
         }
         const positions: number[] = appModel.getFeatureTriggerPositions();
         if (positions && positions.length > 0) {
-          EventHandler.dispatchEvent(SlotEvents.PLAY_SCATTER_WIN_SOUND, positions.length);
+          EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions.length);
           const len = positions.length;
           for (let j = 0; j < len; j++) {
             const pos = this.getReelPosition(positions[j]);
@@ -207,7 +208,6 @@ export default class WinController {
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
           const doneSymbols = [];
-          console.log('AAAAAAAA');
           for (let i = 0; i < winDataLength; i++) {
             const winData = appModel.getWinData();
             const winningPos = winData[i].winningPosition;
@@ -215,7 +215,7 @@ export default class WinController {
               for (let j = 0; j < winningPos.length; j++) {
                 const pos = this.getReelPosition(winData[i].winningPosition[j]);
                 const symb = this.symbolsArray[pos.reel][pos.row + 1];
-                if (doneSymbols.indexOf(symb) > -1) {
+                if (doneSymbols.includes(symb)) {
                 } else {
                   this.totalWinSymbols++;
                 }
@@ -229,11 +229,9 @@ export default class WinController {
           this.notifySpinWinDone();
         }
       }
-    } else {
-      if (!appModel.isCascadeGame()) {
-        clearTimeout(this.timeoutId);
-        this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
-      }
+    } else if (!appModel.isCascadeGame()) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(this.notifySpinWinDone.bind(this), 2000);
     }
   }
   protected notifySpinWinDone(): void {

@@ -23,7 +23,7 @@ type ConvertedJWildPosition = {
 export default class SlotReelTumble extends SlotReel {
   protected pendingBlastAnimations = 0;
   protected pendingJwdAnimations = 0;
-  private pendingAppearingAnimations: number;
+  private readonly pendingAppearingAnimations: number;
 
   constructor(configData: any) {
     super(configData);

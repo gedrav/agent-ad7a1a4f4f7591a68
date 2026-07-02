@@ -5,10 +5,10 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 
 export class InitErrorPopup extends ResponsiveChildrenView {
-  private refreshBtn: PixFancyButton;
-  private errorText: PixText;
-  private bg: any;
-  private codeText: PixText;
+  private readonly refreshBtn: PixFancyButton;
+  private readonly errorText: PixText;
+  private readonly bg: any;
+  private readonly codeText: PixText;
 
   constructor(config: any) {
     super(config);

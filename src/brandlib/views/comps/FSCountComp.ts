@@ -3,7 +3,7 @@ import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 export class FSCountComp extends ResponsiveView {
-  private valueText: PixText;
+  private readonly valueText: PixText;
   constructor(config) {
     super(config);
     this.valueText = this.elementsList['valueText'];

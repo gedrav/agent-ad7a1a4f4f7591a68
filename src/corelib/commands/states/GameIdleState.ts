@@ -5,7 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 class GameIdleStateCommand extends StateCommand {
-  private intervalId: any;
+  private readonly intervalId: any;
   private lineWinCounter: number = 0;
   public async execute(data: any = null) {
     super.execute(data);
@@ -13,20 +13,18 @@ class GameIdleStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     const winData = appModel.getWinData();
-    if (!appModel.isCascadeGame()) {
-      if (winData?.length > 0) {
-        if (GameProxy.config.dontShowWinAfterFS) {
-          GameProxy.config.dontShowWinAfterFS = false;
-          return;
-        }
-        this.lineWinCounter = 0;
-        this.showLineWin();
-        //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
-      } else {
-        GameProxy.config.idleTimeoutId = setTimeout(() => {
-          EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
-        }, 1000);
+    if (appModel.isCascadeGame()) {
+      GameProxy.config.idleTimeoutId = setTimeout(() => {
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+      }, 1000);
+    } else if (winData?.length > 0) {
+      if (GameProxy.config.checkToShowWinAfterFS) {
+        GameProxy.config.checkToShowWinAfterFS = false;
+        return;
       }
+      this.lineWinCounter = 0;
+      this.showLineWin();
+      //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
     } else {
       GameProxy.config.idleTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
@@ -39,12 +37,12 @@ class GameIdleStateCommand extends StateCommand {
   }
 
   protected showLineWin(): void {
-    if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {
-      this.lineWinCounter++;
-    }
     if (this.lineWinCounter >= 4) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       return;
+    }
+    if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {
+      this.lineWinCounter++;
     }
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_LINE_WIN);

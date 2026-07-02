@@ -7,12 +7,12 @@ import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 
 export class BetValueComp extends ResponsiveView {
-  private bg: PixResponsiveGraphics;
-  private labelText: PixText;
-  private valueText: PixText;
-  private padX: number;
-  private padY: number;
-  private gap: number;
+  private readonly bg: PixResponsiveGraphics;
+  private readonly labelText: PixText;
+  private readonly valueText: PixText;
+  private readonly padX: number;
+  private readonly padY: number;
+  private readonly gap: number;
   private hideTimer: any = null;
 
   constructor(config: any) {

@@ -85,7 +85,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
     const finalReelView = appModel.gameResult?.cascadeData?.[0]?.reelView; // taking 0 bcoz the reelmodifier original reel will come at first index of cascade
     const symbolHeight = this.configData.data.symbolHeight;
     const column = this.symbolsArray?.[reel];
-    if (!column || !column.length || !finalReelView) {
+    if (!column?.length || !finalReelView) {
       this.onReelSettled(reel);
       return;
     }
@@ -146,7 +146,7 @@ export default class FMBMultiplierSlotReelCascade extends MultiplierSlotReelCasc
   // cleanup for the old bottom symbol
   private removeExitedBottomSymbol(reel: number): void {
     const column = this.symbolsArray?.[reel];
-    if (!column || !column.length) return;
+    if (!column?.length) return;
     const exited = column.pop() as CascadeReelSymbol;
     exited.destroySymbol();
     exited.destroyView();

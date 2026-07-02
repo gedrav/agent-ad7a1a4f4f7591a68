@@ -3,6 +3,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export class BookOpenComp extends StandardView {
   private mainBook: PixSpine;
@@ -82,9 +83,9 @@ export class BookOpenComp extends StandardView {
     }
   }
 
-  private availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
+  private readonly availableSkins: string[] = ['10', 'A', 'J', 'K', 'Q', 'eagle', 'castle', 'man', 'mask'];
 
-  private symbolToSkinMap: { [key: string]: string } = {
+  private readonly symbolToSkinMap: { [key: string]: string } = {
     H1: 'man',
     H2: 'eagle',
     H3: 'mask',
@@ -143,7 +144,7 @@ export class BookOpenComp extends StandardView {
 
       this.winFrameComp.visible = true;
       this.winFrameComp.playAnimation({ state: 'start', loop: false });
-
+      EventHandler.dispatchEvent('PLAY_BOOK_INTRO_END');
       this.emit('BOOK_ANIMATION_COMPLETE');
 
       return;
@@ -166,6 +167,8 @@ export class BookOpenComp extends StandardView {
     this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
     this.bookRight.playAnimation({ state: 'static_right', loop: false });
 
+    // EventHandler.dispatchEvent('PLAY_BOOK_INTRO_CONSOLIDATED');
+    EventHandler.dispatchEvent('PLAY_BOOK_INTRO_POP_UP');
     this.mainBook.playAnimation({ state: 'start', loop: false });
   }
 
@@ -182,6 +185,7 @@ export class BookOpenComp extends StandardView {
 
   private startNextFlip(): void {
     this.bookRightStatic.playAnimation({ state: 'static_right', loop: false });
+    EventHandler.dispatchEvent('PLAY_BOOK_PAGE_TURNING');
     this.bookRight.playAnimation({ state: 'flipping', loop: false });
 
     if (this.currentTurn > 0) {
@@ -205,9 +209,9 @@ export class BookOpenComp extends StandardView {
       if (this.currentTurn <= this.targetTurns) {
         this.startNextFlip();
       } else {
-        //this.bookRight.visible = false;
         this.winFrameComp.visible = true;
         this.winFrameComp.playAnimation({ state: 'start', loop: false });
+        EventHandler.dispatchEvent('PLAY_BOOK_INTRO_END');
         this.emit('BOOK_ANIMATION_COMPLETE');
       }
     }

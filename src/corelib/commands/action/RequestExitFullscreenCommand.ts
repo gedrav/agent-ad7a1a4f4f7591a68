@@ -8,7 +8,6 @@ class RequestExitFullscreenCmd extends ActionCommand {
 
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
-      return;
     }
   }
 }

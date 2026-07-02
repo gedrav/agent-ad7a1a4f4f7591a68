@@ -5,8 +5,8 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 export class GameLineWinAmountComp extends LineWinAmountComp {
-  private wildMultiplierText: PixText;
-  private multiplierImg: PixSprite;
+  private readonly wildMultiplierText: PixText;
+  private readonly multiplierImg: PixSprite;
 
   constructor(config) {
     super(config);

@@ -560,12 +560,10 @@ class UIUtilService {
     let obj: any;
     if (typeof tobj === 'string') {
       obj = this.getTextProp(tobj);
+    } else if (DeviceProxy.isDevice() && tobj.mStyle != undefined) {
+      obj = this.getTextProp(tobj.mStyle);
     } else {
-      if (DeviceProxy.isDevice() && tobj.mStyle != undefined) {
-        obj = this.getTextProp(tobj.mStyle);
-      } else {
-        obj = this.getTextProp(tobj.style);
-      }
+      obj = this.getTextProp(tobj.style);
     }
     if (obj === undefined) {
       return;
@@ -643,20 +641,16 @@ class UIUtilService {
       if (tobj.mWordWrapWidth != undefined) {
         newobj.wordWrap = true;
         newobj.wordWrapWidth = tobj.mWordWrapWidth;
-      } else {
-        if (tobj.wordWrapWidth != undefined) {
-          newobj.wordWrap = true;
-          newobj.wordWrapWidth = tobj.wordWrapWidth;
-        }
+      } else if (tobj.wordWrapWidth != undefined) {
+        newobj.wordWrap = true;
+        newobj.wordWrapWidth = tobj.wordWrapWidth;
       }
       if (tobj.mFill != undefined) {
         newobj.fill = tobj.mFill;
       }
-    } else {
-      if (tobj.wordWrapWidth != undefined) {
-        newobj.wordWrap = true;
-        newobj.wordWrapWidth = tobj.wordWrapWidth;
-      }
+    } else if (tobj.wordWrapWidth != undefined) {
+      newobj.wordWrap = true;
+      newobj.wordWrapWidth = tobj.wordWrapWidth;
     }
 
     if (tobj.align != undefined) {
@@ -712,12 +706,10 @@ class UIUtilService {
     let texture;
     if (DeviceProxy.config.isDesktop) {
       texture = this.getTexture(name);
+    } else if (data?.mobileImage != undefined) {
+      texture = this.getTexture(data.mobileImage);
     } else {
-      if (data && data.mobileImage != undefined) {
-        texture = this.getTexture(data.mobileImage);
-      } else {
-        texture = this.getTexture(name);
-      }
+      texture = this.getTexture(name);
     }
     const obj: any = {};
     obj.texture = texture;
@@ -735,12 +727,10 @@ class UIUtilService {
     let texture;
     if (DeviceProxy.config.isDesktop) {
       texture = this.getTexture(name);
+    } else if (data?.mobileImage != undefined) {
+      texture = this.getTexture(data.mobileImage);
     } else {
-      if (data && data.mobileImage != undefined) {
-        texture = this.getTexture(data.mobileImage);
-      } else {
-        texture = this.getTexture(name);
-      }
+      texture = this.getTexture(name);
     }
     const sp: PixSprite = new PixSprite(texture);
     sp.configData = data;
@@ -760,10 +750,10 @@ class UIUtilService {
 
   public getSpineAnim(name: string, obj: any) {
     const spine = new PixSpine(obj);
-    if (obj && obj.defaultState != undefined && obj.defaultState != '') {
+    if (obj?.defaultState != undefined && obj.defaultState != '') {
       spine.playAnimation({ state: obj.defaultState, loop: obj.loop });
     }
-    if (obj && obj.pivot) {
+    if (obj?.pivot) {
       spine.pivot.x = obj.pivot.x;
       spine.pivot.y = obj.pivot.y;
     }
@@ -775,7 +765,7 @@ class UIUtilService {
     const frames: any = [];
     let arr: any = [];
     const newarr: any = [];
-    if (obj && obj.image != undefined) {
+    if (obj?.image != undefined) {
       frames.push(this.getTexture(obj.image));
     } else {
       arr = this.getAnimationFramesArray(obj);
@@ -892,13 +882,13 @@ class UIUtilService {
 
   // resize and adjusting views components
   public positionComponent(element: any): void {
-    if (element.configData && element.configData.layoutData) {
+    if (element.configData?.layoutData) {
       const layout: any = this.getDeviceSpecificLayout(element.configData.layoutData);
       this.positionElement(element, layout);
     }
   }
   public adjustElement(element: any): void {
-    if (element && element.configData && element.configData.layoutData) {
+    if (element?.configData?.layoutData) {
       const layout: any = this.getDeviceSpecificLayout(element.configData.layoutData);
       if (layout) {
         if (layout.visible != undefined) {
@@ -914,41 +904,39 @@ class UIUtilService {
         }
         this.positionElement(element, layout);
       }
-    } else {
-      if (DeviceProxy.isDevice()) {
-        const layout = element.configData;
-        if (DeviceProxy.config.isPortrait) {
-          if (layout?.pWidth) {
-            element.width = layout.pWidth;
-          }
-          if (layout?.pHeight) {
-            element.height = layout.pHeight;
-          }
-          if (layout?.pScale != undefined) {
-            element.scale.set(layout.pScale);
-          }
-          if (layout?.px != undefined) {
-            element.x = layout.px;
-          }
-          if (layout?.py != undefined) {
-            element.y = layout.py;
-          }
-        } else {
-          if (layout?.lWidth) {
-            element.width = layout.lWidth;
-          }
-          if (layout?.lHeight) {
-            element.height = layout.lHeight;
-          }
-          if (layout?.lScale != undefined) {
-            element.scale.set(layout.lScale);
-          }
-          if (layout?.lx != undefined) {
-            element.x = layout.lx;
-          }
-          if (layout?.ly != undefined) {
-            element.y = layout.ly;
-          }
+    } else if (DeviceProxy.isDevice()) {
+      const layout = element.configData;
+      if (DeviceProxy.config.isPortrait) {
+        if (layout?.pWidth) {
+          element.width = layout.pWidth;
+        }
+        if (layout?.pHeight) {
+          element.height = layout.pHeight;
+        }
+        if (layout?.pScale != undefined) {
+          element.scale.set(layout.pScale);
+        }
+        if (layout?.px != undefined) {
+          element.x = layout.px;
+        }
+        if (layout?.py != undefined) {
+          element.y = layout.py;
+        }
+      } else {
+        if (layout?.lWidth) {
+          element.width = layout.lWidth;
+        }
+        if (layout?.lHeight) {
+          element.height = layout.lHeight;
+        }
+        if (layout?.lScale != undefined) {
+          element.scale.set(layout.lScale);
+        }
+        if (layout?.lx != undefined) {
+          element.x = layout.lx;
+        }
+        if (layout?.ly != undefined) {
+          element.y = layout.ly;
         }
       }
     }
@@ -988,17 +976,13 @@ class UIUtilService {
           }
           if (layout.lx != undefined) {
             this.setPositionX(element, layout.lx);
-          } else {
-            if (layout.x != undefined) {
-              this.setPositionX(element, layout.x);
-            }
+          } else if (layout.x != undefined) {
+            this.setPositionX(element, layout.x);
           }
           if (layout.ly != undefined) {
             this.setPositionY(element, layout.ly);
-          } else {
-            if (layout.y != undefined) {
-              this.setPositionY(element, layout.y);
-            }
+          } else if (layout.y != undefined) {
+            this.setPositionY(element, layout.y);
           }
         }
       }
@@ -1143,23 +1127,19 @@ class UIUtilService {
               element.getWidth() * element.configData.anchor.x +
               Util.getDefaultValue(layout.hPadding, 0),
           );
+        } else if (refElement.anchor && refElement.anchor.x != 0) {
+          this.setPositionX(
+            element,
+            refElement.x +
+              (refElement.getWidth() - element.getWidth()) / 2 -
+              refElement.getWidth() * refElement.anchor.x +
+              Util.getDefaultValue(layout.hPadding, 0),
+          );
         } else {
-          if (refElement.anchor && refElement.anchor.x != 0) {
-            this.setPositionX(
-              element,
-              refElement.x +
-                (refElement.getWidth() - element.getWidth()) / 2 -
-                refElement.getWidth() * refElement.anchor.x +
-                Util.getDefaultValue(layout.hPadding, 0),
-            );
-          } else {
-            this.setPositionX(
-              element,
-              refElement.x +
-                (refElement.getWidth() - element.getWidth()) / 2 +
-                Util.getDefaultValue(layout.hPadding, 0),
-            );
-          }
+          this.setPositionX(
+            element,
+            refElement.x + (refElement.getWidth() - element.getWidth()) / 2 + Util.getDefaultValue(layout.hPadding, 0),
+          );
         }
         break;
       case 'right':
@@ -1793,20 +1773,16 @@ class UIUtilService {
         } else {
           obj = data.Desktop ?? data.Landscape ?? data.Portrait;
         }
-      } else {
-        if (DeviceProxy.config.isLandscape) {
-          if (this.isShortPhone()) {
-            obj = data.SmallLandscape ?? data.SmallLandscape ?? data.Landscape ?? data.Portrait ?? data.Desktop;
-          } else {
-            obj = data.Landscape ?? data.Portrait ?? data.Desktop;
-          }
+      } else if (DeviceProxy.config.isLandscape) {
+        if (this.isShortPhone()) {
+          obj = data.SmallLandscape ?? data.SmallLandscape ?? data.Landscape ?? data.Portrait ?? data.Desktop;
         } else {
-          if (this.isShortPhone()) {
-            obj = data.SmallPortrait ?? data.SmallPortrait ?? data.Portrait ?? data.Landscape ?? data.Desktop;
-          } else {
-            obj = data.Portrait ?? data.Landscape ?? data.Desktop;
-          }
+          obj = data.Landscape ?? data.Portrait ?? data.Desktop;
         }
+      } else if (this.isShortPhone()) {
+        obj = data.SmallPortrait ?? data.SmallPortrait ?? data.Portrait ?? data.Landscape ?? data.Desktop;
+      } else {
+        obj = data.Portrait ?? data.Landscape ?? data.Desktop;
       }
     }
     return obj;
@@ -1836,7 +1812,7 @@ class UIUtilService {
     if (cleanUp === undefined) {
       const cleanUp = false;
     }
-    if (view && view.objectType) {
+    if (view?.objectType) {
       if (view.objectType.indexOf('Text') >= 0) {
         cleanUp = true;
       }
@@ -2047,72 +2023,70 @@ class UIUtilService {
           }
         }
       }
+    } else if (DeviceProxy.config.isPortrait) {
+      if (element.configData.pScale != undefined) {
+        if (typeof element.configData.pScale === 'object') {
+          if (element.configData.pScale.x) {
+            element.scale.x = element.configData.pScale.x;
+          }
+          if (element.configData.pScale.y) {
+            element.scale.y = element.configData.pScale.y;
+          }
+        } else {
+          element.scale.set(element.configData.pScale);
+        }
+      }
+      if (element.configData.px != undefined) {
+        element.x = element.configData.px;
+      }
+      if (element.configData.py != undefined) {
+        element.y = element.configData.py;
+      }
+      if (element.configData.pbgWidth != undefined) {
+        if (element.sliderOptions) {
+          element.sliderOptions.bgWidth = element.configData.pbgWidth;
+        }
+        if (element.bg) {
+          element.bg.width = element.configData.pbgWidth;
+        }
+        if (element.fill && !element.sliderOptions.fillWidth) {
+          element.fill.width = element.configData.pbgWidth;
+        }
+        if (element.updateSlider) {
+          element.updateSlider();
+        }
+      }
     } else {
-      if (DeviceProxy.config.isPortrait) {
-        if (element.configData.pScale != undefined) {
-          if (typeof element.configData.pScale === 'object') {
-            if (element.configData.pScale.x) {
-              element.scale.x = element.configData.pScale.x;
-            }
-            if (element.configData.pScale.y) {
-              element.scale.y = element.configData.pScale.y;
-            }
-          } else {
-            element.scale.set(element.configData.pScale);
+      if (element.configData.lScale != undefined) {
+        if (typeof element.configData.lScale === 'object') {
+          if (element.configData.lScale.x) {
+            element.scale.x = element.configData.lScale.x;
           }
+          if (element.configData.lScale.y) {
+            element.scale.y = element.configData.lScale.y;
+          }
+        } else {
+          element.scale.set(element.configData.lScale);
         }
-        if (element.configData.px != undefined) {
-          element.x = element.configData.px;
+      }
+      if (element.configData.lx != undefined) {
+        element.x = element.configData.lx;
+      }
+      if (element.configData.ly != undefined) {
+        element.y = element.configData.ly;
+      }
+      if (element.configData.lbgWidth != undefined) {
+        if (element.sliderOptions) {
+          element.sliderOptions.bgWidth = element.configData.lbgWidth;
         }
-        if (element.configData.py != undefined) {
-          element.y = element.configData.py;
+        if (element.bg) {
+          element.bg.width = element.configData.lbgWidth;
         }
-        if (element.configData.pbgWidth != undefined) {
-          if (element.sliderOptions) {
-            element.sliderOptions.bgWidth = element.configData.pbgWidth;
-          }
-          if (element.bg) {
-            element.bg.width = element.configData.pbgWidth;
-          }
-          if (element.fill && !element.sliderOptions.fillWidth) {
-            element.fill.width = element.configData.pbgWidth;
-          }
-          if (element.updateSlider) {
-            element.updateSlider();
-          }
+        if (element.fill && !element.sliderOptions.fillWidth) {
+          element.fill.width = element.configData.lbgWidth;
         }
-      } else {
-        if (element.configData.lScale != undefined) {
-          if (typeof element.configData.lScale === 'object') {
-            if (element.configData.lScale.x) {
-              element.scale.x = element.configData.lScale.x;
-            }
-            if (element.configData.lScale.y) {
-              element.scale.y = element.configData.lScale.y;
-            }
-          } else {
-            element.scale.set(element.configData.lScale);
-          }
-        }
-        if (element.configData.lx != undefined) {
-          element.x = element.configData.lx;
-        }
-        if (element.configData.ly != undefined) {
-          element.y = element.configData.ly;
-        }
-        if (element.configData.lbgWidth != undefined) {
-          if (element.sliderOptions) {
-            element.sliderOptions.bgWidth = element.configData.lbgWidth;
-          }
-          if (element.bg) {
-            element.bg.width = element.configData.lbgWidth;
-          }
-          if (element.fill && !element.sliderOptions.fillWidth) {
-            element.fill.width = element.configData.lbgWidth;
-          }
-          if (element.updateSlider) {
-            element.updateSlider();
-          }
+        if (element.updateSlider) {
+          element.updateSlider();
         }
       }
     }

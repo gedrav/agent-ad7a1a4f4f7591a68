@@ -23,8 +23,8 @@ export class AnteBetComp extends StandardView {
   protected toggleHit: any;
   protected toggleBtnOnX: number;
   protected toggleArrowOffsetX: number;
-  private anteFrameGold: PixSprite;
-  private anteFrameSilver: PixSprite;
+  private readonly anteFrameGold: PixSprite;
+  private readonly anteFrameSilver: PixSprite;
 
   constructor(config: any) {
     super(config);

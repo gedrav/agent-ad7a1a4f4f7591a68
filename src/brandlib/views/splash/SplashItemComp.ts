@@ -5,8 +5,8 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { Util } from '@core/utils/UtilService';
 
 export class SplashItemComp extends StandardView {
-  private splashImage: PixSprite;
-  private contentTxt: PixText;
+  private readonly splashImage: PixSprite;
+  private readonly contentTxt: PixText;
 
   constructor(config: any) {
     super(config);

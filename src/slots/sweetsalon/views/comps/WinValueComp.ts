@@ -4,8 +4,8 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 
 export class WinValueComp extends StandardView {
-  private text: PixText;
-  private bg: PixNineSpliceSprite;
+  private readonly text: PixText;
+  private readonly bg: PixNineSpliceSprite;
 
   constructor(config: any) {
     super(config);

@@ -46,26 +46,26 @@ export const SLOT_MACHINE_CONFIG: any = {
         symbolClass: ReelSymbolSpine,
         noOfReels: 5,
         noOfRows: 3,
-        reelHeight: 800,
+        reelHeight: 900,
         reelsConfig: ReelsConfig,
         landingSymbols: ['WD', 'SC'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 195, y: 240 },
+            reelContainerPos: { x: 195, y: 230 },
             reelPositionX: [0, 332, 662, 990, 1320],
-            symbolHeight: 322,
+            symbolHeight: 330,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 170, y: 240 },
+            reelContainerPos: { x: 195, y: 230 },
             reelPositionX: [0, 332, 662, 990, 1320],
-            symbolHeight: 322,
+            symbolHeight: 330,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 195, y: 240 },
+            reelContainerPos: { x: 195, y: 230 },
             reelPositionX: [0, 332, 662, 990, 1320],
-            symbolHeight: 322,
+            symbolHeight: 330,
             symbolScale: 1,
           },
         },
@@ -73,28 +73,30 @@ export const SLOT_MACHINE_CONFIG: any = {
           ['H1', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
           ['H2', 'WD', 'L5'],
-          ['H3', 'pot', 'paw_red'],
-          ['H4', 'paw_green', 'paw_blue'],
+          ['H3', 'H5', 'L4'],
+          ['H4', 'H3', 'WD'],
         ],
         symbolsData: {
-          paw_red: {
-            name: 'paw_red',
+          RC: {
+            name: 'RC',
             animScale: 0.65,
           },
-          paw_blue: {
-            name: 'paw_blue',
+          BC: {
+            name: 'BC',
             animScale: 0.65,
           },
-          paw_green: {
-            name: 'paw_green',
-            animScale: 0.65,
-          },
-          pot: {
-            name: 'pot',
+          GC: {
+            name: 'GC',
             animScale: 0.65,
           },
           WD: {
             name: 'WD',
+            spineName: 'WDSymbolAnim',
+            skin: 'default',
+            idleAnim: 'Ideal',
+            landingAnim: 'Landing',
+            winAnim: 'Win',
+            animScale: 0.71,
           },
           SC: {
             name: 'SC',
@@ -110,6 +112,10 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H4: {
             name: 'H4',
+          },
+          H5: {
+            name: 'H5',
+            animScale: 0.65,
           },
           L1: {
             name: 'L1',
