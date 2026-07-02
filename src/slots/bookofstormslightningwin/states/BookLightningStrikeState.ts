@@ -7,12 +7,13 @@ import { StateManager } from '@core/states/StateManagerService';
 class BookLightningStrikeStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    const lightningData = appModel.getLightningStrikeData();
-    if (!lightningData) {
+    const modifiers = appModel.getReelModifiers();
+    const lightningData = modifiers?.find((m: any) => m.type === 'lightningStrike');
+    if (lightningData) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_LIGHTNING_STRIKE);
+    } else {
       StateManager.next();
-      return;
     }
-    EventHandler.dispatchEvent(SlotEvents.SHOW_LIGHTNING_STRIKE);
   }
 
   public doNextStep(data: any = null) {
