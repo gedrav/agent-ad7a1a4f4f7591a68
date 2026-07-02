@@ -32,7 +32,7 @@ class ShowSpinWinStateCommand extends StateCommand {
         }
       }
     } else if (appModel.getSpinWin() > 0) {
-      if (GameProxy.config.dontShowAllWinForFeature && appModel.getIsFeatureTriggered()) {
+      if (GameProxy.config.dontShowAllWinForFeature && appModel.getCurrentFreeSpin() == 1) {
         StateManager.next();
         return;
       }
