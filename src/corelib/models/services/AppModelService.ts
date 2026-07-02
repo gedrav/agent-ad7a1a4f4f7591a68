@@ -303,14 +303,10 @@ class AppModelService {
     this.gameResult = data.result;
     this.featureResult = null;
     if (data.result.featureResults) {
-      console.log('aaaaaaaaaaaaaaaaaa');
       this.featureResult = data.result.featureResults[data.result.featureResults?.length - 1];
-      console.log('bbbbbbbbbbbbbbbbbb -- ', data.result.featureResults.length, this.featureResult.featureType);
       if (data.result.featureResults.length && this.featureResult.featureType == CONSTANTS.FEATURE_TYPE_FREESPIN) {
-        console.log('cccccccccccc');
         this.featureName = data.result.featureResults[data.result.featureResults.length - 1].featureType;
         this.fsInfo.currentFreespin = data.result.featureResults[data.result.featureResults.length - 1].currentCount;
-        console.log('stroing fs info data == ', this.fsInfo.currentFreespin);
         this.fsInfo.totalFreespins = data.result.featureResults[data.result.featureResults.length - 1].totalCount;
         this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
         this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
