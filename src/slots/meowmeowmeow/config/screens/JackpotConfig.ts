@@ -23,13 +23,14 @@ export const JACKPOT_CONFIG: any = {
       ly: 0,
       Elements: [
         { name: 'bg', type: 'Sprite', image: 'grand', x: 0, y: 0 },
+        { name: 'title', type: 'Sprite', image: 'grandTitle', x: 34, y: 60 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$10,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 135,
+          y: 140,
           style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0xffffff, align: 'center' },
         },
       ],
@@ -46,13 +47,14 @@ export const JACKPOT_CONFIG: any = {
       ly: 0,
       Elements: [
         { name: 'bg', type: 'Sprite', image: 'major', x: 0, y: 0 },
+        { name: 'title', type: 'Sprite', image: 'majorTitle', x: 34, y: 60 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$5,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 135,
+          y: 140,
           style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0xffffff, align: 'center' },
         },
       ],
@@ -69,13 +71,14 @@ export const JACKPOT_CONFIG: any = {
       ly: 0,
       Elements: [
         { name: 'bg', type: 'Sprite', image: 'minor', x: 0, y: 0 },
+        { name: 'title', type: 'Sprite', image: 'minorTitle', x: 34, y: 60 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$1,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 135,
+          y: 140,
           style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0xffffff, align: 'center' },
         },
       ],
@@ -92,13 +95,14 @@ export const JACKPOT_CONFIG: any = {
       ly: 0,
       Elements: [
         { name: 'bg', type: 'Sprite', image: 'mini', x: 0, y: 0 },
+        { name: 'title', type: 'Sprite', image: 'miniTitle', x: 34, y: 60 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$200',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 135,
+          y: 140,
           style: { fontFamily: 'gameFont1', fontSize: 60, fill: 0xffffff, align: 'center' },
         },
       ],

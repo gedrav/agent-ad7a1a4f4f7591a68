@@ -91,6 +91,12 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           WD: {
             name: 'WD',
+            spineName: 'WDSymbolAnim',
+            skin: 'default',
+            idleAnim: 'Ideal',
+            landingAnim: 'Landing',
+            winAnim: 'Win',
+            animScale: 0.71,
           },
           SC: {
             name: 'SC',

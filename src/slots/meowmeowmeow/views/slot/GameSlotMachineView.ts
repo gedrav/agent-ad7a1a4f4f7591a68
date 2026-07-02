@@ -10,9 +10,9 @@ export class GameSlotMachineView extends SlotMachineView {
     super(config);
 
     // setTimeout(() => this.expandRowsTo4(), 5000);
-
+    //
     // setTimeout(() => this.reverseRowsTo3(), 10000);
-    setTimeout(() => this.animateSymbolToKittyBank(3, 3, 'meow'), 2000);
+    // setTimeout(() => this.animateSymbolToKittyBank(3, 3, 'meow'), 2000);
   }
 
   public animateSymbolToKittyBank(col: number, row: number, bankName: 'meow' | 'mew' | 'mii') {

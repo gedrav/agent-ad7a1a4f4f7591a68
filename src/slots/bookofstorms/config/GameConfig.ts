@@ -23,6 +23,7 @@ export const GAME_CONFIG = {
   showWinInReelView: true,
   dontShowAllWinForFeature: true,
   featureTriggerDelay: 3500,
+  dontShowWinAfterFS: true,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'Caudex',
@@ -36,7 +37,6 @@ export const GAME_CONFIG = {
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },
-  dontShowWinAfterFS: true,
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
