@@ -13,20 +13,18 @@ class GameIdleStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     const winData = appModel.getWinData();
-    if (!appModel.isCascadeGame()) {
-      if (winData?.length > 0) {
-        if (GameProxy.config.checkToShowWinAfterFS) {
-          GameProxy.config.checkToShowWinAfterFS = false;
-          return;
-        }
-        this.lineWinCounter = 0;
-        this.showLineWin();
-        //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
-      } else {
-        GameProxy.config.idleTimeoutId = setTimeout(() => {
-          EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
-        }, 1000);
+    if (appModel.isCascadeGame()) {
+      GameProxy.config.idleTimeoutId = setTimeout(() => {
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+      }, 1000);
+    } else if (winData?.length > 0) {
+      if (GameProxy.config.checkToShowWinAfterFS) {
+        GameProxy.config.checkToShowWinAfterFS = false;
+        return;
       }
+      this.lineWinCounter = 0;
+      this.showLineWin();
+      //this.intervalId = setInterval(this.showLineWin.bind(this), 8000);
     } else {
       GameProxy.config.idleTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
