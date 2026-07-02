@@ -44,6 +44,14 @@ const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
     { TYPE: 'game', NAME: 'WDSymbolAnim', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'SCSymbolAnim', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: '10', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'A', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'J', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'K', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Q', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'WoolenBall', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'CoinPouch', ASSETTYPE: 'spine' },
     //{ TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
   ],
 };
