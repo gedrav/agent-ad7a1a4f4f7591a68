@@ -212,6 +212,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       return;
     }
     let reels = appModel.getReelsView();
+    console.log('Default Reel', this.defaultReel, reels);
     this.finalSymbols = [];
     if (reels) {
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
