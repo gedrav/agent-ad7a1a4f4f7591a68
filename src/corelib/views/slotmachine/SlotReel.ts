@@ -247,7 +247,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       if (this.reelsData.isFixedSymbol) {
         row = Util.getRandomRange(0, this.reelsData.noOfRows - 1);
       } else {
-        row = Util.getRandomRange(1, this.reelsData.noOfRows); //Util.getRandomRange(1, this.reelsData.noOfRows);
+        row = 1; //Util.getRandomRange(1, this.reelsData.noOfRows); //Util.getRandomRange(1, this.reelsData.noOfRows);
       }
 
       this.symbolsArray[k][row].showIdle();

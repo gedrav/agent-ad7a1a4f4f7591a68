@@ -13,6 +13,7 @@ import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
 import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
+import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -35,7 +36,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: BookSlotReel,
+      class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
         Desktop: { x: 450, y: 224 },
@@ -70,7 +71,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
         },
         initialReel: [
-          ['H1', 'L1', 'L3'],
+          ['WD', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
           ['H2', 'WD', 'L5'],
           ['H3', 'H5', 'L4'],
@@ -109,17 +110,17 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H1: {
             name: 'H1',
+            spineName: 'CoinPouch',
+            skin: 'default',
+            idleAnim: 'idle',
+            winAnim: 'win',
+            animScale: 1,
           },
           H2: {
             name: 'H2',
           },
           H3: {
             name: 'H3',
-            spineName: 'CoinPouch',
-            skin: 'default',
-            idleAnim: 'idle',
-            winAnim: 'win',
-            animScale: 1,
           },
           H4: {
             name: 'H4',
