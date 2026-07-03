@@ -97,7 +97,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'Ideal',
             landingAnim: 'Landing',
             winAnim: 'Win',
-            animScale: 0.87,
+            animScale: 1,
           },
           SC: {
             name: 'SC',
@@ -106,7 +106,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'Ideal',
             landingAnim: 'Landing',
             winAnim: 'Win',
-            animScale: 0.87,
+            animScale: 1,
           },
           H1: {
             name: 'H1',
@@ -132,7 +132,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H5: {
             name: 'H5',
-            animScale: 0.65,
           },
           L1: {
             name: 'L1',
