@@ -226,19 +226,33 @@ class SoundServiceProxy {
     if (!this.isSoundPresent) {
       return;
     }
-    await Util.addDelays(delay);
-    if (Howler.ctx?.state && Howler.ctx.state === 'suspended') {
-      try {
-        await Howler.ctx.resume();
-      } catch (e) {
-        console.error('Failed to resume audio context on gesture:', e);
-        // Device not ready yet (iOS "Failed to start the audio device"). Retry
-        // by calling again with a longer delay, capped at 1000ms so it can't
-        // loop forever — delays step 250 -> 500 -> 750 -> 1000 then stop.
-        if (delay <= 1000) {
-          await this.resumeAudioContext(delay + 250);
-        }
+    const ctx = Howler.ctx;
+    if (!ctx) {
+      return;
+    }
+    // iOS Safari reports the non-standard state 'interrupted' (not
+    // 'suspended') after the tab was hidden behind another tab — e.g. the
+    // detailed-history page opened via window.open. Both states need resume().
+    // The first resume() call must happen before any await so it still runs
+    // inside the user-gesture call stack (iOS requires a gesture). WebKit's
+    // resume() promise can also stay pending forever from 'interrupted', so
+    // poll ctx.state between attempts instead of awaiting the promise.
+    // Delays step 250 -> 500 -> 750 -> 1000 then stop.
+    for (;;) {
+      const state = ctx.state as string;
+      if (state !== 'suspended' && state !== 'interrupted') {
+        return;
       }
+      try {
+        ctx.resume()?.catch?.((e: any) => console.error('Failed to resume audio context:', e));
+      } catch (e) {
+        console.error('Failed to resume audio context:', e);
+      }
+      await Util.addDelays(delay);
+      if (delay >= 1000) {
+        return;
+      }
+      delay += 250;
     }
   }
 

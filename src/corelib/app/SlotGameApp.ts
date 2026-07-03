@@ -536,6 +536,13 @@ class SlotGameApp {
       this.stopPixiApp();
     } else {
       if ((globalThis as any)._isPanelOpen) {
+        // Panel still open (returning from the detailed-history tab): keep
+        // Pixi stopped, but kick the iOS audio context now — it comes back
+        // 'interrupted' and Howler stays muted until the panel closes, so
+        // this is inaudible and lets audio recover before the close click.
+        if (DeviceProxy.config.isIOSDevice) {
+          SoundFactory.resumeAudioContext();
+        }
         return;
       }
       this.startPixiApp();
