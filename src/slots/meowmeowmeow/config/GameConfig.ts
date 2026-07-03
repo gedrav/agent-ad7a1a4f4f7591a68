@@ -22,7 +22,7 @@ export const GAME_CONFIG = {
   showWinInReelView: true,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'BelweEF Bold',
+    gameFont1: 'cambriab',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
@@ -32,7 +32,7 @@ export const GAME_CONFIG = {
   bigWinValues: [25, 50, 100, 500],
   reelSpinSettings: {
     firstReelSymbolPassCount: 5,
-    otherReelsSymbolPassCount: 0,
+    otherReelsSymbolPassCount: 2,
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },

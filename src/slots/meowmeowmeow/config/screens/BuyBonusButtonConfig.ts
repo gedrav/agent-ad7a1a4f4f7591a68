@@ -21,7 +21,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
       type: 'Text',
       content: 'BuyText',
       style: {
-        fontFamily: 'commonFontBold',
+        fontFamily: 'gameFont1',
         fontSize: 40,
         fill: 0xffffff,
         wordWrap: true,
@@ -38,7 +38,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
       type: 'Text',
       content: ' ',
       style: {
-        fontFamily: 'commonFontBold',
+        fontFamily: 'gameFont1',
         fontSize: 60,
         fill: 0xffff00,
         wordWrap: true,
