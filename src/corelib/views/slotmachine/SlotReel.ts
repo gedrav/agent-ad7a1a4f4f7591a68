@@ -212,7 +212,6 @@ export default class SlotReel extends ResponsiveChildrenView {
       return;
     }
     let reels = appModel.getReelsView();
-    console.log('Default Reel', this.defaultReel, reels);
     this.finalSymbols = [];
     if (reels) {
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
@@ -221,6 +220,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.finalSymbols[k].push(this.getRandomSymbolName(k));
       }
     } else {
+      console.log('no reels data available');
       reels = this.defaultReel;
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         this.finalSymbols[k] = reels[k];
