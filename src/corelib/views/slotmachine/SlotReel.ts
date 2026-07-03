@@ -225,6 +225,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.finalSymbols[k] = reels[k];
       }
     }
+    console.log('finalSymbols', this.finalSymbols);
   }
 
   public restartIdleAnim(): void {
@@ -514,6 +515,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         if (newSymbolType == null) {
           throw new Error('There is no new symbol to spin on the queue.');
         }
+        console.log('newSymbolType', reelno, symb, this.finalSymbols);
         lastSymbol.setNormalTexture();
         lastSymbol.setNewSymbol(newSymbolType, reelno);
         // lastSymbol.setNormalTexture();
@@ -571,8 +573,9 @@ export default class SlotReel extends ResponsiveChildrenView {
       }
     }
     EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
-    if (reelno == this.reelsData.noOfReels - 2) {
+    if (reelno == this.reelsData.noOfReels - 1) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
+      console.log('-------------------------------------');
     }
   }
   public showLandinAnimation(reelno: number) {
