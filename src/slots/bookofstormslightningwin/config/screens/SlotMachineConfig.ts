@@ -11,6 +11,7 @@ import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
+import { WildTransitionComp } from '@game/views/comps/WildTransitionComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -322,6 +323,12 @@ export const SLOT_MACHINE_CONFIG: any = {
               ],
             },
           ],
+        },
+        {
+          name: 'wildTransition',
+          type: 'Comp',
+          class: WildTransitionComp,
+          visible: false,
         },
         {
           name: 'lineWinAmountComp',

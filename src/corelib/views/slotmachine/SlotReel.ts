@@ -212,6 +212,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       return;
     }
     let reels = appModel.getReelsView();
+    console.log('Default Reel', this.defaultReel, reels);
     this.finalSymbols = [];
     if (reels) {
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
@@ -628,6 +629,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
   }
   protected stopReelQuick(reelno: number): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;

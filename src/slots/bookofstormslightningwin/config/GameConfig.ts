@@ -1,6 +1,7 @@
 import { UIConfig } from '@game/config/UIConfig';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
+import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
 export const GAME_CONFIG = {
@@ -20,6 +21,8 @@ export const GAME_CONFIG = {
   anteBetMultiplier: 1.25,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
+  dontShowAllWinForFeature: true,
+  featureTriggerDelay: 3500,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'Caudex',
