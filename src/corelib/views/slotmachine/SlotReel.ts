@@ -356,6 +356,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected startSpin(): void {
     this.anticipationRunning = [];
+    this.scatterAnticipArray = [];
     this.symbolPassedCounterArray = [];
     this.stopStarted = [];
     this.startAnticipationReel = [];
