@@ -122,53 +122,27 @@ export class BookSlotReel extends SlotReelStandard {
   }
 
   protected showLightningStrike(): void {
-    const lightningData = appModel.getLightningStrikeData();
+    const lightningData = appModel.getReelModifiers()?.[0];
     if (!lightningData?.lightningStrikeWildPositions?.length) {
       StateManager.doNextStep();
       return;
     }
 
-    // EventHandler.dispatchEvent(SlotEvents.SHOW_LIGHTNING_STRIKE);
-
-    const positions: number[][] = lightningData.lightningStrikeWildPositions;
     const wildSymbolConfig = this.reelsData.symbolsData['WD'];
-
-    this.totalAnims = positions.length;
-    this.animIndex = 0;
-
-    positions.forEach((pos: number[]) => {
-      const [reelIndex, row] = pos;
-      const symbol = this.symbolsArray[reelIndex]?.[row + 1]; // +1 offset for hidden top row, matches showSymbolExpansion
-
-      if (!symbol) {
-        this.onLightningStrikeAnimEnd();
-        return;
-      }
-      AnimationProxy.animateTween(symbol.scale, {
-        duration: 0.3,
-        x: 0,
-        y: 0,
-        ease: Sine.easeIn,
-        onComplete: () => {
-          symbol.setNewSymbol(wildSymbolConfig, reelIndex);
-          AnimationProxy.animateTween(symbol.scale, {
-            duration: 0.4,
-            x: this.reelsData.symbolScale,
-            y: this.reelsData.symbolScale,
-            ease: Sine.easeOut,
-            onComplete: () => this.onLightningStrikeAnimEnd(),
-          });
-        },
-      });
+    const items = lightningData.lightningStrikeWildPositions.map(([reelIndex, row]: number[]) => {
+      const symbol = this.symbolsArray[reelIndex]?.[row + 1];
+      const bounds = symbol?.getBounds();
+      return {
+        x: bounds?.x + bounds?.width / 2,
+        y: bounds?.y + bounds?.height / 2,
+        onEventEmit: () => symbol?.setNewSymbol(wildSymbolConfig, reelIndex),
+      };
     });
-  }
 
-  protected onLightningStrikeAnimEnd(): void {
-    this.animIndex++;
-    if (this.animIndex === this.totalAnims) {
-      // EventHandler.dispatchEvent(SlotEvents.LIGHTNING_STRIKE_COMPLETE);
-      StateManager.doNextStep();
-    }
+    EventHandler.dispatchEvent(SlotEvents.SHOW_WILD_TRANSITION, {
+      items,
+      onComplete: () => StateManager.doNextStep(),
+    });
   }
 
   protected onSymbolExpansionAnimEnd(): void {
