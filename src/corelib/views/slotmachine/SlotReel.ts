@@ -628,6 +628,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
   }
   protected stopReelQuick(reelno: number): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
