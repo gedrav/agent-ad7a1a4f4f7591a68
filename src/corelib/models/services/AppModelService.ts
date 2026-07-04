@@ -13,6 +13,14 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get opConfig(): any {
+    return this._opConfig;
+  }
+
+  set opConfig(value: any) {
+    this._opConfig = value;
+  }
+  private _opConfig: any;
   get waitingForFeature(): boolean {
     return this._waitingForFeature;
   }
@@ -207,6 +215,16 @@ class AppModelService {
     this._preferences.showIntro = value;
   }
 
+  public getIsBBAvailable(): boolean {
+    return this.opConfig.isBBAvailable;
+  }
+  public getIsAutoAvailable(): boolean {
+    return this.opConfig.isAutoAvailable;
+  }
+  public getIsTurboAvailable(): boolean {
+    return this.opConfig.isTurboAvailable;
+  }
+
   public storeGameInitData(data: any): void {
     this._gameInitData = data;
     if (data.preferences) {
@@ -217,6 +235,8 @@ class AppModelService {
     this.gameInfo = {};
     this.fsInfo = {};
     this.rtpInfo = data.rtp;
+    this._opConfig = data.opCnf;
+    this.opConfig.isTurboAvailable = true;
 
     this.playerInfo = data.playerInfo;
     this.gameInfo.devMode = data.gameInfo.devMode;

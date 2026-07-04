@@ -14,6 +14,7 @@ import { BookSlotReel } from '@game/views/slot/BookSloReel';
 import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
+import { JP_BANNER_ANIM_CONFIG } from '@slots/meowmeowmeow/config/screens/JPAnimsConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -25,11 +26,11 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 2200,
-      height: 1416,
+      height: 1456,
       pWidth: 1660,
       pHeight: 2200,
       lWidth: 2300,
-      lHeight: 1416,
+      lHeight: 1456,
       alpha: 0,
     },
     JACKPOT_CONFIG,
@@ -39,7 +40,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 450, y: 224 },
+        Desktop: { x: 450, y: 274 },
         Portrait: { x: 0, y: 1000 },
         Landscape: { x: 450, y: 224 },
       },

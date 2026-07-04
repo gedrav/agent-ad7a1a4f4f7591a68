@@ -38,6 +38,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'kittiebank', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'jpbanner', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {

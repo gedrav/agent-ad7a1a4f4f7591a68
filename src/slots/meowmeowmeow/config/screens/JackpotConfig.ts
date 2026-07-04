@@ -1,12 +1,12 @@
-import { JackpotComp } from '../../views/comps/JackpotComp';
+import { MMMJackpotComp } from '../../views/comps/MMMJackpotComp';
 import { JPItemComp } from '@slots/meowmeowmeow/views/comps/JPItemComp';
 
 export const JACKPOT_CONFIG: any = {
   name: 'jackpotContainer',
   type: 'Comp',
-  class: JackpotComp,
+  class: MMMJackpotComp,
   layoutData: {
-    Desktop: { scale: 1, x: 469, y: 100 },
+    Desktop: { scale: 1, x: 469, y: 120 },
     Portrait: { scale: 1.2, x: 70, y: 100 },
     Landscape: { scale: 1, x: 469, y: 100 },
   },
@@ -22,15 +22,25 @@ export const JACKPOT_CONFIG: any = {
       lx: 0,
       ly: 0,
       Elements: [
-        { name: 'bg', type: 'Sprite', image: 'grand', x: 0, y: 0 },
-        { name: 'title', type: 'Sprite', image: 'grandTitle', x: 34, y: 60 },
+        {
+          name: 'bg',
+          type: 'Spine',
+          spineName: 'jpbanner',
+          defaultState: '4_Grand_ideal',
+          loop: false,
+          idleState: '4_Grand_ideal',
+          winState: '4_Grand_Win',
+          x: 208,
+          y: 122,
+        },
+        { name: 'title', type: 'Sprite', image: 'grandTitle', x: 34, y: 88 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$10,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 140,
+          y: 170,
           style: {
             fontFamily: 'gameFont1',
             fontSize: 50,
@@ -56,15 +66,25 @@ export const JACKPOT_CONFIG: any = {
       lx: 418,
       ly: 0,
       Elements: [
-        { name: 'bg', type: 'Sprite', image: 'major', x: 0, y: 0 },
-        { name: 'title', type: 'Sprite', image: 'majorTitle', x: 34, y: 60 },
+        {
+          name: 'bg',
+          type: 'Spine',
+          spineName: 'jpbanner',
+          defaultState: '3_Major_ideal',
+          loop: false,
+          idleState: '3_Major_ideal',
+          winState: '3_Major_Win',
+          x: 208,
+          y: 122,
+        },
+        { name: 'title', type: 'Sprite', image: 'majorTitle', x: 34, y: 88 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$5,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 140,
+          y: 170,
           style: {
             fontFamily: 'gameFont1',
             fontSize: 50,
@@ -90,15 +110,25 @@ export const JACKPOT_CONFIG: any = {
       lx: 835,
       ly: 0,
       Elements: [
-        { name: 'bg', type: 'Sprite', image: 'minor', x: 0, y: 0 },
-        { name: 'title', type: 'Sprite', image: 'minorTitle', x: 34, y: 60 },
+        {
+          name: 'bg',
+          type: 'Spine',
+          spineName: 'jpbanner',
+          defaultState: '2_Minor_ideal',
+          loop: false,
+          idleState: '2_Minor_ideal',
+          winState: '2_Minor_Win',
+          x: 208,
+          y: 122,
+        },
+        { name: 'title', type: 'Sprite', image: 'minorTitle', x: 34, y: 88 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$1,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 140,
+          y: 170,
           style: {
             fontFamily: 'gameFont1',
             fontSize: 50,
@@ -124,15 +154,25 @@ export const JACKPOT_CONFIG: any = {
       lx: 1252,
       ly: 0,
       Elements: [
-        { name: 'bg', type: 'Sprite', image: 'mini', x: 0, y: 0 },
-        { name: 'title', type: 'Sprite', image: 'miniTitle', x: 34, y: 60 },
+        {
+          name: 'bg',
+          type: 'Spine',
+          spineName: 'jpbanner',
+          defaultState: '1_Mini_ideal',
+          loop: false,
+          idleState: '1_Mini_ideal',
+          winState: '1_Mini_Win',
+          x: 208,
+          y: 122,
+        },
+        { name: 'title', type: 'Sprite', image: 'miniTitle', x: 34, y: 88 },
         {
           name: 'value',
           type: 'Text',
           contentText: '$200',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
-          y: 140,
+          y: 170,
           style: {
             fontFamily: 'gameFont1',
             fontSize: 50,
