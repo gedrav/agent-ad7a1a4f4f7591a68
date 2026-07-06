@@ -57,6 +57,11 @@ export class ReelTickerComp extends StandardView {
   }
 
   protected showSpinWin(data: any): void {
+    const isFeatureSession = appModel.getIsAutoSession() || appModel.getIsFreeSpinsSession();
+
+    if (isFeatureSession && !appModel.isCascadeGame()) {
+      return; // win ticker isn't shown during FS/autoplay for non-cascade games
+    }
     this.totalWin += data.value;
     this.hideTicker();
   }

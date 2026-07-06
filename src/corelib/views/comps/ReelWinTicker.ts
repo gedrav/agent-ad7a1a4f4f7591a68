@@ -40,7 +40,7 @@ export class ReelWinTicker extends StandardView {
     if (appModel.getIsAutoSession()) {
       return;
     }
-    if (appModel.getIsFreeSpinsSession() && appModel.getCurrentFreeSpin() - 1 < appModel.getTotalFreespins()) {
+    if (appModel.getIsFreeSpinsSession()) {
       return;
     }
 
