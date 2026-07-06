@@ -478,6 +478,7 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   // ----------- stop spin --------------------
   protected startStoppingSpin(): void {
+    console.log('START STOPPING SPIN -- ', this.spinResponseReceived);
     if (this.quickSpinStarted) {
       return;
     }
