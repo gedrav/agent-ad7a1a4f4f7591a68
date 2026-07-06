@@ -32,7 +32,7 @@ export const GAME_CONFIG = {
   bigWinValues: [25, 50, 100, 500],
   reelSpinSettings: {
     firstReelSymbolPassCount: 5,
-    otherReelsSymbolPassCount: 2,
+    otherReelsSymbolPassCount: 1,
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },

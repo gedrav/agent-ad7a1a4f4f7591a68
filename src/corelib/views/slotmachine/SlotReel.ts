@@ -214,6 +214,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     let reels = appModel.getReelsView();
     this.finalSymbols = [];
     if (reels) {
+      console.log('BE reelview -- ', reels);
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         this.finalSymbols[k] = reels[k];
         this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
@@ -226,6 +227,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.finalSymbols[k] = reels[k];
       }
     }
+    console.log('CREATE FINAL REEL SYMBOLS: ', this.finalSymbols);
   }
 
   public restartIdleAnim(): void {
@@ -354,6 +356,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     });
   }
   protected startSpin(): void {
+    this.spinResponseReceived = false;
     this.anticipationRunning = [];
     this.scatterAnticipArray = [];
     this.symbolPassedCounterArray = [];
@@ -476,6 +479,7 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   // ----------- stop spin --------------------
   protected startStoppingSpin(): void {
+    console.log('START STOPPING SPIN -- ', this.spinResponseReceived);
     if (this.quickSpinStarted) {
       return;
     }
@@ -511,7 +515,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       } else {
         const symb = this.finalSymbols[reelno][this.stopIndex[reelno]];
         this.stopIndex[reelno]--;
-
+        console.log('replace final symbol == ', reelno, this.stopIndex[reelno], symb);
         const newSymbolType = this.reelsData.symbolsData[symb];
         if (newSymbolType == null) {
           throw new Error('There is no new symbol to spin on the queue.');

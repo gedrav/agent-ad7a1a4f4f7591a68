@@ -305,6 +305,13 @@ export default class WinController {
         symbol.cleanUpSymbolWin();
       }
     }
+    const len2 = this.symbolsArray.length;
+    for (let i = 0; i < len2; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        this.symbolsArray[i][j].visible = true;
+      }
+    }
   }
 
   protected fadeOutAllSymbols(): void {

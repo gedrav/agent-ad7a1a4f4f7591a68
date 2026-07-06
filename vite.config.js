@@ -11,8 +11,8 @@ const defaultGameNames = [
   //'empireofgoldnewconquest',
   //'sweetsalon',
   //'frostedmarketbonanza',
-  //'bookofstorms',
-  'meowmeowmeow',
+  'bookofstorms',
+  //'meowmeowmeow',
   //'bookofstormslightningwin'
 
 ];
