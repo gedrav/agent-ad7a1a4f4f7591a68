@@ -46,6 +46,10 @@ export class ReelTickerComp extends StandardView {
     this.renderable = false;
   }
   protected showForFeature(): void {
+    if (appModel.getIsAutoSession()) {
+      // still in a feature session (e.g. FS just ended but autoplay continues) — stay hidden
+      return;
+    }
     this.renderable = true;
   }
 
