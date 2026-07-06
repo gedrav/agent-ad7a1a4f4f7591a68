@@ -213,8 +213,9 @@ export default class WinController {
           this.fadeOutAllSymbols();
           let total = 0;
           const doneSymbols = [];
+          const winData = appModel.getWinData();
           for (let i = 0; i < winDataLength; i++) {
-            const winData = appModel.getWinData();
+            console.log('winData', winData);
             const winningPos = winData[i].winningPosition;
             if (winningPos && winningPos.length > 0) {
               for (let j = 0; j < winningPos.length; j++) {
@@ -227,6 +228,7 @@ export default class WinController {
                 }
                 doneSymbols.push(symb);
                 this.winSymbolsContainer.addChild(symb);
+                console.log('show winning --- ', winData[i].winningPosition[j], symb.getSymbolName());
                 symb.showWinning(() => this.onSpinWinAnimComplete(symb));
               }
             }
