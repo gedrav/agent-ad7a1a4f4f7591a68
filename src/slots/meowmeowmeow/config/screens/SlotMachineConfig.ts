@@ -74,7 +74,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         initialReel: [
           ['WD', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
-          ['H2', 'WD', 'L5'],
+          ['H2', 'H4', 'L5'],
           ['H3', 'H5', 'L4'],
           ['H4', 'H3', 'WD'],
         ],

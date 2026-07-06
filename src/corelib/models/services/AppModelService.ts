@@ -320,6 +320,7 @@ class AppModelService {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.updatedBalance = data.playerInfo.balance;
+    this.gameResult = null;
     this.gameResult = data.result;
     this.featureResult = null;
     if (data.result.featureResults) {
@@ -341,6 +342,7 @@ class AppModelService {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
+    this.gameResult = null;
     this.gameResult =
       data.result.featureResults[data.result.featureResults.length - 1].spinResults[
         data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
