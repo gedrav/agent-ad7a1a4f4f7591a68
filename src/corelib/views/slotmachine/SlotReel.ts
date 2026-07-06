@@ -515,7 +515,6 @@ export default class SlotReel extends ResponsiveChildrenView {
       } else {
         const symb = this.finalSymbols[reelno][this.stopIndex[reelno]];
         this.stopIndex[reelno]--;
-        console.log('replace final symbol == ', reelno, this.stopIndex[reelno], symb);
         const newSymbolType = this.reelsData.symbolsData[symb];
         if (newSymbolType == null) {
           throw new Error('There is no new symbol to spin on the queue.');

@@ -211,6 +211,7 @@ export default class WinController {
         const winDataLength = appModel.getWinDataLength();
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
+          console.log('SHOW SPIN WIN ----------------------');
           let total = 0;
           const doneSymbols = [];
           const winData = appModel.getWinData();
@@ -234,6 +235,7 @@ export default class WinController {
             }
           }
           console.log('symbol count -- ', total, this.totalWinSymbols);
+          console.log('--------------- ----------------------');
         } else {
           this.notifySpinWinDone();
         }
