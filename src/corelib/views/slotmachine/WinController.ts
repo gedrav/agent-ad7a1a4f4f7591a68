@@ -154,10 +154,14 @@ export default class WinController {
   }
 
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
-    if (this.totalWinSymbols > 0) {
-      symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
+    if (appModel.isCascadeGame()) {
+      if (this.totalWinSymbols > 0) {
+        symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms, required only for cascade game
+      }
     }
+
     this.winSymbolIndex++;
+    console.log('winSymbolIndex', this.winSymbolIndex, this.totalWinSymbols);
     if (this.winSymbolIndex === this.totalWinSymbols) {
       this.notifySpinWinDone();
     }
@@ -207,12 +211,14 @@ export default class WinController {
         const winDataLength = appModel.getWinDataLength();
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
+          let total = 0;
           const doneSymbols = [];
           for (let i = 0; i < winDataLength; i++) {
             const winData = appModel.getWinData();
             const winningPos = winData[i].winningPosition;
             if (winningPos && winningPos.length > 0) {
               for (let j = 0; j < winningPos.length; j++) {
+                total++;
                 const pos = this.getReelPosition(winData[i].winningPosition[j]);
                 const symb = this.symbolsArray[pos.reel][pos.row + 1];
                 if (doneSymbols.includes(symb)) {
@@ -225,6 +231,7 @@ export default class WinController {
               }
             }
           }
+          console.log('symbol count -- ', total, this.totalWinSymbols);
         } else {
           this.notifySpinWinDone();
         }
