@@ -161,7 +161,6 @@ export default class WinController {
     }
 
     this.winSymbolIndex++;
-    console.log('winSymbolIndex', this.winSymbolIndex, this.totalWinSymbols);
     if (this.winSymbolIndex === this.totalWinSymbols) {
       this.notifySpinWinDone();
     }
@@ -208,20 +207,21 @@ export default class WinController {
           }
         }
       } else {
-        const winDataLength = appModel.getWinDataLength();
+        const winData = appModel.getWinData();
+        const winDataLength = winData?.length;
+        console.trace('SHOW SPIN WIN ----------------------');
+        console.log('winData -- ', winData);
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
-          console.log('SHOW SPIN WIN ----------------------');
           let total = 0;
           const doneSymbols = [];
-          const winData = appModel.getWinData();
           for (let i = 0; i < winDataLength; i++) {
-            console.log('winData', winData);
             const winningPos = winData[i].winningPosition;
             if (winningPos && winningPos.length > 0) {
               for (let j = 0; j < winningPos.length; j++) {
                 total++;
-                const pos = this.getReelPosition(winData[i].winningPosition[j]);
+                const pos = this.getReelPosition(winningPos[j]);
+                console.log('pos -- ', pos);
                 const symb = this.symbolsArray[pos.reel][pos.row + 1];
                 if (doneSymbols.includes(symb)) {
                 } else {

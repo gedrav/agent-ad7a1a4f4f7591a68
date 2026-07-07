@@ -214,20 +214,17 @@ export default class SlotReel extends ResponsiveChildrenView {
     let reels = appModel.getReelsView();
     this.finalSymbols = [];
     if (reels) {
-      console.log('BE reelview -- ', reels);
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         this.finalSymbols[k] = reels[k];
         this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
         this.finalSymbols[k].push(this.getRandomSymbolName(k));
       }
     } else {
-      console.warn('no reels data available');
       reels = this.defaultReel;
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         this.finalSymbols[k] = reels[k];
       }
     }
-    console.log('CREATE FINAL REEL SYMBOLS: ', this.finalSymbols);
   }
 
   public restartIdleAnim(): void {
@@ -479,7 +476,7 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   // ----------- stop spin --------------------
   protected startStoppingSpin(): void {
-    console.log('START STOPPING SPIN -- ', this.spinResponseReceived);
+    console.log('START STOPPING SPIN -- ');
     if (this.quickSpinStarted) {
       return;
     }
@@ -608,6 +605,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (let k = 0; k < len2; k++) {
         clearTimeout(this.timeoutIds2[k]);
       }
+      console.log('ALL REELS STOPPED -- ');
       StateManager.doNextStep();
     }
   }

@@ -100,7 +100,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (this.configData.data.winAnim) {
       this.spineAnimCompleteCallback = onComplete;
       this.playSpineAnimation(this.configData.data.winAnim, loop);
-      const name: string = this.configData.data.name ?? '';
     } else {
       super.showWinning(onComplete);
     }
