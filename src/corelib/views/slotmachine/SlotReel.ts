@@ -650,6 +650,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     // Clean up symbols
     for (let k = 0; k < len; k++) {
       symbols[k].setNormalTexture();
+      console.log('aaaaaaaaaaaaaaaaaa');
       symbols[k].cleanUpSymbolWin();
     }
 

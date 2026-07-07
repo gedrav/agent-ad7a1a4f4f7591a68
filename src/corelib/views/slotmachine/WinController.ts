@@ -209,8 +209,7 @@ export default class WinController {
       } else {
         const winData = appModel.getWinData();
         const winDataLength = winData?.length;
-        console.trace('SHOW SPIN WIN ----------------------');
-        console.log('winData -- ', winData);
+        console.log('SHOW SPIN WIN ---------------------- ', winData);
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
           let total = 0;
@@ -221,7 +220,6 @@ export default class WinController {
               for (let j = 0; j < winningPos.length; j++) {
                 total++;
                 const pos = this.getReelPosition(winningPos[j]);
-                console.log('pos -- ', pos);
                 const symb = this.symbolsArray[pos.reel][pos.row + 1];
                 if (doneSymbols.includes(symb)) {
                 } else {
@@ -229,13 +227,10 @@ export default class WinController {
                 }
                 doneSymbols.push(symb);
                 this.winSymbolsContainer.addChild(symb);
-                console.log('show winning --- ', winData[i].winningPosition[j], symb.getSymbolName());
                 symb.showWinning(() => this.onSpinWinAnimComplete(symb));
               }
             }
           }
-          console.log('symbol count -- ', total, this.totalWinSymbols);
-          console.log('--------------- ----------------------');
         } else {
           this.notifySpinWinDone();
         }
@@ -313,6 +308,7 @@ export default class WinController {
       for (let j = 0; j < len2; j++) {
         const symbol = this.symbolsArray[i][j];
         this.symbolsContainer.addChild(symbol);
+        console.log('bbbbbbbbbbb');
         symbol.cleanUpSymbolWin();
       }
     }
