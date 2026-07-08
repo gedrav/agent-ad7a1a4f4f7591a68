@@ -79,6 +79,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected timeoutIds: any[];
   private timeoutIds2: any[];
   private landingSymbolsCount: any;
+  private nextActionTaken: boolean;
 
   constructor(configData: any) {
     super(configData);
@@ -353,6 +354,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     });
   }
   protected startSpin(): void {
+    this.nextActionTaken = false;
     this.spinResponseReceived = false;
     this.anticipationRunning = [];
     this.scatterAnticipArray = [];
@@ -607,7 +609,10 @@ export default class SlotReel extends ResponsiveChildrenView {
         clearTimeout(this.timeoutIds2[k]);
       }
       console.log('ALL REELS STOPPED -- calling doNextStep() ');
-      StateManager.doNextStep();
+      if (!this.nextActionTaken) {
+        this.nextActionTaken = true;
+        StateManager.doNextStep();
+      }
     }
   }
 
@@ -615,6 +620,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (!this.spinStarted) return;
     this.spinResponseReceived = true;
     this.ticker.stop();
+    this.numberOfStoppedReels = 0;
     this.quickSpinStarted = true;
 
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
@@ -630,9 +636,17 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected stopReelQuick(reelno: number): void {
     EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
+
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
+
+    // Clean up symbols
+    for (let k = 0; k < len; k++) {
+      symbols[k].setNormalTexture();
+      symbols[k].cleanUpSymbolWin();
+      AnimationProxy.killTweensOf(symbols[k]);
+    }
 
     // Set final symbols - finalSymbols has extra symbols at start and end
     // symbols array: [hidden, visible1, visible2, visible3, hidden]
@@ -647,13 +661,6 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
     }
-
-    // Clean up symbols
-    for (let k = 0; k < len; k++) {
-      symbols[k].setNormalTexture();
-      symbols[k].cleanUpSymbolWin();
-    }
-    console.log('clean up symbol win ');
 
     // Quick jerk animation
     const quickEase = Elastic.easeOut.config(0.8, 0.4);
