@@ -558,6 +558,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
       if (k == len - 1) {
+        console.log('FINAL JERK ANIMATION -- ', reelno);
         AnimationProxy.animateTween(symbols[k], {
           y: (k - 1) * this.reelsData.symbolHeight,
           duration: appModel.turboMode ? this.jerkDuration * 0.5 : this.jerkDuration,
@@ -593,7 +594,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
-
+    console.log('stopped reel no: ' + reelno);
     this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
       this.hideAllAnticipation();
@@ -605,7 +606,7 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (let k = 0; k < len2; k++) {
         clearTimeout(this.timeoutIds2[k]);
       }
-      console.log('ALL REELS STOPPED -- ');
+      console.log('ALL REELS STOPPED -- calling doNextStep() ');
       StateManager.doNextStep();
     }
   }
@@ -661,6 +662,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     for (let k = 0; k < len; k++) {
       symbols[k].visible = true;
       if (k === len - 1) {
+        console.log('FINAL JERK ANIMATION quick-- ', reelno);
         AnimationProxy.animateTween(symbols[k], {
           duration: quickDuration,
           y: (k - 1) * this.reelsData.symbolHeight,

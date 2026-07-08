@@ -37,7 +37,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   protected destroySpine(): void {
-    console.trace('destroySpine');
     this.symbol.visible = true;
     super.cleanUpSymbolWin();
 
@@ -107,7 +106,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   public cleanUpSymbolWin(): void {
-    console.trace('clean up symbol win ');
     super.cleanUpSymbolWin();
     this.destroySpine();
   }

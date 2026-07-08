@@ -166,7 +166,6 @@ export default class ReelSymbolSprite extends ReelSymbol {
     }
     this.disposeGlowFilter();
     this.symbol.tint = 0xffffff;
-    console.trace('cleanUpSymbolWin');
     AnimationProxy.killTweensOf(this.symbol);
     this.symbol.scale.set(this.getDefaultScale());
   }
