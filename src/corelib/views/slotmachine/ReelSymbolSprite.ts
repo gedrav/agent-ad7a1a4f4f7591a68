@@ -133,7 +133,6 @@ export default class ReelSymbolSprite extends ReelSymbol {
 
   public showFaded(): void {
     this.symbol.tint = 0x333333;
-    console.log('show faded');
   }
 
   public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
@@ -143,7 +142,6 @@ export default class ReelSymbolSprite extends ReelSymbol {
   public showWinning(onComplete?: () => void, loop: boolean = false): void {
     //this.applyGlowAnimation({ innerStrength: 2 });
     this.symbol.tint = 0xffffff;
-    console.log('set tint to 0xffffff');
     AnimationProxy.animateTween(this.symbol, {
       duration: 0.5,
       scaleX: 1.1,
@@ -167,7 +165,6 @@ export default class ReelSymbolSprite extends ReelSymbol {
     }
     this.disposeGlowFilter();
     this.symbol.tint = 0xffffff;
-    console.log('clean up symbol win set tint to 0xffffff');
     AnimationProxy.killTweensOf(this.symbol);
     this.symbol.scale.set(this.getDefaultScale());
   }

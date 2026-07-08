@@ -88,6 +88,11 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     }
   }
 
+  public showFaded(): void {
+    this.clearCallBackAnimation();
+    this.symbol.tint = 0x333333;
+  }
+
   public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
     this.showWinning(onComplete, loop);
   }
@@ -106,6 +111,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   public cleanUpSymbolWin(): void {
+    console.log('222222222');
     super.cleanUpSymbolWin();
     this.destroySpine();
   }
