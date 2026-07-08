@@ -650,9 +650,9 @@ export default class SlotReel extends ResponsiveChildrenView {
     // Clean up symbols
     for (let k = 0; k < len; k++) {
       symbols[k].setNormalTexture();
-      console.log('aaaaaaaaaaaaaaaaaa');
       symbols[k].cleanUpSymbolWin();
     }
+    console.log('clean up symbol win ');
 
     // Quick jerk animation
     const quickEase = Elastic.easeOut.config(0.8, 0.4);

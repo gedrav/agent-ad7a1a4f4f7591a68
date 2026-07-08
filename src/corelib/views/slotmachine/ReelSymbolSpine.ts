@@ -38,7 +38,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
 
   protected destroySpine(): void {
     this.symbol.visible = true;
-    super.cleanUpSymbolWin();
+    //super.cleanUpSymbolWin();
 
     if (!this.spine) return;
 

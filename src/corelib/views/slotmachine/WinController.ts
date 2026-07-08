@@ -308,7 +308,6 @@ export default class WinController {
       for (let j = 0; j < len2; j++) {
         const symbol = this.symbolsArray[i][j];
         this.symbolsContainer.addChild(symbol);
-        console.log('bbbbbbbbbbb');
         symbol.cleanUpSymbolWin();
       }
     }
@@ -330,6 +329,7 @@ export default class WinController {
         symbol.showFaded();
       }
     }
+    console.log('fade out all symbols');
   }
   protected getReelPosition(value: number): any {
     if (Array.isArray(value)) {
