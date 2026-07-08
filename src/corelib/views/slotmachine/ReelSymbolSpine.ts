@@ -37,6 +37,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   protected destroySpine(): void {
+    console.trace('destroySpine');
     this.symbol.visible = true;
     super.cleanUpSymbolWin();
 
@@ -86,11 +87,6 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     } else {
       //super.showIdle();
     }
-  }
-
-  public showFaded(): void {
-    this.clearCallBackAnimation();
-    this.symbol.tint = 0x333333;
   }
 
   public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
