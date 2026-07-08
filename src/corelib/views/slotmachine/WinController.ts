@@ -159,7 +159,7 @@ export default class WinController {
         symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms, required only for cascade game
       }
     }
-
+    console.log('onSpinWinAnimComplete', this.winSymbolIndex, this.totalWinSymbols);
     this.winSymbolIndex++;
     if (this.winSymbolIndex === this.totalWinSymbols) {
       this.notifySpinWinDone();
