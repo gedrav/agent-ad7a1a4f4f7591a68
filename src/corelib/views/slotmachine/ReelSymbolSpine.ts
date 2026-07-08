@@ -107,7 +107,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   }
 
   public cleanUpSymbolWin(): void {
-    console.log('222222222');
+    console.trace('clean up symbol win ');
     super.cleanUpSymbolWin();
     this.destroySpine();
   }
