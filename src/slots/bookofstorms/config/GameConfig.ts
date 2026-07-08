@@ -12,7 +12,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.095',
+  gameVersion: '0.096',
   gameId: 'bookofstorms',
   gameName: 'Book Of Storms',
   uiConfig: UIConfig,
