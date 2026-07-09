@@ -133,7 +133,6 @@ export default class ReelSymbolSprite extends ReelSymbol {
 
   public showFaded(): void {
     this.symbol.tint = 0x333333;
-    console.log('showFaded');
   }
 
   public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
