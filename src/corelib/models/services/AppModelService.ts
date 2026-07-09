@@ -13,6 +13,14 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get gameData(): any {
+    return this._gameData;
+  }
+
+  set gameData(value: any) {
+    this._gameData = value;
+  }
+  private _gameData: any;
   get opConfig(): any {
     return this._opConfig;
   }
@@ -238,6 +246,7 @@ class AppModelService {
     this._opConfig = data.opCnf;
     this.opConfig.isTurboAvailable = true;
 
+    this.gameData = data.gameInfo.gameData;
     this.playerInfo = data.playerInfo;
     this.gameInfo.devMode = data.gameInfo.devMode;
     this.gameInfo.allowCheat = data.playerInfo.allowCheat;
