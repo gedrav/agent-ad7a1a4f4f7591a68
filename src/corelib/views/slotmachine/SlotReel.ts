@@ -909,10 +909,11 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected getFirstTimeSymbol(reelno: number, rowIndex: number) {
-    if (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1) {
+    // non fixed reels render one padding symbol above and below the visible rows
+    if (!this.reelsData.isFixedSymbol && (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1)) {
       return this.getNextSymbol(reelno);
     }
-    const symbol = this.reelsData.initialReel[reelno][rowIndex - 1];
+    const symbol = this.reelsData.initialReel[reelno][this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
     const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
