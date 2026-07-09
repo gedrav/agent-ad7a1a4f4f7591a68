@@ -119,9 +119,19 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H2: {
             name: 'H2',
+            spineName: 'Fan',
+            skin: 'default',
+            idleAnim: 'idle',
+            winAnim: 'win',
+            animScale: 1,
           },
           H3: {
             name: 'H3',
+            spineName: 'Cap',
+            skin: 'default',
+            idleAnim: 'idle',
+            winAnim: 'win',
+            animScale: 1,
           },
           H4: {
             name: 'H4',
@@ -133,6 +143,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H5: {
             name: 'H5',
+            spineName: 'CupPlate',
+            skin: 'default',
+            idleAnim: 'idle',
+            winAnim: 'win',
+            animScale: 1,
           },
           L1: {
             name: 'L1',
