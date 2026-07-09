@@ -62,6 +62,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected tickerHandler: (ticker: Ticker) => void;
   protected winController: WinController;
   protected quickSpinStarted: boolean;
+  protected pendingRecreateAnimations: boolean = false;
   protected speedFactor: number;
   protected lineWinAmountComp: LineWinAmountComp;
   protected reelFrame: ReelFrameComp;
@@ -190,7 +191,24 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected onSecondaryAssetsLoaded(): void {
+    if (this.hasPendingSymbolWinCallback()) {
+      this.pendingRecreateAnimations = true;
+      return;
+    }
     this.recreateAnimations();
+  }
+
+  protected hasPendingSymbolWinCallback(): boolean {
+    const len1: number = this.symbolsArray.length;
+    for (let i = 0; i < len1; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        if (this.symbolsArray[i][j].hasPendingWinCallback()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
   protected stopReelForError(): void {
     this.ticker.stop();
@@ -319,6 +337,10 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected onIdleStateEntry(): void {
+    if (this.pendingRecreateAnimations) {
+      this.pendingRecreateAnimations = false;
+      this.recreateAnimations();
+    }
     this.showHideExtraSymbols(false);
     this.setSymbolsClickable(true);
   }
