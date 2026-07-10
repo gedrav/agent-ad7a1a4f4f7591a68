@@ -4,6 +4,7 @@ import { GameIdleState } from '@core/commands/states/GameIdleState';
 import { SpinStartState } from '@core/commands/states/SpinStartState';
 import { SpinResponseReceivedState } from '@core/commands/states/SpinResponseReceivedState';
 import { SpinStoppedState } from '@core/commands/states/SpinStoppedState';
+import { MeowShowCoinFlyState } from '@game/states/MeowShowCoinFlyState';
 import { ShowSpinWinState } from '@core/commands/states/ShowSpinWinState';
 import { CheckFeatureState } from '@core/commands/states/CheckFeatureState';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
@@ -14,8 +15,6 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
-import { BookShowSymbolExpansionState } from '@game/states/BookShowSymbolExpansionState';
-import { BookShowSymbolAfterExpansionState } from '@game/states/BookShowSymbolAfterExpansionState';
 import { ShowFSEnterTransitionState } from '@game/states/ShowFSEnterTransitionState';
 
 export const STATES_CONFIG: any = [
@@ -25,9 +24,8 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
+  { name: STATES.SHOW_COIN_FLY_STATE, state: MeowShowCoinFlyState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
-  { name: STATES.SHOW_SYMBOL_EXPANSION_STATE, state: BookShowSymbolExpansionState },
-  { name: STATES.SHOW_POST_EXPANSION_WIN_STATE, state: BookShowSymbolAfterExpansionState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
