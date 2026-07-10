@@ -12,6 +12,27 @@ class PreSpinWinStateCommand extends StateCommand {
   private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
+
+    const coinPositions = appModel.gameResult?.coinPositions;
+    let hasCoins = false;
+
+    if (coinPositions) {
+      for (const key in coinPositions) {
+        if (coinPositions[key] && coinPositions[key].length > 0) {
+          hasCoins = true;
+          break;
+        }
+      }
+    }
+
+    if (hasCoins) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_COIN_ANIMATION);
+    } else {
+      StateManager.next();
+    }
+  }
+
+  public doNextStep(): void {
     StateManager.next();
   }
 }

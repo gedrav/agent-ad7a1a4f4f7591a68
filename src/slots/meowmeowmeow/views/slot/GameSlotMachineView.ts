@@ -12,7 +12,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 export class GameSlotMachineView extends SlotMachineView {
   constructor(config: any) {
     super(config);
-    EventHandler.addEventListener('MEOW_SHOW_COIN_ANIMATION', this.showCoinAnimations.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // setTimeout(() => this.expandRowsTo4(), 5000);
     // setTimeout(() => this.reverseRowsTo3(), 10000);
   }
