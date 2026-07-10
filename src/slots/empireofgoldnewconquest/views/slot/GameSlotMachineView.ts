@@ -32,7 +32,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private checkToAddBBComp() {
-    if (!appModel.getIsBuyBonusAvailable()) {
+    if (!appModel.getIsBBAvailable()) {
       this.removeChild(this.buyBonusComp);
     }
   }

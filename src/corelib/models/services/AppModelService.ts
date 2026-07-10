@@ -224,7 +224,7 @@ class AppModelService {
   }
 
   public getIsBBAvailable(): boolean {
-    return this.opConfig.isBBAvailable;
+    return this.opConfig?.isBBAvailable && this.playerInfo?.buyFeature;
   }
   public getIsAutoAvailable(): boolean {
     return this.opConfig.isAutoAvailable;
@@ -581,12 +581,6 @@ class AppModelService {
 
   public getBuyBonusMultiplier(featureType: string): number {
     return this.playerInfo?.bbBetMultiplierSettings?.[featureType] || 100;
-  }
-
-  public getIsBuyBonusAvailable(): any {
-    if (this.playerInfo?.buyFeature != undefined) {
-      return this.playerInfo.buyFeature;
-    }
   }
 
   // ---------------------------------- All set methods -----------------------------------------
