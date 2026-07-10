@@ -62,6 +62,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected tickerHandler: (ticker: Ticker) => void;
   protected winController: WinController;
   protected quickSpinStarted: boolean;
+  protected pendingRecreateAnimations: boolean = false;
   protected speedFactor: number;
   protected lineWinAmountComp: LineWinAmountComp;
   protected reelFrame: ReelFrameComp;
@@ -79,6 +80,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected timeoutIds: any[];
   private timeoutIds2: any[];
   private landingSymbolsCount: any;
+  private nextActionTaken: boolean;
 
   constructor(configData: any) {
     super(configData);
@@ -189,7 +191,24 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected onSecondaryAssetsLoaded(): void {
+    if (this.hasPendingSymbolWinCallback()) {
+      this.pendingRecreateAnimations = true;
+      return;
+    }
     this.recreateAnimations();
+  }
+
+  protected hasPendingSymbolWinCallback(): boolean {
+    const len1: number = this.symbolsArray.length;
+    for (let i = 0; i < len1; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        if (this.symbolsArray[i][j].hasPendingWinCallback()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
   protected stopReelForError(): void {
     this.ticker.stop();
@@ -318,6 +337,10 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected onIdleStateEntry(): void {
+    if (this.pendingRecreateAnimations) {
+      this.pendingRecreateAnimations = false;
+      this.recreateAnimations();
+    }
     this.showHideExtraSymbols(false);
     this.setSymbolsClickable(true);
   }
@@ -353,6 +376,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     });
   }
   protected startSpin(): void {
+    this.nextActionTaken = false;
     this.spinResponseReceived = false;
     this.anticipationRunning = [];
     this.scatterAnticipArray = [];
@@ -476,7 +500,6 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   // ----------- stop spin --------------------
   protected startStoppingSpin(): void {
-    console.log('START STOPPING SPIN -- ');
     if (this.quickSpinStarted) {
       return;
     }
@@ -593,7 +616,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
-
     this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
       this.hideAllAnticipation();
@@ -605,8 +627,10 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (let k = 0; k < len2; k++) {
         clearTimeout(this.timeoutIds2[k]);
       }
-      console.log('ALL REELS STOPPED -- ');
-      StateManager.doNextStep();
+      if (!this.nextActionTaken) {
+        this.nextActionTaken = true;
+        StateManager.doNextStep();
+      }
     }
   }
 
@@ -614,6 +638,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (!this.spinStarted) return;
     this.spinResponseReceived = true;
     this.ticker.stop();
+    this.numberOfStoppedReels = 0;
     this.quickSpinStarted = true;
 
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
@@ -629,9 +654,17 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected stopReelQuick(reelno: number): void {
     EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
+
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
+
+    // Clean up symbols
+    for (let k = 0; k < len; k++) {
+      symbols[k].setNormalTexture();
+      symbols[k].cleanUpSymbolWin();
+      AnimationProxy.killTweensOf(symbols[k]);
+    }
 
     // Set final symbols - finalSymbols has extra symbols at start and end
     // symbols array: [hidden, visible1, visible2, visible3, hidden]
@@ -646,13 +679,6 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
     }
-
-    // Clean up symbols
-    for (let k = 0; k < len; k++) {
-      symbols[k].setNormalTexture();
-      symbols[k].cleanUpSymbolWin();
-    }
-    console.log('clean up symbol win ');
 
     // Quick jerk animation
     const quickEase = Elastic.easeOut.config(0.8, 0.4);
@@ -905,10 +931,11 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected getFirstTimeSymbol(reelno: number, rowIndex: number) {
-    if (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1) {
+    // non fixed reels render one padding symbol above and below the visible rows
+    if (!this.reelsData.isFixedSymbol && (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1)) {
       return this.getNextSymbol(reelno);
     }
-    const symbol = this.reelsData.initialReel[reelno][rowIndex - 1];
+    const symbol = this.reelsData.initialReel[reelno][this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
     const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }

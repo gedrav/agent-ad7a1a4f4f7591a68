@@ -79,4 +79,7 @@ export default class ReelSymbol extends StandardView {
   public setNormalTexture(): void {}
   public setNewSymbol(symbol: any, reelno: number): void {}
   public recreateAnimation(): void {}
+  public hasPendingWinCallback(): boolean {
+    return false;
+  }
 }

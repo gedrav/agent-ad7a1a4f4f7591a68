@@ -158,6 +158,10 @@ export default class ReelSymbolSprite extends ReelSymbol {
     }, 2000);
   }
 
+  public hasPendingWinCallback(): boolean {
+    return this.winningTimeoutId !== null;
+  }
+
   public cleanUpSymbolWin(): void {
     if (this.winningTimeoutId !== null) {
       clearTimeout(this.winningTimeoutId);

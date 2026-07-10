@@ -37,7 +37,6 @@ export const JACKPOT_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          contentText: '$10,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
           y: 170,
@@ -81,7 +80,6 @@ export const JACKPOT_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          contentText: '$5,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
           y: 170,
@@ -125,7 +123,6 @@ export const JACKPOT_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          contentText: '$1,000',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
           y: 170,
@@ -169,7 +166,6 @@ export const JACKPOT_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          contentText: '$200',
           anchor: { x: 0.5, y: 0.5 },
           x: 214,
           y: 170,

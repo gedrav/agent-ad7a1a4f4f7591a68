@@ -40,10 +40,11 @@ export class MMMJackpotComp extends ResponsiveChildrenView {
   }
 
   protected setJPValues(): void {
-    const multipliers = [20, 50, 100, 200000];
-    this.miniJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers[0]));
-    this.minorJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers[1]));
-    this.majorJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers[2]));
-    this.grandJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers[3]));
+    const multipliers = appModel.gameData.jackpotMultipliers;
+    if (!multipliers) return;
+    this.miniJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers.Mini));
+    this.minorJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers.Minor));
+    this.majorJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers.Major));
+    this.grandJP.updateJPValue(Util.formatCurrency(appModel.getTotalBet() * multipliers.Grand));
   }
 }
