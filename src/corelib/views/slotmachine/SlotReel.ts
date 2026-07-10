@@ -326,7 +326,11 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
-        UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
+
+        const isPaddingRow = !this.reelsData.isFixedSymbol && (j === 0 || j === rows - 1);
+        if (!isPaddingRow) {
+          UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
+        }
       }
     }
     this.winController.symbolsArray = this.symbolsArray;
