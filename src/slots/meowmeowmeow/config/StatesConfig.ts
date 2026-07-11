@@ -4,7 +4,7 @@ import { GameIdleState } from '@core/commands/states/GameIdleState';
 import { SpinStartState } from '@core/commands/states/SpinStartState';
 import { SpinResponseReceivedState } from '@core/commands/states/SpinResponseReceivedState';
 import { SpinStoppedState } from '@core/commands/states/SpinStoppedState';
-import { PreSpinWinState } from '@core/commands/states/PreSpinWinState';
+import { MeowPreSpinWinState } from '@game/states/MeowPreSpinWinState';
 import { ShowSpinWinState } from '@core/commands/states/ShowSpinWinState';
 import { CheckFeatureState } from '@core/commands/states/CheckFeatureState';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
@@ -24,7 +24,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
-  { name: STATES.PRE_SPIN_WIN_STATE, state: PreSpinWinState },
+  { name: STATES.PRE_SPIN_WIN_STATE, state: MeowPreSpinWinState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
