@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
 const slotsDir = path.resolve(projectRoot, 'src', 'slots');
 
-const CONFIGURED_GAME_IDS = ['empireofgold', 'royale81', 'empireofgoldnewconquest', 'sweetsalon', 'frostedmarketbonanza','bookofstorms'];
+const CONFIGURED_GAME_IDS = ['empireofgold', 'royale81', 'empireofgoldnewconquest', 'sweetsalon', 'frostedmarketbonanza','bookofstorms','bookofstormslightningwin', 'meowmeowmeow','carpathiantreasures'];
 
 // Resolve build mode: --mode <value> CLI arg > NODE_ENV > fallback 'production'
 const modeArgIndex = process.argv.indexOf('--mode');

@@ -72,12 +72,17 @@ export class ControlPanelView extends ResponsiveChildrenView {
       this.removeChild(this.cheatBtn);
     }
 
-    // Hide home button if getHomeURL is null or empty
-
-    this.longPressSprite = UIUtil.getSprite('longPressText');
-    this.spinBtn.addChild(this.longPressSprite);
-    this.longPressSprite.scale.set(0.95);
-    this.longPressSprite.anchor.set(0.5);
+    if (!appModel.getIsTurboAvailable()) {
+      this.turboBtn.renderable = false;
+      this.stopSpinBtn.renderable = false;
+      // as bb buttons are scaled and positioned based on this button
+    }
+    if (appModel.getIsAutoAvailable()) {
+      this.longPressSprite = UIUtil.getSprite('longPressText');
+      this.spinBtn.addChild(this.longPressSprite);
+      this.longPressSprite.scale.set(0.95);
+      this.longPressSprite.anchor.set(0.5);
+    }
 
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_SPIN, this.updateBalanceForSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN, this.updateBalanceForBBSpin.bind(this));
@@ -115,11 +120,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.updateTotalbet();
     this.disablePanel();
 
-    this.spinBtn.on('pointerdown', this.startPress.bind(this));
+    if (appModel.getIsAutoAvailable()) {
+      this.spinBtn.on('pointerdown', this.startPress.bind(this));
+      this.spinBtn.on('pointerupoutside', this.cancelPress.bind(this));
+      this.spinBtn.on('pointerout', this.cancelPress.bind(this));
+      this.spinBtn.on('pointercancel', this.cancelPress.bind(this));
+    }
     this.spinBtn.on('pointerup', this.endPress.bind(this));
-    this.spinBtn.on('pointerupoutside', this.cancelPress.bind(this));
-    this.spinBtn.on('pointerout', this.cancelPress.bind(this));
-    this.spinBtn.on('pointercancel', this.cancelPress.bind(this));
   }
   protected onFullScreenModeChange(): void {
     if (DeviceProxy.config.isDevice) {
@@ -153,7 +160,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       clearTimeout(longPressTimer);
       longPressTimer = null;
     }
-    this.longPressSprite.scale.set(0.95);
+    this.longPressSprite?.scale.set(0.95);
     GameProxy.config.isLongPressTriggered = false;
   }
   protected addKeyboardEvents(): void {
@@ -170,7 +177,12 @@ export class ControlPanelView extends ResponsiveChildrenView {
         }
         const action: ActionCommand = SpinClickCommand;
         action.execute(this.spinBtn);
-      } else if (this.stopSpinBtn.enabled && this.stopSpinBtn.visible && !this.spinBtn.visible) {
+      } else if (
+        this.stopSpinBtn.enabled &&
+        this.stopSpinBtn.visible &&
+        !this.spinBtn.visible &&
+        appModel.getIsTurboAvailable()
+      ) {
         this.stopSpinBtn.click();
       }
     }
@@ -184,6 +196,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected createBBButtons(): void {
     this.bbButtonsArray = [];
+    if (!appModel.getIsBBAvailable()) {
+      return;
+    }
     const len = GameProxy.config.buyBonusData?.features.length;
     if (len > 0) {
       for (let k = 0; k < len; k++) {
@@ -280,7 +295,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected showStopSpinButton(): void {
     this.stopSpinBtn.visible = true;
-    this.spinBtn.visible = false;
+    if (appModel.getIsTurboAvailable()) {
+      this.spinBtn.visible = false;
+    }
   }
   protected disableStopSpinButton(): void {
     this.stopSpinBtn.visible = false;

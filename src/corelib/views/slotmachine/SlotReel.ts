@@ -62,6 +62,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected tickerHandler: (ticker: Ticker) => void;
   protected winController: WinController;
   protected quickSpinStarted: boolean;
+  protected pendingRecreateAnimations: boolean = false;
   protected speedFactor: number;
   protected lineWinAmountComp: LineWinAmountComp;
   protected reelFrame: ReelFrameComp;
@@ -79,6 +80,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   protected timeoutIds: any[];
   private timeoutIds2: any[];
   private landingSymbolsCount: any;
+  private nextActionTaken: boolean;
 
   constructor(configData: any) {
     super(configData);
@@ -189,7 +191,24 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected onSecondaryAssetsLoaded(): void {
+    if (this.hasPendingSymbolWinCallback()) {
+      this.pendingRecreateAnimations = true;
+      return;
+    }
     this.recreateAnimations();
+  }
+
+  protected hasPendingSymbolWinCallback(): boolean {
+    const len1: number = this.symbolsArray.length;
+    for (let i = 0; i < len1; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        if (this.symbolsArray[i][j].hasPendingWinCallback()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
   protected stopReelForError(): void {
     this.ticker.stop();
@@ -307,7 +326,11 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
-        UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
+
+        const isPaddingRow = !this.reelsData.isFixedSymbol && (j === 0 || j === rows - 1);
+        if (!isPaddingRow) {
+          UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
+        }
       }
     }
     this.winController.symbolsArray = this.symbolsArray;
@@ -318,6 +341,10 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected onIdleStateEntry(): void {
+    if (this.pendingRecreateAnimations) {
+      this.pendingRecreateAnimations = false;
+      this.recreateAnimations();
+    }
     this.showHideExtraSymbols(false);
     this.setSymbolsClickable(true);
   }
@@ -353,7 +380,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     });
   }
   protected startSpin(): void {
+    this.nextActionTaken = false;
+    this.spinResponseReceived = false;
     this.anticipationRunning = [];
+    this.scatterAnticipArray = [];
     this.symbolPassedCounterArray = [];
     this.stopStarted = [];
     this.startAnticipationReel = [];
@@ -509,7 +539,6 @@ export default class SlotReel extends ResponsiveChildrenView {
       } else {
         const symb = this.finalSymbols[reelno][this.stopIndex[reelno]];
         this.stopIndex[reelno]--;
-
         const newSymbolType = this.reelsData.symbolsData[symb];
         if (newSymbolType == null) {
           throw new Error('There is no new symbol to spin on the queue.');
@@ -570,10 +599,8 @@ export default class SlotReel extends ResponsiveChildrenView {
         });
       }
     }
-    if (!landingSoundPlayed) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
-    }
-    if (reelno == this.reelsData.noOfReels - 2) {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
+    if (reelno == this.reelsData.noOfReels - 1) {
       EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
     }
   }
@@ -593,7 +620,6 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
   protected onReelStripStopped(reelno: number): void {
     this.numberOfStoppedReels++;
-
     this.setAllNormalTexture(reelno);
     if (this.numberOfStoppedReels == this.reelsData.noOfReels) {
       this.hideAllAnticipation();
@@ -605,7 +631,10 @@ export default class SlotReel extends ResponsiveChildrenView {
       for (let k = 0; k < len2; k++) {
         clearTimeout(this.timeoutIds2[k]);
       }
-      StateManager.doNextStep();
+      if (!this.nextActionTaken) {
+        this.nextActionTaken = true;
+        StateManager.doNextStep();
+      }
     }
   }
 
@@ -613,6 +642,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (!this.spinStarted) return;
     this.spinResponseReceived = true;
     this.ticker.stop();
+    this.numberOfStoppedReels = 0;
     this.quickSpinStarted = true;
 
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
@@ -627,9 +657,18 @@ export default class SlotReel extends ResponsiveChildrenView {
     }
   }
   protected stopReelQuick(reelno: number): void {
+    EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
+
     this.reelSpinningState[reelno] = 0;
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
+
+    // Clean up symbols
+    for (let k = 0; k < len; k++) {
+      symbols[k].setNormalTexture();
+      symbols[k].cleanUpSymbolWin();
+      AnimationProxy.killTweensOf(symbols[k]);
+    }
 
     // Set final symbols - finalSymbols has extra symbols at start and end
     // symbols array: [hidden, visible1, visible2, visible3, hidden]
@@ -643,12 +682,6 @@ export default class SlotReel extends ResponsiveChildrenView {
           }
         }
       }
-    }
-
-    // Clean up symbols
-    for (let k = 0; k < len; k++) {
-      symbols[k].setNormalTexture();
-      symbols[k].cleanUpSymbolWin();
     }
 
     // Quick jerk animation
@@ -681,7 +714,7 @@ export default class SlotReel extends ResponsiveChildrenView {
   // check reelstop
   public checkToStopReelStrip(reelno: number) {
     if (reelno == 0) {
-      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 5;
+      const symbolsCount = GameProxy?.config?.reelSpinSettings?.firstReelSymbolPassCount || 2;
       if (this.symbolPassedCounterArray[reelno] >= symbolsCount - this.totalSymbols && this.spinResponseReceived) {
         if (!this.stopStarted[reelno]) {
           this.stopStarted[reelno] = true;
@@ -689,7 +722,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
     } else {
-      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 2;
+      let symbolsCount = GameProxy?.config?.reelSpinSettings?.otherReelsSymbolPassCount || 0;
       let totalcount = symbolsCount - this.totalSymbols;
       if (DeviceProxy.isDevice()) {
         if (DeviceProxy.config.isPortrait) {
@@ -699,7 +732,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         }
       }
       if (this.anticipationRunning[reelno]) {
-        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 25;
+        symbolsCount = GameProxy?.config?.reelSpinSettings?.anticipationSymbolPassCount || 20;
         totalcount = symbolsCount - this.totalSymbols;
         if (DeviceProxy.isDevice()) {
           if (DeviceProxy.config.isPortrait) {
@@ -785,15 +818,16 @@ export default class SlotReel extends ResponsiveChildrenView {
       AnimationProxy.animateTween(this.anticipationElementArray[reelno], {
         duration: this.jerkDuration * 0.5,
         alpha: 0,
-        onComplete: this.hideAnticipationStrip.bind(this, reelno),
       });
+      this.hideAnticipationStrip(reelno);
     }
   }
   protected hideAnticipationStrip(reelno) {
-    if (this.configData.anticipationConfig) {
+    if (this.reelsData.anticipationConfig) {
       this.anticipationElementArray[reelno].stopAnimation();
       this.anticipationElementArray[reelno].visible = false;
       this.anticipationElementArray[reelno].alpha = 1;
+      EventHandler.dispatchEvent('STOP_ANTICIPATION_SOUND');
     }
   }
   protected hideAllAnticipation() {
@@ -901,10 +935,11 @@ export default class SlotReel extends ResponsiveChildrenView {
   }
 
   protected getFirstTimeSymbol(reelno: number, rowIndex: number) {
-    if (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1) {
+    // non fixed reels render one padding symbol above and below the visible rows
+    if (!this.reelsData.isFixedSymbol && (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1)) {
       return this.getNextSymbol(reelno);
     }
-    const symbol = this.reelsData.initialReel[reelno][rowIndex - 1];
+    const symbol = this.reelsData.initialReel[reelno][this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
     const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
@@ -936,11 +971,11 @@ export default class SlotReel extends ResponsiveChildrenView {
 
   protected resetSpinParams(): void {
     this.movingUpSpeed = 10;
-    this.maxSpeed = 80;
-    this.minSpeed = 70;
+    this.maxSpeed = 120;
+    this.minSpeed = 100;
     this.speedFactor = 2;
     this.spinningSpeed = 0;
-    this.maxUpY = -120;
+    this.maxUpY = -60;
     this.maxDownY = 40;
     this.jerkDuration = 0.75;
     this.reelStopGap = 200;
@@ -1010,20 +1045,32 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.anticipationElementArray.forEach((element, index) => {
           if (element === null) return;
           const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
-          element.x = anticipationConfig.px;
-          element.y = anticipationConfig.py;
-          if (anticipationConfig.pScale) {
-            element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+          if (DeviceProxy.config.isTablet && anticipationConfig.tpScale) {
+            element.x = anticipationConfig.tpx;
+            element.y = anticipationConfig.tpy;
+            element.scale.set(anticipationConfig.tpScale.x, anticipationConfig.tpScale.y);
+          } else {
+            element.x = anticipationConfig.px;
+            element.y = anticipationConfig.py;
+            if (anticipationConfig.pScale) {
+              element.scale.set(anticipationConfig.pScale.x, anticipationConfig.pScale.y);
+            }
           }
         });
       } else {
         this.anticipationElementArray.forEach((element, index) => {
           if (element === null) return;
           const anticipationConfig = this.reelsData.anticipationConfig.positions[index];
-          element.x = anticipationConfig.lx;
-          element.y = anticipationConfig.ly;
-          if (anticipationConfig.pScale) {
-            element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+          if (DeviceProxy.config.isTablet && anticipationConfig.tpScale) {
+            element.x = anticipationConfig.tpx;
+            element.y = anticipationConfig.tpy;
+            element.scale.set(anticipationConfig.tpScale.x, anticipationConfig.tpScale.y);
+          } else {
+            element.x = anticipationConfig.lx;
+            element.y = anticipationConfig.ly;
+            if (anticipationConfig.pScale) {
+              element.scale.set(anticipationConfig.lScale.x, anticipationConfig.lScale.y);
+            }
           }
         });
       }

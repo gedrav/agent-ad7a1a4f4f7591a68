@@ -4,9 +4,7 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 const PRELOADER: AssetBundle = {
   name: LOAD_CONSTANTS.PRELOADER,
   assets: [
-    { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
     { TYPE: 'content', NAME: 'gameContent.json' },
-    // { TYPE: 'content', NAME: 'rules.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
@@ -15,7 +13,7 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'BelweEF-Bold.otf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'cambriab.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
@@ -40,11 +38,24 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'kittiebank', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'jpbanner', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
+    { TYPE: 'game', NAME: 'WDSymbolAnim', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'SCSymbolAnim', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: '10', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'A', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'J', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'K', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Q', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'WoolenBall', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'CoinPouch', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Fan', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Cap', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'CupPlate', ASSETTYPE: 'spine' },
     //{ TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
   ],
 };

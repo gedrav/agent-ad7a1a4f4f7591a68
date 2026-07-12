@@ -52,7 +52,12 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.spine = null;
   }
 
+  public hasPendingWinCallback(): boolean {
+    return super.hasPendingWinCallback() || !!this.spineAnimCompleteCallback;
+  }
+
   public recreateAnimation(): void {
+    if (this.hasPendingWinCallback()) return;
     this.destroySpine();
     this.createExtraElements();
   }
@@ -88,19 +93,22 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     }
   }
 
-  public showFeatureTriggerAnimation(onComplete?: () => void): void {
-    this.showWinning(onComplete);
+  public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
+    this.showWinning(onComplete, loop);
   }
 
-  public showWinning(onComplete?: () => void): void {
+  public showWinning(onComplete?: () => void, loop: boolean = false): void {
     if (!appModel.secondaryAssetsLoaded) {
-      super.showWinning(onComplete);
+      super.showWinning(onComplete, loop);
       return;
     }
     if (this.configData.data.winAnim) {
       this.spineAnimCompleteCallback = onComplete;
-      this.playSpineAnimation(this.configData.data.winAnim, false);
-      const name: string = this.configData.data.name ?? '';
+      if (!this.playSpineAnimation(this.configData.data.winAnim, loop)) {
+        // Spine unavailable; fall back so onComplete still fires and the state machine advances.
+        this.spineAnimCompleteCallback = null;
+        super.showWinning(onComplete, loop);
+      }
     } else {
       super.showWinning(onComplete);
     }
@@ -115,16 +123,18 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   // Helpers
   // -------------------------
 
-  protected playSpineAnimation(state: string, loop: boolean): void {
+  protected playSpineAnimation(state: string, loop: boolean): boolean {
     if (!this.spine) {
       this.createExtraElements();
     }
+    if (!this.spine) return false;
     this.animState = state;
     this.setSpineVisible(true);
     if (this.configData.data.skin) {
       this.spine.setSkin(this.configData.data.skin);
     }
     this.spine.playAnimation({ state, loop });
+    return true;
   }
   public clearCallBackAnimation() {
     this.spineAnimCompleteCallback = null;
@@ -133,7 +143,10 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.spine.visible = false;
     this.destroySpine();
   }
-  protected onAnimComplete(data: { animation: { name: string } }): void {
+  protected onAnimComplete(data: { loop: boolean; animation: { name: string } }): void {
+    if (data.loop) {
+      return;
+    }
     const isCurrentAnim = data.animation.name === this.animState;
     const isWinAnim = this.animState?.toLowerCase().includes('win');
     const isBlastAnim = this.animState?.toLowerCase().includes(this.configData.data.blastAnim);

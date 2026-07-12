@@ -40,7 +40,6 @@ export default class WinController {
   public showScatterTrigger(): void {
     const positions: number[] = appModel.getFeatureTriggerPositions();
     if (positions && positions.length > 0) {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_SCATTER_WIN_SOUND, positions.length);
       const len = positions.length;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);
@@ -49,12 +48,15 @@ export default class WinController {
           this.symbolsArray[pos.reel][pos.row].showFeatureTriggerAnimation();
         } else {
           this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation();
+          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation(null, true);
         }
       }
       EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions?.length);
       clearTimeout(this.timeoutId);
-      this.timeoutId = setTimeout(this.notifyFeatureTriggerAnimDone.bind(this), 2000);
+      this.timeoutId = setTimeout(
+        this.notifyFeatureTriggerAnimDone.bind(this),
+        Util.getDefaultValue(GameProxy.config.featureTriggerDelay, 4000),
+      );
     } else {
       this.notifyFeatureTriggerAnimDone();
     }
@@ -152,8 +154,10 @@ export default class WinController {
   }
 
   protected onSpinWinAnimComplete(symbol: ReelSymbolSprite): void {
-    if (this.totalWinSymbols > 0) {
-      symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms
+    if (appModel.isCascadeGame()) {
+      if (this.totalWinSymbols > 0) {
+        symbol.visible = false; // made it as during different anim duration for fixing symbol appear for some ms, required only for cascade game
+      }
     }
     this.winSymbolIndex++;
     if (this.winSymbolIndex === this.totalWinSymbols) {
@@ -184,7 +188,7 @@ export default class WinController {
         }
         const positions: number[] = appModel.getFeatureTriggerPositions();
         if (positions && positions.length > 0) {
-          EventHandler.dispatchEvent(SlotEvents.PLAY_SCATTER_WIN_SOUND, positions.length);
+          EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions.length);
           const len = positions.length;
           for (let j = 0; j < len; j++) {
             const pos = this.getReelPosition(positions[j]);
@@ -202,16 +206,18 @@ export default class WinController {
           }
         }
       } else {
-        const winDataLength = appModel.getWinDataLength();
+        const winData = appModel.getWinData();
+        const winDataLength = winData?.length;
         if (winDataLength > 0) {
           this.fadeOutAllSymbols();
+          let total = 0;
           const doneSymbols = [];
           for (let i = 0; i < winDataLength; i++) {
-            const winData = appModel.getWinData();
             const winningPos = winData[i].winningPosition;
             if (winningPos && winningPos.length > 0) {
               for (let j = 0; j < winningPos.length; j++) {
-                const pos = this.getReelPosition(winData[i].winningPosition[j]);
+                total++;
+                const pos = this.getReelPosition(winningPos[j]);
                 const symb = this.symbolsArray[pos.reel][pos.row + 1];
                 if (doneSymbols.includes(symb)) {
                 } else {
@@ -301,6 +307,13 @@ export default class WinController {
         const symbol = this.symbolsArray[i][j];
         this.symbolsContainer.addChild(symbol);
         symbol.cleanUpSymbolWin();
+      }
+    }
+    const len2 = this.symbolsArray.length;
+    for (let i = 0; i < len2; i++) {
+      const len2 = this.symbolsArray[i].length;
+      for (let j = 0; j < len2; j++) {
+        this.symbolsArray[i][j].visible = true;
       }
     }
   }

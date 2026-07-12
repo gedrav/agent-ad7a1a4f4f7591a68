@@ -13,6 +13,22 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get gameData(): any {
+    return this._gameData;
+  }
+
+  set gameData(value: any) {
+    this._gameData = value;
+  }
+  private _gameData: any;
+  get opConfig(): any {
+    return this._opConfig;
+  }
+
+  set opConfig(value: any) {
+    this._opConfig = value;
+  }
+  private _opConfig: any;
   get waitingForFeature(): boolean {
     return this._waitingForFeature;
   }
@@ -207,6 +223,16 @@ class AppModelService {
     this._preferences.showIntro = value;
   }
 
+  public getIsBBAvailable(): boolean {
+    return this.opConfig?.isBBAvailable && this.playerInfo?.buyFeature;
+  }
+  public getIsAutoAvailable(): boolean {
+    return this.opConfig.isAutoAvailable;
+  }
+  public getIsTurboAvailable(): boolean {
+    return this.opConfig.isTurboAvailable;
+  }
+
   public storeGameInitData(data: any): void {
     this._gameInitData = data;
     if (data.preferences) {
@@ -217,7 +243,10 @@ class AppModelService {
     this.gameInfo = {};
     this.fsInfo = {};
     this.rtpInfo = data.rtp;
+    this._opConfig = data.opCnf;
+    this.opConfig.isTurboAvailable = true;
 
+    this.gameData = data.gameInfo.gameData;
     this.playerInfo = data.playerInfo;
     this.gameInfo.devMode = data.gameInfo.devMode;
     this.gameInfo.allowCheat = data.playerInfo.allowCheat;
@@ -300,6 +329,7 @@ class AppModelService {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.updatedBalance = data.playerInfo.balance;
+    this.gameResult = null;
     this.gameResult = data.result;
     this.featureResult = null;
     if (data.result.featureResults) {
@@ -321,6 +351,7 @@ class AppModelService {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
+    this.gameResult = null;
     this.gameResult =
       data.result.featureResults[data.result.featureResults.length - 1].spinResults[
         data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
@@ -497,6 +528,13 @@ class AppModelService {
     }
     return null;
   }
+  public getLightningStrikeData(): any {
+    const modifiers = this.getReelModifiers();
+    if (modifiers && modifiers.length > 0) {
+      return modifiers.find((mod: any) => mod.type === 'lightningStrike');
+    }
+    return null;
+  }
   public getNormalWin(): number {
     return this.gameResult?.normalWin || 0;
   }
@@ -543,12 +581,6 @@ class AppModelService {
 
   public getBuyBonusMultiplier(featureType: string): number {
     return this.playerInfo?.bbBetMultiplierSettings?.[featureType] || 100;
-  }
-
-  public getIsBuyBonusAvailable(): any {
-    if (this.playerInfo?.buyFeature != undefined) {
-      return this.playerInfo.buyFeature;
-    }
   }
 
   // ---------------------------------- All set methods -----------------------------------------

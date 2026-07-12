@@ -1,0 +1,76 @@
+import { JackpotComp } from '@core/views/comps/JackpotComp';
+
+export const JACKPOT_CONFIG: any = {
+  name: 'jackpotContainer',
+  type: 'Comp',
+  class: JackpotComp,
+  Elements: [
+    {
+      name: 'guideRect',
+      type: 'Graphics',
+      color: 0xff0000,
+      width: 1143,
+      height: 75,
+      alpha: 1,
+    },
+    {
+      name: 'Jackpot1',
+      type: 'Graphics',
+      color: 0xffff00,
+      width: 208,
+      height: 75,
+      x: 0,
+      y: 0,
+    },
+    {
+      name: 'Jackpot2',
+      type: 'Graphics',
+      color: 0xffff00,
+      width: 208,
+      height: 75,
+      x: 220,
+      y: 0,
+    },
+    {
+      name: 'Jackpot3',
+      type: 'Graphics',
+      color: 0xffff00,
+      width: 208,
+      height: 75,
+      x: 714,
+      y: 0,
+    },
+    {
+      name: 'Jackpot4',
+      type: 'Graphics',
+      color: 0xffff00,
+      width: 208,
+      height: 75,
+      x: 934,
+      y: 0,
+    },
+  ],
+  layoutData: {
+    Desktop: {
+      hAlign: 'center',
+      vAlign: 'top',
+      widthPerc: 0.85,
+      vPaddingPerc: -0.13,
+      posRefComponent: 'slotMachineView',
+    },
+    Portrait: {
+      hAlign: 'center',
+      vAlign: 'top',
+      widthPerc: 1,
+      vPaddingPerc: -0.09,
+      posRefComponent: 'slotMachineView',
+    },
+    Landscape: {
+      hAlign: 'center',
+      vAlign: 'top',
+      widthPerc: 1,
+      vPaddingPerc: -0.11,
+      posRefComponent: 'slotMachineView',
+    },
+  },
+};

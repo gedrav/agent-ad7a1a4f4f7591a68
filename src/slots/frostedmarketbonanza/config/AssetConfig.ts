@@ -4,7 +4,6 @@ import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 const PRELOADER: AssetBundle = {
   name: LOAD_CONSTANTS.PRELOADER,
   assets: [
-    { TYPE: 'commonConfig', NAME: 'commonConfig.json' },
     { TYPE: 'content', NAME: 'gameContent.json' },
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },

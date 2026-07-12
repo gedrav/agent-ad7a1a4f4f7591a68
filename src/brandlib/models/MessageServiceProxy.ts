@@ -82,7 +82,7 @@ export class MessageServiceProxy extends AbstractProxy {
     const finalObj: any = {};
     finalObj.gameId = GameProxy.config.gameId;
     finalObj.playerId = WrapperProxy.playerData.playerId;
-    finalObj.betAmount = appModel.getTotalBet(true);
+    finalObj.betAmount = appModel.getTotalBet();
     finalObj.token = WrapperProxy.playerData.newToken;
 
     if (GameProxy.config.dontSendBBRequest) {
@@ -143,6 +143,13 @@ export class MessageServiceProxy extends AbstractProxy {
       } else if (GameProxy.config.cheatObject.forceBookSymbol) {
         finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
         finalObj.extraData.combination = cheatObj.combination;
+      } else if (GameProxy.config.cheatObject.forceFeatureType) {
+        // Lightning_Trigger-style cheat: { forceFeatureType, forceWildCount, forceLightningWildCount }
+        finalObj.extraData.forceFeatureType = cheatObj.forceFeatureType;
+        finalObj.extraData.forceWildCount = cheatObj.forceWildCount;
+        finalObj.extraData.forceLightningWildCount = cheatObj.forceLightningWildCount;
+      } else if (cheatObj.extraData) {
+        Object.assign(finalObj.extraData, cheatObj.extraData);
       } else {
         finalObj.extraData.combination = cheatObj;
       }

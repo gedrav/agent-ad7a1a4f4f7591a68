@@ -1,6 +1,7 @@
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class SoundManager {
   constructor(config: any) {
@@ -56,6 +57,11 @@ export class SoundManager {
   }
 
   onSoundPlayEvent(sObj: any, param: any): any {
+    if (sObj.dontPlayForTurbo != undefined) {
+      if (sObj.dontPlayForTurbo && appModel.turboMode) {
+        return;
+      }
+    }
     if (sObj.matchParam != undefined) {
       if (sObj.matchParam === param) {
         SoundFactory.playSound(sObj);

@@ -11,8 +11,10 @@ const defaultGameNames = [
   //'empireofgoldnewconquest',
   //'sweetsalon',
   //'frostedmarketbonanza',
-  'bookofstorms',
-  //'meowmeowmeow',
+  //'bookofstorms',
+  // 'meowmeowmeow',
+  //'bookofstormslightningwin',
+  'carpathiantreasures'
 
 ];
 
@@ -128,7 +130,7 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
       rollupOptions: {
         output: {
-          entryFileNames: 'assets/index-canvas.js',
+          entryFileNames: 'assets/index-canvas-[hash].js',
           manualChunks(id) {
             const normalizedId = toPosix(id);
 

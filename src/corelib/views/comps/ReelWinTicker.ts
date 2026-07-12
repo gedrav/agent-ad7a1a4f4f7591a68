@@ -40,7 +40,7 @@ export class ReelWinTicker extends StandardView {
     if (appModel.getIsAutoSession()) {
       return;
     }
-    if (appModel.getIsFreeSpinsSession() && appModel.getCurrentFreeSpin() < appModel.getTotalFreespins()) {
+    if (appModel.getIsFreeSpinsSession()) {
       return;
     }
 
@@ -52,6 +52,7 @@ export class ReelWinTicker extends StandardView {
       this.winTicker.countUpValue(this.totalWin, data.duration, true);
     }
     this.visible = true;
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
   }
   protected skipToFinalValue(): void {
     this.winTicker.skipToFinalValue();

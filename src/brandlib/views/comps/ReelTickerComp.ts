@@ -46,6 +46,10 @@ export class ReelTickerComp extends StandardView {
     this.renderable = false;
   }
   protected showForFeature(): void {
+    if (appModel.getIsAutoSession()) {
+      // still in a feature session (e.g. FS just ended but autoplay continues) — stay hidden
+      return;
+    }
     this.renderable = true;
   }
 
@@ -57,6 +61,11 @@ export class ReelTickerComp extends StandardView {
   }
 
   protected showSpinWin(data: any): void {
+    const isFeatureSession = appModel.getIsAutoSession() || appModel.getIsFreeSpinsSession();
+
+    if (isFeatureSession && !appModel.isCascadeGame()) {
+      return; // win ticker isn't shown during FS/autoplay for non-cascade games
+    }
     this.totalWin += data.value;
     this.hideTicker();
   }

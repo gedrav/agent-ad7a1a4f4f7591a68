@@ -82,7 +82,10 @@ export default class CascadeReelSymbol extends ReelSymbolSpine {
         this.explosionMovie.playAnimation({ state, loop });
       }
       this.spineAnimCompleteCallback = onComplete;
-      this.playSpineAnimation(this.configData.data.blastAnim, false);
+      if (!this.playSpineAnimation(this.configData.data.blastAnim, false)) {
+        this.spineAnimCompleteCallback = null;
+        super.showBlastAnim(onComplete);
+      }
     } else {
       // if no blast anim in config then we dont show any blast anim and directly call the oncomplete
       onComplete();

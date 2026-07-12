@@ -132,14 +132,14 @@ export default class ReelSymbolSprite extends ReelSymbol {
   }
 
   public showFaded(): void {
-    this.symbol.tint = 0x666666;
+    this.symbol.tint = 0x333333;
   }
 
-  public showFeatureTriggerAnimation(onComplete?: () => void): void {
+  public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
     this.applyGlowAnimation({ innerStrength: 30 });
   }
 
-  public showWinning(onComplete?: () => void): void {
+  public showWinning(onComplete?: () => void, loop: boolean = false): void {
     //this.applyGlowAnimation({ innerStrength: 2 });
     this.symbol.tint = 0xffffff;
     AnimationProxy.animateTween(this.symbol, {
@@ -156,6 +156,10 @@ export default class ReelSymbolSprite extends ReelSymbol {
       this.winningTimeoutId = null;
       onComplete?.();
     }, 2000);
+  }
+
+  public hasPendingWinCallback(): boolean {
+    return this.winningTimeoutId !== null;
   }
 
   public cleanUpSymbolWin(): void {
