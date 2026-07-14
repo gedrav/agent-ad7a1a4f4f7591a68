@@ -8,6 +8,7 @@ import { PixAnimatedSprite } from '@core/pixiwrapper/PixAnimatedSprite';
 import { Graphics } from 'pixi.js';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class PreloaderScreen extends ResponsiveChildrenView {
   private readonly loadingText: PixText;
@@ -32,6 +33,7 @@ export class PreloaderScreen extends ResponsiveChildrenView {
   protected onLoadProgress(progress: number): void {
     if (!this.bar) return;
     this.bar.scale.x = progress / 100;
+    GameProxy.config.progressSoFar = progress;
     this.circle2.x = this.bar.x + this.bar.width;
   }
   public removePreloader(): void {

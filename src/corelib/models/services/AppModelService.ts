@@ -558,6 +558,9 @@ class AppModelService {
     this.unfinishedData = null;
   }
 
+  public getFeatureType(): string {
+    return this.featureResult?.featureType;
+  }
   public getUnfinishedFeatureType(): string {
     return this.unfinishedData.nextFeature;
   }
