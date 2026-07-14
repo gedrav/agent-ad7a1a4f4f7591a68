@@ -328,14 +328,19 @@ export default class WinController {
       }
     }
   }
-  protected getReelPosition(value: number): any {
+  protected getReelPosition(value: any): any {
+    const noOfReels = this.reelsData?.noOfReels || this.noOfReels;
+    const noOfRows = this.reelsData?.noOfRows || this.noOfRows;
+
     if (Array.isArray(value)) {
       const reel = value[0];
-      const row = value[1];
+      let row = value[1];
+      if (row >= noOfRows) row = noOfRows - 1;
       return { reel: reel, row: row };
     } else {
-      const reel = value % this.noOfReels; // which column
-      const row = Math.floor(value / this.noOfReels); // which row
+      const reel = value % noOfReels;
+      let row = Math.floor(value / noOfReels);
+      if (row >= noOfRows) row = noOfRows - 1;
       return { reel: reel, row: row };
     }
   }

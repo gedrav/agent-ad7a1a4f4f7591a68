@@ -234,7 +234,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.finalSymbols = [];
     if (reels) {
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
-        this.finalSymbols[k] = reels[k];
+        this.finalSymbols[k] = [...reels[k]];
         this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
         this.finalSymbols[k].push(this.getRandomSymbolName(k));
       }
@@ -292,8 +292,15 @@ export default class SlotReel extends ResponsiveChildrenView {
       const reelsview = appModel.getUnfinishedReel();
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         for (let j = 1; j <= this.reelsData.noOfRows; j++) {
-          const symb = reelsview[k][j - 1];
-          this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
+          let symbName = reelsview?.[k]?.[j - 1];
+          if (!symbName) {
+            symbName = this.getRandomSymbolName();
+          }
+          let symbolData = this.reelsData.symbolsData[symbName];
+          if (!symbolData) {
+            symbolData = this.reelsData.symbolsData[this.getRandomSymbolName()];
+          }
+          this.symbolsArray[k][j].setNewSymbol(symbolData, k);
         }
       }
     }
@@ -939,7 +946,10 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (!this.reelsData.isFixedSymbol && (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1)) {
       return this.getNextSymbol(reelno);
     }
-    const symbol = this.reelsData.initialReel[reelno][this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
+    let symbol = this.reelsData.initialReel?.[reelno]?.[this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
+    if (!symbol) {
+      symbol = this.getRandomSymbolName(reelno);
+    }
     const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
