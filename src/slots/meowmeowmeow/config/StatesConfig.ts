@@ -15,7 +15,6 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
-import { ShowFSEnterTransitionState } from '@game/states/ShowFSEnterTransitionState';
 import { MMMCheckFeatureState } from '@slots/meowmeowmeow/states/MMMCheckFeatureState';
 
 export const STATES_CONFIG: any = [
@@ -37,7 +36,6 @@ export const STATES_CONFIG: any = [
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
   { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
-  { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: ShowFSEnterTransitionState },
 
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
