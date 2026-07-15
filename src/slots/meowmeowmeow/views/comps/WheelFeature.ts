@@ -62,8 +62,12 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  private velocityMatchedEaseOut(t: number, k: number): number {
-    return (k - 2) * t ** 3 + (3 - 2 * k) * t ** 2 + k * t;
+  // private velocityMatchedEaseOut(t: number, k: number): number {
+  //   return (k - 2) * t ** 3 + (3 - 2 * k) * t ** 2 + k * t;
+  // }
+
+  private easeOutSharp(t) {
+    return Math.sqrt(1 - Math.pow(t - 1, 2));
   }
 
   public spinWheel(): void {
@@ -97,11 +101,10 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
   public stopWheel(choosenSector: number): void {
     if (this.spinState !== 'spinning') {
-      console.warn('WheelFeatureComp: stopWheel called but wheel is not currently free-spinning');
       return;
     }
     if (choosenSector < 0 || choosenSector >= this.numberOfSectors) {
-      console.warn(`WheelFeatureComp: invalid sector ${choosenSector}`);
+      console.warn(`WheelFeatureComp: invalid Response ${choosenSector}`);
       return;
     }
 
@@ -142,7 +145,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     const animateStop = (frameNow: number): void => {
       const elapsed = frameNow - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = this.velocityMatchedEaseOut(progress, k);
+      const eased = this.easeOutSharp(progress);
 
       this.wheelBG.rotation = startRotation + totalRotation * eased;
 

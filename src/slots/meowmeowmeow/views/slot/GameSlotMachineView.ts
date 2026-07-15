@@ -20,7 +20,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
   public showWheel(): void {
     const wheelBG = this.elementsList['wheelContainer'];
-    console.warn(wheelBG);
     wheelBG.visible = true;
     wheelBG.renderable = true;
     wheelBG.interactive = true;
