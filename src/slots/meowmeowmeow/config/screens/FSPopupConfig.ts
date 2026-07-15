@@ -9,18 +9,18 @@ export const FS_POPUP_CONFIG = {
     { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
     {
       name: 'popupbg',
-      type: 'NineSliceSprite',
-      image: 'popup1',
-      nineSlice: [200, 200, 200, 200],
-      anchor: { x: 0.5, y: 0.5 },
-      width: 1106,
-      x: 448,
-      y: 540,
+      type: 'Graphics',
+      width: 5000,
+      height: 5000,
+      color: 0x000000,
+      alpha: 1,
+      x: 450 - 2500,
+      y: 540 - 2500,
     },
     {
       name: 'titleText',
       type: 'Text',
-      contentText: '',
+      content: 'CONGRATULATIONS!',
       style: {
         fontFamily: 'gameFont1',
         fontSize: 70,
@@ -39,8 +39,8 @@ export const FS_POPUP_CONFIG = {
     {
       name: 'messageText1',
       type: 'Text',
-      contentText: '',
-      visible: false,
+      content: 'YOU WON \n FREE SPINS',
+      visible: true,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 60,
