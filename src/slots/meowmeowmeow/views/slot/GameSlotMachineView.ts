@@ -13,31 +13,33 @@ export class GameSlotMachineView extends SlotMachineView {
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
-    // setTimeout(() => this.expandRowsTo4(), 5000);
-    // setTimeout(() => this.reverseRowsTo3(), 10000);
+    EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
   }
 
   public showCoinAnimations() {
-    const coinPositions = appModel.gameResult?.coinPositions;
-
-    // 1. Gather all coins into a single array
+    // 1. Gather all coins into a single array by scanning the actual physical reels on the screen
     const allCoins: { col: number; row: number; bank: 'meow' | 'mew' | 'mii'; symbol: string }[] = [];
 
-    if (coinPositions) {
-      if (coinPositions.red) {
-        coinPositions.red.forEach((pos: number[]) => {
-          allCoins.push({ col: pos[0], row: pos[1], bank: 'meow', symbol: 'RC' });
-        });
-      }
-      if (coinPositions.blue) {
-        coinPositions.blue.forEach((pos: number[]) => {
-          allCoins.push({ col: pos[0], row: pos[1], bank: 'mew', symbol: 'BC' });
-        });
-      }
-      if (coinPositions.green) {
-        coinPositions.green.forEach((pos: number[]) => {
-          allCoins.push({ col: pos[0], row: pos[1], bank: 'mii', symbol: 'GC' });
-        });
+    const reel: any = this.slotReel;
+    const maxRow = (reel.reelsData.noOfRows || 3) - 1;
+
+    for (let col = 0; col < reel.symbolsArray.length; col++) {
+      if (Array.isArray(reel.symbolsArray[col])) {
+        for (let row = 0; row <= maxRow; row++) {
+          const symbolRow = row + 1; // +1 to skip top padding
+          const targetSymbol = reel.symbolsArray[col][symbolRow];
+          if (targetSymbol && typeof targetSymbol.getSymbolName === 'function') {
+            const symbolName = targetSymbol.getSymbolName();
+            if (symbolName === 'RC') {
+              allCoins.push({ col, row, bank: 'meow', symbol: 'RC' });
+            } else if (symbolName === 'BC') {
+              allCoins.push({ col, row, bank: 'mew', symbol: 'BC' });
+            } else if (symbolName === 'GC') {
+              allCoins.push({ col, row, bank: 'mii', symbol: 'GC' });
+            }
+          }
+        }
       }
     }
 
@@ -115,7 +117,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
     this.slotReel.addChild(movingSymbol);
 
-    const arcHeight = -500;
+    const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
 
@@ -136,47 +138,43 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
-  public expandRowsTo4(): void {
+  public updateReelLayout(interfaceSize: number | string): void {
+    const size = Number(interfaceSize);
     const reel: any = this.slotReel;
-    if (reel.reelsData.noOfRows === 4) return;
-    reel.reelsData.noOfRows = 4;
+    if (reel.reelsData.noOfRows === size) return;
+    reel.reelsData.noOfRows = size;
 
-    // Pad initialReel to 6 symbols to prevent 4-row engine crash
-    if (reel.reelsData.initialReel) {
-      for (let k = 0; k < reel.reelsData.initialReel.length; k++) {
-        if (reel.reelsData.initialReel[k].length < 6) {
-          reel.reelsData.initialReel[k].push('H1', 'L2', 'RC');
+    if (size === 4 || size === 5) {
+      // Pad initialReel to prevent engine crash
+      const targetLength = size + 2;
+      if (reel.reelsData.initialReel) {
+        for (let k = 0; k < reel.reelsData.initialReel.length; k++) {
+          while (reel.reelsData.initialReel[k].length < targetLength) {
+            reel.reelsData.initialReel[k].push('H1', 'L2', 'RC');
+          }
         }
       }
-    }
 
-    for (const key in reel.reelsData.deviceLayout) {
-      if (reel.reelsData.deviceLayout[key]) {
-        reel.reelsData.deviceLayout[key].symbolHeight = 246;
-        reel.reelsData.deviceLayout[key].symbolScale = 0.75;
-        reel.reelsData.deviceLayout[key].reelContainerPos.y = 195;
+      for (const key in reel.reelsData.deviceLayout) {
+        if (reel.reelsData.deviceLayout[key]) {
+          if (size === 4) {
+            reel.reelsData.deviceLayout[key].symbolHeight = 246;
+            reel.reelsData.deviceLayout[key].symbolScale = 0.75;
+            reel.reelsData.deviceLayout[key].reelContainerPos.y = 195;
+          } else if (size === 5) {
+            reel.reelsData.deviceLayout[key].symbolHeight = 196;
+            reel.reelsData.deviceLayout[key].symbolScale = 0.6;
+            reel.reelsData.deviceLayout[key].reelContainerPos.y = 170;
+          }
+        }
       }
-    }
-
-    reel.symbolsArray.flat().forEach((sym: any) => {
-      AnimationProxy.killTweensOf(sym);
-      sym.destroySymbol();
-      sym.destroy();
-    });
-    reel.symbolsArray = [];
-    reel.createReel();
-  }
-
-  public reverseRowsTo3(): void {
-    const reel: any = this.slotReel;
-    if (reel.reelsData.noOfRows === 3) return;
-    reel.reelsData.noOfRows = 3;
-
-    for (const key in reel.reelsData.deviceLayout) {
-      if (reel.reelsData.deviceLayout[key]) {
-        reel.reelsData.deviceLayout[key].symbolHeight = 322;
-        reel.reelsData.deviceLayout[key].symbolScale = 1;
-        reel.reelsData.deviceLayout[key].reelContainerPos.y = 240;
+    } else {
+      for (const key in reel.reelsData.deviceLayout) {
+        if (reel.reelsData.deviceLayout[key]) {
+          reel.reelsData.deviceLayout[key].symbolHeight = 322;
+          reel.reelsData.deviceLayout[key].symbolScale = 1;
+          reel.reelsData.deviceLayout[key].reelContainerPos.y = 240;
+        }
       }
     }
 

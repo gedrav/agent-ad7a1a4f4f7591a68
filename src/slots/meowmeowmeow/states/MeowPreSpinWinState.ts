@@ -11,11 +11,24 @@ class MeowPreSpinWinStateCommand extends StateCommand {
     const coinPositions = appModel.gameResult?.coinPositions;
     let hasCoins = false;
 
+    // Base game format: coinPositions.red / .blue / .green
     if (coinPositions) {
       if (
         (coinPositions.red && coinPositions.red.length > 0) ||
         (coinPositions.blue && coinPositions.blue.length > 0) ||
         (coinPositions.green && coinPositions.green.length > 0)
+      ) {
+        hasCoins = true;
+      }
+    }
+
+    // Free spin format: greenCoinPositions / redCoinPositions / blueCoinPositions
+    if (!hasCoins) {
+      const gr = appModel.gameResult;
+      if (
+        (gr?.greenCoinPositions && gr.greenCoinPositions.length > 0) ||
+        (gr?.redCoinPositions && gr.redCoinPositions.length > 0) ||
+        (gr?.blueCoinPositions && gr.blueCoinPositions.length > 0)
       ) {
         hasCoins = true;
       }
