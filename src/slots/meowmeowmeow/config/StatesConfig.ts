@@ -4,7 +4,7 @@ import { GameIdleState } from '@core/commands/states/GameIdleState';
 import { SpinStartState } from '@core/commands/states/SpinStartState';
 import { SpinResponseReceivedState } from '@core/commands/states/SpinResponseReceivedState';
 import { SpinStoppedState } from '@core/commands/states/SpinStoppedState';
-import { MeowPreSpinWinState } from '@game/states/MeowPreSpinWinState';
+import { MeowPreSpinWinState } from '../states/MeowPreSpinWinState';
 import { ShowSpinWinState } from '@core/commands/states/ShowSpinWinState';
 import { CheckFeatureState } from '@core/commands/states/CheckFeatureState';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
@@ -17,9 +17,11 @@ import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
 import { MMMCheckFeatureState } from '@slots/meowmeowmeow/states/MMMCheckFeatureState';
 import { GreenEnterFreespinsState } from '@slots/meowmeowmeow/states/GreenEnterFreespinsState';
+import { MMMCheckUnfinishedState } from '../states/MMMCheckUnfinishedState';
 
 export const STATES_CONFIG: any = [
-  { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
+  // { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
+  { name: STATES.CHECK_UNFINISHED_STATE, state: MMMCheckUnfinishedState },
 
   { name: STATES.IDLE_STATE, state: GameIdleState },
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
