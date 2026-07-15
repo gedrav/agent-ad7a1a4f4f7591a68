@@ -19,6 +19,9 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     if (appModel.getIsUnfinishedFreespins()) {
       EventHandler.dispatchEvent(SlotEvents.RENDER_UNFINISHED_REEL);
     }
+
+    // Proceed to the core ENTER_FREESPINS_STATE after handling the Green-specific setup
+    StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
   }
 }
 

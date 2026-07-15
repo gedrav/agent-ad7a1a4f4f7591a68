@@ -11,7 +11,8 @@ class MMMCheckFeatureStateCommand extends StateCommand {
     const featureType = appModel.getFeatureType() || appModel.getFeatureName() || '';
 
     if (featureType.toUpperCase() === 'GREEN') {
-      GreenEnterFreespinsState.execute(data);
+      StateManager.goToState(STATES.GREEN_ENTER_FREESPINS_STATE);
+      return;
     }
 
     // fsInfo is now dynamically populated in MeowPreSpinWinState
