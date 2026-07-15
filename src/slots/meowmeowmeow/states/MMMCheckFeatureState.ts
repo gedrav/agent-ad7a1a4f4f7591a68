@@ -8,7 +8,10 @@ import { SlotEvents } from '@core/events/SlotEvents';
 class MMMCheckFeatureStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (appModel.getFeatureType() == 'green') {
+    if (appModel.getFeatureType() == 'GREEN') {
+    } else if (appModel.getFeatureType() == 'BLUE') {
+      EventHandler.dispatchEvent('showWheel');
+      // TODO: send featureReq
     }
   }
 }

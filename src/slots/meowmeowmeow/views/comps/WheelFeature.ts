@@ -1,0 +1,169 @@
+import { SlotEvents } from '@core/events/SlotEvents';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+
+type SpinState = 'idle' | 'spinning' | 'stopping';
+
+export class WheelFeatureComp extends ResponsiveChildrenView {
+  private readonly wheelBG: PixSprite;
+  private readonly numberOfSectors: number = 10;
+  private readonly radiansPerSector: number = (Math.PI * 2) / this.numberOfSectors;
+  private isSpinning: boolean = false;
+  private spinState: SpinState = 'idle';
+  private iteration: number = 0;
+  private readonly maxSpinDuration: number = 5000;
+  private readonly lateStopDuration: number = 600;
+  private readonly minDecelDuration: number = 400;
+  private readonly continuousSpeed: number = (Math.PI * 2) / 1000;
+  private lastFrameTime: number = 0;
+  private spinStartTime: number = 0;
+
+  // TODO: Map wheel sectors with response
+  // private featureMpa = {
+  //     0: '',
+  //     1: '',
+  //     2: '',
+  //     3: '',
+  //     4: '',
+  //     5: '',
+  //     6: '',
+  //     7: '',
+  //     8: '',
+  //     9: '',
+  //     10: '',
+  // };
+
+  constructor(config: any) {
+    super(config);
+    this.wheelBG = this.elementsList['wheelBG'];
+    this.wheelBG.x = 0;
+    this.wheelBG.y = 0;
+    this.visible = false;
+    this.renderable = false;
+    this.interactive = false;
+    this.resizeView();
+    this.onpointerdown = () => {
+      this.spinWheel();
+      setTimeout(() => {
+        const choosenSector = this.getRandomInt(0, this.numberOfSectors - 1);
+        this.stopWheel(choosenSector);
+      }, 2000);
+    };
+  }
+
+  private finalPosition(choosenSector: number): number {
+    const sectorsToMinus = this.numberOfSectors - choosenSector;
+    const rotation = sectorsToMinus * this.radiansPerSector;
+    return rotation;
+  }
+
+  private getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  private velocityMatchedEaseOut(t: number, k: number): number {
+    return (k - 2) * t ** 3 + (3 - 2 * k) * t ** 2 + k * t;
+  }
+
+  public spinWheel(): void {
+    if (this.isSpinning) {
+      return;
+    }
+
+    this.isSpinning = true;
+    this.spinState = 'spinning';
+    this.interactive = false;
+
+    const now = performance.now();
+    this.spinStartTime = now;
+    this.lastFrameTime = now;
+
+    requestAnimationFrame(this.freeSpinTick);
+  }
+
+  private readonly freeSpinTick = (now: number): void => {
+    if (this.spinState !== 'spinning') {
+      return;
+    }
+
+    const delta = now - this.lastFrameTime;
+    this.lastFrameTime = now;
+
+    this.wheelBG.rotation += this.continuousSpeed * delta;
+
+    requestAnimationFrame(this.freeSpinTick);
+  };
+
+  public stopWheel(choosenSector: number): void {
+    if (this.spinState !== 'spinning') {
+      console.warn('WheelFeatureComp: stopWheel called but wheel is not currently free-spinning');
+      return;
+    }
+    if (choosenSector < 0 || choosenSector >= this.numberOfSectors) {
+      console.warn(`WheelFeatureComp: invalid sector ${choosenSector}`);
+      return;
+    }
+
+    this.spinState = 'stopping';
+
+    const now = performance.now();
+    const elapsedSinceStart = now - this.spinStartTime;
+
+    const duration =
+      elapsedSinceStart < this.maxSpinDuration
+        ? Math.max(this.maxSpinDuration - elapsedSinceStart, this.minDecelDuration)
+        : this.lateStopDuration;
+
+    const startRotation = this.wheelBG.rotation % (Math.PI * 2);
+    this.wheelBG.rotation = startRotation;
+
+    const targetRotation = this.finalPosition(choosenSector);
+
+    let deltaToTarget = (targetRotation - startRotation) % (Math.PI * 2);
+    if (deltaToTarget < 0) {
+      deltaToTarget += Math.PI * 2;
+    }
+
+    const naturalDistance = 0.5 * this.continuousSpeed * duration;
+
+    let extraFullSpins = Math.round((naturalDistance - deltaToTarget) / (Math.PI * 2));
+    if (extraFullSpins < 0) {
+      extraFullSpins = 0;
+    }
+
+    const totalRotation = extraFullSpins * Math.PI * 2 + deltaToTarget;
+
+    let k = totalRotation > 0 ? (this.continuousSpeed * duration) / totalRotation : 2;
+    k = Math.min(Math.max(k, 1.5), 2);
+
+    const startTime = now;
+
+    const animateStop = (frameNow: number): void => {
+      const elapsed = frameNow - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = this.velocityMatchedEaseOut(progress, k);
+
+      this.wheelBG.rotation = startRotation + totalRotation * eased;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateStop);
+      } else {
+        this.wheelBG.rotation = startRotation + deltaToTarget;
+        this.isSpinning = false;
+        this.spinState = 'idle';
+        this.interactive = true;
+        this.iteration++;
+        this.onSpinComplete(choosenSector);
+      }
+    };
+
+    requestAnimationFrame(animateStop);
+  }
+
+  private onSpinComplete(choosenSector: number): void {}
+
+  public resizeView(): void {
+    super.resizeView();
+  }
+}
