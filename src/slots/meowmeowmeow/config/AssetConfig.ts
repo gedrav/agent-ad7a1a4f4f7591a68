@@ -18,6 +18,7 @@ const COMMON: AssetBundle = {
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
     { TYPE: 'common', NAME: 'gameBG', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine' },
   ],
 };
 

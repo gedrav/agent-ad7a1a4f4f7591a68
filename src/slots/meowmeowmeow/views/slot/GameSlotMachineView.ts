@@ -86,10 +86,10 @@ export class GameSlotMachineView extends SlotMachineView {
     const symbolRow = row + 1;
 
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
-    const startPos = this.slotReel.toLocal(strtGlobalPos);
+    const startPos = kittieBankComp.toLocal(strtGlobalPos);
 
     const endGlobalPos = targetBank.getGlobalPosition();
-    const endPos = this.slotReel.toLocal(endGlobalPos);
+    const endPos = kittieBankComp.toLocal(endGlobalPos);
 
     endPos.x += targetBank.width / 2;
     endPos.y += targetBank.height / 2;
@@ -104,7 +104,6 @@ export class GameSlotMachineView extends SlotMachineView {
       },
     });
 
-    // Swap the original symbol on the reel to its actual greyscale asset
     const reel: any = this.slotReel;
     const targetSymbol = reel.symbolsArray?.[col]?.[symbolRow];
     if (targetSymbol?.symbol) {
@@ -115,7 +114,14 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.position.copyFrom(startPos);
     movingSymbol.scale.set(1);
 
-    this.slotReel.addChild(movingSymbol);
+    // Dynamically find exactly where the target bank is, and add the coin just below it!
+    const targetIndex = kittieBankComp.getChildIndex(targetBank);
+    kittieBankComp.addChildAt(movingSymbol, targetIndex);
+
+    kittieBankComp.children.forEach((child: any, idx: number) => {
+      const childName = child.name || 'MovingCoin';
+      console.log(`  [${idx}] -> ${childName}`);
+    });
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
@@ -125,13 +131,14 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1,
       onUpdate: function () {
         const t = this.progress();
-        // Move along the curved path and shrink to half size
         const bezierPoint = getBezierPoint(t, startPos, c1, c2, endPos);
         movingSymbol.position.copyFrom(bezierPoint);
         movingSymbol.scale.set(lerp(1, 0.5, t));
       },
       onComplete: () => {
-        this.slotReel.removeChild(movingSymbol);
+        if (movingSymbol.parent) {
+          movingSymbol.parent.removeChild(movingSymbol);
+        }
         movingSymbol.destroy();
         console.log(`Symbol successfully reached the ${bankName} bank!`);
       },
