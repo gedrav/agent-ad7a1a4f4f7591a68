@@ -234,7 +234,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.finalSymbols = [];
     if (reels) {
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
-        this.finalSymbols[k] = [...reels[k]];
+        this.finalSymbols[k] = reels[k];
         this.finalSymbols[k].unshift(this.getRandomSymbolName(k));
         this.finalSymbols[k].push(this.getRandomSymbolName(k));
       }
@@ -292,15 +292,8 @@ export default class SlotReel extends ResponsiveChildrenView {
       const reelsview = appModel.getUnfinishedReel();
       for (let k = 0; k < this.reelsData.noOfReels; k++) {
         for (let j = 1; j <= this.reelsData.noOfRows; j++) {
-          let symbName = reelsview?.[k]?.[j - 1];
-          if (!symbName) {
-            symbName = this.getRandomSymbolName();
-          }
-          let symbolData = this.reelsData.symbolsData[symbName];
-          if (!symbolData) {
-            symbolData = this.reelsData.symbolsData[this.getRandomSymbolName()];
-          }
-          this.symbolsArray[k][j].setNewSymbol(symbolData, k);
+          const symb = reelsview[k][j - 1];
+          this.symbolsArray[k][j].setNewSymbol(this.reelsData.symbolsData[reelsview[k][j - 1]], k);
         }
       }
     }
@@ -334,10 +327,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
 
-        const isPaddingRow = !this.reelsData.isFixedSymbol && (j === 0 || j === rows - 1);
-        if (!isPaddingRow) {
-          UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
-        }
+        UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
       }
     }
     this.winController.symbolsArray = this.symbolsArray;
@@ -910,7 +900,14 @@ export default class SlotReel extends ResponsiveChildrenView {
     for (let i = 0; i < len1; i++) {
       const len2 = this.symbolsArray[i].length;
       for (let j = 0; j < len2; j++) {
-        UIUtil.setClickable(this.symbolsArray[i][j], flag);
+        const isPaddingRow = !this.reelsData.isFixedSymbol && (j === 0 || j === len2 - 1);
+        if (isPaddingRow) {
+          // Always disable clicking if it's currently a padding row
+          UIUtil.setClickable(this.symbolsArray[i][j], false);
+        } else {
+          // Enable/disable based on the game state if it's a visible row
+          UIUtil.setClickable(this.symbolsArray[i][j], flag);
+        }
       }
     }
   }
@@ -946,10 +943,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     if (!this.reelsData.isFixedSymbol && (rowIndex == 0 || rowIndex == this.reelsData.noOfRows + 1)) {
       return this.getNextSymbol(reelno);
     }
-    let symbol = this.reelsData.initialReel?.[reelno]?.[this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
-    if (!symbol) {
-      symbol = this.getRandomSymbolName(reelno);
-    }
+    const symbol = this.reelsData.initialReel[reelno][this.reelsData.isFixedSymbol ? rowIndex : rowIndex - 1];
     const data: any = { ...this.reelsData.symbolsData[symbol], reelNumber: reelno };
     return new this.reelsData.symbolClass({ data: data });
   }
