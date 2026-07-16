@@ -8,20 +8,7 @@ import { STATES } from '@core/states/StateConstants';
 class GreenEnterFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    let interfaceSize =
-      Number(appModel.featureResult?.interfaceSize) || Number(appModel.gameResult?.interfaceSize) || 4;
-    if (interfaceSize < 4) {
-      interfaceSize = 4;
-    }
-    // Update the reel layout dynamically for the Green feature via events
-    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
-
-    if (appModel.getIsUnfinishedFreespins()) {
-      EventHandler.dispatchEvent(SlotEvents.RENDER_UNFINISHED_REEL);
-    }
-
-    // Proceed to the core ENTER_FREESPINS_STATE after handling the Green-specific setup
-    StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
+    EventHandler.dispatchEvent('showGreenFeature');
   }
 }
 

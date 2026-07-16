@@ -16,6 +16,7 @@ import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 import { JP_BANNER_ANIM_CONFIG } from '@slots/meowmeowmeow/config/screens/JPAnimsConfig';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
+import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -75,23 +76,36 @@ export const SLOT_MACHINE_CONFIG: any = {
         initialReel: [
           ['WD', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
-          ['H2', 'H4', 'L5'],
+          ['H2', 'BC', 'L5'],
           ['H3', 'H5', 'L4'],
           ['H4', 'H3', 'WD'],
         ],
         symbolsData: {
           RC: {
             name: 'RC',
-            animScale: 0.65,
+            spineName: 'Coin',
+            skin: 'red',
+            idleAnim: 'STatic',
+            winAnim: 'Win',
+            animScale: 1,
           },
           BC: {
             name: 'BC',
-            animScale: 0.65,
+            spineName: 'Coin',
+            skin: 'Blue',
+            idleAnim: 'STatic',
+            winAnim: 'Win',
+            animScale: 1,
           },
           GC: {
             name: 'GC',
-            animScale: 0.65,
+            spineName: 'Coin',
+            skin: 'Green',
+            idleAnim: 'STatic',
+            winAnim: 'Win',
+            animScale: 1,
           },
+
           WD: {
             name: 'WD',
             spineName: 'WDSymbolAnim',
@@ -336,6 +350,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     KITTIEBANK_CONFIG,
     WHEEL_CONFIG,
+    GREEN_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {
