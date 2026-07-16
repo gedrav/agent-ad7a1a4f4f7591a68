@@ -352,6 +352,7 @@ class AppModelService {
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameResult = null;
+    // Check this fix added because for wheel features's response it doesn't have spinresults in featureResults, so we need to check if spinresults exists before accessing it.
     if (!data.result.featureResults[data.result.featureResults.length - 1].spinResults) {
       this.gameResult = null;
     } else {
