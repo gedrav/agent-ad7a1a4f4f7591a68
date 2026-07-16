@@ -78,8 +78,8 @@ export class GameSlotMachineView extends SlotMachineView {
       return;
     }
 
-    const targetBank = kittieBankComp.elementsList[bankName];
-    if (!targetBank) {
+    const targetBankComp = kittieBankComp.elementsList[bankName];
+    if (!targetBankComp) {
       return;
     }
 
@@ -88,11 +88,11 @@ export class GameSlotMachineView extends SlotMachineView {
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
     const startPos = kittieBankComp.toLocal(strtGlobalPos);
 
+    // Target the spine directly instead of the outer Comp
+    const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
+
     const endGlobalPos = targetBank.getGlobalPosition();
     const endPos = kittieBankComp.toLocal(endGlobalPos);
-
-    endPos.x += targetBank.width / 2;
-    endPos.y += targetBank.height / 2;
 
     const movingSymbol = new ReelSymbolSprite({
       data: {
@@ -115,7 +115,7 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.scale.set(1);
 
     // Dynamically find exactly where the target bank is, and add the coin just below it!
-    const targetIndex = kittieBankComp.getChildIndex(targetBank);
+    const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
     kittieBankComp.addChildAt(movingSymbol, targetIndex);
 
     kittieBankComp.children.forEach((child: any, idx: number) => {

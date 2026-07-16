@@ -2,7 +2,6 @@ import { StateCommand } from '@core/commands/core/StateCommand';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
-import { GreenEnterFreespinsState } from '@slots/meowmeowmeow/states/GreenEnterFreespinsState';
 
 class MMMCheckFeatureStateCommand extends StateCommand {
   public async execute(data: any = null) {

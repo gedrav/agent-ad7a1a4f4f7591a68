@@ -23,7 +23,6 @@ class CheckUnfinishedStateCommand extends StateCommand {
             StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
           } else {
             console.log('feature but not FS, handle now');
-            StateManager.goToState(STATES.GAME_FEATURE_STATE);
           }
         } else {
           appModel.waitingForFeature = true;
