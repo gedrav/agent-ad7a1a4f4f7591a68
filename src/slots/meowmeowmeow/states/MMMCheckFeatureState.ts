@@ -13,14 +13,16 @@ class MMMCheckFeatureStateCommand extends StateCommand {
     if (featureType.toUpperCase() === 'GREEN') {
       StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
       return;
-    } else {
+    } else if (featureType.toUpperCase() === 'BLUE') {
       StateManager.goToState(GAMESTATES.WHEEL_FEATURE_STATE);
+      return;
+    } else if (featureType.toUpperCase() === 'RED') {
+      // TODO: Implement RED feature later. Bypassing for now.
+      StateManager.next();
       return;
     }
 
-    // fsInfo is now dynamically populated in MeowPreSpinWinState
-
-    StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
+    StateManager.next();
   }
 }
 

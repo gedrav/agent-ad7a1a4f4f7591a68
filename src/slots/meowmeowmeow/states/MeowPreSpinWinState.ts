@@ -4,37 +4,29 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 
+function hasNonEmpty(arr: any): boolean {
+  return Array.isArray(arr) && arr.length > 0;
+}
+
+// Base game format: coinPositions.red / .blue / .green
+// Free spin format: redCoinPositions / blueCoinPositions / greenCoinPositions
+function hasCoins(gameResult: any): boolean {
+  const coinPositions = gameResult?.coinPositions;
+  return (
+    hasNonEmpty(coinPositions?.red) ||
+    hasNonEmpty(coinPositions?.blue) ||
+    hasNonEmpty(coinPositions?.green) ||
+    hasNonEmpty(gameResult?.redCoinPositions) ||
+    hasNonEmpty(gameResult?.blueCoinPositions) ||
+    hasNonEmpty(gameResult?.greenCoinPositions)
+  );
+}
+
 class MeowPreSpinWinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
 
-    const coinPositions = appModel.gameResult?.coinPositions;
-    let hasCoins = false;
-
-    // Base game format: coinPositions.red / .blue / .green
-    if (coinPositions) {
-      if (
-        (coinPositions.red && coinPositions.red.length > 0) ||
-        (coinPositions.blue && coinPositions.blue.length > 0) ||
-        (coinPositions.green && coinPositions.green.length > 0)
-      ) {
-        hasCoins = true;
-      }
-    }
-
-    // Free spin format: greenCoinPositions / redCoinPositions / blueCoinPositions
-    if (!hasCoins) {
-      const gr = appModel.gameResult;
-      if (
-        (gr?.greenCoinPositions && gr.greenCoinPositions.length > 0) ||
-        (gr?.redCoinPositions && gr.redCoinPositions.length > 0) ||
-        (gr?.blueCoinPositions && gr.blueCoinPositions.length > 0)
-      ) {
-        hasCoins = true;
-      }
-    }
-
-    if (hasCoins) {
+    if (hasCoins(appModel.gameResult)) {
       EventHandler.dispatchEvent(SlotEvents.SHOW_COIN_ANIMATION);
     } else {
       StateManager.next();
