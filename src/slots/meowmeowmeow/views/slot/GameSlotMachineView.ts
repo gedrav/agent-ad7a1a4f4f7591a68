@@ -13,8 +13,16 @@ export class GameSlotMachineView extends SlotMachineView {
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
+    EventHandler.addEventListener('showWheel', this.showWheel.bind(this));
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
+  }
+
+  public showWheel(): void {
+    const wheelBG = this.elementsList['wheelContainer'];
+    wheelBG.visible = true;
+    wheelBG.renderable = true;
+    wheelBG.interactive = true;
   }
 
   public showCoinAnimations() {
