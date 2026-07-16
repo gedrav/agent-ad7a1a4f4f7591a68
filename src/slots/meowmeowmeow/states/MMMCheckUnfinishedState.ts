@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
+import { GAMESTATES } from './GameStates';
 
 class MMMCheckUnfinishedStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -21,9 +22,12 @@ class MMMCheckUnfinishedStateCommand extends StateCommand {
         if (appModel.secondaryAssetsLoaded) {
           if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
             StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
-          } else if (fType.toUpperCase() === 'GREEN') {
-            StateManager.goToState(STATES.GREEN_ENTER_FREESPINS_STATE);
+            // FIXME:
+            // } else if (fType.toUpperCase() === 'GREEN') {
+            //   StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
+            // }else if(fType.toUpperCase() === 'BLUE') {
           } else {
+            StateManager.goToState(GAMESTATES.WHEEL_FEATURE_STATE);
             console.log('MMMCheckUnfinishedState: Unknown feature type, handling now');
           }
         } else {

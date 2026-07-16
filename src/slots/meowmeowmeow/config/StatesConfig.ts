@@ -19,6 +19,7 @@ import { MMMCheckFeatureState } from '@slots/meowmeowmeow/states/MMMCheckFeature
 import { GreenEnterFreespinsState } from '@slots/meowmeowmeow/states/GreenEnterFreespinsState';
 import { MMMCheckUnfinishedState } from '../states/MMMCheckUnfinishedState';
 import { GAMESTATES } from '@slots/meowmeowmeow/states/GameStates';
+import { WheelFeatureState } from '@slots/meowmeowmeow/states/WheelFeatureState';
 
 export const STATES_CONFIG: any = [
   // { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -40,6 +41,8 @@ export const STATES_CONFIG: any = [
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
   { name: GAMESTATES.GREEN_ENTER_FREESPINS_STATE, state: GreenEnterFreespinsState },
+  { name: GAMESTATES.WHEEL_FEATURE_STATE, state: WheelFeatureState },
+
   { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
 
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },

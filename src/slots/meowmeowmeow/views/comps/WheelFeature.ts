@@ -1,7 +1,12 @@
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { STATES } from '@core/states/StateConstants';
+import { StateManager } from '@core/states/StateManagerService';
+import { GAMESTATES } from '@slots/meowmeowmeow/states/GameStates';
 
 type SpinState = 'idle' | 'spinning' | 'stopping';
 
@@ -18,6 +23,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   private readonly continuousSpeed: number = (Math.PI * 2) / 1000;
   private lastFrameTime: number = 0;
   private spinStartTime: number = 0;
+  private wheelWinnings: string = '';
 
   // TODO: Map wheel sectors with response
   // private featureMpa = {
@@ -43,8 +49,17 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     this.renderable = false;
     this.interactive = false;
     this.resizeView();
-    this.onpointerdown = () => {
+    this.onpointerdown = async () => {
       this.spinWheel();
+      await MessageProxy.requestBonusData(appModel.getFeatureType());
+      const wheelResult = appModel.featureResult;
+      this.wheelWinnings =
+        wheelResult.prizeValue === 'Green_Coin_Feature'
+          ? 'Green'
+          : wheelResult.prizeValue === 'Red_Coin_Feature'
+            ? 'Red'
+            : wheelResult.prizeValue;
+      console.warn(this.wheelWinnings);
       setTimeout(() => {
         const choosenSector = this.getRandomInt(0, this.numberOfSectors - 1);
         this.stopWheel(choosenSector);
@@ -62,13 +77,13 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  // private velocityMatchedEaseOut(t: number, k: number): number {
-  //   return (k - 2) * t ** 3 + (3 - 2 * k) * t ** 2 + k * t;
-  // }
-
-  private easeOutSharp(t) {
-    return Math.sqrt(1 - Math.pow(t - 1, 2));
+  private velocityMatchedEaseOut(t: number, k: number): number {
+    return (k - 2) * t ** 3 + (3 - 2 * k) * t ** 2 + k * t;
   }
+
+  // private easeOutSharp(t) {
+  //   return Math.sqrt(1 - Math.pow(t - 1, 2));
+  // }
 
   public spinWheel(): void {
     if (this.isSpinning) {
@@ -145,7 +160,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     const animateStop = (frameNow: number): void => {
       const elapsed = frameNow - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = this.easeOutSharp(progress);
+      const eased = this.velocityMatchedEaseOut(progress, k);
 
       this.wheelBG.rotation = startRotation + totalRotation * eased;
 
@@ -164,7 +179,20 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     requestAnimationFrame(animateStop);
   }
 
-  private onSpinComplete(choosenSector: number): void {}
+  private onSpinComplete(choosenSector: number): void {
+    this.visible = false;
+    this.renderable = false;
+    this.interactive = false;
+
+    if (this.wheelWinnings === 'Green') {
+      StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
+    } else if (this.wheelWinnings === 'Red') {
+      // createOne
+      // StateManager.goToState(GAMESTATES.RED_ENTER_FREESPINS_STATE);
+    } else {
+      StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
+    }
+  }
 
   public resizeView(): void {
     super.resizeView();
