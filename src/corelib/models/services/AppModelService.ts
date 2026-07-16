@@ -88,7 +88,6 @@ class AppModelService {
   private _secondaryAssetsLoaded: boolean;
   private _featureAssetsLoaded: boolean;
   public isSymbolExpanded: boolean = false;
-  public bookSymbol: string | null = null;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
@@ -306,9 +305,6 @@ class AppModelService {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }
     this.tumbleIndex = 0;
-    if (this.featureResult?.bookSymbol) {
-      this.bookSymbol = this.featureResult.bookSymbol;
-    }
 
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
@@ -341,9 +337,6 @@ class AppModelService {
         this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
         this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
-        if (this.featureResult.bookSymbol) {
-          this.bookSymbol = this.featureResult.bookSymbol;
-        }
       }
     }
   }
@@ -360,9 +353,6 @@ class AppModelService {
         data.result.featureResults[data.result.featureResults.length - 1].spinResults[
           data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
         ];
-    }
-    if (this.featureResult.bookSymbol) {
-      this.bookSymbol = this.featureResult.bookSymbol;
     }
     this.featureResult = data.result.featureResults[data.result.featureResults.length - 1];
 
