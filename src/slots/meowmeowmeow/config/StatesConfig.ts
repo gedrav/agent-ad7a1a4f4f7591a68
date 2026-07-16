@@ -40,8 +40,8 @@ export const STATES_CONFIG: any = [
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
-  { name: GAMESTATES.GREEN_ENTER_FREESPINS_STATE, state: GreenEnterFreespinsState },
   { name: GAMESTATES.WHEEL_FEATURE_STATE, state: WheelFeatureState },
+  { name: GAMESTATES.GREEN_ENTER_FREESPINS_STATE, state: GreenEnterFreespinsState },
 
   { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
 

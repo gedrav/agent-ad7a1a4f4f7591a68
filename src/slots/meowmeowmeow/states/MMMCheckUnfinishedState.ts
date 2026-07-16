@@ -22,13 +22,16 @@ class MMMCheckUnfinishedStateCommand extends StateCommand {
         if (appModel.secondaryAssetsLoaded) {
           if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
             StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
-            // FIXME:
-            // } else if (fType.toUpperCase() === 'GREEN') {
-            //   StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
-            // }else if(fType.toUpperCase() === 'BLUE') {
-          } else {
+          } else if (fType.toUpperCase() === 'GREEN') {
+            StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
+          } else if (fType.toUpperCase() === 'BLUE') {
             StateManager.goToState(GAMESTATES.WHEEL_FEATURE_STATE);
+          } else if (fType.toUpperCase() === 'RED') {
+            // For now bypassing the red
+            StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
+          } else {
             console.log('MMMCheckUnfinishedState: Unknown feature type, handling now');
+            StateManager.next();
           }
         } else {
           appModel.waitingForFeature = true;
