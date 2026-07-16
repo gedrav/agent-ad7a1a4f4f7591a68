@@ -1,6 +1,7 @@
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
+import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { MenuCompAmbientSoundToggleCommand } from '@core/commands/action/MenuCompAmbientSoundToggleCommand';
 import { Point, Texture } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
@@ -42,9 +43,9 @@ export class GameSlotMachineView extends SlotMachineView {
             if (symbolName === 'RC') {
               allCoins.push({ col, row, bank: 'meow', symbol: 'RC' });
             } else if (symbolName === 'BC') {
-              allCoins.push({ col, row, bank: 'mew', symbol: 'BC' });
+              allCoins.push({ col, row, bank: 'mii', symbol: 'BC' });
             } else if (symbolName === 'GC') {
-              allCoins.push({ col, row, bank: 'mii', symbol: 'GC' });
+              allCoins.push({ col, row, bank: 'mew', symbol: 'GC' });
             }
           }
         }
@@ -102,21 +103,28 @@ export class GameSlotMachineView extends SlotMachineView {
     const endGlobalPos = targetBank.getGlobalPosition();
     const endPos = kittieBankComp.toLocal(endGlobalPos);
 
-    const movingSymbol = new ReelSymbolSprite({
+    const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
+    const movingSymbol = new ReelSymbolSpine({
       data: {
         name: symbolName,
-        spineName: '',
-        skin: 'default',
-        idleAnim: 'Idle',
+        spineName: 'Coin',
+        skin: skinName,
+        idleAnim: 'none',
         winAnim: 'Win',
       },
     });
+    movingSymbol.showWinning();
 
     const reel: any = this.slotReel;
     const targetSymbol = reel.symbolsArray?.[col]?.[symbolRow];
-    if (targetSymbol?.symbol) {
-      targetSymbol.symbol.texture = Texture.from(symbolName + '_grey');
-      targetSymbol.symbol.alpha = 0.2;
+    if (targetSymbol) {
+      if (typeof targetSymbol.clearCallBackAnimation === 'function') {
+        targetSymbol.clearCallBackAnimation();
+      }
+      if (targetSymbol.symbol) {
+        targetSymbol.symbol.texture = Texture.from(symbolName + '_grey');
+        targetSymbol.symbol.alpha = 0.2;
+      }
     }
 
     movingSymbol.position.copyFrom(startPos);
@@ -149,6 +157,21 @@ export class GameSlotMachineView extends SlotMachineView {
         }
         movingSymbol.destroy();
         console.log(`Symbol successfully reached the ${bankName} bank!`);
+
+        const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
+        const collectAnim = `${animPrefix}_Collect`;
+        const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
+
+        if (targetBank && typeof targetBank.playAnimation === 'function') {
+          targetBank.playAnimation({
+            state: collectAnim,
+            loop: false,
+            reset: false,
+            defaultMix: 0.1,
+            nextState: idleAnim,
+            nextLoop: true,
+          });
+        }
       },
     });
   }
