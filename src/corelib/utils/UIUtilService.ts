@@ -38,6 +38,7 @@ import { PixHTMLText } from '@core/pixiwrapper/PixHTMLText';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
 import { Input } from '@pixi/ui';
+import { PixInput } from '@core/pixiwrapper/PixInput';
 import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 
 const minMobileWidth: number = 44;
@@ -148,6 +149,9 @@ class UIUtilService {
         break;
       case 'Input':
         element = this.getInput(obj);
+        break;
+      case 'PixInput':
+        element = this.getPixInput(obj);
         break;
       case 'PixToggleButton':
         element = this.getPixToggleButton(obj);
@@ -315,6 +319,21 @@ class UIUtilService {
         .stroke({ width: borderWidth, color: borderColor });
     }
     return new Input({ ...obj.options, bg });
+  }
+
+  // Mobile-safe numeric input (see PixInput). Same bg handling as getInput.
+  public getPixInput(obj: any): PixInput {
+    let bg: any;
+    if (obj.image) {
+      bg = Sprite.from(obj.image);
+    } else {
+      const { width = 120, height = 50, radius = 8, color = 0xffffff, borderColor = 0x999999, borderWidth = 2 } = obj;
+      bg = new Graphics()
+        .roundRect(0, 0, width, height, radius)
+        .fill(color)
+        .stroke({ width: borderWidth, color: borderColor });
+    }
+    return new PixInput({ ...obj.options, bg });
   }
 
   public getBitmapText(obj: any): PixBMPText {
