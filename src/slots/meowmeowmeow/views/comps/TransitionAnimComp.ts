@@ -4,23 +4,21 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixView } from '@core/pixiwrapper/PixView';
+import { Power2 } from 'gsap/gsap-core';
 
-export class TransitionAnimComp extends ResponsiveView {
+export class TransitionAnimComp extends ResponsiveChildrenView {
   private bg: PixSprite;
   private door: PixSprite;
-  private castle: PixSprite;
-  private cont: PixView;
+  private readonly cont: PixView;
 
   constructor(config: any) {
     super(config);
     this.visible = false;
   }
   protected onViewCreated(): void {
-    this.cont = this.elementsList['cont'];
-    this.cont.pivot.set(0);
-    this.bg = this.cont.elementsList['bg'];
-    this.door = this.cont.elementsList['door'];
-    this.castle = this.cont.elementsList['castle'];
+    super.onViewCreated();
+    this.bg = this.elementsList['bg'];
+    this.door = this.elementsList['door'];
     /*setTimeout(() => {
       this.showTransition();
     }, 2000);*/
@@ -28,35 +26,29 @@ export class TransitionAnimComp extends ResponsiveView {
 
   protected showTransition(): void {
     this.resizeView();
+    this.bg.visible = false;
+    this.door.y = -this.door.height;
     this.visible = true;
     UIUtil.adjustElement(this);
-    const xpos = this.cont.x;
-    this.cont.x = this.cont.width;
-    AnimationProxy.animateTween(this.cont, {
+    AnimationProxy.animateTween(this.door, {
       duration: 2,
-      x: xpos,
-      ease: 'power2.in',
+      y: 0,
+      ease: Power2.easeIn,
       onComplete: () => {
-        this.onDoorAnimComplete();
+        this.onDoorReachedBottom();
       },
     });
   }
-  protected onDoorAnimComplete(): void {
-    /*AnimationProxy.animateTween(this.cont, {
+  protected onDoorReachedBottom(): void {
+    this.bg.visible = true;
+    AnimationProxy.animateTween(this.door, {
       duration: 2,
-      scaleX: 0.5,
-      scaleY: 0.5,
-      ease: 'power2.in',
+      y: -this.door.height,
+      ease: Power2.easeIn,
       onComplete: () => {
-        this.onSceneZoomedOut();
+        this.onDoorReachedTop();
       },
-    });*/
+    });
   }
-  protected onSceneZoomedOut(): void {}
-
-  protected resizeView() {
-    super.resizeView();
-    if (this.door) {
-    }
-  }
+  protected onDoorReachedTop(): void {}
 }
