@@ -47,6 +47,7 @@ const PRIMARY: AssetBundle = {
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
+    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'WDSymbolAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'SCSymbolAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: '10', ASSETTYPE: 'spine' },

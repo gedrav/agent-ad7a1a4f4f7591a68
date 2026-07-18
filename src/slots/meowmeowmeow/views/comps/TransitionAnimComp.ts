@@ -1,65 +1,62 @@
-import { PixSpine } from '@core/pixiwrapper/PixSpine';
-import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { SlotEvents } from '@core/events/SlotEvents';
-import { StateManager } from '@core/states/StateManagerService';
-import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { UIUtil } from '@core/utils/UIUtilService';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { PixView } from '@core/pixiwrapper/PixView';
 
-export class TransitionAnimComp extends ResponsiveChildrenView {
-  private readonly transitionAnimHor: PixSpine;
-  private readonly transitionAnimVer: PixSpine;
+export class TransitionAnimComp extends ResponsiveView {
+  private bg: PixSprite;
+  private door: PixSprite;
+  private castle: PixSprite;
+  private cont: PixView;
 
   constructor(config: any) {
     super(config);
-    this.transitionAnimHor = this.elementsList['transitionAnimHor'];
-    this.transitionAnimVer = this.elementsList['transitionAnimVer'];
-
-    this.transitionAnimHor.x = this.guideRect.width / 2;
-    this.transitionAnimHor.y = this.guideRect.height / 2;
-    this.transitionAnimVer.x = this.guideRect.width / 2;
-    this.transitionAnimVer.y = this.guideRect.height / 2;
-
-    this.transitionAnimHor.addEventListener('complete', this.onTransitionComplete.bind(this));
-    this.transitionAnimVer.addEventListener('complete', this.onTransitionComplete.bind(this));
-
     this.visible = false;
-    this.hideTransitionAnim();
-
-    EventHandler.addEventListener(SlotEvents.SHOW_TRANSITION_ANIM, this.onShowTransition.bind(this));
+  }
+  protected onViewCreated(): void {
+    this.cont = this.elementsList['cont'];
+    this.cont.pivot.set(0);
+    this.bg = this.cont.elementsList['bg'];
+    this.door = this.cont.elementsList['door'];
+    this.castle = this.cont.elementsList['castle'];
+    /*setTimeout(() => {
+      this.showTransition();
+    }, 2000);*/
   }
 
-  private hideTransitionAnim(): void {
-    this.transitionAnimHor.renderable = false;
-    this.transitionAnimVer.renderable = false;
-  }
-
-  private onShowTransition(): void {
-    this.visible = true;
-    this.playTransitionAnim();
-  }
-
-  private playTransitionAnim(): void {
-    this.transitionAnimHor.playAnimation({ state: 'horisontal', loop: false, defaultMix: 0 });
-    this.transitionAnimVer.playAnimation({ state: 'vertical', loop: false, defaultMix: 0 });
-
+  protected showTransition(): void {
     this.resizeView();
+    this.visible = true;
+    UIUtil.adjustElement(this);
+    const xpos = this.cont.x;
+    this.cont.x = this.cont.width;
+    AnimationProxy.animateTween(this.cont, {
+      duration: 2,
+      x: xpos,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.onDoorAnimComplete();
+      },
+    });
   }
-
-  private onTransitionComplete(): void {
-    if (!this.visible) return;
-    this.visible = false;
-    this.hideTransitionAnim();
-    StateManager.doNextStep();
+  protected onDoorAnimComplete(): void {
+    /*AnimationProxy.animateTween(this.cont, {
+      duration: 2,
+      scaleX: 0.5,
+      scaleY: 0.5,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.onSceneZoomedOut();
+      },
+    });*/
   }
+  protected onSceneZoomedOut(): void {}
 
-  public resizeView(): void {
+  protected resizeView() {
     super.resizeView();
-    if (DeviceProxy.config.isPortrait) {
-      this.transitionAnimVer.renderable = true;
-      this.transitionAnimHor.renderable = false;
-    } else {
-      this.transitionAnimHor.renderable = true;
-      this.transitionAnimVer.renderable = false;
+    if (this.door) {
     }
   }
 }
