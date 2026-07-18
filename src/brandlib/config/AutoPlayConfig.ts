@@ -297,7 +297,7 @@ export const AUTOPLAY_CONFIG = {
         },
         {
           name: 'spendingLimitInput',
-          type: 'Input',
+          type: 'PixInput',
           image: 'autoinputBG',
           x: 426,
           y: 77,
@@ -305,6 +305,8 @@ export const AUTOPLAY_CONFIG = {
             placeholder: '0',
             align: 'center',
             padding: 0,
+            numeric: true,
+            decimals: 2,
             textStyle: { fontFamily: 'Mulish', fontSize: 28, fill: 0xffffff },
           },
         },

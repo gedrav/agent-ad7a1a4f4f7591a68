@@ -6,7 +6,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { PixResponsiveGraphics } from '@core/pixiwrapper/PixResponsiveGraphics';
-import { Input } from '@pixi/ui';
+import { PixInput } from '@core/pixiwrapper/PixInput';
 import { Util } from '@core/utils/UtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { appModel } from '@core/models/services/AppModelService';
@@ -31,7 +31,7 @@ export class AutoplayView extends ResponsiveChildrenView {
   private readonly onAnyWin: any;
   private readonly onBonusWin: any;
   private readonly spendingLimitSlider: any;
-  private readonly spendingLimitInput: Input;
+  private readonly spendingLimitInput: PixInput;
   private readonly balanceIncreaseSlider: any;
   private readonly balanceDecreaseSlider: any;
   private selectedSpins: number = 50;
@@ -68,6 +68,10 @@ export class AutoplayView extends ResponsiveChildrenView {
     if (spendingMinLimitText) spendingMinLimitText.text = Util.formatCurrency(this.spendingLimitSlider?.min ?? 0);
     if (spendingMaxLimitText) spendingMaxLimitText.text = Util.formatCurrency(this.spendingLimitSlider?.max ?? 0);
 
+    // Cap the integer digits the user can type to the max value's digit count
+    // (PixInput derives the digit count, e.g. max 1000 -> 4 digits).
+    this.spendingLimitInput?.setMaxValue(this.spendingLimitSlider?.max ?? 0);
+
     // Slider dragged by user → show integer only (step:1 so value is always whole number)
     this.spendingLimitSlider?.onUpdate.connect((value: number) => {
       if (this._sliderUpdating) return; // Input is typing — don't overwrite
@@ -77,23 +81,15 @@ export class AutoplayView extends ResponsiveChildrenView {
       }
     });
 
-    // User typing → enforce max 2dp, move slider silently, never overwrite freely-typed text
+    // User typing → text arrives already sanitised by PixInput (numeric mode).
+    // Here we only clamp to max and move the slider silently.
     this.spendingLimitInput?.onChange.connect((text: string) => {
       if (this._inputUpdating) return;
 
-      // restrict to 2 decimal places
-      const valid = text.match(/^(?:0|[1-9]\d*)(?:\.\d{0,2})?/)?.[0] ?? '';
-      if (valid !== text) {
-        this._inputUpdating = true;
-
-        this.spendingLimitInput.value = valid;
-        this._inputUpdating = false;
-        return;
-      }
       const max = Number(this.spendingLimitSlider?.max ?? 0);
       const min = Number(this.spendingLimitSlider?.min ?? 0);
 
-      if (valid === '') {
+      if (text === '') {
         this._sliderUpdating = true;
         if (this.spendingLimitSlider) {
           this.spendingLimitSlider.value = min;
@@ -102,7 +98,7 @@ export class AutoplayView extends ResponsiveChildrenView {
         return;
       }
 
-      const parsed = parseFloat(valid);
+      const parsed = parseFloat(text);
 
       if (!isNaN(parsed) && this.spendingLimitSlider) {
         let value = Number(parsed.toFixed(2));
@@ -110,9 +106,8 @@ export class AutoplayView extends ResponsiveChildrenView {
         // clamp ONLY to max and reflect in input
         if (value > max) {
           value = max;
-
           this._inputUpdating = true;
-          this.spendingLimitInput.value = value.toString();
+          this.spendingLimitInput.setValue(value.toString());
           this._inputUpdating = false;
         }
 
