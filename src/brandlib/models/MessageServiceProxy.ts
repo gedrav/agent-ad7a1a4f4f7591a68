@@ -170,6 +170,7 @@ export class MessageServiceProxy extends AbstractProxy {
       finalObj.betPerLine = appModel.getBetPerLine();
     } else {
     }
+    finalObj.extraData = {};
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
@@ -181,6 +182,10 @@ export class MessageServiceProxy extends AbstractProxy {
       } else if (GameProxy.config.cheatObject.freespincheat) {
         finalObj.extraData = {};
         finalObj.extraData.combination = cheatObj.combination;
+      }
+      // Fix added to use cheat in featureReq too
+      else if (cheatObj.extraData) {
+        Object.assign(finalObj.extraData, cheatObj.extraData);
       }
     }
     return this.encryptObject(finalObj);

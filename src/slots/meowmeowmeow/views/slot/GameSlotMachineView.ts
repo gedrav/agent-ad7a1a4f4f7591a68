@@ -14,16 +14,38 @@ export class GameSlotMachineView extends SlotMachineView {
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
-    EventHandler.addEventListener('showWheel', this.showWheel.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
   }
 
-  public showWheel(): void {
+  private handlePickFeature(SubfeatureType: string) {
+    switch (SubfeatureType.toUpperCase()) {
+      case 'RED':
+        //  Handle for red one
+        break;
+      case 'BLUE':
+        this.showWheel();
+        break;
+      default:
+        console.error('Invalid SubFeatureType:', SubfeatureType);
+        break;
+    }
+  }
+
+  private showWheel(): void {
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
     wheelBG.interactive = true;
+  }
+
+  private hideWheel(): void {
+    const wheelBG = this.elementsList['wheelContainer'];
+    wheelBG.visible = false;
+    wheelBG.renderable = false;
+    wheelBG.interactive = false;
   }
 
   public showCoinAnimations() {
