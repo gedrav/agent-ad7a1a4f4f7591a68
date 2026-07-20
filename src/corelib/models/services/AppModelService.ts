@@ -83,13 +83,13 @@ class AppModelService {
   private _autoPlayObj: any;
   private _autoPlaySession: boolean = false;
   private _freeSpinsSession: boolean;
-  private _pickFeatureSession: boolean;
+  private _pickFeatureSession: boolean = false;
   private _tumbleIndex: number;
   private _lightningStopOnBonus: boolean;
   private _secondaryAssetsLoaded: boolean;
   private _featureAssetsLoaded: boolean;
   public isSymbolExpanded: boolean = false;
-  private _nextFeature: boolean = false;
+  private _nextFeature: string;
   private _nextSubFeature: string = '';
 
   get isErrorOccurred(): boolean {
@@ -568,7 +568,10 @@ class AppModelService {
     return this.featureResult?.featureType;
   }
 
-  public getNextFeatureType(): boolean {
+  public getPickFeatureWinnings(): number {
+    return this.featureResult.featureData.ownWin;
+  }
+  public getNextFeatureType(): string {
     return this._nextFeature;
   }
 

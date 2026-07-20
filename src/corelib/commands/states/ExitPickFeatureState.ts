@@ -13,12 +13,11 @@ class ExitPickFeatureStateCommand extends StateCommand {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
-
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
     obj.message1 = Util.parseMessage(Util.getContent('PickFeatureExitText'), [
       //TODO:  Update fn to get total wins for the feature
-      Util.formatCurrency(10000),
+      Util.formatCurrency(appModel.getPickFeatureWinnings()),
     ]);
     obj.entryPopUp = false;
     obj.callbackFunction = this.exitPickFeature.bind(this);

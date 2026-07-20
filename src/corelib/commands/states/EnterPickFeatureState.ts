@@ -11,7 +11,7 @@ import { STATES } from '@core/states/StateConstants';
 class EnterPickFeatureStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (appModel.getIsPickFeatureSession()) {
+    if (appModel.getNextFeatureType() !== CONSTANTS.FEATURE_TYPE_PICK) {
       StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
       return;
     }

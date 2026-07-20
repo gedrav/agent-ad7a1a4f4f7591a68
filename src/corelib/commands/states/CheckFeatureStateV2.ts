@@ -12,11 +12,11 @@ class CheckFeatureStateV2Command extends StateCommand {
     super.execute(data);
     if (appModel.getIsFeatureTriggered() && appModel.getNextFeatureType()) {
       if (appModel.secondaryAssetsLoaded) {
-        const fType = appModel.getFeatureType();
+        const fType = appModel.getNextFeatureType();
         if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
           if (appModel.getIsFreeSpinsSession()) {
             StateManager.goToState(STATES.CHECK_FS_STATE);
-          } else if (appModel.getIsFSTriggered()) {
+          } else {
             StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
           }
         } else if (fType === CONSTANTS.FEATURE_TYPE_PICK) {

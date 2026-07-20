@@ -54,7 +54,7 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.STOP_FS_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
-    StateManager.next();
+    StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
   }
 }
 
