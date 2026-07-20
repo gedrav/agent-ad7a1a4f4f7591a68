@@ -326,6 +326,7 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
+
         UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
       }
     }
@@ -899,7 +900,14 @@ export default class SlotReel extends ResponsiveChildrenView {
     for (let i = 0; i < len1; i++) {
       const len2 = this.symbolsArray[i].length;
       for (let j = 0; j < len2; j++) {
-        UIUtil.setClickable(this.symbolsArray[i][j], flag);
+        const isPaddingRow = !this.reelsData.isFixedSymbol && (j === 0 || j === len2 - 1);
+        if (isPaddingRow) {
+          // Always disable clicking if it's currently a padding row
+          UIUtil.setClickable(this.symbolsArray[i][j], false);
+        } else {
+          // Enable/disable based on the game state if it's a visible row
+          UIUtil.setClickable(this.symbolsArray[i][j], flag);
+        }
       }
     }
   }

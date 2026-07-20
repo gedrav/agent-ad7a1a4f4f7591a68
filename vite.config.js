@@ -12,9 +12,9 @@ const defaultGameNames = [
   //'sweetsalon',
   //'frostedmarketbonanza',
   //'bookofstorms',
-  // 'meowmeowmeow',
+  'meowmeowmeow',
   //'bookofstormslightningwin',
-  'carpathiantreasures'
+  //'carpathiantreasures'
 
 ];
 
@@ -130,7 +130,7 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
       rollupOptions: {
         output: {
-          entryFileNames: 'assets/index-canvas.js',
+          entryFileNames: 'assets/index-canvas-[hash].js',
           manualChunks(id) {
             const normalizedId = toPosix(id);
 

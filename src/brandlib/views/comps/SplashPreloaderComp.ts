@@ -8,6 +8,7 @@ import { PixAnimatedSprite } from '@core/pixiwrapper/PixAnimatedSprite';
 import { Graphics } from 'pixi.js';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class SplashPreloaderComp extends ResponsiveChildrenView {
   private readonly loadingText: PixText;
@@ -20,12 +21,13 @@ export class SplashPreloaderComp extends ResponsiveChildrenView {
     super(config);
     this.loadingText = this.elementsList['loadingText'];
     this.bar = this.elementsList['progressBar'].elementsList['bar'];
+    this.bar.scale.x = GameProxy.config.progressSoFar / 100;
     this.circle2 = this.elementsList['progressBar'].elementsList['circle2'];
     this.disposeLoadProgress = EventHandler.bind(AppEvents.LOAD_PROGRESS, this.onLoadProgress.bind(this));
   }
 
   protected onLoadProgress(progress: number): void {
-    if (!this.bar) return;
+    if (this.isDestroyed || !this.bar || this.bar?.destroyed) return;
     this.bar.scale.x = progress / 100;
     this.circle2.x = this.bar.x + this.bar.width;
   }

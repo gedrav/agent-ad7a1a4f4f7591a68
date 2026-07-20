@@ -1,0 +1,6 @@
+export const GAMESTATES = {
+  GREEN_ENTER_FREESPINS_STATE: 'GREEN_ENTER_FREESPINS_STATE',
+  WHEEL_FEATURE_STATE: 'WHEEL_FEATURE_STATE',
+} as const;
+
+export type StateKey = keyof typeof GAMESTATES;
