@@ -1,15 +1,17 @@
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
-import { STATES } from '@core/states/StateConstants';
 
-class GreenEnterFreespinsStateCommand extends StateCommand {
+class GreenExitTransitionStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    EventHandler.dispatchEvent('showGreenFeature');
+  }
+
+  public doNextStep(data: any = null) {
+    super.doNextStep(data);
+    StateManager.next();
   }
 }
 
-export const GreenEnterFreespinsState = new GreenEnterFreespinsStateCommand();
+export const GreenExitTransitionState = new GreenExitTransitionStateCommand();
