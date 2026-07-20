@@ -11,6 +11,7 @@ import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 import { FS_POPUP_CONFIG } from './FSPopupConfig';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 import { PF_POPUP_CONFIG } from './PFPopupConfig';
+import { MMM_TRANSITION_CONFIG } from '@slots/meowmeowmeow/config/screens/MMMTransitionConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -28,5 +29,6 @@ export const SLOT_GAME_APP_CONFIG: any = {
     PF_POPUP_CONFIG,
     MESSAGE_POPUP_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
+    MMM_TRANSITION_CONFIG,
   ],
 };

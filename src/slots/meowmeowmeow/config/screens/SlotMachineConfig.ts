@@ -16,6 +16,7 @@ import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 import { JP_BANNER_ANIM_CONFIG } from '@slots/meowmeowmeow/config/screens/JPAnimsConfig';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
 import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
+import { MMM_TRANSITION_CONFIG } from '@slots/meowmeowmeow/config/screens/MMMTransitionConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
