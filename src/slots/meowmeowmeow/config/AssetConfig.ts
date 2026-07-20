@@ -36,8 +36,9 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'kittiebank', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'KittieBank', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Coin', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'AnticipationAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'jpbanner', ASSETTYPE: 'spine' },
@@ -60,7 +61,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Fan', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Cap', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'CupPlate', ASSETTYPE: 'spine' },
-    //{ TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'BigWin_Anim', ASSETTYPE: 'spine' },
   ],
 };
 const FREESPIN: AssetBundle = {

@@ -53,6 +53,27 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelHeight: 900,
         reelsConfig: ReelsConfig,
         landingSymbols: ['WD', 'SC'],
+        anticipationSymbols: ['SC'],
+        anticipationConfig: {
+          totalElements: 5,
+          element: {
+            name: 'anticipationAnim',
+            type: 'Spine',
+            spineName: 'AnticipationAnim',
+            defaultState: 'animation',
+            loop: true,
+            y: 0, // Tweak this to move the effect up or down
+            px: 0,
+            lx: 0,
+          },
+          positions: [
+            null,
+            { x: 333, y: 356, px: 333, py: 356, lx: 333, ly: 356 },
+            { x: 664, y: 356, px: 664, py: 356, lx: 664, ly: 356 },
+            { x: 994, y: 356, px: 994, py: 356, lx: 994, ly: 356 },
+            { x: 1324, y: 356, px: 1324, py: 356, lx: 1324, ly: 356 },
+          ],
+        },
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 195, y: 230 },
@@ -61,8 +82,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 195, y: 230 },
-            reelPositionX: [2, 333, 664, 994, 1324],
+            reelContainerPos: { x: 172, y: 230 },
+            reelPositionX: [3, 333, 664, 994, 1324],
             symbolHeight: 330,
             symbolScale: 1,
           },
@@ -263,6 +284,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           alpha: 1,
           visible: true,
         },
+        { name: 'anticipationContainer', type: 'Container' },
         {
           name: 'winSymbolsContainer',
           type: 'Container',

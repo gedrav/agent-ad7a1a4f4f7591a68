@@ -14,8 +14,9 @@ export const KITTIEBANK_CONFIG: any = {
     {
       name: 'meow',
       type: 'Spine',
-      spineName: 'kittiebank',
+      spineName: 'KittieBank',
       defaultState: '3_RED_Static',
+      idle: '3_RED_Ideal',
       loop: true,
       scale: 0.42,
       x: 226,
@@ -28,8 +29,9 @@ export const KITTIEBANK_CONFIG: any = {
     {
       name: 'mew',
       type: 'Spine',
-      spineName: 'kittiebank',
+      spineName: 'KittieBank',
       defaultState: '1_GREEN_Static',
+      idle: '1_GREEN_Ideal',
       loop: true,
       scale: 0.5,
       x: 216,
@@ -42,8 +44,9 @@ export const KITTIEBANK_CONFIG: any = {
     {
       name: 'mii',
       type: 'Spine',
-      spineName: 'kittiebank',
+      spineName: 'KittieBank',
       defaultState: '2_BLUE_Static',
+      idle: '2_BLUE_Ideal',
       loop: true,
       scale: 0.44,
       x: 216,
