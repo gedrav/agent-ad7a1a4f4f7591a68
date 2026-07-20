@@ -88,7 +88,6 @@ class AppModelService {
   private _secondaryAssetsLoaded: boolean;
   private _featureAssetsLoaded: boolean;
   public isSymbolExpanded: boolean = false;
-  public bookSymbol: string | null = null;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
@@ -306,9 +305,6 @@ class AppModelService {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }
     this.tumbleIndex = 0;
-    if (this.featureResult?.bookSymbol) {
-      this.bookSymbol = this.featureResult.bookSymbol;
-    }
 
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
@@ -341,9 +337,6 @@ class AppModelService {
         this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
         this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
-        if (this.featureResult.bookSymbol) {
-          this.bookSymbol = this.featureResult.bookSymbol;
-        }
       }
     }
   }
@@ -352,12 +345,14 @@ class AppModelService {
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameResult = null;
-    this.gameResult =
-      data.result.featureResults[data.result.featureResults.length - 1].spinResults[
-        data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
-      ];
-    if (this.featureResult.bookSymbol) {
-      this.bookSymbol = this.featureResult.bookSymbol;
+    // Check this fix added because for wheel features's response it doesn't have spinresults in featureResults, so we need to check if spinresults exists before accessing it.
+    if (!data.result.featureResults[data.result.featureResults.length - 1].spinResults) {
+      this.gameResult = null;
+    } else {
+      this.gameResult =
+        data.result.featureResults[data.result.featureResults.length - 1].spinResults[
+          data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
+        ];
     }
     this.featureResult = data.result.featureResults[data.result.featureResults.length - 1];
 
@@ -558,6 +553,9 @@ class AppModelService {
     this.unfinishedData = null;
   }
 
+  public getFeatureType(): string {
+    return this.featureResult?.featureType;
+  }
   public getUnfinishedFeatureType(): string {
     return this.unfinishedData.nextFeature;
   }

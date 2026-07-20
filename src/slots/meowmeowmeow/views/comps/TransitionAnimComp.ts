@@ -1,65 +1,54 @@
-import { PixSpine } from '@core/pixiwrapper/PixSpine';
-import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { SlotEvents } from '@core/events/SlotEvents';
-import { StateManager } from '@core/states/StateManagerService';
-import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { UIUtil } from '@core/utils/UIUtilService';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { PixView } from '@core/pixiwrapper/PixView';
+import { Power2 } from 'gsap/gsap-core';
 
 export class TransitionAnimComp extends ResponsiveChildrenView {
-  private readonly transitionAnimHor: PixSpine;
-  private readonly transitionAnimVer: PixSpine;
+  private bg: PixSprite;
+  private door: PixSprite;
+  private readonly cont: PixView;
 
   constructor(config: any) {
     super(config);
-    this.transitionAnimHor = this.elementsList['transitionAnimHor'];
-    this.transitionAnimVer = this.elementsList['transitionAnimVer'];
-
-    this.transitionAnimHor.x = this.guideRect.width / 2;
-    this.transitionAnimHor.y = this.guideRect.height / 2;
-    this.transitionAnimVer.x = this.guideRect.width / 2;
-    this.transitionAnimVer.y = this.guideRect.height / 2;
-
-    this.transitionAnimHor.addEventListener('complete', this.onTransitionComplete.bind(this));
-    this.transitionAnimVer.addEventListener('complete', this.onTransitionComplete.bind(this));
-
     this.visible = false;
-    this.hideTransitionAnim();
-
-    EventHandler.addEventListener(SlotEvents.SHOW_TRANSITION_ANIM, this.onShowTransition.bind(this));
+  }
+  protected onViewCreated(): void {
+    super.onViewCreated();
+    this.bg = this.elementsList['bg'];
+    this.door = this.elementsList['door'];
+    /*setTimeout(() => {
+      this.showTransition();
+    }, 2000);*/
   }
 
-  private hideTransitionAnim(): void {
-    this.transitionAnimHor.renderable = false;
-    this.transitionAnimVer.renderable = false;
-  }
-
-  private onShowTransition(): void {
-    this.visible = true;
-    this.playTransitionAnim();
-  }
-
-  private playTransitionAnim(): void {
-    this.transitionAnimHor.playAnimation({ state: 'horisontal', loop: false, defaultMix: 0 });
-    this.transitionAnimVer.playAnimation({ state: 'vertical', loop: false, defaultMix: 0 });
-
+  protected showTransition(): void {
     this.resizeView();
+    this.bg.visible = false;
+    this.door.y = -this.door.height;
+    this.visible = true;
+    UIUtil.adjustElement(this);
+    AnimationProxy.animateTween(this.door, {
+      duration: 2,
+      y: 0,
+      ease: Power2.easeIn,
+      onComplete: () => {
+        this.onDoorReachedBottom();
+      },
+    });
   }
-
-  private onTransitionComplete(): void {
-    if (!this.visible) return;
-    this.visible = false;
-    this.hideTransitionAnim();
-    StateManager.doNextStep();
+  protected onDoorReachedBottom(): void {
+    this.bg.visible = true;
+    AnimationProxy.animateTween(this.door, {
+      duration: 2,
+      y: -this.door.height,
+      ease: Power2.easeIn,
+      onComplete: () => {
+        this.onDoorReachedTop();
+      },
+    });
   }
-
-  public resizeView(): void {
-    super.resizeView();
-    if (DeviceProxy.config.isPortrait) {
-      this.transitionAnimVer.renderable = true;
-      this.transitionAnimHor.renderable = false;
-    } else {
-      this.transitionAnimHor.renderable = true;
-      this.transitionAnimVer.renderable = false;
-    }
-  }
+  protected onDoorReachedTop(): void {}
 }
