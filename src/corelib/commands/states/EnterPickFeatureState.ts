@@ -11,7 +11,7 @@ import { STATES } from '@core/states/StateConstants';
 class EnterPickFeatureStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (appModel.getFeatureType() !== CONSTANTS.FEATURE_TYPE_PICK) {
+    if (appModel.getIsPickFeatureSession()) {
       StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
       return;
     }
@@ -22,13 +22,13 @@ class EnterPickFeatureStateCommand extends StateCommand {
     super.doNextStep(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_ENTRY_SOUND);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-    appModel.startPickFeatureSession(true);
+    appModel.startPickFeatureSession();
     appModel.setFeatureTriggered();
 
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
-    const subFeatureName = appModel.getFeatureSubType()
-      ? appModel.getFeatureSubType()
+    const subFeatureName = appModel.getNextSubFeatureType()
+      ? appModel.getNextSubFeatureType()
       : appModel.getUnfinishedFeatureSubType();
     obj.message1 = Util.parseMessage(Util.getContent('PickFeatureEntryText'), [subFeatureName]);
     obj.entryPopUp = true;

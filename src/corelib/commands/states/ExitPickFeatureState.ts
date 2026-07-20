@@ -26,14 +26,13 @@ class ExitPickFeatureStateCommand extends StateCommand {
   }
 
   protected async exitPickFeature() {
+    appModel.endPickFeatureSession();
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
-    // Update balance with final pick feature wins
     appModel.endPickFeatureSession();
     appModel.clearUnfinishedData();
     EventHandler.dispatchEvent(SlotEvents.STOP_PICK_FEATURE_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
-    // TODO: add checks for next feature and its states
     StateManager.goToState(STATES.CHECK_FEATURE_STATE_V2);
   }
 }

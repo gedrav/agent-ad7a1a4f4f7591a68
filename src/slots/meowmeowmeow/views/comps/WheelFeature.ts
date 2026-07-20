@@ -188,7 +188,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   }
 
   private onSpinComplete(choosenSector: number): void {
-    StateManager.goToState(STATES.EXIT_PICK_FEATURE_STATE);
+    StateManager.next();
   }
 
   public resizeView(): void {
