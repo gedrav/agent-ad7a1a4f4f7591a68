@@ -12,6 +12,8 @@ type SpinState = 'idle' | 'spinning' | 'stopping';
 
 export class WheelFeatureComp extends ResponsiveChildrenView {
   private readonly wheelBG: PixSprite;
+  private readonly dimBG: PixSprite;
+  private readonly tapText: any;
   private readonly numberOfSectors: number = 10;
   private readonly radiansPerSector: number = (Math.PI * 2) / this.numberOfSectors;
   private isSpinning: boolean = false;
@@ -43,13 +45,17 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   constructor(config: any) {
     super(config);
     this.wheelBG = this.elementsList['wheelBG'];
+    this.dimBG = this.elementsList['dimBG'];
+    this.tapText = this.elementsList['tapText'];
     this.wheelBG.x = 0;
     this.wheelBG.y = 0;
     this.visible = false;
     this.renderable = false;
     this.interactive = false;
+    this.tapText.text = 'Tap on the Wheel to spin!';
     this.resizeView();
     this.onpointerdown = async () => {
+      this.tapText.visible = false;
       this.spinWheel();
       await MessageProxy.requestBonusData(appModel.getFeatureType());
       const wheelResult = appModel.featureResult;
@@ -171,6 +177,8 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
         this.isSpinning = false;
         this.spinState = 'idle';
         this.interactive = true;
+        this.dimBG.visible = false;
+        this.tapText.visible = false;
         this.iteration++;
         this.onSpinComplete(choosenSector);
       }
@@ -180,18 +188,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   }
 
   private onSpinComplete(choosenSector: number): void {
-    this.visible = false;
-    this.renderable = false;
-    this.interactive = false;
-
-    if (this.wheelWinnings === 'Green') {
-      StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
-    } else if (this.wheelWinnings === 'Red') {
-      // createOne
-      // StateManager.goToState(GAMESTATES.RED_ENTER_FREESPINS_STATE);
-    } else {
-      StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
-    }
+    StateManager.goToState(STATES.EXIT_PICK_FEATURE_STATE);
   }
 
   public resizeView(): void {

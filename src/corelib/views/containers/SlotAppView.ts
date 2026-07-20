@@ -16,6 +16,7 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { BuyBonusViewMobile } from '@brand/views/popups/BuyBonusViewMobile';
 import { ModalView } from '@core/views/containers/ModalView';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { PFPopupComp } from '@brand/views/popups/PickFeaturePopupComp';
 
 export class SlotAppView extends ResponsiveChildrenView {
   protected gameBGView: BGView;
@@ -26,7 +27,8 @@ export class SlotAppView extends ResponsiveChildrenView {
   private readonly autoplayView: AutoplayView;
   private readonly buyBonusView: BuyBonusView | BuyBonusViewMobile;
   private readonly messagePopupView: MessagePopupView;
-  private readonly popupComp: FSPopupComp;
+  private readonly popupFSComp: FSPopupComp;
+  private readonly popupPFComp: PFPopupComp;
   private readonly menuComp: MenuComp | MenuCompMobile;
   private readonly modalView: ModalView;
 
@@ -48,8 +50,10 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.buyBonusView);
     this.messagePopupView = this.elementsList['messagePopupView'];
     this.removeChild(this.messagePopupView);
-    this.popupComp = this.elementsList['popupComp'];
-    this.removeChild(this.popupComp);
+    this.popupFSComp = this.elementsList['popupComp'];
+    this.removeChild(this.popupFSComp);
+    this.popupPFComp = this.elementsList['popupComp'];
+    this.removeChild(this.popupPFComp);
     this.menuComp = this.elementsList['menuComp'];
     this.removeChild(this.menuComp);
     this.modalView = this.elementsList['modalView'];
@@ -71,7 +75,7 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_MENU_MOBILE, this.hideAllViews.bind(this));
   }
   protected onModalViewClicked(): void {
-    if (this.popupComp?.parent || this.messagePopupView?.parent) {
+    if (this.popupFSComp?.parent || this.messagePopupView?.parent) {
       return;
     }
     this.hideAllViews();
@@ -82,7 +86,8 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.autoplayView);
     this.removeChild(this.buyBonusView);
     this.removeChild(this.messagePopupView);
-    this.removeChild(this.popupComp);
+    this.removeChild(this.popupFSComp);
+    this.removeChild(this.popupPFComp);
     this.removeChild(this.menuComp);
     this.removeChild(this.modalView);
   }
@@ -98,7 +103,7 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.addChild(this.menuComp);
   }
   protected showFSPopup(): void {
-    this.addChild(this.popupComp);
+    this.addChild(this.popupFSComp);
   }
   protected showBetPanel(): void {
     this.addChild(this.betPanelView);

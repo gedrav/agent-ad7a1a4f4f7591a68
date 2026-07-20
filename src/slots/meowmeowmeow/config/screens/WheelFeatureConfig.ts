@@ -11,6 +11,16 @@ export const WHEEL_CONFIG: any = {
   },
   Elements: [
     {
+      name: 'dimBG',
+      type: 'Graphics',
+      width: 5000,
+      height: 5000,
+      color: 0x000000,
+      alpha: 0.6,
+      x: -2500,
+      y: -2500,
+    },
+    {
       name: 'wheelBG',
       type: 'Sprite',
       image: 'WheelTest',
@@ -18,6 +28,24 @@ export const WHEEL_CONFIG: any = {
       x: 0,
       y: 0,
       scale: 2,
+    },
+    {
+      name: 'tapText',
+      type: 'Text',
+      content: 'TAP ON THE WHEEL\nTO SPIN',
+      visible: true,
+      style: {
+        fontFamily: 'gameFont1',
+        fontSize: 100,
+        fill: 0xffffff,
+        align: 'center',
+        dropShadow: true,
+        dropShadowColor: '0x000000',
+        dropShadowDistance: 3,
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 0,
+      y: -1100,
     },
   ],
 };

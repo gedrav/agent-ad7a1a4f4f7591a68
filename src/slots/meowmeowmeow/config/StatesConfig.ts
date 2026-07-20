@@ -20,10 +20,15 @@ import { GreenEnterFreespinsState } from '@slots/meowmeowmeow/states/GreenEnterF
 import { MMMCheckUnfinishedState } from '../states/MMMCheckUnfinishedState';
 import { GAMESTATES } from '@slots/meowmeowmeow/states/GameStates';
 import { WheelFeatureState } from '@slots/meowmeowmeow/states/WheelFeatureState';
+import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';
+import { CheckUnfinishedStateV2 } from '@core/commands/states/CheckUnfinishedStateV2';
+import { State } from 'pixi.js';
+import { EnterPickFeatureState } from '@core/commands/states/EnterPickFeatureState';
+import { PickFeatureState } from '@core/commands/states/PickFeatureState';
+import { ExitPickFeatureState } from '@core/commands/states/ExitPickFeatureState';
 
 export const STATES_CONFIG: any = [
-  // { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
-  { name: STATES.CHECK_UNFINISHED_STATE, state: MMMCheckUnfinishedState },
+  { name: STATES.CHECK_UNFINISHED_STATE_V2, state: CheckUnfinishedStateV2 },
 
   { name: STATES.IDLE_STATE, state: GameIdleState },
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
@@ -32,22 +37,26 @@ export const STATES_CONFIG: any = [
   { name: STATES.PRE_SPIN_WIN_STATE, state: MeowPreSpinWinState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
-  { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
+  { name: STATES.CHECK_FEATURE_STATE_V2, state: CheckFeatureStateV2 },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 
-  { name: STATES.GAME_FEATURE_STATE, state: MMMCheckFeatureState },
+  // { name: STATES.GAME_FEATURE_STATE, state: MMMCheckFeatureState },
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
-  { name: GAMESTATES.WHEEL_FEATURE_STATE, state: WheelFeatureState },
-  { name: GAMESTATES.GREEN_ENTER_FREESPINS_STATE, state: GreenEnterFreespinsState },
+  // { name: GAMESTATES.WHEEL_FEATURE_STATE, state: WheelFeatureState },
+  // { name: GAMESTATES.GREEN_ENTER_FREESPINS_STATE, state: GreenEnterFreespinsState },
 
   { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
-
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
   { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
+
+  { name: STATES.ENTER_PICK_FEATURE_STATE, state: EnterPickFeatureState },
+  { name: STATES.PICK_FEATURE_STATE, state: PickFeatureState },
+  { name: STATES.EXIT_PICK_FEATURE_STATE, state: ExitPickFeatureState },
+
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 
   { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
