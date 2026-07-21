@@ -8,9 +8,13 @@ import { getBezierPoint, lerp } from '@core/utils/MathUtils';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
+import { STATES } from '@core/states/StateConstants';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { Util } from '@core/utils/UtilService';
 
 export class GameSlotMachineView extends SlotMachineView {
+  private extraSpinTextTimeoutId: any;
+
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
@@ -18,6 +22,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
+    EventHandler.addEventListener(SlotEvents.SHOW_EXTRA_SPIN_ANIM, this.onShowExtraSpinAnim.bind(this));
   }
 
   private handlePickFeature(SubfeatureType: string) {
@@ -156,11 +161,6 @@ export class GameSlotMachineView extends SlotMachineView {
     const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
     kittieBankComp.addChildAt(movingSymbol, targetIndex);
 
-    kittieBankComp.children.forEach((child: any, idx: number) => {
-      const childName = child.name || 'MovingCoin';
-      console.log(`  [${idx}] -> ${childName}`);
-    });
-
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
@@ -178,7 +178,6 @@ export class GameSlotMachineView extends SlotMachineView {
           movingSymbol.parent.removeChild(movingSymbol);
         }
         movingSymbol.destroy();
-        console.log(`Symbol successfully reached the ${bankName} bank!`);
 
         const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
         const collectAnim = `${animPrefix}_Collect`;
@@ -203,6 +202,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const reel: any = this.slotReel;
     if (reel.reelsData.noOfRows === size) return;
     reel.reelsData.noOfRows = size;
+    if (reel.winController) reel.winController.noOfRows = size;
 
     if (size === 4 || size === 5) {
       // Pad initialReel to prevent engine crash
@@ -238,6 +238,8 @@ export class GameSlotMachineView extends SlotMachineView {
       }
     }
 
+    reel.winController?.clearSpinWin();
+
     reel.symbolsArray.flat().forEach((sym: any) => {
       AnimationProxy.killTweensOf(sym);
       sym.destroySymbol();
@@ -245,5 +247,75 @@ export class GameSlotMachineView extends SlotMachineView {
     });
     reel.symbolsArray = [];
     reel.createReel();
+  }
+
+  private onShowExtraSpinAnim(): void {
+    const extraSpinText: any = this.slotReel?.elementsList?.['extraSpinText'];
+    const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
+
+    if (!extraSpinText || !extraSpinTextCenter) {
+      console.warn('Missing extraSpinText elements');
+      StateManager.goToState(STATES.FS_SPIN_START_STATE);
+      return;
+    }
+
+    const text = Util.getContent('ExtraSpinText');
+    extraSpinText.text = text;
+    extraSpinTextCenter.text = text;
+
+    AnimationProxy.killTweensOf(extraSpinText);
+    AnimationProxy.killTweensOf(extraSpinTextCenter);
+    clearTimeout(this.extraSpinTextTimeoutId);
+
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
+
+    // Set initial state for the bounce effect
+    extraSpinTextCenter.scale.set(0);
+    extraSpinTextCenter.alpha = 0;
+    extraSpinText.alpha = 0;
+
+    // Pop the center text in with a bounce by tweening its scale and alpha
+    AnimationProxy.animateTween(extraSpinTextCenter.scale, {
+      duration: 0.5,
+      x: 1,
+      y: 1,
+      ease: 'back.out(1.7)',
+    });
+    AnimationProxy.animateTween(extraSpinTextCenter, {
+      duration: 0.5,
+      alpha: 1,
+      ease: 'power2.out',
+    });
+
+    // Fade in the bottom ticker normally
+    AnimationProxy.animateTween(extraSpinText, {
+      duration: 0.2,
+      alpha: 1,
+    });
+
+    this.extraSpinTextTimeoutId = setTimeout(() => {
+      // Shrink and fade the center text away
+      AnimationProxy.animateTween(extraSpinTextCenter.scale, {
+        duration: 0.3,
+        x: 0,
+        y: 0,
+        ease: 'back.in(1.7)',
+      });
+      AnimationProxy.animateTween(extraSpinTextCenter, {
+        duration: 0.3,
+        alpha: 0,
+        ease: 'power2.in',
+      });
+
+      // Fade out the bottom ticker
+      AnimationProxy.animateTween(extraSpinText, {
+        duration: 0.3,
+        alpha: 0,
+        onComplete: () => {
+          EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
+          StateManager.goToState(STATES.FS_SPIN_START_STATE);
+        },
+      });
+    }, 1500); // 1.5 second display duration to let the player admire the bounce!
   }
 }
