@@ -285,11 +285,11 @@ export const SLOT_MACHINE_CONFIG: any = {
               y: 58,
             },
             Landscape: {
-              scale: 0.9,
+              scale: 1,
               x: 780,
               y: 58,
             },
-            Portrait: { scale: 0.9, x: 775, y: 56 },
+            Portrait: { scale: 1, x: 775, y: 56 },
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 118, color: 0xffff00 },
