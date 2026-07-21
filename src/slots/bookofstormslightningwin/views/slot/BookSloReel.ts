@@ -135,7 +135,13 @@ export class BookSlotReel extends SlotReelStandard {
       return {
         x: bounds?.x + bounds?.width / 2,
         y: bounds?.y + bounds?.height / 2,
-        onEventEmit: () => symbol?.setNewSymbol(wildSymbolConfig, reelIndex),
+        onSymbolDisappear: () => {
+          if (symbol) symbol.visible = false;
+        },
+        onSymbolAppear: () => {
+          symbol?.setNewSymbol(wildSymbolConfig, reelIndex);
+          if (symbol) symbol.visible = true;
+        },
       };
     });
 
