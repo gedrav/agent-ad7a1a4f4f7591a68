@@ -31,7 +31,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 490,
+      textY: 470,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -45,7 +45,7 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
+          fontSize: 40,
           mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
@@ -64,7 +64,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 490,
+      textY: 470,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -78,7 +78,7 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
+          fontSize: 40,
           mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
@@ -97,7 +97,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 490,
+      textY: 470,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -111,7 +111,7 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
+          fontSize: 40,
           mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
