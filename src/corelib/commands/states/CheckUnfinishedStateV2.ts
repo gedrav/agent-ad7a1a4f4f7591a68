@@ -1,13 +1,14 @@
-import { StateCommand } from '@core/commands/core/StateCommand';
+import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { SlotEvents } from '@core/events/SlotEvents';
-import { CONSTANTS } from '@core/utils/CONSTANTS';
-import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
-import { GAMESTATES } from './GameStates';
+import { StateManager } from '@core/states/StateManagerService';
+import { CONSTANTS } from '@core/utils/CONSTANTS';
+import { StateCommand } from '../core/StateCommand';
+import { GAMESTATES } from '@slots/meowmeowmeow/states/GameStates';
+import { State } from 'pixi.js';
 
-class MMMCheckUnfinishedStateCommand extends StateCommand {
+class CheckUnfinishedStateCommandV2 extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.getIsUnfinishedGame()) {
@@ -22,16 +23,11 @@ class MMMCheckUnfinishedStateCommand extends StateCommand {
         if (appModel.secondaryAssetsLoaded) {
           if (fType === CONSTANTS.FEATURE_TYPE_FREESPIN) {
             StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
-          } else if (fType.toUpperCase() === 'GREEN') {
-            StateManager.goToState(GAMESTATES.GREEN_ENTER_FREESPINS_STATE);
-          } else if (fType.toUpperCase() === 'BLUE') {
-            StateManager.goToState(GAMESTATES.WHEEL_FEATURE_STATE);
-          } else if (fType.toUpperCase() === 'RED') {
-            // For now bypassing the red
-            StateManager.goToState(STATES.ENTER_FREESPINS_STATE);
+          } else if (fType === CONSTANTS.FEATURE_TYPE_PICK) {
+            StateManager.goToState(STATES.ENTER_PICK_FEATURE_STATE);
           } else {
-            console.log('MMMCheckUnfinishedState: Unknown feature type, handling now');
-            StateManager.next();
+            console.log('New Feature Typen:', fType, 'not handled yet, going to game feature state');
+            StateManager.goToState(STATES.GAME_FEATURE_STATE);
           }
         } else {
           appModel.waitingForFeature = true;
@@ -46,4 +42,4 @@ class MMMCheckUnfinishedStateCommand extends StateCommand {
   }
 }
 
-export const MMMCheckUnfinishedState = new MMMCheckUnfinishedStateCommand();
+export const CheckUnfinishedStateV2 = new CheckUnfinishedStateCommandV2();

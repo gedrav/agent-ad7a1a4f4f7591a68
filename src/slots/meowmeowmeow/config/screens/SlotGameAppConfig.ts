@@ -10,6 +10,7 @@ import { MENU_CONFIG } from '@brand/config/MenuConfig';
 import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 import { FS_POPUP_CONFIG } from './FSPopupConfig';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
+import { PF_POPUP_CONFIG } from './PFPopupConfig';
 import { MMM_TRANSITION_CONFIG } from '@slots/meowmeowmeow/config/screens/MMMTransitionConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
@@ -25,6 +26,7 @@ export const SLOT_GAME_APP_CONFIG: any = {
     BUY_BONUS_CONFIG,
     AUTOPLAY_CONFIG,
     FS_POPUP_CONFIG,
+    PF_POPUP_CONFIG,
     MESSAGE_POPUP_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
     MMM_TRANSITION_CONFIG,
