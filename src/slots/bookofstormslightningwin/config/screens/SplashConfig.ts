@@ -332,18 +332,18 @@ export const SPLASH_CONFIG: any = {
       image: 'gamelogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.7, heightPerc: 0.3, maxScale: 1, hAlign: 'center', vPosition: 0.09 },
+        Desktop: { widthPerc: 0.4, heightPerc: 0.11, maxScale: 1, hAlign: 'center', vPosition: 0.09 },
         Portrait: {
-          widthPerc: 0.8,
-          heightPerc: 0.2,
+          widthPerc: 0.4,
+          heightPerc: 0.11,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',
           vPaddingPerc: 0.09,
         },
         Landscape: {
-          widthPerc: 0.35,
-          heightPerc: 0.17,
+          widthPerc: 0.5,
+          heightPerc: 0.12,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',
