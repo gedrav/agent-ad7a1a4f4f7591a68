@@ -10,9 +10,24 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
+import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
 export default class WinController {
-  private readonly noOfRows: number;
-  private readonly noOfReels: number;
+  get noOfReels(): number {
+    return this._noOfReels;
+  }
+
+  set noOfReels(value: number) {
+    this._noOfReels = value;
+  }
+  get noOfRows(): number {
+    return this._noOfRows;
+  }
+
+  set noOfRows(value: number) {
+    this._noOfRows = value;
+  }
+  private _noOfRows: number;
+  private _noOfReels: number;
   public symbolsContainer;
   public winSymbolsContainer;
   public lineWinAmountComp;
