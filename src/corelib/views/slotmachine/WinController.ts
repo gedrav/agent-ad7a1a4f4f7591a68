@@ -11,7 +11,13 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 export default class WinController {
-  private readonly noOfRows: number;
+  private _noOfRows: number;
+  public get noOfRows(): number {
+    return this.reelsData?.noOfRows || this._noOfRows;
+  }
+  public set noOfRows(val: number) {
+    this._noOfRows = val;
+  }
   private readonly noOfReels: number;
   public symbolsContainer;
   public winSymbolsContainer;
