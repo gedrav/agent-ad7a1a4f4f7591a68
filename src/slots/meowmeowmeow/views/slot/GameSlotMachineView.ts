@@ -315,7 +315,6 @@ export class GameSlotMachineView extends SlotMachineView {
         delay: ENTER_DURATION + HOLD_DURATION,
         onComplete: () => {
           EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
-          StateManager.goToState(STATES.FS_SPIN_START_STATE);
         },
       },
       false,

@@ -22,6 +22,7 @@ export const GAME_CONFIG = {
   showWinInReelView: true,
   dontShowWinAfterFS: true,
   dontShowRetrigger: true,
+  dontShowRetriggerDelay: 2000,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'cambriab',
