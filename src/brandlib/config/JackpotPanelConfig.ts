@@ -7,7 +7,13 @@ export const JACKPOT_PANEL_CONFIG: any = {
   class: JackpotPanelComp,
   jackpotConfig: {
     noOfElement: 4,
-    elemenContent: ['bronzeTitle', 'silverTitle', 'goldTitle', 'diamondTitle'],
+    jackpotContent: ['bronzeTitle', 'silverTitle', 'goldTitle', 'diamondTitle'],
+    jackpotAnimSkin: ['bronze', 'silver', 'gold', 'diamond'],
+    jackpotTextColor: [0xff9c55, 0xcac2b8, 0xedd94b, 0x64cdff],
+    jackpotAnimState: [
+      { state: 'idle', loop: true },
+      { state: 'win', loop: true },
+    ],
     items: {
       name: 'jackPotItem',
       type: 'Container',
@@ -26,8 +32,9 @@ export const JACKPOT_PANEL_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          style: { fontFamily: 'gameFont1', fontSize: 25, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
+          style: { fontFamily: 'gameFont1', fontSize: 110, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
           content: '',
+          x: 110,
           anchor: { x: 0.5, y: 0.5 },
         },
       ],

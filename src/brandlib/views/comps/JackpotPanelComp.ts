@@ -3,6 +3,8 @@ import { JackPotItem } from './JackPotItem';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { Util } from '@core/utils/UtilService';
+import { Ticker } from 'pixi.js';
 
 interface RowLayout {
   widthPerc: number;
@@ -24,14 +26,20 @@ const ROW_Y_PERC = 0.4;
 const GRID_COLUMNS = 2;
 
 export class JackpotPanelComp extends ResponsiveChildrenView {
-  jackPotsArr: JackPotItem[] = [];
-  jackpotConfig: any;
-  jackpotContainer: PixView;
+  protected jackPotsArr: JackPotItem[] = [];
+  protected jackpotConfig: any;
+  protected jackpotContainer: PixView;
+  protected ticker: Ticker;
+  dummyNumber: number;
   constructor(config) {
     super(config);
     this.jackpotConfig = this.configData.jackpotConfig;
     this.guideRect = this.elementsList['guideRect'];
     this.jackpotContainer = this.elementsList['jackpotContainer'];
+    this.dummyNumber = 1000;
+
+    this.ticker = new Ticker();
+    this.ticker.add(this.updateJackpotValue.bind(this));
     this.createJackPotElement();
   }
   createJackPotElement() {
@@ -41,8 +49,19 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
       const item = new JackPotItem(this.jackpotConfig.items);
       this.addChild(item);
       this.jackPotsArr.push(item);
+      item.initialView({
+        skinName: this.jackpotConfig.jackpotAnimSkin[i],
+        colorcode: this.jackpotConfig.jackpotTextColor[i],
+      });
     }
+    this.ticker.start();
     this.resizeView();
+  }
+  updateJackpotValue() {
+    this.dummyNumber += 0.1;
+    this.jackPotsArr.forEach((item) => {
+      item.updateJackpotValue(this.dummyNumber); // replace with actual number;
+    });
   }
   protected resizeView() {
     super.resizeView();
