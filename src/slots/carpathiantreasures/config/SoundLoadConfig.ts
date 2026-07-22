@@ -55,7 +55,6 @@ export const GAME_SOUND_CONFIG = {
       name: 'uiPopUpSfx',
       type: 'game',
       loop: false,
-      singleton: true,
       playEvents: ['PLAY_GENERIC_SYMB_PAYOUT_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
