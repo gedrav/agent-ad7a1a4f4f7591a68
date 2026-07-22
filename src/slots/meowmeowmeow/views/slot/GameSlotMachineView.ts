@@ -26,9 +26,11 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private handlePickFeature(SubfeatureType: string) {
+    console.warn(SubfeatureType);
     switch (SubfeatureType.toUpperCase()) {
       case 'RED':
         //  Handle for red one
+        this.showPickJackpotFeatureScreen();
         break;
       case 'BLUE':
         this.showWheel();
@@ -37,6 +39,11 @@ export class GameSlotMachineView extends SlotMachineView {
         console.error('Invalid SubFeatureType:', SubfeatureType);
         break;
     }
+  }
+
+  private showPickJackpotFeatureScreen() {
+    const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
+    pickjackoptFeatureScreen.enter();
   }
 
   private showWheel(): void {
