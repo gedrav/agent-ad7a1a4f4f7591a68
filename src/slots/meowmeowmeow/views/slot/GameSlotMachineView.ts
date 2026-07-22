@@ -22,7 +22,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
-    EventHandler.addEventListener(SlotEvents.SHOW_EXTRA_SPIN_ANIM, this.onShowExtraSpinAnim.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
   }
 
   private handlePickFeature(SubfeatureType: string) {
