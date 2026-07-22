@@ -9,7 +9,7 @@ import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig'
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BookSlotReel } from '@game/views/slot/BookSloReel';
+import { CTSlotReel } from '@game/views/slot/CTSloReel';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -21,17 +21,17 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 1700,
-      height: 1150,
+      height: 1140,
       pWidth: 1510,
-      pHeight: 1135,
+      pHeight: 1375,
       lWidth: 1700,
-      lHeight: 1150,
+      lHeight: 1140,
       alpha: 1,
     },
     {
       name: 'slotReel',
       type: 'Comp',
-      class: BookSlotReel,
+      class: CTSlotReel,
       winController: GameWinController,
       x: 155,
       y: 0,
@@ -129,11 +129,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           landingSymbols: ['WD'],
         },
         initialReel: [
-          ['L2', 'H3', 'H2'],
-          ['L1', 'L4', 'L2'],
-          ['L3', 'L4', 'L1'],
-          ['L4', 'L1', 'H4'],
-          ['L4', 'L1', 'H3'],
+          ['H1', 'H3', 'H2'],
+          ['L2', 'L4', 'L2'],
+          ['L5', 'L4', 'L1'],
+          ['SC', 'L1', 'H4'],
+          ['L3', 'WD', 'H3'],
         ],
         symbolsData: {
           WD: {
@@ -143,7 +143,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             landingAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.87,
+            animScale: 0.84,
           },
           SC: {
             name: 'SC',
@@ -152,7 +152,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             landingAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.87,
+            animScale: 0.84,
           },
           BN: {
             name: 'BN',
@@ -161,7 +161,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             landingAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.87,
+            animScale: 0.84,
           },
           H1: {
             name: 'H1',
@@ -169,7 +169,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.87,
+            animScale: 0.837,
           },
           H2: {
             name: 'H2',
@@ -177,7 +177,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.85,
+            animScale: 0.837,
           },
           H3: {
             name: 'H3',
@@ -185,7 +185,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.87,
+            animScale: 0.837,
           },
           H4: {
             name: 'H4',
@@ -193,7 +193,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.84,
+            animScale: 0.837,
           },
           L1: {
             name: 'L1',
@@ -202,7 +202,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim1: 'win',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.9,
+            animScale: 0.83,
           },
           L2: {
             name: 'L2',
@@ -210,7 +210,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.9,
+            animScale: 0.83,
           },
           L3: {
             name: 'L3',
@@ -218,7 +218,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.9,
+            animScale: 0.83,
           },
           L4: {
             name: 'L4',
@@ -226,7 +226,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.9,
+            animScale: 0.83,
           },
           L5: {
             name: 'L4',
@@ -234,7 +234,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.9,
+            animScale: 0.83,
           },
         },
       },
@@ -362,8 +362,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       vPaddingPerc: 0.04,
       hPaddingPerc: 0,
     },
-    Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
-    Landscape: { widthPerc: 0.7, heightPerc: 0.83, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.04 },
-    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.88, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.002 },
+    Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0 },
+    Landscape: { widthPerc: 0.85, heightPerc: 0.83, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.04 },
+    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.78, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.09 },
   },
 };

@@ -9,7 +9,7 @@ import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
 import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
-import { CheckFSState } from '@core/commands/states/CheckFSState';
+import { GameCheckFSState } from '@slots/meowmeowmeow/states/GameCheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
@@ -20,6 +20,7 @@ import { PickFeatureState } from '@core/commands/states/PickFeatureState';
 import { ExitPickFeatureState } from '@core/commands/states/ExitPickFeatureState';
 import { GreenEnterTransitionState } from '@slots/meowmeowmeow/states/GreenEnterTransitionState';
 import { GreenExitTransitionState } from '@slots/meowmeowmeow/states/GreenExitTransitionState';
+import { CheckFSState } from '@core/commands/states/CheckFSState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE_V2, state: CheckUnfinishedStateV2 },

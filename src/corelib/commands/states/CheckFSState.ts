@@ -6,12 +6,18 @@ import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { Clock } from '@core/utils/Clock';
+import { GameProxy } from '@core/models/GameConfigProxy';
 class CheckFSStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     if (appModel.getIsNextFSPossible()) {
       if (appModel.isFSRetriggered()) {
+        if (GameProxy.config.dontShowRetrigger) {
+          EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN);
+          this.exitState();
+          return;
+        }
         EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
       } else {
         await Clock.wait(500);
