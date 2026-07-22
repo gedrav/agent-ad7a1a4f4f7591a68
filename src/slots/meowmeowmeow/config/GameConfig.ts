@@ -21,6 +21,7 @@ export const GAME_CONFIG = {
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   dontShowWinAfterFS: true,
+  dontShowRetrigger: true,
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'cambriab',
