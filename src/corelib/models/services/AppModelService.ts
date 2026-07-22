@@ -368,7 +368,7 @@ class AppModelService {
     if (this.isCascadeGame()) {
       this.featureResult.featureTriggerPositions =
         this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
-    } else if (this.gameResult.featureTriggerPositions) {
+    } else if (this.gameResult?.featureTriggerPositions) {
       this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
     }
 
