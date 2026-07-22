@@ -8,9 +8,8 @@ import { AUTOPLAY_CONFIG } from '@brand/config/AutoPlayConfig';
 import { MESSAGE_POPUP_CONFIG } from '@brand/config/MessagePopupConfig';
 import { MENU_CONFIG } from '@brand/config/MenuConfig';
 import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
-import { FS_POPUP_CONFIG } from './FSPopupConfig';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
-import { JACKPOT_CONFIG } from './JackpotConfig';
+import { JACKPOT_PANEL_CONFIG } from '@brand/config/JackpotPanelConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -25,7 +24,7 @@ export const SLOT_GAME_APP_CONFIG: any = {
     BUY_BONUS_CONFIG,
     AUTOPLAY_CONFIG,
     MESSAGE_POPUP_CONFIG,
-    JACKPOT_CONFIG,
+    JACKPOT_PANEL_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
   ],
 };
