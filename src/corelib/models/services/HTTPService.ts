@@ -32,11 +32,6 @@ export class HTTPService {
     const isAbsolute = /^https?:\/\//.test(endpoint);
     // ky's prefixUrl requires the endpoint must NOT start with '/'
     const path = isAbsolute ? endpoint : endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
-    // if (path === 'feature') {
-    //   console.log('feature endpoint called');
-    //   this.callBackFunction(messageName, sampleData.data);
-    //   return;
-    // }
     const client = isAbsolute ? externalHttpClient : httpClient;
     try {
       let responseData: any;
