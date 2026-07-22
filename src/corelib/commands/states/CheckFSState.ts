@@ -15,7 +15,6 @@ class CheckFSStateCommand extends StateCommand {
       if (appModel.isFSRetriggered()) {
         if (GameProxy.config.dontShowRetrigger) {
           EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN);
-          this.exitState();
           return;
         }
         EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);

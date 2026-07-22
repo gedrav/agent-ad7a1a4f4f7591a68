@@ -9,14 +9,12 @@ import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig'
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BookSlotReel } from '@game/views/slot/BookSloReel';
 import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
-import { JP_BANNER_ANIM_CONFIG } from '@slots/meowmeowmeow/config/screens/JPAnimsConfig';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
 import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
-import { MMM_TRANSITION_CONFIG } from '@slots/meowmeowmeow/config/screens/MMMTransitionConfig';
+import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -364,6 +362,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     KITTIEBANK_CONFIG,
     WHEEL_CONFIG,
+    PICK_BONUS_JACKPOT_FEATURE_CONFIG,
     GREEN_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
