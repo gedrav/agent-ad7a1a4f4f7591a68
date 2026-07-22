@@ -1,6 +1,7 @@
 import ky, { HTTPError } from 'ky';
 import { MessageServiceProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
+import sampleData from './sample.json';
 
 // Shared ky instance — prefixUrl is set from the env var baked in at build time.
 // All requests only need to pass the endpoint path (e.g. 'init', 'spin').
@@ -31,6 +32,11 @@ export class HTTPService {
     const isAbsolute = /^https?:\/\//.test(endpoint);
     // ky's prefixUrl requires the endpoint must NOT start with '/'
     const path = isAbsolute ? endpoint : endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+    // if (path === 'feature') {
+    //   console.log('feature endpoint called');
+    //   this.callBackFunction(messageName, sampleData.data);
+    //   return;
+    // }
     const client = isAbsolute ? externalHttpClient : httpClient;
     try {
       let responseData: any;

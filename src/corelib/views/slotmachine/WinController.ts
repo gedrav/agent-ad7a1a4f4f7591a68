@@ -334,7 +334,7 @@ export default class WinController {
       }
     }
   }
-  protected getReelPosition(value: number): any {
+  public getReelPosition(value: number): any {
     if (Array.isArray(value)) {
       const reel = value[0];
       const row = value[1];
