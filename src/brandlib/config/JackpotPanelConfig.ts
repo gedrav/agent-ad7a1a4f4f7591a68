@@ -34,7 +34,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
           type: 'Text',
           style: { fontFamily: 'gameFont1', fontSize: 110, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
           content: '',
-          x: 110,
+          x: 140,
           anchor: { x: 0.5, y: 0.5 },
         },
       ],

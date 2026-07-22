@@ -1,11 +1,10 @@
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixText } from '@core/pixiwrapper/PixText';
-import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
-import { utils } from '@pixi/core';
 
-export class JackPotItem extends ResponsiveChildrenView {
+export class JackPotItem extends StandardView {
   private readonly jackpotBg: PixSpine;
   private readonly value: PixText;
   constructor(config) {

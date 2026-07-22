@@ -90,13 +90,13 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
 
   /** Two columns: even indices go left, odd go right; each row hangs below the row above it. */
   private layoutAsGrid(item: JackPotItem, index: number) {
-    UIUtil.setRelativeScale(item, 0.24, 0.24, null, 0.24, 0.17);
+    UIUtil.setRelativeScale(item, 0.22, 0.22, null, 0.22, 0.2);
 
     const isLeftColumn = index % GRID_COLUMNS === 0;
     item.x = isLeftColumn ? item.width * 0.45 : UIUtil.getGameWidth() - item.width * 0.5;
 
     if (index < GRID_COLUMNS) {
-      UIUtil.alignVertical(item, { vAlign: 'top', vPaddingPerc: 0.1 });
+      UIUtil.alignVertical(item, { vAlign: 'top', vPaddingPerc: 0.11 });
     } else {
       const above = this.jackPotsArr[index - GRID_COLUMNS];
       item.y = above.y + item.height * 0.8;
