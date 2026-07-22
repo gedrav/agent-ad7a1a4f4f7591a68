@@ -33,6 +33,7 @@ class BookShowSymbolAfterExpansionStateCommand extends StateCommand {
       // WinController has finished showing both the line wins and the big win presentation
       appModel.isSymbolExpanded = false;
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+      EventHandler.dispatchEvent(SlotEvents.RESTORE_WILD_POSITIONS);
       StateManager.next();
     }
   }
