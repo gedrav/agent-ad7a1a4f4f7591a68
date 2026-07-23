@@ -9,7 +9,7 @@ class HomeClickedCmd extends ActionCommand {
     super.execute(data);
     const homeUrl = appModel.getHomeURL();
     if (homeUrl) {
-      window.open(homeUrl, '_blank');
+      window.open(homeUrl, '_self');
     }
     EventHandler.dispatchEvent(SlotEvents.HIDE_MENU);
   }

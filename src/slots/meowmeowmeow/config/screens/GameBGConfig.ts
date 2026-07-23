@@ -7,13 +7,8 @@ export const GAME_BG_CONFIG: any = {
   Elements: [
     {
       name: 'maingameBG',
-      type: 'Spine',
-      spineName: 'BG',
-      defaultSkin: 'default',
-      defaultState: 'Day',
-      freespinState: 'Night',
-      loop: true,
-      boundingBox: { width: 1900, height: 1280 },
+      type: 'Sprite',
+      image: 'maingamebg',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1 },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1 },

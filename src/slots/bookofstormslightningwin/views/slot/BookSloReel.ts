@@ -14,6 +14,7 @@ export class BookSlotReel extends SlotReelStandard {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_EXPANSION, this.showSymbolExpansion.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_LIGHTNING_STRIKE, this.showLightningStrike.bind(this));
+    EventHandler.addEventListener(SlotEvents.RESTORE_WILD_POSITIONS, this.restoreWildsAtTriggerPositions.bind(this));
   }
 
   protected showSymbolExpansion(): void {
@@ -121,6 +122,27 @@ export class BookSlotReel extends SlotReelStandard {
     });
   }
 
+  protected restoreWildsAtTriggerPositions(): void {
+    const positions = appModel.getFeatureTriggerPositions();
+    const expansionData = appModel.getSymbolExpansionData();
+    if (!positions?.length || !expansionData?.expandedReels?.length) {
+      return;
+    }
+
+    const wildConfig = this.reelsData.symbolsData['WD'];
+    const len = positions.length;
+
+    for (let j = 0; j < len; j++) {
+      const pos = this.winController.getReelPosition(positions[j]);
+      const wasExpanded = expansionData.expandedReels.some(([r, w]: number[]) => r === pos.reel && w === pos.row);
+      if (wasExpanded) {
+        const symbol = this.symbolsArray[pos.reel][pos.row + 1];
+        if (symbol) {
+          symbol.setNewSymbol(wildConfig, pos.reel);
+        }
+      }
+    }
+  }
   protected showLightningStrike(): void {
     const lightningData = appModel.getReelModifiers()?.[0];
     if (!lightningData?.lightningStrikeWildPositions?.length) {

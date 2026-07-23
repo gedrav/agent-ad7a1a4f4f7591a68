@@ -13,4 +13,6 @@ export class GameSlotReel extends SlotReelStandard {
   constructor(config: any) {
     super(config);
   }
+
+  public changeReelSize(size: number): void {}
 }

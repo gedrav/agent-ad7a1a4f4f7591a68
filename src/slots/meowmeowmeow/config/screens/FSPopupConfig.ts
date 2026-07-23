@@ -6,16 +6,12 @@ export const FS_POPUP_CONFIG = {
   type: 'Comp',
   class: FSPopupComp,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1961, height: 1430, color: 0xff0000, alpha: 0 },
     {
       name: 'popupbg',
-      type: 'Graphics',
-      width: 5000,
-      height: 5000,
-      color: 0x000000,
+      type: 'Sprite',
+      image: 'newpopupbg',
       alpha: 1,
-      x: 450 - 2500,
-      y: 540 - 2500,
     },
     {
       name: 'titleText',
@@ -23,7 +19,7 @@ export const FS_POPUP_CONFIG = {
       content: 'CONGRATULATIONS!',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 70,
+        fontSize: 140,
         fill: ['0xffff00', '0xffa500'],
         stroke: '0x000000',
         strokeThickness: 5,
@@ -33,8 +29,8 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 450,
-      y: 250,
+      x: 1024,
+      y: 100,
     },
     {
       name: 'messageText1',
@@ -107,7 +103,7 @@ export const FS_POPUP_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, heightPerc: 0.8, maxScale: 1 },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.92, heightPerc: 0.8 },
     Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.88 },
   },

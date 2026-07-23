@@ -9,14 +9,11 @@ import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig'
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BookSlotReel } from '@game/views/slot/BookSloReel';
 import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
-import { JP_BANNER_ANIM_CONFIG } from '@slots/meowmeowmeow/config/screens/JPAnimsConfig';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
-import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
-import { MMM_TRANSITION_CONFIG } from '@slots/meowmeowmeow/config/screens/MMMTransitionConfig';
+import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -28,13 +25,18 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 2200,
-      height: 1456,
+      height: 1600,
       pWidth: 1660,
       pHeight: 2200,
       lWidth: 2300,
       lHeight: 1456,
       alpha: 0,
     },
+    { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
+    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
+    { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
+    { name: 'doorMask', type: 'Circle', radius: 840, color: 0x0000ff, x: 1258, y: 808 },
+
     JACKPOT_CONFIG,
     {
       name: 'slotReel',
@@ -42,7 +44,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 450, y: 274 },
+        Desktop: { x: 395, y: 274 },
         Portrait: { x: 0, y: 1000 },
         Landscape: { x: 450, y: 224 },
       },
@@ -364,7 +366,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     KITTIEBANK_CONFIG,
     WHEEL_CONFIG,
-    GREEN_FEATURE_CONFIG,
+    PICK_BONUS_JACKPOT_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

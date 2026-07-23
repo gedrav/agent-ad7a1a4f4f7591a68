@@ -1,0 +1,213 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Feature completed successfully",
+  "data": {
+    "gameId": "bookofstormslightningwin",
+    "closed": false,
+    "betType": "bet",
+    "playerInfo": {
+      "balance": 4583910.503555629
+    },
+    "result": {
+      "totalWin": 116,
+      "reelView": [
+        ["L3", "WD", "H4"],
+        ["WD", "H4", "L5"],
+        ["H4", "WD", "L2"],
+        ["WD", "L3", "L5"],
+        ["L2", "L4", "H1"]
+      ],
+      "winLines": [
+        { "lineNumber": 1, "winAmount": 3, "winningPosition": [5, 6, 7], "symbol": "H4", "symbolCount": 3 },
+        { "lineNumber": 5, "winAmount": 3, "winningPosition": [10, 6, 2], "symbol": "H4", "symbolCount": 3 },
+        { "lineNumber": 6, "winAmount": 10, "winningPosition": [5, 1, 2, 3], "symbol": "H4", "symbolCount": 4 },
+        { "lineNumber": 8, "winAmount": 0.5, "winningPosition": [0, 1, 7], "symbol": "L3", "symbolCount": 3 }
+      ],
+      "spinWin": 34.5,
+      "normalWin": 16.5,
+      "scatterWin": 18,
+      "wildCount": 4,
+      "wildPositions": [
+        [0, 1],
+        [1, 0],
+        [2, 1],
+        [3, 0]
+      ],
+      "bet": 0.9,
+      "baseWin": 34.5,
+      "nextFeature": "freespins",
+      "featureResults": [
+        {
+          "featureType": "freespins",
+          "featureTriggerPositions": [
+            [0, 1],
+            [1, 0],
+            [2, 1],
+            [3, 0]
+          ],
+          "spinResults": [
+            {
+              "reelView": [
+                ["WD", "H1", "L3"],
+                ["L5", "H1", "WD"],
+                ["L2", "WD", "L3"],
+                ["H2", "H4", "H1"],
+                ["H3", "L3", "L1"]
+              ],
+              "winLines": [
+                { "lineNumber": 1, "winAmount": 10, "winningPosition": [5, 6, 7], "symbol": "H1", "symbolCount": 3 },
+                { "lineNumber": 4, "winAmount": 1, "winningPosition": [0, 6], "symbol": "H1", "symbolCount": 2 },
+                { "lineNumber": 7, "winAmount": 1, "winningPosition": [5, 11], "symbol": "H1", "symbolCount": 2 },
+                { "lineNumber": 8, "winAmount": 0.5, "winningPosition": [0, 1, 7], "symbol": "L5", "symbolCount": 3 }
+              ],
+              "spinWin": 18.8,
+              "normalWin": 12.5,
+              "scatterWin": 1.8,
+              "wildCount": 3,
+              "featureTriggerPositions": [
+                [0, 0],
+                [1, 2],
+                [2, 1]
+              ],
+              "totalWin": 18.8,
+              "expansionWin": 4.5,
+              "reelModifiers": [
+                {
+                  "type": "symbolExpansion",
+                  "expandedReels": [
+                    [0, 0],
+                    [0, 1],
+                    [0, 2],
+                    [2, 0],
+                    [2, 1],
+                    [2, 2],
+                    [4, 0],
+                    [4, 1],
+                    [4, 2]
+                  ],
+                  "initialReelView": [
+                    ["WD", "H1", "L3"],
+                    ["L5", "H1", "WD"],
+                    ["L2", "WD", "L3"],
+                    ["H2", "H4", "H1"],
+                    ["H3", "L3", "L1"]
+                  ],
+                  "expandedReelView": [
+                    ["L3", "L3", "L3"],
+                    ["L5", "H1", "WD"],
+                    ["L3", "L3", "L3"],
+                    ["H2", "H4", "H1"],
+                    ["L3", "L3", "L3"]
+                  ],
+                  "expandedWinLines": [
+                    {
+                      "lineNumber": 1,
+                      "winAmount": 0.5,
+                      "winningPosition": [5, 7, 9],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 2,
+                      "winAmount": 0.5,
+                      "winningPosition": [0, 2, 4],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 3,
+                      "winAmount": 0.5,
+                      "winningPosition": [10, 12, 14],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 4,
+                      "winAmount": 0.5,
+                      "winningPosition": [0, 12, 4],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 5,
+                      "winAmount": 0.5,
+                      "winningPosition": [10, 2, 14],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 6,
+                      "winAmount": 0.5,
+                      "winningPosition": [5, 2, 9],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 7,
+                      "winAmount": 0.5,
+                      "winningPosition": [5, 12, 9],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 8,
+                      "winAmount": 0.5,
+                      "winningPosition": [0, 7, 14],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    },
+                    {
+                      "lineNumber": 9,
+                      "winAmount": 0.5,
+                      "winningPosition": [10, 7, 4],
+                      "symbol": "L3",
+                      "symbolCount": 3
+                    }
+                  ],
+                  "expansionWin": 4.5
+                }
+              ]
+            }
+          ],
+          "totalWin": 116,
+          "currentCount": 42,
+          "currentWin": 18.8,
+          "retrigger": true,
+          "retriggerCount": 10,
+          "totalCount": 60,
+          "closed": false,
+          "isAborted": false,
+          "bookSymbol": "L3",
+          "featureVariant": "Lightning"
+        }
+      ],
+      "reelModifiers": [
+        {
+          "type": "lightningStrike",
+          "initialReelView": [
+            ["L3", "L4", "H4"],
+            ["WD", "H4", "L5"],
+            ["H4", "L1", "L2"],
+            ["WD", "L3", "L5"],
+            ["L2", "L4", "H1"]
+          ],
+          "lightningStrikeWildPositions": [
+            [2, 1],
+            [0, 1]
+          ],
+          "lightningStrikeWildCount": 2,
+          "scatterCountAfterStrike": 4
+        }
+      ],
+      "maxWin": 100000,
+      "maxCapReached": false,
+      "addedWildPositions": [
+        [3, 0],
+        [1, 0],
+        [2, 1],
+        [0, 1]
+      ]
+    }
+  }
+}
