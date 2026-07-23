@@ -22,7 +22,7 @@ export const PICK_BONUS_JACKPOT_ICON_CONFIG: any = {
       visible: false,
       x: 0,
       y: 0,
-      scale: 1,
+      scale: 0.5,
     },
     {
       name: 'Major',
@@ -32,7 +32,7 @@ export const PICK_BONUS_JACKPOT_ICON_CONFIG: any = {
       visible: false,
       x: 0,
       y: 0,
-      scale: 1,
+      scale: 0.5,
     },
     {
       name: 'Minor',
@@ -42,7 +42,7 @@ export const PICK_BONUS_JACKPOT_ICON_CONFIG: any = {
       visible: false,
       x: 0,
       y: 0,
-      scale: 1,
+      scale: 0.5,
     },
     {
       name: 'Mini',
@@ -52,7 +52,7 @@ export const PICK_BONUS_JACKPOT_ICON_CONFIG: any = {
       visible: false,
       x: 0,
       y: 0,
-      scale: 1,
+      scale: 0.5,
     },
   ],
 };
