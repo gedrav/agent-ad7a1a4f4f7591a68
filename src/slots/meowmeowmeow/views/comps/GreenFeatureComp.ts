@@ -10,7 +10,7 @@ export class GreenFeatureComp extends ResponsiveChildrenView {
     this.renderable = false;
     this.interactive = false;
 
-    EventHandler.addEventListener('showGreenFeature', this.onShowGreenFeature.bind(this));
+    EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.onShowGreenFeature.bind(this));
   }
 
   private onShowGreenFeature(): void {

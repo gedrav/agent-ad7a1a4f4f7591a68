@@ -11,9 +11,13 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { Util } from '@core/utils/UtilService';
+import { MMMJackpotComp } from '@slots/meowmeowmeow/views/comps/MMMJackpotComp';
+import { KittieBankComp } from '@slots/meowmeowmeow/views/comps/KittieBankComp';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly extraSpinTextTimeoutId: any;
+  private readonly jackpotContainer: MMMJackpotComp;
+  private readonly kittiebankComp: KittieBankComp;
 
   constructor(config: any) {
     super(config);
@@ -23,8 +27,17 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
+    //EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
+
+    this.jackpotContainer = this.elementsList['jackpotContainer'];
+    this.kittiebankComp = this.elementsList['kittiebankComp'];
   }
 
+  protected showGreenTransition(): void {
+    this.slotReel.visible = false;
+    this.jackpotContainer.visible = false;
+    this.kittiebankComp.visible = false;
+  }
   private handlePickFeature(SubfeatureType: string) {
     console.warn(SubfeatureType);
     switch (SubfeatureType.toUpperCase()) {

@@ -26,13 +26,16 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 2200,
-      height: 1456,
+      height: 1600,
       pWidth: 1660,
       pHeight: 2200,
       lWidth: 2300,
       lHeight: 1456,
       alpha: 0,
     },
+    { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
+    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', x: 314, y: -120, alpha: 0.5 },
+
     JACKPOT_CONFIG,
     {
       name: 'slotReel',
@@ -40,7 +43,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 450, y: 274 },
+        Desktop: { x: 395, y: 274 },
         Portrait: { x: 0, y: 1000 },
         Landscape: { x: 450, y: 224 },
       },

@@ -17,8 +17,7 @@ const COMMON: AssetBundle = {
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
-    { TYPE: 'common', NAME: 'gameBG', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'gameBG', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -36,6 +35,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'KittieBank', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Coin', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'AnticipationAnim', ASSETTYPE: 'spine' },
@@ -53,7 +53,6 @@ const PRIMARY: AssetBundle = {
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
-    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'WDSymbolAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'SCSymbolAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: '10', ASSETTYPE: 'spine' },
