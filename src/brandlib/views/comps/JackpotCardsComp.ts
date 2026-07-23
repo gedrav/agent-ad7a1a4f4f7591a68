@@ -35,7 +35,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.cardsConfig = this.configData.cardsConfig;
     this.cardsContainer = this.elementsList['cardsContainer'];
     this.createCards();
-    // this.visible = false;
+    this.visible = false;
   }
   protected showJackpotGame() {
     this.updateCards();
