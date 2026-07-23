@@ -42,12 +42,14 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'jpbanner', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'gameTitle', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Wheel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Grand', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Major', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Minor', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Mini', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Jackpot_Coin', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Vault_Anim', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
