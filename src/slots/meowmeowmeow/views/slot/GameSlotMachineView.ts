@@ -52,14 +52,23 @@ export class GameSlotMachineView extends SlotMachineView {
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
     AnimationProxy.animateTween(this.wheelBase, { duration: 0.25, alpha: 1 });
-    AnimationProxy.animateTween(this.wheelRim, { duration: 0.25, alpha: 1 });
-    AnimationProxy.animateTween(this.wheelDoor, {
-      duration: 0,
+    AnimationProxy.animateTween(this.wheelRim, {
+      duration: 0.25,
       alpha: 1,
       onComplete: () => {
         this.animateWheelDoor();
       },
     });
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 0,
+      alpha: 1,
+    });
+    this.changeReelInterface();
+  }
+  private changeReelInterface(): void {
+    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
+    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
+    this.slotReel.changeReelSize(interfaceSize);
   }
   protected animateWheelDoor(): void {
     this.slotReel.visible = true;
@@ -85,7 +94,9 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1.2,
       x: this.wheelDoor.x - this.wheelDoor.width,
       rotation: Util.getRadians(90),
-      onComplete: () => {},
+      onComplete: () => {
+        StateManager.doNextStep();
+      },
     });
   }
   private handlePickFeature(SubfeatureType: string) {

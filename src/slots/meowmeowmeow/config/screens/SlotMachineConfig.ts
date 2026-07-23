@@ -13,7 +13,6 @@ import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
-import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
 import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
@@ -36,7 +35,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
     { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
     { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
-    { name: 'doorMask', type: 'Graphics', color: 0x0000ff, width: 1660, height: 1600, x: 480 },
+    { name: 'doorMask', type: 'Circle', radius: 840, color: 0x0000ff, x: 1258, y: 808 },
 
     JACKPOT_CONFIG,
     {
@@ -368,7 +367,6 @@ export const SLOT_MACHINE_CONFIG: any = {
     KITTIEBANK_CONFIG,
     WHEEL_CONFIG,
     PICK_BONUS_JACKPOT_FEATURE_CONFIG,
-    GREEN_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {
