@@ -21,15 +21,6 @@ export const WHEEL_CONFIG: any = {
       y: -2500,
     },
     {
-      name: 'Wheel_Border',
-      type: 'Spine',
-      spineName: 'Wheel',
-      idleAnim: '10',
-      animScale: 1,
-      loop: false,
-      defaultSkin: 'default',
-    },
-    {
       name: 'Wheel_BG',
       type: 'Spine',
       spineName: 'Wheel',
@@ -38,7 +29,15 @@ export const WHEEL_CONFIG: any = {
       loop: false,
       defaultSkin: 'default',
     },
-
+    {
+      name: 'Wheel_Border',
+      type: 'Spine',
+      spineName: 'Wheel',
+      idleAnim: '10',
+      animScale: 1,
+      loop: false,
+      defaultSkin: 'default',
+    },
     {
       name: 'Wheel_Topper',
       type: 'Spine',
