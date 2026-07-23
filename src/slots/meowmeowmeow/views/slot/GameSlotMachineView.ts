@@ -90,6 +90,7 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
   protected moveWheelDoor(): void {
+    //Play the spine animation
     AnimationProxy.animateTween(this.wheelDoor, {
       duration: 1.2,
       x: this.wheelDoor.x - this.wheelDoor.width,
