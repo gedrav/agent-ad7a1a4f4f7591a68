@@ -34,7 +34,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       alpha: 0,
     },
     { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
-    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', x: 314, y: -120, alpha: 0.5 },
+    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
+    { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
+    { name: 'doorMask', type: 'Graphics', color: 0x0000ff, width: 1660, height: 1600, x: 480 },
 
     JACKPOT_CONFIG,
     {

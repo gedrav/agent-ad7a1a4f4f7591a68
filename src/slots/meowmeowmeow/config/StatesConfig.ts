@@ -21,6 +21,7 @@ import { ExitPickFeatureState } from '@core/commands/states/ExitPickFeatureState
 import { GreenEnterTransitionState } from '@slots/meowmeowmeow/states/GreenEnterTransitionState';
 import { GreenExitTransitionState } from '@slots/meowmeowmeow/states/GreenExitTransitionState';
 import { CheckFSState } from '@core/commands/states/CheckFSState';
+import { GreenEnterFreespinsState } from '@slots/meowmeowmeow/states/GreenEnterFreespinsState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE_V2, state: CheckUnfinishedStateV2 },
@@ -38,7 +39,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
-  { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
+  { name: STATES.ENTER_FREESPINS_STATE, state: GreenEnterFreespinsState },
   { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: GreenEnterTransitionState },
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },

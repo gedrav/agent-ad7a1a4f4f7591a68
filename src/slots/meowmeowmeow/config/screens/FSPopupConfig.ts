@@ -6,7 +6,7 @@ export const FS_POPUP_CONFIG = {
   type: 'Comp',
   class: FSPopupComp,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1961, height: 1430, color: 0xff0000, alpha: 1 },
+    { name: 'guideRect', type: 'Graphics', width: 1961, height: 1430, color: 0xff0000, alpha: 0 },
     {
       name: 'popupbg',
       type: 'Sprite',

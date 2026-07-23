@@ -13,11 +13,18 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { Util } from '@core/utils/UtilService';
 import { MMMJackpotComp } from '@slots/meowmeowmeow/views/comps/MMMJackpotComp';
 import { KittieBankComp } from '@slots/meowmeowmeow/views/comps/KittieBankComp';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly extraSpinTextTimeoutId: any;
   private readonly jackpotContainer: MMMJackpotComp;
   private readonly kittiebankComp: KittieBankComp;
+  private readonly gameTitle: PixSprite;
+  private readonly wheelBase: PixSprite;
+  private readonly wheelDoor: PixSprite;
+  private readonly wheelRim: PixSprite;
+  private readonly doorMask: PixGraphics;
 
   constructor(config: any) {
     super(config);
@@ -27,16 +34,59 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
-    //EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
+    EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
 
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.kittiebankComp = this.elementsList['kittiebankComp'];
+    this.gameTitle = this.elementsList['gameTitle'];
+    this.wheelBase = this.elementsList['wheelBase'];
+    this.wheelDoor = this.elementsList['wheelDoor'];
+    this.wheelRim = this.elementsList['wheelRim'];
+    this.doorMask = this.elementsList['doorMask'];
+    this.wheelDoor.mask = this.doorMask;
   }
 
   protected showGreenTransition(): void {
     this.slotReel.visible = false;
+    this.gameTitle.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
+    AnimationProxy.animateTween(this.wheelBase, { duration: 0.25, alpha: 1 });
+    AnimationProxy.animateTween(this.wheelRim, { duration: 0.25, alpha: 1 });
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 0,
+      alpha: 1,
+      onComplete: () => {
+        this.animateWheelDoor();
+      },
+    });
+  }
+  protected animateWheelDoor(): void {
+    this.slotReel.visible = true;
+    this.slotReel.scale.set(0.72);
+    this.gameTitle.scale.set(0.72);
+    this.gameTitle.x = 1258;
+    this.gameTitle.y = 325;
+    this.slotReel.position.set(644, 384);
+    this.addChild(this.wheelDoor, this.wheelRim);
+    this.gameTitle.visible = true;
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 0.25,
+      rotation: Util.getRadians(30),
+      yoyo: true,
+      repeat: 2,
+      onComplete: () => {
+        this.moveWheelDoor();
+      },
+    });
+  }
+  protected moveWheelDoor(): void {
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 1.2,
+      x: this.wheelDoor.x - this.wheelDoor.width,
+      rotation: Util.getRadians(90),
+      onComplete: () => {},
+    });
   }
   private handlePickFeature(SubfeatureType: string) {
     console.warn(SubfeatureType);

@@ -23,9 +23,10 @@ export const GAME_CONFIG = {
   dontShowWinAfterFS: true,
   dontShowRetrigger: true,
   dontShowRetriggerDelay: 2000,
+  featureTriggerDelay: 2000,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'cambriab',
+    gameFont1: 'TitanOne Regular',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',

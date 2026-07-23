@@ -16,6 +16,5 @@ export class GreenFeatureComp extends ResponsiveChildrenView {
   private onShowGreenFeature(): void {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
     EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
-    StateManager.next();
   }
 }
