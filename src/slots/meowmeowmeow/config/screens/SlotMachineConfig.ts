@@ -34,6 +34,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
     { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
+    { name: 'vaultAnim', type: 'Spine', spineName: 'Vault_Anim', scale: 0.65, x: 1254, y: 820, visible: false },
     { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
     { name: 'doorMask', type: 'Circle', radius: 840, color: 0x0000ff, x: 1258, y: 808 },
 
@@ -260,6 +261,22 @@ export const SLOT_MACHINE_CONFIG: any = {
               x: 0,
               y: 0,
             },
+            {
+              name: 'frame4',
+              type: 'Sprite',
+              image: '5_4',
+              x: 0,
+              y: 0,
+              visible: false,
+            },
+            {
+              name: 'frame5',
+              type: 'Sprite',
+              image: '5_5',
+              x: 0,
+              y: 0,
+              visible: false,
+            },
           ],
         },
         {
@@ -355,9 +372,11 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     {
       name: 'gameTitle',
-      type: 'Sprite',
-      image: 'gamelogo',
-      anchor: { x: 0.5, y: 0.5 },
+      type: 'Spine',
+      spineName: 'gameTitle',
+      defaultState: 'idle',
+      idleState: 'idle',
+      loop: true,
       layoutData: {
         Desktop: { scale: 1, x: 1300, y: 60 },
         Landscape: { scale: 1, x: 1300, y: 60 },
