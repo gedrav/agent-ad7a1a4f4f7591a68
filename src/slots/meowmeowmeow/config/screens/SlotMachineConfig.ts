@@ -7,14 +7,14 @@ import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
-import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BookSlotReel } from '@game/views/slot/BookSloReel';
 import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
-import { JP_BANNER_ANIM_CONFIG } from '@slots/meowmeowmeow/config/screens/JPAnimsConfig';
+import { WHEEL_CONFIG } from './WheelFeatureConfig';
+import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
+import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -26,13 +26,18 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 2200,
-      height: 1456,
+      height: 1600,
       pWidth: 1660,
       pHeight: 2200,
       lWidth: 2300,
       lHeight: 1456,
       alpha: 0,
     },
+    { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
+    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
+    { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
+    { name: 'doorMask', type: 'Graphics', color: 0x0000ff, width: 1660, height: 1600, x: 480 },
+
     JACKPOT_CONFIG,
     {
       name: 'slotReel',
@@ -40,7 +45,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 450, y: 274 },
+        Desktop: { x: 395, y: 274 },
         Portrait: { x: 0, y: 1000 },
         Landscape: { x: 450, y: 224 },
       },
@@ -51,6 +56,27 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelHeight: 900,
         reelsConfig: ReelsConfig,
         landingSymbols: ['WD', 'SC'],
+        anticipationSymbols: ['SC'],
+        anticipationConfig: {
+          totalElements: 5,
+          element: {
+            name: 'anticipationAnim',
+            type: 'Spine',
+            spineName: 'AnticipationAnim',
+            defaultState: 'animation',
+            loop: true,
+            y: 0, // Tweak this to move the effect up or down
+            px: 0,
+            lx: 0,
+          },
+          positions: [
+            null,
+            { x: 333, y: 356, px: 333, py: 356, lx: 333, ly: 356 },
+            { x: 664, y: 356, px: 664, py: 356, lx: 664, ly: 356 },
+            { x: 994, y: 356, px: 994, py: 356, lx: 994, ly: 356 },
+            { x: 1324, y: 356, px: 1324, py: 356, lx: 1324, ly: 356 },
+          ],
+        },
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 195, y: 230 },
@@ -59,8 +85,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 195, y: 230 },
-            reelPositionX: [2, 333, 664, 994, 1324],
+            reelContainerPos: { x: 172, y: 230 },
+            reelPositionX: [3, 333, 664, 994, 1324],
             symbolHeight: 330,
             symbolScale: 1,
           },
@@ -74,23 +100,36 @@ export const SLOT_MACHINE_CONFIG: any = {
         initialReel: [
           ['WD', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
-          ['H2', 'H4', 'L5'],
+          ['H2', 'BC', 'L5'],
           ['H3', 'H5', 'L4'],
           ['H4', 'H3', 'WD'],
         ],
         symbolsData: {
           RC: {
             name: 'RC',
-            animScale: 0.65,
+            spineName: 'Coin',
+            skin: 'red',
+            idleAnim: 'STatic',
+            winAnim: 'Win',
+            animScale: 1,
           },
           BC: {
             name: 'BC',
-            animScale: 0.65,
+            spineName: 'Coin',
+            skin: 'Blue',
+            idleAnim: 'STatic',
+            winAnim: 'Win',
+            animScale: 1,
           },
           GC: {
             name: 'GC',
-            animScale: 0.65,
+            spineName: 'Coin',
+            skin: 'Green',
+            idleAnim: 'STatic',
+            winAnim: 'Win',
+            animScale: 1,
           },
+
           WD: {
             name: 'WD',
             spineName: 'WDSymbolAnim',
@@ -238,6 +277,15 @@ export const SLOT_MACHINE_CONFIG: any = {
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
         {
+          name: 'extraSpinText',
+          type: 'Text',
+          anchor: { x: 0, y: 0.5 },
+          alpha: 0,
+          x: 72,
+          y: 1115,
+          style: { fontFamily: 'gameFont1', fontSize: 48, fill: 0xd4f4bd, fontWeight: 'bold' },
+        },
+        {
           name: 'maskRect',
           type: 'Graphics',
           width: 1666,
@@ -248,6 +296,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           alpha: 1,
           visible: true,
         },
+        { name: 'anticipationContainer', type: 'Container' },
         {
           name: 'winSymbolsContainer',
           type: 'Container',
@@ -284,41 +333,24 @@ export const SLOT_MACHINE_CONFIG: any = {
           ],
         },
         {
-          name: 'betValueContainer',
-          type: 'Comp',
-          class: BetValueComp,
-          x: 816,
-          y: 510,
-          padX: 40,
-          padY: 15,
-          gap: 30,
-          visible: false,
-          isMobileOnly: true,
-          Elements: [
-            {
-              name: 'betValueBg',
-              type: 'ResponsiveGraphics',
-              alpha: 0.8,
-              width: 180,
-              height: 70,
-              radius: 16,
-              color: 0x000000,
-            },
-            {
-              name: 'betLabelText',
-              type: 'Text',
-              content: 'BetText',
-              toUpperCase: true,
-              anchor: { x: 0, y: 0.5 },
-              style: { fontFamily: 'commonFont', fontSize: 44, fill: 0xffd700, fontWeight: 700 },
-            },
-            {
-              name: 'betValueText',
-              type: 'Text',
-              anchor: { x: 0, y: 0.5 },
-              style: { fontFamily: 'commonFont', fontSize: 44, fill: 0xffffff, fontWeight: 700 },
-            },
-          ],
+          name: 'extraSpinTextCenter',
+          type: 'Text',
+          anchor: { x: 0.5, y: 0.5 },
+          alpha: 0,
+          x: 863,
+          y: 562,
+          style: {
+            fontFamily: 'gameFont1',
+            fontSize: 72,
+            fill: ['#ffffff', '#f4d11b'],
+            stroke: '#003399',
+            strokeThickness: 8,
+            dropShadow: true,
+            dropShadowColor: '#000000',
+            dropShadowBlur: 8,
+            dropShadowDistance: 6,
+            fontWeight: 'bold',
+          },
         },
       ],
     },
@@ -334,6 +366,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     KITTIEBANK_CONFIG,
+    WHEEL_CONFIG,
+    PICK_BONUS_JACKPOT_FEATURE_CONFIG,
+    GREEN_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

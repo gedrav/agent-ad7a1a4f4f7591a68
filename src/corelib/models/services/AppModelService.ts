@@ -83,12 +83,14 @@ class AppModelService {
   private _autoPlayObj: any;
   private _autoPlaySession: boolean = false;
   private _freeSpinsSession: boolean;
+  private _pickFeatureSession: boolean = false;
   private _tumbleIndex: number;
   private _lightningStopOnBonus: boolean;
   private _secondaryAssetsLoaded: boolean;
   private _featureAssetsLoaded: boolean;
   public isSymbolExpanded: boolean = false;
-  public bookSymbol: string | null = null;
+  private _nextFeature: string;
+  private _nextSubFeature: string = '';
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
@@ -299,6 +301,8 @@ class AppModelService {
   }
   public setUnfinishedInfo(): void {
     this.gameResult = this.unfinishedData;
+    this._nextFeature = this.unfinishedData.nextFeature;
+    this._nextSubFeature = this.unfinishedData.nextFeatureSubType;
     if (this.unfinishedData.ante) {
       const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier;
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
@@ -306,9 +310,6 @@ class AppModelService {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }
     this.tumbleIndex = 0;
-    if (this.featureResult?.bookSymbol) {
-      this.bookSymbol = this.featureResult.bookSymbol;
-    }
 
     this.featureName = this.unfinishedData.nextFeature;
     this.featureResult = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1];
@@ -331,6 +332,8 @@ class AppModelService {
     this.gameInfo.updatedBalance = data.playerInfo.balance;
     this.gameResult = null;
     this.gameResult = data.result;
+    this._nextFeature = data.result.nextFeature;
+    this._nextSubFeature = data.result.nextFeatureSubType;
     this.featureResult = null;
     if (data.result.featureResults) {
       this.featureResult = data.result.featureResults[data.result.featureResults?.length - 1];
@@ -341,9 +344,6 @@ class AppModelService {
         this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
         this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
-        if (this.featureResult.bookSymbol) {
-          this.bookSymbol = this.featureResult.bookSymbol;
-        }
       }
     }
   }
@@ -352,19 +352,23 @@ class AppModelService {
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameResult = null;
-    this.gameResult =
-      data.result.featureResults[data.result.featureResults.length - 1].spinResults[
-        data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
-      ];
-    if (this.featureResult.bookSymbol) {
-      this.bookSymbol = this.featureResult.bookSymbol;
+    this._nextFeature = data.result.nextFeature;
+    this._nextSubFeature = data.result.nextFeatureSubType;
+    // Check this fix added because for wheel features's response it doesn't have spinresults in featureResults, so we need to check if spinresults exists before accessing it.
+    if (!data.result.featureResults[data.result.featureResults.length - 1].spinResults) {
+      this.gameResult = null;
+    } else {
+      this.gameResult =
+        data.result.featureResults[data.result.featureResults.length - 1].spinResults[
+          data.result.featureResults[data.result.featureResults.length - 1].spinResults.length - 1
+        ];
     }
     this.featureResult = data.result.featureResults[data.result.featureResults.length - 1];
 
     if (this.isCascadeGame()) {
       this.featureResult.featureTriggerPositions =
         this.gameResult.cascadeData[this.gameResult.cascadeData.length - 1].scatterPositions;
-    } else if (this.gameResult.featureTriggerPositions) {
+    } else if (this.gameResult?.featureTriggerPositions) {
       this.featureResult.featureTriggerPositions = this.gameResult.featureTriggerPositions;
     }
 
@@ -380,6 +384,8 @@ class AppModelService {
 
   public resetGameResult(): void {
     this.gameResult = null;
+    this._nextFeature = null;
+    this._nextSubFeature = null;
   }
   // ------------------- All get methods ---------------------------------------------------------
   public getHomeURL(): string {
@@ -558,10 +564,30 @@ class AppModelService {
     this.unfinishedData = null;
   }
 
+  public getFeatureType(): string {
+    return this.featureResult?.featureType;
+  }
+
+  public getPickFeatureWinnings(): number {
+    return this.featureResult.featureData.ownWin;
+  }
+  public getNextFeatureType(): string {
+    return this._nextFeature;
+  }
+
+  public getNextSubFeatureType(): string {
+    return this._nextSubFeature;
+  }
+
+  public getFeatureSubType(): string {
+    return this.featureResult?.featureSubType;
+  }
   public getUnfinishedFeatureType(): string {
     return this.unfinishedData.nextFeature;
   }
-
+  public getUnfinishedFeatureSubType(): string {
+    return this.unfinishedData?.nextFeatureSubType;
+  }
   public getUnfinishedReel(): any {
     return this.unfinishedData.reelView;
   }
@@ -858,6 +884,16 @@ class AppModelService {
     this._freeSpinsSession = true;
   }
 
+  public startPickFeatureSession(): void {
+    this._pickFeatureSession = true;
+  }
+  public getIsPickFeatureSession(): boolean {
+    return this._pickFeatureSession;
+  }
+  public endPickFeatureSession(): void {
+    this._pickFeatureSession = false;
+  }
+
   public getCurrentFreeSpin(): number {
     return this.fsInfo.currentFreespin + 1;
   }
@@ -889,7 +925,6 @@ class AppModelService {
   public endFreeSpinsSession(): void {
     this._freeSpinsSession = false;
   }
-
   public isFSRetriggered(): boolean {
     return this.fsInfo.retrigger;
   }

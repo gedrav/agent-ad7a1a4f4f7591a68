@@ -57,7 +57,7 @@ export class BGView extends ResponsiveChildrenView {
     }
 
     this.currentBG = 'free';
-    if (this.freegameBG.configData.unload) {
+    if (this.freegameBG?.configData?.unload) {
       this.loadFSBG();
     }
     if (this.freegameBG) {

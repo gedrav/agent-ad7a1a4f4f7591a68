@@ -9,7 +9,6 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
-import { Util } from '@core/utils/UtilService';
 import { SplashButton } from '@brand/views/comps/SplashButton';
 import { appModel } from '@core/models/services/AppModelService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
@@ -17,8 +16,6 @@ import { SoundStateChangeCommand } from '@core/commands/action/SoundStateChangeC
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { AppEvents } from '@core/events/AppEvents';
-import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
-import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
 import { SplashPreloaderComp } from '@brand/views/comps/SplashPreloaderComp';
 import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
 
@@ -34,6 +31,7 @@ export class SplashView extends ResponsiveChildrenView {
   private readonly controlsContainer: PixView;
   private readonly cGuideRect: PixGraphics;
   private preloaderComp: SplashPreloaderComp;
+  private readonly disposers: (() => void)[] = [];
 
   constructor(config: any) {
     super(config);
@@ -54,8 +52,8 @@ export class SplashView extends ResponsiveChildrenView {
     this.soundBtn.on('BUTTON_PRESSED', this.onSoundBtnClick.bind(this));
     this.showIntroBtn.on('BUTTON_PRESSED', this.onshowIntroBtnClick.bind(this));
 
-    EventHandler.addEventListener(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryLoaded.bind(this));
-    EventHandler.addEventListener(SlotEvents.ACTIVATE_SPLASH, this.onPrimaryLoaded.bind(this));
+    this.disposers.push(EventHandler.bind(AppEvents.PRIMARY_ASSETS_LOADED, this.onPrimaryLoaded.bind(this)));
+    this.disposers.push(EventHandler.bind(SlotEvents.ACTIVATE_SPLASH, this.onPrimaryLoaded.bind(this)));
 
     const prefs = appModel.getPreferences();
     this.soundBtn.setSelected(!prefs.sound);
@@ -77,7 +75,8 @@ export class SplashView extends ResponsiveChildrenView {
     this.controlsContainer.addChild(this.preloaderComp);
   }
   protected onPrimaryLoaded(): void {
-    this.preloaderComp.visible = false;
+    if (this.isDestroyed) return;
+    if (this.preloaderComp) this.preloaderComp.visible = false;
     this.startBtn.visible = true;
   }
   protected onshowIntroBtnClick(): void {
@@ -317,6 +316,10 @@ export class SplashView extends ResponsiveChildrenView {
   }
 
   protected async onFadedOut(): Promise<void> {
+    this.disposers.forEach((dispose) => dispose());
+    this.disposers.length = 0;
+    this.preloaderComp?.removePreloader();
+    this.preloaderComp = null;
     await this.destroyElements();
     EventHandler.dispatchEvent(SlotEvents.SPLASH_DESTROYED);
   }

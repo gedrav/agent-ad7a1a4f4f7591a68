@@ -1,7 +1,6 @@
 import { UIConfig } from '@game/config/UIConfig';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
-import { BuyBonusButtonComp } from '@brand/views/comps/BuyBonusButtonComp';
 import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
 
 export const GAME_CONFIG = {
@@ -12,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.074',
+  gameVersion: '0.075',
   gameId: 'bookofstormslightningwin',
   gameName: 'Book Of Storms Lightning Win',
   uiConfig: UIConfig,

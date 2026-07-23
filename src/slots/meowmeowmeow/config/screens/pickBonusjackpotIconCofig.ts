@@ -1,0 +1,58 @@
+import { PickBonusJackpotIconComp } from '@slots/meowmeowmeow/views/comps/pickBonusJackpotIcon';
+
+export const PICK_BONUS_JACKPOT_ICON_CONFIG: any = {
+  name: 'japot_Icon',
+  type: 'Comp',
+  class: PickBonusJackpotIconComp,
+  Elements: [
+    {
+      name: 'jackpotIcon',
+      type: 'Spine',
+      spineName: 'Jackpot_Coin',
+      animScale: 1,
+      scale: 0.25,
+      loop: false,
+      defaultSkin: 'default',
+    },
+    {
+      name: 'Grand',
+      type: 'Sprite',
+      image: 'Grand',
+      anchor: { x: 0.5, y: 0.5 },
+      visible: false,
+      x: 0,
+      y: 0,
+      scale: 1,
+    },
+    {
+      name: 'Major',
+      type: 'Sprite',
+      image: 'Major',
+      anchor: { x: 0.5, y: 0.5 },
+      visible: false,
+      x: 0,
+      y: 0,
+      scale: 1,
+    },
+    {
+      name: 'Minor',
+      type: 'Sprite',
+      image: 'Minor',
+      anchor: { x: 0.5, y: 0.5 },
+      visible: false,
+      x: 0,
+      y: 0,
+      scale: 1,
+    },
+    {
+      name: 'Mini',
+      type: 'Sprite',
+      image: 'Mini',
+      anchor: { x: 0.5, y: 0.5 },
+      visible: false,
+      x: 0,
+      y: 0,
+      scale: 1,
+    },
+  ],
+};

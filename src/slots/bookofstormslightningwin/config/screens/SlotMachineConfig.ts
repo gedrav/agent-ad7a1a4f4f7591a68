@@ -7,11 +7,9 @@ import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
-import { BetValueComp } from '@brand/views/comps/BetValueComp';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
-import { WildTransitionComp } from '@game/views/comps/WildTransitionComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -284,14 +282,14 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 780,
-              y: 58,
+              y: 25,
             },
             Landscape: {
-              scale: 0.9,
+              scale: 0.7,
               x: 780,
-              y: 58,
+              y: 55,
             },
-            Portrait: { scale: 0.9, x: 775, y: 56 },
+            Portrait: { scale: 1, x: 775, y: 25 },
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 118, color: 0xffff00 },
@@ -325,12 +323,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           ],
         },
         {
-          name: 'wildTransition',
-          type: 'Comp',
-          class: WildTransitionComp,
-          visible: false,
-        },
-        {
           name: 'lineWinAmountComp',
           type: 'Comp',
           class: LineWinAmountComp,
@@ -341,43 +333,6 @@ export const SLOT_MACHINE_CONFIG: any = {
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
               style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
-            },
-          ],
-        },
-        {
-          name: 'betValueContainer',
-          type: 'Comp',
-          class: BetValueComp,
-          x: 816,
-          y: 510,
-          padX: 40,
-          padY: 15,
-          gap: 30,
-          visible: false,
-          isMobileOnly: true,
-          Elements: [
-            {
-              name: 'betValueBg',
-              type: 'ResponsiveGraphics',
-              alpha: 0.8,
-              width: 180,
-              height: 70,
-              radius: 16,
-              color: 0x000000,
-            },
-            {
-              name: 'betLabelText',
-              type: 'Text',
-              content: 'BetText',
-              toUpperCase: true,
-              anchor: { x: 0, y: 0.5 },
-              style: { fontFamily: 'commonFont', fontSize: 44, fill: 0xffd700, fontWeight: 700 },
-            },
-            {
-              name: 'betValueText',
-              type: 'Text',
-              anchor: { x: 0, y: 0.5 },
-              style: { fontFamily: 'commonFont', fontSize: 44, fill: 0xffffff, fontWeight: 700 },
             },
           ],
         },
