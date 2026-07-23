@@ -13,7 +13,6 @@ import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
-import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
 import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
@@ -26,13 +25,19 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 2200,
-      height: 1456,
+      height: 1600,
       pWidth: 1660,
       pHeight: 2200,
       lWidth: 2300,
       lHeight: 1456,
       alpha: 0,
     },
+    { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
+    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
+    { name: 'vaultAnim', type: 'Spine', spineName: 'Vault_Anim', scale: 0.65, x: 1254, y: 820, visible: false },
+    { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
+    { name: 'doorMask', type: 'Circle', radius: 840, color: 0x0000ff, x: 1258, y: 808 },
+
     JACKPOT_CONFIG,
     {
       name: 'slotReel',
@@ -40,7 +45,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 450, y: 274 },
+        Desktop: { x: 395, y: 274 },
         Portrait: { x: 0, y: 1000 },
         Landscape: { x: 450, y: 224 },
       },
@@ -256,6 +261,22 @@ export const SLOT_MACHINE_CONFIG: any = {
               x: 0,
               y: 0,
             },
+            {
+              name: 'frame4',
+              type: 'Sprite',
+              image: '5_4',
+              x: 0,
+              y: 0,
+              visible: false,
+            },
+            {
+              name: 'frame5',
+              type: 'Sprite',
+              image: '5_5',
+              x: 0,
+              y: 0,
+              visible: false,
+            },
           ],
         },
         {
@@ -351,9 +372,11 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     {
       name: 'gameTitle',
-      type: 'Sprite',
-      image: 'gamelogo',
-      anchor: { x: 0.5, y: 0.5 },
+      type: 'Spine',
+      spineName: 'gameTitle',
+      defaultState: 'idle',
+      idleState: 'idle',
+      loop: true,
       layoutData: {
         Desktop: { scale: 1, x: 1300, y: 60 },
         Landscape: { scale: 1, x: 1300, y: 60 },
@@ -363,7 +386,6 @@ export const SLOT_MACHINE_CONFIG: any = {
     KITTIEBANK_CONFIG,
     WHEEL_CONFIG,
     PICK_BONUS_JACKPOT_FEATURE_CONFIG,
-    GREEN_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

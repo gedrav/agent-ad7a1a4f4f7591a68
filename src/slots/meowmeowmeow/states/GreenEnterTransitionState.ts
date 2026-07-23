@@ -5,7 +5,7 @@ import { StateManager } from '@core/states/StateManagerService';
 class GreenEnterTransitionStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    EventHandler.dispatchEvent('showGreenFeature');
+    EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
   }
 
   public doNextStep(data: any = null) {
