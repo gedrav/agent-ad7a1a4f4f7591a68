@@ -11,6 +11,7 @@ import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 import { JACKPOT_PANEL_CONFIG } from '@brand/config/JackpotPanelConfig';
 import { JACKPOT_CARD_CONFIG } from '@brand/config/JackpotCardConfig';
+import { JACKPOT_GAME_BG_CONFIG } from '@brand/config/JackpotBGConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -25,8 +26,9 @@ export const SLOT_GAME_APP_CONFIG: any = {
     BUY_BONUS_CONFIG,
     AUTOPLAY_CONFIG,
     MESSAGE_POPUP_CONFIG,
-    JACKPOT_PANEL_CONFIG,
+    JACKPOT_GAME_BG_CONFIG,
     JACKPOT_CARD_CONFIG,
+    JACKPOT_PANEL_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
   ],
 };
