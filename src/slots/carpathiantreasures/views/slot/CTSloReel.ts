@@ -6,7 +6,7 @@ import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
-export class BookSlotReel extends SlotReelStandard {
+export class CTSlotReel extends SlotReelStandard {
   private totalAnims: number;
   private animIndex: number;
 

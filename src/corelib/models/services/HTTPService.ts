@@ -1,6 +1,7 @@
 import ky, { HTTPError } from 'ky';
 import { MessageServiceProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
+import sampleData from './sample.json';
 
 // Shared ky instance — prefixUrl is set from the env var baked in at build time.
 // All requests only need to pass the endpoint path (e.g. 'init', 'spin').

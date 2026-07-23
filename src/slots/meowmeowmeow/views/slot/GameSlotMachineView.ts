@@ -8,22 +8,119 @@ import { getBezierPoint, lerp } from '@core/utils/MathUtils';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
+import { STATES } from '@core/states/StateConstants';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { Util } from '@core/utils/UtilService';
+import { MMMJackpotComp } from '@slots/meowmeowmeow/views/comps/MMMJackpotComp';
+import { KittieBankComp } from '@slots/meowmeowmeow/views/comps/KittieBankComp';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 export class GameSlotMachineView extends SlotMachineView {
+  private readonly extraSpinTextTimeoutId: any;
+  private readonly jackpotContainer: MMMJackpotComp;
+  private readonly kittiebankComp: KittieBankComp;
+  private readonly gameTitle: PixSprite;
+  private readonly wheelBase: PixSprite;
+  private readonly wheelDoor: PixSprite;
+  private readonly wheelRim: PixSprite;
+  private readonly doorMask: PixGraphics;
+
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
-    EventHandler.addEventListener('showWheel', this.showWheel.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
+    EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
+    EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
+
+    this.jackpotContainer = this.elementsList['jackpotContainer'];
+    this.kittiebankComp = this.elementsList['kittiebankComp'];
+    this.gameTitle = this.elementsList['gameTitle'];
+    this.wheelBase = this.elementsList['wheelBase'];
+    this.wheelDoor = this.elementsList['wheelDoor'];
+    this.wheelRim = this.elementsList['wheelRim'];
+    this.doorMask = this.elementsList['doorMask'];
+    this.wheelDoor.mask = this.doorMask;
   }
 
-  public showWheel(): void {
+  protected showGreenTransition(): void {
+    this.slotReel.visible = false;
+    this.gameTitle.visible = false;
+    this.jackpotContainer.visible = false;
+    this.kittiebankComp.visible = false;
+    AnimationProxy.animateTween(this.wheelBase, { duration: 0.25, alpha: 1 });
+    AnimationProxy.animateTween(this.wheelRim, { duration: 0.25, alpha: 1 });
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 0,
+      alpha: 1,
+      onComplete: () => {
+        this.animateWheelDoor();
+      },
+    });
+  }
+  protected animateWheelDoor(): void {
+    this.slotReel.visible = true;
+    this.slotReel.scale.set(0.72);
+    this.gameTitle.scale.set(0.72);
+    this.gameTitle.x = 1258;
+    this.gameTitle.y = 325;
+    this.slotReel.position.set(644, 384);
+    this.addChild(this.wheelDoor, this.wheelRim);
+    this.gameTitle.visible = true;
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 0.25,
+      rotation: Util.getRadians(30),
+      yoyo: true,
+      repeat: 2,
+      onComplete: () => {
+        this.moveWheelDoor();
+      },
+    });
+  }
+  protected moveWheelDoor(): void {
+    AnimationProxy.animateTween(this.wheelDoor, {
+      duration: 1.2,
+      x: this.wheelDoor.x - this.wheelDoor.width,
+      rotation: Util.getRadians(90),
+      onComplete: () => {},
+    });
+  }
+  private handlePickFeature(SubfeatureType: string) {
+    console.warn(SubfeatureType);
+    switch (SubfeatureType.toUpperCase()) {
+      case 'RED':
+        //  Handle for red one
+        this.showPickJackpotFeatureScreen();
+        break;
+      case 'BLUE':
+        this.showWheel();
+        break;
+      default:
+        console.error('Invalid SubFeatureType:', SubfeatureType);
+        break;
+    }
+  }
+
+  private showPickJackpotFeatureScreen() {
+    const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
+    pickjackoptFeatureScreen.enter();
+  }
+
+  private showWheel(): void {
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
     wheelBG.interactive = true;
+  }
+
+  private hideWheel(): void {
+    const wheelBG = this.elementsList['wheelContainer'];
+    wheelBG.visible = false;
+    wheelBG.renderable = false;
+    wheelBG.interactive = false;
   }
 
   public showCoinAnimations() {
@@ -134,11 +231,6 @@ export class GameSlotMachineView extends SlotMachineView {
     const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
     kittieBankComp.addChildAt(movingSymbol, targetIndex);
 
-    kittieBankComp.children.forEach((child: any, idx: number) => {
-      const childName = child.name || 'MovingCoin';
-      console.log(`  [${idx}] -> ${childName}`);
-    });
-
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
@@ -156,7 +248,6 @@ export class GameSlotMachineView extends SlotMachineView {
           movingSymbol.parent.removeChild(movingSymbol);
         }
         movingSymbol.destroy();
-        console.log(`Symbol successfully reached the ${bankName} bank!`);
 
         const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
         const collectAnim = `${animPrefix}_Collect`;
@@ -181,6 +272,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const reel: any = this.slotReel;
     if (reel.reelsData.noOfRows === size) return;
     reel.reelsData.noOfRows = size;
+    if (reel.winController) reel.winController.noOfRows = size;
 
     if (size === 4 || size === 5) {
       // Pad initialReel to prevent engine crash
@@ -216,6 +308,8 @@ export class GameSlotMachineView extends SlotMachineView {
       }
     }
 
+    reel.winController?.clearSpinWin();
+
     reel.symbolsArray.flat().forEach((sym: any) => {
       AnimationProxy.killTweensOf(sym);
       sym.destroySymbol();
@@ -223,5 +317,81 @@ export class GameSlotMachineView extends SlotMachineView {
     });
     reel.symbolsArray = [];
     reel.createReel();
+  }
+
+  private onShowExtraSpinAnim(): void {
+    const extraSpinText: any = this.slotReel?.elementsList?.['extraSpinText'];
+    const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
+
+    if (!extraSpinText || !extraSpinTextCenter) {
+      console.warn('Missing extraSpinText elements');
+      StateManager.goToState(STATES.FS_SPIN_START_STATE);
+      return;
+    }
+
+    const text = Util.getContent('ExtraSpinText');
+    extraSpinText.text = text;
+    extraSpinTextCenter.text = text;
+
+    AnimationProxy.killTweensOf(extraSpinText);
+    AnimationProxy.killTweensOf(extraSpinTextCenter);
+
+    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
+
+    const ENTER_DURATION = 0.5;
+    const HOLD_DURATION = 1.0;
+    const EXIT_DURATION = 0.4;
+    const OFFSET_Y = 300;
+
+    if (extraSpinTextCenter._naturalY === undefined) {
+      extraSpinTextCenter._naturalY = extraSpinTextCenter.y;
+    }
+    const naturalY = extraSpinTextCenter._naturalY;
+
+    // Set initial state: start below the reel center, invisible
+    extraSpinTextCenter.scale.set(1);
+    extraSpinTextCenter.y = naturalY + OFFSET_Y; // start at reel bottom
+    extraSpinTextCenter.alpha = 0;
+    extraSpinText.alpha = 0;
+
+    // ENTER: slide up from bottom to center + fade in
+    AnimationProxy.animateTween(extraSpinTextCenter, {
+      duration: ENTER_DURATION,
+      y: naturalY,
+      alpha: 1,
+      ease: 'power2.out',
+    });
+
+    // Fade in the bottom ticker as text arrives
+    AnimationProxy.animateTween(extraSpinText, {
+      duration: 0.3,
+      alpha: 1,
+    });
+
+    AnimationProxy.animateTween(
+      extraSpinTextCenter,
+      {
+        duration: EXIT_DURATION,
+        y: naturalY - OFFSET_Y, // exits toward top of reel
+        alpha: 0,
+        ease: 'power2.in',
+        delay: ENTER_DURATION + HOLD_DURATION,
+        onComplete: () => {
+          EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
+        },
+      },
+      false,
+    );
+
+    // Fade out the bottom ticker in sync with the exit
+    AnimationProxy.animateTween(
+      extraSpinText,
+      {
+        duration: EXIT_DURATION,
+        alpha: 0,
+        delay: ENTER_DURATION + HOLD_DURATION,
+      },
+      false,
+    );
   }
 }

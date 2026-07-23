@@ -7,21 +7,21 @@ export const BIG_WIN_CONFIG = {
   class: BigWinsComp,
   data: {
     animations: {
-      BIG_WIN: { start: 'big_start', idle: 'big' },
-      SUPER_WIN: { start: 'mega_start', idle: 'mega' },
-      MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic' },
-      EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable' },
+      BIG_WIN: { start: '1_big_Win', idle: '1_big_Win_Loop' },
+      SUPER_WIN: { start: '2_Super_Win', idle: '2_Super_Win_Loop' },
+      MEGA_WIN: { start: '3_Mega_Win_', idle: '3_Mega_Win_Loop' },
+      EPIC_WIN: { start: '4_Epic_Win', idle: '4_Epic_Win_Loop' },
     },
-    /*bigWinAnim: {
+    bigWinAnim: {
       name: 'bigWinAnim',
       dontCreateView: true,
       type: 'Spine',
-      spineName: 'bigWins',
+      spineName: 'BigWin_Anim',
       loop: true,
-      x: 755,
-      y: 490,
-      scale: 1.2,
-    },*/
+      x: 830,
+      y: 696,
+      scale: 1,
+    },
     bigWinTextScales: [0.75, 0.7, 0.7, 0.7],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
@@ -32,14 +32,14 @@ export const BIG_WIN_CONFIG = {
   },
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0xffff00, x: 0, y: 0, alpha: 0 },
-    { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 755, y: 155 },
+    { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 830, y: 55 },
     {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
       x: 830,
-      y: 430,
+      y: 630,
       Elements: [
         {
           name: 'valueText',
@@ -54,9 +54,8 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 830,
-      y: 430,
+      y: 960,
       Elements: [
-        // { name: 'banner', type: 'Sprite', image: 'Red_banner', anchor: { x: 0.5, y: 0.5 }, x: 0, y: 40 },
         {
           name: 'valueText',
           type: 'BitmapText',
@@ -67,28 +66,9 @@ export const BIG_WIN_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: {
-      refComponent: 'guideRect',
-      widthPerc: 1,
-      maxScale: 1,
-      x: 480,
-      y: 294,
-    },
-    Landscape: {
-      refComponent: 'guideRect',
-      widthPerc: 1,
-      heightPerc: 1,
-      maxScale: 1,
-      x: 480,
-      y: 294,
-    },
-    Portrait: {
-      refComponent: 'guideRect',
-      widthPerc: 1,
-      heightPerc: 1,
-      maxScale: 1,
-      x: 480,
-      y: 294,
-    },
+    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
+    Portrait: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 0, y: 1010 },
+    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 234 },
+    SmallLandscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 234 },
   },
 };

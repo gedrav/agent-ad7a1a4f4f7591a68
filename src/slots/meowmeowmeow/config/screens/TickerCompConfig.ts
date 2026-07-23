@@ -24,7 +24,6 @@ export const TICKER_COMP_CONFIG: any = {
             fontSize: 48,
             mFontSize: 48,
             fill: 0xd4f4bd,
-            fontWeight: 'bold',
           },
         },
         {
@@ -36,7 +35,6 @@ export const TICKER_COMP_CONFIG: any = {
             fontSize: 48,
             mFontSize: 48,
             fill: 0xd4f4bd,
-            fontWeight: 'bold',
           },
         },
       ],

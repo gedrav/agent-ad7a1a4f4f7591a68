@@ -10,7 +10,6 @@ import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { BookSlotReel } from '@game/views/slot/BookSloReel';
-import { WildTransitionComp } from '@game/views/comps/WildTransitionComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -283,14 +282,14 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 780,
-              y: 58,
+              y: 25,
             },
             Landscape: {
-              scale: 0.9,
+              scale: 0.7,
               x: 780,
-              y: 58,
+              y: 55,
             },
-            Portrait: { scale: 0.9, x: 775, y: 56 },
+            Portrait: { scale: 1, x: 775, y: 25 },
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1420, height: 834, x: 66, y: 118, color: 0xffff00 },
@@ -322,12 +321,6 @@ export const SLOT_MACHINE_CONFIG: any = {
               ],
             },
           ],
-        },
-        {
-          name: 'wildTransition',
-          type: 'Comp',
-          class: WildTransitionComp,
-          visible: false,
         },
         {
           name: 'lineWinAmountComp',

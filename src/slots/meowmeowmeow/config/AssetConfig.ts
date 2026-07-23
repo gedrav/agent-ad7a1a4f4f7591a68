@@ -13,12 +13,11 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'cambriab.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'TitanOne-Regular.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
-    { TYPE: 'common', NAME: 'gameBG', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'gameBG', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -36,18 +35,24 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'kittiebank', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'KittieBank', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Coin', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'AnticipationAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'jpbanner', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'WheelTest', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Wheel', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Grand', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Major', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Minor', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Mini', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Jackpot_Coin', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
-    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'WDSymbolAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'SCSymbolAnim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: '10', ASSETTYPE: 'spine' },
@@ -60,7 +65,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Fan', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Cap', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'CupPlate', ASSETTYPE: 'spine' },
-    //{ TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'BigWin_Anim', ASSETTYPE: 'spine' },
   ],
 };
 const FREESPIN: AssetBundle = {
