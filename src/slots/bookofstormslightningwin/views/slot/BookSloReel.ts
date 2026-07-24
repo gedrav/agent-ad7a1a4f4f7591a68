@@ -18,10 +18,6 @@ export class BookSlotReel extends SlotReelStandard {
     EventHandler.addEventListener(SlotEvents.RESTORE_WILD_POSITIONS, this.restoreWildsAtTriggerPositions.bind(this));
   }
 
-  protected resizeView(): void {
-    super.resizeView();
-  }
-
   protected showSymbolExpansion(): void {
     const expansionData = appModel.getSymbolExpansionData();
     if (!expansionData) {
@@ -165,12 +161,9 @@ export class BookSlotReel extends SlotReelStandard {
     const wildSymbolConfig = this.reelsData.symbolsData['WD'];
     const items = lightningData.lightningStrikeWildPositions.map(([reelIndex, row]: number[]) => {
       const symbol = this.symbolsArray[reelIndex]?.[row + 1];
-      const getPosition = () => {
-        const bounds = symbol?.getBounds();
-        return { x: (bounds?.x ?? 0) + (bounds?.width ?? 0) / 2, y: (bounds?.y ?? 0) + (bounds?.height ?? 0) / 2 };
-      };
       return {
-        getPosition,
+        container: this.winSymbolsContainer,
+        getLocalPosition: () => ({ x: symbol?.x ?? 0, y: symbol?.y ?? 0 }),
         onSymbolDisappear: () => {
           if (symbol) symbol.visible = false;
         },

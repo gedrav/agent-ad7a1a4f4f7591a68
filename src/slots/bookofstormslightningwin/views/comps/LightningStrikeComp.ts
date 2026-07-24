@@ -4,10 +4,10 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { GameProxy } from '@core/models/GameConfigProxy';
-import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 interface WildTransitionData {
-  getPosition: () => { x: number; y: number };
+  container: any;
+  getLocalPosition: () => { x: number; y: number };
   onSymbolDisappear?: () => void;
   onSymbolAppear?: () => void;
 }
@@ -29,19 +29,21 @@ export class LightningStrikeComp extends ResponsiveView {
   constructor(config: any) {
     super(config);
     this.visible = false;
-    this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_WILD_TRANSITION, this.showAllTransitions.bind(this));
-  }
-
-  protected resizeView(): void {
-    super.resizeView();
-    this.onResize();
   }
 
   private computeOrigin(): { x: number; y: number } {
     const screen = GameProxy.config.renderer.screen;
-    const originY = DeviceProxy.config.isDesktop ? 90 : 0;
-    return this.toLocal({ x: screen.width / 2, y: originY });
+    return this.toLocal({ x: screen.width / 2, y: this.y });
+  }
+
+  protected resizeView(): void {
+    super.resizeView();
+    if (this.cloud) {
+      this.strikeOrigin = this.computeOrigin();
+      this.cloud.x = this.strikeOrigin.x;
+      this.cloud.y = this.strikeOrigin.y;
+    }
   }
 
   private showAllTransitions(payload: { items: WildTransitionData[]; onComplete?: () => void }): void {
@@ -56,7 +58,6 @@ export class LightningStrikeComp extends ResponsiveView {
     this.cloud = cloud;
     cloud.x = this.strikeOrigin.x;
     cloud.y = this.strikeOrigin.y;
-    cloud.zIndex = 1;
     this.addChild(cloud);
     cloud.addEventListener('event', this.onCloudEvent.bind(this));
     cloud.addEventListener('complete', this.onCloudComplete.bind(this));
@@ -95,9 +96,11 @@ export class LightningStrikeComp extends ResponsiveView {
 
     for (const data of items) {
       const spine = this.createTransitionSpine();
-      this.targetSymbolPosition(spine, data, this.strikeOrigin);
-      spine.zIndex = 0;
-      this.addChild(spine);
+      const localPos = data.getLocalPosition();
+      data.container.addChild(spine);
+      spine.x = localPos.x;
+      spine.y = localPos.y;
+      spine.rotation = this.getAimRotation(localPos, data.container.toLocal(this.toGlobal(this.strikeOrigin)));
       this.activeSpines.push({ spine, data });
 
       spine.addEventListener('event', this.onThunderEvent.bind(this));
@@ -130,14 +133,6 @@ export class LightningStrikeComp extends ResponsiveView {
     if (entry?.animation?.name === 'burst') this.onOneComplete(spine);
   }
 
-  /** Positions a thunder spine at its target symbol and rotates it to point back at the strike origin. */
-  private targetSymbolPosition(spine: PixSpine, data: WildTransitionData, origin: { x: number; y: number }): void {
-    const localPos = this.toLocal(data.getPosition());
-    spine.x = localPos.x;
-    spine.y = localPos.y;
-    spine.rotation = this.getAimRotation(localPos, origin);
-  }
-
   private getAimRotation(localPos: { x: number; y: number }, origin: { x: number; y: number }): number {
     const dx = origin.x - localPos.x;
     const dy = origin.y - localPos.y;
@@ -152,7 +147,8 @@ export class LightningStrikeComp extends ResponsiveView {
   }
 
   private onOneComplete(spine: PixSpine): void {
-    this.removeChild(spine);
+    const data = this.activeSpines.find((active) => active.spine === spine)?.data;
+    data?.container.removeChild(spine);
     spine.destroySpine();
     this.activeSpines = this.activeSpines.filter((active) => active.spine !== spine);
     this.completedCount++;
@@ -162,18 +158,6 @@ export class LightningStrikeComp extends ResponsiveView {
       const callback = this.onAllComplete;
       this.onAllComplete = null;
       callback?.();
-    }
-  }
-
-  private onResize(): void {
-    if (!this.strikeOrigin) return;
-    this.strikeOrigin = this.computeOrigin();
-    if (this.cloud) {
-      this.cloud.x = this.strikeOrigin.x;
-      this.cloud.y = this.strikeOrigin.y;
-    }
-    for (const { spine, data } of this.activeSpines) {
-      this.targetSymbolPosition(spine, data, this.strikeOrigin);
     }
   }
 }
