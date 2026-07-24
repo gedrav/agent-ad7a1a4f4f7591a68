@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.074',
+  gameVersion: '0.076',
   gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
   uiConfig: UIConfig,

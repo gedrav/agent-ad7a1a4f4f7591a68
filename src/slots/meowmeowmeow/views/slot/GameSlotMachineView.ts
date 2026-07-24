@@ -73,10 +73,12 @@ export class GameSlotMachineView extends SlotMachineView {
   }
   protected animateWheelDoor(): void {
     this.slotReel.visible = true;
-    this.slotReel.scale.set(0.72);
+    this.slotReel.scale.set(0.76);
     this.gameTitle.scale.set(0.72);
     this.gameTitle.x = 1258;
     this.gameTitle.y = 325;
+    this.slotReel.configData.layoutData.Desktop.x = 644;
+    this.slotReel.configData.layoutData.Desktop.y = 384;
     this.slotReel.position.set(644, 384);
 
     if (this.vaultAnim) {

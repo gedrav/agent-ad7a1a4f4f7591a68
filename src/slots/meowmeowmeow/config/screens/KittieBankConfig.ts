@@ -6,7 +6,7 @@ export const KITTIEBANK_CONFIG: any = {
   type: 'Comp',
   class: KittieBankComp,
   layoutData: {
-    Desktop: { x: 0, y: 58 },
+    Desktop: { x: -40, y: 58 },
     Portrait: { x: 200, y: 520 },
     Landscape: { x: 0, y: 0 },
   },
