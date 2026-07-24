@@ -379,5 +379,21 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
+    {
+      name: 'LIGHETNING STRIKE',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_LIGHTNING_STRIKE_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'WILD CONVERSION',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_WILD_CONVERSION_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
   ],
 };

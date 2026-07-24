@@ -5,6 +5,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class BookSlotReel extends SlotReelStandard {
   private totalAnims: number;
@@ -15,6 +16,10 @@ export class BookSlotReel extends SlotReelStandard {
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_EXPANSION, this.showSymbolExpansion.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_LIGHTNING_STRIKE, this.showLightningStrike.bind(this));
     EventHandler.addEventListener(SlotEvents.RESTORE_WILD_POSITIONS, this.restoreWildsAtTriggerPositions.bind(this));
+  }
+
+  protected resizeView(): void {
+    super.resizeView();
   }
 
   protected showSymbolExpansion(): void {
@@ -125,7 +130,14 @@ export class BookSlotReel extends SlotReelStandard {
   protected restoreWildsAtTriggerPositions(): void {
     const positions = appModel.getFeatureTriggerPositions();
     const expansionData = appModel.getSymbolExpansionData();
-    if (!positions?.length || !expansionData?.expandedReels?.length) {
+    const isFeatureTriggered = appModel.getFeatureType() === CONSTANTS.FEATURE_TYPE_FREESPIN;
+    if (!isFeatureTriggered || !positions?.length || !expansionData?.expandedReels?.length) {
+      return;
+    }
+
+    const [firstExpandedReel] = expansionData.expandedReels[0];
+    const expandedSymbolName = expansionData.expandedReelView?.[firstExpandedReel]?.[0];
+    if (expandedSymbolName !== 'WD') {
       return;
     }
 
@@ -153,10 +165,12 @@ export class BookSlotReel extends SlotReelStandard {
     const wildSymbolConfig = this.reelsData.symbolsData['WD'];
     const items = lightningData.lightningStrikeWildPositions.map(([reelIndex, row]: number[]) => {
       const symbol = this.symbolsArray[reelIndex]?.[row + 1];
-      const bounds = symbol?.getBounds();
+      const getPosition = () => {
+        const bounds = symbol?.getBounds();
+        return { x: (bounds?.x ?? 0) + (bounds?.width ?? 0) / 2, y: (bounds?.y ?? 0) + (bounds?.height ?? 0) / 2 };
+      };
       return {
-        x: bounds?.x + bounds?.width / 2,
-        y: bounds?.y + bounds?.height / 2,
+        getPosition,
         onSymbolDisappear: () => {
           if (symbol) symbol.visible = false;
         },
