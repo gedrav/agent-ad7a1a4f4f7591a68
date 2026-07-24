@@ -12,6 +12,7 @@ export class GameSlotReel extends SlotReelStandard {
 
   constructor(config: any) {
     super(config);
+
     EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.changeReelSize(size));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.changeReelSize(3));
   }
@@ -20,9 +21,16 @@ export class GameSlotReel extends SlotReelStandard {
     const size = Number(interfaceSize);
 
     // Toggle the correct reel frame based on the size
-    const parentView = this.parent as any;
-    if (parentView?.elementsList) {
-      const reelFrameComp = parentView.elementsList['reelFrame'];
+    const elementsList = (this as any).elementsList;
+    if (elementsList) {
+      const reelstripBG = elementsList['reelstripBG'];
+      const bg4 = elementsList['bg4'];
+      const bg5 = elementsList['bg5'];
+      if (reelstripBG) reelstripBG.visible = size === 3;
+      if (bg4) bg4.visible = size === 4;
+      if (bg5) bg5.visible = size === 5;
+
+      const reelFrameComp = elementsList['reelFrame'];
       if (reelFrameComp) {
         const reelFrame = reelFrameComp.elementsList['reelFrame'];
         const frame4 = reelFrameComp.elementsList['frame4'];
@@ -31,14 +39,48 @@ export class GameSlotReel extends SlotReelStandard {
         if (frame4) frame4.visible = size === 4;
         if (frame5) frame5.visible = size === 5;
       }
+
+      const maskRect = elementsList['maskRect'];
+      const tickerComp = elementsList['tickerComp'];
+      const fsAutoCounterComp = elementsList['fsAutoCounterComp'];
+      const extraSpinText = elementsList['extraSpinText'];
+
+      if (size === 4) {
+        if (maskRect) {
+          maskRect.y = -180;
+          maskRect.height = 1450;
+        }
+        if (tickerComp) tickerComp.y = 1200;
+        if (fsAutoCounterComp) fsAutoCounterComp.y = 1150;
+        if (extraSpinText) extraSpinText.y = 1150;
+      } else if (size === 5) {
+        if (maskRect) {
+          maskRect.y = -261;
+          maskRect.height = 1750;
+        }
+        if (tickerComp) tickerComp.y = 1500;
+        if (fsAutoCounterComp) fsAutoCounterComp.y = 1395;
+        if (extraSpinText) extraSpinText.y = 1440;
+      } else {
+        if (maskRect) {
+          maskRect.y = 68;
+          maskRect.height = 988;
+        }
+        if (tickerComp) tickerComp.y = 1070;
+        if (fsAutoCounterComp) fsAutoCounterComp.y = 1070;
+        if (extraSpinText) extraSpinText.y = 1115;
+      }
     }
 
     if (this.reelsData.noOfRows === size) return;
     this.reelsData.noOfRows = size;
     if (this.winController) this.winController.noOfRows = size;
 
+    this.reelsData.symbolHeight = 322;
+    this.reelsData.reelHeight = size * 322;
+
     if (size === 4 || size === 5) {
-      // Pad initialReel to prevent engine crash
+      // Pad initialReel to prevent engine crash and make the falling strip longer
       const targetLength = size + 2;
       if (this.reelsData.initialReel) {
         for (let k = 0; k < this.reelsData.initialReel.length; k++) {
@@ -47,25 +89,19 @@ export class GameSlotReel extends SlotReelStandard {
           }
         }
       }
+    }
 
-      for (const key in this.reelsData.deviceLayout) {
-        if (this.reelsData.deviceLayout[key]) {
-          if (size === 4) {
-            this.reelsData.deviceLayout[key].symbolHeight = 246;
-            this.reelsData.deviceLayout[key].symbolScale = 0.75;
-            this.reelsData.deviceLayout[key].reelContainerPos.y = 195;
-          } else if (size === 5) {
-            //this.reelsData.deviceLayout[key].symbolHeight = 196;
-            this.reelsData.deviceLayout[key].symbolScale = 1;
-            this.reelsData.deviceLayout[key].reelContainerPos.y = 170;
-          }
-        }
-      }
-    } else {
-      for (const key in this.reelsData.deviceLayout) {
-        if (this.reelsData.deviceLayout[key]) {
-          this.reelsData.deviceLayout[key].symbolHeight = 322;
-          this.reelsData.deviceLayout[key].symbolScale = 1;
+    for (const key in this.reelsData.deviceLayout) {
+      if (this.reelsData.deviceLayout[key]) {
+        this.reelsData.deviceLayout[key].symbolHeight = 322;
+        this.reelsData.deviceLayout[key].symbolScale = 1;
+
+        if (size === 4) {
+          this.reelsData.deviceLayout[key].reelContainerPos.y = 40;
+          this.reelsData.deviceLayout[key].reelContainerPos.x = 210;
+        } else if (size === 5) {
+          this.reelsData.deviceLayout[key].reelContainerPos.y = -75;
+        } else {
           this.reelsData.deviceLayout[key].reelContainerPos.y = 240;
         }
       }
@@ -79,6 +115,6 @@ export class GameSlotReel extends SlotReelStandard {
       sym.destroy();
     });
     this.symbolsArray = [];
-    this.createReel();
+    this.createReel(); // Rebuild symbols for new layout size
   }
 }
