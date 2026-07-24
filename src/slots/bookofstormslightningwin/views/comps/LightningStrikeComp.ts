@@ -15,12 +15,16 @@ interface WildTransitionData {
 interface ActiveSpine {
   spine: PixSpine;
   data: WildTransitionData;
+  eventListener: any;
+  completeListener: any;
 }
 
 export class LightningStrikeComp extends ResponsiveView {
   private activeSpines: ActiveSpine[] = [];
   private pendingItems: WildTransitionData[] = [];
   private cloud: PixSpine | null = null;
+  private cloudEventListener: any = null;
+  private cloudCompleteListener: any = null;
   private strikeOrigin: { x: number; y: number } | null = null;
   private completedCount = 0;
   private totalCount = 0;
@@ -59,8 +63,8 @@ export class LightningStrikeComp extends ResponsiveView {
     cloud.x = this.strikeOrigin.x;
     cloud.y = this.strikeOrigin.y;
     this.addChild(cloud);
-    cloud.addEventListener('event', this.onCloudEvent.bind(this));
-    cloud.addEventListener('complete', this.onCloudComplete.bind(this));
+    this.cloudEventListener = cloud.addEventListener('event', this.onCloudEvent.bind(this));
+    this.cloudCompleteListener = cloud.addEventListener('complete', this.onCloudComplete.bind(this));
 
     cloud.playAnimation({
       state: 'cloud_start',
@@ -85,6 +89,10 @@ export class LightningStrikeComp extends ResponsiveView {
     if (entry?.animation?.name === 'cloud_loop') {
       this.cloud.playAnimation({ state: 'cloud_end', trackIndex: 0, loop: false, defaultMix: 0, reset: false });
     } else if (entry?.animation?.name === 'cloud_end') {
+      this.cloud.removeSpineEvent(this.cloudEventListener);
+      this.cloud.removeSpineEvent(this.cloudCompleteListener);
+      this.cloudEventListener = null;
+      this.cloudCompleteListener = null;
       this.removeChild(this.cloud);
       this.cloud.destroySpine();
       this.cloud = null;
@@ -101,10 +109,10 @@ export class LightningStrikeComp extends ResponsiveView {
       spine.x = localPos.x;
       spine.y = localPos.y;
       spine.rotation = this.getAimRotation(localPos, data.container.toLocal(this.toGlobal(this.strikeOrigin)));
-      this.activeSpines.push({ spine, data });
 
-      spine.addEventListener('event', this.onThunderEvent.bind(this));
-      spine.addEventListener('complete', this.onThunderComplete.bind(this));
+      const eventListener = spine.addEventListener('event', this.onThunderEvent.bind(this));
+      const completeListener = spine.addEventListener('complete', this.onThunderComplete.bind(this));
+      this.activeSpines.push({ spine, data, eventListener, completeListener });
 
       spine.playAnimation({
         state: 'thunder_sfx',
@@ -147,8 +155,10 @@ export class LightningStrikeComp extends ResponsiveView {
   }
 
   private onOneComplete(spine: PixSpine): void {
-    const data = this.activeSpines.find((active) => active.spine === spine)?.data;
-    data?.container.removeChild(spine);
+    const active = this.activeSpines.find((active) => active.spine === spine);
+    spine.removeSpineEvent(active?.eventListener);
+    spine.removeSpineEvent(active?.completeListener);
+    active?.data.container.removeChild(spine);
     spine.destroySpine();
     this.activeSpines = this.activeSpines.filter((active) => active.spine !== spine);
     this.completedCount++;
