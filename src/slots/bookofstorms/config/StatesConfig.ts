@@ -18,7 +18,6 @@ import { BookShowSymbolExpansionState } from '@game/states/BookShowSymbolExpansi
 import { BookShowSymbolAfterExpansionState } from '@game/states/BookShowSymbolAfterExpansionState';
 import { ShowFSEnterTransitionState } from '@game/states/ShowFSEnterTransitionState';
 import { ShowFSExitTransitionState } from '@game/states/ShowFSExitTransitionState';
-import { ShowJackpotGameState } from '@core/commands/states/ShowJackpotGameState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -33,7 +32,6 @@ export const STATES_CONFIG: any = [
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
-  // { name: STATES.SHOW_JACKPOT_GAME_STATE, state: ShowJackpotGameState },// jackpot screen
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
