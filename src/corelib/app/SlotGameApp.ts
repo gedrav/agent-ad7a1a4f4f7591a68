@@ -405,7 +405,6 @@ class SlotGameApp {
       // explicit destroy() here.
     }
     if (this.isViewCreated) {
-      this.makeGameVisible();
       this.app.stop();
       if (this.rafId !== null) {
         cancelAnimationFrame(this.rafId);
