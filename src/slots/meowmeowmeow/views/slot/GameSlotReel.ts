@@ -55,8 +55,8 @@ export class GameSlotReel extends SlotReelStandard {
             this.reelsData.deviceLayout[key].symbolScale = 0.75;
             this.reelsData.deviceLayout[key].reelContainerPos.y = 195;
           } else if (size === 5) {
-            this.reelsData.deviceLayout[key].symbolHeight = 196;
-            this.reelsData.deviceLayout[key].symbolScale = 0.6;
+            //this.reelsData.deviceLayout[key].symbolHeight = 196;
+            this.reelsData.deviceLayout[key].symbolScale = 1;
             this.reelsData.deviceLayout[key].reelContainerPos.y = 170;
           }
         }
