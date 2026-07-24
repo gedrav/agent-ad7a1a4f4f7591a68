@@ -15,6 +15,7 @@ import { MMMJackpotComp } from '@slots/meowmeowmeow/views/comps/MMMJackpotComp';
 import { KittieBankComp } from '@slots/meowmeowmeow/views/comps/KittieBankComp';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly extraSpinTextTimeoutId: any;
@@ -25,16 +26,16 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
   private readonly doorMask: PixGraphics;
+  private readonly vaultAnim: PixSpine;
 
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
-    EventHandler.addEventListener('UPDATE_REEL_LAYOUT', (size: number) => this.updateReelLayout(size));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, () => this.updateReelLayout(3));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
+    EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
 
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.kittiebankComp = this.elementsList['kittiebankComp'];
@@ -43,6 +44,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.wheelDoor = this.elementsList['wheelDoor'];
     this.wheelRim = this.elementsList['wheelRim'];
     this.doorMask = this.elementsList['doorMask'];
+    this.vaultAnim = this.elementsList['vaultAnim'];
     this.wheelDoor.mask = this.doorMask;
   }
 
@@ -68,17 +70,26 @@ export class GameSlotMachineView extends SlotMachineView {
   private changeReelInterface(): void {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
     EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
-    this.slotReel.changeReelSize(interfaceSize);
   }
   protected animateWheelDoor(): void {
     this.slotReel.visible = true;
-    this.slotReel.scale.set(0.72);
+    this.slotReel.scale.set(0.76);
     this.gameTitle.scale.set(0.72);
     this.gameTitle.x = 1258;
     this.gameTitle.y = 325;
+    this.slotReel.configData.layoutData.Desktop.x = 644;
+    this.slotReel.configData.layoutData.Desktop.y = 384;
     this.slotReel.position.set(644, 384);
-    this.addChild(this.wheelDoor, this.wheelRim);
+
+    if (this.vaultAnim) {
+      this.vaultAnim.mask = this.doorMask;
+      this.vaultAnim.scale.set(0.5);
+      this.vaultAnim.visible = false;
+    }
+    this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
     this.gameTitle.visible = true;
+
+    // Spin the golden door
     AnimationProxy.animateTween(this.wheelDoor, {
       duration: 0.25,
       rotation: Util.getRadians(30),
@@ -90,14 +101,34 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
   protected moveWheelDoor(): void {
-    //Play the spine animation
-    AnimationProxy.animateTween(this.wheelDoor, {
-      duration: 1.2,
-      x: this.wheelDoor.x - this.wheelDoor.width,
-      rotation: Util.getRadians(90),
-      onComplete: () => {
-        StateManager.doNextStep();
-      },
+    if (!this.vaultAnim) return;
+    this.vaultAnim.visible = true;
+    this.vaultAnim.playAnimation({
+      state: 'Unlock',
+      loop: false,
+      reset: true,
+    });
+
+    this.vaultAnim.addEventListener('complete', () => {
+      this.vaultAnim.removeEventListners();
+
+      // Tween the golden door
+      AnimationProxy.animateTween(this.wheelDoor, {
+        duration: 1.2,
+        x: this.wheelDoor.x - this.wheelDoor.width,
+        rotation: Util.getRadians(90),
+        onComplete: () => {
+          this.vaultAnim.visible = false;
+          StateManager.doNextStep();
+        },
+      });
+
+      // Tween the dark vault door at the EXACT same time
+      AnimationProxy.animateTween(this.vaultAnim, {
+        duration: 1.2,
+        x: this.vaultAnim.x - this.wheelDoor.width,
+        rotation: Util.getRadians(90),
+      });
     });
   }
   private handlePickFeature(SubfeatureType: string) {
@@ -279,56 +310,13 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
-  public updateReelLayout(interfaceSize: number | string): void {
-    const size = Number(interfaceSize);
-    const reel: any = this.slotReel;
-    if (reel.reelsData.noOfRows === size) return;
-    reel.reelsData.noOfRows = size;
-    if (reel.winController) reel.winController.noOfRows = size;
-
-    if (size === 4 || size === 5) {
-      // Pad initialReel to prevent engine crash
-      const targetLength = size + 2;
-      if (reel.reelsData.initialReel) {
-        for (let k = 0; k < reel.reelsData.initialReel.length; k++) {
-          while (reel.reelsData.initialReel[k].length < targetLength) {
-            reel.reelsData.initialReel[k].push('H1', 'L2', 'RC');
-          }
-        }
-      }
-
-      for (const key in reel.reelsData.deviceLayout) {
-        if (reel.reelsData.deviceLayout[key]) {
-          if (size === 4) {
-            reel.reelsData.deviceLayout[key].symbolHeight = 246;
-            reel.reelsData.deviceLayout[key].symbolScale = 0.75;
-            reel.reelsData.deviceLayout[key].reelContainerPos.y = 195;
-          } else if (size === 5) {
-            reel.reelsData.deviceLayout[key].symbolHeight = 196;
-            reel.reelsData.deviceLayout[key].symbolScale = 0.6;
-            reel.reelsData.deviceLayout[key].reelContainerPos.y = 170;
-          }
-        }
-      }
-    } else {
-      for (const key in reel.reelsData.deviceLayout) {
-        if (reel.reelsData.deviceLayout[key]) {
-          reel.reelsData.deviceLayout[key].symbolHeight = 322;
-          reel.reelsData.deviceLayout[key].symbolScale = 1;
-          reel.reelsData.deviceLayout[key].reelContainerPos.y = 240;
-        }
-      }
-    }
-
-    reel.winController?.clearSpinWin();
-
-    reel.symbolsArray.flat().forEach((sym: any) => {
-      AnimationProxy.killTweensOf(sym);
-      sym.destroySymbol();
-      sym.destroy();
+  protected showGreenKittieBankBreak(): void {
+    EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
+      bankName: 'mew',
+      callback: () => {
+        StateManager.doNextStep();
+      },
     });
-    reel.symbolsArray = [];
-    reel.createReel();
   }
 
   private onShowExtraSpinAnim(): void {

@@ -5,11 +5,8 @@ export const JACKPOT_CONFIG: any = {
   name: 'jackpotContainer',
   type: 'Comp',
   class: MMMJackpotComp,
-  layoutData: {
-    Desktop: { scale: 1, x: 469, y: 120 },
-    Portrait: { scale: 1.2, x: 70, y: 100 },
-    Landscape: { scale: 1, x: 469, y: 100 },
-  },
+  x: 378,
+  y: 120,
   Elements: [
     {
       name: 'grand',
@@ -42,7 +39,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
@@ -85,7 +82,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
@@ -128,7 +125,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
@@ -171,7 +168,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
