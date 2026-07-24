@@ -39,7 +39,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
@@ -82,7 +82,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
@@ -125,7 +125,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
@@ -168,7 +168,7 @@ export const JACKPOT_CONFIG: any = {
           y: 170,
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 50,
+            fontSize: 40,
             fill: 0xffffff,
             align: 'center',
             dropShadow: true,
