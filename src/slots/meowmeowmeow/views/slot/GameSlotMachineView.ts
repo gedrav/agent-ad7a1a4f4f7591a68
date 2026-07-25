@@ -91,16 +91,8 @@ export class GameSlotMachineView extends SlotMachineView {
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
     this.wheelDoor.alpha = 1;
-
-    AnimationProxy.animateTween(this.wheelBase, { duration: 0.25, alpha: 1 });
-    AnimationProxy.animateTween(this.wheelRim, {
-      duration: 0.25,
-      alpha: 1,
-      onComplete: () => {
-        this.animateWheelDoor();
-      },
-    });
     this.changeReelInterface();
+    this.animateWheelDoor();
   }
   private changeReelInterface(): void {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
