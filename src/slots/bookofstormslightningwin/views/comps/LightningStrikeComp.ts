@@ -75,7 +75,9 @@ export class LightningStrikeComp extends ResponsiveView {
       nextLoop: false,
       delay: 0,
     });
-    EventHandler.dispatchEvent(SlotEvents.PLAY_LIGHTNING_STRIKE_SOUND);
+    setTimeout(() => {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_LIGHTNING_STRIKE_SOUND);
+    }, 500);
   }
 
   protected onCloudEvent(event: any): void {
