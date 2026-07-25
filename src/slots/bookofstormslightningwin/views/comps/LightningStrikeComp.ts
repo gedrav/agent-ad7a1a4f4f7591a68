@@ -75,11 +75,11 @@ export class LightningStrikeComp extends ResponsiveView {
       nextLoop: false,
       delay: 0,
     });
+    EventHandler.dispatchEvent(SlotEvents.PLAY_LIGHTNING_STRIKE_SOUND);
   }
 
   protected onCloudEvent(event: any): void {
     if (event?.data?.name === 'light_burst') {
-      EventHandler.dispatchEvent(SlotEvents.PLAY_LIGHTNING_STRIKE_SOUND);
       this.startThunderAnimation(this.pendingItems);
     }
   }
@@ -130,7 +130,6 @@ export class LightningStrikeComp extends ResponsiveView {
     const data = this.activeSpines.find((active) => active.spine === spine)?.data;
     if (event?.data?.name === 'symbol_disappear') {
       data?.onSymbolDisappear?.();
-      EventHandler.dispatchEvent(SlotEvents.PLAY_WILD_CONVERSION_SOUND);
     }
     if (event?.data?.name === 'symbol_appear') {
       data?.onSymbolAppear?.();
@@ -138,7 +137,11 @@ export class LightningStrikeComp extends ResponsiveView {
   }
 
   protected onThunderComplete(entry: any, spine: PixSpine): void {
-    if (entry?.animation?.name === 'burst') this.onOneComplete(spine);
+    if (entry?.animation?.name === 'thunder_sfx') {
+      EventHandler.dispatchEvent(SlotEvents.PLAY_WILD_CONVERSION_SOUND);
+    } else if (entry?.animation?.name === 'burst') {
+      this.onOneComplete(spine);
+    }
   }
 
   private getAimRotation(localPos: { x: number; y: number }, origin: { x: number; y: number }): number {
