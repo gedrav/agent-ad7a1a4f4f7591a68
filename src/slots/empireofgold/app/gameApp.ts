@@ -39,8 +39,10 @@ export class gameApp extends SlotGameApp {
   }
   async createView() {
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
-  }
-  protected makeGameVisible() {
-    this.appContainer.addChild(this.gameAppScreen);
+    this.gameAppScreen.visible = false;
+    this.appContainer.addChildAt(this.gameAppScreen, 0);
+    setTimeout(() => {
+      this.gameAppScreen.visible = true;
+    }, 10);
   }
 }

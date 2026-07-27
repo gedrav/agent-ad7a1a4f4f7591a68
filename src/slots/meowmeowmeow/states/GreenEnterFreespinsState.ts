@@ -26,11 +26,11 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();
     const obj: any = {};
-    obj.title = Util.getContent('CongratTitle');
+    obj.title = Util.getContent('FeatureAwardedTitle');
 
     const isUnfinishedFreespins = appModel.getIsUnfinishedFreespins();
 
-    obj.message1 = Util.parseMessage(Util.getContent('FSEntryText'), [appModel.getTotalFreespins()]);
+    obj.message1 = '';
     obj.entryPopUp = true;
 
     const totalCount = appModel.getTotalFreespins();

@@ -24,6 +24,7 @@ export class PixSpine extends StandardView {
     if (this.configData.defaultSkin != undefined) {
       this.setSkin(this.configData.defaultSkin);
     }
+    this.spineAnim.eventMode = 'none';
     this.addChild(this.spineAnim);
     if (this.configData.boundingBox) {
       this.guideRect = UIUtil.getRectangle(

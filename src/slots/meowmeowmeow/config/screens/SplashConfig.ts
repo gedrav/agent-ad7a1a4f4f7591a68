@@ -33,7 +33,6 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
-          fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -65,7 +64,6 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
-          fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -97,7 +95,6 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
-          fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -219,7 +216,6 @@ export const SPLASH_CONFIG: any = {
             content: 'playGameText',
             style: {
               fontFamily: 'gameFont1',
-              fontWeight: 700,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,

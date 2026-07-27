@@ -14,7 +14,7 @@ const defaultGameNames = [
   //'bookofstorms',
    'meowmeowmeow',
   //'bookofstormslightningwin',
-  //'carpathiantreasures'
+  'carpathiantreasures'
 
 ];
 
@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       port: 8002,
-      open: true,
+      open: '?token=',
       fs: {
         allow: [path.resolve(__dirname), ASSETS_ROOT, GAME_ASSETS_ROOT, COMMON_ASSETS_ROOT],
       },
