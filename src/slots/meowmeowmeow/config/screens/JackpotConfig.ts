@@ -5,7 +5,7 @@ export const JACKPOT_CONFIG: any = {
   name: 'jackpotContainer',
   type: 'Comp',
   class: MMMJackpotComp,
-  x: 378,
+  x: 382,
   y: 120,
   Elements: [
     {
