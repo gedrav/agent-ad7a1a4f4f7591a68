@@ -11,9 +11,9 @@ export class FSPopupComp extends ResponsiveChildrenView {
   protected titleText: PixText;
   protected messageText1: PixText;
   protected messageText2: PixText;
-  private readonly panelBG: PixSprite;
-  private callbackFunction: any;
-  private readonly timeoutId: any;
+  protected readonly panelBG: PixSprite;
+  protected callbackFunction: any;
+  protected readonly timeoutId: any;
 
   constructor(config: any) {
     super(config);
@@ -31,15 +31,13 @@ export class FSPopupComp extends ResponsiveChildrenView {
   protected async showFSPopup(data: any) {
     GameProxy.config.isPopupOpened = true;
     EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    this.visible = true;
     this.titleText.text = data.title;
-
     this.updateMessagePositions(data);
-
     clearTimeout(this.timeoutId);
     // this.timeoutId = setTimeout(this.onTimerEnd.bind(this), 5000);
     this.messageText1.text = data.message1;
     this.callbackFunction = data.callbackFunction;
+    this.visible = true;
   }
 
   protected updateMessagePositions(data: any): void {

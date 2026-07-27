@@ -1,10 +1,11 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
+import { MMMFSPopupComp } from '@slots/meowmeowmeow/views/comps/MMMFSPopupComp';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
-  class: FSPopupComp,
+  class: MMMFSPopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1961, height: 1430, color: 0xff0000, alpha: 0 },
     {

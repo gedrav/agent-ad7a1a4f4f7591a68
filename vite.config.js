@@ -12,9 +12,9 @@ const defaultGameNames = [
   //'sweetsalon',
   //'frostedmarketbonanza',
   //'bookofstorms',
-  //  'meowmeowmeow',
-  'bookofstormslightningwin',
-  // 'carpathiantreasures'
+   'meowmeowmeow',
+  //'bookofstormslightningwin',
+  //'carpathiantreasures'
 
 ];
 
