@@ -7,7 +7,7 @@ export const LIGHTNING_STRIKE_CONFIG: any = {
   visible: false,
   layoutData: {
     Desktop: { scale: 1, vAlign: 'top', vPaddingPerc: 0.09 },
-    Landscape: { scale: 0.5, vAlign: 'top', vPaddingPerc: 0.01 },
+    Landscape: { scale: 0.5, vAlign: 'top', vPaddingPerc: 0.03 },
     Portrait: { scale: 0.5, vAlign: 'top', vPaddingPerc: 0.05 },
   },
 };
