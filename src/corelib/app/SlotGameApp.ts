@@ -438,8 +438,12 @@ class SlotGameApp {
       const data: any = {};
       let isOfflineError = false;
       data.title = Util.getContent('infoText');
-      data.message = obj?.data?.extensions?.code ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code]) : null;
-      if (!data.msg) {
+      // Prefer the platform's own specific, localized message (e.g. FEG's exact
+      // reason for a bet rejection) over our generic ERROR_CODES-mapped bucket text.
+      data.message =
+        obj?.data?.extensions?.public?.displayMessage ??
+        (obj?.data?.extensions?.code ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code]) : null);
+      if (!data.message) {
         if (obj.data.extensions) {
           data.message = Util.getContent('generic_error');
         } else {
@@ -458,9 +462,9 @@ class SlotGameApp {
   private displayInitError(obj: any): void {
     this.errorPopup = new InitErrorPopup(INIT_ERROR_POPUP_CONFIG);
     this.appContainer.addChild(this.errorPopup);
-    let msg = obj?.data?.extensions?.code
-      ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code])
-      : obj?.data?.message;
+    let msg =
+      obj?.data?.extensions?.public?.displayMessage ??
+      (obj?.data?.extensions?.code ? Util.getContent(ERROR_CODES[obj?.data?.extensions?.code]) : obj?.data?.message);
     if (!msg) {
       msg = Util.getContent('generic_error');
     }
