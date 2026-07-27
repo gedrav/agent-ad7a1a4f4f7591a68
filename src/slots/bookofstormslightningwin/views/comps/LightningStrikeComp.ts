@@ -20,6 +20,7 @@ interface ActiveSpine {
 }
 
 export class LightningStrikeComp extends ResponsiveView {
+  private static readonly STRIKE_REFERENCE_DISTANCE = 500;
   private activeSpines: ActiveSpine[] = [];
   private pendingItems: WildTransitionData[] = [];
   private cloud: PixSpine | null = null;
@@ -105,10 +106,13 @@ export class LightningStrikeComp extends ResponsiveView {
     for (const data of items) {
       const spine = this.createTransitionSpine();
       const localPos = data.getLocalPosition();
+      const origin = data.container.toLocal(this.toGlobal(this.strikeOrigin));
       data.container.addChild(spine);
       spine.x = localPos.x;
       spine.y = localPos.y;
-      spine.rotation = this.getAimRotation(localPos, data.container.toLocal(this.toGlobal(this.strikeOrigin)));
+      spine.rotation = this.getAimRotation(localPos, origin);
+      const distance = Math.hypot(origin.x - localPos.x, origin.y - localPos.y);
+      spine.scale.set(distance / LightningStrikeComp.STRIKE_REFERENCE_DISTANCE);
 
       const eventListener = spine.addEventListener('event', this.onThunderEvent.bind(this));
       const completeListener = spine.addEventListener('complete', this.onThunderComplete.bind(this));

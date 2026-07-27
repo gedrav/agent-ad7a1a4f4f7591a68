@@ -168,8 +168,16 @@ export class BookSlotReel extends SlotReelStandard {
           if (symbol) symbol.visible = false;
         },
         onSymbolAppear: () => {
-          symbol?.setNewSymbol(wildSymbolConfig, reelIndex);
-          if (symbol) symbol.visible = true;
+          if (!symbol) return;
+          symbol.setNewSymbol(wildSymbolConfig, reelIndex);
+          symbol.scale.set(0);
+          symbol.visible = true;
+          AnimationProxy.animateTween(symbol.scale, {
+            duration: 0.6,
+            x: this.reelsData.symbolScale,
+            y: this.reelsData.symbolScale,
+            ease: Sine.easeOut,
+          });
         },
       };
     });
