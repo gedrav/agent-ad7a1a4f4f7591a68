@@ -1,4 +1,3 @@
-import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 import GameWinController from '@game/views/slot/GameWinController';
 import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
@@ -10,6 +9,7 @@ import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { CTSlotReel } from '@game/views/slot/CTSloReel';
+import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -46,67 +46,6 @@ export const SLOT_MACHINE_CONFIG: any = {
         reelHeight: 800,
         reelsConfig: ReelsConfig,
         landingSymbols: ['WD'],
-        anticipationSymbols: ['WD'],
-        anticipationConfig: {
-          totalElements: 5,
-          element: {
-            name: 'anticipation',
-            type: 'Spine',
-            spineName: 'anticipation',
-            defaultState: 'animation',
-            loop: true,
-            y: 318,
-            py: 0,
-            ly: 0,
-          },
-          positions: [
-            null,
-            {
-              x: 278,
-              y: 276,
-              px: 278,
-              py: 276,
-              lx: 278,
-              ly: 276,
-              scale: { x: 0.88, y: 0.98 },
-              pScale: { x: 0.88, y: 0.98 },
-              lScale: { x: 0.88, y: 0.98 },
-            },
-            {
-              x: 562,
-              y: 276,
-              px: 562,
-              py: 276,
-              lx: 562,
-              ly: 276,
-              scale: { x: 0.88, y: 0.98 },
-              pScale: { x: 0.88, y: 0.98 },
-              lScale: { x: 0.88, y: 0.98 },
-            },
-            {
-              x: 843,
-              y: 276,
-              px: 843,
-              py: 276,
-              lx: 843,
-              ly: 276,
-              scale: { x: 0.88, y: 0.98 },
-              pScale: { x: 0.88, y: 0.98 },
-              lScale: { x: 0.88, y: 0.98 },
-            },
-            {
-              x: 1122,
-              y: 276,
-              px: 1122,
-              py: 276,
-              lx: 1122,
-              ly: 276,
-              scale: { x: 0.88, y: 0.98 },
-              pScale: { x: 0.88, y: 0.98 },
-              lScale: { x: 0.88, y: 0.98 },
-            },
-          ],
-        },
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 187, y: 258 },
@@ -298,7 +237,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1470, height: 860, x: 38, y: 105, color: 0xffff00 },
-        { name: 'anticipationContainer', type: 'Container' },
         {
           name: 'winSymbolsContainer',
           type: 'Container',

@@ -14,6 +14,7 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
+import { GamePreWinState } from '@game/states/GamePreWinState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -22,6 +23,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
+  { name: STATES.PRE_SPIN_WIN_STATE, state: GamePreWinState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
