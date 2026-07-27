@@ -100,9 +100,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 352, y: 274 },
+        Desktop: { x: 360, y: 274 },
         Portrait: { x: 0, y: 1000 },
-        Landscape: { x: 450, y: 224 },
+        Landscape: { x: 360, y: 274 },
       },
       data: {
         symbolClass: ReelSymbolSpine,

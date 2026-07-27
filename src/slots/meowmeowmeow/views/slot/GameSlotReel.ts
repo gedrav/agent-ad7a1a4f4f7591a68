@@ -93,7 +93,7 @@ export class GameSlotReel extends SlotReelStandard {
 
     for (const key in this.reelsData.deviceLayout) {
       if (this.reelsData.deviceLayout[key]) {
-        this.reelsData.deviceLayout[key].symbolHeight = 322;
+        this.reelsData.deviceLayout[key].symbolHeight = 330;
         this.reelsData.deviceLayout[key].symbolScale = 1;
 
         if (size === 4) {
