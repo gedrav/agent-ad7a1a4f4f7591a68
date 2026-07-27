@@ -19,6 +19,11 @@ export class MMMFSPopupComp extends FSPopupComp {
     this.scale.set(0);
     this.y += 550;
     this.x += 200;
+
+    const mewSpine = this.elementsList['mew'] as PixSpine;
+    if (mewSpine?.configData.idle) {
+      mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+    }
     AnimationProxy.animateTween(this, {
       scaleX: scale,
       scaleY: scale,
