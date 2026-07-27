@@ -22,7 +22,7 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly extraSpinTextTimeoutId: any;
   private readonly jackpotContainer: MMMJackpotComp;
   private readonly kittiebankComp: KittieBankComp;
-  private readonly gameTitle: PixSprite;
+  private readonly gameTitle: PixSpine;
   private readonly wheelBase: PixSprite;
   private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
@@ -32,6 +32,7 @@ export class GameSlotMachineView extends SlotMachineView {
   // Stores the closed position of the door to restore on feature exit
   private readonly doorClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
+  private readonly kittiebankBaseX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly reelBaseLayoutData: {
     Desktop: { x: number; y: number; scale?: number };
     Portrait: { x: number; y: number; scale?: number };
@@ -75,6 +76,14 @@ export class GameSlotMachineView extends SlotMachineView {
         Landscape: vld.Landscape.x,
       };
     }
+    const kld = this.kittiebankComp?.configData?.layoutData;
+    if (kld) {
+      this.kittiebankBaseX = {
+        Desktop: kld.Desktop.x,
+        Portrait: kld.Portrait.x,
+        Landscape: kld.Landscape.x,
+      };
+    }
     const rld = this.slotReel?.configData?.layoutData;
     if (rld) {
       this.reelBaseLayoutData = {
@@ -82,6 +91,20 @@ export class GameSlotMachineView extends SlotMachineView {
         Portrait: { x: rld.Portrait.x, y: rld.Portrait.y, scale: rld.Portrait.scale || 1 },
         Landscape: { x: rld.Landscape.x, y: rld.Landscape.y, scale: rld.Landscape.scale || 1 },
       };
+    }
+
+    this.startGameLogoAnimation();
+  }
+
+  protected startGameLogoAnimation(): void {
+    if (this.gameTitle) {
+      this.gameTitle.playAnimation({ state: 'idle', loop: false });
+      setTimeout(
+        () => {
+          this.startGameLogoAnimation();
+        },
+        Math.random() * 5000 + 5000,
+      );
     }
   }
 
@@ -127,6 +150,14 @@ export class GameSlotMachineView extends SlotMachineView {
       (this.slotReel as any).resizeView();
     }
 
+    // Restore kitty bank position to its base (non-free-spins) x
+    if (this.kittiebankBaseX && this.kittiebankComp?.configData?.layoutData) {
+      const kld = this.kittiebankComp.configData.layoutData;
+      kld.Desktop.x = this.kittiebankBaseX.Desktop;
+      kld.Portrait.x = this.kittiebankBaseX.Portrait;
+      kld.Landscape.x = this.kittiebankBaseX.Landscape;
+    }
+
     this.wheelBase.alpha = 0.5;
     this.wheelRim.alpha = 0.5;
     this.wheelDoor.alpha = 0.5;
@@ -142,7 +173,19 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected animateWheelDoor(): void {
     this.slotReel.visible = true;
+    this.kittiebankComp.visible = true;
+    this.addChild(this.kittiebankComp);
     this.gameTitle.scale.set(0.72);
+
+    // Shift the kitty banks left so they clear the vault ring during free spins
+    const kld = this.kittiebankComp.configData?.layoutData;
+    if (this.kittiebankBaseX && kld) {
+      const shift = 60;
+      kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
+      kld.Portrait.x = this.kittiebankBaseX.Portrait - shift;
+      kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
+      (this.kittiebankComp as any).resizeView();
+    }
 
     if (DeviceProxy.config.isPortrait) {
       this.gameTitle.x = 871;
@@ -188,65 +231,51 @@ export class GameSlotMachineView extends SlotMachineView {
     if (this.vaultAnim) {
       this.vaultAnim.mask = this.doorMask;
       this.vaultAnim.scale.set(0.5);
-      this.vaultAnim.visible = false;
+      this.vaultAnim.visible = true;
     }
+    this.wheelDoor.visible = false;
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
+    this.wheelRim.alpha = 0.8;
     this.gameTitle.visible = true;
 
-    //Spin the golden door
-    AnimationProxy.animateTween(this.wheelDoor, {
-      duration: 0.25,
-      rotation: Util.getRadians(30),
-      yoyo: true,
-      repeat: 2,
-      onComplete: () => {
+    if (this.vaultAnim) {
+      this.vaultAnim.playAnimation({
+        state: 'Unlock',
+        loop: false,
+        reset: true,
+      });
+
+      this.vaultAnim.addEventListener('complete', () => {
+        this.vaultAnim.removeEventListners();
         this.moveWheelDoor();
-      },
-    });
+      });
+    }
   }
   protected moveWheelDoor(): void {
     if (!this.vaultAnim) return;
-    this.vaultAnim.visible = true;
-    this.vaultAnim.playAnimation({
-      state: 'Unlock',
-      loop: false,
-      reset: true,
-    });
 
-    this.vaultAnim.addEventListener('complete', () => {
-      this.vaultAnim.removeEventListners();
+    // Calculate open position
+    const shiftX = this.wheelDoor.width;
 
-      // Calculate open position
-      const shiftX = this.wheelDoor.width;
+    if (this.doorClosedX && this.wheelDoor.configData?.layoutData) {
+      this.wheelDoor.configData.layoutData.Desktop.x = this.doorClosedX.Desktop - shiftX;
+      this.wheelDoor.configData.layoutData.Portrait.x = this.doorClosedX.Portrait - shiftX;
+      this.wheelDoor.configData.layoutData.Landscape.x = this.doorClosedX.Landscape - shiftX;
+    }
+    if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
+      this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop - shiftX;
+      this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait - shiftX;
+      this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape - shiftX;
+    }
 
-      if (this.doorClosedX && this.wheelDoor.configData?.layoutData) {
-        this.wheelDoor.configData.layoutData.Desktop.x = this.doorClosedX.Desktop - shiftX;
-        this.wheelDoor.configData.layoutData.Portrait.x = this.doorClosedX.Portrait - shiftX;
-        this.wheelDoor.configData.layoutData.Landscape.x = this.doorClosedX.Landscape - shiftX;
-      }
-      if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
-        this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop - shiftX;
-        this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait - shiftX;
-        this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape - shiftX;
-      }
-
-      // Tween the golden door
-      AnimationProxy.animateTween(this.wheelDoor, {
-        duration: 1.2,
-        x: this.wheelDoor.x - shiftX,
-        rotation: Util.getRadians(90),
-        onComplete: () => {
-          this.vaultAnim.visible = false;
-          StateManager.doNextStep();
-        },
-      });
-
-      // Tween the dark vault door at the EXACT same time
-      AnimationProxy.animateTween(this.vaultAnim, {
-        duration: 1.2,
-        x: this.vaultAnim.x - shiftX,
-        rotation: Util.getRadians(90),
-      });
+    // Move left and open fully
+    AnimationProxy.animateTween(this.vaultAnim, {
+      duration: 1.2,
+      x: this.vaultAnim.x - shiftX,
+      onComplete: () => {
+        this.vaultAnim.visible = false;
+        StateManager.doNextStep();
+      },
     });
   }
   private handlePickFeature(SubfeatureType: string) {
