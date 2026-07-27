@@ -281,12 +281,14 @@ pipeline {
         success {
           script {
             notify.teams('teams-webhook-nonprod', 'Deployed', 'good', 'STG', "${env.IMAGE_TAG}-stg")
+            notify.shipiq('feg_games_src', 'SUCCESS')
           }
         }
         failure {
           script {
             currentBuild.description = 'teams-notified'
             notify.teams('teams-webhook-nonprod', 'Deploy Failed', 'attention', 'STG', "${env.IMAGE_TAG}-stg")
+            notify.shipiq('feg_games_src', 'FAILURE')
           }
         }
       }
@@ -296,9 +298,12 @@ pipeline {
 
     stage('Build PROD') {
       when {
-        allOf {
-          branch pattern: 'release/.*|hotfix/.*', comparator: 'REGEXP'
-          expression { params.DEPLOY_TARGET == 'prod' }
+        anyOf {
+          allOf {
+            branch pattern: 'release/.*|hotfix/.*', comparator: 'REGEXP'
+            expression { params.DEPLOY_TARGET == 'prod' }
+          }
+          tag pattern: 'prod-deploy/.*', comparator: 'REGEXP'
         }
       }
       steps {
@@ -308,9 +313,12 @@ pipeline {
 
     stage('Push PROD Image') {
       when {
-        allOf {
-          branch pattern: 'release/.*|hotfix/.*', comparator: 'REGEXP'
-          expression { params.DEPLOY_TARGET == 'prod' }
+        anyOf {
+          allOf {
+            branch pattern: 'release/.*|hotfix/.*', comparator: 'REGEXP'
+            expression { params.DEPLOY_TARGET == 'prod' }
+          }
+          tag pattern: 'prod-deploy/.*', comparator: 'REGEXP'
         }
       }
       steps {
@@ -337,9 +345,12 @@ pipeline {
 
     stage('Deploy PROD') {
       when {
-        allOf {
-          branch pattern: 'release/.*|hotfix/.*', comparator: 'REGEXP'
-          expression { params.DEPLOY_TARGET == 'prod' }
+        anyOf {
+          allOf {
+            branch pattern: 'release/.*|hotfix/.*', comparator: 'REGEXP'
+            expression { params.DEPLOY_TARGET == 'prod' }
+          }
+          tag pattern: 'prod-deploy/.*', comparator: 'REGEXP'
         }
       }
       steps {
@@ -378,12 +389,23 @@ pipeline {
         success {
           script {
             notify.teams('teams-webhook-prod', 'Deployed', 'good', 'PROD', "${env.IMAGE_TAG}-prod")
+            notify.shipiq('feg_games_src', 'SUCCESS')
           }
         }
         failure {
           script {
             currentBuild.description = 'teams-notified'
             notify.teams('teams-webhook-prod', 'Deploy Failed', 'attention', 'PROD', "${env.IMAGE_TAG}-prod")
+            notify.shipiq('feg_games_src', 'FAILURE')
+          }
+        }
+        always {
+          script {
+            if (env.TAG_NAME?.startsWith('prod-deploy/')) {
+              sshagent(credentials: ['jenkins-secret-bitbucket']) {
+                sh 'git push origin :refs/tags/${TAG_NAME} || true'
+              }
+            }
           }
         }
       }

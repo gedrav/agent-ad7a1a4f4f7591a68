@@ -89,7 +89,7 @@ export class KittieBankComp extends ResponsiveChildrenView {
           if (targetBank.spineAnim) {
             const anim = targetBank.spineAnim.state.data.skeletonData.findAnimation(blastAnim);
             if (anim) {
-              duration = anim.duration * 1000;
+              duration = anim.duration * 500;
             }
           }
         } catch (e) {

@@ -426,6 +426,14 @@ class UIUtilService {
       delete cloneData.style.fillGradientStops;
     }
 
+    if (cloneData?.style?.stroke?.fill && Array.isArray(cloneData.style.stroke.fill)) {
+      cloneData.style.stroke.fill = this.getFillGradient(
+        cloneData.style.stroke.fill,
+        cloneData.style.strokeGradientStops ?? [],
+      );
+      delete cloneData.style.strokeGradientStops;
+    }
+
     const style = new TextStyle(cloneData.style);
     const txt = new PixText({ text: label, style }, cloneData);
 
