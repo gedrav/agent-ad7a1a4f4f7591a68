@@ -13,7 +13,6 @@ import { KITTIEBANK_CONFIG } from './KittieBankConfig';
 import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
-import { GREEN_FEATURE_CONFIG } from './GreenFeatureConfig';
 import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
@@ -25,7 +24,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 2200,
+      width: 2110,
       height: 1600,
       pWidth: 1660,
       pHeight: 2200,
@@ -33,10 +32,66 @@ export const SLOT_MACHINE_CONFIG: any = {
       lHeight: 1456,
       alpha: 0,
     },
-    { name: 'wheelBase', type: 'Sprite', image: 'wheelBase', x: 314, y: -120, alpha: 0.5 },
-    { name: 'wheelDoor', type: 'Sprite', image: 'wheelDoor', anchor: { x: 0.5, y: 0.5 }, x: 1254, y: 820, alpha: 0.5 },
-    { name: 'wheelRim', type: 'Sprite', image: 'wheelRim', x: 314, y: -120, alpha: 0.5 },
-    { name: 'doorMask', type: 'Graphics', color: 0x0000ff, width: 1660, height: 1600, x: 480 },
+    {
+      name: 'wheelBase',
+      type: 'Sprite',
+      image: 'wheelBase',
+      alpha: 0.5,
+      layoutData: {
+        Desktop: { x: 314, y: -120 },
+        Portrait: { x: -30, y: 410 },
+        Landscape: { x: 314, y: -120 },
+      },
+    },
+    {
+      name: 'wheelDoor',
+      type: 'Sprite',
+      image: 'wheelDoor',
+      anchor: { x: 0.5, y: 0.5 },
+      angle: 0.5,
+      alpha: 0.5,
+      layoutData: {
+        Desktop: { x: 1208, y: 760 },
+        Portrait: { x: 864, y: 1290 },
+        Landscape: { x: 1208, y: 760 },
+      },
+    },
+    {
+      name: 'vaultAnim',
+      type: 'Spine',
+      spineName: 'Vault_Anim',
+      scale: 0.65,
+      angle: 0.5,
+      visible: false,
+      layoutData: {
+        Desktop: { x: 1208, y: 760 },
+        Portrait: { x: 864, y: 1290 },
+        Landscape: { x: 1208, y: 760 },
+      },
+    },
+    {
+      name: 'wheelRim',
+      type: 'Sprite',
+      image: 'wheelRim',
+      alpha: 0.5,
+      visible: true,
+      layoutData: {
+        Desktop: { x: 314, y: -120 },
+        Portrait: { x: -30, y: 410 },
+        Landscape: { x: 314, y: -120 },
+      },
+    },
+    {
+      name: 'doorMask',
+      type: 'Circle',
+      radius: 840,
+      color: 0x0000ff,
+      layoutData: {
+        Desktop: { x: 1258, y: 808 },
+        Portrait: { x: 914, y: 1338 },
+        Landscape: { x: 1258, y: 808 },
+      },
+    },
 
     JACKPOT_CONFIG,
     {
@@ -45,7 +100,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: GameSlotReel,
       winController: GameWinController,
       layoutData: {
-        Desktop: { x: 395, y: 274 },
+        Desktop: { x: 352, y: 274 },
         Portrait: { x: 0, y: 1000 },
         Landscape: { x: 450, y: 224 },
       },
@@ -242,6 +297,30 @@ export const SLOT_MACHINE_CONFIG: any = {
           lx: 34,
           ly: 62,
         },
+        {
+          name: 'bg4',
+          type: 'Sprite',
+          image: '5_4Reelbg',
+          x: 40,
+          y: -180,
+          px: -4,
+          py: -102,
+          lx: 34,
+          ly: -102,
+          visible: false,
+        },
+        {
+          name: 'bg5',
+          type: 'Sprite',
+          image: '5_5Reelbg',
+          x: 34,
+          y: -267,
+          px: -4,
+          py: -267,
+          lx: 34,
+          ly: -267,
+          visible: false,
+        },
         { name: 'symbolsContainer', type: 'Container' },
         {
           name: 'reelFrame',
@@ -260,6 +339,22 @@ export const SLOT_MACHINE_CONFIG: any = {
               image: 'ReelFrame',
               x: 0,
               y: 0,
+            },
+            {
+              name: 'frame4',
+              type: 'Sprite',
+              image: '5_4Frame',
+              x: -51,
+              y: -277,
+              visible: false,
+            },
+            {
+              name: 'frame5',
+              type: 'Sprite',
+              image: '5_5Frame',
+              x: 1,
+              y: -328,
+              visible: false,
             },
           ],
         },
@@ -283,7 +378,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           alpha: 0,
           x: 72,
           y: 1115,
-          style: { fontFamily: 'gameFont1', fontSize: 48, fill: 0xd4f4bd, fontWeight: 'bold' },
+          style: { fontFamily: 'gameFont1', fontSize: 48, fill: 0xd4f4bd },
         },
         {
           name: 'maskRect',
@@ -349,18 +444,19 @@ export const SLOT_MACHINE_CONFIG: any = {
             dropShadowColor: '#000000',
             dropShadowBlur: 8,
             dropShadowDistance: 6,
-            fontWeight: 'bold',
           },
         },
       ],
     },
     {
       name: 'gameTitle',
-      type: 'Sprite',
-      image: 'gamelogo',
-      anchor: { x: 0.5, y: 0.5 },
+      type: 'Spine',
+      spineName: 'gameTitle',
+      defaultState: 'idle',
+      idleState: 'idle',
+      loop: true,
       layoutData: {
-        Desktop: { scale: 1, x: 1300, y: 60 },
+        Desktop: { scale: 1, x: 1216, y: 60 },
         Landscape: { scale: 1, x: 1300, y: 60 },
         Portrait: { scale: 1, x: 840, y: 60 },
       },
@@ -368,7 +464,6 @@ export const SLOT_MACHINE_CONFIG: any = {
     KITTIEBANK_CONFIG,
     WHEEL_CONFIG,
     PICK_BONUS_JACKPOT_FEATURE_CONFIG,
-    GREEN_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
   ],
   layoutData: {

@@ -1090,4 +1090,6 @@ export default class SlotReel extends ResponsiveChildrenView {
       });
     }
   }
+
+  public changeReelSize(size: number): void {}
 }

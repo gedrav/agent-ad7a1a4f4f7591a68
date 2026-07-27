@@ -5,6 +5,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class BookSlotReel extends SlotReelStandard {
   private totalAnims: number;
@@ -125,7 +126,14 @@ export class BookSlotReel extends SlotReelStandard {
   protected restoreWildsAtTriggerPositions(): void {
     const positions = appModel.getFeatureTriggerPositions();
     const expansionData = appModel.getSymbolExpansionData();
-    if (!positions?.length || !expansionData?.expandedReels?.length) {
+    const isFeatureTriggered = appModel.getFeatureType() === CONSTANTS.FEATURE_TYPE_FREESPIN;
+    if (!isFeatureTriggered || !positions?.length || !expansionData?.expandedReels?.length) {
+      return;
+    }
+
+    const [firstExpandedReel] = expansionData.expandedReels[0];
+    const expandedSymbolName = expansionData.expandedReelView?.[firstExpandedReel]?.[0];
+    if (expandedSymbolName !== 'WD') {
       return;
     }
 
@@ -153,10 +161,9 @@ export class BookSlotReel extends SlotReelStandard {
     const wildSymbolConfig = this.reelsData.symbolsData['WD'];
     const items = lightningData.lightningStrikeWildPositions.map(([reelIndex, row]: number[]) => {
       const symbol = this.symbolsArray[reelIndex]?.[row + 1];
-      const bounds = symbol?.getBounds();
       return {
-        x: bounds?.x + bounds?.width / 2,
-        y: bounds?.y + bounds?.height / 2,
+        container: this.winSymbolsContainer,
+        getLocalPosition: () => ({ x: symbol?.x ?? 0, y: symbol?.y ?? 0 }),
         onSymbolDisappear: () => {
           if (symbol) symbol.visible = false;
         },

@@ -9,8 +9,6 @@ import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
 import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
-import { GameCheckFSState } from '@slots/meowmeowmeow/states/GameCheckFSState';
-import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
 import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';

@@ -12,6 +12,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private static readonly V_SPACING = 0;
 
   private readonly icons: PickBonusJackpotIconComp[] = [];
+  private readonly pickedIcons: PickBonusJackpotIconComp[] = [];
   private response: any[] = [];
   private responseIterator: number = 0;
   private responseLength: number = 0;
@@ -44,6 +45,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
       icon.y = row * (icon.height + V_SPACING);
 
       icon.on(PICK_ICON_EVENT.SELECTED, this.onIconSelected, this);
+      icon.on(PICK_ICON_EVENT.REVEAL_COMPLETE, this.onIconRevealComplete, this);
     });
   }
 
@@ -62,14 +64,28 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     const pick = this.response[this.responseIterator];
     icon.setjackpotData(pick.jackpotTier.replace(/\d+$/, '').toLowerCase());
     this.responseIterator++;
+    this.pickedIcons.push(icon);
+  }
 
-    if (this.responseIterator === this.responseLength) {
+  private onIconRevealComplete(): void {
+    if (this.pickedIcons.length === this.responseLength) {
+      this.animateWinningSymbols();
       this.scheduleExit();
     }
   }
 
+  private animateWinningSymbols() {
+    this.icons.forEach((icon) => {
+      if (icon.getjackpotData() === appModel.featureResult.featureData.winningTier.replace(/\d+$/, '').toLowerCase()) {
+        icon.playWinAnim();
+      } else {
+        icon.disable();
+      }
+    });
+  }
+
   private scheduleExit(): void {
-    setTimeout(() => this.exit(), 2500);
+    setTimeout(() => this.exit(), 3000);
   }
 
   private exit(): void {
@@ -80,6 +96,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private resetFeature(): void {
     this.response = [];
     this.responseIterator = 0;
+    this.visible = false;
     this.icons.forEach((icon) => icon.reset());
   }
 }
