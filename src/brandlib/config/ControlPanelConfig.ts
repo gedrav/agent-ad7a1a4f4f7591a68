@@ -654,7 +654,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
         Desktop: {
-          widthPerc: 0.06,
+          widthPerc: 0.08,
           heightPerc: 0.06,
           hAlign: 'left',
           vAlign: 'top',
