@@ -5,7 +5,6 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class BookSlotReel extends SlotReelStandard {
   private totalAnims: number;
@@ -125,14 +124,8 @@ export class BookSlotReel extends SlotReelStandard {
   protected restoreWildsAtTriggerPositions(): void {
     const positions = appModel.getFeatureTriggerPositions();
     const expansionData = appModel.getSymbolExpansionData();
-    const isFeatureTriggered = appModel.getFeatureType() === CONSTANTS.FEATURE_TYPE_FREESPIN;
+    const isFeatureTriggered = appModel.isFSRetriggered();
     if (!isFeatureTriggered || !positions?.length || !expansionData?.expandedReels?.length) {
-      return;
-    }
-
-    const [firstExpandedReel] = expansionData.expandedReels[0];
-    const expandedSymbolName = expansionData.expandedReelView?.[firstExpandedReel]?.[0];
-    if (expandedSymbolName !== 'WD') {
       return;
     }
 
