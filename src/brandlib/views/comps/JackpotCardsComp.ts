@@ -2,6 +2,9 @@ import { PixView } from '@core/pixiwrapper/PixView';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { JackpotCard } from './JackpotCard';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { StateManager } from '@core/states/StateManagerService';
 
 const skinsName = {
   BRONZE: 'bronze',
@@ -30,14 +33,29 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   cardsContainer: PixView;
   cardsConfig: any;
   cardArray: JackpotCard[] = [];
+  cardClickCount: number;
   constructor(config) {
     super(config);
+    this.cardClickCount = 0;
     this.cardsConfig = this.configData.cardsConfig;
     this.cardsContainer = this.elementsList['cardsContainer'];
     this.createCards();
     this.visible = false;
+    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_CARD_GAME, this.showJackPotCard.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
   }
-  protected showJackpotGame() {
+  hideJPCards() {
+    this.resetCards();
+    this.visible = false;
+  }
+  onCardClick() {
+    this.cardClickCount++;
+    if (dummyArray.length === this.cardClickCount) {
+      this.cardClickCount = 0;
+      StateManager.doNextStep();
+    }
+  }
+  protected showJackPotCard() {
     this.updateCards();
     this.visible = true;
   }
@@ -49,16 +67,15 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       const card = new JackpotCard(this.cardsConfig.cardConfig);
       this.cardsContainer.addChild(card);
       this.cardArray.push(card);
+      card.on('onCardClick', this.onCardClick.bind(this));
     }
     this.layoutCards(this.cardsConfig.maxcCol);
-    this.updateCards();
   }
   updateCards(cardData: string[] = dummyArray) {
     this.cardArray.forEach((card, index) => {
       card.onSkinChange(skinsName[cardData[index]]); //show dummy cards
     });
   }
-
   resetCards() {
     this.cardArray.forEach((card) => {
       card.reset();

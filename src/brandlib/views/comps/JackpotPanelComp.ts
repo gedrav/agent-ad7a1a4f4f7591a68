@@ -3,8 +3,13 @@ import { JackPotItem } from './JackPotItem';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { Util } from '@core/utils/UtilService';
-import { Ticker } from 'pixi.js';
+import { Graphics, Ticker } from 'pixi.js';
+import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { StateManager } from '@core/states/StateManagerService';
+import { WinTicker } from '@core/views/comps/WinTicker';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 interface RowLayout {
   widthPerc: number;
@@ -26,28 +31,127 @@ const ROW_Y_PERC = 0.4;
 const GRID_COLUMNS = 2;
 
 export class JackpotPanelComp extends ResponsiveChildrenView {
+  protected overlayRect: Graphics;
   protected jackPotsArr: JackPotItem[] = [];
   protected jackpotConfig: any;
   protected jackpotContainer: PixView;
   protected ticker: Ticker;
+  protected jackpotIntroAnimHor: PixSpine;
+  protected jackpotIntroAnimVer: PixSpine;
+  protected isJackpotIntroAnim: boolean;
+  protected isJackpotOutroAnim: boolean;
+  protected jackPotOutroAnimation: PixSpine;
+  protected jackpotWinContainer: PixView;
+  protected winTickerJP: WinTicker;
+  protected timeoutId: number;
   dummyNumber: number;
   constructor(config) {
     super(config);
     this.jackpotConfig = this.configData.jackpotConfig;
+    this.overlayRect = this.elementsList['overlayRect'];
     this.guideRect = this.elementsList['guideRect'];
     this.jackpotContainer = this.elementsList['jackpotContainer'];
+    this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
+    this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
+    this.jackpotWinContainer = this.elementsList['jackpotWinContainer'];
+    this.jackPotOutroAnimation = this.jackpotWinContainer.elementsList['jackPotOutroAnimation'];
+    this.winTickerJP = this.jackpotWinContainer.elementsList['winTickerJP'];
+
+    this.hideJackpotIntroAnim();
+
+    this.notifyWinDone();
     this.dummyNumber = 1000;
 
     this.ticker = new Ticker();
     this.ticker.add(this.updateJackpotValue.bind(this));
     this.createJackPotElement();
+    this.winTickerJP?.on('COUNTUP_COMPLETED', this.onCountUpUpdateBW.bind(this));
+    this.jackPotOutroAnimation.addEventListener('complete', this.onJackpotOutroAnimComplete.bind(this));
+    this.jackpotIntroAnimHor.addEventListener('complete', this.onIntroAnimComplete.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
+    EventHandler.addEventListener(SlotEvents.JACKPOT_WIN_TICKER_ANIM, this.showJackpotWinAnimation.bind(this));
   }
+  onCountUpUpdateBW() {
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
+  }
+  notifyWinDone() {
+    this.winTickerJP.visible = false;
+    this.overlayRect.visible = false;
+
+    this.jackPotOutroAnimation.stopAnimation();
+    this.jackPotOutroAnimation.visible = false;
+    if (this.isJackpotOutroAnim) {
+      this.isJackpotOutroAnim = false;
+      StateManager.doNextStep();
+    }
+  }
+  onJackpotOutroAnimComplete(e) {
+    if (e.animation.name === 'start_land') {
+      this.jackPotOutroAnimation.playAnimation({ state: 'idle_land', loop: true });
+    }
+  }
+  showJackpotWinAnimation() {
+    this.isJackpotOutroAnim = true;
+    const winValue = 500;
+    this.winTickerJP.visible = true;
+    this.winTickerJP.countUpValue(winValue, 5000);
+    AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
+    this.jackPotOutroAnimation.visible = true;
+    this.jackPotOutroAnimation.playAnimation({ state: 'start_land', loop: false });
+  }
+  hideJackPotOutroAnim() {
+    this.jackPotOutroAnimation.visible = false;
+    this.jackPotOutroAnimation.stopAnimation();
+  }
+  onIntroAnimComplete(e) {
+    const animationName = e.animation.name;
+
+    switch (animationName) {
+      case 'start_land':
+        this.playIntroAnimations({ state: 'idle_land', loop: true, stateP: 'idle_port' });
+        break;
+      case 'idle_land':
+        this.playIntroAnimations({ state: 'end_land', loop: false, stateP: 'end_port', timeScale: 1.2 });
+        break;
+      case 'end_land':
+        this.hideJackpotIntroAnim();
+        break;
+      default:
+        break;
+    }
+  }
+  protected hideJackpotIntroAnim() {
+    this.jackpotIntroAnimHor.visible = false;
+    this.jackpotIntroAnimVer.visible = false;
+    this.jackpotIntroAnimHor.stopAnimation();
+    this.jackpotIntroAnimVer.stopAnimation();
+    if (this.isJackpotIntroAnim) {
+      this.isJackpotIntroAnim = false;
+      StateManager.doNextStep();
+    }
+  }
+  protected showJackpotIntroAnim() {
+    if (!this.isJackpotIntroAnim) {
+      this.isJackpotIntroAnim = true;
+      this.jackpotIntroAnimHor.visible = true;
+      this.jackpotIntroAnimVer.visible = true;
+      this.resizeJackpotWinAnimation();
+      this.playIntroAnimations({ state: 'start_land', stateP: 'start_port', loop: false });
+    }
+  }
+
+  playIntroAnimations({ state, stateP, loop, timeScale = 1 }) {
+    this.jackpotIntroAnimHor.playAnimation({ state, loop, reset: false, timeScale });
+    this.jackpotIntroAnimVer.playAnimation({ state: stateP, loop, reset: false, timeScale });
+  }
+
   createJackPotElement() {
     const itemCount = this.jackpotConfig.noOfElement;
 
     for (let i = 0; i < itemCount; i++) {
       const item = new JackPotItem(this.jackpotConfig.items);
-      this.addChild(item);
+      this.addChildAt(item, 0);
       this.jackPotsArr.push(item);
       item.initialView({
         skinName: this.jackpotConfig.jackpotAnimSkin[i],
@@ -65,6 +169,10 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   }
   protected resizeView() {
     super.resizeView();
+    this.resizeJackpotWinAnimation();
+    this.overlayRect.width = UIUtil.getGameWidth();
+    this.overlayRect.height = UIUtil.getGameHeight();
+
     if (!DeviceProxy.isDesktop() && DeviceProxy.config.isPortrait) {
       this.jackPotsArr.forEach((item, index) => this.layoutAsGrid(item, index));
       return;
@@ -100,6 +208,22 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     } else {
       const above = this.jackPotsArr[index - GRID_COLUMNS];
       item.y = above.y + item.height * 0.8;
+    }
+  }
+  protected resizeJackpotWinAnimation() {
+    if (!this.isJackpotIntroAnim) return;
+
+    if (DeviceProxy.isDevice()) {
+      if (DeviceProxy.config.isPortrait) {
+        this.jackpotIntroAnimHor.renderable = false;
+        this.jackpotIntroAnimVer.renderable = true;
+      } else {
+        this.jackpotIntroAnimHor.renderable = true;
+        this.jackpotIntroAnimVer.renderable = false;
+      }
+    } else {
+      this.jackpotIntroAnimHor.renderable = true;
+      this.jackpotIntroAnimVer.renderable = false;
     }
   }
 }
