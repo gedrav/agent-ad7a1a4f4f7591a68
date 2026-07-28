@@ -12,6 +12,26 @@ export class KittieBankComp extends ResponsiveChildrenView {
     EventHandler.addEventListener('PLAY_KITTIE_ANTICIPATION', this.playKittyBankAnticipation.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, this.restartIdleAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.stopIdleAnim.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.resetToNormal.bind(this));
+    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetToNormal.bind(this));
+  }
+
+  public resetToNormal(): void {
+    const bankNames = ['meow', 'mew', 'mii'];
+    for (const bank of bankNames) {
+      const targetBankComp = this.elementsList[bank];
+      if (targetBankComp) {
+        const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
+        const animPrefix = bank === 'meow' ? '3_RED' : bank === 'mew' ? '1_GREEN' : '2_BLUE';
+        const defaultAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
+        if (targetBank && typeof targetBank.playAnimation === 'function') {
+          targetBank.playAnimation({
+            state: defaultAnim,
+            loop: true,
+          });
+        }
+      }
+    }
   }
 
   private restartIdleAnim(): void {
@@ -43,12 +63,19 @@ export class KittieBankComp extends ResponsiveChildrenView {
       const defaultAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
       if (targetBank && typeof targetBank.playAnimation === 'function') {
-        targetBank.playAnimation({
-          state: idlePlayAnim,
-          loop: false,
-          nextState: defaultAnim,
-          nextLoop: true,
-        });
+        if (idlePlayAnim.includes('Blast')) {
+          targetBank.playAnimation({
+            state: idlePlayAnim,
+            loop: false,
+          });
+        } else {
+          targetBank.playAnimation({
+            state: idlePlayAnim,
+            loop: false,
+            nextState: defaultAnim,
+            nextLoop: true,
+          });
+        }
       }
     }
 
@@ -75,27 +102,16 @@ export class KittieBankComp extends ResponsiveChildrenView {
     const blastAnim = `${animPrefix}_Blast`;
     const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
+    this.stopIdleAnim(); // Stop random idle animations from interrupting
+
     if (targetBank && typeof targetBank.playAnimation === 'function') {
       targetBank.playAnimation({
         state: blastAnim,
         loop: false,
-        nextState: idleAnim,
-        nextLoop: true,
       });
 
       if (callback) {
-        let duration = 2000; // default fallback
-        try {
-          if (targetBank.spineAnim) {
-            const anim = targetBank.spineAnim.state.data.skeletonData.findAnimation(blastAnim);
-            if (anim) {
-              duration = anim.duration * 500;
-            }
-          }
-        } catch (e) {
-          console.warn('Could not determine spine animation duration for', blastAnim);
-        }
-        setTimeout(callback, duration);
+        setTimeout(callback, 1600);
       }
     } else if (callback) callback();
   }
@@ -110,6 +126,12 @@ export class KittieBankComp extends ResponsiveChildrenView {
     const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
     if (targetBank && typeof targetBank.playAnimation === 'function') {
+      if (targetBank.spineAnim) {
+        console.log(
+          'Available animations for KittieBank:',
+          targetBank.spineAnim.state.data.skeletonData.animations.map((a: any) => a.name),
+        );
+      }
       targetBank.playAnimation({
         state: anticipationAnim,
         loop: false,
