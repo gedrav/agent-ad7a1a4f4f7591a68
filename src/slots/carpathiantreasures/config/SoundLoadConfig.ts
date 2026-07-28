@@ -220,15 +220,6 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
-      name: 'anticipation',
-      type: 'game',
-      loop: true,
-      playEvents: ['PLAY_ANTICIPATION_SOUND'],
-      stopEvents: ['STOP_ANTICIPATION_SOUND'],
-      volume: 1,
-      fadeOutDuration: 0,
-    },
-    {
       name: 'H1',
       type: 'game',
       loop: false,
