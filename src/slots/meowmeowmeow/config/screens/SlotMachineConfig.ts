@@ -372,15 +372,6 @@ export const SLOT_MACHINE_CONFIG: any = {
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
         {
-          name: 'extraSpinText',
-          type: 'Text',
-          anchor: { x: 0, y: 0.5 },
-          alpha: 0,
-          x: 72,
-          y: 1115,
-          style: { fontFamily: 'gameFont1', fontSize: 48, fill: 0xd4f4bd },
-        },
-        {
           name: 'maskRect',
           type: 'Graphics',
           width: 1666,

@@ -19,7 +19,6 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private readonly extraSpinTextTimeoutId: any;
   private readonly jackpotContainer: MMMJackpotComp;
   private readonly kittiebankComp: KittieBankComp;
   private readonly gameTitle: PixSpine;
@@ -471,23 +470,18 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private onShowExtraSpinAnim(): void {
-    const extraSpinText: any = this.slotReel?.elementsList?.['extraSpinText'];
     const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
 
-    if (!extraSpinText || !extraSpinTextCenter) {
-      console.warn('Missing extraSpinText elements');
+    if (!extraSpinTextCenter) {
+      console.warn('Missing extraSpinTextCenter element');
       StateManager.goToState(STATES.FS_SPIN_START_STATE);
       return;
     }
 
     const text = Util.getContent('ExtraSpinText');
-    extraSpinText.text = text;
     extraSpinTextCenter.text = text;
 
-    AnimationProxy.killTweensOf(extraSpinText);
     AnimationProxy.killTweensOf(extraSpinTextCenter);
-
-    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
 
     const ENTER_DURATION = 0.5;
     const HOLD_DURATION = 1.0;
@@ -503,7 +497,6 @@ export class GameSlotMachineView extends SlotMachineView {
     extraSpinTextCenter.scale.set(1);
     extraSpinTextCenter.y = naturalY + OFFSET_Y; // start at reel bottom
     extraSpinTextCenter.alpha = 0;
-    extraSpinText.alpha = 0;
 
     // ENTER: slide up from bottom to center + fade in
     AnimationProxy.animateTween(extraSpinTextCenter, {
@@ -513,12 +506,6 @@ export class GameSlotMachineView extends SlotMachineView {
       ease: 'power2.out',
     });
 
-    // Fade in the bottom ticker as text arrives
-    AnimationProxy.animateTween(extraSpinText, {
-      duration: 0.3,
-      alpha: 1,
-    });
-
     AnimationProxy.animateTween(
       extraSpinTextCenter,
       {
@@ -526,20 +513,6 @@ export class GameSlotMachineView extends SlotMachineView {
         y: naturalY - OFFSET_Y, // exits toward top of reel
         alpha: 0,
         ease: 'power2.in',
-        delay: ENTER_DURATION + HOLD_DURATION,
-        onComplete: () => {
-          EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
-        },
-      },
-      false,
-    );
-
-    // Fade out the bottom ticker in sync with the exit
-    AnimationProxy.animateTween(
-      extraSpinText,
-      {
-        duration: EXIT_DURATION,
-        alpha: 0,
         delay: ENTER_DURATION + HOLD_DURATION,
       },
       false,
