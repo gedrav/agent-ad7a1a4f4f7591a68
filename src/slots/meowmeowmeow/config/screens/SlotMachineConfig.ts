@@ -304,9 +304,9 @@ export const SLOT_MACHINE_CONFIG: any = {
           x: 40,
           y: -180,
           px: -4,
-          py: -102,
+          py: -180,
           lx: 34,
-          ly: -102,
+          ly: -180,
           visible: false,
         },
         {
@@ -457,8 +457,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       loop: true,
       layoutData: {
         Desktop: { scale: 1, x: 1216, y: 60 },
-        Landscape: { scale: 1, x: 1300, y: 60 },
-        Portrait: { scale: 1, x: 840, y: 60 },
+        Landscape: { scale: 1, x: 1216, y: 60 },
+        Portrait: { scale: 1, x: 832, y: 0 },
       },
     },
     KITTIEBANK_CONFIG,

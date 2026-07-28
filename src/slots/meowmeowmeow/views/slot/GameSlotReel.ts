@@ -47,12 +47,12 @@ export class GameSlotReel extends SlotReelStandard {
 
       if (size === 4) {
         if (maskRect) {
-          maskRect.y = -180;
-          maskRect.height = 1450;
+          maskRect.y = -170;
+          maskRect.height = 1400;
         }
         if (tickerComp) tickerComp.y = 1200;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1150;
-        if (extraSpinText) extraSpinText.y = 1150;
+        if (extraSpinText) extraSpinText.y = 1200;
       } else if (size === 5) {
         if (maskRect) {
           maskRect.y = -261;
@@ -97,7 +97,7 @@ export class GameSlotReel extends SlotReelStandard {
         this.reelsData.deviceLayout[key].symbolScale = 1;
 
         if (size === 4) {
-          this.reelsData.deviceLayout[key].reelContainerPos.y = 40;
+          this.reelsData.deviceLayout[key].reelContainerPos.y = 5;
           this.reelsData.deviceLayout[key].reelContainerPos.x = 210;
         } else if (size === 5) {
           this.reelsData.deviceLayout[key].reelContainerPos.y = -75;
@@ -115,6 +115,6 @@ export class GameSlotReel extends SlotReelStandard {
       sym.destroy();
     });
     this.symbolsArray = [];
-    this.createReel(); // Rebuild symbols for new layout size
+    this.createReel();
   }
 }

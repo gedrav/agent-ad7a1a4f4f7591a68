@@ -26,8 +26,8 @@ export const FS_POPUP_CONFIG = {
       y: 500,
       px: 1006,
       py: 290,
-      lx: 188,
-      ly: 808,
+      lx: 950,
+      ly: 500,
     },
     {
       name: 'titleText',
@@ -248,8 +248,8 @@ export const FS_POPUP_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, heightPerc: 0.8, maxScale: 1 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.92, heightPerc: 0.8 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.88 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
   },
 };

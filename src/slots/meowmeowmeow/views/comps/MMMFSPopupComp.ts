@@ -11,6 +11,33 @@ export class MMMFSPopupComp extends FSPopupComp {
     super(config);
   }
 
+  protected updateMessagePositions(data: any): void {
+    super.updateMessagePositions(data);
+
+    const freeGamesCountText = this.elementsList['freeGamesCountText'];
+    const freeGamesLabelText = this.elementsList['freeGamesLabelText'];
+    const waysCountText = this.elementsList['waysCountText'];
+    const waysLabelText = this.elementsList['waysLabelText'];
+
+    if (data.entryPopUp) {
+      if (freeGamesCountText) freeGamesCountText.visible = true;
+      if (freeGamesLabelText) freeGamesLabelText.visible = true;
+      if (waysCountText) waysCountText.visible = true;
+      if (waysLabelText) waysLabelText.visible = true;
+      if (this.messageText1) this.messageText1.visible = false;
+    } else {
+      if (freeGamesCountText) freeGamesCountText.visible = false;
+      if (freeGamesLabelText) freeGamesLabelText.visible = false;
+      if (waysCountText) waysCountText.visible = false;
+      if (waysLabelText) waysLabelText.visible = false;
+
+      if (this.messageText1) {
+        this.messageText1.visible = true;
+        this.messageText1.y = 1020;
+      }
+    }
+  }
+
   protected async showFSPopup(data: any) {
     super.showFSPopup(data);
     const scale = this.scale.x;
