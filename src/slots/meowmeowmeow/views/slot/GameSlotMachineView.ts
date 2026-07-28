@@ -182,8 +182,9 @@ export class GameSlotMachineView extends SlotMachineView {
     if (this.kittiebankBaseX && kld) {
       const shift = 60;
       kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
-      kld.Portrait.x = this.kittiebankBaseX.Portrait - shift;
+      kld.Portrait.x = 230;
       kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
+      kld.Portrait.y = -45;
       (this.kittiebankComp as any).resizeView();
     }
 
@@ -225,7 +226,7 @@ export class GameSlotMachineView extends SlotMachineView {
         reelLd.Landscape.y = 457;
         reelLd.Landscape.scale = 0.58;
       }
-      this.slotReel.resizeView();
+      (this.slotReel as any).resizeView();
     }
 
     if (this.vaultAnim) {
@@ -235,7 +236,7 @@ export class GameSlotMachineView extends SlotMachineView {
     }
     this.wheelDoor.visible = false;
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
-    this.wheelRim.alpha = 0.8;
+    this.wheelRim.alpha = 1;
     this.gameTitle.visible = true;
 
     if (this.vaultAnim) {
@@ -381,14 +382,14 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const symbolRow = row + 1;
 
+    const isFreeSpins = appModel.getIsFreeSpinsSession();
+
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
-    const startPos = kittieBankComp.toLocal(strtGlobalPos);
-
-    // Target the spine directly instead of the outer Comp
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-
     const endGlobalPos = targetBank.getGlobalPosition();
-    const endPos = kittieBankComp.toLocal(endGlobalPos);
+
+    const startPos = isFreeSpins ? this.toLocal(strtGlobalPos) : kittieBankComp.toLocal(strtGlobalPos);
+    const endPos = isFreeSpins ? this.toLocal(endGlobalPos) : kittieBankComp.toLocal(endGlobalPos);
 
     const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
     const movingSymbol = new ReelSymbolSpine({
@@ -417,9 +418,12 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.position.copyFrom(startPos);
     movingSymbol.scale.set(1);
 
-    // Dynamically find exactly where the target bank is, and add the coin just below it!
-    const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
-    kittieBankComp.addChildAt(movingSymbol, targetIndex);
+    if (isFreeSpins) {
+      this.addChild(movingSymbol);
+    } else {
+      const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
+      kittieBankComp.addChildAt(movingSymbol, targetIndex);
+    }
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
