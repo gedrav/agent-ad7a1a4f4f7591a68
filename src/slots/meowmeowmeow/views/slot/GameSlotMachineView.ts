@@ -19,7 +19,6 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private readonly extraSpinTextTimeoutId: any;
   private readonly jackpotContainer: MMMJackpotComp;
   private readonly kittiebankComp: KittieBankComp;
   private readonly gameTitle: PixSpine;
@@ -182,8 +181,9 @@ export class GameSlotMachineView extends SlotMachineView {
     if (this.kittiebankBaseX && kld) {
       const shift = 60;
       kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
-      kld.Portrait.x = this.kittiebankBaseX.Portrait - shift;
+      kld.Portrait.x = 230;
       kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
+      kld.Portrait.y = -45;
       (this.kittiebankComp as any).resizeView();
     }
 
@@ -225,7 +225,7 @@ export class GameSlotMachineView extends SlotMachineView {
         reelLd.Landscape.y = 457;
         reelLd.Landscape.scale = 0.58;
       }
-      this.slotReel.resizeView();
+      (this.slotReel as any).resizeView();
     }
 
     if (this.vaultAnim) {
@@ -235,7 +235,7 @@ export class GameSlotMachineView extends SlotMachineView {
     }
     this.wheelDoor.visible = false;
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
-    this.wheelRim.alpha = 0.8;
+    this.wheelRim.alpha = 1;
     this.gameTitle.visible = true;
 
     if (this.vaultAnim) {
@@ -381,14 +381,14 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const symbolRow = row + 1;
 
+    const isFreeSpins = appModel.getIsFreeSpinsSession();
+
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
-    const startPos = kittieBankComp.toLocal(strtGlobalPos);
-
-    // Target the spine directly instead of the outer Comp
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-
     const endGlobalPos = targetBank.getGlobalPosition();
-    const endPos = kittieBankComp.toLocal(endGlobalPos);
+
+    const startPos = isFreeSpins ? this.toLocal(strtGlobalPos) : kittieBankComp.toLocal(strtGlobalPos);
+    const endPos = isFreeSpins ? this.toLocal(endGlobalPos) : kittieBankComp.toLocal(endGlobalPos);
 
     const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
     const movingSymbol = new ReelSymbolSpine({
@@ -417,9 +417,12 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.position.copyFrom(startPos);
     movingSymbol.scale.set(1);
 
-    // Dynamically find exactly where the target bank is, and add the coin just below it!
-    const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
-    kittieBankComp.addChildAt(movingSymbol, targetIndex);
+    if (isFreeSpins) {
+      this.addChild(movingSymbol);
+    } else {
+      const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
+      kittieBankComp.addChildAt(movingSymbol, targetIndex);
+    }
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
@@ -467,23 +470,18 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private onShowExtraSpinAnim(): void {
-    const extraSpinText: any = this.slotReel?.elementsList?.['extraSpinText'];
     const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
 
-    if (!extraSpinText || !extraSpinTextCenter) {
-      console.warn('Missing extraSpinText elements');
+    if (!extraSpinTextCenter) {
+      console.warn('Missing extraSpinTextCenter element');
       StateManager.goToState(STATES.FS_SPIN_START_STATE);
       return;
     }
 
     const text = Util.getContent('ExtraSpinText');
-    extraSpinText.text = text;
     extraSpinTextCenter.text = text;
 
-    AnimationProxy.killTweensOf(extraSpinText);
     AnimationProxy.killTweensOf(extraSpinTextCenter);
-
-    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
 
     const ENTER_DURATION = 0.5;
     const HOLD_DURATION = 1.0;
@@ -499,7 +497,6 @@ export class GameSlotMachineView extends SlotMachineView {
     extraSpinTextCenter.scale.set(1);
     extraSpinTextCenter.y = naturalY + OFFSET_Y; // start at reel bottom
     extraSpinTextCenter.alpha = 0;
-    extraSpinText.alpha = 0;
 
     // ENTER: slide up from bottom to center + fade in
     AnimationProxy.animateTween(extraSpinTextCenter, {
@@ -509,12 +506,6 @@ export class GameSlotMachineView extends SlotMachineView {
       ease: 'power2.out',
     });
 
-    // Fade in the bottom ticker as text arrives
-    AnimationProxy.animateTween(extraSpinText, {
-      duration: 0.3,
-      alpha: 1,
-    });
-
     AnimationProxy.animateTween(
       extraSpinTextCenter,
       {
@@ -522,20 +513,6 @@ export class GameSlotMachineView extends SlotMachineView {
         y: naturalY - OFFSET_Y, // exits toward top of reel
         alpha: 0,
         ease: 'power2.in',
-        delay: ENTER_DURATION + HOLD_DURATION,
-        onComplete: () => {
-          EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
-        },
-      },
-      false,
-    );
-
-    // Fade out the bottom ticker in sync with the exit
-    AnimationProxy.animateTween(
-      extraSpinText,
-      {
-        duration: EXIT_DURATION,
-        alpha: 0,
         delay: ENTER_DURATION + HOLD_DURATION,
       },
       false,

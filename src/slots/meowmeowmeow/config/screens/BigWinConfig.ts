@@ -68,7 +68,7 @@ export const BIG_WIN_CONFIG = {
   layoutData: {
     Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
     Portrait: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 0, y: 1010 },
-    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 234 },
-    SmallLandscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 234 },
+    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
+    SmallLandscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
   },
 };

@@ -43,16 +43,14 @@ export class GameSlotReel extends SlotReelStandard {
       const maskRect = elementsList['maskRect'];
       const tickerComp = elementsList['tickerComp'];
       const fsAutoCounterComp = elementsList['fsAutoCounterComp'];
-      const extraSpinText = elementsList['extraSpinText'];
 
       if (size === 4) {
         if (maskRect) {
-          maskRect.y = -180;
-          maskRect.height = 1450;
+          maskRect.y = -170;
+          maskRect.height = 1400;
         }
         if (tickerComp) tickerComp.y = 1200;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1150;
-        if (extraSpinText) extraSpinText.y = 1150;
       } else if (size === 5) {
         if (maskRect) {
           maskRect.y = -261;
@@ -60,7 +58,6 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1500;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1395;
-        if (extraSpinText) extraSpinText.y = 1440;
       } else {
         if (maskRect) {
           maskRect.y = 68;
@@ -68,7 +65,6 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1070;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1070;
-        if (extraSpinText) extraSpinText.y = 1115;
       }
     }
 
@@ -97,12 +93,14 @@ export class GameSlotReel extends SlotReelStandard {
         this.reelsData.deviceLayout[key].symbolScale = 1;
 
         if (size === 4) {
-          this.reelsData.deviceLayout[key].reelContainerPos.y = 40;
+          this.reelsData.deviceLayout[key].reelContainerPos.y = 5;
           this.reelsData.deviceLayout[key].reelContainerPos.x = 210;
         } else if (size === 5) {
           this.reelsData.deviceLayout[key].reelContainerPos.y = -75;
+          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 172 : 195;
         } else {
-          this.reelsData.deviceLayout[key].reelContainerPos.y = 240;
+          this.reelsData.deviceLayout[key].reelContainerPos.y = 230;
+          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 172 : 195;
         }
       }
     }
@@ -115,6 +113,6 @@ export class GameSlotReel extends SlotReelStandard {
       sym.destroy();
     });
     this.symbolsArray = [];
-    this.createReel(); // Rebuild symbols for new layout size
+    this.createReel();
   }
 }

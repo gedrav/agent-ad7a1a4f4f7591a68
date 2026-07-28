@@ -140,6 +140,8 @@ export class LightningStrikeComp extends ResponsiveView {
 
   protected onThunderComplete(entry: any, spine: PixSpine): void {
     if (entry?.animation?.name === 'thunder_sfx') {
+      spine.rotation = 0;
+      spine.scale.set(1);
       EventHandler.dispatchEvent(SlotEvents.PLAY_WILD_CONVERSION_SOUND);
     } else if (entry?.animation?.name === 'burst') {
       this.onOneComplete(spine);

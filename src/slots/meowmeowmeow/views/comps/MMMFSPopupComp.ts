@@ -5,10 +5,55 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { Util } from '@core/utils/UtilService';
 
 export class MMMFSPopupComp extends FSPopupComp {
+  private readonly congratText: PixText;
+
   constructor(config: any) {
     super(config);
+    this.congratText = this.elementsList['congratText'];
+  }
+
+  protected updateMessagePositions(data: any): void {
+    super.updateMessagePositions(data);
+
+    const freeGamesCountText = this.elementsList['freeGamesCountText'];
+    const freeGamesLabelText = this.elementsList['freeGamesLabelText'];
+    const waysCountText = this.elementsList['waysCountText'];
+    const waysLabelText = this.elementsList['waysLabelText'];
+
+    if (this.congratText) {
+      this.congratText.visible = true;
+      this.congratText.text = Util.getContent('CongratTitle') || 'CONGRATULATIONS!';
+      this.congratText.y = 150;
+    }
+
+    if (data.entryPopUp) {
+      if (this.titleText) {
+        this.titleText.visible = true;
+        this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
+        this.titleText.y = 880;
+      }
+      if (freeGamesCountText) freeGamesCountText.visible = true;
+      if (freeGamesLabelText) freeGamesLabelText.visible = true;
+      if (waysCountText) waysCountText.visible = true;
+      if (waysLabelText) waysLabelText.visible = true;
+      if (this.messageText1) this.messageText1.visible = false;
+    } else {
+      if (this.titleText) {
+        this.titleText.visible = false;
+      }
+      if (freeGamesCountText) freeGamesCountText.visible = false;
+      if (freeGamesLabelText) freeGamesLabelText.visible = false;
+      if (waysCountText) waysCountText.visible = false;
+      if (waysLabelText) waysLabelText.visible = false;
+
+      if (this.messageText1) {
+        this.messageText1.visible = true;
+        this.messageText1.y = 1020;
+      }
+    }
   }
 
   protected async showFSPopup(data: any) {

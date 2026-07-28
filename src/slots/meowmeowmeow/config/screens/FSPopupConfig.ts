@@ -15,6 +15,36 @@ export const FS_POPUP_CONFIG = {
       alpha: 1,
     },
     {
+      name: 'congratText',
+      type: 'Text',
+      content: 'CongratTitle',
+      style: {
+        fontFamily: 'Showcard Gothic',
+        fontSize: 85,
+        fontWeight: '900',
+        letterSpacing: 12,
+        fill: ['0xFFE81C', '0xFFA000'],
+        fillGradientStops: [0, 1],
+        stroke: {
+          fill: ['0xEDBA13', '0xF4BD00', '0xF9EE29', '0xF0B703'],
+          width: 8,
+          join: 'round',
+        },
+        strokeGradientStops: [0, 0.35, 0.75, 1],
+        dropShadow: {
+          color: 0x000000,
+          alpha: 0.7,
+          blur: 2,
+          distance: 4,
+          angle: Math.PI / 2,
+        },
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 982,
+      y: 150,
+    },
+    {
       name: 'mew',
       type: 'Spine',
       spineName: 'KittieBank',
@@ -26,8 +56,8 @@ export const FS_POPUP_CONFIG = {
       y: 500,
       px: 1006,
       py: 290,
-      lx: 188,
-      ly: 808,
+      lx: 950,
+      ly: 500,
     },
     {
       name: 'titleText',
@@ -248,8 +278,8 @@ export const FS_POPUP_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, heightPerc: 0.8, maxScale: 1 },
+    Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.92, heightPerc: 0.8 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.88 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
   },
 };
