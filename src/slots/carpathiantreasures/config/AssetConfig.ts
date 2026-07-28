@@ -31,6 +31,8 @@ const SPLASH: AssetBundle = {
 const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
+    { TYPE: 'common', NAME: 'jakpots', ASSETTYPE: 'spine' },
+    { TYPE: 'common', NAME: 'cards', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },

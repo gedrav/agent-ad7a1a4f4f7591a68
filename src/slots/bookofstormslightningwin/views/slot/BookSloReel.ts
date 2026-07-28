@@ -5,7 +5,6 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { CONSTANTS } from '@core/utils/CONSTANTS';
 
 export class BookSlotReel extends SlotReelStandard {
   private totalAnims: number;
@@ -16,10 +15,6 @@ export class BookSlotReel extends SlotReelStandard {
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_EXPANSION, this.showSymbolExpansion.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_LIGHTNING_STRIKE, this.showLightningStrike.bind(this));
     EventHandler.addEventListener(SlotEvents.RESTORE_WILD_POSITIONS, this.restoreWildsAtTriggerPositions.bind(this));
-  }
-
-  protected resizeView(): void {
-    super.resizeView();
   }
 
   protected showSymbolExpansion(): void {
@@ -130,14 +125,8 @@ export class BookSlotReel extends SlotReelStandard {
   protected restoreWildsAtTriggerPositions(): void {
     const positions = appModel.getFeatureTriggerPositions();
     const expansionData = appModel.getSymbolExpansionData();
-    const isFeatureTriggered = appModel.getFeatureType() === CONSTANTS.FEATURE_TYPE_FREESPIN;
+    const isFeatureTriggered = appModel.isFSRetriggered();
     if (!isFeatureTriggered || !positions?.length || !expansionData?.expandedReels?.length) {
-      return;
-    }
-
-    const [firstExpandedReel] = expansionData.expandedReels[0];
-    const expandedSymbolName = expansionData.expandedReelView?.[firstExpandedReel]?.[0];
-    if (expandedSymbolName !== 'WD') {
       return;
     }
 
@@ -165,18 +154,23 @@ export class BookSlotReel extends SlotReelStandard {
     const wildSymbolConfig = this.reelsData.symbolsData['WD'];
     const items = lightningData.lightningStrikeWildPositions.map(([reelIndex, row]: number[]) => {
       const symbol = this.symbolsArray[reelIndex]?.[row + 1];
-      const getPosition = () => {
-        const bounds = symbol?.getBounds();
-        return { x: (bounds?.x ?? 0) + (bounds?.width ?? 0) / 2, y: (bounds?.y ?? 0) + (bounds?.height ?? 0) / 2 };
-      };
       return {
-        getPosition,
+        container: this.winSymbolsContainer,
+        getLocalPosition: () => ({ x: symbol?.x ?? 0, y: symbol?.y ?? 0 }),
         onSymbolDisappear: () => {
           if (symbol) symbol.visible = false;
         },
         onSymbolAppear: () => {
-          symbol?.setNewSymbol(wildSymbolConfig, reelIndex);
-          if (symbol) symbol.visible = true;
+          if (!symbol) return;
+          symbol.setNewSymbol(wildSymbolConfig, reelIndex);
+          symbol.scale.set(0);
+          symbol.visible = true;
+          AnimationProxy.animateTween(symbol.scale, {
+            duration: 0.6,
+            x: this.reelsData.symbolScale,
+            y: this.reelsData.symbolScale,
+            ease: Sine.easeOut,
+          });
         },
       };
     });

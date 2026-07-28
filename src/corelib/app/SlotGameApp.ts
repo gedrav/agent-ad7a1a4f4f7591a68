@@ -254,7 +254,7 @@ class SlotGameApp {
       // the indefinite black-screen state users currently experience.
       window.location.reload();
     };
-    canvas.addEventListener('webglcontextlost', this.boundContextLost as EventListener, false);
+    canvas.addEventListener('webglcontextlost', this.boundContextLost, false);
     canvas.addEventListener('webglcontextrestored', this.boundContextRestored, false);
   }
 
@@ -272,7 +272,7 @@ class SlotGameApp {
     const canvas: HTMLCanvasElement | undefined = this.app?.canvas;
     if (canvas) {
       if (this.boundContextLost) {
-        canvas.removeEventListener('webglcontextlost', this.boundContextLost as EventListener);
+        canvas.removeEventListener('webglcontextlost', this.boundContextLost);
       }
       if (this.boundContextRestored) {
         canvas.removeEventListener('webglcontextrestored', this.boundContextRestored);
@@ -405,7 +405,6 @@ class SlotGameApp {
       // explicit destroy() here.
     }
     if (this.isViewCreated) {
-      this.makeGameVisible();
       this.app.stop();
       if (this.rafId !== null) {
         cancelAnimationFrame(this.rafId);
