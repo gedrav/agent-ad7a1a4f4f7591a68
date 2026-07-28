@@ -192,7 +192,7 @@ class AssetLoaderClass {
           sprite: `assets/images/${DeviceProxy.config.assetResolution}/${name}.json`,
           sound: `assets/sounds/${name}`,
           font: `${this.commonFontPath}${name}`,
-          bmpfont: `assets/fonts/bmp/}`, // Handle fonts in the common path
+          bmpfont: `${this.bmpFontPath}${name}`, // Handle fonts in the common path
         };
         return assetPaths[assetType] || `assets/${name}`; // Default path
       },
@@ -231,7 +231,7 @@ class AssetLoaderClass {
     if (ASSETTYPE === 'sequence') {
       const resolution = DeviceProxy.config.assetResolution;
       const numSheets = resolution === '@1x' ? file[0] : file[1];
-      return Array.from({ length: numSheets }, (_, i) => getPath(`${NAME}${i}.json`, ASSETTYPE));
+      return Array.from({ length: numSheets }, (_, i) => getPath(`${NAME}${i}`, 'sprite'));
     }
 
     return getPath(NAME, ASSETTYPE);

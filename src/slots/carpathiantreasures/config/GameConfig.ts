@@ -25,6 +25,7 @@ export const GAME_CONFIG = {
   featureTriggerDelay: 3500,
   dontShowWinAfterFS: true,
   FontFaces: {
+    bitmapFontJP: 'bitmapFontJP',
     commonFont: 'Mulish',
     gameFont1: 'Caudex',
     commonFontBold: 'Oswald Bold',

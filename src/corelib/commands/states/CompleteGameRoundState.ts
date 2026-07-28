@@ -13,7 +13,11 @@ class CompleteGameRoundStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
-    StateManager.goToState(STATES.CHECK_AUTOSPIN_STATE);
+    if (appModel.storeJackpotData) {
+      StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
+    } else {
+      StateManager.goToState(STATES.CHECK_AUTOSPIN_STATE);
+    }
   }
 }
 
