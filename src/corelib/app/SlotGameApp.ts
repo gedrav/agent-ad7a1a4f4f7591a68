@@ -416,6 +416,7 @@ class SlotGameApp {
         this.rafId = requestAnimationFrame(this.animBound);
       }
     }
+    // demo purpose added this can remove once socket connected
     // const timer = setTimeout(()=>{
     //   appModel.storeJackpotData = true;
     //   StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
