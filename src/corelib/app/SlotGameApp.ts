@@ -25,6 +25,7 @@ import { BaseTexture, SCALE_MODES } from '@pixi/core';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
 import { ERROR_CODES } from '@brand/utils/ErrorCodes';
+import { STATES } from '@core/states/StateConstants';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -415,6 +416,10 @@ class SlotGameApp {
         this.rafId = requestAnimationFrame(this.animBound);
       }
     }
+    // const timer = setTimeout(()=>{
+    //   appModel.storeJackpotData = true;
+    //   StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
+    // },5000);
   }
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
