@@ -35,7 +35,7 @@ export class PixView extends PIXI.Container {
       if (appModel.isBundleLoaded(this.configData.requiredBundle)) {
         this.createView();
       } else {
-        console.log('bundle not loaded yet');
+        //console.log('bundle not loaded yet');
       }
     } else {
       if (this.configData.dontCreateView) {
