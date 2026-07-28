@@ -6,7 +6,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
 class ShowJackpotGameStateCommand extends StateCommand {
-  count: number;
+  protected count: number;
   public async execute(data: any = null) {
     super.execute(data);
     this.count = 0;
