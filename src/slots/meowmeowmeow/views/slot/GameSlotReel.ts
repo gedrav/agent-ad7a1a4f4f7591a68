@@ -53,15 +53,18 @@ export class GameSlotReel extends SlotReelStandard {
           maskRect.height = 1400;
         }
         if (tickerComp) tickerComp.y = 1200;
-        if (fsAutoCounterComp) fsAutoCounterComp.y = 1150;
+        if (fsAutoCounterComp) {
+          fsAutoCounterComp.x = 70;
+          fsAutoCounterComp.y = 1150;
+        }
 
         if (bigWinsComp) {
           bigWinsComp.scale.set(0.65);
           bigWinsComp.position.set(718, 518);
           const winTicker = bigWinsComp.elementsList?.['winTicker'];
           if (winTicker) {
-            winTicker.x = 774;
-            winTicker.y = 300;
+            winTicker.x = 772;
+            winTicker.y = 320;
           }
         }
       } else if (size === 5) {
@@ -70,15 +73,18 @@ export class GameSlotReel extends SlotReelStandard {
           maskRect.height = 1750;
         }
         if (tickerComp) tickerComp.y = 1500;
-        if (fsAutoCounterComp) fsAutoCounterComp.y = 1395;
+        if (fsAutoCounterComp) {
+          fsAutoCounterComp.x = 48;
+          fsAutoCounterComp.y = 1395;
+        }
 
         if (bigWinsComp) {
           bigWinsComp.scale.set(0.58);
           bigWinsComp.position.set(772, 660);
           const winTicker = bigWinsComp.elementsList?.['winTicker'];
           if (winTicker) {
-            winTicker.x = 774;
-            winTicker.y = 200;
+            winTicker.x = 762;
+            winTicker.y = 180;
           }
         }
       } else {
@@ -94,8 +100,8 @@ export class GameSlotReel extends SlotReelStandard {
           bigWinsComp.position.set(450, 294);
           const winTicker = bigWinsComp.elementsList?.['winTicker'];
           if (winTicker) {
-            winTicker.x = 774;
-            winTicker.y = 400;
+            winTicker.x = 755;
+            winTicker.y = 480;
           }
         }
       }

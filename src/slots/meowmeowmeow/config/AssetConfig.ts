@@ -35,7 +35,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'transition', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'KittieBank', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Coin', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'AnticipationAnim', ASSETTYPE: 'spine' },
