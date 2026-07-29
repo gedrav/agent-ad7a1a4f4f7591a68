@@ -40,6 +40,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       obj.message2 = Util.parseMessage(Util.getContent('FSRemainingText'), [remainingCount]);
     }
 
+    obj.totalCount = totalCount;
     obj.callbackFunction = this.enterFreespin.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);

@@ -18,11 +18,11 @@ export const BIG_WIN_CONFIG = {
       type: 'Spine',
       spineName: 'BigWin_Anim',
       loop: true,
-      x: 830,
-      y: 696,
-      scale: 1,
+      x: 744,
+      y: 785,
+      scale: 0.8,
     },
-    bigWinTextScales: [0.75, 0.7, 0.7, 0.7],
+    bigWinTextScales: [0.7, 0.7, 0.7, 0.7],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
       SUPER_WIN: 'superWinText',
@@ -33,13 +33,13 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0xffff00, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 830, y: 55 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55 },
     {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 830,
-      y: 630,
+      x: 774,
+      y: 400,
       Elements: [
         {
           name: 'valueText',
@@ -53,8 +53,8 @@ export const BIG_WIN_CONFIG = {
       name: 'winTickerBW',
       type: 'Comp',
       class: WinTicker,
-      x: 830,
-      y: 960,
+      x: 750,
+      y: 1000,
       Elements: [
         {
           name: 'valueText',

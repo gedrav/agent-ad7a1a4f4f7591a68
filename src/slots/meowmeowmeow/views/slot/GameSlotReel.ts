@@ -44,6 +44,9 @@ export class GameSlotReel extends SlotReelStandard {
       const tickerComp = elementsList['tickerComp'];
       const fsAutoCounterComp = elementsList['fsAutoCounterComp'];
 
+      const parentElements = (this.parent as any)?.elementsList;
+      const bigWinsComp = parentElements?.['bigWinsComp'] || elementsList?.['bigWinsComp'];
+
       if (size === 4) {
         if (maskRect) {
           maskRect.y = -170;
@@ -51,6 +54,16 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1200;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1150;
+
+        if (bigWinsComp) {
+          bigWinsComp.scale.set(0.65);
+          bigWinsComp.position.set(718, 518);
+          const winTicker = bigWinsComp.elementsList?.['winTicker'];
+          if (winTicker) {
+            winTicker.x = 774;
+            winTicker.y = 300;
+          }
+        }
       } else if (size === 5) {
         if (maskRect) {
           maskRect.y = -261;
@@ -58,6 +71,16 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1500;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1395;
+
+        if (bigWinsComp) {
+          bigWinsComp.scale.set(0.58);
+          bigWinsComp.position.set(772, 660);
+          const winTicker = bigWinsComp.elementsList?.['winTicker'];
+          if (winTicker) {
+            winTicker.x = 774;
+            winTicker.y = 200;
+          }
+        }
       } else {
         if (maskRect) {
           maskRect.y = 68;
@@ -65,6 +88,16 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1070;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1070;
+
+        if (bigWinsComp) {
+          bigWinsComp.scale.set(1);
+          bigWinsComp.position.set(450, 294);
+          const winTicker = bigWinsComp.elementsList?.['winTicker'];
+          if (winTicker) {
+            winTicker.x = 774;
+            winTicker.y = 400;
+          }
+        }
       }
     }
 
