@@ -81,6 +81,7 @@ export class WinTicker extends StandardView {
       return;
     }
 
+    this.valueText.scale.set(1);
     const progress = (timestamp - this.startTime) / this.duration;
     const clamped = Math.min(progress, 1);
 
@@ -91,6 +92,11 @@ export class WinTicker extends StandardView {
       this.valueText.text = Util.formatCurrency(this.currentValue);
     } else {
       this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
+    }
+    if (this.configData.maxWidth != undefined) {
+      if (this.valueText.width > this.configData.maxWidth) {
+        this.valueText.scale.set(this.configData.maxWidth / this.valueText.width);
+      }
     }
     this.emit('COUNTUP_UPDATE');
 
