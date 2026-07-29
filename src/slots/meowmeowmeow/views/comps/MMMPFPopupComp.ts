@@ -22,9 +22,10 @@ export class MMMPFPopupComp extends PFPopupComp {
     const scale = this.scale.x;
     const yy = this.y;
     const xx = this.x;
-    // this.scale.set(0);
-    this.y += 550;
-    this.x += 200;
+
+    const dropOffset = 550;
+    this.y -= dropOffset;
+    this.x = xx;
 
     const mewSpine = this.elementsList['mew'] as PixSpine;
     if (mewSpine?.configData.idle) {
@@ -32,13 +33,14 @@ export class MMMPFPopupComp extends PFPopupComp {
       const animName = featName === 'RED' ? '3_RED_Ideal' : '2_BLUE_Ideal';
       mewSpine.playAnimation({ state: animName, loop: true });
     }
+
     AnimationProxy.animateTween(this, {
       scaleX: scale,
       scaleY: scale,
       duration: 0.6,
       y: yy,
       x: xx,
-      ease: 'power2.out',
+      ease: 'bounce.out',
     });
   }
 }

@@ -23,6 +23,12 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly kittiebankComp: KittieBankComp;
   private readonly gameTitle: PixSpine;
   private readonly wheelBase: PixSprite;
+  private readonly wheelBaseGreen: PixSprite;
+  private readonly wheelBaseBlue: PixSprite;
+  private readonly wheelBaseRed: PixSprite;
+  private readonly feautreHeadingGreen: PixSprite;
+  private readonly feautreHeadingBlue: PixSprite;
+  private readonly feautreHeadingRed: PixSprite;
   private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
   private readonly wheelTest: PixSprite;
@@ -42,6 +48,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
   constructor(config: any) {
     super(config);
+    this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
@@ -60,6 +67,12 @@ export class GameSlotMachineView extends SlotMachineView {
     this.wheelTest = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
+    this.wheelBaseGreen = this.elementsList['greenBG'];
+    this.wheelBaseBlue = this.elementsList['blueBG'];
+    this.wheelBaseRed = this.elementsList['redBG'];
+    this.feautreHeadingGreen = this.elementsList['GreenMeow'];
+    this.feautreHeadingBlue = this.elementsList['BlueMeow'];
+    this.feautreHeadingRed = this.elementsList['RedMeow'];
     this.wheelDoor.mask = this.doorMask;
 
     // Snapshot the closed x values from config to restore on feature exit
@@ -102,8 +115,7 @@ export class GameSlotMachineView extends SlotMachineView {
   public updateBigWinsCompScale(): void {
     if (!this.bigWinsComp) return;
 
-    const noOfRows =
-      this.slotReel?.reelsData?.noOfRows || Number(appModel.featureResult?.featureData?.interfaceSize) || 3;
+    const noOfRows = Number(appModel.featureResult?.featureData?.interfaceSize) || 3;
 
     if (noOfRows === 4) {
       this.bigWinsComp.scale.set(0.65);
@@ -115,11 +127,6 @@ export class GameSlotMachineView extends SlotMachineView {
       this.bigWinsComp.scale.set(1);
       this.bigWinsComp.position.set(450, 294);
     }
-  }
-
-  public resizeView(): void {
-    super.resizeView();
-    this.updateBigWinsCompScale();
   }
 
   protected showSpinWin(): void {
@@ -316,9 +323,11 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.visible = true;
     }
     this.wheelDoor.visible = false;
+    const featureHeadings = [this.feautreHeadingGreen, this.feautreHeadingBlue, this.feautreHeadingRed];
+    this.removeChild(...featureHeadings);
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
+    this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
-    this.gameTitle.visible = true;
 
     if (this.vaultAnim) {
       this.vaultAnim.playAnimation({
@@ -356,45 +365,60 @@ export class GameSlotMachineView extends SlotMachineView {
       x: this.vaultAnim.x - shiftX,
       onComplete: () => {
         this.vaultAnim.visible = false;
+        this.makeWheelInteractive();
         StateManager.doNextStep();
       },
     });
   }
-  private handlePickFeature(SubfeatureType: string) {
-    console.warn(SubfeatureType);
-    switch (SubfeatureType.toUpperCase()) {
-      case 'RED':
-        //  Handle for red one
-        this.showPickJackpotFeatureScreen();
-        break;
-      case 'BLUE':
-        this.showWheel();
-        break;
-      default:
-        console.error('Invalid SubFeatureType:', SubfeatureType);
-        break;
-    }
-  }
+  // private handlePickFeature(SubfeatureType: string) {
+  //   console.warn(SubfeatureType);
+  //   switch (SubfeatureType.toUpperCase()) {
+  //     case 'RED':
+  //       //  Handle for red one
+  //       this.showPickJackpotFeatureScreen();
+  //       break;
+  //     case 'BLUE':
+  //       this.showWheel();
+  //       break;
+  //     default:
+  //       console.error('Invalid SubFeatureType:', SubfeatureType);
+  //       break;
+  //   }
+  // }
 
   private showPickJackpotFeatureScreen() {
+    this.wheelBaseRed.visible = true;
+    this.feautreHeadingRed.visible = true;
     const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
     pickjackoptFeatureScreen.enter();
   }
 
   private showWheel(): void {
+    this.wheelBaseBlue.visible = true;
+    this.feautreHeadingBlue.visible = true;
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
+  }
+  private makeWheelInteractive(): void {
+    const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.interactive = true;
   }
 
   private hideWheel(): void {
+    this.wheelBaseRed.visible = false;
+    this.wheelBaseBlue.visible = false;
+    this.feautreHeadingBlue.visible = false;
+    this.wheelBaseGreen.visible = false;
+    this.feautreHeadingGreen.visible = false;
+    this.gameTitle.visible = true;
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = false;
     wheelBG.renderable = false;
     wheelBG.interactive = false;
     this.slotReel.visible = true;
     this.resetMachineLayout();
+    this.gameTitle.visible = true;
   }
 
   public showCoinAnimations() {
@@ -606,5 +630,6 @@ export class GameSlotMachineView extends SlotMachineView {
   protected override resizeView(): void {
     super.resizeView();
     this.maskWheelTestToRim();
+    this.updateBigWinsCompScale();
   }
 }

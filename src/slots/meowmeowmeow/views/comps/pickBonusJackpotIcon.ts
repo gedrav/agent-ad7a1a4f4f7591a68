@@ -1,7 +1,6 @@
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
-import { Ticker } from 'pixi.js';
 import gsap from 'gsap';
 
 type IconState = 'closed' | 'opening' | 'open' | 'disabled' | 'won';
@@ -9,9 +8,11 @@ type IconState = 'closed' | 'opening' | 'open' | 'disabled' | 'won';
 export type JackpotTier = 'grand' | 'major' | 'minor' | 'mini';
 
 const ANIM = {
-  IDLE: 'Ideal',
+  IDLE: ['Ideal', 'Ideal2'],
   HOVER: 'Hover_over',
 } as const;
+
+const IDLE_START_DELAY_MAX_MS = 300;
 
 const FLIP_ANIM_BY_TIER: Record<JackpotTier, string> = {
   grand: 'Flip/Red_Flip_Grand',
@@ -20,13 +21,18 @@ const FLIP_ANIM_BY_TIER: Record<JackpotTier, string> = {
   mini: 'Flip/Green_Flip_Mini',
 };
 
+const BACK_STATIC_ANIM_BY_TIER: Record<JackpotTier, string> = {
+  grand: 'Back/Red_Static',
+  major: 'Back/Purple_Static',
+  minor: 'Back/BLue_Static',
+  mini: 'Back/Green_Static',
+};
+
 const WIN_ANIM = {
   SCALE_UP: 1.15,
   SCALE_DURATION: 0.5,
   EASE: 'sine.inOut',
 } as const;
-
-const TEXT_SLOT_NAME = 'Text';
 
 export const PICK_ICON_EVENT = {
   SELECTED: 'pickIconSelected',
@@ -35,10 +41,6 @@ export const PICK_ICON_EVENT = {
 
 export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
   private readonly jackpotSym: PixSpine;
-  // private readonly grand: PixSprite;
-  // private readonly major: PixSprite;
-  // private readonly minor: PixSprite;
-  // private readonly mini: PixSprite;
   private readonly tierSprites: Record<JackpotTier, PixSprite>;
   private state: IconState = 'closed';
   private isHovering: boolean = false;
@@ -46,28 +48,12 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
   private jackpotData: JackpotTier;
   private revealedTier: JackpotTier | null = null;
   private winTween: gsap.core.Tween | null = null;
-  // private slotSprite: PixSprite | null = null;
-  // private readonly syncSlotSprite = (): void => this.updateSlotSpriteTransform();
+  private idleTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(config) {
     super(config);
     this.jackpotSym = this.elementsList['jackpotIcon'];
-    // this.grand = this.elementsList['Grand'];
-    // this.major = this.elementsList['Major'];
-    // this.minor = this.elementsList['Minor'];
-    // this.mini = this.elementsList['Mini'];
-    // this.tierSprites = {
-    //   grand: this.grand,
-    //   major: this.major,
-    //   minor: this.minor,
-    //   mini: this.mini,
-    // };
-
-    // this.grand.visible = false;
-    // this.major.visible = false;
-    // this.minor.visible = false;
-    // this.mini.visible = false;
-
+    this.jackpotSym.setInteractive(true);
     this.setupInteraction();
     this.playIdle();
   }
@@ -106,7 +92,17 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
 
   private playIdle(): void {
     if (this.state !== 'closed' && this.state !== 'disabled') return;
-    this.jackpotSym.playAnimation({ state: ANIM.IDLE, loop: true });
+    if (this.idleTimeout) {
+      clearTimeout(this.idleTimeout);
+      this.idleTimeout = null;
+    }
+    const idleAnim = ANIM.IDLE[Math.floor(Math.random() * ANIM.IDLE.length)];
+    const delay = Math.random() * IDLE_START_DELAY_MAX_MS;
+    this.idleTimeout = setTimeout(() => {
+      this.idleTimeout = null;
+      if (this.state !== 'closed' && this.state !== 'disabled') return;
+      this.jackpotSym.playAnimation({ state: idleAnim, loop: true });
+    }, delay);
   }
 
   private playHover(): void {
@@ -131,10 +127,6 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
 
     this.revealedTier = tier;
 
-    // const sprite = this.tierSprites[tier];
-    // sprite.visible = true;
-    // this.attachSpriteToSlot(TEXT_SLOT_NAME, sprite);
-
     this.jackpotSym.playAnimation({ state: flipAnim, loop: false });
     const listener = this.jackpotSym.addEventListener('complete', () => {
       this.jackpotSym.removeSpineEvent(listener);
@@ -144,13 +136,14 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
 
   private onFlipComplete(tier: JackpotTier): void {
     this.state = 'open';
+    this.jackpotSym.playAnimation({ state: BACK_STATIC_ANIM_BY_TIER[tier], loop: true });
     this.emit(PICK_ICON_EVENT.REVEAL_COMPLETE, this, tier);
   }
 
   private setInteractive(value: boolean): void {
     this.isActive = value;
     if (!value) {
-      this.jackpotSym.playAnimation({ state: ANIM.IDLE, loop: true });
+      this.playIdle();
     }
   }
 
@@ -193,14 +186,6 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
 
   public reset(): void {
     this.killWinAnim();
-
-    // if (this.revealedTier) {
-    //   const sprite = this.tierSprites[this.revealedTier];
-    //   // this.detachSpriteFromSlot(sprite);
-    //   sprite.visible = false;
-    //   this.revealedTier = null;
-    // }
-
     this.state = 'closed';
     this.isActive = true;
     this.isHovering = false;
@@ -210,57 +195,4 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
     this.jackpotSym.stopAnimation();
     this.playIdle();
   }
-
-  private getSpineSkeleton(): any {
-    return (this.jackpotSym as any)?.spineAnim?.skeleton ?? null;
-  }
-
-  // private attachSpriteToSlot(slotName: string, sprite: PixSprite): void {
-  //   const skeleton = this.getSpineSkeleton();
-  //   if (!skeleton) {
-  //     console.warn('attachSpriteToSlot: spine skeleton not available');
-  //     return;
-  //   }
-
-  //   const slot = skeleton.findSlot(slotName);
-  //   if (!slot) {
-  //     console.warn(`attachSpriteToSlot: slot "${slotName}" not found`);
-  //     return;
-  //   }
-
-  //   if (!sprite.parent) {
-  //     this.addChild(sprite as any);
-  //   }
-
-  //   // this.slotSprite = sprite;
-  //   // this.updateSlotSpriteTransform();
-  //   // Ticker.shared.add(this.syncSlotSprite);
-  // }
-
-  // private detachSpriteFromSlot(sprite: PixSprite): void {
-  // if (this.slotSprite === sprite) {
-  //   Ticker.shared.remove(this.syncSlotSprite);
-  //   this.slotSprite = null;
-  // }
-  // if (sprite.parent) {
-  //   sprite.parent.removeChild(sprite as any);
-  // }
-  // }
-
-  // private updateSlotSpriteTransform(): void {
-  //   // if (!this.slotSprite) return;
-
-  //   const skeleton = this.getSpineSkeleton();
-  //   const slot = skeleton?.findSlot(TEXT_SLOT_NAME);
-  //   const bone = slot?.bone;
-  //   if (!bone) return;
-
-  //   this.slotSprite.x = bone.worldX;
-  //   this.slotSprite.y = bone.worldY;
-  //   this.slotSprite.rotation = Math.atan2(bone.c, bone.a);
-  //   this.slotSprite.scale.set(
-  //     Math.sqrt(bone.a * bone.a + bone.c * bone.c),
-  //     Math.sqrt(bone.b * bone.b + bone.d * bone.d),
-  //   );
-  // }
 }

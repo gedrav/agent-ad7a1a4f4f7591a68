@@ -4,15 +4,17 @@ import { PICK_BONUS_JACKPOT_ICON_CONFIG } from '@slots/meowmeowmeow/config/scree
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
+import { Util } from '@core/utils/UtilService';
 
 export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private static readonly COLS = 4;
   private static readonly ROWS = 3;
-  private static readonly H_SPACING = 40;
-  private static readonly V_SPACING = 40;
+  private static readonly H_SPACING = -250;
+  private static readonly V_SPACING = -50;
 
   private readonly icons: PickBonusJackpotIconComp[] = [];
   private readonly pickedIcons: PickBonusJackpotIconComp[] = [];
+  private readonly tapText: any;
   private response: any[] = [];
   private responseIterator: number = 0;
   private responseLength: number = 0;
@@ -20,6 +22,9 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   constructor(config) {
     super(config);
     this.visible = false;
+
+    this.tapText = this.elementsList['tapText'];
+    this.tapText.text = Util.getContent('PickACatText');
 
     this.createIcons();
     this.setupIcons();
