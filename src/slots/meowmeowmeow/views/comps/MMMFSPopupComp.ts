@@ -13,6 +13,20 @@ export class MMMFSPopupComp extends FSPopupComp {
   constructor(config: any) {
     super(config);
     this.congratText = this.elementsList['congratText'];
+
+    if (this.okBtn) {
+      this.okBtn.visible = false;
+    }
+
+    if (this.panelBG) {
+      this.panelBG.interactive = true;
+      this.panelBG.cursor = 'pointer';
+      this.panelBG.on('pointerdown', this.onCloseClicked.bind(this));
+    }
+
+    this.interactive = true;
+    this.cursor = 'pointer';
+    this.on('pointerdown', this.onCloseClicked.bind(this));
   }
 
   protected updateMessagePositions(data: any): void {
@@ -35,11 +49,20 @@ export class MMMFSPopupComp extends FSPopupComp {
         this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
         this.titleText.y = 880;
       }
-      if (freeGamesCountText) freeGamesCountText.visible = true;
+      if (freeGamesCountText) {
+        freeGamesCountText.visible = true;
+        if (data.totalCount !== undefined) {
+          freeGamesCountText.text = String(data.totalCount);
+        }
+      }
       if (freeGamesLabelText) freeGamesLabelText.visible = true;
       if (waysCountText) waysCountText.visible = true;
       if (waysLabelText) waysLabelText.visible = true;
       if (this.messageText1) this.messageText1.visible = false;
+      if (this.messageText2) {
+        this.messageText2.visible = true;
+        this.messageText2.text = 'PRESS ► TO CONTINUE';
+      }
     } else {
       if (this.titleText) {
         this.titleText.visible = false;
@@ -52,6 +75,10 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.messageText1) {
         this.messageText1.visible = true;
         this.messageText1.y = 1020;
+      }
+      if (this.messageText2) {
+        this.messageText2.visible = true;
+        this.messageText2.text = 'PRESS ► TO CONTINUE';
       }
     }
   }

@@ -1,6 +1,3 @@
-import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
-import { UIUtil } from '@core/utils/UIUtilService';
-import { CoreUIConfig } from './CoreUIConfig';
 import { SecondaryWaitingView } from '@brand/views/containers/SecondaryWaitingView';
 
 export const SECONDARY_WAITING_SCREEN_CONFIG = {

@@ -411,7 +411,13 @@ export const SLOT_MACHINE_CONFIG: any = {
                 {
                   name: 'infoText',
                   type: 'Text',
-                  style: { fontFamily: 'gameFont1', fontSize: 25, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
+                  style: {
+                    fontFamily: 'Showcard Gothic',
+                    fontSize: 30,
+                    fill: 0xfdd63b,
+                    wordWrap: true,
+                    wordWrapWidth: 210,
+                  },
                 },
               ],
             },

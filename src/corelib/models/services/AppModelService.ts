@@ -66,6 +66,12 @@ class AppModelService {
     }
     return false;
   }
+  set storeJackpotData(value: any) {
+    this._storeJackpotData = value;
+  }
+  get storeJackpotData() {
+    return this._storeJackpotData;
+  }
   private unfinishedData: any;
   private featureName: string;
   private _featureResult: any;
@@ -91,6 +97,7 @@ class AppModelService {
   public isSymbolExpanded: boolean = false;
   private _nextFeature: string;
   private _nextSubFeature: string = '';
+  private _storeJackpotData: any = null;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;

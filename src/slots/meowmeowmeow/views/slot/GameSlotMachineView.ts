@@ -99,6 +99,37 @@ export class GameSlotMachineView extends SlotMachineView {
     this.startGameLogoAnimation();
   }
 
+  public updateBigWinsCompScale(): void {
+    if (!this.bigWinsComp) return;
+
+    const noOfRows =
+      this.slotReel?.reelsData?.noOfRows || Number(appModel.featureResult?.featureData?.interfaceSize) || 3;
+
+    if (noOfRows === 4) {
+      this.bigWinsComp.scale.set(0.65);
+      this.bigWinsComp.position.set(718, 518);
+    } else if (noOfRows === 5) {
+      this.bigWinsComp.scale.set(0.58);
+      this.bigWinsComp.position.set(772, 660);
+    } else {
+      this.bigWinsComp.scale.set(1);
+      this.bigWinsComp.position.set(450, 294);
+    }
+  }
+
+  public resizeView(): void {
+    super.resizeView();
+    this.updateBigWinsCompScale();
+  }
+
+  protected showSpinWin(): void {
+    this.updateBigWinsCompScale();
+    if (this.bigWinsComp) {
+      this.addChild(this.bigWinsComp);
+    }
+    super.showSpinWin();
+  }
+
   protected startGameLogoAnimation(): void {
     if (this.gameTitle) {
       this.gameTitle.playAnimation({ state: 'idle', loop: false });
