@@ -28,7 +28,7 @@ export class WinValueComp extends StandardView {
         fontFamily: 'bitmapFont',
         fill: 0xffffff,
         fontSize: 150,
-        letterSpacing: -20,
+        letterSpacing: 0,
       },
     };
     this.text = UIUtil.getElement(tConfig);
