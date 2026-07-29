@@ -44,6 +44,39 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     {
+      name: 'blueBG',
+      type: 'Sprite',
+      image: 'blueBG',
+      visible: false,
+      layoutData: {
+        Desktop: { scale: 1.1, x: 420, y: -45 },
+        Portrait: { x: -30, y: 410 },
+        Landscape: { x: 314, y: -120 },
+      },
+    },
+    {
+      name: 'greenBG',
+      type: 'Sprite',
+      image: 'greenBG',
+      visible: false,
+      layoutData: {
+        Desktop: { scale: 1.1, x: 420, y: -45 },
+        Portrait: { x: -30, y: 410 },
+        Landscape: { x: 314, y: -120 },
+      },
+    },
+    {
+      name: 'redBG',
+      type: 'Sprite',
+      image: 'redBG',
+      visible: false,
+      layoutData: {
+        Desktop: { scale: 1.1, x: 420, y: -45 },
+        Portrait: { x: -30, y: 410 },
+        Landscape: { x: 314, y: -120 },
+      },
+    },
+    {
       name: 'wheelDoor',
       type: 'Sprite',
       image: 'wheelDoor',
@@ -468,6 +501,39 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 1, x: 1216, y: 60 },
         Landscape: { scale: 1, x: 1216, y: 60 },
+        Portrait: { scale: 1, x: 832, y: 0 },
+      },
+    },
+    {
+      name: 'RedMeow',
+      type: 'Sprite',
+      image: 'RedMeow',
+      visible: false,
+      layoutData: {
+        Desktop: { scale: 0.5, x: 940, y: -105 },
+        Landscape: { scale: 0.5, x: 940, y: -105 },
+        Portrait: { scale: 1, x: 832, y: 0 },
+      },
+    },
+    {
+      name: 'BlueMeow',
+      type: 'Sprite',
+      image: 'BlueMeow',
+      visible: false,
+      layoutData: {
+        Desktop: { scale: 0.5, x: 940, y: -105 },
+        Landscape: { scale: 0.5, x: 940, y: -105 },
+        Portrait: { scale: 1, x: 832, y: 0 },
+      },
+    },
+    {
+      name: 'GreenMeow',
+      type: 'Sprite',
+      image: 'GreenMeow',
+      visible: false,
+      layoutData: {
+        Desktop: { scale: 0.5, x: 940, y: -105 },
+        Landscape: { scale: 0.5, x: 940, y: -105 },
         Portrait: { scale: 1, x: 832, y: 0 },
       },
     },
