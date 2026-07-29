@@ -82,6 +82,19 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     {
+      name: 'WheelTest',
+      type: 'Sprite',
+      image: 'WheelTest',
+      alpha: 1,
+      scale: 2,
+      visible: true,
+      layoutData: {
+        Desktop: { x: -250, y: 500 },
+        Portrait: { x: -30, y: 410 },
+        Landscape: { x: 314, y: -120 },
+      },
+    },
+    {
       name: 'doorMask',
       type: 'Circle',
       radius: 840,

@@ -59,7 +59,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
   constructor(config: any) {
     super(config);
-
+    this.zIndex = 10;
     this.wheelBG = this.elementsList['Wheel_BG'];
     this.wheelBorder = this.elementsList['Wheel_Border'];
     this.glowEffect = this.elementsList['Wheel_Glow'];
