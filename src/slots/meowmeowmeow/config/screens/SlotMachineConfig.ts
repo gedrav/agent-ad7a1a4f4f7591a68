@@ -36,9 +36,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'wheelBase',
       type: 'Sprite',
       image: 'wheelBase',
-      alpha: 0.5,
+      alpha: 1,
+      scale: 0.9,
       layoutData: {
-        Desktop: { x: 314, y: -120 },
+        Desktop: { x: 430, y: 1 },
         Portrait: { x: -30, y: 410 },
         Landscape: { x: 314, y: -120 },
       },
@@ -502,6 +503,11 @@ export const SLOT_MACHINE_CONFIG: any = {
         Desktop: { scale: 1, x: 1216, y: 60 },
         Landscape: { scale: 1, x: 1216, y: 60 },
         Portrait: { scale: 1, x: 832, y: 0 },
+      },
+      fsLayoutData: {
+        Desktop: { scale: 0.72, x: 1215, y: 190 },
+        Landscape: { scale: 0.72, x: 1215, y: 190 },
+        Portrait: { scale: 0.72, x: 871, y: 716 },
       },
     },
     {

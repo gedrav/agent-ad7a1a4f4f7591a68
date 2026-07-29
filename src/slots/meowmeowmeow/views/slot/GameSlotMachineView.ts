@@ -17,6 +17,7 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
@@ -37,7 +38,6 @@ export class GameSlotMachineView extends SlotMachineView {
   private wheelMask: PixGraphics | null = null;
 
   // Stores the closed position of the door to restore on feature exit
-  private readonly doorClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly kittiebankBaseX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly reelBaseLayoutData: {
@@ -45,6 +45,7 @@ export class GameSlotMachineView extends SlotMachineView {
     Portrait: { x: number; y: number; scale?: number };
     Landscape: { x: number; y: number; scale?: number };
   } | null = null;
+  private readonly gameTitleBaseLayoutData: any = null;
 
   constructor(config: any) {
     super(config);
@@ -62,29 +63,21 @@ export class GameSlotMachineView extends SlotMachineView {
     this.kittiebankComp = this.elementsList['kittiebankComp'];
     this.gameTitle = this.elementsList['gameTitle'];
     this.wheelBase = this.elementsList['wheelBase'];
+    this.wheelBaseGreen = this.elementsList['wheelBaseGreen'];
+    this.wheelBaseBlue = this.elementsList['wheelBaseBlue'];
+    this.wheelBaseRed = this.elementsList['wheelBaseRed'];
+    this.feautreHeadingGreen = this.elementsList['feautreHeadingGreen'];
+    this.feautreHeadingBlue = this.elementsList['feautreHeadingBlue'];
+    this.feautreHeadingRed = this.elementsList['feautreHeadingRed'];
     this.wheelDoor = this.elementsList['wheelDoor'];
     this.wheelRim = this.elementsList['wheelRim'];
     this.wheelTest = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
-    this.wheelBaseGreen = this.elementsList['greenBG'];
-    this.wheelBaseBlue = this.elementsList['blueBG'];
-    this.wheelBaseRed = this.elementsList['redBG'];
-    this.feautreHeadingGreen = this.elementsList['GreenMeow'];
-    this.feautreHeadingBlue = this.elementsList['BlueMeow'];
-    this.feautreHeadingRed = this.elementsList['RedMeow'];
-    this.wheelDoor.mask = this.doorMask;
+    if (this.wheelDoor) this.wheelDoor.mask = this.doorMask;
 
     // Snapshot the closed x values from config to restore on feature exit
-    const ld = this.wheelDoor.configData?.layoutData;
     const vld = this.vaultAnim?.configData?.layoutData;
-    if (ld) {
-      this.doorClosedX = {
-        Desktop: ld.Desktop.x,
-        Portrait: ld.Portrait.x,
-        Landscape: ld.Landscape.x,
-      };
-    }
     if (vld) {
       this.vaultClosedX = {
         Desktop: vld.Desktop.x,
@@ -108,6 +101,7 @@ export class GameSlotMachineView extends SlotMachineView {
         Landscape: { x: rld.Landscape.x, y: rld.Landscape.y, scale: rld.Landscape.scale || 1 },
       };
     }
+    this.gameTitleBaseLayoutData = this.gameTitle?.configData?.layoutData;
 
     this.startGameLogoAnimation();
   }
@@ -180,11 +174,13 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected showGreenTransition(): void {
+    if (this.slotReel && (this.slotReel as any).winController) {
+      clearTimeout((this.slotReel as any).winController.timeoutId);
+    }
     this.slotReel.visible = false;
     this.gameTitle.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
-    this.wheelDoor.alpha = 1;
     this.changeReelInterface();
     this.animateWheelDoor();
   }
@@ -210,18 +206,18 @@ export class GameSlotMachineView extends SlotMachineView {
 
   // reset all layout mutations made during free spins
   private resetMachineLayout(): void {
-    // Restore vPaddingPerc that was set during animateWheelDoor
+    // Stop autoplay after free spins complete — this event fires synchronously
+    // from ExitFreespinsState.exitFreespin() BEFORE StateManager.next(), so
+    // CheckAutoSpinState will see _autoPlaySession=false and go to IDLE.
+    if (appModel.getIsAutoSession()) {
+      appModel.resetAutoplayData();
+      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
+    }
+
     if (this.configData?.layoutData?.Portrait) {
       this.configData.layoutData.Portrait.vPaddingPerc = 0;
     }
 
-    // Restore door to closed position
-    if (this.doorClosedX && this.wheelDoor?.configData?.layoutData) {
-      this.wheelDoor.configData.layoutData.Desktop.x = this.doorClosedX.Desktop;
-      this.wheelDoor.configData.layoutData.Portrait.x = this.doorClosedX.Portrait;
-      this.wheelDoor.configData.layoutData.Landscape.x = this.doorClosedX.Landscape;
-      this.wheelDoor.rotation = 0;
-    }
     if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
@@ -244,12 +240,14 @@ export class GameSlotMachineView extends SlotMachineView {
       kld.Landscape.x = this.kittiebankBaseX.Landscape;
     }
 
-    this.wheelBase.alpha = 0.5;
+    this.wheelBase.alpha = 1;
     this.wheelRim.alpha = 0.5;
-    this.wheelDoor.alpha = 0.5;
     if (this.vaultAnim) this.vaultAnim.visible = false;
+    this.doorMask.visible = false;
 
-    this.gameTitle.scale.set(1);
+    if (this.gameTitleBaseLayoutData && this.gameTitle?.configData) {
+      this.gameTitle.configData.layoutData = this.gameTitleBaseLayoutData;
+    }
     this.jackpotContainer.visible = true;
     this.kittiebankComp.visible = true;
 
@@ -263,7 +261,11 @@ export class GameSlotMachineView extends SlotMachineView {
     }
     this.kittiebankComp.visible = true;
     this.addChild(this.kittiebankComp);
-    this.gameTitle.scale.set(0.72);
+
+    if (this.gameTitle?.configData?.fsLayoutData) {
+      this.gameTitle.configData.layoutData = this.gameTitle.configData.fsLayoutData;
+    }
+    UIUtil.adjustElement(this.gameTitle);
 
     // Shift the kitty banks left so they clear the vault ring during free spins
     const kld = this.kittiebankComp.configData?.layoutData;
@@ -274,14 +276,6 @@ export class GameSlotMachineView extends SlotMachineView {
       kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
       kld.Portrait.y = -45;
       (this.kittiebankComp as any).resizeView();
-    }
-
-    if (DeviceProxy.config.isPortrait) {
-      this.gameTitle.x = 871;
-      this.gameTitle.y = 716;
-    } else {
-      this.gameTitle.x = 1215;
-      this.gameTitle.y = 190;
     }
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
     if (interfaceSize === 4 || interfaceSize === 5) {
@@ -318,15 +312,13 @@ export class GameSlotMachineView extends SlotMachineView {
     }
 
     if (this.vaultAnim) {
+      this.doorMask.visible = true;
       this.vaultAnim.mask = this.doorMask;
       this.vaultAnim.scale.set(0.5);
       this.vaultAnim.visible = true;
     }
     this.wheelDoor.visible = false;
-    const featureHeadings = [this.feautreHeadingGreen, this.feautreHeadingBlue, this.feautreHeadingRed];
-    this.removeChild(...featureHeadings);
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
-    this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
 
     if (this.vaultAnim) {
@@ -336,23 +328,17 @@ export class GameSlotMachineView extends SlotMachineView {
         reset: true,
       });
 
-      this.vaultAnim.addEventListener('complete', () => {
-        this.vaultAnim.removeEventListners();
+      setTimeout(() => {
         this.moveWheelDoor();
-      });
+      }, 1500);
     }
   }
   protected moveWheelDoor(): void {
     if (!this.vaultAnim) return;
 
     // Calculate open position
-    const shiftX = this.wheelDoor.width;
+    const shiftX = 1506;
 
-    if (this.doorClosedX && this.wheelDoor.configData?.layoutData) {
-      this.wheelDoor.configData.layoutData.Desktop.x = this.doorClosedX.Desktop - shiftX;
-      this.wheelDoor.configData.layoutData.Portrait.x = this.doorClosedX.Portrait - shiftX;
-      this.wheelDoor.configData.layoutData.Landscape.x = this.doorClosedX.Landscape - shiftX;
-    }
     if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop - shiftX;
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait - shiftX;
@@ -489,14 +475,12 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const symbolRow = row + 1;
 
-    const isFreeSpins = appModel.getIsFreeSpinsSession();
-
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
     const endGlobalPos = targetBank.getGlobalPosition();
 
-    const startPos = isFreeSpins ? this.toLocal(strtGlobalPos) : kittieBankComp.toLocal(strtGlobalPos);
-    const endPos = isFreeSpins ? this.toLocal(endGlobalPos) : kittieBankComp.toLocal(endGlobalPos);
+    const startPos = kittieBankComp.toLocal(strtGlobalPos);
+    const endPos = kittieBankComp.toLocal(endGlobalPos);
 
     const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
     const movingSymbol = new ReelSymbolSpine({
@@ -525,12 +509,8 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.position.copyFrom(startPos);
     movingSymbol.scale.set(1);
 
-    if (isFreeSpins) {
-      this.addChild(movingSymbol);
-    } else {
-      const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
-      kittieBankComp.addChildAt(movingSymbol, targetIndex);
-    }
+    const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
+    kittieBankComp.addChildAt(movingSymbol, targetIndex);
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
