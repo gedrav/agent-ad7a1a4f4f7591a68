@@ -14,6 +14,7 @@ export const FS_POPUP_CONFIG = {
       image: 'newpopupbg',
       alpha: 1,
     },
+
     {
       name: 'congratText',
       type: 'Text',
@@ -34,7 +35,7 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 982,
+      x: 985,
       y: 150,
     },
     {
@@ -45,12 +46,25 @@ export const FS_POPUP_CONFIG = {
       idle: '1_GREEN_Ideal',
       loop: true,
       scale: 0.5,
-      x: 950,
-      y: 500,
+      x: 968,
+      y: 438,
       px: 1006,
       py: 290,
       lx: 950,
       ly: 500,
+    },
+    {
+      name: 'fspopupcoins',
+      type: 'Sprite',
+      image: 'Coins',
+      alpha: 1,
+      scale: 0.5,
+      x: 371,
+      y: 576,
+      px: 980,
+      py: 715,
+      lx: 980,
+      ly: 715,
     },
     {
       name: 'titleText',
@@ -72,7 +86,7 @@ export const FS_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 1024,
+      x: 992,
       y: 880,
     },
     {
