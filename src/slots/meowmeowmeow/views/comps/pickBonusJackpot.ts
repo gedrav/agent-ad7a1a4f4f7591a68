@@ -8,8 +8,8 @@ import { StateManager } from '@core/states/StateManagerService';
 export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private static readonly COLS = 4;
   private static readonly ROWS = 3;
-  private static readonly H_SPACING = 0;
-  private static readonly V_SPACING = 0;
+  private static readonly H_SPACING = 40;
+  private static readonly V_SPACING = 40;
 
   private readonly icons: PickBonusJackpotIconComp[] = [];
   private readonly pickedIcons: PickBonusJackpotIconComp[] = [];

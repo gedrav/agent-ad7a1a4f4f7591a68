@@ -25,8 +25,10 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly wheelBase: PixSprite;
   private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
+  private readonly wheelTest: PixSprite;
   private readonly doorMask: PixGraphics;
   private readonly vaultAnim: PixSpine;
+  private wheelMask: PixGraphics | null = null;
 
   // Stores the closed position of the door to restore on feature exit
   private readonly doorClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
@@ -41,10 +43,11 @@ export class GameSlotMachineView extends SlotMachineView {
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
+    // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
+    EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showPickFeatureTransition.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
 
@@ -54,6 +57,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.wheelBase = this.elementsList['wheelBase'];
     this.wheelDoor = this.elementsList['wheelDoor'];
     this.wheelRim = this.elementsList['wheelRim'];
+    this.wheelTest = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
     this.wheelDoor.mask = this.doorMask;
@@ -138,6 +142,36 @@ export class GameSlotMachineView extends SlotMachineView {
     }
   }
 
+  private maskWheelTestToRim(): void {
+    if (!this.wheelTest || !this.wheelRim) {
+      console.warn('wheelTest or wheelRim missing, cannot apply mask');
+      return;
+    }
+
+    if (!this.wheelMask) {
+      this.wheelMask = new PixGraphics();
+      this.addChild(this.wheelMask);
+      this.wheelTest.mask = this.wheelMask;
+    }
+
+    const rimBounds = this.wheelRim.getBounds();
+    const rimGlobalCenter = new Point(rimBounds.x + rimBounds.width / 2, rimBounds.y + rimBounds.height / 2);
+    const globalRadius = (Math.min(rimBounds.width, rimBounds.height) / 2) * 0.9;
+
+    // Convert both center and an edge point into `this`'s local space,
+    // so the radius correctly accounts for any ancestor scaling.
+    const rimGlobalEdge = new Point(rimGlobalCenter.x + globalRadius, rimGlobalCenter.y);
+
+    const rimLocalCenter = this.toLocal(rimGlobalCenter);
+    const rimLocalEdge = this.toLocal(rimGlobalEdge);
+    const radius = rimLocalEdge.x - rimLocalCenter.x;
+
+    this.wheelMask.clear();
+    this.wheelMask.beginFill(0xffffff);
+    this.wheelMask.drawCircle(rimLocalCenter.x, rimLocalCenter.y, radius);
+    this.wheelMask.endFill();
+  }
+
   protected showGreenTransition(): void {
     this.slotReel.visible = false;
     this.gameTitle.visible = false;
@@ -147,6 +181,21 @@ export class GameSlotMachineView extends SlotMachineView {
     this.changeReelInterface();
     this.animateWheelDoor();
   }
+
+  protected showPickFeatureTransition(): void {
+    this.slotReel.visible = false;
+    this.gameTitle.visible = false;
+    this.jackpotContainer.visible = false;
+    this.kittiebankComp.visible = false;
+    this.wheelDoor.alpha = 1;
+    if (appModel.getNextSubFeatureType() === 'Blue') {
+      this.showWheel();
+    } else {
+      this.showPickJackpotFeatureScreen();
+    }
+    this.animateWheelDoor();
+  }
+
   private changeReelInterface(): void {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
     EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
@@ -202,7 +251,9 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected animateWheelDoor(): void {
-    this.slotReel.visible = true;
+    if (appModel.getNextSubFeatureType() === 'Green') {
+      this.slotReel.visible = true;
+    }
     this.kittiebankComp.visible = true;
     this.addChild(this.kittiebankComp);
     this.gameTitle.scale.set(0.72);
@@ -342,6 +393,8 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.visible = false;
     wheelBG.renderable = false;
     wheelBG.interactive = false;
+    this.slotReel.visible = true;
+    this.resetMachineLayout();
   }
 
   public showCoinAnimations() {
@@ -548,5 +601,10 @@ export class GameSlotMachineView extends SlotMachineView {
       },
       false,
     );
+  }
+
+  protected override resizeView(): void {
+    super.resizeView();
+    this.maskWheelTestToRim();
   }
 }

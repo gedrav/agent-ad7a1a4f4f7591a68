@@ -5,7 +5,7 @@ export const WHEEL_CONFIG: any = {
   type: 'Comp',
   class: WheelFeatureComp,
   layoutData: {
-    Desktop: { scale: 1, x: 1130, y: 1500 },
+    Desktop: { scale: 1, x: 1208, y: 1511 },
     Portrait: { scale: 1.2, x: 70, y: 100 },
     Landscape: { scale: 1, x: 469, y: 100 },
   },
@@ -63,7 +63,7 @@ export const WHEEL_CONFIG: any = {
       visible: true,
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 100,
+        fontSize: 85,
         fill: 0xffffff,
         align: 'center',
         dropShadow: true,

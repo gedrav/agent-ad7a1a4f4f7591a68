@@ -15,9 +15,13 @@ class ExitPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
-    obj.message1 = Util.parseMessage(Util.getContent('PickFeatureExitText'), [
-      Util.formatCurrency(appModel.getPickFeatureWinnings()),
-    ]);
+    if (appModel.getNextSubFeatureType()) {
+      obj.message1 = Util.parseMessage(Util.getContent('PickFeatureEntryText'), [appModel.getNextSubFeatureType()]);
+    } else {
+      obj.message1 = Util.parseMessage(Util.getContent('PickFeatureExitText'), [
+        Util.formatCurrency(appModel.getPickFeatureWinnings()),
+      ]);
+    }
     obj.entryPopUp = false;
     obj.callbackFunction = this.exitPickFeature.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, obj);

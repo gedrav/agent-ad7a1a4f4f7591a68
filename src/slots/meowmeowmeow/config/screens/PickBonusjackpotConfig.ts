@@ -5,6 +5,7 @@ export const PICK_BONUS_JACKPOT_FEATURE_CONFIG: any = {
   name: 'pickjackpotContainer',
   type: 'Comp',
   class: PickBonusJackpotComp,
-  x: 800,
-  y: 600,
+  layoutData: {
+    Desktop: { scale: 1, x: 770, y: 460 },
+  },
 };
