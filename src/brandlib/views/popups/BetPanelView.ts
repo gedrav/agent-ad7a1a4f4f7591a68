@@ -41,7 +41,7 @@ const btnConfig: any = {
     contentText: '',
     style: {
       fontFamily: 'commonFont',
-      fontSize: 28,
+      fontSize: 26,
       fontWeight: 400,
       nonSelectedStateColor: 0xffffff,
       selectedStateColor: 0xffffff,
