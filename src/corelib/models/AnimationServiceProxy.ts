@@ -17,10 +17,10 @@ class AnimationServiceProxy {
     gsap.registerPlugin(PixiPlugin);
   }
 
-  public fadeIn(element, duration, callback = null) {
+  public fadeIn(element, duration, callback = null, alpha = 1) {
     element.visible = true;
     element.alpha = 0;
-    this.animateTween(element, { duration: duration, alpha: 1, onComplete: callback });
+    this.animateTween(element, { duration: duration, alpha: alpha, onComplete: callback });
   }
   public fadeOut(element, duration, callback = null) {
     this.animateTween(element, { duration: duration, alpha: 0, onComplete: callback });

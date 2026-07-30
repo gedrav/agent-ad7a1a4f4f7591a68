@@ -6,9 +6,22 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 
 class ShowJackpotGameStateCommand extends StateCommand {
+  protected count: number;
   public async execute(data: any = null) {
     super.execute(data);
-    EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_GAME);
+    this.count = 0;
+    EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_INTRO_ANIM);
+  }
+  doNextStep() {
+    this.count++;
+    if (this.count == 1) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_CARD_GAME);
+    } else if (this.count == 2) {
+      EventHandler.dispatchEvent(SlotEvents.JACKPOT_WIN_TICKER_ANIM);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.HIDE_JACKPOT_BG);
+      StateManager.next();
+    }
   }
 }
 

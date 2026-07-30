@@ -40,6 +40,10 @@ export class PixSpine extends StandardView {
     this.uploadToGPU();
   }
 
+  public setInteractive(value: boolean): void {
+    this.spineAnim.eventMode = 'static';
+  }
+
   private async uploadToGPU() {
     this.spineAnim.skeleton.setToSetupPose();
     this.spineAnim.update(0);

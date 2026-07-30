@@ -14,6 +14,9 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
+import { GamePreWinState } from '@game/states/GamePreWinState';
+import { CheckFSStateCT } from '@game/states/CheckFeatureStateCT';
+import { ShowJackpotGameState } from '@core/commands/states/ShowJackpotGameState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
@@ -22,10 +25,14 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
+  { name: STATES.PRE_SPIN_WIN_STATE, state: GamePreWinState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
+  // TODO:uncomment
+  // { name: STATES.CHECK_FS_STATE, state: CheckFSStateCT },
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
+  { name: STATES.SHOW_JACKPOT_GAME_STATE, state: ShowJackpotGameState },
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },

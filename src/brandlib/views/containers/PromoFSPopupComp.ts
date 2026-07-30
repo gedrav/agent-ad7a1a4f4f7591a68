@@ -25,9 +25,9 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.bg = this.elementsList['bg'];
     UIUtil.setModalState(this.bg);
     // CoreLib.UIUtil.addInteraction(this.bg, this.hideBuyBonus.bind(this));
-    this.panelBG = this.elementsList['panelBG'];
+    this.panelBG = this.elementsList['parentContainer'].elementsList['panelBG'];
     this.entryContainer = this.elementsList['parentContainer'].elementsList['entryContainer'];
-    this.entryContainer.visible = false;
+    this.entryContainer.visible = true;
 
     this.valueText1 = this.entryContainer.elementsList['valueText1'];
     this.promoBetValue = this.entryContainer.elementsList['promoBetValue'];
@@ -37,7 +37,7 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     // this.startBtn.enabled = true;
 
     this.exitContainer = this.elementsList['parentContainer'].elementsList['exitContainer'];
-    this.exitContainer.visible = true;
+    this.exitContainer.visible = false;
 
     this.valueText3 = this.exitContainer.elementsList['valueText3'];
     this.valueText3.text = '';
@@ -48,6 +48,10 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.visible = false;
     // EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_ENTRY_POPUP, this.showPromoEntryPopup.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP, this.showPromoExitPopup.bind(this));
+
+    //temporarily calling ,it can remove once BE implemented
+    // this.showPromoEntryPopup();
+    // this.showPromoExitPopup();
   }
   showPromoEntryPopup() {
     this.exitContainer.visible = false;
@@ -55,6 +59,7 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     // const data = appModel.promoSpinInfo;
     // this.valueText1.text = data?.playCount;
     // this.promoBetValue.text = Util.formatCurrency(data?.betAmount);
+    this.panelBG.height = 865;
     this.visible = true;
   }
   showPromoExitPopup() {
@@ -62,6 +67,8 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.entryContainer.visible = false;
     // const data = appModel.promoSpinInfo;
     // this.valueText3.text = Util.formatCurrency(data?.totalWin);
+    this.panelBG.width = 712;
+    this.panelBG.height = 752;
     this.visible = true;
   }
   startBtnClick() {

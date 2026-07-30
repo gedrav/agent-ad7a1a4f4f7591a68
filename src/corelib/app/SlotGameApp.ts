@@ -25,6 +25,7 @@ import { BaseTexture, SCALE_MODES } from '@pixi/core';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { RefreshGameCommand } from '@core/commands/action/RefreshGameCommand';
 import { ERROR_CODES } from '@brand/utils/ErrorCodes';
+import { STATES } from '@core/states/StateConstants';
 
 declare const __SHOW_STATS__: boolean;
 
@@ -254,7 +255,7 @@ class SlotGameApp {
       // the indefinite black-screen state users currently experience.
       window.location.reload();
     };
-    canvas.addEventListener('webglcontextlost', this.boundContextLost as EventListener, false);
+    canvas.addEventListener('webglcontextlost', this.boundContextLost, false);
     canvas.addEventListener('webglcontextrestored', this.boundContextRestored, false);
   }
 
@@ -272,7 +273,7 @@ class SlotGameApp {
     const canvas: HTMLCanvasElement | undefined = this.app?.canvas;
     if (canvas) {
       if (this.boundContextLost) {
-        canvas.removeEventListener('webglcontextlost', this.boundContextLost as EventListener);
+        canvas.removeEventListener('webglcontextlost', this.boundContextLost);
       }
       if (this.boundContextRestored) {
         canvas.removeEventListener('webglcontextrestored', this.boundContextRestored);
@@ -415,6 +416,11 @@ class SlotGameApp {
         this.rafId = requestAnimationFrame(this.animBound);
       }
     }
+    // demo purpose added this can remove once socket connected
+    // const timer = setTimeout(()=>{
+    //   appModel.storeJackpotData = true;
+    //   StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
+    // },5000);
   }
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
