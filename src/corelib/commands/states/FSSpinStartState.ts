@@ -6,6 +6,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { STATES } from '@core/states/StateConstants';
 import { StateManager } from '@core/states/StateManagerService';
 import { Clock } from '@core/utils/Clock';
+import { Util } from '@core/utils/UtilService';
 
 class FSSpinStartStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -15,6 +16,7 @@ class FSSpinStartStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
     EventHandler.dispatchEvent(SlotEvents.START_SPIN);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_COUNT);
+    appModel.spinStartTime = Util.getCurrentTimeInMili();
 
     await MessageProxy.requestBonusData(appModel.getFeatureName());
     EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
