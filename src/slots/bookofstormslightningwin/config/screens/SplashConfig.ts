@@ -5,18 +5,16 @@ import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
 import { SplashButton } from '@brand/views/comps/SplashButton';
 import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfSpinsBtnCommand';
-import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 46 },
-  cs: { fontSize: 42 },
-  lt: { fontSize: 36 },
-  pl: { fontSize: 42 },
-  sk: { fontSize: 42 },
-  ro: { fontSize: 42 },
-  hr: { fontSize: 42 },
-  cnr: { fontSize: 40 },
+  cs: { fontSize: 52 },
+  cnr: { fontSize: 52 },
+  lt: { fontSize: 48 },
+  pl: { fontSize: 48 },
+  sk: { fontSize: 50 },
+  ro: { fontSize: 48 },
+  hr: { fontSize: 48 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -33,7 +31,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 470,
+      textY: 555,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -48,8 +46,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffffff],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 40,
-          mFontSize: 40,
+          fontSize: 50,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -67,7 +65,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 470,
+      textY: 555,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -82,8 +80,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffffff],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 40,
-          mFontSize: 40,
+          fontSize: 50,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -101,7 +99,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 470,
+      textY: 555,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -116,8 +114,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffffff],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 40,
-          mFontSize: 40,
+          fontSize: 50,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
