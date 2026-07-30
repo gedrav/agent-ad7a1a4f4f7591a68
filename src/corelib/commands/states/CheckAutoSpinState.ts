@@ -9,12 +9,13 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 class CheckAutoSpinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
+    const remainingTime = appModel.getSpinRemainingTime();
     if (appModel.getIsAutoSession()) {
       appModel.incrementAutoSpin();
       appModel.setAutoPlayWin(appModel.getTotalBaseWin());
       const status = appModel.getNextAutoPossible();
       if (status === 1 && appModel.getIsSpinStartPossible()) {
-        setTimeout(() => StateManager.goToState('SPIN_START_STATE'), 250);
+        setTimeout(() => StateManager.goToState('SPIN_START_STATE'), Math.max(remainingTime, 250));
       } else {
         appModel.resetAutoplayData();
         EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
