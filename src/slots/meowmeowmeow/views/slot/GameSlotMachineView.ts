@@ -30,7 +30,6 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly feautreHeadingGreen: PixSprite;
   private readonly feautreHeadingBlue: PixSprite;
   private readonly feautreHeadingRed: PixSprite;
-  private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
   private readonly wheelContainer: PixSprite;
   private readonly doorMask: PixGraphics;
@@ -70,12 +69,10 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingBlue = this.elementsList['BlueMeow'];
     this.feautreHeadingGreen = this.elementsList['GreenMeow'];
     this.feautreHeadingRed = this.elementsList['RedMeow'];
-    this.wheelDoor = this.elementsList['wheelDoor'];
     this.wheelRim = this.elementsList['wheelRim'];
     this.wheelContainer = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
-    if (this.wheelDoor) this.wheelDoor.mask = this.doorMask;
 
     // Snapshot the closed x values from config to restore on feature exit
     const vld = this.vaultAnim?.configData?.layoutData;
@@ -189,7 +186,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.gameTitle.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
-    this.wheelDoor.alpha = 1;
     if (appModel.getNextSubFeatureType() === 'Blue') {
       this.showWheel();
     } else {
@@ -205,14 +201,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
   // reset all layout mutations made during free spins
   private resetMachineLayout(): void {
-    // Stop autoplay after free spins complete — this event fires synchronously
-    // from ExitFreespinsState.exitFreespin() BEFORE StateManager.next(), so
-    // CheckAutoSpinState will see _autoPlaySession=false and go to IDLE.
-    if (appModel.getIsAutoSession()) {
-      appModel.resetAutoplayData();
-      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
-    }
-
     if (this.configData?.layoutData?.Portrait) {
       this.configData.layoutData.Portrait.vPaddingPerc = 0;
     }
@@ -260,6 +248,8 @@ export class GameSlotMachineView extends SlotMachineView {
     }
     this.kittiebankComp.visible = true;
     this.addChild(this.kittiebankComp);
+    this.wheelBaseGreen.visible = true;
+    this.feautreHeadingGreen.visible = true;
 
     if (this.gameTitle?.configData?.fsLayoutData) {
       this.gameTitle.configData.layoutData = this.gameTitle.configData.fsLayoutData;
@@ -313,13 +303,12 @@ export class GameSlotMachineView extends SlotMachineView {
     if (this.vaultAnim) {
       this.doorMask.visible = true;
       this.vaultAnim.mask = this.doorMask;
-      this.vaultAnim.scale.set(0.5);
+      this.vaultAnim.scale.set(0.6);
       this.vaultAnim.visible = true;
     }
-    this.wheelDoor.visible = false;
     const featureHeadings = [this.feautreHeadingGreen, this.feautreHeadingBlue, this.feautreHeadingRed];
     this.removeChild(...featureHeadings);
-    this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
+    this.addChild(this.vaultAnim, this.wheelRim);
     this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
 
@@ -330,9 +319,10 @@ export class GameSlotMachineView extends SlotMachineView {
         reset: true,
       });
 
-      setTimeout(() => {
+      this.vaultAnim.addEventListener('complete', () => {
+        this.vaultAnim.removeEventListners();
         this.moveWheelDoor();
-      }, 1500);
+      });
     }
   }
   protected moveWheelDoor(): void {
@@ -347,7 +337,6 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape - shiftX;
     }
 
-    // Move left and open fully
     AnimationProxy.animateTween(this.vaultAnim, {
       duration: 1.2,
       x: this.vaultAnim.x - shiftX,
@@ -471,8 +460,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
     const endGlobalPos = targetBank.getGlobalPosition();
 
-    const startPos = kittieBankComp.toLocal(strtGlobalPos);
-    const endPos = kittieBankComp.toLocal(endGlobalPos);
+    const startPos = this.toLocal(strtGlobalPos);
+    const endPos = this.toLocal(endGlobalPos);
 
     const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
     const movingSymbol = new ReelSymbolSpine({
@@ -501,19 +490,31 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.position.copyFrom(startPos);
     movingSymbol.scale.set(1);
 
-    const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
-    kittieBankComp.addChildAt(movingSymbol, targetIndex);
+    this.addChild(movingSymbol);
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
+    const self = this;
 
     AnimationProxy.animateTween(movingSymbol, {
       duration: 1,
       onUpdate: function () {
         const t = this.progress();
         const bezierPoint = getBezierPoint(t, startPos, c1, c2, endPos);
-        movingSymbol.position.copyFrom(bezierPoint);
+
+        if (t > 0.85 && movingSymbol.parent !== kittieBankComp && kittieBankComp.visible) {
+          const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
+          kittieBankComp.addChildAt(movingSymbol, targetIndex);
+        }
+
+        if (movingSymbol.parent === kittieBankComp) {
+          const localPos = kittieBankComp.toLocal(bezierPoint, self);
+          movingSymbol.position.copyFrom(localPos);
+        } else {
+          movingSymbol.position.copyFrom(bezierPoint);
+        }
+
         movingSymbol.scale.set(lerp(1, 0.5, t));
       },
       onComplete: () => {

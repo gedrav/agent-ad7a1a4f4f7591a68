@@ -78,19 +78,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     {
-      name: 'wheelDoor',
-      type: 'Sprite',
-      image: 'wheelDoor',
-      anchor: { x: 0.5, y: 0.5 },
-      angle: 0.5,
-      alpha: 0.5,
-      layoutData: {
-        Desktop: { x: 1208, y: 760 },
-        Portrait: { x: 864, y: 1290 },
-        Landscape: { x: 1208, y: 760 },
-      },
-    },
-    {
       name: 'vaultAnim',
       type: 'Spine',
       spineName: 'Vault_Anim',
@@ -120,6 +107,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Circle',
       radius: 840,
       color: 0x0000ff,
+      visible: false,
       layoutData: {
         Desktop: { x: 1258, y: 808 },
         Portrait: { x: 914, y: 1338 },
@@ -492,9 +480,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         Portrait: { scale: 1, x: 832, y: 0 },
       },
       fsLayoutData: {
-        Desktop: { scale: 0.72, x: 1215, y: 190 },
-        Landscape: { scale: 0.72, x: 1215, y: 190 },
-        Portrait: { scale: 0.72, x: 871, y: 716 },
+        Desktop: { scale: 0.72, x: 1215, y: 190, visible: true },
+        Landscape: { scale: 0.72, x: 1215, y: 190, visible: true },
+        Portrait: { scale: 0.72, x: 871, y: 716, visible: true },
       },
     },
     {
