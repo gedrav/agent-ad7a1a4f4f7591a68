@@ -7,6 +7,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
 import { STATES } from '@core/states/StateConstants';
+import { Util } from '@core/utils/UtilService';
 
 class SpinStartStateCommand extends StateCommand {
   private readonly timeoutId: any;
@@ -20,6 +21,7 @@ class SpinStartStateCommand extends StateCommand {
     if (appModel.getIsAutoSession()) {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
+    appModel.spinStartTime = Util.getCurrentTimeInMili();
     await MessageProxy.requestSpinResult(false);
     EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
     if (!appModel.isErrorOccurred) {

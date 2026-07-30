@@ -17,8 +17,8 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       y: 48,
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 42,
-        mFontSize: 42,
+        fontSize: 48,
+        fontWeight: 900,
         fill: 0xd4f4bd,
         fontMLProps: fontMLProps,
       },
@@ -31,8 +31,8 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       y: 48,
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 42,
-        mFontSize: 42,
+        fontSize: 48,
+        fontWeight: 900,
         fill: 0xd4f4bd,
         fontMLProps: fontMLProps,
       },
