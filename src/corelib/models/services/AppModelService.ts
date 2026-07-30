@@ -13,6 +13,13 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get spinStartTime(): number {
+    return this._spinStartTime;
+  }
+
+  set spinStartTime(value: number) {
+    this._spinStartTime = value;
+  }
   get gameData(): any {
     return this._gameData;
   }
@@ -72,6 +79,8 @@ class AppModelService {
   get storeJackpotData() {
     return this._storeJackpotData;
   }
+
+  private _spinStartTime: number;
   private unfinishedData: any;
   private featureName: string;
   private _featureResult: any;
@@ -253,7 +262,6 @@ class AppModelService {
     this.fsInfo = {};
     this.rtpInfo = data.rtp;
     this._opConfig = data.opCnf;
-    this.opConfig.isTurboAvailable = true;
 
     this.gameData = data.gameInfo.gameData;
     this.playerInfo = data.playerInfo;
@@ -1022,6 +1030,14 @@ class AppModelService {
     return this.gameResult?.featureResults[this.gameResult?.featureResults.length - 1].currentCount
       ? this.gameResult?.featureResults[this.gameResult?.featureResults.length - 1].spinResults[0].freeSpinMultiplier
       : 0;
+  }
+  public getSpinRemainingTime(): number {
+    if (!this.opConfig?.spinDuration) {
+      return 0;
+    } else {
+      const diff: number = Util.getCurrentTimeInMili() - this.spinStartTime;
+      return this.opConfig.spinDuration - diff;
+    }
   }
 }
 

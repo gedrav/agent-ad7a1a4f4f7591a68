@@ -56,6 +56,7 @@ export const BIG_WIN_CONFIG = {
       class: WinTicker,
       x: 694,
       y: 740,
+      maxWidth: 800,
       Elements: [
         {
           name: 'valueText',

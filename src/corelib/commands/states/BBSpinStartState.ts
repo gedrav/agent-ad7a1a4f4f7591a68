@@ -7,6 +7,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
+import { Util } from '@core/utils/UtilService';
 
 class BBSpinStartStateCommand extends StateCommand {
   private readonly timeoutId: any;
@@ -18,6 +19,7 @@ class BBSpinStartStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER); // reset multiplier to lvl1 on each spin
     EventHandler.dispatchEvent(SlotEvents.START_SPIN);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE_FOR_BB_SPIN);
+    appModel.spinStartTime = Util.getCurrentTimeInMili();
     GameProxy.config.buyBonusFeatureId = GameProxy.config.selectedBB;
     GameProxy.config.buyBonusBetMultiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     await MessageProxy.requestSpinResult(true);
