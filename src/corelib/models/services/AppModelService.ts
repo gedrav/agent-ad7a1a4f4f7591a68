@@ -262,8 +262,6 @@ class AppModelService {
     this.fsInfo = {};
     this.rtpInfo = data.rtp;
     this._opConfig = data.opCnf;
-    this.opConfig.spinDuration = 6000;
-    this.opConfig.isTurboAvailable = true;
 
     this.gameData = data.gameInfo.gameData;
     this.playerInfo = data.playerInfo;
