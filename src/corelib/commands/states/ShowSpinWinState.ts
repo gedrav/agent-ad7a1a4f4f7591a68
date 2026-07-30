@@ -46,14 +46,22 @@ class ShowSpinWinStateCommand extends StateCommand {
     }
   }
   checkToActivateButtons(): void {
-    if (
-      !appModel.getIsFeatureTriggered() &&
-      !appModel.getIsAutoSession() &&
-      !appModel.isTumbleRemaining() &&
-      !appModel.getIsMaxCapReached()
-    ) {
-      EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
+    const remainingTime = appModel.getSpinRemainingTime();
+    if (remainingTime <= 0) {
+      if (
+        !appModel.getIsFeatureTriggered() &&
+        !appModel.getIsAutoSession() &&
+        !appModel.isTumbleRemaining() &&
+        !appModel.getIsMaxCapReached()
+      ) {
+        this.enableGame();
+      }
+    } else {
+      setTimeout(this.enableGame.bind(this), remainingTime);
     }
+  }
+  protected enableGame(): void {
+    EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
   }
   public doNextStep(): void {
     this.completedIndex++;

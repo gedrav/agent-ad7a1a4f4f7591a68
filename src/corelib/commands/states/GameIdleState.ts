@@ -9,6 +9,14 @@ class GameIdleStateCommand extends StateCommand {
   private lineWinCounter: number = 0;
   public async execute(data: any = null) {
     super.execute(data);
+    const remainingTime = appModel.getSpinRemainingTime();
+    if (remainingTime > 0) {
+      setTimeout(this.enableGame.bind(this), remainingTime);
+    } else {
+      this.enableGame();
+    }
+  }
+  public enableGame(): void {
     EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
