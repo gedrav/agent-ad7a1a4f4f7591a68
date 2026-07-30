@@ -67,8 +67,6 @@ export class FSPopupComp extends ResponsiveChildrenView {
     if (this.callbackFunction) {
       this.callbackFunction();
     }
-    if (this.parent) {
-      this.parent.removeChild(this);
-    }
+    this.parent.removeChild(this);
   }
 }
