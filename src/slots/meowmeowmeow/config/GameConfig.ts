@@ -26,7 +26,7 @@ export const GAME_CONFIG = {
   featureTriggerDelay: 2000,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'TitanOne Regular',
+    gameFont1: 'Cambria',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
