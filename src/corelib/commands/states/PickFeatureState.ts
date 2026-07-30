@@ -7,7 +7,7 @@ class PickFeatureStateCommand extends StateCommand {
   public async execute(data?: any): Promise<void> {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
-    EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_UI, appModel.getFeatureSubType());
+    EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_UI, appModel.getNextSubFeatureType());
   }
 }
 export const PickFeatureState = new PickFeatureStateCommand();

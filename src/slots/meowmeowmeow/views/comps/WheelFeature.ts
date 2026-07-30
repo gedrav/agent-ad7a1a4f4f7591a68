@@ -1,5 +1,6 @@
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
@@ -14,7 +15,6 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   private readonly wheelBorder: PixSpine;
   private readonly glowEffect: PixSpine;
   private readonly wheelBordeTop: PixSpine;
-  private readonly dimBG: PixSprite;
   private readonly tapText: any;
 
   private readonly numberOfSectors: number = 10;
@@ -59,17 +59,20 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
   constructor(config: any) {
     super(config);
-
     this.wheelBG = this.elementsList['Wheel_BG'];
+    this.wheelBG.setInteractive(true);
     this.wheelBorder = this.elementsList['Wheel_Border'];
     this.glowEffect = this.elementsList['Wheel_Glow'];
     this.wheelBordeTop = this.elementsList['Wheel_Topper'];
-    this.dimBG = this.elementsList['dimBG'];
     this.tapText = this.elementsList['tapText'];
-
+    EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showText.bind(this));
     this.initView();
     this.bindEvents();
     this.resizeView();
+  }
+
+  private showText() {
+    this.tapText.visible = true;
   }
 
   // ---------- Setup ----------
@@ -230,7 +233,6 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
     this.isSpinning = false;
     this.spinState = 'idle';
-    this.dimBG.visible = false;
     this.tapText.visible = false;
     this.iteration++;
 

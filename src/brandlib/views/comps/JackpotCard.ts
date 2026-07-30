@@ -36,6 +36,7 @@ export class JackpotCard extends StandardView {
   }
   private onAnimationComplete(e) {
     if (e.animation.name === animationState.ROTATION) {
+      this.emit('onCardClick');
       this.playCardAnimation({ state: animationState.STATIC, loop: false });
     }
   }

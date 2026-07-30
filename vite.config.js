@@ -6,15 +6,15 @@ import path from 'node:path';
 
 // Uncomment ONE game to run/build it:
 const defaultGameNames = [
-  //'royale81',
+  // 'royale81',
   //"empireofgold",
   //'empireofgoldnewconquest',
-  //'sweetsalon',
+  // 'sweetsalon',
   //'frostedmarketbonanza',
   //'bookofstorms',
    'meowmeowmeow',
   //'bookofstormslightningwin',
-  //'carpathiantreasures'
+  // 'carpathiantreasures'
 
 ];
 

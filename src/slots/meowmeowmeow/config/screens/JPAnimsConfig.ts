@@ -10,7 +10,7 @@ export const JP_BANNER_ANIM_CONFIG: any = {
   layoutData: {
     Desktop: { scale: 1, x: 469, y: 120 },
     Portrait: { scale: 1.2, x: 70, y: 100 },
-    Landscape: { scale: 1, x: 469, y: 100 },
+    Landscape: { scale: 1, x: 469, y: 120 },
   },
   Elements: [
     {

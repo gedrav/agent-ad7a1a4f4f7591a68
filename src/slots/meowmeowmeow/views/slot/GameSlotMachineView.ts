@@ -17,20 +17,27 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { UIUtil } from '@core/utils/UIUtilService';
 
 export class GameSlotMachineView extends SlotMachineView {
-  private readonly extraSpinTextTimeoutId: any;
   private readonly jackpotContainer: MMMJackpotComp;
   private readonly kittiebankComp: KittieBankComp;
   private readonly gameTitle: PixSpine;
   private readonly wheelBase: PixSprite;
+  private readonly wheelBaseGreen: PixSprite;
+  private readonly wheelBaseBlue: PixSprite;
+  private readonly wheelBaseRed: PixSprite;
+  private readonly feautreHeadingGreen: PixSprite;
+  private readonly feautreHeadingBlue: PixSprite;
+  private readonly feautreHeadingRed: PixSprite;
   private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
+  private readonly wheelContainer: PixSprite;
   private readonly doorMask: PixGraphics;
   private readonly vaultAnim: PixSpine;
+  private wheelMask: PixGraphics | null = null;
 
   // Stores the closed position of the door to restore on feature exit
-  private readonly doorClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly kittiebankBaseX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
   private readonly reelBaseLayoutData: {
@@ -38,14 +45,17 @@ export class GameSlotMachineView extends SlotMachineView {
     Portrait: { x: number; y: number; scale?: number };
     Landscape: { x: number; y: number; scale?: number };
   } | null = null;
+  private readonly gameTitleBaseLayoutData: any = null;
 
   constructor(config: any) {
     super(config);
+    this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
+    // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
+    EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showPickFeatureTransition.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
 
@@ -53,22 +63,21 @@ export class GameSlotMachineView extends SlotMachineView {
     this.kittiebankComp = this.elementsList['kittiebankComp'];
     this.gameTitle = this.elementsList['gameTitle'];
     this.wheelBase = this.elementsList['wheelBase'];
+    this.wheelBaseRed = this.elementsList['redBG'];
+    this.wheelBaseBlue = this.elementsList['blueBG'];
+    this.wheelBaseGreen = this.elementsList['greenBG'];
+    this.feautreHeadingBlue = this.elementsList['BlueMeow'];
+    this.feautreHeadingGreen = this.elementsList['GreenMeow'];
+    this.feautreHeadingRed = this.elementsList['RedMeow'];
     this.wheelDoor = this.elementsList['wheelDoor'];
     this.wheelRim = this.elementsList['wheelRim'];
+    this.wheelContainer = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
-    this.wheelDoor.mask = this.doorMask;
+    if (this.wheelDoor) this.wheelDoor.mask = this.doorMask;
 
     // Snapshot the closed x values from config to restore on feature exit
-    const ld = this.wheelDoor.configData?.layoutData;
     const vld = this.vaultAnim?.configData?.layoutData;
-    if (ld) {
-      this.doorClosedX = {
-        Desktop: ld.Desktop.x,
-        Portrait: ld.Portrait.x,
-        Landscape: ld.Landscape.x,
-      };
-    }
     if (vld) {
       this.vaultClosedX = {
         Desktop: vld.Desktop.x,
@@ -92,8 +101,34 @@ export class GameSlotMachineView extends SlotMachineView {
         Landscape: { x: rld.Landscape.x, y: rld.Landscape.y, scale: rld.Landscape.scale || 1 },
       };
     }
+    this.gameTitleBaseLayoutData = this.gameTitle?.configData?.layoutData;
 
     this.startGameLogoAnimation();
+  }
+
+  public updateBigWinsCompScale(): void {
+    if (!this.bigWinsComp) return;
+
+    const noOfRows = Number(appModel.featureResult?.featureData?.interfaceSize) || 3;
+
+    if (noOfRows === 4) {
+      this.bigWinsComp.scale.set(0.65);
+      this.bigWinsComp.position.set(718, 518);
+    } else if (noOfRows === 5) {
+      this.bigWinsComp.scale.set(0.58);
+      this.bigWinsComp.position.set(772, 660);
+    } else {
+      this.bigWinsComp.scale.set(1);
+      this.bigWinsComp.position.set(450, 294);
+    }
+  }
+
+  protected showSpinWin(): void {
+    this.updateBigWinsCompScale();
+    if (this.bigWinsComp) {
+      this.addChild(this.bigWinsComp);
+    }
+    super.showSpinWin();
   }
 
   protected startGameLogoAnimation(): void {
@@ -108,15 +143,60 @@ export class GameSlotMachineView extends SlotMachineView {
     }
   }
 
+  private maskWheelTestToRim(): void {
+    if (!this.wheelContainer || !this.wheelRim) {
+      console.warn('wheelTest or wheelRim missing, cannot apply mask');
+      return;
+    }
+
+    if (!this.wheelMask) {
+      this.wheelMask = new PixGraphics();
+      this.addChild(this.wheelMask);
+      this.wheelContainer.mask = this.wheelMask;
+    }
+
+    const rimBounds = this.wheelRim.getBounds();
+    const rimGlobalCenter = new Point(rimBounds.x + rimBounds.width / 2, rimBounds.y + rimBounds.height / 2);
+    const globalRadius = (Math.min(rimBounds.width, rimBounds.height) / 2) * 0.9;
+
+    // Convert both center and an edge point into `this`'s local space,
+    // so the radius correctly accounts for any ancestor scaling.
+    const rimGlobalEdge = new Point(rimGlobalCenter.x + globalRadius, rimGlobalCenter.y);
+
+    const rimLocalCenter = this.toLocal(rimGlobalCenter);
+    const rimLocalEdge = this.toLocal(rimGlobalEdge);
+    const radius = rimLocalEdge.x - rimLocalCenter.x;
+
+    this.wheelMask.clear();
+    this.wheelMask.circle(rimLocalCenter.x, rimLocalCenter.y, radius).fill(0xffffff);
+  }
+
   protected showGreenTransition(): void {
+    if (this.slotReel && (this.slotReel as any).winController) {
+      clearTimeout((this.slotReel as any).winController.timeoutId);
+    }
+    this.slotReel.visible = false;
+    this.gameTitle.visible = false;
+    this.jackpotContainer.visible = false;
+    this.kittiebankComp.visible = false;
+    this.changeReelInterface();
+    this.animateWheelDoor();
+  }
+
+  protected showPickFeatureTransition(): void {
     this.slotReel.visible = false;
     this.gameTitle.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
     this.wheelDoor.alpha = 1;
-    this.changeReelInterface();
+    if (appModel.getNextSubFeatureType() === 'Blue') {
+      this.showWheel();
+    } else {
+      this.showPickJackpotFeatureScreen();
+    }
     this.animateWheelDoor();
   }
+
   private changeReelInterface(): void {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
     EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
@@ -124,18 +204,18 @@ export class GameSlotMachineView extends SlotMachineView {
 
   // reset all layout mutations made during free spins
   private resetMachineLayout(): void {
-    // Restore vPaddingPerc that was set during animateWheelDoor
+    // Stop autoplay after free spins complete — this event fires synchronously
+    // from ExitFreespinsState.exitFreespin() BEFORE StateManager.next(), so
+    // CheckAutoSpinState will see _autoPlaySession=false and go to IDLE.
+    if (appModel.getIsAutoSession()) {
+      appModel.resetAutoplayData();
+      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
+    }
+
     if (this.configData?.layoutData?.Portrait) {
       this.configData.layoutData.Portrait.vPaddingPerc = 0;
     }
 
-    // Restore door to closed position
-    if (this.doorClosedX && this.wheelDoor?.configData?.layoutData) {
-      this.wheelDoor.configData.layoutData.Desktop.x = this.doorClosedX.Desktop;
-      this.wheelDoor.configData.layoutData.Portrait.x = this.doorClosedX.Portrait;
-      this.wheelDoor.configData.layoutData.Landscape.x = this.doorClosedX.Landscape;
-      this.wheelDoor.rotation = 0;
-    }
     if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
@@ -158,12 +238,14 @@ export class GameSlotMachineView extends SlotMachineView {
       kld.Landscape.x = this.kittiebankBaseX.Landscape;
     }
 
-    this.wheelBase.alpha = 0.5;
+    this.wheelBase.alpha = 1;
     this.wheelRim.alpha = 0.5;
-    this.wheelDoor.alpha = 0.5;
     if (this.vaultAnim) this.vaultAnim.visible = false;
+    this.doorMask.visible = false;
 
-    this.gameTitle.scale.set(1);
+    if (this.gameTitleBaseLayoutData && this.gameTitle?.configData) {
+      this.gameTitle.configData.layoutData = this.gameTitleBaseLayoutData;
+    }
     this.jackpotContainer.visible = true;
     this.kittiebankComp.visible = true;
 
@@ -172,27 +254,26 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected animateWheelDoor(): void {
-    this.slotReel.visible = true;
+    if (appModel.getNextSubFeatureType() === 'Green') {
+      this.slotReel.visible = true;
+    }
     this.kittiebankComp.visible = true;
     this.addChild(this.kittiebankComp);
-    this.gameTitle.scale.set(0.72);
+
+    if (this.gameTitle?.configData?.fsLayoutData) {
+      this.gameTitle.configData.layoutData = this.gameTitle.configData.fsLayoutData;
+    }
+    UIUtil.adjustElement(this.gameTitle);
 
     // Shift the kitty banks left so they clear the vault ring during free spins
     const kld = this.kittiebankComp.configData?.layoutData;
     if (this.kittiebankBaseX && kld) {
       const shift = 60;
       kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
-      kld.Portrait.x = this.kittiebankBaseX.Portrait - shift;
+      kld.Portrait.x = 230;
       kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
+      kld.Portrait.y = -45;
       (this.kittiebankComp as any).resizeView();
-    }
-
-    if (DeviceProxy.config.isPortrait) {
-      this.gameTitle.x = 871;
-      this.gameTitle.y = 716;
-    } else {
-      this.gameTitle.x = 1215;
-      this.gameTitle.y = 190;
     }
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
     if (interfaceSize === 4 || interfaceSize === 5) {
@@ -225,18 +306,21 @@ export class GameSlotMachineView extends SlotMachineView {
         reelLd.Landscape.y = 457;
         reelLd.Landscape.scale = 0.58;
       }
-      this.slotReel.resizeView();
+      (this.slotReel as any).resizeView();
     }
 
     if (this.vaultAnim) {
+      this.doorMask.visible = true;
       this.vaultAnim.mask = this.doorMask;
       this.vaultAnim.scale.set(0.5);
       this.vaultAnim.visible = true;
     }
     this.wheelDoor.visible = false;
+    const featureHeadings = [this.feautreHeadingGreen, this.feautreHeadingBlue, this.feautreHeadingRed];
+    this.removeChild(...featureHeadings);
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
-    this.wheelRim.alpha = 0.8;
-    this.gameTitle.visible = true;
+    this.addChild(...featureHeadings);
+    this.wheelRim.alpha = 1;
 
     if (this.vaultAnim) {
       this.vaultAnim.playAnimation({
@@ -245,23 +329,17 @@ export class GameSlotMachineView extends SlotMachineView {
         reset: true,
       });
 
-      this.vaultAnim.addEventListener('complete', () => {
-        this.vaultAnim.removeEventListners();
+      setTimeout(() => {
         this.moveWheelDoor();
-      });
+      }, 1500);
     }
   }
   protected moveWheelDoor(): void {
     if (!this.vaultAnim) return;
 
     // Calculate open position
-    const shiftX = this.wheelDoor.width;
+    const shiftX = 1506;
 
-    if (this.doorClosedX && this.wheelDoor.configData?.layoutData) {
-      this.wheelDoor.configData.layoutData.Desktop.x = this.doorClosedX.Desktop - shiftX;
-      this.wheelDoor.configData.layoutData.Portrait.x = this.doorClosedX.Portrait - shiftX;
-      this.wheelDoor.configData.layoutData.Landscape.x = this.doorClosedX.Landscape - shiftX;
-    }
     if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop - shiftX;
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait - shiftX;
@@ -274,43 +352,62 @@ export class GameSlotMachineView extends SlotMachineView {
       x: this.vaultAnim.x - shiftX,
       onComplete: () => {
         this.vaultAnim.visible = false;
+        this.makeWheelInteractive();
         StateManager.doNextStep();
       },
     });
   }
-  private handlePickFeature(SubfeatureType: string) {
-    console.warn(SubfeatureType);
-    switch (SubfeatureType.toUpperCase()) {
-      case 'RED':
-        //  Handle for red one
-        this.showPickJackpotFeatureScreen();
-        break;
-      case 'BLUE':
-        this.showWheel();
-        break;
-      default:
-        console.error('Invalid SubFeatureType:', SubfeatureType);
-        break;
-    }
-  }
+  // private handlePickFeature(SubfeatureType: string) {
+  //   console.warn(SubfeatureType);
+  //   switch (SubfeatureType.toUpperCase()) {
+  //     case 'RED':
+  //       //  Handle for red one
+  //       this.showPickJackpotFeatureScreen();
+  //       break;
+  //     case 'BLUE':
+  //       this.showWheel();
+  //       break;
+  //     default:
+  //       console.error('Invalid SubFeatureType:', SubfeatureType);
+  //       break;
+  //   }
+  // }
 
   private showPickJackpotFeatureScreen() {
+    this.wheelBaseRed.visible = true;
+    this.feautreHeadingRed.visible = true;
     const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
     pickjackoptFeatureScreen.enter();
   }
 
   private showWheel(): void {
+    this.wheelBaseBlue.visible = true;
+    this.feautreHeadingBlue.visible = true;
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
+  }
+  private makeWheelInteractive(): void {
+    const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.interactive = true;
   }
 
   private hideWheel(): void {
+    this.wheelBaseRed.visible = false;
+    this.wheelBaseBlue.visible = false;
+    this.feautreHeadingBlue.visible = false;
+    this.feautreHeadingGreen.visible = false;
+    this.feautreHeadingRed.visible = false;
+    this.wheelBaseGreen.visible = false;
+    this.feautreHeadingGreen.visible = false;
+    this.gameTitle.visible = true;
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = false;
     wheelBG.renderable = false;
     wheelBG.interactive = false;
+    this.slotReel.visible = true;
+    this.resetMachineLayout();
+    this.gameTitle.visible = true;
   }
 
   public showCoinAnimations() {
@@ -382,12 +479,10 @@ export class GameSlotMachineView extends SlotMachineView {
     const symbolRow = row + 1;
 
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
-    const startPos = kittieBankComp.toLocal(strtGlobalPos);
-
-    // Target the spine directly instead of the outer Comp
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-
     const endGlobalPos = targetBank.getGlobalPosition();
+
+    const startPos = kittieBankComp.toLocal(strtGlobalPos);
     const endPos = kittieBankComp.toLocal(endGlobalPos);
 
     const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
@@ -417,7 +512,6 @@ export class GameSlotMachineView extends SlotMachineView {
     movingSymbol.position.copyFrom(startPos);
     movingSymbol.scale.set(1);
 
-    // Dynamically find exactly where the target bank is, and add the coin just below it!
     const targetIndex = kittieBankComp.getChildIndex(targetBankComp);
     kittieBankComp.addChildAt(movingSymbol, targetIndex);
 
@@ -467,23 +561,18 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private onShowExtraSpinAnim(): void {
-    const extraSpinText: any = this.slotReel?.elementsList?.['extraSpinText'];
     const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
 
-    if (!extraSpinText || !extraSpinTextCenter) {
-      console.warn('Missing extraSpinText elements');
+    if (!extraSpinTextCenter) {
+      console.warn('Missing extraSpinTextCenter element');
       StateManager.goToState(STATES.FS_SPIN_START_STATE);
       return;
     }
 
     const text = Util.getContent('ExtraSpinText');
-    extraSpinText.text = text;
     extraSpinTextCenter.text = text;
 
-    AnimationProxy.killTweensOf(extraSpinText);
     AnimationProxy.killTweensOf(extraSpinTextCenter);
-
-    EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_VISIBLE);
 
     const ENTER_DURATION = 0.5;
     const HOLD_DURATION = 1.0;
@@ -499,7 +588,6 @@ export class GameSlotMachineView extends SlotMachineView {
     extraSpinTextCenter.scale.set(1);
     extraSpinTextCenter.y = naturalY + OFFSET_Y; // start at reel bottom
     extraSpinTextCenter.alpha = 0;
-    extraSpinText.alpha = 0;
 
     // ENTER: slide up from bottom to center + fade in
     AnimationProxy.animateTween(extraSpinTextCenter, {
@@ -507,12 +595,6 @@ export class GameSlotMachineView extends SlotMachineView {
       y: naturalY,
       alpha: 1,
       ease: 'power2.out',
-    });
-
-    // Fade in the bottom ticker as text arrives
-    AnimationProxy.animateTween(extraSpinText, {
-      duration: 0.3,
-      alpha: 1,
     });
 
     AnimationProxy.animateTween(
@@ -523,22 +605,14 @@ export class GameSlotMachineView extends SlotMachineView {
         alpha: 0,
         ease: 'power2.in',
         delay: ENTER_DURATION + HOLD_DURATION,
-        onComplete: () => {
-          EventHandler.dispatchEvent(SlotEvents.REEL_WIN_TICKER_HIDDEN);
-        },
       },
       false,
     );
+  }
 
-    // Fade out the bottom ticker in sync with the exit
-    AnimationProxy.animateTween(
-      extraSpinText,
-      {
-        duration: EXIT_DURATION,
-        alpha: 0,
-        delay: ENTER_DURATION + HOLD_DURATION,
-      },
-      false,
-    );
+  protected override resizeView(): void {
+    super.resizeView();
+    this.maskWheelTestToRim();
+    this.updateBigWinsCompScale();
   }
 }

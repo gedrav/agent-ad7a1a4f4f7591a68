@@ -31,8 +31,15 @@ const SPLASH: AssetBundle = {
 const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
+    // jackpot assets start
     { TYPE: 'common', NAME: 'jakpots', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'cards', ASSETTYPE: 'spine' },
+    { TYPE: 'common', NAME: 'jp_jackpots', ASSETTYPE: 'spine' },
+    { TYPE: 'common', NAME: 'jp_wins', ASSETTYPE: 'spine' },
+    { TYPE: 'common', NAME: 'jackpotBG', ASSETTYPE: 'sequence', file: [1, 1] },
+    { TYPE: 'common', NAME: 'bitmapFontJP.fnt', ASSETTYPE: 'bmpfont' },
+    // jackpot assets end
+
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
@@ -42,7 +49,6 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'anticipation', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {

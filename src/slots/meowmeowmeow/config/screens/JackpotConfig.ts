@@ -7,6 +7,7 @@ export const JACKPOT_CONFIG: any = {
   class: MMMJackpotComp,
   x: 382,
   y: 120,
+  px: 214,
   Elements: [
     {
       name: 'grand',
