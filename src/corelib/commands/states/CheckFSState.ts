@@ -26,7 +26,7 @@ class CheckFSStateCommand extends StateCommand {
         }
         EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
       } else {
-        await Clock.wait(appModel.getSpinRemainingTime());
+        await Clock.wait(Math.max(appModel.getSpinRemainingTime(), 500));
         this.exitState();
       }
     } else {

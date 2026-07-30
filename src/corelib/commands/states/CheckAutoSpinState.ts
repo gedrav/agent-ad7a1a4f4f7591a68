@@ -3,6 +3,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
+import { Util } from '@core/utils/UtilService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 class CheckAutoSpinStateCommand extends StateCommand {
@@ -14,7 +15,7 @@ class CheckAutoSpinStateCommand extends StateCommand {
       appModel.setAutoPlayWin(appModel.getTotalBaseWin());
       const status = appModel.getNextAutoPossible();
       if (status === 1 && appModel.getIsSpinStartPossible()) {
-        setTimeout(() => StateManager.goToState('SPIN_START_STATE'), remainingTime);
+        setTimeout(() => StateManager.goToState('SPIN_START_STATE'), Math.max(remainingTime, 250));
       } else {
         appModel.resetAutoplayData();
         EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
