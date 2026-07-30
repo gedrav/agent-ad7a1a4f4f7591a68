@@ -110,20 +110,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       alpha: 0.5,
       visible: true,
       layoutData: {
-        Desktop: { x: 314, y: -120 },
-        Portrait: { x: -30, y: 410 },
-        Landscape: { x: 314, y: -120 },
-      },
-    },
-    {
-      name: 'WheelTest',
-      type: 'Sprite',
-      image: 'WheelTest',
-      alpha: 1,
-      scale: 2,
-      visible: true,
-      layoutData: {
-        Desktop: { x: -250, y: 500 },
+        Desktop: { x: 310, y: -130 },
         Portrait: { x: -30, y: 410 },
         Landscape: { x: 314, y: -120 },
       },

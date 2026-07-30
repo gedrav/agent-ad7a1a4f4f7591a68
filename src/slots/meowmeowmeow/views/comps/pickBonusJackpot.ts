@@ -101,6 +101,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private resetFeature(): void {
     this.response = [];
     this.responseIterator = 0;
+    this.pickedIcons.length = 0;
     this.visible = false;
     this.icons.forEach((icon) => icon.reset());
   }

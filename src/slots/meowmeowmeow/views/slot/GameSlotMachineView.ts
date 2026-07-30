@@ -32,7 +32,7 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly feautreHeadingRed: PixSprite;
   private readonly wheelDoor: PixSprite;
   private readonly wheelRim: PixSprite;
-  private readonly wheelTest: PixSprite;
+  private readonly wheelContainer: PixSprite;
   private readonly doorMask: PixGraphics;
   private readonly vaultAnim: PixSpine;
   private wheelMask: PixGraphics | null = null;
@@ -63,15 +63,15 @@ export class GameSlotMachineView extends SlotMachineView {
     this.kittiebankComp = this.elementsList['kittiebankComp'];
     this.gameTitle = this.elementsList['gameTitle'];
     this.wheelBase = this.elementsList['wheelBase'];
-    this.wheelBaseGreen = this.elementsList['wheelBaseGreen'];
-    this.wheelBaseBlue = this.elementsList['wheelBaseBlue'];
-    this.wheelBaseRed = this.elementsList['wheelBaseRed'];
-    this.feautreHeadingGreen = this.elementsList['feautreHeadingGreen'];
-    this.feautreHeadingBlue = this.elementsList['feautreHeadingBlue'];
-    this.feautreHeadingRed = this.elementsList['feautreHeadingRed'];
+    this.wheelBaseRed = this.elementsList['redBG'];
+    this.wheelBaseBlue = this.elementsList['blueBG'];
+    this.wheelBaseGreen = this.elementsList['greenBG'];
+    this.feautreHeadingBlue = this.elementsList['BlueMeow'];
+    this.feautreHeadingGreen = this.elementsList['GreenMeow'];
+    this.feautreHeadingRed = this.elementsList['RedMeow'];
     this.wheelDoor = this.elementsList['wheelDoor'];
     this.wheelRim = this.elementsList['wheelRim'];
-    this.wheelTest = this.elementsList['wheelContainer'];
+    this.wheelContainer = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
     if (this.wheelDoor) this.wheelDoor.mask = this.doorMask;
@@ -144,7 +144,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private maskWheelTestToRim(): void {
-    if (!this.wheelTest || !this.wheelRim) {
+    if (!this.wheelContainer || !this.wheelRim) {
       console.warn('wheelTest or wheelRim missing, cannot apply mask');
       return;
     }
@@ -152,7 +152,7 @@ export class GameSlotMachineView extends SlotMachineView {
     if (!this.wheelMask) {
       this.wheelMask = new PixGraphics();
       this.addChild(this.wheelMask);
-      this.wheelTest.mask = this.wheelMask;
+      this.wheelContainer.mask = this.wheelMask;
     }
 
     const rimBounds = this.wheelRim.getBounds();
@@ -168,9 +168,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const radius = rimLocalEdge.x - rimLocalCenter.x;
 
     this.wheelMask.clear();
-    this.wheelMask.beginFill(0xffffff);
-    this.wheelMask.drawCircle(rimLocalCenter.x, rimLocalCenter.y, radius);
-    this.wheelMask.endFill();
+    this.wheelMask.circle(rimLocalCenter.x, rimLocalCenter.y, radius).fill(0xffffff);
   }
 
   protected showGreenTransition(): void {
@@ -318,7 +316,10 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.visible = true;
     }
     this.wheelDoor.visible = false;
+    const featureHeadings = [this.feautreHeadingGreen, this.feautreHeadingBlue, this.feautreHeadingRed];
+    this.removeChild(...featureHeadings);
     this.addChild(this.wheelDoor, this.vaultAnim, this.wheelRim);
+    this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
 
     if (this.vaultAnim) {
@@ -395,6 +396,8 @@ export class GameSlotMachineView extends SlotMachineView {
     this.wheelBaseRed.visible = false;
     this.wheelBaseBlue.visible = false;
     this.feautreHeadingBlue.visible = false;
+    this.feautreHeadingGreen.visible = false;
+    this.feautreHeadingRed.visible = false;
     this.wheelBaseGreen.visible = false;
     this.feautreHeadingGreen.visible = false;
     this.gameTitle.visible = true;
