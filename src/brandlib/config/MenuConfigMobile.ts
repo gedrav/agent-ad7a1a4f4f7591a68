@@ -187,7 +187,7 @@ export const MENU_CONFIG_MOBILE: any = {
       textConfig: {
         name: 'homeText',
         type: 'Text',
-        content: 'soundOnText',
+        content: 'soundOffText',
         style: {
           fontFamily: 'commonFont',
           fontSize: 32,

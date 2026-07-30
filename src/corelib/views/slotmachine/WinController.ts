@@ -107,7 +107,6 @@ export default class WinController {
               winAmountText.y = sym.y + this.reelsData.symbolHeight / 2 - winAmountText.height / 2;
               winAmountText.scale.set(1);
               if (maxWid && winAmountText.width > maxWid) {
-                // const sc = maxWid / winAmountText.width;
                 const sc = Math.max(maxWid / winAmountText.width, 0.5);
                 winAmountText.scale.set(sc);
               }
