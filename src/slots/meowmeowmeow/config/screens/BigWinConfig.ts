@@ -1,11 +1,12 @@
 import { WinTicker } from '@core/views/comps/WinTicker';
-import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
+import { MMMBigWinsComp } from '@slots/meowmeowmeow/views/comps/MMMBigWinsComp';
 
 export const BIG_WIN_CONFIG = {
   name: 'bigWinsComp',
   type: 'Comp',
-  class: BigWinsComp,
+  class: MMMBigWinsComp,
   data: {
+    backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: '1_big_Win', idle: '1_big_Win_Loop' },
       SUPER_WIN: { start: '2_Super_Win', idle: '2_Super_Win_Loop' },
@@ -31,9 +32,40 @@ export const BIG_WIN_CONFIG = {
     },
   },
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0xffff00, x: 0, y: 0, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
     { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55 },
+    {
+      name: 'featureWinText',
+      type: 'Text',
+      content: 'FeatureWinCongratsText',
+      visible: false,
+      style: {
+        fontFamily: 'Showcard Gothic',
+        fontSize: 90,
+        fontWeight: '900',
+        letterSpacing: 8,
+        fill: ['0xFFE3E3', '0xFF5252', '0xE00000', '0x8E0000'],
+        fillGradientStops: [0, 0.35, 0.7, 1],
+        stroke: {
+          fill: ['0xFFE9A8', '0xFFC53D', '0xFFF07A', '0xE9A400'],
+          width: 10,
+          join: 'round',
+        },
+        strokeGradientStops: [0, 0.35, 0.75, 1],
+        dropShadow: {
+          color: 0x000000,
+          alpha: 0.8,
+          blur: 2,
+          distance: 6,
+          angle: Math.PI / 2,
+        },
+        align: 'center',
+      },
+      anchor: { x: 0.5, y: 0.5 },
+      x: 757,
+      y: 55,
+    },
     {
       name: 'winTicker',
       type: 'Comp',

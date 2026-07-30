@@ -59,6 +59,19 @@ export const PF_POPUP_CONFIG = {
       ly: 500,
     },
     {
+      name: 'fspopupcoins',
+      type: 'Sprite',
+      image: 'Coins',
+      alpha: 1,
+      scale: 0.5,
+      x: 371,
+      y: 576,
+      px: 980,
+      py: 715,
+      lx: 980,
+      ly: 715,
+    },
+    {
       name: 'titleText',
       type: 'Text',
       content: 'FeatureAwardedTitle',
@@ -85,7 +98,7 @@ export const PF_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 1024,
+      x: 990,
       y: 880,
     },
     {
@@ -103,7 +116,7 @@ export const PF_POPUP_CONFIG = {
         dropShadowDistance: 4,
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 1030,
+      x: 990,
       y: 1040,
     },
     {
