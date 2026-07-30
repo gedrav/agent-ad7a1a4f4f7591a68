@@ -51,12 +51,6 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
   protected async enterFreespin() {
-    // Stop autoplay when feature is triggered — free spins should not auto-spin
-    if (appModel.getIsAutoSession()) {
-      appModel.resetAutoplayData();
-      EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_UI_STOP);
-    }
-
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_START);
