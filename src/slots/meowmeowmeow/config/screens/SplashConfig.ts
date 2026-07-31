@@ -33,6 +33,7 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
+          fontWeight: 900,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -64,6 +65,7 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
+          fontWeight: 900,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -95,6 +97,7 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
+          fontWeight: 900,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -180,7 +183,7 @@ export const SPLASH_CONFIG: any = {
       },
       layoutData: {
         Desktop: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.005, vPaddingPerc: 0.01, scale: 0.6 },
-        Landscape: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.005, vPaddingPerc: 0.01, scale: 0.6 },
+        Landscape: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.03, vPaddingPerc: 0.01, scale: 0.6 },
         Portrait: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.02, vPaddingPerc: 0.01, scale: 0.5 },
       },
     },
@@ -216,6 +219,7 @@ export const SPLASH_CONFIG: any = {
             content: 'playGameText',
             style: {
               fontFamily: 'gameFont1',
+              fontWeight: 900,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,

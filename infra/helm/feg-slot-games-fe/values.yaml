@@ -1,0 +1,33 @@
+packName: feg-slot-games-fe
+
+replicaCount: 1
+
+image:
+  repository: registry.svc.ifortuna.cz/gaming-studio/feg-slot-games-fe
+  tag: ""
+  pullPolicy: Always
+
+service:
+  port: 8080
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+probes:
+  readiness:
+    path: /
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  liveness:
+    path: /
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    timeoutSeconds: 3
+    failureThreshold: 3
