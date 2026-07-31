@@ -79,7 +79,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.messageText1) this.messageText1.visible = false;
       if (this.messageText2) {
         this.messageText2.visible = true;
-        this.messageText2.text = 'PRESS ► TO CONTINUE';
+        this.messageText2.text = Util.getContent('pressToContinue');
       }
     } else {
       if (this.titleText) {
@@ -96,7 +96,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       }
       if (this.messageText2) {
         this.messageText2.visible = true;
-        this.messageText2.text = 'PRESS ► TO CONTINUE';
+        this.messageText2.text = Util.getContent('pressToContinue');
       }
     }
   }
@@ -163,5 +163,14 @@ export class MMMFSPopupComp extends FSPopupComp {
       x: xx,
       ease: 'power2.out',
     });
+  }
+
+  protected async onCloseClicked() {
+    if (this._isClicked) return;
+    this._isClicked = true;
+
+    if (this.parent) {
+      super.onCloseClicked();
+    }
   }
 }
