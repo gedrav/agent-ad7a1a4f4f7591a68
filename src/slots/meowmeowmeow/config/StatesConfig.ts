@@ -43,7 +43,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: GreenEnterTransitionState },
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
-  { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: GreenExitTransitionState },
+  // { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: GreenExitTransitionState },
   { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 

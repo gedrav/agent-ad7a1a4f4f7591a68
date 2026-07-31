@@ -170,9 +170,16 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
+  private getInterfaceSize(): number {
+    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
+    if (!isNaN(interfaceSize) && interfaceSize !== 0) {
+      return interfaceSize;
+    }
+    return appModel.getNextSubFeatureType() === 'Green' ? 5 : 4;
+  }
+
   private changeReelInterface(): void {
-    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
-    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
+    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', this.getInterfaceSize());
   }
 
   protected animateWheelDoor(onDoorOpened?: () => void): void {
@@ -194,7 +201,7 @@ export class GameSlotMachineView extends SlotMachineView {
     UIUtil.adjustElement(this.gameTitle);
     (this.kittiebankComp as any).resizeView();
 
-    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
+    const interfaceSize = this.getInterfaceSize();
     if (interfaceSize === 4 || interfaceSize === 5) {
       this.resizeView();
     }
@@ -396,6 +403,28 @@ export class GameSlotMachineView extends SlotMachineView {
     }
   }
 
+  private holdGreyedOutSymbol(targetSymbol: any): void {
+    if (typeof targetSymbol.resetSymbol !== 'function' || typeof targetSymbol.setNewSymbol !== 'function') {
+      return;
+    }
+
+    const originalResetSymbol = targetSymbol.resetSymbol.bind(targetSymbol);
+    const originalSetNewSymbol = targetSymbol.setNewSymbol.bind(targetSymbol);
+
+    // Block the reel's automatic reset so the symbol keeps scrolling in grey.
+    targetSymbol.resetSymbol = () => {};
+
+    // Once the reel actually recycles this symbol with a new result, let it land fresh.
+    targetSymbol.setNewSymbol = (data: any, reelno: number) => {
+      targetSymbol.resetSymbol = originalResetSymbol;
+      targetSymbol.setNewSymbol = originalSetNewSymbol;
+      originalSetNewSymbol(data, reelno);
+      if (targetSymbol.symbol) {
+        targetSymbol.symbol.alpha = 1;
+      }
+    };
+  }
+
   public animateSymbolToKittyBank(col: number, row: number, bankName: 'meow' | 'mew' | 'mii', symbolName: string) {
     const kittieBankComp = this.elementsList['kittiebankComp'];
     if (!kittieBankComp) {
@@ -437,6 +466,7 @@ export class GameSlotMachineView extends SlotMachineView {
       if (targetSymbol.symbol) {
         targetSymbol.symbol.texture = Texture.from(symbolName + '_grey');
         targetSymbol.symbol.alpha = 0.2;
+        this.holdGreyedOutSymbol(targetSymbol);
       }
     }
 
@@ -506,7 +536,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   public updateAllConfigs(featureName: string): void {
-    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
+    const interfaceSize = this.getInterfaceSize();
 
     switch (featureName) {
       case 'Base':
