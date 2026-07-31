@@ -180,7 +180,7 @@ export const SPLASH_CONFIG: any = {
       },
       layoutData: {
         Desktop: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.005, vPaddingPerc: 0.01, scale: 0.6 },
-        Landscape: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.005, vPaddingPerc: 0.01, scale: 0.6 },
+        Landscape: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.03, vPaddingPerc: 0.01, scale: 0.6 },
         Portrait: { hAlign: 'right', vAlign: 'top', hPaddingPerc: -0.02, vPaddingPerc: 0.01, scale: 0.5 },
       },
     },
