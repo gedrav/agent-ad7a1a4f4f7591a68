@@ -23,10 +23,10 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 60,
+        fontSize: 56,
         fill: 0xffffff,
         wordWrap: true,
-        wordWrapWidth: 750,
+        wordWrapWidth: 820,
         letterSpacing: 2,
         align: 'center',
       },
@@ -40,7 +40,7 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 60,
+        fontSize: 56,
         fill: 0xffffff,
         wordWrap: true,
         wordWrapWidth: 1000,
