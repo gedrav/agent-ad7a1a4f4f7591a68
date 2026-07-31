@@ -492,7 +492,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   public updateAllConfigs(featureName: string): void {
-    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
+    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
 
     switch (featureName) {
       case 'Base':
