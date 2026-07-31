@@ -105,7 +105,7 @@ export class MMMFSPopupComp extends FSPopupComp {
     this._isClicked = false;
 
     // Bypass the extra free spins popup since MMM uses an on-screen text animation
-    if (!data.entryPopUp && data.title === (Util.getContent('CongratTitle') || 'CONGRATULATIONS!')) {
+    if (data.entryPopUp == undefined && data.title === (Util.getContent('CongratTitle') || 'CONGRATULATIONS!')) {
       if (data.callbackFunction) {
         data.callbackFunction();
       }
