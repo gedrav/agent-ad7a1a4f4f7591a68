@@ -6,7 +6,7 @@ export const BIG_WIN_CONFIG = {
   type: 'Comp',
   class: MMMBigWinsComp,
   data: {
-    backgroundAlpha: 0.7,
+    backgroundAlpha: 0,
     animations: {
       BIG_WIN: { start: '1_big_Win', idle: '1_big_Win_Loop' },
       SUPER_WIN: { start: '2_Super_Win', idle: '2_Super_Win_Loop' },
@@ -71,7 +71,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 774,
-      y: 400,
+      y: 480,
       Elements: [
         {
           name: 'valueText',

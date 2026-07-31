@@ -36,12 +36,12 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'wheelBase',
       type: 'Sprite',
       image: 'wheelBase',
-      alpha: 1,
+      visible: false,
       scale: 0.9,
       layoutData: {
         Desktop: { x: 430, y: 1 },
-        Portrait: { x: -30, y: 410 },
-        Landscape: { x: 314, y: -120 },
+        Portrait: { x: 91, y: 515 },
+        Landscape: { x: 430, y: 1 },
       },
     },
     {
@@ -51,8 +51,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1.1, x: 420, y: -45 },
-        Portrait: { x: -30, y: 410 },
-        Landscape: { x: 314, y: -120 },
+        Portrait: { scale: 1.05, x: 100, y: 512 },
+        Landscape: { scale: 1.05, x: 450, y: 10 },
       },
     },
     {
@@ -62,8 +62,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1.1, x: 420, y: -45 },
-        Portrait: { x: -30, y: 410 },
-        Landscape: { x: 314, y: -120 },
+        Portrait: { scale: 1.05, x: 100, y: 512 },
+        Landscape: { scale: 1.05, x: 450, y: 10 },
       },
     },
     {
@@ -73,8 +73,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1.1, x: 420, y: -45 },
-        Portrait: { x: -30, y: 410 },
-        Landscape: { x: 314, y: -120 },
+        Portrait: { scale: 1.05, x: 100, y: 512 },
+        Landscape: { scale: 1.05, x: 450, y: 10 },
       },
     },
     {
@@ -177,7 +177,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         initialReel: [
           ['WD', 'L1', 'L3'],
           ['SC', 'L2', 'L4'],
-          ['H2', 'BC', 'L5'],
+          ['H2', 'H1', 'L5'],
           ['H3', 'H5', 'L4'],
           ['H4', 'H3', 'WD'],
         ],
@@ -426,6 +426,8 @@ export const SLOT_MACHINE_CONFIG: any = {
                     fill: 0xfdd63b,
                     wordWrap: true,
                     wordWrapWidth: 210,
+                    letterSpacing: 5,
+                    leading: 5,
                   },
                 },
               ],
@@ -456,6 +458,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           style: {
             fontFamily: 'gameFont1',
             fontSize: 72,
+            fontWeight: 900,
             fill: ['#ffffff', '#f4d11b'],
             stroke: '#003399',
             strokeThickness: 8,
@@ -493,7 +496,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 0.5, x: 940, y: -105 },
         Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 1, x: 832, y: 0 },
+        Portrait: { scale: 0.5, x: 610, y: 400 },
       },
     },
     {
@@ -504,7 +507,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 0.5, x: 940, y: -105 },
         Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 1, x: 832, y: 0 },
+        Portrait: { scale: 0.5, x: 610, y: 400 },
       },
     },
     {
@@ -515,7 +518,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 0.5, x: 940, y: -105 },
         Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 1, x: 832, y: 0 },
+        Portrait: { scale: 0.5, x: 610, y: 400 },
       },
     },
     KITTIEBANK_CONFIG,
