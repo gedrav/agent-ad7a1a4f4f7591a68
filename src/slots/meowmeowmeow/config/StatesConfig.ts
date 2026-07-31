@@ -51,6 +51,4 @@ export const STATES_CONFIG: any = [
   { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: PickFeatureTransitionState },
   { name: STATES.PICK_FEATURE_STATE, state: PickFeatureState },
   { name: STATES.EXIT_PICK_FEATURE_STATE, state: ExitPickFeatureState },
-
-  { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
 ];

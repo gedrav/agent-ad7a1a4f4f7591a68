@@ -147,15 +147,27 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected showPickFeatureTransition(): void {
     this.slotReel.visible = false;
-    this.gameTitle.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
-    if (appModel.getNextSubFeatureType() === 'Blue') {
-      this.showWheel();
-    } else {
+    const isRedFeature = appModel.getNextSubFeatureType() !== 'Blue';
+    if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
+    } else {
+      this.showWheel();
     }
-    this.animateWheelDoor();
+    this.animateWheelDoor(isRedFeature ? this.revealJackpotContainer.bind(this) : undefined);
+    this.gameTitle.visible = false;
+  }
+
+  private revealJackpotContainer(): void {
+    this.jackpotContainer.visible = true;
+    this.jackpotContainer.alpha = 0;
+    this.jackpotContainer.zIndex = 2;
+    AnimationProxy.animateTween(this.jackpotContainer, {
+      alpha: 1,
+      duration: 0.5,
+      ease: 'back.out(1.7)',
+    });
   }
 
   private changeReelInterface(): void {
@@ -163,11 +175,14 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
   }
 
-  protected animateWheelDoor(): void {
+  protected animateWheelDoor(onDoorOpened?: () => void): void {
     if (appModel.getNextSubFeatureType() === 'Green') {
       this.slotReel.visible = true;
       this.wheelBaseGreen.visible = true;
       this.feautreHeadingGreen.visible = true;
+    } else {
+      this.wheelBaseGreen.visible = false;
+      this.feautreHeadingGreen.visible = false;
     }
     this.kittiebankComp.visible = true;
     this.addChild(this.kittiebankComp);
@@ -207,12 +222,11 @@ export class GameSlotMachineView extends SlotMachineView {
 
       this.vaultAnim.addEventListener('complete', () => {
         this.vaultAnim.removeEventListners();
-        this.moveWheelDoor();
+        this.moveWheelDoor(onDoorOpened);
       });
     }
   }
-
-  protected moveWheelDoor(): void {
+  protected moveWheelDoor(onDoorOpened?: () => void): void {
     if (!this.vaultAnim) return;
 
     // Calculate open position
@@ -230,6 +244,7 @@ export class GameSlotMachineView extends SlotMachineView {
       onComplete: () => {
         this.vaultAnim.visible = false;
         this.makeWheelInteractive();
+        onDoorOpened?.();
         StateManager.doNextStep();
       },
     });
@@ -324,7 +339,6 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.interactive = false;
     this.slotReel.visible = true;
     this.resetMachineLayout();
-    this.gameTitle.visible = true;
   }
 
   public showCoinAnimations() {

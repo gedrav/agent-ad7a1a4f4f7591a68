@@ -48,6 +48,11 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Jackpot_Coin', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Vault_Anim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'reelframes', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'Grand', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Major', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Minor', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'Mini', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'kittiebank_statics', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {
