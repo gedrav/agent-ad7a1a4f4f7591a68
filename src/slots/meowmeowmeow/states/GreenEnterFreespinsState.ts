@@ -9,7 +9,6 @@ import { STATES } from '@core/states/StateConstants';
 class GreenEnterFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    console.log('GreenEnterFreespinsStateCommand -- ', appModel.getFeatureTriggerPositions());
     if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0) {
       EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
     } else {

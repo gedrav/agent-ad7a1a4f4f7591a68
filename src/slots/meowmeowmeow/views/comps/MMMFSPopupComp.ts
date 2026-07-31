@@ -9,6 +9,7 @@ import { Util } from '@core/utils/UtilService';
 
 export class MMMFSPopupComp extends FSPopupComp {
   private readonly congratText: PixText;
+  protected _isClicked: boolean = false;
 
   constructor(config: any) {
     super(config);
@@ -78,7 +79,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.messageText1) this.messageText1.visible = false;
       if (this.messageText2) {
         this.messageText2.visible = true;
-        this.messageText2.text = 'PRESS ► TO CONTINUE';
+        this.messageText2.text = Util.getContent('pressToContinue');
       }
     } else {
       if (this.titleText) {
@@ -95,12 +96,22 @@ export class MMMFSPopupComp extends FSPopupComp {
       }
       if (this.messageText2) {
         this.messageText2.visible = true;
-        this.messageText2.text = 'PRESS ► TO CONTINUE';
+        this.messageText2.text = Util.getContent('pressToContinue');
       }
     }
   }
 
   protected async showFSPopup(data: any) {
+    this._isClicked = false;
+
+    // Bypass the extra free spins popup since MMM uses an on-screen text animation
+    if (data.entryPopUp == undefined && data.title === (Util.getContent('CongratTitle') || 'CONGRATULATIONS!')) {
+      if (data.callbackFunction) {
+        data.callbackFunction();
+      }
+      return;
+    }
+
     super.showFSPopup(data);
     const scale = this.scale.x;
     const yy = this.y;
@@ -152,5 +163,14 @@ export class MMMFSPopupComp extends FSPopupComp {
       x: xx,
       ease: 'power2.out',
     });
+  }
+
+  protected async onCloseClicked() {
+    if (this._isClicked) return;
+    this._isClicked = true;
+
+    if (this.parent) {
+      super.onCloseClicked();
+    }
   }
 }

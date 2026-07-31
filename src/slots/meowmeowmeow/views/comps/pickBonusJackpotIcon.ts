@@ -1,6 +1,7 @@
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { ColorMatrixFilter } from 'pixi.js';
 import gsap from 'gsap';
 
 type IconState = 'closed' | 'opening' | 'open' | 'disabled' | 'won';
@@ -33,6 +34,7 @@ const WIN_ANIM = {
   SCALE_DURATION: 0.5,
   EASE: 'sine.inOut',
 } as const;
+const DISABLED_BRIGHTNESS = 0.35;
 
 export const PICK_ICON_EVENT = {
   SELECTED: 'pickIconSelected',
@@ -49,6 +51,7 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
   private revealedTier: JackpotTier | null = null;
   private winTween: gsap.core.Tween | null = null;
   private idleTimeout: ReturnType<typeof setTimeout> | null = null;
+  private dimFilter: ColorMatrixFilter | null = null;
 
   constructor(config) {
     super(config);
@@ -153,6 +156,12 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
     this.isHovering = false;
     this.eventMode = 'none';
     this.cursor = 'default';
+    if (!this.dimFilter) {
+      this.dimFilter = new ColorMatrixFilter();
+      this.dimFilter.brightness(DISABLED_BRIGHTNESS, false);
+      this.dimFilter.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
+    }
+    this.filters = [this.dimFilter];
     if (this.jackpotData) return;
     this.playIdle();
   }
@@ -186,6 +195,7 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
 
   public reset(): void {
     this.killWinAnim();
+    this.filters = null;
     this.state = 'closed';
     this.isActive = true;
     this.isHovering = false;

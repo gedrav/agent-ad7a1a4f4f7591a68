@@ -6,7 +6,6 @@ export const BIG_WIN_CONFIG = {
   type: 'Comp',
   class: MMMBigWinsComp,
   data: {
-    backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: '1_big_Win', idle: '1_big_Win_Loop' },
       SUPER_WIN: { start: '2_Super_Win', idle: '2_Super_Win_Loop' },
@@ -33,6 +32,17 @@ export const BIG_WIN_CONFIG = {
   },
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: 0, y: 0, alpha: 0 },
+    {
+      name: 'featureWinDim',
+      type: 'Graphics',
+      color: 0x000000,
+      width: 8000,
+      height: 8000,
+      x: -4000,
+      y: -4000,
+      alpha: 0,
+      visible: false,
+    },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
     { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55 },
     {
@@ -42,17 +52,17 @@ export const BIG_WIN_CONFIG = {
       visible: false,
       style: {
         fontFamily: 'Showcard Gothic',
-        fontSize: 90,
+        fontSize: 150,
         fontWeight: '900',
         letterSpacing: 8,
-        fill: ['0xFFE3E3', '0xFF5252', '0xE00000', '0x8E0000'],
+        fill: ['0xFFF9C4', '0xFFD700', '0xFFA000', '0xE8890C'],
         fillGradientStops: [0, 0.35, 0.7, 1],
         stroke: {
-          fill: ['0xFFE9A8', '0xFFC53D', '0xFFF07A', '0xE9A400'],
+          fill: ['0x8A0000', '0x6B0000', '0x4A0000'],
           width: 10,
           join: 'round',
         },
-        strokeGradientStops: [0, 0.35, 0.75, 1],
+        strokeGradientStops: [0, 0.5, 1],
         dropShadow: {
           color: 0x000000,
           alpha: 0.8,
@@ -71,7 +81,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 774,
-      y: 400,
+      y: 480,
       Elements: [
         {
           name: 'valueText',
