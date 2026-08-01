@@ -1,8 +1,6 @@
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
-import { MenuCompAmbientSoundToggleCommand } from '@core/commands/action/MenuCompAmbientSoundToggleCommand';
 import { Point, Texture } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -13,7 +11,6 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { Util } from '@core/utils/UtilService';
 import { MMMJackpotComp } from '@slots/meowmeowmeow/views/comps/MMMJackpotComp';
 import { KittieBankComp } from '@slots/meowmeowmeow/views/comps/KittieBankComp';
-import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
@@ -38,12 +35,15 @@ export class GameSlotMachineView extends SlotMachineView {
 
   // Stores the closed position of the door to restore on feature exit
   private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
+
   private readonly kittiebankBaseX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
+
   private readonly reelBaseLayoutData: {
     Desktop: { x: number; y: number; scale?: number };
     Portrait: { x: number; y: number; scale?: number };
     Landscape: { x: number; y: number; scale?: number };
   } | null = null;
+
   private readonly gameTitleBaseLayoutData: any = null;
 
   constructor(config: any) {
@@ -104,31 +104,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.startGameLogoAnimation();
   }
 
-  public updateBigWinsCompScale(): void {
-    if (!this.bigWinsComp) return;
-
-    const noOfRows = Number(appModel.featureResult?.featureData?.interfaceSize) || 3;
-
-    if (noOfRows === 4) {
-      this.bigWinsComp.scale.set(0.65);
-      this.bigWinsComp.position.set(718, 518);
-    } else if (noOfRows === 5) {
-      this.bigWinsComp.scale.set(0.58);
-      this.bigWinsComp.position.set(772, 660);
-    } else {
-      this.bigWinsComp.scale.set(1);
-      this.bigWinsComp.position.set(450, 294);
-    }
-  }
-
-  protected showSpinWin(): void {
-    this.updateBigWinsCompScale();
-    if (this.bigWinsComp) {
-      this.addChild(this.bigWinsComp);
-    }
-    super.showSpinWin();
-  }
-
   protected startGameLogoAnimation(): void {
     if (this.gameTitle) {
       this.gameTitle.playAnimation({ state: 'idle', loop: false });
@@ -141,32 +116,12 @@ export class GameSlotMachineView extends SlotMachineView {
     }
   }
 
-  private maskWheelTestToRim(): void {
-    if (!this.wheelContainer || !this.wheelRim) {
-      console.warn('wheelTest or wheelRim missing, cannot apply mask');
-      return;
+  protected showSpinWin(): void {
+    this.updateBigWinsCompScale();
+    if (this.bigWinsComp) {
+      this.addChild(this.bigWinsComp);
     }
-
-    if (!this.wheelMask) {
-      this.wheelMask = new PixGraphics();
-      this.addChild(this.wheelMask);
-      this.wheelContainer.mask = this.wheelMask;
-    }
-
-    const rimBounds = this.wheelRim.getBounds();
-    const rimGlobalCenter = new Point(rimBounds.x + rimBounds.width / 2, rimBounds.y + rimBounds.height / 2);
-    const globalRadius = (Math.min(rimBounds.width, rimBounds.height) / 2) * 0.9;
-
-    // Convert both center and an edge point into `this`'s local space,
-    // so the radius correctly accounts for any ancestor scaling.
-    const rimGlobalEdge = new Point(rimGlobalCenter.x + globalRadius, rimGlobalCenter.y);
-
-    const rimLocalCenter = this.toLocal(rimGlobalCenter);
-    const rimLocalEdge = this.toLocal(rimGlobalEdge);
-    const radius = rimLocalEdge.x - rimLocalCenter.x;
-
-    this.wheelMask.clear();
-    this.wheelMask.circle(rimLocalCenter.x, rimLocalCenter.y, radius).fill(0xffffff);
+    super.showSpinWin();
   }
 
   protected showGreenTransition(): void {
@@ -181,124 +136,77 @@ export class GameSlotMachineView extends SlotMachineView {
     this.animateWheelDoor();
   }
 
+  protected showGreenKittieBankBreak(): void {
+    EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
+      bankName: 'mew',
+      callback: () => {
+        StateManager.doNextStep();
+      },
+    });
+  }
+
   protected showPickFeatureTransition(): void {
     this.slotReel.visible = false;
-    this.gameTitle.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
-    if (appModel.getNextSubFeatureType() === 'Blue') {
-      this.showWheel();
-    } else {
+    const isRedFeature = appModel.getNextSubFeatureType() !== 'Blue';
+    if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
+    } else {
+      this.showWheel();
     }
-    this.animateWheelDoor();
+    this.animateWheelDoor(isRedFeature ? this.revealJackpotContainer.bind(this) : undefined);
+    this.gameTitle.visible = false;
+  }
+
+  private revealJackpotContainer(): void {
+    this.jackpotContainer.visible = true;
+    this.jackpotContainer.alpha = 0;
+    this.jackpotContainer.zIndex = 2;
+    AnimationProxy.animateTween(this.jackpotContainer, {
+      alpha: 1,
+      duration: 0.5,
+      ease: 'back.out(1.7)',
+    });
+  }
+
+  private getInterfaceSize(): number {
+    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
+    if (!isNaN(interfaceSize) && interfaceSize !== 0) {
+      return interfaceSize;
+    }
+    return appModel.getNextSubFeatureType() === 'Green' ? 5 : 4;
   }
 
   private changeReelInterface(): void {
-    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
-    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', interfaceSize);
+    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', this.getInterfaceSize());
   }
 
-  // reset all layout mutations made during free spins
-  private resetMachineLayout(): void {
-    if (this.configData?.layoutData?.Portrait) {
-      this.configData.layoutData.Portrait.vPaddingPerc = 0;
-    }
-
-    if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
-      this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
-      this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
-      this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
-      this.vaultAnim.rotation = 0;
-    }
-
-    if (this.reelBaseLayoutData && this.slotReel?.configData?.layoutData) {
-      Object.assign(this.slotReel.configData.layoutData.Desktop, this.reelBaseLayoutData.Desktop);
-      Object.assign(this.slotReel.configData.layoutData.Portrait, this.reelBaseLayoutData.Portrait);
-      Object.assign(this.slotReel.configData.layoutData.Landscape, this.reelBaseLayoutData.Landscape);
-      (this.slotReel as any).resizeView();
-    }
-
-    // Restore kitty bank position to its base (non-free-spins) x
-    if (this.kittiebankBaseX && this.kittiebankComp?.configData?.layoutData) {
-      const kld = this.kittiebankComp.configData.layoutData;
-      kld.Desktop.x = this.kittiebankBaseX.Desktop;
-      kld.Portrait.x = this.kittiebankBaseX.Portrait;
-      kld.Landscape.x = this.kittiebankBaseX.Landscape;
-    }
-
-    this.wheelBase.alpha = 1;
-    this.wheelRim.alpha = 0.5;
-    if (this.vaultAnim) this.vaultAnim.visible = false;
-    this.doorMask.visible = false;
-
-    if (this.gameTitleBaseLayoutData && this.gameTitle?.configData) {
-      this.gameTitle.configData.layoutData = this.gameTitleBaseLayoutData;
-    }
-    this.jackpotContainer.visible = true;
-    this.kittiebankComp.visible = true;
-
-    this.addChild(this.jackpotContainer, this.slotReel, this.gameTitle, this.kittiebankComp);
-    this.resizeView();
-  }
-
-  protected animateWheelDoor(): void {
+  protected animateWheelDoor(onDoorOpened?: () => void): void {
     if (appModel.getNextSubFeatureType() === 'Green') {
       this.slotReel.visible = true;
+      this.wheelBaseGreen.visible = true;
+      this.feautreHeadingGreen.visible = true;
+    } else {
+      this.wheelBaseGreen.visible = false;
+      this.feautreHeadingGreen.visible = false;
     }
     this.kittiebankComp.visible = true;
     this.addChild(this.kittiebankComp);
-    this.wheelBaseGreen.visible = true;
-    this.feautreHeadingGreen.visible = true;
 
-    if (this.gameTitle?.configData?.fsLayoutData) {
-      this.gameTitle.configData.layoutData = this.gameTitle.configData.fsLayoutData;
+    this.updateAllConfigs('FreeSpins');
+    if (this.configData?.layoutData?.Portrait) {
     }
+
     UIUtil.adjustElement(this.gameTitle);
+    (this.kittiebankComp as any).resizeView();
 
-    // Shift the kitty banks left so they clear the vault ring during free spins
-    const kld = this.kittiebankComp.configData?.layoutData;
-    if (this.kittiebankBaseX && kld) {
-      const shift = 60;
-      kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
-      kld.Portrait.x = 230;
-      kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
-      kld.Portrait.y = -45;
-      (this.kittiebankComp as any).resizeView();
-    }
-    const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize) || 4;
+    const interfaceSize = this.getInterfaceSize();
     if (interfaceSize === 4 || interfaceSize === 5) {
-      if (this.configData.layoutData.Portrait) {
-        this.configData.layoutData.Portrait.vPaddingPerc = 0.05;
-      }
+      this.resizeView();
     }
 
-    // Parent sets the reel position for free spins (boss's pattern)
-    const reelLd = this.slotReel.configData?.layoutData;
-    if (reelLd) {
-      if (interfaceSize === 4) {
-        reelLd.Desktop.x = 650;
-        reelLd.Desktop.y = 436;
-        reelLd.Desktop.scale = 0.65;
-        reelLd.Portrait.x = 306;
-        reelLd.Portrait.y = 966;
-        reelLd.Portrait.scale = 0.65;
-        reelLd.Landscape.x = 650;
-        reelLd.Landscape.y = 436;
-        reelLd.Landscape.scale = 0.65;
-      } else if (interfaceSize === 5) {
-        reelLd.Desktop.x = 718;
-        reelLd.Desktop.y = 457;
-        reelLd.Desktop.scale = 0.58;
-        reelLd.Portrait.x = 374;
-        reelLd.Portrait.y = 987;
-        reelLd.Portrait.scale = 0.58;
-        reelLd.Landscape.x = 718;
-        reelLd.Landscape.y = 457;
-        reelLd.Landscape.scale = 0.58;
-      }
-      (this.slotReel as any).resizeView();
-    }
+    (this.slotReel as any).resizeView();
 
     if (this.vaultAnim) {
       this.doorMask.visible = true;
@@ -321,11 +229,11 @@ export class GameSlotMachineView extends SlotMachineView {
 
       this.vaultAnim.addEventListener('complete', () => {
         this.vaultAnim.removeEventListners();
-        this.moveWheelDoor();
+        this.moveWheelDoor(onDoorOpened);
       });
     }
   }
-  protected moveWheelDoor(): void {
+  protected moveWheelDoor(onDoorOpened?: () => void): void {
     if (!this.vaultAnim) return;
 
     // Calculate open position
@@ -343,10 +251,62 @@ export class GameSlotMachineView extends SlotMachineView {
       onComplete: () => {
         this.vaultAnim.visible = false;
         this.makeWheelInteractive();
+        onDoorOpened?.();
         StateManager.doNextStep();
       },
     });
   }
+
+  private onShowExtraSpinAnim(): void {
+    const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
+
+    if (!extraSpinTextCenter) {
+      console.warn('Missing extraSpinTextCenter element');
+      StateManager.goToState(STATES.FS_SPIN_START_STATE);
+      return;
+    }
+
+    const text = Util.getContent('ExtraSpinText');
+    extraSpinTextCenter.text = text;
+
+    AnimationProxy.killTweensOf(extraSpinTextCenter);
+
+    const ENTER_DURATION = 0.5;
+    const HOLD_DURATION = 1.0;
+    const EXIT_DURATION = 0.4;
+    const OFFSET_Y = 300;
+
+    if (extraSpinTextCenter._naturalY === undefined) {
+      extraSpinTextCenter._naturalY = extraSpinTextCenter.y;
+    }
+    const naturalY = extraSpinTextCenter._naturalY;
+
+    // Set initial state: start below the reel center, invisible
+    extraSpinTextCenter.scale.set(1);
+    extraSpinTextCenter.y = naturalY + OFFSET_Y; // start at reel bottom
+    extraSpinTextCenter.alpha = 0;
+
+    // ENTER: slide up from bottom to center + fade in
+    AnimationProxy.animateTween(extraSpinTextCenter, {
+      duration: ENTER_DURATION,
+      y: naturalY,
+      alpha: 1,
+      ease: 'power2.out',
+    });
+
+    AnimationProxy.animateTween(
+      extraSpinTextCenter,
+      {
+        duration: EXIT_DURATION,
+        y: naturalY - OFFSET_Y, // exits toward top of reel
+        alpha: 0,
+        ease: 'power2.in',
+        delay: ENTER_DURATION + HOLD_DURATION,
+      },
+      false,
+    );
+  }
+
   private handlePickFeature() {
     this.kittiebankComp.resetToNormal();
   }
@@ -365,6 +325,7 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.visible = true;
     wheelBG.renderable = true;
   }
+
   private makeWheelInteractive(): void {
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.interactive = true;
@@ -385,7 +346,6 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.interactive = false;
     this.slotReel.visible = true;
     this.resetMachineLayout();
-    this.gameTitle.visible = true;
   }
 
   public showCoinAnimations() {
@@ -443,6 +403,28 @@ export class GameSlotMachineView extends SlotMachineView {
     }
   }
 
+  private holdGreyedOutSymbol(targetSymbol: any): void {
+    if (typeof targetSymbol.resetSymbol !== 'function' || typeof targetSymbol.setNewSymbol !== 'function') {
+      return;
+    }
+
+    const originalResetSymbol = targetSymbol.resetSymbol.bind(targetSymbol);
+    const originalSetNewSymbol = targetSymbol.setNewSymbol.bind(targetSymbol);
+
+    // Block the reel's automatic reset so the symbol keeps scrolling in grey.
+    targetSymbol.resetSymbol = () => {};
+
+    // Once the reel actually recycles this symbol with a new result, let it land fresh.
+    targetSymbol.setNewSymbol = (data: any, reelno: number) => {
+      targetSymbol.resetSymbol = originalResetSymbol;
+      targetSymbol.setNewSymbol = originalSetNewSymbol;
+      originalSetNewSymbol(data, reelno);
+      if (targetSymbol.symbol) {
+        targetSymbol.symbol.alpha = 1;
+      }
+    };
+  }
+
   public animateSymbolToKittyBank(col: number, row: number, bankName: 'meow' | 'mew' | 'mii', symbolName: string) {
     const kittieBankComp = this.elementsList['kittiebankComp'];
     if (!kittieBankComp) {
@@ -484,6 +466,7 @@ export class GameSlotMachineView extends SlotMachineView {
       if (targetSymbol.symbol) {
         targetSymbol.symbol.texture = Texture.from(symbolName + '_grey');
         targetSymbol.symbol.alpha = 0.2;
+        this.holdGreyedOutSymbol(targetSymbol);
       }
     }
 
@@ -541,15 +524,6 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
-  protected showGreenKittieBankBreak(): void {
-    EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
-      bankName: 'mew',
-      callback: () => {
-        StateManager.doNextStep();
-      },
-    });
-  }
-
   private showKittieBankBreak(): void {
     const subFeatureType = appModel.getNextSubFeatureType().toUpperCase();
     const bankName = subFeatureType === 'RED' ? 'meow' : subFeatureType === 'GREEN' ? 'mew' : 'mii';
@@ -561,54 +535,158 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
-  private onShowExtraSpinAnim(): void {
-    const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
+  public updateAllConfigs(featureName: string): void {
+    const interfaceSize = this.getInterfaceSize();
 
-    if (!extraSpinTextCenter) {
-      console.warn('Missing extraSpinTextCenter element');
-      StateManager.goToState(STATES.FS_SPIN_START_STATE);
+    switch (featureName) {
+      case 'Base':
+        if (this.configData?.layoutData?.Portrait) {
+          this.configData.layoutData.Portrait.vPaddingPerc = 0;
+          this.configData.layoutData.Portrait.hPaddingPerc = 0;
+        }
+
+        if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
+          this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
+          this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
+          this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
+          this.vaultAnim.rotation = 0;
+        }
+
+        if (this.reelBaseLayoutData && this.slotReel?.configData?.layoutData) {
+          Object.assign(this.slotReel.configData.layoutData.Desktop, this.reelBaseLayoutData.Desktop);
+          Object.assign(this.slotReel.configData.layoutData.Portrait, this.reelBaseLayoutData.Portrait);
+          Object.assign(this.slotReel.configData.layoutData.Landscape, this.reelBaseLayoutData.Landscape);
+        }
+
+        if (this.kittiebankBaseX && this.kittiebankComp?.configData?.layoutData) {
+          const kld = this.kittiebankComp.configData.layoutData;
+          kld.Desktop.x = this.kittiebankBaseX.Desktop;
+          kld.Portrait.x = this.kittiebankBaseX.Portrait;
+          kld.Landscape.x = this.kittiebankBaseX.Landscape;
+        }
+
+        if (this.gameTitleBaseLayoutData && this.gameTitle?.configData) {
+          this.gameTitle.configData.layoutData = this.gameTitleBaseLayoutData;
+        }
+        break;
+
+      case 'FreeSpins':
+        if (this.gameTitle?.configData?.fsLayoutData) {
+          this.gameTitle.configData.layoutData = this.gameTitle.configData.fsLayoutData;
+        }
+
+        if (this.configData?.layoutData?.Portrait) {
+          this.configData.layoutData.Portrait.vPaddingPerc = -0.08;
+          this.configData.layoutData.Portrait.hPaddingPerc = -0.02;
+        }
+
+        const kld = this.kittiebankComp?.configData?.layoutData;
+        if (this.kittiebankBaseX && kld) {
+          const shift = 60;
+          kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
+          kld.Portrait.x = 230;
+          kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
+          kld.Portrait.y = -90;
+        }
+
+        const reelLd = this.slotReel?.configData?.layoutData;
+        if (reelLd) {
+          if (interfaceSize === 4) {
+            reelLd.Desktop.x = 650;
+            reelLd.Desktop.y = 436;
+            reelLd.Desktop.scale = 0.65;
+            reelLd.Portrait.x = 306;
+            reelLd.Portrait.y = 966;
+            reelLd.Portrait.scale = 0.65;
+            reelLd.Landscape.x = 650;
+            reelLd.Landscape.y = 436;
+            reelLd.Landscape.scale = 0.65;
+          } else if (interfaceSize === 5) {
+            reelLd.Desktop.x = 718;
+            reelLd.Desktop.y = 457;
+            reelLd.Desktop.scale = 0.58;
+            reelLd.Portrait.x = 374;
+            reelLd.Portrait.y = 987;
+            reelLd.Portrait.scale = 0.58;
+            reelLd.Landscape.x = 718;
+            reelLd.Landscape.y = 457;
+            reelLd.Landscape.scale = 0.58;
+          }
+        }
+
+        // Apply the resize after all layout configurations have been updated
+        this.resizeView();
+
+        // CRITICAL: adjust the main container ONLY AFTER the children have been resized!
+        UIUtil.adjustElement(this);
+        break;
+
+      case 'BigWin':
+        if (this.bigWinsComp) {
+          if (interfaceSize === 4) {
+            this.bigWinsComp.scale.set(0.65);
+            this.bigWinsComp.position.set(718, 518);
+          } else if (interfaceSize === 5) {
+            this.bigWinsComp.scale.set(0.58);
+            this.bigWinsComp.position.set(772, 660);
+          } else {
+            this.bigWinsComp.scale.set(1);
+            this.bigWinsComp.position.set(450, 294);
+          }
+        }
+        break;
+    }
+  }
+
+  // reset all layout mutations made during free spins
+  private resetMachineLayout(): void {
+    this.updateAllConfigs('Base');
+    (this.slotReel as any).resizeView();
+
+    this.wheelBase.alpha = 1;
+    this.wheelRim.alpha = 0.5;
+    if (this.vaultAnim) this.vaultAnim.visible = false;
+    this.doorMask.visible = false;
+    this.wheelBaseGreen.visible = false;
+    this.feautreHeadingGreen.visible = false;
+
+    this.jackpotContainer.visible = true;
+    this.kittiebankComp.visible = true;
+
+    this.addChild(this.jackpotContainer, this.slotReel, this.gameTitle, this.kittiebankComp);
+    this.resizeView();
+  }
+
+  public updateBigWinsCompScale(): void {
+    this.updateAllConfigs('BigWin');
+  }
+
+  private maskWheelTestToRim(): void {
+    if (!this.wheelContainer || !this.wheelRim) {
+      console.warn('wheelTest or wheelRim missing, cannot apply mask');
       return;
     }
 
-    const text = Util.getContent('ExtraSpinText');
-    extraSpinTextCenter.text = text;
-
-    AnimationProxy.killTweensOf(extraSpinTextCenter);
-
-    const ENTER_DURATION = 0.5;
-    const HOLD_DURATION = 1.0;
-    const EXIT_DURATION = 0.4;
-    const OFFSET_Y = 300;
-
-    if (extraSpinTextCenter._naturalY === undefined) {
-      extraSpinTextCenter._naturalY = extraSpinTextCenter.y;
+    if (!this.wheelMask) {
+      this.wheelMask = new PixGraphics();
+      this.addChild(this.wheelMask);
+      this.wheelContainer.mask = this.wheelMask;
     }
-    const naturalY = extraSpinTextCenter._naturalY;
 
-    // Set initial state: start below the reel center, invisible
-    extraSpinTextCenter.scale.set(1);
-    extraSpinTextCenter.y = naturalY + OFFSET_Y; // start at reel bottom
-    extraSpinTextCenter.alpha = 0;
+    const rimBounds = this.wheelRim.getBounds();
+    const rimGlobalCenter = new Point(rimBounds.x + rimBounds.width / 2, rimBounds.y + rimBounds.height / 2);
+    const globalRadius = (Math.min(rimBounds.width, rimBounds.height) / 2) * 0.9;
 
-    // ENTER: slide up from bottom to center + fade in
-    AnimationProxy.animateTween(extraSpinTextCenter, {
-      duration: ENTER_DURATION,
-      y: naturalY,
-      alpha: 1,
-      ease: 'power2.out',
-    });
+    // Convert both center and an edge point into `this`'s local space,
+    // so the radius correctly accounts for any ancestor scaling.
+    const rimGlobalEdge = new Point(rimGlobalCenter.x + globalRadius, rimGlobalCenter.y);
 
-    AnimationProxy.animateTween(
-      extraSpinTextCenter,
-      {
-        duration: EXIT_DURATION,
-        y: naturalY - OFFSET_Y, // exits toward top of reel
-        alpha: 0,
-        ease: 'power2.in',
-        delay: ENTER_DURATION + HOLD_DURATION,
-      },
-      false,
-    );
+    const rimLocalCenter = this.toLocal(rimGlobalCenter);
+    const rimLocalEdge = this.toLocal(rimGlobalEdge);
+    const radius = rimLocalEdge.x - rimLocalCenter.x;
+
+    this.wheelMask.clear();
+    this.wheelMask.circle(rimLocalCenter.x, rimLocalCenter.y, radius).fill(0xffffff);
   }
 
   protected override resizeView(): void {
