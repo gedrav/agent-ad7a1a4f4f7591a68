@@ -26,8 +26,11 @@ const WHEEL_PRIZE_ROW_ORDER = [
 ];
 const WHEEL_PRIZE_ROW_GAP = 20;
 const WHEEL_PRIZE_ROW_Y_OFFSETS: Record<string, number> = {
-  wheelPrizeOr1: 15,
+  wheelPrizeIconGreen: 10,
+  wheelPrizeOr1: 20,
+  wheelPrizeIconRed: 21,
   wheelPrizeText2: 15,
+  wheelPrizeCashText: 10,
 };
 
 const RED_PRIZE_ROW_ORDER = ['redPrizeIconGrand', 'redPrizeIconMajor', 'redPrizeIconMinor', 'redPrizeIconMini'];
@@ -60,6 +63,23 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.blueOutroFeatureIcon = this.blueOutroRow?.elementsList['blueOutroFeatureIcon'];
     this.layoutPrizeRow(this.wheelPrizeRow, WHEEL_PRIZE_ROW_ORDER, WHEEL_PRIZE_ROW_GAP, WHEEL_PRIZE_ROW_Y_OFFSETS);
     this.layoutPrizeRow(this.redPrizeRow, RED_PRIZE_ROW_ORDER, RED_PRIZE_ROW_GAP, RED_PRIZE_ROW_Y_OFFSETS);
+    if (this.okBtn) {
+      this.okBtn.visible = false;
+    }
+    const panelBG = this.elementsList['popupbg'];
+    if (panelBG) {
+      panelBG.interactive = true;
+      panelBG.cursor = 'pointer';
+      panelBG.on('pointerdown', this.onCloseClicked.bind(this));
+    }
+    this.interactive = true;
+    this.cursor = 'pointer';
+    this.on('pointerdown', this.onCloseClicked.bind(this));
+  }
+
+  protected override async onCloseClicked() {
+    super.onCloseClicked();
+    EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
   }
 
   private layoutPrizeRow(row: PixView, order: string[], gap: number, yOffsets: Record<string, number>): void {
@@ -104,6 +124,10 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.showRedFeatureEntryContent(isRedFeatureEntry);
     this.showBlueFeatureExitContent(isBlueFeatureExit);
     this.messageText1.visible = !isBlueFeatureEntry && !isRedFeatureEntry && !isBlueFeatureExit;
+    if (this.messageText2) {
+      this.messageText2.visible = true;
+      this.messageText2.text = 'PRESS ► TO CONTINUE';
+    }
   }
 
   private showBlueFeatureEntryContent(isBlueFeatureEntry: boolean): void {
@@ -139,9 +163,7 @@ export class MMMPFPopupComp extends PFPopupComp {
     }
   }
   protected async showPFPopup(data: any) {
-    const featureSubType = appModel.getNextSubFeatureType()
-      ? appModel.getNextSubFeatureType()
-      : appModel.getFeatureSubType();
+    const featureSubType = appModel.getFeatureSubType();
     if (!data.entryPopUp && featureSubType.toUpperCase() === 'RED') {
       EventHandler.dispatchEvent(SHOW_FEATURE_WIN_ANIM, { callback: data.callbackFunction });
       return;

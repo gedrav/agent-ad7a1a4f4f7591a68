@@ -4,10 +4,13 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
+const WIN_ANIM_REPEAT_COUNT = 4;
+
 export class JPItemComp extends StandardView {
   private readonly valueText: PixText;
   private readonly titleImage: PixSprite;
   private readonly bg: PixSpine;
+  private winAnimListener: any = null;
 
   constructor(config: any) {
     super(config);
@@ -27,9 +30,27 @@ export class JPItemComp extends StandardView {
     this.bg.playAnimation({ state: this.bg.configData.idleState, loop: false });
   }
   public showWin(): void {
-    this.bg.playAnimation({ state: this.bg.configData.winState, loop: false });
+    this.clearWinAnimListener();
+    let completions = 0;
+    this.bg.playAnimation({ state: this.bg.configData.winState, loop: true });
+    this.winAnimListener = this.bg.addEventListener('complete', () => {
+      completions++;
+      if (completions >= WIN_ANIM_REPEAT_COUNT) {
+        this.clearWinAnimListener();
+        this.bg.playAnimation({ state: this.bg.configData.winState, loop: false });
+      }
+    });
   }
+
+  private clearWinAnimListener(): void {
+    if (this.winAnimListener) {
+      this.bg.removeSpineEvent(this.winAnimListener);
+      this.winAnimListener = null;
+    }
+  }
+
   public stopAnimation(): void {
+    this.clearWinAnimListener();
     this.bg.stopAnimation();
   }
 }

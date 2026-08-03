@@ -14,6 +14,7 @@ export class KittieBankComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.stopIdleAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.resetToNormal.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetToNormal.bind(this));
+    EventHandler.addEventListener('RESET_KITTIEBANK_ANIM', this.resetToNormal.bind(this));
   }
 
   public resetToNormal(): void {
