@@ -5,10 +5,16 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { StateManager } from '@core/states/StateManagerService';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import gsap from 'gsap';
 
 type SpinState = 'idle' | 'spinning' | 'stopping';
 
 const RESULT_STOP_DELAY = 2000;
+const TAP_TEXT_PULSE_DURATION = 0.6;
+const TAP_TEXT_PULSE_SCALE = 1.15;
+const TAP_TEXT_HIDE_DURATION = 0.3;
+const TAP_TEXT_HIDE_SCALE = 0.5;
 
 export class WheelFeatureComp extends ResponsiveChildrenView {
   private readonly wheelBG: PixSpine;
@@ -16,6 +22,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   private readonly glowEffect: PixSpine;
   private readonly wheelBordeTop: PixSpine;
   private readonly tapText: any;
+  private tapTextScaleTween: gsap.core.Tween | null = null;
 
   private readonly numberOfSectors: number = 10;
   private readonly radiansPerSector: number = (Math.PI * 2) / this.numberOfSectors;
@@ -73,6 +80,45 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
   private showText() {
     this.tapText.visible = true;
+    this.killTapTextTweens();
+    this.tapTextScaleTween = AnimationProxy.animateTween(this.tapText.scale, {
+      x: TAP_TEXT_PULSE_SCALE,
+      y: TAP_TEXT_PULSE_SCALE,
+      duration: TAP_TEXT_PULSE_DURATION,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+
+  private hideTapText(): void {
+    this.killTapTextTweens();
+    AnimationProxy.animateTween(this.tapText, {
+      alpha: 0,
+      duration: TAP_TEXT_HIDE_DURATION,
+      ease: 'sine.in',
+      onComplete: () => {
+        this.tapText.visible = false;
+        this.tapText.alpha = 1;
+        this.tapText.scale.set(1);
+      },
+    });
+    AnimationProxy.animateTween(this.tapText.scale, {
+      x: TAP_TEXT_HIDE_SCALE,
+      y: TAP_TEXT_HIDE_SCALE,
+      duration: TAP_TEXT_HIDE_DURATION,
+      ease: 'sine.in',
+      onComplete: () => {
+        this.tapText.scale.set(1);
+      },
+    });
+  }
+
+  private killTapTextTweens(): void {
+    this.tapTextScaleTween?.kill();
+    this.tapTextScaleTween = null;
+    this.tapText.alpha = 1;
+    this.tapText.scale.set(1);
   }
 
   // ---------- Setup ----------
@@ -96,7 +142,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   }
 
   private readonly handleWheelTap = async (): Promise<void> => {
-    this.tapText.visible = false;
+    this.hideTapText();
     this.spinWheel();
 
     const choosenSector = await this.resolveWinningSector();
@@ -233,7 +279,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
     this.isSpinning = false;
     this.spinState = 'idle';
-    this.tapText.visible = false;
+    this.hideTapText();
     this.iteration++;
 
     this.onSpinComplete(choosenSector);

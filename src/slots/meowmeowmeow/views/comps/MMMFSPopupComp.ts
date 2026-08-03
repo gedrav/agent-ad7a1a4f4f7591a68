@@ -117,40 +117,9 @@ export class MMMFSPopupComp extends FSPopupComp {
     const yy = this.y;
     const xx = this.x;
 
-    if (data.entryPopUp) {
-      if (data.triggeredByScatter) {
-        // Open the popup from top to bottom
-        this.scale.set(scale);
-        this.y = yy - 1500;
-      } else {
-        // Coming from the kitties banks
-        let startX = xx + 200;
-        let startY = yy + 550;
-
-        const slotMachineView = (this.parent as any)?.elementsList?.['slotMachineView'];
-        if (slotMachineView) {
-          const kittiebankComp = slotMachineView.elementsList?.['kittiebankComp'];
-          const targetBankComp = kittiebankComp?.elementsList?.['mew'];
-          if (targetBankComp) {
-            const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-            const globalPos = targetBank.getGlobalPosition();
-            const localPos = this.parent.toLocal(globalPos);
-            startX = localPos.x;
-            startY = localPos.y;
-          }
-        }
-
-        this.scale.set(0);
-        this.x = startX;
-        this.y = startY;
-      }
-    } else {
-      // Default exit popup transition
-      this.scale.set(0);
-      this.y += 550;
-      this.x += 200;
-    }
-
+    const dropOffset = 550;
+    this.y -= dropOffset;
+    this.x = xx;
     const mewSpine = this.elementsList['mew'] as PixSpine;
     if (mewSpine?.configData.idle) {
       mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
@@ -161,7 +130,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       duration: 0.6,
       y: yy,
       x: xx,
-      ease: 'power2.out',
+      ease: 'bounce.out',
     });
   }
 

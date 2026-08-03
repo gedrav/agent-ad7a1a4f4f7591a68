@@ -42,6 +42,7 @@ export class MMMBigWinsComp extends BigWinsComp {
   private readonly featureWinText: PixText;
   private readonly featureWinDim: PixGraphics;
   private featureWinCallback: (() => void) | null = null;
+  private isFeatureWinActive: boolean = false;
 
   constructor(config: any) {
     super(config);
@@ -66,6 +67,7 @@ export class MMMBigWinsComp extends BigWinsComp {
 
   protected showFeatureWin(data: { callback?: () => void }): void {
     this.featureWinCallback = data?.callback ?? null;
+    this.isFeatureWinActive = true;
     this.currentLevel = 3;
     this.targetLevel = 4;
     this.currentState = CONSTANTS.EPIC_WIN;
@@ -76,12 +78,6 @@ export class MMMBigWinsComp extends BigWinsComp {
       this.setChildIndex(this.featureWinDim, 0);
     }
     this.parent?.addChild(this);
-    const skipRect = this.elementsList['skipRect'];
-    if (skipRect) {
-      skipRect.visible = false;
-      skipRect.eventMode = 'none';
-    }
-
     const bigWinText = this.elementsList['bigWinText'];
     if (bigWinText) {
       bigWinText.visible = false;
@@ -114,9 +110,18 @@ export class MMMBigWinsComp extends BigWinsComp {
     this.elementsList['winTickerBW'].countUpValue(appModel.featureResult?.totalWin, FEATURE_WIN_COUNTUP_DURATION);
   }
 
+  protected override onSkipClicked(): void {
+    if (this.isFeatureWinActive) return;
+    super.onSkipClicked();
+  }
+
   public override clearSpinWin() {
+    if (this.isFeatureWinActive) return;
     super.clearSpinWin();
     this.featureWinDim.visible = false;
+    if (this.featureWinText) {
+      this.featureWinText.visible = false;
+    }
   }
   protected notifyWinDone(): void {
     if (!this.featureWinCallback) {
@@ -140,6 +145,7 @@ export class MMMBigWinsComp extends BigWinsComp {
         alpha: 0,
         duration: FEATURE_WIN_EXIT_FADE_DURATION,
         onComplete: () => {
+          this.isFeatureWinActive = false;
           this.clearSpinWin();
           if (this.featureWinDim) {
             this.featureWinDim.visible = false;
