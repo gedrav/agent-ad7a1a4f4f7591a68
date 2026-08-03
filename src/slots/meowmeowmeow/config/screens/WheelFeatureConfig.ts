@@ -6,7 +6,7 @@ export const WHEEL_CONFIG: any = {
   class: WheelFeatureComp,
   layoutData: {
     Desktop: { scale: 1, x: 1208, y: 1511 },
-    Portrait: { scale: 1.2, x: 70, y: 100 },
+    Portrait: { scale: 0.85, x: 878, y: 1940 },
     Landscape: { scale: 1, x: 469, y: 100 },
   },
   Elements: [
