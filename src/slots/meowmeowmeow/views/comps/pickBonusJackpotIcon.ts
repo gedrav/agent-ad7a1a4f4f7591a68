@@ -30,7 +30,7 @@ const BACK_STATIC_ANIM_BY_TIER: Record<JackpotTier, string> = {
 };
 
 const WIN_ANIM = {
-  SCALE_UP: 1.15,
+  SCALE_UP: 1.08,
   SCALE_DURATION: 0.5,
   EASE: 'sine.inOut',
 } as const;
@@ -156,14 +156,17 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
     this.isHovering = false;
     this.eventMode = 'none';
     this.cursor = 'default';
+    if (this.idleTimeout) {
+      clearTimeout(this.idleTimeout);
+      this.idleTimeout = null;
+    }
+    this.jackpotSym.stopAnimation();
     if (!this.dimFilter) {
       this.dimFilter = new ColorMatrixFilter();
       this.dimFilter.brightness(DISABLED_BRIGHTNESS, false);
       this.dimFilter.resolution = Math.min(Math.ceil(window.devicePixelRatio), 2);
     }
     this.filters = [this.dimFilter];
-    if (this.jackpotData) return;
-    this.playIdle();
   }
 
   public playWinAnim(): void {

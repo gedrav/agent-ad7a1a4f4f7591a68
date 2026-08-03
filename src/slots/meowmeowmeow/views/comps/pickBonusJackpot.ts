@@ -1,5 +1,5 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
-import { JackpotTier, PICK_ICON_EVENT, PickBonusJackpotIconComp } from './pickBonusJackpotIcon';
+import { PICK_ICON_EVENT, PickBonusJackpotIconComp } from './pickBonusJackpotIcon';
 import { PICK_BONUS_JACKPOT_ICON_CONFIG } from '@slots/meowmeowmeow/config/screens/pickBonusjackpotIconCofig';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
@@ -69,6 +69,8 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     const pick = this.response[this.responseIterator];
     icon.setjackpotData(pick.jackpotTier.replace(/\d+$/, '').toLowerCase());
     this.responseIterator++;
+    const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
+    jackpotComp?.playIdleAnim(pick.jackpotTier.replace(/\d+$/, ''));
     this.pickedIcons.push(icon);
   }
 
@@ -82,6 +84,8 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private animateWinningSymbols() {
     this.icons.forEach((icon) => {
       if (icon.getjackpotData() === appModel.featureResult.featureData.winningTier.replace(/\d+$/, '').toLowerCase()) {
+        const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
+        jackpotComp?.playWinAnim(appModel.featureResult.featureData.winningTier.replace(/\d+$/, ''));
         icon.playWinAnim();
       } else {
         icon.disable();
