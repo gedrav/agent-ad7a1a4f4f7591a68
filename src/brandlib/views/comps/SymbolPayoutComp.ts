@@ -22,23 +22,35 @@ export class SymbolPayoutComp extends StandardView {
     this.infoText.text = '';
     const pays = appModel.getPaytableData();
     const data = pays[symbol];
+    let hasPay = false;
     if (data) {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] > 0) {
+          hasPay = true;
+          break;
+        }
+      }
+    }
+
+    if (hasPay) {
       EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SYMB_PAYOUT_SOUND);
       let result: string = '';
       const len = data.length;
-      if (len > 0) {
-        for (let i = 0; i < len; i++) {
-          if (data[i] > 0) {
-            result +=
-              i + 1 + 'x: ' + Util.formatCurrency(appModel.getSymbolPayoutValue(data[i])) + (i == len - 1 ? '' : '\n');
-          }
+      for (let i = 0; i < len; i++) {
+        if (data[i] > 0) {
+          result +=
+            i + 1 + 'x: ' + Util.formatCurrency(appModel.getSymbolPayoutValue(data[i])) + (i == len - 1 ? '' : '\n');
         }
-        this.infoText.style.wordWrap = false;
-        this.infoText.text = result;
-        this.fitInfoText();
       }
+      this.infoText.style.wordWrap = false;
+      this.infoText.text = result;
+      this.fitInfoText();
     } else {
-      const str = Util.getContent(symbol + 'payoutContent');
+      let str = Util.getContent(symbol + 'payoutContent');
+      if (str === symbol + 'payoutContent') {
+        str = '';
+      }
+
       if (str && str.length > 0) {
         EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SYMB_PAYOUT_SOUND);
         this.infoText.style.fontSize = this.infoText.style.fontSize;
@@ -46,6 +58,7 @@ export class SymbolPayoutComp extends StandardView {
         this.infoText.style.wordWrapWidth = this.infoText.style.wordWrapWidth;
         this.infoText.text = str;
       } else {
+        this.visible = false;
         EventHandler.dispatchEvent(SlotEvents.HIDE_SYMBOL_PAYOUT);
       }
     }
