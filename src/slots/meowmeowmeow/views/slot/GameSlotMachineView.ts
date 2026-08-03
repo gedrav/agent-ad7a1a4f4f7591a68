@@ -50,7 +50,7 @@ export class GameSlotMachineView extends SlotMachineView {
     super(config);
     this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
+    // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
@@ -307,10 +307,6 @@ export class GameSlotMachineView extends SlotMachineView {
     );
   }
 
-  private handlePickFeature() {
-    this.kittiebankComp.resetToNormal();
-  }
-
   private showPickJackpotFeatureScreen() {
     this.wheelBaseRed.visible = true;
     this.feautreHeadingRed.visible = true;
@@ -525,7 +521,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private showKittieBankBreak(): void {
-    const subFeatureType = appModel.getNextSubFeatureType().toUpperCase();
+    const subFeatureType = appModel.getNextSubFeatureType()?.toUpperCase();
     const bankName = subFeatureType === 'RED' ? 'meow' : subFeatureType === 'GREEN' ? 'mew' : 'mii';
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName,

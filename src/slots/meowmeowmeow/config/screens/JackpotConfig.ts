@@ -115,7 +115,7 @@ export const JACKPOT_CONFIG: any = {
           defaultState: '2_Minor_ideal',
           loop: false,
           idleState: '2_Minor_ideal',
-          winState: '2_Minor_Win',
+          winState: '2 _Minor_Win',
           x: 208,
           y: 122,
         },
