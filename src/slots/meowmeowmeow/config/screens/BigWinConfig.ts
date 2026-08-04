@@ -20,6 +20,7 @@ export const BIG_WIN_CONFIG = {
       loop: true,
       x: 744,
       y: 785,
+      px: 860,
       scale: 0.8,
     },
     bigWinTextScales: [0.7, 0.7, 0.7, 0.7],
@@ -44,7 +45,7 @@ export const BIG_WIN_CONFIG = {
       visible: false,
     },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55, px: 873 },
     {
       name: 'featureWinText',
       type: 'Text',
@@ -75,6 +76,7 @@ export const BIG_WIN_CONFIG = {
       anchor: { x: 0.5, y: 0.5 },
       x: 757,
       y: 55,
+      px: 873,
     },
     {
       name: 'winTicker',

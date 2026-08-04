@@ -100,7 +100,7 @@ export class GameSlotReel extends SlotReelStandard {
 
         if (size === 4) {
           this.reelsData.deviceLayout[key].reelContainerPos.y = 5;
-          this.reelsData.deviceLayout[key].reelContainerPos.x = 210;
+          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 186 : 210;
         } else if (size === 5) {
           this.reelsData.deviceLayout[key].reelContainerPos.y = -75;
           this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 172 : 195;

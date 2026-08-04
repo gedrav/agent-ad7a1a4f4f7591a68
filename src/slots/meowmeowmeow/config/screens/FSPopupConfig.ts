@@ -48,8 +48,8 @@ export const FS_POPUP_CONFIG = {
       y: 576,
       px: 980,
       py: 715,
-      lx: 980,
-      ly: 715,
+      lx: 371,
+      ly: 576,
     },
     {
       name: 'mew',

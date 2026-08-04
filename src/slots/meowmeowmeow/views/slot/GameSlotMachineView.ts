@@ -8,6 +8,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { AppEvents } from '@core/events/AppEvents';
 import { Util } from '@core/utils/UtilService';
 import { MMMJackpotComp } from '@slots/meowmeowmeow/views/comps/MMMJackpotComp';
 import { KittieBankComp } from '@slots/meowmeowmeow/views/comps/KittieBankComp';
@@ -47,6 +48,10 @@ export class GameSlotMachineView extends SlotMachineView {
 
   private readonly gameTitleBaseLayoutData: any = null;
   private readonly coinAnimationTimeouts: ReturnType<typeof setTimeout>[] = [];
+
+  private readonly machineBasePaddingPortrait: { v: number; h: number } | null = null;
+
+  private readonly kittiebankBasePortraitY: number | null = null;
 
   constructor(config: any) {
     super(config);
@@ -91,6 +96,14 @@ export class GameSlotMachineView extends SlotMachineView {
         Desktop: kld.Desktop.x,
         Portrait: kld.Portrait.x,
         Landscape: kld.Landscape.x,
+      };
+      this.kittiebankBasePortraitY = kld.Portrait.y;
+    }
+    const mld = this.configData?.layoutData?.Portrait;
+    if (mld) {
+      this.machineBasePaddingPortrait = {
+        v: mld.vPaddingPerc ?? 0,
+        h: mld.hPaddingPerc ?? 0,
       };
     }
     const rld = this.slotReel?.configData?.layoutData;
@@ -550,9 +563,9 @@ export class GameSlotMachineView extends SlotMachineView {
 
     switch (featureName) {
       case 'Base':
-        if (this.configData?.layoutData?.Portrait) {
-          this.configData.layoutData.Portrait.vPaddingPerc = 0;
-          this.configData.layoutData.Portrait.hPaddingPerc = 0;
+        if (this.configData?.layoutData?.Portrait && this.machineBasePaddingPortrait) {
+          this.configData.layoutData.Portrait.vPaddingPerc = this.machineBasePaddingPortrait.v;
+          this.configData.layoutData.Portrait.hPaddingPerc = this.machineBasePaddingPortrait.h;
         }
 
         if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
@@ -573,6 +586,9 @@ export class GameSlotMachineView extends SlotMachineView {
           kld.Desktop.x = this.kittiebankBaseX.Desktop;
           kld.Portrait.x = this.kittiebankBaseX.Portrait;
           kld.Landscape.x = this.kittiebankBaseX.Landscape;
+          if (this.kittiebankBasePortraitY !== null) {
+            kld.Portrait.y = this.kittiebankBasePortraitY;
+          }
         }
 
         if (this.gameTitleBaseLayoutData && this.gameTitle?.configData) {
@@ -642,8 +658,20 @@ export class GameSlotMachineView extends SlotMachineView {
             '';
           const isRedFeature = subFeatureType.toUpperCase() === 'RED';
 
-          const actualReelRows = this.slotReel?.reelsData?.noOfRows;
+          const actualReelRows = (this.slotReel as any)?.reelsData?.noOfRows;
           const currentInterfaceSize = actualReelRows === 3 ? 0 : interfaceSize;
+
+          const applyOrientationPos = (el: any, cfg: any) => {
+            if (!el || !cfg) return;
+            const ox = isPortrait ? cfg.px : cfg.lx;
+            const oy = isPortrait ? cfg.py : cfg.ly;
+            el.x = ox != undefined ? ox : cfg.x;
+            el.y = oy != undefined ? oy : cfg.y;
+          };
+          const els = this.bigWinsComp.elementsList ?? {};
+          applyOrientationPos((this.bigWinsComp as any).bigWinAnim, this.bigWinsComp.configData?.data?.bigWinAnim);
+          applyOrientationPos(els['bigWinText'], els['bigWinText']?.configData);
+          applyOrientationPos(els['featureWinText'], els['featureWinText']?.configData);
 
           if (currentInterfaceSize === 4 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.65);
@@ -661,7 +689,10 @@ export class GameSlotMachineView extends SlotMachineView {
             }
           } else {
             this.bigWinsComp.scale.set(1);
-            this.bigWinsComp.position.set(...(isPortrait ? [90, 1010] : [450, 294]));
+            const bwBase = this.bigWinsComp.configData?.layoutData?.[isPortrait ? 'Portrait' : 'Landscape'];
+            if (bwBase) {
+              this.bigWinsComp.position.set(bwBase.x, bwBase.y);
+            }
             if (winTicker) {
               winTicker.x = 755;
               winTicker.y = 480;
@@ -675,11 +706,6 @@ export class GameSlotMachineView extends SlotMachineView {
   // reset all layout mutations made during free spins
   private resetMachineLayout(): void {
     this.updateAllConfigs('Base');
-
-    const reelLd = this.slotReel?.configData?.layoutData;
-    if (reelLd?.Portrait) {
-      reelLd.Portrait.y = 550;
-    }
 
     EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', 3);
 
@@ -704,6 +730,8 @@ export class GameSlotMachineView extends SlotMachineView {
 
     this.addChild(this.jackpotContainer, this.slotReel, this.gameTitle, this.kittiebankComp);
     this.resizeView();
+
+    EventHandler.dispatchEvent(AppEvents.APP_RESIZE);
   }
 
   public updateBigWinsCompScale(): void {

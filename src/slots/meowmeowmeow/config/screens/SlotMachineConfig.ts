@@ -326,7 +326,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           image: '5_4Reelbg',
           x: 40,
           y: -180,
-          px: -4,
+          px: 23,
           py: -180,
           lx: 34,
           ly: -180,

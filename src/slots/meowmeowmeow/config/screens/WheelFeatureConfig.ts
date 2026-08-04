@@ -7,7 +7,7 @@ export const WHEEL_CONFIG: any = {
   layoutData: {
     Desktop: { scale: 1, x: 1208, y: 1511 },
     Portrait: { scale: 0.85, x: 878, y: 1940 },
-    Landscape: { scale: 1, x: 469, y: 100 },
+    Landscape: { scale: 1, x: 1208, y: 1511 },
   },
   Elements: [
     {
