@@ -770,5 +770,10 @@ export class GameSlotMachineView extends SlotMachineView {
     super.resizeView();
     this.maskWheelTestToRim();
     this.updateBigWinsCompScale();
+    const featureType = appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
+    const isFeatureActive = this.wheelBaseRed?.visible || this.wheelBaseBlue?.visible || this.wheelBaseGreen?.visible;
+    if ((featureType === 'RED' || featureType === 'BLUE') && isFeatureActive) {
+      this.gameTitle.visible = false;
+    }
   }
 }
