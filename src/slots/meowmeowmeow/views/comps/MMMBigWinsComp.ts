@@ -52,6 +52,7 @@ export class MMMBigWinsComp extends BigWinsComp {
     }
     this.featureWinDim = this.elementsList['featureWinDim'];
     EventHandler.addEventListener(SHOW_FEATURE_WIN_ANIM, this.showFeatureWin.bind(this));
+    EventHandler.addEventListener(SlotEvents.START_SPIN, this.clearSpinWin.bind(this));
   }
 
   public async showSpinWin(): Promise<void> {
@@ -116,11 +117,16 @@ export class MMMBigWinsComp extends BigWinsComp {
   }
 
   public override clearSpinWin() {
-    if (this.isFeatureWinActive) return;
+    this.isFeatureWinActive = false;
     super.clearSpinWin();
     this.featureWinDim.visible = false;
     if (this.featureWinText) {
       this.featureWinText.visible = false;
+      this.featureWinText.alpha = 1;
+    }
+    if (this.bigWinAnim) {
+      this.bigWinAnim.stopAnimation();
+      this.bigWinAnim.visible = false;
     }
   }
   protected notifyWinDone(): void {

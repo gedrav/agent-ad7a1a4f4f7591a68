@@ -46,6 +46,7 @@ export class GameSlotMachineView extends SlotMachineView {
   } | null = null;
 
   private readonly gameTitleBaseLayoutData: any = null;
+  private readonly coinAnimationTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   constructor(config: any) {
     super(config);
@@ -389,20 +390,21 @@ export class GameSlotMachineView extends SlotMachineView {
         return a.col - b.col;
       });
 
-      // 3. Animate sequentially with a small stagger delay
+      // 3. Animate with staggered timing (coins can overlap slightly)
       let currentDelay = 0;
-      const delayBetweenCoins = 300;
       const animationDuration = 1000;
+      const delayBetweenCoins = 400;
 
       allCoins.forEach((coin) => {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           this.animateSymbolToKittyBank(coin.col, coin.row, coin.bank, coin.symbol);
         }, currentDelay);
+        this.coinAnimationTimeouts.push(timeoutId);
         currentDelay += delayBetweenCoins;
       });
 
       // 4. Move to next state after the very last animation finishes
-      const totalWaitTime = (allCoins.length - 1) * delayBetweenCoins + animationDuration;
+      const totalWaitTime = currentDelay + animationDuration;
       setTimeout(() => {
         StateManager.doNextStep();
       }, totalWaitTime);

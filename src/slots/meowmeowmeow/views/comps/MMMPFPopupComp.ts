@@ -172,12 +172,14 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.parent?.addChild(this);
 
     super.showPFPopup(data);
-    const scale = this.scale.x;
-    const yy = this.y;
-    const xx = this.x;
+    (this as any).resizeView?.();
 
-    const dropOffset = 550;
-    this.y -= dropOffset;
+    const scale = this.scale.x;
+    const xx = this.x;
+    const yy = this.y;
+    const dropStartY = -400;
+
+    this.y = dropStartY;
     this.x = xx;
 
     const mewSpine = this.elementsList['mew'] as PixSpine;
