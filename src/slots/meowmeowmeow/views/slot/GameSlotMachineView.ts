@@ -15,6 +15,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
@@ -163,6 +164,14 @@ export class GameSlotMachineView extends SlotMachineView {
     this.jackpotContainer.visible = true;
     this.jackpotContainer.alpha = 0;
     this.jackpotContainer.zIndex = 2;
+
+    const jackpotLd = this.jackpotContainer.configData?.layoutData?.Portrait;
+    if (jackpotLd) {
+      jackpotLd.px = 238;
+      jackpotLd.py = 605;
+      UIUtil.adjustElement(this.jackpotContainer);
+    }
+
     AnimationProxy.animateTween(this.jackpotContainer, {
       alpha: 1,
       duration: 0.5,
@@ -174,6 +183,9 @@ export class GameSlotMachineView extends SlotMachineView {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
     if (!isNaN(interfaceSize) && interfaceSize !== 0) {
       return interfaceSize;
+    }
+    if (!appModel.getNextFeatureType()) {
+      return 0;
     }
     return appModel.getNextSubFeatureType() === 'Green' ? 5 : 4;
   }
@@ -619,15 +631,39 @@ export class GameSlotMachineView extends SlotMachineView {
 
       case 'BigWin':
         if (this.bigWinsComp) {
-          if (interfaceSize === 4) {
+          const isPortrait = DeviceProxy.config.isPortrait;
+          const winTicker = this.bigWinsComp.elementsList?.['winTicker'];
+          const subFeatureType =
+            appModel.getNextSubFeatureType() ||
+            appModel.getUnfinishedFeatureSubType() ||
+            appModel.featureResult?.featureData?.subFeatureType ||
+            '';
+          const isRedFeature = subFeatureType.toUpperCase() === 'RED';
+
+          const actualReelRows = this.slotReel?.reelsData?.noOfRows;
+          const currentInterfaceSize = actualReelRows === 3 ? 0 : interfaceSize;
+
+          if (currentInterfaceSize === 4 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.65);
-            this.bigWinsComp.position.set(718, 518);
-          } else if (interfaceSize === 5) {
+            this.bigWinsComp.position.set(...(isPortrait ? [374, 1048] : [718, 518]));
+            if (winTicker) {
+              winTicker.x = 772;
+              winTicker.y = 320;
+            }
+          } else if (currentInterfaceSize === 5 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.58);
-            this.bigWinsComp.position.set(772, 660);
+            this.bigWinsComp.position.set(...(isPortrait ? [428, 1190] : [772, 660]));
+            if (winTicker) {
+              winTicker.x = 762;
+              winTicker.y = 180;
+            }
           } else {
             this.bigWinsComp.scale.set(1);
-            this.bigWinsComp.position.set(450, 294);
+            this.bigWinsComp.position.set(...(isPortrait ? [90, 1010] : [450, 294]));
+            if (winTicker) {
+              winTicker.x = 755;
+              winTicker.y = 480;
+            }
           }
         }
         break;
@@ -637,6 +673,20 @@ export class GameSlotMachineView extends SlotMachineView {
   // reset all layout mutations made during free spins
   private resetMachineLayout(): void {
     this.updateAllConfigs('Base');
+
+    const reelLd = this.slotReel?.configData?.layoutData;
+    if (reelLd?.Portrait) {
+      reelLd.Portrait.y = 550;
+    }
+
+    EventHandler.dispatchEvent('UPDATE_REEL_LAYOUT', 3);
+
+    const jackpotLd = this.jackpotContainer?.configData?.layoutData?.Portrait;
+    if (jackpotLd) {
+      delete jackpotLd.px;
+      delete jackpotLd.py;
+    }
+
     (this.slotReel as any).resizeView();
 
     this.wheelBase.alpha = 1;
@@ -648,6 +698,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
     this.jackpotContainer.visible = true;
     this.kittiebankComp.visible = true;
+    this.gameTitle.visible = true;
 
     this.addChild(this.jackpotContainer, this.slotReel, this.gameTitle, this.kittiebankComp);
     this.resizeView();

@@ -5,9 +5,11 @@ export const JACKPOT_CONFIG: any = {
   name: 'jackpotContainer',
   type: 'Comp',
   class: MMMJackpotComp,
-  x: 382,
-  y: 120,
-  px: 214,
+  layoutData: {
+    Desktop: { scale: 1, x: 382, y: 120 },
+    Portrait: { scale: 1, x: 207, y: 107 },
+    Landscape: { scale: 1, x: 382, y: 120 },
+  },
   Elements: [
     {
       name: 'grand',
