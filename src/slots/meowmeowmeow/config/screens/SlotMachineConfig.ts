@@ -36,7 +36,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'wheelBase',
       type: 'Sprite',
       image: 'wheelBase',
-      visible: false,
+      visible: true,
       scale: 0.9,
       layoutData: {
         Desktop: { x: 430, y: 1 },

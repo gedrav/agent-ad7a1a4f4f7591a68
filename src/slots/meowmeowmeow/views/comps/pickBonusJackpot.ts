@@ -66,7 +66,13 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   }
 
   private onIconSelected(icon: PickBonusJackpotIconComp): void {
+    if (this.responseIterator >= this.responseLength) {
+      this.animateWinningSymbols();
+      this.scheduleExit();
+      return;
+    }
     const pick = this.response[this.responseIterator];
+
     icon.setjackpotData(pick.jackpotTier.replace(/\d+$/, '').toLowerCase());
     this.responseIterator++;
     const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
