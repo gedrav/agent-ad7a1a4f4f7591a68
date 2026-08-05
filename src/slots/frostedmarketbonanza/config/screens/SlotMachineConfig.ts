@@ -27,8 +27,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xffff00,
       width: 1955,
       height: 1420,
-      lWidth: 2200,
-      lHeight: 1450,
+      lWidth: 1920,
+      lHeight: 1430,
       pWidth: 1450,
       pHeight: 1440,
       alpha: 0,
@@ -43,7 +43,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       y: 90,
       px: 5,
       py: 110,
-      lx: 375,
+      lx: 300,
       ly: 100,
       data: {
         onlyWinAnim: true,
@@ -360,6 +360,6 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
     SmallPortrait: { widthPerc: 1.3, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
-    Landscape: { widthPerc: 0.7, heightPerc: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
+    Landscape: { widthPerc: 0.7, heightPerc: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.004 },
   },
 };
