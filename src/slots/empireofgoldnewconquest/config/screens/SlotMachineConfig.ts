@@ -29,7 +29,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       width: 2284,
       height: 1380,
       lWidth: 2140,
-      lHeight: 1400,
+      lHeight: 1380,
       pWidth: 1400,
       pHeight: 1760,
       alpha: 0,
@@ -445,6 +445,6 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
     SmallPortrait: { widthPerc: 1.3, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
-    Landscape: { widthPerc: 0.7, heightPerc: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
+    Landscape: { widthPerc: 0.7, heightPerc: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.015 },
   },
 };
