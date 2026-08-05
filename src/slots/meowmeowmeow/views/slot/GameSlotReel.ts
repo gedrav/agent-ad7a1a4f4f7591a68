@@ -69,7 +69,7 @@ export class GameSlotReel extends SlotReelStandard {
           maskRect.y = 68;
           maskRect.height = 988;
         }
-        if (tickerComp) tickerComp.y = 1070;
+        if (tickerComp) tickerComp.y = 1060;
         if (fsAutoCounterComp) fsAutoCounterComp.y = 1070;
       }
     }
@@ -100,10 +100,10 @@ export class GameSlotReel extends SlotReelStandard {
 
         if (size === 4) {
           this.reelsData.deviceLayout[key].reelContainerPos.y = 5;
-          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 186 : 210;
+          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 188 : 210;
         } else if (size === 5) {
           this.reelsData.deviceLayout[key].reelContainerPos.y = -75;
-          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 172 : 195;
+          this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 163 : 195;
         } else {
           this.reelsData.deviceLayout[key].reelContainerPos.y = 230;
           this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 172 : 195;
