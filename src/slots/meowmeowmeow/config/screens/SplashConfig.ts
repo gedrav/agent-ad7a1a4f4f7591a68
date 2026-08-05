@@ -22,9 +22,9 @@ export const SPLASH_CONFIG: any = {
       name: 'item1',
       type: 'Comp',
       class: SplashItemComp,
-      image: 'screen1',
+      image: 'screen3',
       content: 'splash1',
-      textY: 490,
+      textY: 600,
       textAreaHeight: 190,
       textStyle: {
         name: 'contentTxt',
@@ -38,7 +38,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 40,
+          fontSize: 50,
+          mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -55,8 +56,8 @@ export const SPLASH_CONFIG: any = {
       type: 'Comp',
       class: SplashItemComp,
       image: 'screen2',
-      content: 'splash2',
-      textY: 486,
+      content: 'splash3',
+      textY: 600,
       textAreaHeight: 190,
       textStyle: {
         name: 'contentTxt',
@@ -70,7 +71,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 40,
+          fontSize: 50,
+          mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -86,9 +88,9 @@ export const SPLASH_CONFIG: any = {
       name: 'item3',
       type: 'Comp',
       class: SplashItemComp,
-      image: 'screen3',
-      content: 'splash3',
-      textY: 480,
+      image: 'screen1',
+      content: 'splash2',
+      textY: 600,
       textAreaHeight: 190,
       textStyle: {
         name: 'contentTxt',
@@ -102,7 +104,8 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 40,
+          fontSize: 50,
+          mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -240,7 +243,7 @@ export const SPLASH_CONFIG: any = {
           x: 274,
           y: 85,
           layoutData: {
-            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.7, maxScale: 1 },
+            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 0.7, heightPerc: 0.5, maxScale: 0.7 },
           },
         },
         {
@@ -322,7 +325,7 @@ export const SPLASH_CONFIG: any = {
       image: 'gamelogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1.5, hAlign: 'center', vPosition: 0.06 },
         Portrait: {
           widthPerc: 0.6,
           heightPerc: 0.12,
