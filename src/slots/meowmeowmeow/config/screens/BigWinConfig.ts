@@ -21,7 +21,7 @@ export const BIG_WIN_CONFIG = {
       loop: true,
       x: 744,
       y: 785,
-      px: 806,
+      px: 838,
       scale: 0.8,
     },
     bigWinTextScales: [0.7, 0.7, 0.7, 0.7],
@@ -35,7 +35,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: -62, y: 46, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55, px: 873 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55, px: 860 },
     {
       name: 'featureWinText',
       type: 'Text',

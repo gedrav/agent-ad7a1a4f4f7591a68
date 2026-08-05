@@ -5,6 +5,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class GameSlotReel extends SlotReelStandard {
   private readonly totalAnims: number;
@@ -51,7 +52,7 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1200;
         if (fsAutoCounterComp) {
-          fsAutoCounterComp.x = 70;
+          fsAutoCounterComp.x = DeviceProxy.config.isPortrait ? 39 : 70;
           fsAutoCounterComp.y = 1150;
         }
       } else if (size === 5) {
@@ -61,7 +62,7 @@ export class GameSlotReel extends SlotReelStandard {
         }
         if (tickerComp) tickerComp.y = 1500;
         if (fsAutoCounterComp) {
-          fsAutoCounterComp.x = 48;
+          fsAutoCounterComp.x = DeviceProxy.config.isPortrait ? 15 : 45;
           fsAutoCounterComp.y = 1395;
         }
       } else {
@@ -99,13 +100,13 @@ export class GameSlotReel extends SlotReelStandard {
         this.reelsData.deviceLayout[key].symbolScale = 1;
 
         if (size === 4) {
-          this.reelsData.deviceLayout[key].reelContainerPos.y = 5;
+          this.reelsData.deviceLayout[key].reelContainerPos.y = -10;
           this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 188 : 210;
         } else if (size === 5) {
-          this.reelsData.deviceLayout[key].reelContainerPos.y = -75;
+          this.reelsData.deviceLayout[key].reelContainerPos.y = -95;
           this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 163 : 195;
         } else {
-          this.reelsData.deviceLayout[key].reelContainerPos.y = 230;
+          this.reelsData.deviceLayout[key].reelContainerPos.y = 222;
           this.reelsData.deviceLayout[key].reelContainerPos.x = key === 'Portrait' ? 172 : 195;
         }
       }

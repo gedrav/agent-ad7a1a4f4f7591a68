@@ -123,7 +123,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       winController: GameWinController,
       layoutData: {
         Desktop: { x: 360, y: 274 },
-        Portrait: { x: 0, y: 1000 },
+        Portrait: { x: -6, y: 1000 },
         Landscape: { x: 360, y: 274 },
       },
       data: {
@@ -156,7 +156,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 195, y: 230 },
+            reelContainerPos: { x: 195, y: 222 },
             reelPositionX: [2, 333, 664, 994, 1324],
             symbolHeight: 330,
             symbolScale: 1,
@@ -539,7 +539,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       vPaddingPerc: 0,
       hPaddingPerc: 0,
     },
-    Portrait: { widthPerc: 0.95, heightPerc: 0.68, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
+    Portrait: { widthPerc: 1, heightPerc: 0.68, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
     Landscape: { widthPerc: 0.7, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
     SmallLandscape: { widthPerc: 0.7, heightPerc: 0.88, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },
   },
