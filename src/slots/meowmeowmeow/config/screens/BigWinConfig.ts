@@ -6,6 +6,7 @@ export const BIG_WIN_CONFIG = {
   type: 'Comp',
   class: MMMBigWinsComp,
   data: {
+    backgroundAlpha: 0.7,
     animations: {
       BIG_WIN: { start: '1_big_Win', idle: '1_big_Win_Loop' },
       SUPER_WIN: { start: '2_Super_Win', idle: '2_Super_Win_Loop' },
@@ -20,7 +21,7 @@ export const BIG_WIN_CONFIG = {
       loop: true,
       x: 744,
       y: 785,
-      px: 860,
+      px: 806,
       scale: 0.8,
     },
     bigWinTextScales: [0.7, 0.7, 0.7, 0.7],
@@ -32,18 +33,7 @@ export const BIG_WIN_CONFIG = {
     },
   },
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: 0, y: 0, alpha: 0 },
-    {
-      name: 'featureWinDim',
-      type: 'Graphics',
-      color: 0x000000,
-      width: 8000,
-      height: 8000,
-      x: -4000,
-      y: -4000,
-      alpha: 0,
-      visible: false,
-    },
+    { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: -62, y: 46, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
     { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55, px: 873 },
     {
@@ -99,6 +89,7 @@ export const BIG_WIN_CONFIG = {
       class: WinTicker,
       x: 750,
       y: 1000,
+      px: 810,
       Elements: [
         {
           name: 'valueText',

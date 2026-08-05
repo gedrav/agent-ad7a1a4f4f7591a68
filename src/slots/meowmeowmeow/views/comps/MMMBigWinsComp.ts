@@ -1,6 +1,5 @@
 import { BigWinsComp } from '@brand/views/comps/BigWinsComp';
 import { PixText } from '@core/pixiwrapper/PixText';
-import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
@@ -27,7 +26,6 @@ function buildFillGradient(colors: number[], offsets: number[] = []): FillGradie
 export const SHOW_FEATURE_WIN_ANIM = 'SHOW_FEATURE_WIN_ANIM';
 
 const FEATURE_WIN_COUNTUP_DURATION = 4000;
-const FEATURE_WIN_DIM_ALPHA = 0.7;
 const FEATURE_WIN_EXIT_PAUSE_MS = 500;
 const FEATURE_WIN_EXIT_FADE_DURATION = 0.5;
 
@@ -40,7 +38,6 @@ const TIER_TEXT_FILL: Record<string, number[]> = {
 
 export class MMMBigWinsComp extends BigWinsComp {
   private readonly featureWinText: PixText;
-  private readonly featureWinDim: PixGraphics;
   private featureWinCallback: (() => void) | null = null;
   private isFeatureWinActive: boolean = false;
 
@@ -50,20 +47,8 @@ export class MMMBigWinsComp extends BigWinsComp {
     if (this.featureWinText) {
       this.featureWinText.visible = false;
     }
-    this.featureWinDim = this.elementsList['featureWinDim'];
     EventHandler.addEventListener(SHOW_FEATURE_WIN_ANIM, this.showFeatureWin.bind(this));
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.clearSpinWin.bind(this));
-  }
-
-  public async showSpinWin(): Promise<void> {
-    const winType = appModel.getWinType();
-    const isBigWin = winType !== CONSTANTS.BELOW_TOTALBET_WIN && winType !== CONSTANTS.STANDARD_WIN;
-    if (isBigWin && this.featureWinDim) {
-      this.featureWinDim.visible = true;
-      this.featureWinDim.alpha = FEATURE_WIN_DIM_ALPHA;
-      this.setChildIndex(this.featureWinDim, 0);
-    }
-    await super.showSpinWin();
   }
 
   protected showFeatureWin(data: { callback?: () => void }): void {
@@ -73,11 +58,6 @@ export class MMMBigWinsComp extends BigWinsComp {
     this.targetLevel = 4;
     this.currentState = CONSTANTS.EPIC_WIN;
 
-    if (this.featureWinDim) {
-      this.featureWinDim.visible = true;
-      this.featureWinDim.alpha = FEATURE_WIN_DIM_ALPHA;
-      this.setChildIndex(this.featureWinDim, 0);
-    }
     this.parent?.addChild(this);
     const bigWinText = this.elementsList['bigWinText'];
     if (bigWinText) {
@@ -119,7 +99,6 @@ export class MMMBigWinsComp extends BigWinsComp {
   public override clearSpinWin() {
     this.isFeatureWinActive = false;
     super.clearSpinWin();
-    this.featureWinDim.visible = false;
     if (this.featureWinText) {
       this.featureWinText.visible = false;
       this.featureWinText.alpha = 1;
@@ -131,10 +110,6 @@ export class MMMBigWinsComp extends BigWinsComp {
   }
   protected notifyWinDone(): void {
     if (!this.featureWinCallback) {
-      if (this.featureWinDim) {
-        this.featureWinDim.visible = false;
-        this.featureWinDim.alpha = 1;
-      }
       super.notifyWinDone();
       return;
     }
@@ -146,17 +121,13 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
 
     setTimeout(() => {
-      const fadeTargets = [this.bigWinAnim, this.featureWinText, this.featureWinDim].filter(Boolean);
+      const fadeTargets = [this.bigWinAnim, this.featureWinText].filter(Boolean);
       AnimationProxy.animateTween(fadeTargets, {
         alpha: 0,
         duration: FEATURE_WIN_EXIT_FADE_DURATION,
         onComplete: () => {
           this.isFeatureWinActive = false;
           this.clearSpinWin();
-          if (this.featureWinDim) {
-            this.featureWinDim.visible = false;
-            this.featureWinDim.alpha = 1;
-          }
           if (this.featureWinText) {
             this.featureWinText.visible = false;
             this.featureWinText.alpha = 1;

@@ -621,7 +621,7 @@ export class GameSlotMachineView extends SlotMachineView {
             reelLd.Desktop.x = 650;
             reelLd.Desktop.y = 436;
             reelLd.Desktop.scale = 0.65;
-            reelLd.Portrait.x = 306;
+            reelLd.Portrait.x = 320;
             reelLd.Portrait.y = 966;
             reelLd.Portrait.scale = 0.65;
             reelLd.Landscape.x = 650;
@@ -631,7 +631,7 @@ export class GameSlotMachineView extends SlotMachineView {
             reelLd.Desktop.x = 718;
             reelLd.Desktop.y = 457;
             reelLd.Desktop.scale = 0.58;
-            reelLd.Portrait.x = 374;
+            reelLd.Portrait.x = 394;
             reelLd.Portrait.y = 987;
             reelLd.Portrait.scale = 0.58;
             reelLd.Landscape.x = 718;
@@ -669,9 +669,19 @@ export class GameSlotMachineView extends SlotMachineView {
             el.y = oy != undefined ? oy : cfg.y;
           };
           const els = this.bigWinsComp.elementsList ?? {};
-          applyOrientationPos((this.bigWinsComp as any).bigWinAnim, this.bigWinsComp.configData?.data?.bigWinAnim);
+          const bigWinAnim = (this.bigWinsComp as any).bigWinAnim;
+          applyOrientationPos(bigWinAnim, this.bigWinsComp.configData?.data?.bigWinAnim);
           applyOrientationPos(els['bigWinText'], els['bigWinText']?.configData);
           applyOrientationPos(els['featureWinText'], els['featureWinText']?.configData);
+          applyOrientationPos(els['winTickerBW'], els['winTickerBW']?.configData);
+
+          const guideRect = els['guideRect'];
+          const setGuideRect = (x: number, y: number, width: number, height: number) => {
+            if (!guideRect) return;
+            guideRect.position.set(x, y);
+            guideRect.width = width;
+            guideRect.height = height;
+          };
 
           if (currentInterfaceSize === 4 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.65);
@@ -680,12 +690,23 @@ export class GameSlotMachineView extends SlotMachineView {
               winTicker.x = 772;
               winTicker.y = 320;
             }
+            setGuideRect(-60, -297, 1660, 1293.6);
+            if (isPortrait && bigWinAnim) {
+              bigWinAnim.x = 721;
+            }
+            if (isPortrait && els['winTickerBW']) {
+              els['winTickerBW'].x = 770;
+            }
           } else if (currentInterfaceSize === 5 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.58);
             this.bigWinsComp.position.set(...(isPortrait ? [428, 1190] : [772, 660]));
             if (winTicker) {
               winTicker.x = 762;
               winTicker.y = 180;
+            }
+            setGuideRect(-65, -603, 1660, 1617);
+            if (isPortrait && bigWinAnim) {
+              bigWinAnim.x = 746;
             }
           } else {
             this.bigWinsComp.scale.set(1);
@@ -697,6 +718,7 @@ export class GameSlotMachineView extends SlotMachineView {
               winTicker.x = 755;
               winTicker.y = 480;
             }
+            setGuideRect(isPortrait ? 28 : -62, isPortrait ? 56 : 46, 1660, 980);
           }
         }
         break;
