@@ -8,6 +8,7 @@ const PRELOADER: AssetBundle = {
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'common', NAME: 'Roboto.ttf', ASSETTYPE: 'font' },
   ],
 };
 const COMMON: AssetBundle = {
