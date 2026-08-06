@@ -33,7 +33,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          style: { fontFamily: 'commonFont1', fontSize: 110, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
+          style: { fontFamily: 'commonFont', fontSize: 110, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
           content: '',
           x: 140,
           anchor: { x: 0.5, y: 0.5 },
