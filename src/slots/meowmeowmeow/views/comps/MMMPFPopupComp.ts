@@ -26,9 +26,9 @@ const WHEEL_PRIZE_ROW_ORDER = [
 ];
 const WHEEL_PRIZE_ROW_GAP = 20;
 const WHEEL_PRIZE_ROW_Y_OFFSETS: Record<string, number> = {
-  wheelPrizeIconGreen: 10,
+  wheelPrizeIconGreen: 16,
   wheelPrizeOr1: 20,
-  wheelPrizeIconRed: 21,
+  wheelPrizeIconRed: 16,
   wheelPrizeText2: 15,
   wheelPrizeCashText: 10,
 };
@@ -184,9 +184,10 @@ export class MMMPFPopupComp extends PFPopupComp {
 
     const mewSpine = this.elementsList['mew'] as PixSpine;
     if (mewSpine?.configData.idle) {
-      const featName = appModel.getNextSubFeatureType()
-        ? appModel.getNextSubFeatureType()
-        : appModel.getFeatureSubType();
+      let featName = appModel.getNextSubFeatureType() ? appModel.getNextSubFeatureType() : appModel.getFeatureSubType();
+      if (!data.entryPopUp && appModel.getFeatureSubType().toUpperCase() === 'BLUE') {
+        featName = 'BLUE';
+      }
       const animName = featName.toUpperCase() === 'RED' ? '3_RED_Ideal' : '2_BLUE_Ideal';
       mewSpine.playAnimation({ state: animName, loop: true });
     }

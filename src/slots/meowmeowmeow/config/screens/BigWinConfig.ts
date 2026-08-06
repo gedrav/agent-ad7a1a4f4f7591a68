@@ -20,9 +20,9 @@ export const BIG_WIN_CONFIG = {
       spineName: 'BigWin_Anim',
       loop: true,
       x: 744,
-      y: 785,
+      y: 711,
       px: 838,
-      scale: 0.8,
+      scale: 0.7,
     },
     bigWinTextScales: [0.7, 0.7, 0.7, 0.7],
     bigWinTextStates: {
@@ -35,7 +35,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: -62, y: 46, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 55, px: 860 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 142, px: 860 },
     {
       name: 'featureWinText',
       type: 'Text',
@@ -43,7 +43,7 @@ export const BIG_WIN_CONFIG = {
       visible: false,
       style: {
         fontFamily: 'gameFont2',
-        fontSize: 150,
+        fontSize: 140,
         fontWeight: '900',
         letterSpacing: 8,
         fill: ['0xFFF9C4', '0xFFD700', '0xFFA000', '0xE8890C'],
@@ -65,7 +65,7 @@ export const BIG_WIN_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 757,
-      y: 55,
+      y: 123,
       px: 873,
     },
     {
@@ -88,7 +88,7 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 750,
-      y: 1000,
+      y: 887,
       px: 810,
       Elements: [
         {

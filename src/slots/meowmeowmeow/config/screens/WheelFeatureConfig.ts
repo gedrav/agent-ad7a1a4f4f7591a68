@@ -53,7 +53,7 @@ export const WHEEL_CONFIG: any = {
       visible: true,
       style: {
         fontFamily: 'gameFont2',
-        fontSize: 62,
+        fontSize: 144,
         fontWeight: '900',
         letterSpacing: 10,
         fill: ['0xFFFFFF', '0xFFF176', '0xFFD600', '0xFF8F00'],
