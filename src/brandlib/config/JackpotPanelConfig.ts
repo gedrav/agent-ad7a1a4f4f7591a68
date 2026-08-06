@@ -33,7 +33,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          style: { fontFamily: 'gameFont1', fontSize: 110, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
+          style: { fontFamily: 'commonFont', fontSize: 110, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
           content: '',
           x: 140,
           anchor: { x: 0.5, y: 0.5 },
@@ -77,7 +77,17 @@ export const JACKPOT_PANEL_CONFIG: any = {
       name: 'jackpotWinContainer',
       type: 'Container',
       Elements: [
-        { name: 'guideRect', type: 'Graphics', width: 1400, height: 1200, alpha: 0 },
+        {
+          name: 'jpguideRect',
+          type: 'Graphics',
+          width: 1400,
+          height: 1200,
+          pWidth: 650,
+          pHeight: 1200,
+          lWidth: 1400,
+          lHeight: 1200,
+          alpha: 0,
+        },
         {
           name: 'jackPotOutroAnimation',
           type: 'Spine',
@@ -87,12 +97,13 @@ export const JACKPOT_PANEL_CONFIG: any = {
           x: 0,
           y: 600,
         },
+        { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, y: 448 },
         {
           name: 'winTickerJP',
           type: 'Comp',
           class: WinTicker,
           x: 0,
-          y: 600,
+          y: 566,
           Elements: [
             {
               name: 'valueText',
@@ -106,7 +117,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
       ],
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 0.5, widthPerc: 1, vPaddingPerc: 0 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 1, widthPerc: 2, vPaddingPerc: 0 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 0.5, widthPerc: 1, vPaddingPerc: 0 },
         Landscape: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 0.5, widthPerc: 1, vPaddingPerc: 0 },
       },
     },
