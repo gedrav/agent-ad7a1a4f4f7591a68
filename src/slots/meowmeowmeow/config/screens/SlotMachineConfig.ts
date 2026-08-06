@@ -83,7 +83,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       spineName: 'Vault_Anim',
       scale: 0.65,
       angle: 0.5,
-      visible: false,
+      visible: true,
       layoutData: {
         Desktop: { x: 1208, y: 760 },
         Portrait: { x: 864, y: 1290 },

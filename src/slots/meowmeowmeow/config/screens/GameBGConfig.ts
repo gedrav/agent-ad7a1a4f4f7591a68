@@ -10,8 +10,8 @@ export const GAME_BG_CONFIG: any = {
       type: 'Sprite',
       image: 'maingamebg',
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1 },
+        Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.003, fitToScreen: true, fullScreenScale: 1 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.16, fitToScreen: true, fullScreenScale: 1 },
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1 },
       },
     },
