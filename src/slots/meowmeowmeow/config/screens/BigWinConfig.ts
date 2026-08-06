@@ -42,7 +42,7 @@ export const BIG_WIN_CONFIG = {
       content: 'FeatureWinCongratsText',
       visible: false,
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 150,
         fontWeight: '900',
         letterSpacing: 8,
