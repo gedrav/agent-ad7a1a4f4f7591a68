@@ -1,11 +1,16 @@
 import WinController from '@core/views/slotmachine/WinController';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { GameProxy } from '@core/models/GameConfigProxy';
+import { Util } from '@core/utils/UtilService';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { SymbolConfig } from '@core/views/slotmachine/ReelSymbol';
 import { SpinePool } from '@core/views/slotmachine/SpinePool';
 import { WildAppearEvent } from './CTSloReel';
+import { WIN_FRAME_SHOW_EVENT, WIN_FRAME_HIDE_EVENT } from './CTReelSymbolSpine';
 import { StateManager } from '@core/states/StateManagerService';
 
 interface ActiveWildSpine {
@@ -13,14 +18,54 @@ interface ActiveWildSpine {
   data: SymbolConfig['data'];
 }
 
+const WIN_FRAME_SCALE = 0.5;
+
 export default class GameWinController extends WinController {
-  private readonly maskRect: PixGraphics;
+  private maskRect: PixGraphics;
   private activeWildSpines: ActiveWildSpine[] = [];
+  private readonly activeWinFrames: Map<ReelSymbolSprite, PixSpine> = new Map();
+  private scatterTriggerTimeoutId: any;
 
   constructor(data: any) {
     super(data);
     EventHandler.addEventListener('Wildappear', this.playWildAppear.bind(this));
     EventHandler.addEventListener('ClearWildSpines', this.clearAllWildSpines.bind(this));
+    EventHandler.addEventListener(WIN_FRAME_SHOW_EVENT, this.showWinFrame.bind(this));
+    EventHandler.addEventListener(WIN_FRAME_HIDE_EVENT, this.hideWinFrame.bind(this));
+  }
+
+  private getWinFrameData(): SymbolConfig['data'] {
+    return {
+      name: 'win_frame',
+      spineName: 'win_frame',
+      skin: 'default',
+      idleAnim: 'animation',
+      winAnim: 'animation',
+    };
+  }
+
+  private showWinFrame(symbol: ReelSymbolSprite): void {
+    if (this.activeWinFrames.has(symbol)) return;
+    const spine = SpinePool.getInstance().acquire(this.getWinFrameData());
+    spine.x = symbol.x;
+    spine.y = symbol.y;
+    spine.scale.set(WIN_FRAME_SCALE);
+    spine.visible = true;
+    this.winSymbolsContainer.addChild(spine);
+    spine.playAnimation({ state: 'animation', loop: true });
+    this.activeWinFrames.set(symbol, spine);
+  }
+
+  private hideWinFrame(symbol: ReelSymbolSprite): void {
+    const spine = this.activeWinFrames.get(symbol);
+    if (!spine) return;
+    spine.stopAnimation();
+    spine.visible = false;
+    if (spine.parent) {
+      spine.parent.removeChild(spine);
+    }
+    SpinePool.getInstance().release(this.getWinFrameData(), spine);
+    this.activeWinFrames.delete(symbol);
   }
 
   private playWildAppear(data: WildAppearEvent): void {
@@ -74,51 +119,76 @@ export default class GameWinController extends WinController {
     };
   }
 
-  // public showLineWin(): void {
-  //   if (!this.maskRect) {
-  //     this.maskRect = this.slotReel?.elementsList['maskRect'];
-  //   }
+  public showScatterTrigger(): void {
+    const positions: number[] = appModel.getSpinResult().scatterPositions;
+    if (positions && positions.length > 0) {
+      const len = positions.length;
+      for (let j = 0; j < len; j++) {
+        const pos = this.getReelPosition(positions[j]);
+        if (this.reelsData.isFixedSymbol) {
+          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
+          this.symbolsArray[pos.reel][pos.row].showFeatureTriggerAnimation();
+        } else {
+          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation(null, true);
+        }
+      }
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions.length);
+      clearTimeout(this.scatterTriggerTimeoutId);
+      this.scatterTriggerTimeoutId = setTimeout(
+        this.notifyFeatureTriggerAnimDone.bind(this),
+        Util.getDefaultValue(GameProxy.config.featureTriggerDelay, 4000),
+      );
+    } else {
+      this.notifyFeatureTriggerAnimDone();
+    }
+  }
 
-  //   if (!appModel.isCascadeGame() && appModel.getWinDataLength() > 0) {
-  //     this.fadeOutAllSymbols();
-  //     this.winSymbolIndex = 0;
-  //     this.totalWinSymbols = 0;
-  //     this.lineWinAmountComp.reset();
-  //     this.lineWinAmountComp.visible = false;
-  //     const currentLineWin = appModel.getCurrentLineWinData();
-  //     const winningPos = currentLineWin?.winningPosition;
-  //     if (winningPos && winningPos.length > 0) {
-  //       const multiplier = currentLineWin.multiplier ?? 1;
-  //       for (let j = 0; j < winningPos.length; j++) {
-  //         const pos = this.getReelPosition(winningPos[j]);
-  //         this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-  //         this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
-  //           this.onLineWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
-  //         );
-  //         this.totalWinSymbols++;
-  //         if (j === 0) {
-  //           this.lineWinAmountComp.visible = true;
-  //           this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;
-  //           this.lineWinAmountComp.y = this.symbolsArray[pos.reel][pos.row + 1].y + this.winSymbolsContainer.y;
-  //           this.lineWinAmountComp.showWin(currentLineWin.winAmount, multiplier);
+  public override showLineWin(): void {
+    if (!this.maskRect) {
+      this.maskRect = this.slotReel?.elementsList['maskRect'];
+    }
 
-  //           if (this.maskRect) {
-  //             const maskLeft = this.maskRect.x;
+    if (!appModel.isCascadeGame() && appModel.getWinDataLength() > 0) {
+      this.fadeOutAllSymbols();
+      this.winSymbolIndex = 0;
+      this.totalWinSymbols = 0;
+      this.lineWinAmountComp.reset();
+      this.lineWinAmountComp.visible = false;
+      const currentLineWin = appModel.getCurrentLineWinData();
+      const winningPos = currentLineWin?.winningPosition;
+      if (winningPos && winningPos.length > 0) {
+        const multiplier = currentLineWin.multiplier ?? 1;
+        for (let j = 0; j < winningPos.length; j++) {
+          const pos = this.getReelPosition(winningPos[j]);
+          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
+          this.symbolsArray[pos.reel][pos.row + 1].showWinning(() =>
+            this.onLineWinAnimComplete(this.symbolsArray[pos.reel][pos.row]),
+          );
+          this.totalWinSymbols++;
+          if (j === 0) {
+            this.lineWinAmountComp.visible = true;
+            this.lineWinAmountComp.x = this.symbolsArray[pos.reel][pos.row + 1].x + this.winSymbolsContainer.x;
+            this.lineWinAmountComp.y = this.symbolsArray[pos.reel][pos.row + 1].y + this.winSymbolsContainer.y;
+            this.lineWinAmountComp.showWin(currentLineWin.winAmount, multiplier);
 
-  //             const winAmountLeftEdge = this.lineWinAmountComp.x - this.lineWinAmountComp.width / 2;
+            if (this.maskRect) {
+              const maskLeft = this.maskRect.x;
 
-  //             if (winAmountLeftEdge < maskLeft) {
-  //               this.lineWinAmountComp.x = maskLeft + this.lineWinAmountComp.width / 2;
-  //             }
-  //           }
-  //         }
-  //       }
-  //       EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_' + currentLineWin.symbol);
-  //     }
-  //   }
-  //   appModel.lineWinIndex++;
-  //   if (appModel.lineWinIndex > appModel.getWinDataLength() - 1) {
-  //     appModel.lineWinIndex = 0;
-  //   }
-  // }
+              const winAmountLeftEdge = this.lineWinAmountComp.x - this.lineWinAmountComp.width / 2;
+
+              if (winAmountLeftEdge < maskLeft) {
+                this.lineWinAmountComp.x = maskLeft + this.lineWinAmountComp.width / 2;
+              }
+            }
+          }
+        }
+        EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_' + currentLineWin.symbol);
+      }
+    }
+    appModel.lineWinIndex++;
+    if (appModel.lineWinIndex > appModel.getWinDataLength() - 1) {
+      appModel.lineWinIndex = 0;
+    }
+  }
 }

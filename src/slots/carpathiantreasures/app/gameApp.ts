@@ -6,7 +6,7 @@ import { GameAppScreen } from '@game/views/containers/GameAppView';
 import { SLOT_GAME_APP_CONFIG } from '@game/config/screens/SlotGameAppConfig';
 import { GAME_SOUND_CONFIG } from '@game/config/SoundLoadConfig';
 import { GameSoundManager } from '@game/app/GameSoundManager';
-import { SplashView } from '@brand/views/splash/SplashView';
+import { CTSplashView } from '@game/views/splash/CTSplashView';
 import SlotGameApp from '@core/app/SlotGameApp';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -25,7 +25,7 @@ export class gameApp extends SlotGameApp {
 
   async createSplash() {
     if (appModel.getPreferences()?.showIntro !== false) {
-      this.splashComp = new SplashView(SPLASH_CONFIG);
+      this.splashComp = new CTSplashView(SPLASH_CONFIG);
       this.appContainer.addChild(this.splashComp, this.preloader);
       if (appModel.primaryAssetsLoaded) {
         EventHandler.dispatchEvent(SlotEvents.ACTIVATE_SPLASH);
