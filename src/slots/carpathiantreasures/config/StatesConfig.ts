@@ -15,7 +15,7 @@ import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
 import { GamePreWinState } from '@game/states/GamePreWinState';
-import { CheckFSStateCT } from '@game/states/CheckFeatureStateCT';
+import { CheckFSStateCT } from '@game/states/CTCheckFeatureState';
 import { ShowJackpotGameState } from '@core/commands/states/ShowJackpotGameState';
 
 export const STATES_CONFIG: any = [
@@ -29,7 +29,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   // TODO:uncomment
-  // { name: STATES.CHECK_FS_STATE, state: CheckFSStateCT },
+  { name: STATES.CHECK_FS_STATE, state: CheckFSStateCT },
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
   { name: STATES.SHOW_JACKPOT_GAME_STATE, state: ShowJackpotGameState },

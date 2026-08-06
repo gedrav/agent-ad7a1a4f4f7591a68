@@ -1,5 +1,5 @@
 import { SplashStartCommand } from '@core/commands/action/SplashStartCommand';
-import { SplashView } from '@brand/views/splash/SplashView';
+import { CTSplashView } from '@game/views/splash/CTSplashView';
 import { SplashItemComp } from '@brand/views/splash/SplashItemComp';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { Point } from 'pixi.js';
@@ -20,7 +20,7 @@ const fontMLProps = {
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
-  class: SplashView,
+  class: CTSplashView,
   itemsDesktopScale: 1,
   unloadAssets: true,
   requiredBundle: LOAD_CONSTANTS.SPLASH,
@@ -129,7 +129,7 @@ export const SPLASH_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Sprite',
-      image: 'splashbg',
+      image: 'SplashBG',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
@@ -233,14 +233,14 @@ export const SPLASH_CONFIG: any = {
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 40,
+              fontSize: 90,
               mFontSize: 40,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {
                 angle: 0.5235987755982988,
                 blur: 4, // use 0 or a positive value in v8
                 color: '0x000000',
-                distance: 3,
+                distance: 13,
                 alpha: 1,
               },
             },
@@ -329,21 +329,21 @@ export const SPLASH_CONFIG: any = {
     {
       name: 'gameTitle',
       type: 'Sprite',
-      image: 'gamelogo',
+      image: 'logo1',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.2, maxScale: 1, hAlign: 'center', vPosition: 0.12 },
         Portrait: {
-          widthPerc: 0.6,
-          heightPerc: 0.12,
+          widthPerc: 0.8,
+          heightPerc: 0.2,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',
           vPaddingPerc: 0.1,
         },
         Landscape: {
-          widthPerc: 0.36,
-          heightPerc: 0.12,
+          widthPerc: 0.45,
+          heightPerc: 0.2,
           maxScale: 1,
           hAlign: 'center',
           vAlign: 'top',

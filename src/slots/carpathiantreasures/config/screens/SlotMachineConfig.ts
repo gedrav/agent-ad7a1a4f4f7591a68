@@ -3,7 +3,7 @@ import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
+import CTReelSymbolSpine from '@game/views/slot/CTReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
@@ -26,21 +26,21 @@ export const SLOT_MACHINE_CONFIG: any = {
       pHeight: 1375,
       lWidth: 1700,
       lHeight: 1140,
-      alpha: 1,
+      alpha: 0,
     },
     {
       name: 'slotReel',
       type: 'Comp',
       class: CTSlotReel,
       winController: GameWinController,
-      x: 155,
+      x: 100,
       y: 0,
       px: -20,
-      py: 0,
+      py: 90,
       lx: 155,
       ly: 0,
       data: {
-        symbolClass: ReelSymbolSpine,
+        symbolClass: CTReelSymbolSpine,
         noOfReels: 5,
         noOfRows: 3,
         reelHeight: 800,
@@ -220,7 +220,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'gameTitle',
           type: 'Sprite',
-          image: 'gamelogo',
+          image: 'logo1.png',
           anchor: { x: 0.5, y: 0.5 },
           layoutData: {
             Desktop: {
@@ -283,10 +283,66 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     {
       name: 'leftFrame',
-      type: 'Sprite',
-      image: 'frame_l',
-      x: 0,
+      type: 'Container',
+      x: -75,
       y: 450,
+      px: 80,
+      py: 1250,
+      lx: -20,
+      ly: 450,
+      Elements: [
+        {
+          name: 'frameImage',
+          type: 'Sprite',
+          image: 'frame_l',
+        },
+        {
+          name: 'linesNumberText',
+          type: 'Text',
+          contentText: '10',
+          anchor: { x: 0.5, y: 0.5 },
+          x: 79,
+          y: 80,
+          style: {
+            fontFamily: 'gameFont1',
+            fontSize: 100,
+            fontWeight: 900,
+            fill: [0xffed54, 0xf5a100],
+            stroke: 0x000000,
+            strokeThickness: 8,
+            dropShadow: {
+              angle: 0.5235987755982988,
+              blur: 4,
+              color: '0xcc3300',
+              distance: 10,
+              alpha: 1,
+            },
+          },
+        },
+        {
+          name: 'linesLabelText',
+          type: 'Text',
+          contentText: 'LINES',
+          anchor: { x: 0.5, y: 0.5 },
+          x: 79,
+          y: 165,
+          style: {
+            fontFamily: 'gameFont1',
+            fontSize: 42,
+            fontWeight: 900,
+            fill: [0xffed54, 0xf5a100],
+            stroke: 0x000000,
+            strokeThickness: 6,
+            dropShadow: {
+              angle: 0.5235987755982988,
+              blur: 4,
+              color: '0xcc3300',
+              distance: 10,
+              alpha: 1,
+            },
+          },
+        },
+      ],
     },
     BIG_WIN_CONFIG,
   ],

@@ -13,8 +13,7 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'Caudex.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'COOPBL.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
   ],
@@ -54,9 +53,10 @@ const PRIMARY: AssetBundle = {
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
   assets: [
-    { TYPE: 'game', NAME: 'Transition', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'book_feature', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'bigWins', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'BIG', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'GIGANTIC', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'MEGA', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'UNBELIEVABLE', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'symbol_A', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'wild', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Castle', ASSETTYPE: 'spine' },
@@ -68,7 +68,7 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'wolf', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'scatter2', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'scatter1', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'book_win_frame', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'win_frame', ASSETTYPE: 'spine' },
   ],
 };
 const FREESPIN: AssetBundle = {
