@@ -30,7 +30,7 @@ export const GAME_CONFIG = {
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
-    gameFont2: 'SHOWG.TTF',
+    gameFont2: 'showg.ttf',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
