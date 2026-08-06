@@ -424,7 +424,7 @@ export const SLOT_MACHINE_CONFIG: any = {
                   name: 'infoText',
                   type: 'Text',
                   style: {
-                    fontFamily: 'Showcard Gothic',
+                    fontFamily: 'gameFont2',
                     fontSize: 30,
                     fill: 0xfdd63b,
                     wordWrap: true,
