@@ -10,6 +10,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
 
 interface RowLayout {
   widthPerc: number;
@@ -42,6 +43,8 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   protected isJackpotOutroAnim: boolean;
   protected jackPotOutroAnimation: PixSpine;
   protected jackpotWinContainer: PixView;
+  protected jpguideRect: PixView;
+  protected youwinJPTextimg: PixSprite;
   protected winTickerJP: WinTicker;
   protected timeoutId: number;
   dummyNumber: number;
@@ -54,6 +57,8 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
     this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
     this.jackpotWinContainer = this.elementsList['jackpotWinContainer'];
+    this.jpguideRect = this.jackpotWinContainer.elementsList['jpguideRect'];
+    this.youwinJPTextimg = this.jackpotWinContainer.elementsList['youwinJPTextimg'];
     this.jackPotOutroAnimation = this.jackpotWinContainer.elementsList['jackPotOutroAnimation'];
     this.winTickerJP = this.jackpotWinContainer.elementsList['winTickerJP'];
 
@@ -66,16 +71,27 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     this.ticker.add(this.updateJackpotValue.bind(this));
     this.createJackPotElement();
     this.winTickerJP?.on('COUNTUP_COMPLETED', this.onCountUpUpdateBW.bind(this));
+    this.winTickerJP?.on('COUNTUP_UPDATE', this.adjustTextSize.bind(this));
     this.jackPotOutroAnimation.addEventListener('complete', this.onJackpotOutroAnimComplete.bind(this));
     this.jackpotIntroAnimHor.addEventListener('complete', this.onIntroAnimComplete.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_WIN_TICKER_ANIM, this.showJackpotWinAnimation.bind(this));
   }
+  public adjustTextSize() {
+    this.winTickerJP.scale.set(1);
+    if (this.winTickerJP.width > this.jpguideRect.width) {
+      this.winTickerJP.width = this.jpguideRect.width * 0.8;
+      this.winTickerJP.scale.set(this.winTickerJP.scale.x);
+    }
+  }
   onCountUpUpdateBW() {
     clearTimeout(this.timeoutId);
+    this.adjustTextSize();
     this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
   }
   notifyWinDone() {
+    this.adjustTextSize();
+    this.youwinJPTextimg.visible = false;
     this.winTickerJP.visible = false;
     this.overlayRect.visible = false;
 
@@ -98,9 +114,11 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     this.winTickerJP.countUpValue(winValue, 5000);
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
     this.jackPotOutroAnimation.visible = true;
+    this.youwinJPTextimg.visible = true;
     this.jackPotOutroAnimation.playAnimation({ state: 'start_land', loop: false });
   }
   hideJackPotOutroAnim() {
+    this.youwinJPTextimg.visible = false;
     this.jackPotOutroAnimation.visible = false;
     this.jackPotOutroAnimation.stopAnimation();
   }
@@ -211,6 +229,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     }
   }
   protected resizeJackpotWinAnimation() {
+    UIUtil.adjustElement(this.jpguideRect);
     if (!this.isJackpotIntroAnim) return;
 
     if (DeviceProxy.isDevice()) {
