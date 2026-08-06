@@ -52,7 +52,7 @@ export const WHEEL_CONFIG: any = {
       content: 'TAP ON THE WHEEL\nTO SPIN',
       visible: true,
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 62,
         fontWeight: '900',
         letterSpacing: 10,

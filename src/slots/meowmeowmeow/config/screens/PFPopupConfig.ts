@@ -18,7 +18,7 @@ export const PF_POPUP_CONFIG = {
       type: 'Text',
       content: 'CongratTitle',
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 90,
         fontWeight: '900',
         letterSpacing: 14,
@@ -76,7 +76,7 @@ export const PF_POPUP_CONFIG = {
       type: 'Text',
       content: 'FeatureAwardedTitle',
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 90,
         fontWeight: '900',
         letterSpacing: 14,
@@ -109,7 +109,7 @@ export const PF_POPUP_CONFIG = {
       content: 'YOU WON \n PICK FEATURE',
       visible: true,
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 60,
         fontWeight: '900',
         fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
@@ -134,7 +134,7 @@ export const PF_POPUP_CONFIG = {
       content: 'PRESS ► TO CONTINUE',
       visible: false,
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 60,
         fill: 0xffffff,
         stroke: '0x4a1b00',
@@ -154,7 +154,7 @@ export const PF_POPUP_CONFIG = {
       content: 'PickFeatureWheelPrizeText1',
       visible: false,
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 60,
         fontWeight: '900',
         fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
@@ -194,7 +194,7 @@ export const PF_POPUP_CONFIG = {
           type: 'Text',
           content: 'PickFeatureWheelPrizeText2',
           style: {
-            fontFamily: 'Showcard Gothic',
+            fontFamily: 'gameFont2',
             fontSize: 60,
             fontWeight: '900',
             fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
@@ -227,7 +227,7 @@ export const PF_POPUP_CONFIG = {
           type: 'Text',
           content: 'PickFeatureWheelPrizeText2',
           style: {
-            fontFamily: 'Showcard Gothic',
+            fontFamily: 'gameFont2',
             fontSize: 60,
             fontWeight: '900',
             fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
@@ -251,7 +251,7 @@ export const PF_POPUP_CONFIG = {
           type: 'Text',
           content: 'PickFeatureWheelPrizeCashText',
           style: {
-            fontFamily: 'Showcard Gothic',
+            fontFamily: 'gameFont2',
             fontSize: 85,
             fontWeight: '900',
             letterSpacing: 2,
@@ -279,7 +279,7 @@ export const PF_POPUP_CONFIG = {
       visible: false,
 
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 60,
         fontWeight: '900',
         fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
@@ -361,7 +361,7 @@ export const PF_POPUP_CONFIG = {
           type: 'Text',
           content: 'PickFeatureBlueExitPrefixText',
           style: {
-            fontFamily: 'Showcard Gothic',
+            fontFamily: 'gameFont2',
             fontSize: 60,
             fontWeight: '900',
             fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
@@ -385,7 +385,7 @@ export const PF_POPUP_CONFIG = {
           type: 'Text',
           visible: false,
           style: {
-            fontFamily: 'Showcard Gothic',
+            fontFamily: 'gameFont2',
             fontSize: 85,
             fontWeight: '900',
             letterSpacing: 2,
@@ -434,7 +434,7 @@ export const PF_POPUP_CONFIG = {
         type: 'Text',
         content: 'startBtnText',
         style: {
-          fontFamily: 'Showcard Gothic',
+          fontFamily: 'gameFont2',
           fontSize: 60,
           fill: ['0x864201', '0xffc100', '0xffec43', '0xffff9e', '0xffff34', '0xffdf0b', '0xffb800', '0xf99900'],
           stroke: '0x792819',

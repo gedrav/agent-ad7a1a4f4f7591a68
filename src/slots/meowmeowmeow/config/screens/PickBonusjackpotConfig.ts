@@ -16,7 +16,7 @@ export const PICK_BONUS_JACKPOT_FEATURE_CONFIG: any = {
       type: 'Text',
       visible: true,
       style: {
-        fontFamily: 'Showcard Gothic',
+        fontFamily: 'gameFont2',
         fontSize: 100,
         fontWeight: '900',
         letterSpacing: 14,
