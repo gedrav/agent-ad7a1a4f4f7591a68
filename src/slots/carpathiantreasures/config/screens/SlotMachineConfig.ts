@@ -37,8 +37,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       y: 0,
       px: -20,
       py: 90,
-      lx: 155,
-      ly: 0,
+      lx: 85,
+      ly: 10,
       data: {
         symbolClass: CTReelSymbolSpine,
         noOfReels: 5,
@@ -288,7 +288,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       y: 450,
       px: 80,
       py: 1250,
-      lx: -20,
+      lx: -90,
       ly: 450,
       Elements: [
         {
