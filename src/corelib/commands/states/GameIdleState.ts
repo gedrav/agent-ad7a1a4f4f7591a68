@@ -7,13 +7,40 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 class GameIdleStateCommand extends StateCommand {
   private readonly intervalId: any;
   private lineWinCounter: number = 0;
+  private promoCheckedOnLoad: boolean = false;
   public async execute(data: any = null) {
     super.execute(data);
+    this.checkPromoTrigger();
     const remainingTime = appModel.getSpinRemainingTime();
     if (remainingTime > 0) {
       setTimeout(this.enableGame.bind(this), remainingTime);
     } else {
       this.enableGame();
+    }
+  }
+  private checkPromoTrigger(): void {
+    const promo = appModel.promoSpinInfo;
+
+    if (promo?.status === 'IN_PROGRESS' && !appModel.getIsPromoFSSession()) {
+      // Resumed mid-promo (new session, or came back from another game) - must finish,
+      // no popup needed, the server already enforces this regardless of client input.
+      appModel.startPromoFSSession();
+      EventHandler.dispatchEvent(SlotEvents.LOCK_BET_SELECTION);
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
+      this.promoCheckedOnLoad = true;
+      return;
+    }
+
+    if (promo?.status !== 'ACTIVE' || appModel.getIsPromoFSSession()) {
+      this.promoCheckedOnLoad = true;
+      return;
+    }
+
+    const isGameLoadTrigger = !this.promoCheckedOnLoad;
+    const isBalanceZeroTrigger = appModel.getBalance() === 0;
+    if (isGameLoadTrigger || isBalanceZeroTrigger) {
+      this.promoCheckedOnLoad = true;
+      EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_ENTRY_POPUP);
     }
   }
   public enableGame(): void {
