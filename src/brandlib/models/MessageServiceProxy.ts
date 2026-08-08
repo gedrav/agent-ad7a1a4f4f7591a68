@@ -42,9 +42,17 @@ export class MessageServiceProxy extends AbstractProxy {
           break;
         case 'spinresult':
           appModel.storeSpinResult(data);
+          if (appModel.promoSpinInfo?.status === 'COMPLETED') {
+            EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP);
+          }
+          EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
           break;
         case 'featureResult':
           appModel.storeFeatureResult(data);
+          if (appModel.promoSpinInfo?.status === 'COMPLETED') {
+            EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP);
+          }
+          EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
           break;
         default:
           break;

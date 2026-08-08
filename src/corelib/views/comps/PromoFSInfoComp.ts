@@ -14,17 +14,23 @@ export class PromoFSInfoComp extends ResponsiveChildrenView {
 
   constructor(config) {
     super(config);
-    this.bg = UIUtil.getSprite('promofsInfoBG');
-    this.addChild(this.bg);
+    // Background asset lookup can fail if the game bundle is missing 'promofsInfoBG' - keep
+    // the counter text usable without it rather than crashing the widget's construction.
+    try {
+      this.bg = UIUtil.getSprite('promofsInfoBG');
+      this.addChild(this.bg);
+    } catch (e) {
+      console.warn('PromoFSInfoComp: failed to load background sprite "promofsInfoBG"', e);
+    }
 
     this.spinValueText = this.elementsList['spinValueText'];
     this.addChild(this.spinValueText);
-    this.spinValueText.x = this.bg.width / 2;
+    this.spinValueText.x = (this.bg?.width ?? 0) / 2;
     this.spinValueText.y = 50;
 
     this.winValueText = this.elementsList['winValueText'];
     this.addChild(this.winValueText);
-    this.winValueText.x = this.bg.width / 2;
+    this.winValueText.x = (this.bg?.width ?? 0) / 2;
     this.winValueText.y = 150;
 
     this.visible = false;

@@ -373,6 +373,9 @@ class AppModelService {
       // (there's nothing to acknowledge, this wasn't a promo spin).
       this.endPromoFSSession();
     }
+    if (this._promoSpinInfo?.status === 'COMPLETED') {
+      this.endPromoFSSession();
+    }
   }
   public storeFeatureResult(data: any): void {
     this.lineWinIndex = 0;
@@ -414,6 +417,9 @@ class AppModelService {
       // Client thought it was in a promo, but the server's response doesn't confirm it -
       // the server processed this as a normal real-money bet. Reconcile silently, no exit popup
       // (there's nothing to acknowledge, this wasn't a promo spin).
+      this.endPromoFSSession();
+    }
+    if (this._promoSpinInfo?.status === 'COMPLETED') {
       this.endPromoFSSession();
     }
   }
@@ -861,7 +867,7 @@ class AppModelService {
   // WHEN: Called before starting autoplay or next spin
   // WHY: Prevents autoplay from starting/continuing without funds
   public getIsSpinStartPossible(): boolean {
-    return this.getBalance() >= this.getTotalBet();
+    return this.getIsPromoFSSession() || this.getBalance() >= this.getTotalBet();
   }
   public getIsBBSpinStartPossible(bbId): boolean {
     const multiplier = appModel.getBuyBonusMultiplier(bbId);

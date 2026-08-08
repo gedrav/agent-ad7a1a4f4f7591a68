@@ -37,7 +37,7 @@ class GameIdleStateCommand extends StateCommand {
     }
 
     const isGameLoadTrigger = !this.promoCheckedOnLoad;
-    const isBalanceZeroTrigger = appModel.getBalance() === 0;
+    const isBalanceZeroTrigger = !appModel.getIsSpinStartPossible();
     if (isGameLoadTrigger || isBalanceZeroTrigger) {
       this.promoCheckedOnLoad = true;
       EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_ENTRY_POPUP);

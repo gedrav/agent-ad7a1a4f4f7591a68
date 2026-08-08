@@ -140,6 +140,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     action.execute(this.spinBtn);
   }
   protected startPress(): void {
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
     GameProxy.config.isLongPressTriggered = false;
     this.longPressSprite.scale.set(0.88);
     longPressTimer = setTimeout(() => {
@@ -233,7 +236,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateBalanceForSpin(): void {
-    this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
+    if (!appModel.getIsPromoFSSession()) {
+      this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
+    }
     appModel.setAfterSpinBalance();
   }
   protected updateBalanceForBBSpin(): void {
@@ -265,7 +270,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected enablePanel(): void {
     this.spinBtn.enabled = true;
-    this.betBtn.enabled = true;
+    this.betBtn.enabled = !appModel.getIsPromoFSSession();
     this.menuBtn.enabled = true;
     this.infoBtn.enabled = true;
 

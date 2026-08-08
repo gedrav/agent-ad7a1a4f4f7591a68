@@ -188,7 +188,7 @@ export const PROMOFS_POPUP_CONFIG = {
               y: 545,
             },
             {
-              name: 'cancelBtn',
+              name: 'closeBtn',
               type: 'Button',
               scale: 1,
               //   action: {
