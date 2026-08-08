@@ -13,6 +13,7 @@ import { JACKPOT_PANEL_CONFIG } from '@brand/config/JackpotPanelConfig';
 import { JACKPOT_CARD_CONFIG } from '@brand/config/JackpotCardConfig';
 import { JACKPOT_GAME_BG_CONFIG } from '@brand/config/JackpotBGConfig';
 import { PROMOFS_POPUP_CONFIG } from '@brand/config/PromoFSPopupConfig';
+import { PROMOFS_INFO_CONFIG } from '@brand/config/PromoFSInfoConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -32,5 +33,6 @@ export const SLOT_GAME_APP_CONFIG: any = {
     JACKPOT_PANEL_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
     PROMOFS_POPUP_CONFIG,
+    PROMOFS_INFO_CONFIG,
   ],
 };
