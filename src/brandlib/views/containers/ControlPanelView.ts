@@ -236,7 +236,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateBalanceForSpin(): void {
-    if (!appModel.getIsPromoFSSession()) {
+    const status = appModel.promoSpinInfo?.status;
+    if (status !== 'IN_PROGRESS' && status !== 'COMPLETED') {
       this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
     }
     appModel.setAfterSpinBalance();

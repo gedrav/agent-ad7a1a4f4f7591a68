@@ -8,6 +8,7 @@ class GameIdleStateCommand extends StateCommand {
   private readonly intervalId: any;
   private lineWinCounter: number = 0;
   private promoCheckedOnLoad: boolean = false;
+  private promoExitShownId: string | null = null;
   public async execute(data: any = null) {
     super.execute(data);
     this.checkPromoTrigger();
@@ -20,6 +21,12 @@ class GameIdleStateCommand extends StateCommand {
   }
   private checkPromoTrigger(): void {
     const promo = appModel.promoSpinInfo;
+
+    if (promo?.status === 'COMPLETED' && this.promoExitShownId !== promo.promoId) {
+      this.promoExitShownId = promo.promoId;
+      EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP);
+      return;
+    }
 
     if (promo?.status === 'IN_PROGRESS' && !appModel.getIsPromoFSSession()) {
       // Resumed mid-promo (new session, or came back from another game) - must finish,

@@ -39,7 +39,7 @@ export class PromoFSInfoComp extends ResponsiveChildrenView {
 
   private updatePromoFS(): void {
     const data = appModel.promoSpinInfo;
-    if (!data) {
+    if (!data || (data.status !== 'IN_PROGRESS' && data.status !== 'COMPLETED')) {
       this.visible = false;
       return;
     }
