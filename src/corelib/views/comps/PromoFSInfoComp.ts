@@ -25,7 +25,7 @@ export class PromoFSInfoComp extends ResponsiveChildrenView {
       return;
     }
     this.visible = true;
-    const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount + 1);
+    const count = data.playCount - data.remainingPlayCount;
     this.spinValueText.text = count + ' / ' + data.playCount;
     this.winValueText.text = Util.formatCurrency(data.totalWin);
   }
