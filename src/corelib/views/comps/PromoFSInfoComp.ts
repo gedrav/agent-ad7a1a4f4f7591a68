@@ -1,6 +1,4 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
-import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { UIUtil } from '@core/utils/UIUtilService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -8,30 +6,13 @@ import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 
 export class PromoFSInfoComp extends ResponsiveChildrenView {
-  private readonly bg: PixSprite;
   private readonly spinValueText: PixText;
   private readonly winValueText: PixText;
 
   constructor(config) {
     super(config);
-    // Background asset lookup can fail if the game bundle is missing 'promofsInfoBG' - keep
-    // the counter text usable without it rather than crashing the widget's construction.
-    try {
-      this.bg = UIUtil.getSprite('promofsInfoBG');
-      this.addChild(this.bg);
-    } catch (e) {
-      console.warn('PromoFSInfoComp: failed to load background sprite "promofsInfoBG"', e);
-    }
-
     this.spinValueText = this.elementsList['spinValueText'];
-    this.addChild(this.spinValueText);
-    this.spinValueText.x = (this.bg?.width ?? 0) / 2;
-    this.spinValueText.y = 50;
-
     this.winValueText = this.elementsList['winValueText'];
-    this.addChild(this.winValueText);
-    this.winValueText.x = (this.bg?.width ?? 0) / 2;
-    this.winValueText.y = 150;
 
     this.visible = false;
     EventHandler.addEventListener(SlotEvents.UPDATE_PROMO_FS_INFO, this.updatePromoFS.bind(this));
