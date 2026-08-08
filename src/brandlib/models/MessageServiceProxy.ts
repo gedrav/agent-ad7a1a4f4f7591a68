@@ -99,6 +99,9 @@ export class MessageServiceProxy extends AbstractProxy {
     if (GameProxy.config.isAnteEnabled) {
       finalObj.extraData.ante = true;
     }
+    if (appModel.getIsPromoFSSession()) {
+      finalObj.usePromo = true;
+    }
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {
