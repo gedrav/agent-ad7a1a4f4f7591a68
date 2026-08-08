@@ -94,6 +94,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enablePanel.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disablePanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.LOCK_BET_SELECTION, this.lockBetSelection.bind(this));
+    EventHandler.addEventListener(SlotEvents.UNLOCK_BET_SELECTION, this.unlockBetSelection.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_BUTTON, this.showSpinButton.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_STOPSPIN_BUTTON, this.showStopSpinButton.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_STOPSPIN_BUTTON, this.disableStopSpinButton.bind(this));
@@ -287,6 +289,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
         }
       }
     }
+  }
+
+  protected lockBetSelection(): void {
+    this.betBtn.enabled = false;
+  }
+  protected unlockBetSelection(): void {
+    this.betBtn.enabled = true;
   }
 
   protected showSpinButton(): void {
