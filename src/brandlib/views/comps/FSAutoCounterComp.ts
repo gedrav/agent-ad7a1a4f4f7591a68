@@ -27,6 +27,10 @@ export class FSAutoCounterComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.REEL_WIN_TICKER_HIDDEN, this.showComp.bind(this));
 
     EventHandler.addEventListener(SlotEvents.CLEAR_WINS_FS, this.showComp.bind(this));
+
+    EventHandler.addEventListener(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN, this.showComp.bind(this));
+    EventHandler.addEventListener(SlotEvents.ADD_BUTTONS_FOR_PROMO_SPIN, this.hideComp.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_PROMO_FS_INFO, this.updatePromoFS.bind(this));
   }
   protected hideComp() {
     this.visible = false;
@@ -38,6 +42,14 @@ export class FSAutoCounterComp extends StandardView {
   }
   protected updateUIForAutoStart(): void {
     this.visible = true;
+  }
+  protected updatePromoFS(): void {
+    const data = appModel.promoSpinInfo;
+    if (data) {
+      const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount + 1);
+      this.spinsText.text = Util.parseMessage(Util.getContent('promoSpinsCounterText'), [count, data.playCount]);
+      this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(data.totalWin)]);
+    }
   }
   protected updateUIAutoCount(): void {
     if (appModel.getIsFreeSpinsSession()) {

@@ -8,10 +8,10 @@ import { STATES } from '@core/states/StateConstants';
 class ResumePromoFSStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    // if (appModel.getIsPromoFSSession()) {
-    //   EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
-    //   StateManager.goToState(STATES.SPIN_START_STATE);
-    // }
+    if (appModel.getIsPromoFSSession()) {
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
+      StateManager.goToState(STATES.SPIN_START_STATE);
+    }
   }
 }
 

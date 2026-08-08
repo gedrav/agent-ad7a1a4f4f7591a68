@@ -13,6 +13,21 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get promoSpinInfo(): any {
+    return this._promoSpinInfo;
+  }
+
+  set promoSpinInfo(value: any) {
+    this._promoSpinInfo = value;
+  }
+  get promoSpinSession(): boolean {
+    return this._promoSpinSession;
+  }
+
+  set promoSpinSession(value: boolean) {
+    this._promoSpinSession = value;
+  }
+
   get spinStartTime(): number {
     return this._spinStartTime;
   }
@@ -80,6 +95,8 @@ class AppModelService {
     return this._storeJackpotData;
   }
 
+  private _promoSpinSession: boolean;
+  private _promoSpinInfo: any;
   private _spinStartTime: number;
   private unfinishedData: any;
   private featureName: string;
@@ -295,10 +312,53 @@ class AppModelService {
         : 0;
 
     this.gameInfo.paytable = data.gameInfo.payTable;
+    this.promoSpinInfo = data.promoSpinInfo;
     this.unfinishedData = data.unfinishedInfo;
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
     }
+  }
+  endPromoFSBet() {
+    this.promoSpinSession = false;
+    if (this.insertedPos > -1) {
+      this.gameInfo.betsArray.splice(this.insertedPos, 1);
+    }
+    this.gameInfo.betPos =
+      this.gameInfo.betsArray.indexOf(this.playerInfo.defaultBet) != undefined
+        ? this.gameInfo.betsArray.indexOf(this.playerInfo.defaultBet)
+        : 0;
+  }
+  setPromoFSBet() {
+    const betPerLine = this.promoSpinInfo.betAmount / (this.gameInfo.selectedLines * this.gameInfo.creditValue);
+    if (this.gameInfo.betsArray.indexOf(betPerLine) === -1) {
+      this.insertSorted2dp(this.gameInfo.betsArray, betPerLine);
+      this.insertedPos = this.gameInfo.betsArray.indexOf(betPerLine);
+      this.gameInfo.betPos = this.insertedPos;
+    } else {
+      this.insertedPos = -1;
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(betPerLine);
+    }
+  }
+  insertSorted2dp(nums, value, decimals = 2) {
+    const scale = 100 ** decimals;
+    const v = Math.round(value * scale);
+
+    const idx = nums.findIndex((n) => Math.round(n * scale) > v);
+    if (idx === -1) nums.push(value);
+    else nums.splice(idx, 0, value);
+
+    return nums;
+  }
+
+  getIsPromoFSSession() {
+    return this.promoSpinSession;
+  }
+  getIsNextPromoSpinPossible() {
+    let flag = false;
+    if (this.promoSpinInfo && this.promoSpinInfo.remainingPlayCount > 0) {
+      flag = true;
+    }
+    return flag;
   }
 
   public isConfigError(): boolean {
@@ -361,6 +421,7 @@ class AppModelService {
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
       }
     }
+    this.promoSpinInfo = data.promoSpinInfo;
   }
   public storeFeatureResult(data: any): void {
     this.lineWinIndex = 0;
@@ -393,6 +454,8 @@ class AppModelService {
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
+
+    this.promoSpinInfo = data.promoSpinInfo;
   }
 
   // public methods -------------------------------------------

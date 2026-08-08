@@ -107,6 +107,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.onFreeSpinsEnded.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FULLSCREEN_MODE, this.onFullScreenModeChange.bind(this));
 
+    EventHandler.addEventListener(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN, this.removeButtonsForPromo.bind(this));
+    EventHandler.addEventListener(SlotEvents.ADD_BUTTONS_FOR_PROMO_SPIN, this.addButtonsForPromo.bind(this));
+
     const soundOn = !appModel.getPreferences()?.sound === false;
     this.onSoundStateChanged(soundOn);
     SoundFactory.ambientState = soundOn;
@@ -127,6 +130,27 @@ export class ControlPanelView extends ResponsiveChildrenView {
       this.spinBtn.on('pointercancel', this.cancelPress.bind(this));
     }
     this.spinBtn.on('pointerup', this.endPress.bind(this));
+  }
+  protected addButtonsForPromo() {
+    this.addChild(this.spinBtn, this.stopSpinBtn, this.stopAutoBtn, this.betBtn);
+    const len = this.bbButtonsArray.length;
+    if (len > 0) {
+      for (let k = 0; k < len; k++) {
+        this.addChild(this.bbButtonsArray[k]);
+      }
+    }
+    this.resizeView();
+  }
+
+  protected removeButtonsForPromo() {
+    this.removeChild(this.spinBtn, this.stopSpinBtn, this.stopAutoBtn, this.betBtn);
+    const len = this.bbButtonsArray.length;
+    if (len > 0) {
+      for (let k = 0; k < len; k++) {
+        this.removeChild(this.bbButtonsArray[k]);
+      }
+    }
+    this.resizeView();
   }
   protected onFullScreenModeChange(): void {
     if (DeviceProxy.config.isDevice) {

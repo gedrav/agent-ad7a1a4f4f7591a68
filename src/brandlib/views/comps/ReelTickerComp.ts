@@ -37,6 +37,9 @@ export class ReelTickerComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_START, this.hideForFeature.bind(this));
     EventHandler.addEventListener(SlotEvents.AUTOPLAY_UPDATE_UI_STOP, this.showForFeature.bind(this));
 
+    EventHandler.addEventListener(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN, this.hideForFeature.bind(this));
+    EventHandler.addEventListener(SlotEvents.ADD_BUTTONS_FOR_PROMO_SPIN, this.showForFeature.bind(this));
+
     this.tickerText1.x = this.bg.width / 2;
     this.tickerText2.x = this.bg.width / 2;
     this.showFirstTicker();

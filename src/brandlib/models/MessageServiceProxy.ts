@@ -84,7 +84,9 @@ export class MessageServiceProxy extends AbstractProxy {
     finalObj.playerId = WrapperProxy.playerData.playerId;
     finalObj.betAmount = appModel.getTotalBet();
     finalObj.token = WrapperProxy.playerData.newToken;
-
+    if (appModel.getIsPromoFSSession()) {
+      finalObj.promoId = appModel.promoSpinInfo?.id;
+    }
     if (GameProxy.config.dontSendBBRequest) {
     } else {
       finalObj.buyBonus = {};

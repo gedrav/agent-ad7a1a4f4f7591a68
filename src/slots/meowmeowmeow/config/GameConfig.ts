@@ -26,11 +26,11 @@ export const GAME_CONFIG = {
   featureTriggerDelay: 2000,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Cambria',
+    gameFont1: 'ClarendonCondensedBold',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
-    gameFont2: 'showg.ttf',
+    gameFont2: 'showg',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',

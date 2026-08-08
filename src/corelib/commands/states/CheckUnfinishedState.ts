@@ -32,6 +32,8 @@ class CheckUnfinishedStateCommand extends StateCommand {
       } else {
         console.log('Unfinished but no feature data');
       }
+    } else if (appModel.getIsPromoFSSession()) {
+      StateManager.goToState(STATES.RESUME_PROMOFS_STATE);
     } else {
       StateManager.next();
     }

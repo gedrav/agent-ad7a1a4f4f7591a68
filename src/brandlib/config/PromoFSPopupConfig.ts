@@ -104,7 +104,7 @@ export const PROMOFS_POPUP_CONFIG = {
               wordWrapWidth: 1000,
             },
             {
-              name: 'setBtn',
+              name: 'startBtn',
               type: 'Button',
               scale: 1,
               //  action: {
@@ -170,7 +170,7 @@ export const PROMOFS_POPUP_CONFIG = {
               y: 545,
             },
             {
-              name: 'cancelBtn',
+              name: 'closeBtn',
               type: 'Button',
               scale: 1,
               //   action: {
