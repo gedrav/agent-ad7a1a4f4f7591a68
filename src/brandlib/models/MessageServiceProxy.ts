@@ -42,9 +42,11 @@ export class MessageServiceProxy extends AbstractProxy {
           break;
         case 'spinresult':
           appModel.storeSpinResult(data);
+          EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
           break;
         case 'featureResult':
           appModel.storeFeatureResult(data);
+          EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
           break;
         default:
           break;
@@ -98,6 +100,9 @@ export class MessageServiceProxy extends AbstractProxy {
     finalObj.extraData = {};
     if (GameProxy.config.isAnteEnabled) {
       finalObj.extraData.ante = true;
+    }
+    if (appModel.getIsPromoFSSession()) {
+      finalObj.usePromo = true;
     }
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;

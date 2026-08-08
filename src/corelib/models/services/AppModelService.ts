@@ -299,6 +299,7 @@ class AppModelService {
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
     }
+    this.promoSpinInfo = data.promoInfo ?? null;
   }
 
   public isConfigError(): boolean {
@@ -361,6 +362,20 @@ class AppModelService {
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
       }
     }
+    this.promoSpinInfo = data.promoInfo ?? null;
+    if (
+      this._promoActive &&
+      this._promoSpinInfo?.status !== 'IN_PROGRESS' &&
+      this._promoSpinInfo?.status !== 'COMPLETED'
+    ) {
+      // Client thought it was in a promo, but the server's response doesn't confirm it -
+      // the server processed this as a normal real-money bet. Reconcile silently, no exit popup
+      // (there's nothing to acknowledge, this wasn't a promo spin).
+      this.endPromoFSSession();
+    }
+    if (this._promoSpinInfo?.status === 'COMPLETED') {
+      this.endPromoFSSession();
+    }
   }
   public storeFeatureResult(data: any): void {
     this.lineWinIndex = 0;
@@ -393,6 +408,20 @@ class AppModelService {
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
+    this.promoSpinInfo = data.promoInfo ?? null;
+    if (
+      this._promoActive &&
+      this._promoSpinInfo?.status !== 'IN_PROGRESS' &&
+      this._promoSpinInfo?.status !== 'COMPLETED'
+    ) {
+      // Client thought it was in a promo, but the server's response doesn't confirm it -
+      // the server processed this as a normal real-money bet. Reconcile silently, no exit popup
+      // (there's nothing to acknowledge, this wasn't a promo spin).
+      this.endPromoFSSession();
+    }
+    if (this._promoSpinInfo?.status === 'COMPLETED') {
+      this.endPromoFSSession();
+    }
   }
 
   // public methods -------------------------------------------
@@ -838,7 +867,7 @@ class AppModelService {
   // WHEN: Called before starting autoplay or next spin
   // WHY: Prevents autoplay from starting/continuing without funds
   public getIsSpinStartPossible(): boolean {
-    return this.getBalance() >= this.getTotalBet();
+    return this.getIsPromoFSSession() || this.getBalance() >= this.getTotalBet();
   }
   public getIsBBSpinStartPossible(bbId): boolean {
     const multiplier = appModel.getBuyBonusMultiplier(bbId);
@@ -897,6 +926,26 @@ class AppModelService {
   }
   public startFreeSpinsSession(flag: boolean): void {
     this._freeSpinsSession = true;
+  }
+
+  private _promoSpinInfo: any = null;
+  private _promoActive: boolean = false;
+
+  get promoSpinInfo(): any {
+    return this._promoSpinInfo;
+  }
+  set promoSpinInfo(value: any) {
+    this._promoSpinInfo = value;
+  }
+
+  public startPromoFSSession(): void {
+    this._promoActive = true;
+  }
+  public getIsPromoFSSession(): boolean {
+    return this._promoActive;
+  }
+  public endPromoFSSession(): void {
+    this._promoActive = false;
   }
 
   public startPickFeatureSession(): void {

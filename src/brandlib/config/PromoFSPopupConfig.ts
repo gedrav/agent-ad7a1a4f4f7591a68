@@ -104,12 +104,9 @@ export const PROMOFS_POPUP_CONFIG = {
               wordWrapWidth: 1000,
             },
             {
-              name: 'setBtn',
+              name: 'startBtn',
               type: 'Button',
               scale: 1,
-              //  action: {
-              //    press: CloseBetPanelCommand,
-              //  },
               data: true,
               options: {
                 defaultView: 'okBtn',
@@ -124,7 +121,28 @@ export const PROMOFS_POPUP_CONFIG = {
                 content: 'startBtnText',
                 style: { fontFamily: 'commonFont', fill: 0x000000, fontSize: 28, fontWeight: 700 },
               },
-              x: 355,
+              x: 230,
+              y: 745,
+            },
+            {
+              name: 'continueBtn',
+              type: 'Button',
+              scale: 1,
+              data: false,
+              options: {
+                defaultView: 'cancelBtn',
+                hoverView: 'cancelBtn',
+                pressedView: 'cancelBtn',
+                disabledView: 'cancelBtn',
+                animations: CoreUIConfig.buttonStates,
+              },
+              textConfig: {
+                name: 'btnText',
+                type: 'Text',
+                content: 'promoContinueBtnText',
+                style: { fontFamily: 'commonFont', fill: 0xffffff, fontSize: 28, fontWeight: 700 },
+              },
+              x: 480,
               y: 745,
             },
           ],
@@ -170,7 +188,7 @@ export const PROMOFS_POPUP_CONFIG = {
               y: 545,
             },
             {
-              name: 'cancelBtn',
+              name: 'closeBtn',
               type: 'Button',
               scale: 1,
               //   action: {
