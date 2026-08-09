@@ -93,6 +93,13 @@ pipeline {
         sshagent(credentials: ['jenkins-secret-bitbucket']) {
           sh 'git clone --depth 1 $BB_ASSETS_URL ../feg_games_assets'
         }
+        script {
+          def assetsCommit = sh(
+            script: 'git -C ../feg_games_assets rev-parse --short=12 HEAD',
+            returnStdout: true
+          ).trim()
+          env.IMAGE_TAG = "${env.IMAGE_TAG}-${assetsCommit}"
+        }
       }
     }
 

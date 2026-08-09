@@ -94,6 +94,8 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enablePanel.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disablePanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.LOCK_BET_SELECTION, this.lockBetSelection.bind(this));
+    EventHandler.addEventListener(SlotEvents.UNLOCK_BET_SELECTION, this.unlockBetSelection.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_BUTTON, this.showSpinButton.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_STOPSPIN_BUTTON, this.showStopSpinButton.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_STOPSPIN_BUTTON, this.disableStopSpinButton.bind(this));
@@ -162,6 +164,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     action.execute(this.spinBtn);
   }
   protected startPress(): void {
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
     GameProxy.config.isLongPressTriggered = false;
     this.longPressSprite.scale.set(0.88);
     longPressTimer = setTimeout(() => {
@@ -255,7 +260,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected updateBalanceForSpin(): void {
-    this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
+    const status = appModel.promoSpinInfo?.status;
+    if (status !== 'IN_PROGRESS' && status !== 'COMPLETED') {
+      this.updateBalance(appModel.getBalance() - appModel.getTotalBet());
+    }
     appModel.setAfterSpinBalance();
   }
   protected updateBalanceForBBSpin(): void {
@@ -287,7 +295,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected enablePanel(): void {
     this.spinBtn.enabled = true;
-    this.betBtn.enabled = true;
+    this.betBtn.enabled = !appModel.getIsPromoFSSession();
     this.menuBtn.enabled = true;
     this.infoBtn.enabled = true;
 
@@ -311,6 +319,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
         }
       }
     }
+  }
+
+  protected lockBetSelection(): void {
+    this.betBtn.enabled = false;
+  }
+  protected unlockBetSelection(): void {
+    this.betBtn.enabled = true;
   }
 
   protected showSpinButton(): void {

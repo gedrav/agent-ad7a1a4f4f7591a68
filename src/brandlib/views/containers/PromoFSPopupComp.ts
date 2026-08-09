@@ -17,6 +17,7 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
   private readonly valueText1: PixText;
   private readonly promoBetValue: PixText;
   private readonly startBtn: PixFancyButton;
+  private readonly continueBtn: PixFancyButton;
   private readonly exitContainer: PixView;
   private readonly valueText3: PixText;
   private readonly closeBtn: PixFancyButton;
@@ -35,6 +36,10 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.startBtn = this.entryContainer.elementsList['startBtn'];
     this.startBtn.onPress.connect(this.startBtnClick.bind(this));
     this.startBtn.enabled = true;
+
+    this.continueBtn = this.entryContainer.elementsList['continueBtn'];
+    this.continueBtn.onPress.connect(this.continueBtnClick.bind(this));
+    this.continueBtn.enabled = true;
 
     this.exitContainer = this.elementsList['parentContainer'].elementsList['exitContainer'];
     this.exitContainer.visible = true;
@@ -67,6 +72,10 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
   startBtnClick() {
     this.visible = false;
     StateManager.doNextStep();
+  }
+  continueBtnClick() {
+    this.visible = false;
+    StateManager.next();
   }
   closeBtnClick() {
     StateManager.doNextStep();
