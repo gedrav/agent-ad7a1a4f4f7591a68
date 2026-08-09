@@ -13,7 +13,7 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'cambriab.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'ClarendonCondensedBold.otf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'showg.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },

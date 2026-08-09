@@ -12,7 +12,6 @@ import { FS_POPUP_CONFIG } from './FSPopupConfig';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 import { PF_POPUP_CONFIG } from './PFPopupConfig';
 import { PROMOFS_POPUP_CONFIG } from '@brand/config/PromoFSPopupConfig';
-import { PROMOFS_INFO_CONFIG } from '@brand/config/PromoFSInfoConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -31,6 +30,5 @@ export const SLOT_GAME_APP_CONFIG: any = {
     MESSAGE_POPUP_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
     PROMOFS_POPUP_CONFIG,
-    PROMOFS_INFO_CONFIG,
   ],
 };

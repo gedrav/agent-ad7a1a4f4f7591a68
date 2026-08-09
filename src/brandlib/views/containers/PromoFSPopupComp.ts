@@ -8,7 +8,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
-import { GameProxy } from '@core/models/GameConfigProxy';
+import { StateManager } from '@core/states/StateManagerService';
 
 export class PromoFSPopupComp extends ResponsiveChildrenView {
   private readonly bg: PixSprite;
@@ -21,15 +21,14 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
   private readonly exitContainer: PixView;
   private readonly valueText3: PixText;
   private readonly closeBtn: PixFancyButton;
-
   constructor(config) {
     super(config);
     this.bg = this.elementsList['bg'];
     UIUtil.setModalState(this.bg);
-
-    this.panelBG = this.elementsList['parentContainer'].elementsList['panelBG'];
+    // CoreLib.UIUtil.addInteraction(this.bg, this.hideBuyBonus.bind(this));
+    this.panelBG = this.elementsList['panelBG'];
     this.entryContainer = this.elementsList['parentContainer'].elementsList['entryContainer'];
-    this.entryContainer.visible = true;
+    this.entryContainer.visible = false;
 
     this.valueText1 = this.entryContainer.elementsList['valueText1'];
     this.promoBetValue = this.entryContainer.elementsList['promoBetValue'];
@@ -37,12 +36,13 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.startBtn = this.entryContainer.elementsList['startBtn'];
     this.startBtn.onPress.connect(this.startBtnClick.bind(this));
     this.startBtn.enabled = true;
+
     this.continueBtn = this.entryContainer.elementsList['continueBtn'];
     this.continueBtn.onPress.connect(this.continueBtnClick.bind(this));
     this.continueBtn.enabled = true;
 
     this.exitContainer = this.elementsList['parentContainer'].elementsList['exitContainer'];
-    this.exitContainer.visible = false;
+    this.exitContainer.visible = true;
 
     this.valueText3 = this.exitContainer.elementsList['valueText3'];
     this.valueText3.text = '';
@@ -54,52 +54,32 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_ENTRY_POPUP, this.showPromoEntryPopup.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP, this.showPromoExitPopup.bind(this));
   }
-
   showPromoEntryPopup() {
-    GameProxy.config.isPopupOpened = true;
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.exitContainer.visible = false;
     this.entryContainer.visible = true;
     const data = appModel.promoSpinInfo;
-    this.valueText1.text = data?.playCount ?? '';
-    this.promoBetValue.text = data ? Util.formatCurrency(data.betAmount) : '';
-    this.panelBG.height = 865;
+    this.valueText1.text = data?.playCount;
+    this.promoBetValue.text = Util.formatCurrency(data?.betAmount);
     this.visible = true;
   }
-
   showPromoExitPopup() {
-    GameProxy.config.isPopupOpened = true;
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     this.exitContainer.visible = true;
     this.entryContainer.visible = false;
     const data = appModel.promoSpinInfo;
-    this.valueText3.text = data ? Util.formatCurrency(data.totalWin) : '';
-    this.panelBG.width = 712;
-    this.panelBG.height = 752;
+    this.valueText3.text = Util.formatCurrency(data?.totalWin);
     this.visible = true;
   }
-
   startBtnClick() {
-    appModel.startPromoFSSession();
-    EventHandler.dispatchEvent(SlotEvents.LOCK_BET_SELECTION);
-    EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
-    this.closePopup();
-  }
-
-  continueBtnClick() {
-    this.closePopup();
-  }
-
-  closeBtnClick() {
-    EventHandler.dispatchEvent(SlotEvents.UNLOCK_BET_SELECTION);
-    this.closePopup();
-  }
-
-  private closePopup(): void {
-    GameProxy.config.isPopupOpened = false;
-    EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     this.visible = false;
-    this.parent?.removeChild(this);
+    StateManager.doNextStep();
+  }
+  continueBtnClick() {
+    this.visible = false;
+    StateManager.next();
+  }
+  closeBtnClick() {
+    StateManager.doNextStep();
+    this.visible = false;
   }
 
   resizeView() {

@@ -13,6 +13,21 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get promoSpinInfo(): any {
+    return this._promoSpinInfo;
+  }
+
+  set promoSpinInfo(value: any) {
+    this._promoSpinInfo = value;
+  }
+  get promoSpinSession(): boolean {
+    return this._promoSpinSession;
+  }
+
+  set promoSpinSession(value: boolean) {
+    this._promoSpinSession = value;
+  }
+
   get spinStartTime(): number {
     return this._spinStartTime;
   }
@@ -80,6 +95,8 @@ class AppModelService {
     return this._storeJackpotData;
   }
 
+  private _promoSpinSession: boolean;
+  private _promoSpinInfo: any;
   private _spinStartTime: number;
   private unfinishedData: any;
   private featureName: string;
@@ -295,11 +312,53 @@ class AppModelService {
         : 0;
 
     this.gameInfo.paytable = data.gameInfo.payTable;
+    this.promoSpinInfo = data.promoInfo;
     this.unfinishedData = data.unfinishedInfo;
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
     }
-    this.promoSpinInfo = data.promoInfo ?? null;
+  }
+  endPromoFSBet() {
+    this.promoSpinSession = false;
+    if (this.insertedPos > -1) {
+      this.gameInfo.betsArray.splice(this.insertedPos, 1);
+    }
+    this.gameInfo.betPos =
+      this.gameInfo.betsArray.indexOf(this.playerInfo.defaultBet) != undefined
+        ? this.gameInfo.betsArray.indexOf(this.playerInfo.defaultBet)
+        : 0;
+  }
+  setPromoFSBet() {
+    const betPerLine = this.promoSpinInfo.betAmount / (this.gameInfo.selectedLines * this.gameInfo.creditValue);
+    if (this.gameInfo.betsArray.indexOf(betPerLine) === -1) {
+      this.insertSorted2dp(this.gameInfo.betsArray, betPerLine);
+      this.insertedPos = this.gameInfo.betsArray.indexOf(betPerLine);
+      this.gameInfo.betPos = this.insertedPos;
+    } else {
+      this.insertedPos = -1;
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(betPerLine);
+    }
+  }
+  insertSorted2dp(nums, value, decimals = 2) {
+    const scale = 100 ** decimals;
+    const v = Math.round(value * scale);
+
+    const idx = nums.findIndex((n) => Math.round(n * scale) > v);
+    if (idx === -1) nums.push(value);
+    else nums.splice(idx, 0, value);
+
+    return nums;
+  }
+
+  getIsPromoFSSession() {
+    return this.promoSpinSession;
+  }
+  getIsNextPromoSpinPossible() {
+    let flag = false;
+    if (this.promoSpinInfo && this.promoSpinInfo.remainingPlayCount > 0) {
+      flag = true;
+    }
+    return flag;
   }
 
   public isConfigError(): boolean {
@@ -362,20 +421,7 @@ class AppModelService {
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
       }
     }
-    this.promoSpinInfo = data.promoInfo ?? null;
-    if (
-      this._promoActive &&
-      this._promoSpinInfo?.status !== 'IN_PROGRESS' &&
-      this._promoSpinInfo?.status !== 'COMPLETED'
-    ) {
-      // Client thought it was in a promo, but the server's response doesn't confirm it -
-      // the server processed this as a normal real-money bet. Reconcile silently, no exit popup
-      // (there's nothing to acknowledge, this wasn't a promo spin).
-      this.endPromoFSSession();
-    }
-    if (this._promoSpinInfo?.status === 'COMPLETED') {
-      this.endPromoFSSession();
-    }
+    this.promoSpinInfo = data.promoInfo;
   }
   public storeFeatureResult(data: any): void {
     this.lineWinIndex = 0;
@@ -408,20 +454,8 @@ class AppModelService {
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
-    this.promoSpinInfo = data.promoInfo ?? null;
-    if (
-      this._promoActive &&
-      this._promoSpinInfo?.status !== 'IN_PROGRESS' &&
-      this._promoSpinInfo?.status !== 'COMPLETED'
-    ) {
-      // Client thought it was in a promo, but the server's response doesn't confirm it -
-      // the server processed this as a normal real-money bet. Reconcile silently, no exit popup
-      // (there's nothing to acknowledge, this wasn't a promo spin).
-      this.endPromoFSSession();
-    }
-    if (this._promoSpinInfo?.status === 'COMPLETED') {
-      this.endPromoFSSession();
-    }
+
+    this.promoSpinInfo = data.promoInfo;
   }
 
   // public methods -------------------------------------------
@@ -867,7 +901,7 @@ class AppModelService {
   // WHEN: Called before starting autoplay or next spin
   // WHY: Prevents autoplay from starting/continuing without funds
   public getIsSpinStartPossible(): boolean {
-    return this.getIsPromoFSSession() || this.getBalance() >= this.getTotalBet();
+    return this.getBalance() >= this.getTotalBet();
   }
   public getIsBBSpinStartPossible(bbId): boolean {
     const multiplier = appModel.getBuyBonusMultiplier(bbId);
@@ -926,26 +960,6 @@ class AppModelService {
   }
   public startFreeSpinsSession(flag: boolean): void {
     this._freeSpinsSession = true;
-  }
-
-  private _promoSpinInfo: any = null;
-  private _promoActive: boolean = false;
-
-  get promoSpinInfo(): any {
-    return this._promoSpinInfo;
-  }
-  set promoSpinInfo(value: any) {
-    this._promoSpinInfo = value;
-  }
-
-  public startPromoFSSession(): void {
-    this._promoActive = true;
-  }
-  public getIsPromoFSSession(): boolean {
-    return this._promoActive;
-  }
-  public endPromoFSSession(): void {
-    this._promoActive = false;
   }
 
   public startPickFeatureSession(): void {
