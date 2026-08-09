@@ -27,7 +27,9 @@ class SpinStartStateCommand extends StateCommand {
     if (!appModel.isErrorOccurred && !appModel.getIsPromoFSSession()) {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE_FOR_SPIN);
     }
-
+    if (appModel.getIsPromoFSSession()) {
+      appModel.setAfterSpinBalance();
+    }
     await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.next();

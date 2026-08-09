@@ -23,6 +23,7 @@ class CheckPromoFSTriggerStateCommand extends StateCommand {
   public doNextStep(data?: any): void {
     super.doNextStep(data);
     appModel.promoSpinSession = true;
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_START);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
     EventHandler.dispatchEvent(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN);
     StateManager.next();

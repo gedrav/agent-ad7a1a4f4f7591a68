@@ -30,6 +30,7 @@ export class FSAutoCounterComp extends StandardView {
 
     EventHandler.addEventListener(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN, this.showComp.bind(this));
     EventHandler.addEventListener(SlotEvents.ADD_BUTTONS_FOR_PROMO_SPIN, this.hideComp.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_PROMO_FS_START, this.updateUIForPromoStart.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_PROMO_FS_INFO, this.updatePromoFS.bind(this));
   }
   protected hideComp() {
@@ -40,13 +41,16 @@ export class FSAutoCounterComp extends StandardView {
       this.visible = true;
     }
   }
+  protected updateUIForPromoStart(): void {
+    this.visible = true;
+  }
   protected updateUIForAutoStart(): void {
     this.visible = true;
   }
   protected updatePromoFS(): void {
     const data = appModel.promoSpinInfo;
     if (data) {
-      const count = data.playCount - data.remainingPlayCount;
+      const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount + 1);
       this.spinsText.text = Util.parseMessage(Util.getContent('promoSpinsCounterText'), [count, data.playCount]);
       this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(data.totalWin)]);
     }

@@ -10,7 +10,6 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { BuyBonusView } from '@brand/views/popups/BuyBonusView';
 import { MessagePopupView } from '@brand/views/popups/MessagePopupView';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
-import { PromoFSPopupComp } from '@brand/views/containers/PromoFSPopupComp';
 import { MenuComp } from '@brand/views/comps/MenuComp';
 import { MenuCompMobile } from '@brand/views/comps/MenuCompMobile';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
@@ -29,7 +28,6 @@ export class SlotAppView extends ResponsiveChildrenView {
   private readonly buyBonusView: BuyBonusView | BuyBonusViewMobile;
   private readonly messagePopupView: MessagePopupView;
   private readonly popupFSComp: FSPopupComp;
-  private readonly popupPromoFSComp: PromoFSPopupComp;
   private readonly popupPFComp: PFPopupComp;
   private readonly menuComp: MenuComp | MenuCompMobile;
   private readonly modalView: ModalView;
@@ -54,8 +52,6 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.messagePopupView);
     this.popupFSComp = this.elementsList['popupComp'];
     this.removeChild(this.popupFSComp);
-    this.popupPromoFSComp = this.elementsList['promoFSComp'];
-    this.removeChild(this.popupPromoFSComp);
     this.popupPFComp = this.elementsList['popupComp'];
     this.removeChild(this.popupPFComp);
     this.menuComp = this.elementsList['menuComp'];
@@ -68,8 +64,6 @@ export class SlotAppView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_BUY_BONUS_VIEW, this.showBuyBonusView.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_MESSAGE_POPUP, this.showMessagePopup.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FS_POPUP, this.showFSPopup.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_ENTRY_POPUP, this.showPromoFSPopup.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP, this.showPromoFSPopup.bind(this));
     EventHandler.addEventListener(SlotEvents.MENU_CLICKED, this.onMenuClicked.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_MODAL_VIEW, this.showModalView.bind(this));
 
@@ -93,7 +87,6 @@ export class SlotAppView extends ResponsiveChildrenView {
     this.removeChild(this.buyBonusView);
     this.removeChild(this.messagePopupView);
     this.removeChild(this.popupFSComp);
-    this.removeChild(this.popupPromoFSComp);
     this.removeChild(this.popupPFComp);
     this.removeChild(this.menuComp);
     this.removeChild(this.modalView);
@@ -111,9 +104,6 @@ export class SlotAppView extends ResponsiveChildrenView {
   }
   protected showFSPopup(): void {
     this.addChild(this.popupFSComp);
-  }
-  protected showPromoFSPopup(): void {
-    this.addChild(this.popupPromoFSComp);
   }
   protected showBetPanel(): void {
     this.addChild(this.betPanelView);

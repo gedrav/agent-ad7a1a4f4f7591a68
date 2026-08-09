@@ -16,6 +16,7 @@ class AppModelService {
   get promoSpinInfo(): any {
     return this._promoSpinInfo;
   }
+  private insertedPos: number;
 
   set promoSpinInfo(value: any) {
     this._promoSpinInfo = value;
@@ -329,14 +330,14 @@ class AppModelService {
         : 0;
   }
   setPromoFSBet() {
-    const betPerLine = this.promoSpinInfo.betAmount / (this.gameInfo.selectedLines * this.gameInfo.creditValue);
-    if (this.gameInfo.betsArray.indexOf(betPerLine) === -1) {
-      this.insertSorted2dp(this.gameInfo.betsArray, betPerLine);
-      this.insertedPos = this.gameInfo.betsArray.indexOf(betPerLine);
+    const bet = this.promoSpinInfo.betAmount;
+    if (this.gameInfo.betsArray.indexOf(bet) === -1) {
+      this.insertSorted2dp(this.gameInfo.betsArray, bet);
+      this.insertedPos = this.gameInfo.betsArray.indexOf(bet);
       this.gameInfo.betPos = this.insertedPos;
     } else {
       this.insertedPos = -1;
-      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(betPerLine);
+      this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
     }
   }
   insertSorted2dp(nums, value, decimals = 2) {
