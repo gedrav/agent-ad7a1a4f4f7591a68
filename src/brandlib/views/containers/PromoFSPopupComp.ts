@@ -20,6 +20,8 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
   private readonly exitContainer: PixView;
   private readonly valueText3: PixText;
   private readonly closeBtn: PixFancyButton;
+  private readonly skipBtn: PixFancyButton;
+  private readonly remainingSpins: PixText;
   constructor(config) {
     super(config);
     this.bg = this.elementsList['bg'];
@@ -29,12 +31,18 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.entryContainer = this.elementsList['parentContainer'].elementsList['entryContainer'];
     this.entryContainer.visible = false;
 
+    this.remainingSpins = this.entryContainer.elementsList['remainingSpins'];
+
     this.valueText1 = this.entryContainer.elementsList['valueText1'];
     this.promoBetValue = this.entryContainer.elementsList['promoBetValue'];
     this.valueText1.text = '';
     this.startBtn = this.entryContainer.elementsList['startBtn'];
     this.startBtn.onPress.connect(this.startBtnClick.bind(this));
     this.startBtn.enabled = true;
+
+    this.skipBtn = this.entryContainer.elementsList['skipBtn'];
+    this.skipBtn.onPress.connect(this.onSkipClicked.bind(this));
+    this.skipBtn.enabled = true;
 
     this.exitContainer = this.elementsList['parentContainer'].elementsList['exitContainer'];
     this.exitContainer.visible = true;
@@ -53,8 +61,20 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.exitContainer.visible = false;
     this.entryContainer.visible = true;
     const data = appModel.promoSpinInfo;
+    console.log(data);
     this.valueText1.text = data?.playCount;
     this.promoBetValue.text = Util.formatCurrency(data?.betAmount);
+    if (data.remainingPlayCount < data.playCount) {
+      this.skipBtn.visible = false;
+      this.startBtn.x = 355;
+      this.remainingSpins.visible = true;
+      this.remainingSpins.text = Util.parseMessage(Util.getContent('remainingPromoSpins'), [data.remainingPlayCount]);
+      this.startBtn.updateText(Util.getContent('ContinueBtnText'));
+    } else {
+      this.remainingSpins.visible = false;
+      this.skipBtn.visible = true;
+      this.startBtn.x = this.startBtn.configData.x;
+    }
     this.visible = true;
   }
   showPromoExitPopup() {
@@ -64,9 +84,13 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.valueText3.text = Util.formatCurrency(data?.totalWin);
     this.visible = true;
   }
-  startBtnClick() {
+  protected startBtnClick() {
     this.visible = false;
-    StateManager.doNextStep();
+    StateManager.doNextStep(true);
+  }
+  protected onSkipClicked(): void {
+    this.visible = false;
+    StateManager.doNextStep(false);
   }
   closeBtnClick() {
     StateManager.doNextStep();

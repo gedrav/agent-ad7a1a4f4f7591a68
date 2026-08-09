@@ -69,7 +69,7 @@ export const PROMOFS_POPUP_CONFIG = {
               },
               anchor: { x: 0.5, y: 0.5 },
               x: 355,
-              y: 70,
+              y: 60,
             },
             {
               name: 'promoSpins',
@@ -78,7 +78,16 @@ export const PROMOFS_POPUP_CONFIG = {
               style: { fontFamily: 'commonFont', fontSize: 30, fill: 0xffffff },
               anchor: { x: 0.5, y: 0.5 },
               x: 355,
-              y: 140,
+              y: 120,
+            },
+            {
+              name: 'remainingSpins',
+              type: 'Text',
+              content: 'freespinText',
+              style: { fontFamily: 'commonFont', fontSize: 24, fill: 0xcccccc },
+              anchor: { x: 0.5, y: 0.5 },
+              x: 355,
+              y: 160,
             },
             {
               name: 'promoFStxt2',
@@ -111,7 +120,7 @@ export const PROMOFS_POPUP_CONFIG = {
               wordWrapWidth: 1000,
             },
             {
-              name: 'cancelBtn',
+              name: 'skipBtn',
               type: 'Button',
               scale: 1,
               soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
