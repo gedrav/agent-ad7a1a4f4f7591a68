@@ -312,7 +312,7 @@ class AppModelService {
         : 0;
 
     this.gameInfo.paytable = data.gameInfo.payTable;
-    this.promoSpinInfo = data.promoSpinInfo;
+    this.promoSpinInfo = data.promoInfo;
     this.unfinishedData = data.unfinishedInfo;
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
@@ -421,7 +421,7 @@ class AppModelService {
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
       }
     }
-    this.promoSpinInfo = data.promoSpinInfo;
+    this.promoSpinInfo = data.promoInfo;
   }
   public storeFeatureResult(data: any): void {
     this.lineWinIndex = 0;
@@ -455,7 +455,7 @@ class AppModelService {
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
 
-    this.promoSpinInfo = data.promoSpinInfo;
+    this.promoSpinInfo = data.promoInfo;
   }
 
   // public methods -------------------------------------------
