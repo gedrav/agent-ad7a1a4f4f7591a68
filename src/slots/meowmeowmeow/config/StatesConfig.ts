@@ -22,8 +22,13 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { GreenEnterFreespinsState } from '@slots/meowmeowmeow/states/GreenEnterFreespinsState';
 import { PickFeatureTransitionState } from '../states/PickFeatureTransitionState';
 import { MMMEnterPickFeatureState } from '../states/MMMEnterPickFeatureState';
+import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTriggerState';
+import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';
+import { ResumePromoFSState } from '@core/commands/states/ResumePromoFSState';
+import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
 
 export const STATES_CONFIG: any = [
+  { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
   { name: STATES.CHECK_UNFINISHED_STATE_V2, state: CheckUnfinishedStateV2 },
 
   { name: STATES.IDLE_STATE, state: GameIdleState },
@@ -35,6 +40,10 @@ export const STATES_CONFIG: any = [
 
   { name: STATES.CHECK_FEATURE_STATE_V2, state: CheckFeatureStateV2 },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
+
+  { name: STATES.CHECK_PROMOFS_STATE, state: CheckPromoFSState },
+  { name: STATES.RESUME_PROMOFS_STATE, state: ResumePromoFSState },
+  { name: STATES.EXIT_PROMOFS_STATE, state: ExitPromoFSState },
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },

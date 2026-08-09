@@ -17,8 +17,13 @@ import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
 import { GamePreWinState } from '@game/states/GamePreWinState';
 import { CheckFSStateCT } from '@game/states/CTCheckFeatureState';
 import { ShowJackpotGameState } from '@core/commands/states/ShowJackpotGameState';
+import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTriggerState';
+import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';
+import { ResumePromoFSState } from '@core/commands/states/ResumePromoFSState';
+import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
 
 export const STATES_CONFIG: any = [
+  { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
   { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
 
   { name: STATES.IDLE_STATE, state: GameIdleState },
@@ -33,6 +38,10 @@ export const STATES_CONFIG: any = [
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
   { name: STATES.SHOW_JACKPOT_GAME_STATE, state: ShowJackpotGameState },
+
+  { name: STATES.CHECK_PROMOFS_STATE, state: CheckPromoFSState },
+  { name: STATES.RESUME_PROMOFS_STATE, state: ResumePromoFSState },
+  { name: STATES.EXIT_PROMOFS_STATE, state: ExitPromoFSState },
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
