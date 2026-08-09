@@ -8,7 +8,6 @@ import { STATES } from '@core/states/StateConstants';
 
 class CheckUnfinishedStateCommand extends StateCommand {
   public async execute(data: any = null) {
-    console.log('CheckUnfinishedStateCommand -- ,', appModel.getIsUnfinishedGame(), appModel.getIsPromoFSSession());
     super.execute(data);
     if (appModel.getIsUnfinishedGame()) {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
