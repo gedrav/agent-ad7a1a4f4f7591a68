@@ -22,7 +22,6 @@ class CheckPromoFSTriggerStateCommand extends StateCommand {
   }
 
   public doNextStep(data?: any): void {
-    console.log('do next -- ', data);
     super.doNextStep(data);
     if (data) {
       appModel.promoSpinSession = true;
@@ -31,6 +30,8 @@ class CheckPromoFSTriggerStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN);
       StateManager.next();
     } else {
+      appModel.endPromoFSBet();
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
       StateManager.goToState(STATES.IDLE_STATE);
     }
   }
