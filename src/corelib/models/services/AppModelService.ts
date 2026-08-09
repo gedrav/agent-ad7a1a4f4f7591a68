@@ -382,6 +382,8 @@ class AppModelService {
     if (this.unfinishedData.ante) {
       const bet = this.unfinishedData.bet / GameProxy.config.anteBetMultiplier;
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
+    } else if (this.promoSpinInfo) {
+      this.setPromoFSBet();
     } else {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(this.unfinishedData.bet);
     }

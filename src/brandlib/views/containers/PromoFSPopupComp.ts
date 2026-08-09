@@ -61,7 +61,6 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.exitContainer.visible = false;
     this.entryContainer.visible = true;
     const data = appModel.promoSpinInfo;
-    console.log(data);
     this.valueText1.text = data?.playCount;
     this.promoBetValue.text = Util.formatCurrency(data?.betAmount);
     if (data.remainingPlayCount < data.playCount) {
