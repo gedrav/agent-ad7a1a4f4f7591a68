@@ -36,7 +36,7 @@ export class FSAutoCounterComp extends StandardView {
     this.visible = false;
   }
   protected showComp() {
-    if (appModel.getIsFreeSpinsSession() || appModel.getIsAutoSession()) {
+    if (appModel.getIsFreeSpinsSession() || appModel.getIsAutoSession() || appModel.getIsPromoFSSession()) {
       this.visible = true;
     }
   }
@@ -46,7 +46,7 @@ export class FSAutoCounterComp extends StandardView {
   protected updatePromoFS(): void {
     const data = appModel.promoSpinInfo;
     if (data) {
-      const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount + 1);
+      const count = data.playCount - data.remainingPlayCount;
       this.spinsText.text = Util.parseMessage(Util.getContent('promoSpinsCounterText'), [count, data.playCount]);
       this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(data.totalWin)]);
     }
