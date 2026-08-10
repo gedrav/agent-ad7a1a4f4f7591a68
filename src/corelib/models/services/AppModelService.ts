@@ -125,6 +125,7 @@ class AppModelService {
   private _nextFeature: string;
   private _nextSubFeature: string = '';
   private _storeJackpotData: any = null;
+  public subFeatureAwardAnnounced: boolean = false;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
