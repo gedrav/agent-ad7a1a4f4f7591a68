@@ -326,7 +326,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           image: '5_4Reelbg',
           x: 40,
           y: -180,
-          px: 23,
+          px: 25,
           py: -180,
           lx: 34,
           ly: -180,
@@ -418,6 +418,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               class: SymbolPayoutComp,
               xPadding: 0.05,
               textXPadding: 0.15,
+              layoutData: { Portrait: { scale: 1.2 } },
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG', scale: 1.2 },
                 {
