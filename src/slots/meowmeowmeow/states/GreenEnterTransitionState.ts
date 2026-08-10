@@ -17,6 +17,8 @@ class GreenEnterTransitionStateCommand extends StateCommand {
         message1: Util.parseMessage(Util.getContent('PickFeatureEntryText'), [appModel.getNextSubFeatureType()]),
         entryPopUp: false,
         skipModalDim: true,
+        hideFeatureAwardedTitle: true,
+        callbackFunction: () => StateManager.doNextStep(),
       });
     }
   }

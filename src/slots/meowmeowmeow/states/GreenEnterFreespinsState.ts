@@ -31,9 +31,15 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();
 
-    this.enteredFromBlue = MMMExitPickFeatureState.isSubFeatureAwardAnnounced();
+    this.enteredFromBlue =
+      MMMExitPickFeatureState.isSubFeatureAwardAnnounced() || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
 
     if (this.enteredFromBlue) {
+      appModel.fsInfo = {
+        ...appModel.fsInfo,
+        currentFreespin: 0,
+        totalFreespins: appModel.featureResult?.featureData?.initialSpinCount,
+      };
       EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
       EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
       EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);

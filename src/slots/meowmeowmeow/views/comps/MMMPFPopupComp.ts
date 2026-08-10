@@ -113,6 +113,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       this.congratText.visible = true;
       this.congratText.text = Util.getContent('CongratTitle');
     }
+    this.titleText.visible = !data.hideFeatureAwardedTitle;
     this.titleText.text = Util.getContent('FeatureAwardedTitle');
     const featureSubType = appModel.getNextSubFeatureType()
       ? appModel.getNextSubFeatureType()
