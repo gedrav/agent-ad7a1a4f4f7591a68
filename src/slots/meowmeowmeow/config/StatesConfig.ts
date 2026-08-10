@@ -15,7 +15,7 @@ import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';
 import { CheckUnfinishedStateV2 } from '@core/commands/states/CheckUnfinishedStateV2';
 import { EnterPickFeatureState } from '@core/commands/states/EnterPickFeatureState';
 import { PickFeatureState } from '@core/commands/states/PickFeatureState';
-import { ExitPickFeatureState } from '@core/commands/states/ExitPickFeatureState';
+import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 import { GreenEnterTransitionState } from '@slots/meowmeowmeow/states/GreenEnterTransitionState';
 import { GreenExitTransitionState } from '@slots/meowmeowmeow/states/GreenExitTransitionState';
 import { CheckFSState } from '@core/commands/states/CheckFSState';
@@ -59,5 +59,5 @@ export const STATES_CONFIG: any = [
   { name: STATES.ENTER_PICK_FEATURE_STATE, state: MMMEnterPickFeatureState },
   { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: PickFeatureTransitionState },
   { name: STATES.PICK_FEATURE_STATE, state: PickFeatureState },
-  { name: STATES.EXIT_PICK_FEATURE_STATE, state: ExitPickFeatureState },
+  { name: STATES.EXIT_PICK_FEATURE_STATE, state: MMMExitPickFeatureState },
 ];

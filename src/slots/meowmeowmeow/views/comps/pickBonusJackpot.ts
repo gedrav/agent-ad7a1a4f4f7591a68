@@ -60,7 +60,10 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   }
 
   private async fetchBonusData(): Promise<void> {
-    await MessageProxy.requestBonusData(appModel.getFeatureType());
+    const featureType = appModel.getIsUnfinishedGame()
+      ? appModel.getUnfinishedFeatureType()
+      : appModel.getFeatureType();
+    await MessageProxy.requestBonusData(featureType);
     this.response = appModel.featureResult.featureData.picks;
     this.responseLength = this.response.length;
   }

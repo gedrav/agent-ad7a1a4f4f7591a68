@@ -4,10 +4,17 @@ import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
+import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 class MMMEnterPickFeatureStateCommand extends StateCommand {
+  private enteredFromBlue: boolean = false;
+
   public async execute(data?: any): Promise<void> {
     super.execute(data);
+    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+      StateManager.doNextStep();
+      return;
+    }
     EventHandler.dispatchEvent('SHOW_KITTIEBANK_BREAK');
   }
 
@@ -17,6 +24,13 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startPickFeatureSession();
     appModel.setFeatureTriggered();
+
+    this.enteredFromBlue = MMMExitPickFeatureState.isSubFeatureAwardAnnounced();
+
+    if (this.enteredFromBlue) {
+      this.enterPickFeature();
+      return;
+    }
 
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');

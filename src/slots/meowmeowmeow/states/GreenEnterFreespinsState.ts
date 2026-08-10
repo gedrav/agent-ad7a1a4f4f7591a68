@@ -4,11 +4,17 @@ import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
-import { STATES } from '@core/states/StateConstants';
+import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 class GreenEnterFreespinsStateCommand extends StateCommand {
+  private enteredFromBlue: boolean = false;
+
   public async execute(data: any = null) {
     super.execute(data);
+    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+      StateManager.doNextStep();
+      return;
+    }
     if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0) {
       EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
     } else {
@@ -24,6 +30,17 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();
+
+    this.enteredFromBlue = MMMExitPickFeatureState.isSubFeatureAwardAnnounced();
+
+    if (this.enteredFromBlue) {
+      EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
+      EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
+      EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
+      this.enterFreespin();
+      return;
+    }
+
     const obj: any = {};
     obj.title = Util.getContent('FeatureAwardedTitle');
 

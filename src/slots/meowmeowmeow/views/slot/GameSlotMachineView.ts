@@ -17,6 +17,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
@@ -164,7 +165,12 @@ export class GameSlotMachineView extends SlotMachineView {
     this.slotReel.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
-    const isRedFeature = appModel.getNextSubFeatureType() !== 'Blue';
+    const featureSubType = appModel.getIsUnfinishedGame()
+      ? appModel.getUnfinishedFeatureSubType()
+      : appModel.getFeatureSubType();
+    const isRedFeature = MMMExitPickFeatureState.isSubFeatureAwardAnnounced()
+      ? true
+      : featureSubType?.toUpperCase() !== 'BLUE';
     if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
     } else {
@@ -245,6 +251,16 @@ export class GameSlotMachineView extends SlotMachineView {
     this.addChild(this.vaultAnim, this.wheelRim);
     this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
+
+    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+      if (this.vaultAnim) {
+        this.vaultAnim.visible = false;
+      }
+      this.makeWheelInteractive();
+      onDoorOpened?.();
+      StateManager.doNextStep();
+      return;
+    }
 
     if (this.vaultAnim) {
       this.vaultAnim.playAnimation({
@@ -685,17 +701,20 @@ export class GameSlotMachineView extends SlotMachineView {
 
           if (currentInterfaceSize === 4 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.65);
-            this.bigWinsComp.position.set(...(isPortrait ? [374, 1048] : [718, 518]));
+            this.bigWinsComp.position.set(...(isPortrait ? [374, 1048] : [718, 510]));
             if (winTicker) {
               winTicker.x = 772;
               winTicker.y = 320;
             }
-            setGuideRect(-60, -297, 1660, 1293.6);
-            if (isPortrait && bigWinAnim) {
-              bigWinAnim.x = 721;
+            setGuideRect(-60, -297, 1660, 1313.6);
+            if (bigWinAnim) {
+              bigWinAnim.x = 776;
             }
-            if (isPortrait && els['winTickerBW']) {
-              els['winTickerBW'].x = 770;
+            if (isPortrait && els['bigWinText']) {
+              els['bigWinText'].x = 756;
+            }
+            if (els['winTickerBW']) {
+              els['winTickerBW'].x = 800;
             }
           } else if (currentInterfaceSize === 5 && !isRedFeature) {
             this.bigWinsComp.scale.set(0.58);
@@ -704,9 +723,15 @@ export class GameSlotMachineView extends SlotMachineView {
               winTicker.x = 762;
               winTicker.y = 180;
             }
-            setGuideRect(-65, -603, 1660, 1617);
-            if (isPortrait && bigWinAnim) {
-              bigWinAnim.x = 746;
+            setGuideRect(-65, -603, 1660, 1623);
+            if (bigWinAnim) {
+              bigWinAnim.x = 768;
+            }
+            if (isPortrait && els['bigWinText']) {
+              els['bigWinText'].x = 756;
+            }
+            if (els['winTickerBW']) {
+              els['winTickerBW'].x = 778;
             }
           } else {
             this.bigWinsComp.scale.set(1);
@@ -717,6 +742,9 @@ export class GameSlotMachineView extends SlotMachineView {
             if (winTicker) {
               winTicker.x = 755;
               winTicker.y = 480;
+            }
+            if (isPortrait && els['winTickerBW']) {
+              els['winTickerBW'].x = 800;
             }
             setGuideRect(isPortrait ? 28 : -62, isPortrait ? 56 : 46, 1660, 980);
           }
