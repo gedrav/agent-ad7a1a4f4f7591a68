@@ -258,7 +258,6 @@ export class GameSlotMachineView extends SlotMachineView {
       }
       this.makeWheelInteractive();
       onDoorOpened?.();
-      StateManager.doNextStep();
       return;
     }
 
