@@ -149,8 +149,15 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     await this.stopWheel(choosenSector);
   };
 
+  private async fetchBonusData(): Promise<void> {
+    const featureType = appModel.getIsUnfinishedGame()
+      ? appModel.getUnfinishedFeatureType()
+      : appModel.getFeatureType();
+    await MessageProxy.requestBonusData(featureType);
+  }
+
   private async resolveWinningSector(): Promise<number> {
-    await MessageProxy.requestBonusData(appModel.getFeatureType());
+    await this.fetchBonusData();
 
     const wheelResult = appModel.featureResult.featureData;
     this.wheelWinnings = this.normalizePrizeValue(wheelResult.prizeValue);

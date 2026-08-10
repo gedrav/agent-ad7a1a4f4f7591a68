@@ -168,7 +168,9 @@ export class MMMPFPopupComp extends PFPopupComp {
       EventHandler.dispatchEvent(SHOW_FEATURE_WIN_ANIM, { callback: data.callbackFunction });
       return;
     }
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    if (!data.skipModalDim) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    }
     this.parent?.addChild(this);
 
     super.showPFPopup(data);
