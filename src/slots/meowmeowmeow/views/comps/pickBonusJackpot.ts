@@ -1,5 +1,5 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
-import { PICK_ICON_EVENT, PickBonusJackpotIconComp } from './pickBonusJackpotIcon';
+import { JackpotTier, PICK_ICON_EVENT, PickBonusJackpotIconComp } from './pickBonusJackpotIcon';
 import { PICK_BONUS_JACKPOT_ICON_CONFIG } from '@slots/meowmeowmeow/config/screens/pickBonusjackpotIconCofig';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
@@ -15,13 +15,12 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private readonly icons: PickBonusJackpotIconComp[] = [];
   private readonly pickedIcons: PickBonusJackpotIconComp[] = [];
   private readonly tapText: any;
-  private response: any[] = [];
-  private responseIterator: number = 0;
-  private responseLength: number = 0;
+  private isWinAchieved: boolean = false;
 
   constructor(config) {
     super(config);
     this.visible = false;
+    this.eventMode = 'none';
 
     this.tapText = this.elementsList['tapText'];
     this.tapText.text = Util.getContent('PickACatText');
@@ -54,52 +53,78 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     });
   }
 
-  public async enter(): Promise<void> {
-    await this.fetchBonusData();
+  public enter(): void {
+    this.restoreUnfinishedScreen();
     this.visible = true;
+    this.eventMode = 'passive';
   }
 
-  private async fetchBonusData(): Promise<void> {
+  private restoreUnfinishedScreen(): void {
+    const pickedTiers: string[] = appModel.featureResult?.featureData?.pickedTiers ?? [];
+    if (pickedTiers.length <= 1 || this.pickedIcons.length === pickedTiers.length) return;
+
+    const availableIcons = [...this.icons];
+
+    pickedTiers.forEach((tier) => {
+      const icon = availableIcons.splice(Math.floor(Math.random() * availableIcons.length), 1)[0];
+      icon.setjackpotData(this.toTierName(tier));
+      icon.revealInstantly();
+      this.pickedIcons.push(icon);
+    });
+  }
+
+  private async onIconSelected(icon: PickBonusJackpotIconComp): Promise<void> {
+    this.eventMode = 'none';
+    icon.startFlipAnimation();
+
     const featureType = appModel.getIsUnfinishedGame()
       ? appModel.getUnfinishedFeatureType()
       : appModel.getFeatureType();
     await MessageProxy.requestBonusData(featureType);
-    this.response = appModel.featureResult.featureData.picks;
-    this.responseLength = this.response.length;
-  }
 
-  private onIconSelected(icon: PickBonusJackpotIconComp): void {
-    if (this.responseIterator >= this.responseLength) {
-      this.animateWinningSymbols();
-      this.scheduleExit();
-      return;
-    }
-    const pick = this.response[this.responseIterator];
+    const { picks, winningTier } = appModel.featureResult.featureData;
+    const pickedTier = picks[0].jackpotTier;
 
-    icon.setjackpotData(pick.jackpotTier.replace(/\d+$/, '').toLowerCase());
-    this.responseIterator++;
-    const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
-    jackpotComp?.playIdleAnim(pick.jackpotTier.replace(/\d+$/, ''));
+    icon.setjackpotData(this.toTierName(pickedTier));
     this.pickedIcons.push(icon);
+
+    const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
+    jackpotComp?.playIdleAnim(this.toTierGroup(pickedTier));
+
+    this.isWinAchieved = !!winningTier;
+    icon.revealJackpot();
+
+    if (!this.isWinAchieved) this.eventMode = 'passive';
   }
 
-  private onIconRevealComplete(): void {
-    if (this.pickedIcons.length === this.responseLength) {
-      this.animateWinningSymbols();
-      this.scheduleExit();
-    }
+  private onIconRevealComplete(icon: PickBonusJackpotIconComp): void {
+    if (!this.isWinAchieved) return;
+    if (icon !== this.pickedIcons[this.pickedIcons.length - 1]) return;
+
+    this.animateWinningSymbols(appModel.featureResult.featureData.winningTier);
+    this.scheduleExit();
   }
 
-  private animateWinningSymbols() {
+  private animateWinningSymbols(winningTier: string): void {
+    const winningTierName = this.toTierName(winningTier);
+    const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
+    jackpotComp?.playWinAnim(this.toTierGroup(winningTier));
+
     this.icons.forEach((icon) => {
-      if (icon.getjackpotData() === appModel.featureResult.featureData.winningTier.replace(/\d+$/, '').toLowerCase()) {
-        const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
-        jackpotComp?.playWinAnim(appModel.featureResult.featureData.winningTier.replace(/\d+$/, ''));
+      if (icon.getjackpotData() === winningTierName) {
         icon.playWinAnim();
       } else {
         icon.disable();
       }
     });
+  }
+
+  private toTierGroup(jackpotTier: string): string {
+    return jackpotTier.replace(/\d+$/, '');
+  }
+
+  private toTierName(jackpotTier: string): JackpotTier {
+    return this.toTierGroup(jackpotTier).toLowerCase() as JackpotTier;
   }
 
   private scheduleExit(): void {
@@ -112,10 +137,10 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   }
 
   private resetFeature(): void {
-    this.response = [];
-    this.responseIterator = 0;
     this.pickedIcons.length = 0;
+    this.isWinAchieved = false;
     this.visible = false;
+    this.eventMode = 'none';
     this.icons.forEach((icon) => icon.reset());
   }
 }

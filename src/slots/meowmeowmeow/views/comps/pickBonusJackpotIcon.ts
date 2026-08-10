@@ -4,13 +4,14 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import { ColorMatrixFilter } from 'pixi.js';
 import gsap from 'gsap';
 
-type IconState = 'closed' | 'opening' | 'open' | 'disabled' | 'won';
+type IconState = 'closed' | 'awaitingData' | 'opening' | 'open' | 'disabled' | 'won';
 
 export type JackpotTier = 'grand' | 'major' | 'minor' | 'mini';
 
 const ANIM = {
   IDLE: ['Ideal', 'Ideal2'],
   HOVER: 'Hover_over',
+  FLIP_LOOP: 'Flip/Flip',
 } as const;
 
 const IDLE_START_DELAY_MAX_MS = 300;
@@ -48,7 +49,8 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
   private isHovering: boolean = false;
   private isActive: boolean = true;
   private jackpotData: JackpotTier;
-  private revealedTier: JackpotTier | null = null;
+  private pendingTier: JackpotTier | null = null;
+  private flipLoopListener: any = null;
   private winTween: gsap.core.Tween | null = null;
   private idleTimeout: ReturnType<typeof setTimeout> | null = null;
   private dimFilter: ColorMatrixFilter | null = null;
@@ -86,7 +88,6 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
     if (!this.canInteract()) return;
     this.isActive = false;
     this.emit(PICK_ICON_EVENT.SELECTED, this);
-    this.revealJackpot(this.jackpotData);
   }
 
   private canInteract(): boolean {
@@ -121,20 +122,63 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
     return this.jackpotData;
   }
 
-  private revealJackpot(tier: JackpotTier): void {
+  public startFlipAnimation(): void {
     if (this.state !== 'closed') return;
 
-    this.state = 'opening';
+    this.state = 'awaitingData';
+    if (this.idleTimeout) {
+      clearTimeout(this.idleTimeout);
+      this.idleTimeout = null;
+    }
+    this.jackpotSym.playAnimation({ state: ANIM.FLIP_LOOP, loop: true });
+
+    this.flipLoopListener = this.jackpotSym.addEventListener('complete', (entry: any) => {
+      if (this.pendingTier == null || entry?.animation?.name !== ANIM.FLIP_LOOP) return;
+      const tier = this.pendingTier;
+      this.pendingTier = null;
+      this.clearFlipLoopListener();
+      this.playTierFlip(tier);
+    });
+  }
+
+  public revealJackpot(): void {
+    if (this.state === 'awaitingData') {
+      this.isActive = false;
+      this.pendingTier = this.jackpotData;
+      return;
+    }
+    if (this.state !== 'closed') return;
+
     this.isActive = false;
+    this.playTierFlip(this.jackpotData);
+  }
+
+  private playTierFlip(tier: JackpotTier): void {
+    this.state = 'opening';
     const flipAnim = FLIP_ANIM_BY_TIER[tier];
 
-    this.revealedTier = tier;
-
     this.jackpotSym.playAnimation({ state: flipAnim, loop: false });
-    const listener = this.jackpotSym.addEventListener('complete', () => {
+    const listener = this.jackpotSym.addEventListener('complete', (entry: any) => {
+      if (entry?.animation?.name !== flipAnim) return;
       this.jackpotSym.removeSpineEvent(listener);
       this.onFlipComplete(tier);
     });
+  }
+
+  private clearFlipLoopListener(): void {
+    if (!this.flipLoopListener) return;
+    this.jackpotSym.removeSpineEvent(this.flipLoopListener);
+    this.flipLoopListener = null;
+  }
+
+  public revealInstantly(): void {
+    if (this.idleTimeout) {
+      clearTimeout(this.idleTimeout);
+      this.idleTimeout = null;
+    }
+    this.isActive = false;
+    this.state = 'open';
+    this.jackpotSym.playAnimation({ state: BACK_STATIC_ANIM_BY_TIER[this.jackpotData], loop: true });
   }
 
   private onFlipComplete(tier: JackpotTier): void {
@@ -156,6 +200,8 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
     this.isHovering = false;
     this.eventMode = 'none';
     this.cursor = 'default';
+    this.pendingTier = null;
+    this.clearFlipLoopListener();
     if (this.idleTimeout) {
       clearTimeout(this.idleTimeout);
       this.idleTimeout = null;
@@ -198,11 +244,13 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
 
   public reset(): void {
     this.killWinAnim();
+    this.clearFlipLoopListener();
     this.filters = null;
     this.state = 'closed';
     this.isActive = true;
     this.isHovering = false;
     this.jackpotData = undefined;
+    this.pendingTier = null;
     this.eventMode = 'static';
     this.cursor = 'pointer';
     this.jackpotSym.stopAnimation();
