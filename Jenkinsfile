@@ -21,7 +21,6 @@ pipeline {
   }
 
   environment {
-    IMAGE_TAG       = "${GIT_COMMIT[0..11]}"
     BB_ASSETS_URL   = 'ssh://git@app-bitb-shared.o.dc1.cz.ipa.ifortuna.cz:7999/gs/feg_games_assets.git'
     GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no'
     PATH            = "$HOME/.local/bin:$PATH"
@@ -98,7 +97,10 @@ pipeline {
             script: 'git -C ../feg_games_assets rev-parse --short=12 HEAD',
             returnStdout: true
           ).trim()
-          env.IMAGE_TAG = "${env.IMAGE_TAG}-${assetsCommit}"
+          // IMAGE_TAG is intentionally NOT declared in the top-level environment {}
+          // block - Declarative Pipeline re-binds environment {} vars at the start
+          // of every stage, silently discarding a mid-pipeline reassignment here.
+          env.IMAGE_TAG = "${GIT_COMMIT[0..11]}-${assetsCommit}"
         }
       }
     }
