@@ -17,7 +17,6 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
@@ -168,9 +167,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const featureSubType = appModel.getIsUnfinishedGame()
       ? appModel.getUnfinishedFeatureSubType()
       : appModel.getFeatureSubType();
-    const isRedFeature = MMMExitPickFeatureState.isSubFeatureAwardAnnounced()
-      ? true
-      : featureSubType?.toUpperCase() !== 'BLUE';
+    const isRedFeature = appModel.subFeatureAwardAnnounced ? true : featureSubType?.toUpperCase() !== 'BLUE';
     if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
     } else {
@@ -252,7 +249,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
 
-    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+    if (appModel.subFeatureAwardAnnounced) {
       if (this.vaultAnim) {
         this.vaultAnim.visible = false;
       }
@@ -617,7 +614,7 @@ export class GameSlotMachineView extends SlotMachineView {
         }
 
         if (this.configData?.layoutData?.Portrait) {
-          this.configData.layoutData.Portrait.vPaddingPerc = -0.08;
+          this.configData.layoutData.Portrait.vPaddingPerc = -0.09;
           this.configData.layoutData.Portrait.hPaddingPerc = -0.02;
         }
 
@@ -666,12 +663,6 @@ export class GameSlotMachineView extends SlotMachineView {
         if (this.bigWinsComp) {
           const isPortrait = DeviceProxy.config.isPortrait;
           const winTicker = this.bigWinsComp.elementsList?.['winTicker'];
-          const subFeatureType =
-            appModel.getNextSubFeatureType() ||
-            appModel.getUnfinishedFeatureSubType() ||
-            appModel.featureResult?.featureData?.subFeatureType ||
-            '';
-          const isRedFeature = subFeatureType.toUpperCase() === 'RED';
 
           const actualReelRows = (this.slotReel as any)?.reelsData?.noOfRows;
           const currentInterfaceSize = actualReelRows === 3 ? 0 : interfaceSize;
@@ -698,7 +689,7 @@ export class GameSlotMachineView extends SlotMachineView {
             guideRect.height = height;
           };
 
-          if (currentInterfaceSize === 4 && !isRedFeature) {
+          if (currentInterfaceSize === 4) {
             this.bigWinsComp.scale.set(0.65);
             this.bigWinsComp.position.set(...(isPortrait ? [374, 1048] : [718, 510]));
             if (winTicker) {
@@ -715,7 +706,7 @@ export class GameSlotMachineView extends SlotMachineView {
             if (els['winTickerBW']) {
               els['winTickerBW'].x = 800;
             }
-          } else if (currentInterfaceSize === 5 && !isRedFeature) {
+          } else if (currentInterfaceSize === 5) {
             this.bigWinsComp.scale.set(0.58);
             this.bigWinsComp.position.set(...(isPortrait ? [428, 1190] : [772, 660]));
             if (winTicker) {

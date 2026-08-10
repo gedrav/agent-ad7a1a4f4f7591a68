@@ -7,16 +7,6 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 
 class MMMExitPickFeatureStateCommand extends StateCommand {
-  private subFeatureAwardAnnounced: boolean = false;
-
-  public isSubFeatureAwardAnnounced(): boolean {
-    return this.subFeatureAwardAnnounced;
-  }
-
-  public setSubFeatureAwardAnnounced(announced: boolean): void {
-    this.subFeatureAwardAnnounced = announced;
-  }
-
   public async execute(data?: any): Promise<void> {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
@@ -29,7 +19,7 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
 
     if (awardedFromBlueWheel) {
       // The award announcement is shown within the transition instead of blocking here.
-      this.setSubFeatureAwardAnnounced(true);
+      appModel.subFeatureAwardAnnounced = true;
       this.exitPickFeature();
       return;
     }
@@ -40,8 +30,9 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     if (appModel.getNextSubFeatureType()) {
       obj.message1 = Util.parseMessage(Util.getContent('PickFeatureEntryText'), [appModel.getNextSubFeatureType()]);
     } else {
+      const amountText = Util.formatCurrency(appModel.getPickFeatureWinnings());
       obj.message1 = Util.parseMessage(Util.getContent('PickFeatureExitText'), [
-        Util.formatCurrency(appModel.getPickFeatureWinnings()),
+        amountText.charAt(0) + ' ' + amountText.slice(1),
       ]);
     }
     obj.entryPopUp = false;

@@ -4,14 +4,13 @@ import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
-import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 class GreenEnterFreespinsStateCommand extends StateCommand {
   private enteredFromBlue: boolean = false;
 
   public async execute(data: any = null) {
     super.execute(data);
-    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+    if (appModel.subFeatureAwardAnnounced) {
       StateManager.doNextStep();
       return;
     }
@@ -31,8 +30,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();
 
-    this.enteredFromBlue =
-      MMMExitPickFeatureState.isSubFeatureAwardAnnounced() || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
+    this.enteredFromBlue = appModel.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
 
     if (this.enteredFromBlue) {
       appModel.fsInfo = {
