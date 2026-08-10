@@ -123,6 +123,21 @@ export default defineConfig(({ mode }) => {
         skipIfLargerOrEqual: true,
         disable: isDevBuild,
       }),
+      {
+        // Static assets copied from feg_games_assets (panel CSS, etc.) keep
+        // their original filename across builds and are served with
+        // no-cache headers - stamp a per-build version query so browsers
+        // and any intermediary CDN always treat a new deploy as a new URL,
+        // instead of relying on a manual cache-buster bump.
+        name: 'stamp-static-asset-links',
+        transformIndexHtml(html) {
+          const version = process.env.IMAGE_TAG || String(Date.now());
+          return html.replace(
+            /(href="assets\/panel\/css\/[\w-]+\.css)"/g,
+            `$1?v=${version}"`,
+          );
+        },
+      },
     ],
     build: {
       minify: !isDevBuild,
