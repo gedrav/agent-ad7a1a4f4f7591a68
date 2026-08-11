@@ -1,17 +1,17 @@
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
-import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 class GreenEnterFreespinsStateCommand extends StateCommand {
   private enteredFromBlue: boolean = false;
 
   public async execute(data: any = null) {
     super.execute(data);
-    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+    if (GameProxy.config.subFeatureAwardAnnounced) {
       StateManager.doNextStep();
       return;
     }
@@ -32,7 +32,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     appModel.setFeatureTriggered();
 
     this.enteredFromBlue =
-      MMMExitPickFeatureState.isSubFeatureAwardAnnounced() || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
+      GameProxy.config.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
 
     if (this.enteredFromBlue) {
       appModel.fsInfo = {

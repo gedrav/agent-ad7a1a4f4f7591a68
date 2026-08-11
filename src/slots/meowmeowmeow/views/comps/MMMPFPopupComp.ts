@@ -158,7 +158,8 @@ export class MMMPFPopupComp extends PFPopupComp {
     } else {
       this.blueOutroFeatureIcon.visible = false;
       this.blueOutroAmountText.visible = true;
-      this.blueOutroAmountText.text = Util.formatCurrency(appModel.getPickFeatureWinnings());
+      const amountText = Util.formatCurrency(appModel.getPickFeatureWinnings());
+      this.blueOutroAmountText.text = amountText.charAt(0) + ' ' + amountText.slice(1);
       this.layoutStackedCenter(this.blueOutroRow, ['blueOutroPrefixText', 'blueOutroAmountText'], BLUE_OUTRO_LINE_GAP);
       this.blueOutroPrefixText.y = 20;
     }
