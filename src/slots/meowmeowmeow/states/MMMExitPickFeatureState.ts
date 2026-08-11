@@ -13,6 +13,10 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
 
+    if (this.checkForMaxCapWin()) {
+      return;
+    }
+
     const awardedFromBlueWheel =
       appModel.getFeatureSubType()?.toUpperCase() === 'BLUE' && !!appModel.getNextSubFeatureType();
 
@@ -41,6 +45,25 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     obj.entryPopUp = false;
     obj.callbackFunction = this.exitPickFeature.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, obj);
+  }
+
+  protected checkForMaxCapWin(): boolean {
+    if (!appModel.getIsMaxCapReached()) {
+      return false;
+    }
+
+    const obj: any = {};
+    obj.title = Util.getContent('infoText');
+    obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
+      Util.formatCurrency(appModel.featureResult.totalWin),
+    ]);
+    obj.callback = this.exitPickFeature.bind(this);
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    return true;
+  }
+
+  protected goToNextStep(): void {
+    StateManager.next();
   }
 
   private isBigWin(): boolean {
