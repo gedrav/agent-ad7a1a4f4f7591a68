@@ -756,6 +756,10 @@ export class GameSlotMachineView extends SlotMachineView {
       delete jackpotLd.py;
     }
 
+    if (this.jackpotContainer) {
+      this.jackpotContainer.zIndex = 0;
+    }
+
     (this.slotReel as any).resizeView();
 
     this.wheelBase.alpha = 1;
