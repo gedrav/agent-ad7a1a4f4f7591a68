@@ -11,11 +11,12 @@ class PickFeatureTransitionStateCommand extends StateCommand {
     EventHandler.dispatchEvent('SHOW_PICK_FEATURE_TRANSITION');
     if (appModel.subFeatureAwardAnnounced) {
       appModel.subFeatureAwardAnnounced = false;
+      // Show the same entry popup a directly-triggered Red/Green entry would show,
+      // instead of a separate "blue exit" style popup.
       EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, {
         title: Util.getContent('CongratTitle'),
         message1: Util.parseMessage(Util.getContent('PickFeatureEntryText'), [appModel.getNextSubFeatureType()]),
-        entryPopUp: false,
-        hideFeatureAwardedTitle: true,
+        entryPopUp: true,
         callbackFunction: () => StateManager.doNextStep(),
       });
     }

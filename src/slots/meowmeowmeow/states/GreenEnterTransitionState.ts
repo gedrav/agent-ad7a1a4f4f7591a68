@@ -11,11 +11,13 @@ class GreenEnterTransitionStateCommand extends StateCommand {
     EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
     if (appModel.subFeatureAwardAnnounced) {
       appModel.subFeatureAwardAnnounced = false;
-      EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, {
-        title: Util.getContent('CongratTitle'),
-        message1: Util.parseMessage(Util.getContent('PickFeatureEntryText'), [appModel.getNextSubFeatureType()]),
-        entryPopUp: false,
-        hideFeatureAwardedTitle: true,
+      // Show the same entry popup a directly-triggered Green entry would show,
+      // instead of a separate "blue exit" style popup.
+      EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {
+        title: Util.getContent('FeatureAwardedTitle'),
+        message1: '',
+        entryPopUp: true,
+        totalCount: appModel.getTotalFreespins(),
         callbackFunction: () => StateManager.doNextStep(),
       });
     }
