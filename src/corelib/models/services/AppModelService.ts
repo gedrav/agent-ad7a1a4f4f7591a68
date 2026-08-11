@@ -13,10 +13,18 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get promoFSTriggered(): boolean {
+    return this._promoFSTriggered;
+  }
+
+  set promoFSTriggered(value: boolean) {
+    this._promoFSTriggered = value;
+  }
   get promoSpinInfo(): any {
     return this._promoSpinInfo;
   }
   private insertedPos: number;
+  private _promoFSTriggered: boolean = false;
 
   set promoSpinInfo(value: any) {
     this._promoSpinInfo = value;
@@ -328,6 +336,8 @@ class AppModelService {
       this.gameInfo.betsArray.indexOf(this.playerInfo.defaultBet) != undefined
         ? this.gameInfo.betsArray.indexOf(this.playerInfo.defaultBet)
         : 0;
+
+    this.promoSpinInfo = null;
   }
   setPromoFSBet() {
     const bet = this.promoSpinInfo.betAmount;
@@ -458,7 +468,11 @@ class AppModelService {
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
     this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
 
-    this.promoSpinInfo = data.promoInfo;
+    if (appModel.promoFSTriggered) {
+      if (data.promoInfo) {
+        this.promoSpinInfo = data.promoInfo;
+      }
+    }
   }
 
   // public methods -------------------------------------------

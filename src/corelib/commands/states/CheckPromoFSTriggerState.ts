@@ -9,7 +9,19 @@ class CheckPromoFSTriggerStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.promoSpinInfo) {
-      this.showPromoFSPopup();
+      if (appModel.getIsUnfinishedGame()) {
+        const data = appModel.promoSpinInfo;
+        if (data.status === 'ACTIVE') {
+          // old unfinished game
+          appModel.promoFSTriggered = true;
+          StateManager.goToState(STATES.CHECK_UNFINISHED_STATE);
+        } else {
+          // unfinished within promo fs
+          this.showPromoFSPopup();
+        }
+      } else {
+        this.showPromoFSPopup();
+      }
     } else {
       StateManager.next();
     }

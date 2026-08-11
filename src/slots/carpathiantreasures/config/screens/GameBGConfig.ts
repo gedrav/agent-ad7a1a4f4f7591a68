@@ -15,9 +15,9 @@ export const GAME_BG_CONFIG: any = {
       loop: true,
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
+        Desktop: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'bottom', fitToScreen: true },
       },
     },
   ],

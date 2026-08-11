@@ -63,16 +63,16 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     const data = appModel.promoSpinInfo;
     this.valueText1.text = data?.playCount;
     this.promoBetValue.text = Util.formatCurrency(data?.betAmount);
-    if (data.remainingPlayCount < data.playCount) {
+    if (data.status === 'ACTIVE') {
+      this.remainingSpins.visible = false;
+      this.skipBtn.visible = true;
+      this.startBtn.x = this.startBtn.configData.x;
+    } else {
       this.skipBtn.visible = false;
       this.startBtn.x = 355;
       this.remainingSpins.visible = true;
       this.remainingSpins.text = Util.parseMessage(Util.getContent('remainingPromoSpins'), [data.remainingPlayCount]);
       this.startBtn.updateText(Util.getContent('ContinueBtnText'));
-    } else {
-      this.remainingSpins.visible = false;
-      this.skipBtn.visible = true;
-      this.startBtn.x = this.startBtn.configData.x;
     }
     this.visible = true;
   }
