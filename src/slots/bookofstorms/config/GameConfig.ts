@@ -57,7 +57,7 @@ export const GAME_CONFIG = {
             pressedView: 'bbBtn',
             disabledView: 'bbBtn',
             textOffset: new Point(0, 0),
-            animations: CoreUIConfig.spinButtonStates,
+            animations: CoreUIConfig.bbButtonStates,
             padding: 50,
           },
           textConfig: {

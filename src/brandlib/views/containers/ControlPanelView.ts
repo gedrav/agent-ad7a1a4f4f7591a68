@@ -273,7 +273,22 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected updateTotalbet(value: number = null) {
     this.betComp.updateValue(value == undefined ? appModel.getTotalBet() : value);
+    this.validateBBButtons();
   }
+
+  protected validateBBButtons() {
+    const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
+    const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
+    const bbBet = appModel.getTotalBet() * multiplier * factor;
+    if (appModel.getBBMaxBet()) {
+      if (bbBet > appModel.getBBMaxBet()) {
+        this.bbButtonsArray.forEach((btn) => (btn.enabled = false));
+      } else {
+        this.bbButtonsArray.forEach((btn) => (btn.enabled = true));
+      }
+    }
+  }
+
   protected onSoundStateChanged(flag: boolean): void {
     this.soundOnBtn.visible = flag;
     this.soundOffBtn.visible = !flag;

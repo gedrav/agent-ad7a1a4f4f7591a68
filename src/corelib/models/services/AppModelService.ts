@@ -307,6 +307,7 @@ class AppModelService {
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameInfo.minBet = data.playerInfo.minBet;
     this.gameInfo.maxBet = data.playerInfo.maxBet;
+    this.gameInfo.bbMaxBet = data.playerInfo.bbMaxBet ? data.playerInfo.bbMaxBet : 0;
     this.gameInfo.selectedLines = GameProxy.config.totalLines;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.betsArray = [];
@@ -335,6 +336,9 @@ class AppModelService {
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
     }
+  }
+  public getBBMaxBet(): number {
+    return this.gameInfo.bbMaxBet;
   }
   endPromoFSBet() {
     this.promoSpinSession = false;
@@ -560,6 +564,24 @@ class AppModelService {
         }
       } else {
         return this.gameInfo?.betsArray[this.gameInfo.betPos];
+      }
+    } else {
+      return 0;
+    }
+  }
+  public getNextTotalBet(): number {
+    const isAnte = GameProxy.config.isAnteEnabled;
+    if (this.gameInfo.betsArray.length > 0) {
+      if (this.gameInfo.betPos < this.gameInfo.betsArray.length - 2) {
+        if (isAnte) {
+          if (this.gameInfo.betsArray.length > 0) {
+            return this.gameInfo?.betsArray[this.gameInfo.betPos + 1] * this.gameInfo?.anteBet;
+          }
+        } else {
+          return this.gameInfo?.betsArray[this.gameInfo.betPos + 1];
+        }
+      } else {
+        return 0;
       }
     } else {
       return 0;

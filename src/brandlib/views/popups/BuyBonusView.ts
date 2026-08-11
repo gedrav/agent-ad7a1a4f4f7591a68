@@ -50,11 +50,18 @@ export class BuyBonusView extends ResponsiveChildrenView {
     this.visible = false;
     UIUtil.stopPropagation(this);
   }
-  protected updateBetPanel(data: any = null): void {
+  protected updateBetPanel(): void {
     if (!this.viewCreated) return;
     this.stakeText.text = Util.formatCurrency(appModel.getTotalBet());
     this.downStakeBtn.enabled = appModel.getBetPos() > 0;
-    this.upStakeBtn.enabled = appModel.getBetPos() < appModel.getAllBets().length - 1;
+
+    const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
+    const bbBet = appModel.getNextTotalBet() * multiplier;
+    if (appModel.getBBMaxBet()) {
+      this.upStakeBtn.enabled = bbBet <= appModel.getBBMaxBet();
+    } else {
+      this.upStakeBtn.enabled = appModel.getBetPos() < appModel.getAllBets().length - 1;
+    }
   }
   protected resizeView(): void {
     this.buyBonusBg.width = this.buyBonusBg.configData.width;
@@ -69,9 +76,11 @@ export class BuyBonusView extends ResponsiveChildrenView {
   }
 
   protected updateBuyBonusPanel(): void {
+    let bbBet: number = 0;
     if (this.buyFreeSpinsValueText) {
       const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
-      this.buyFreeSpinsValueText.text = Util.formatCurrency(appModel.getTotalBet() * multiplier);
+      bbBet = appModel.getTotalBet() * multiplier;
+      this.buyFreeSpinsValueText.text = Util.formatCurrency(bbBet);
     }
     this.updateBetPanel();
   }
