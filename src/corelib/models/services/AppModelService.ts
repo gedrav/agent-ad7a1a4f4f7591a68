@@ -13,9 +13,18 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get maxCapReached(): boolean {
+    return this._maxCapReached;
+  }
+
+  set maxCapReached(value: boolean) {
+    this._maxCapReached = value;
+  }
   get promoFSTriggered(): boolean {
     return this._promoFSTriggered;
   }
+
+  private _maxCapReached: boolean = false;
 
   set promoFSTriggered(value: boolean) {
     this._promoFSTriggered = value;
@@ -434,6 +443,7 @@ class AppModelService {
         this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
       }
     }
+    this.maxCapReached = data.result.maxCapReached;
     this.promoSpinInfo = data.promoInfo;
   }
   public storeFeatureResult(data: any): void {
@@ -466,7 +476,7 @@ class AppModelService {
     this.fsInfo.totalFreespinWinAmount = data.result.featureResults[data.result.featureResults.length - 1].totalWin;
     this.fsInfo.isClosed = data.result.featureResults[data.result.featureResults.length - 1].closed;
     this.fsInfo.retrigger = data.result.featureResults[data.result.featureResults.length - 1].retrigger;
-    this.fsInfo.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
+    this.maxCapReached = data.result.featureResults[data.result.featureResults.length - 1].maxCapReached;
 
     if (appModel.promoFSTriggered) {
       if (data.promoInfo) {
@@ -1000,11 +1010,7 @@ class AppModelService {
     return this.fsInfo.totalFreespinWinAmount;
   }
   public getIsMaxCapReached(): boolean {
-    if (this.getIsFreeSpinsSession()) {
-      return this.fsInfo.maxCapReached;
-    } else {
-      return this.gameResult.maxCapReached;
-    }
+    return this.maxCapReached;
   }
 
   public getCurrentFreeSpinWin(): number {
