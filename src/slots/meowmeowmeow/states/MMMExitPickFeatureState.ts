@@ -13,8 +13,6 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
 
-    // Only the Blue wheel awarding a Red/Green feature defers its announcement to the
-    // transition. Every other pick-feature exit keeps its original popup behavior.
     const awardedFromBlueWheel =
       appModel.getFeatureSubType()?.toUpperCase() === 'BLUE' && !!appModel.getNextSubFeatureType();
 
@@ -25,7 +23,11 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
       return;
     }
 
-    // Original exit behavior, unchanged, for every non-Blue-wheel case (Red / Green / etc.).
+    if (!appModel.getNextSubFeatureType() && this.isBigWin()) {
+      EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: this.exitPickFeature.bind(this) });
+      return;
+    }
+
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
     if (appModel.getNextSubFeatureType()) {
@@ -39,6 +41,14 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     obj.entryPopUp = false;
     obj.callbackFunction = this.exitPickFeature.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, obj);
+  }
+
+  private isBigWin(): boolean {
+    const bigWinMultiplier = GameProxy.config.bigWinValues?.[0];
+    if (!bigWinMultiplier) return false;
+
+    const win = appModel.featureResult?.totalWin ?? 0;
+    return win >= appModel.getTotalBet() * bigWinMultiplier;
   }
 
   protected async exitPickFeature() {
