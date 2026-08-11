@@ -7,7 +7,6 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { SHOW_FEATURE_WIN_ANIM } from './MMMBigWinsComp';
 import { Util } from '@core/utils/UtilService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { Texture } from 'pixi.js';
@@ -167,7 +166,7 @@ export class MMMPFPopupComp extends PFPopupComp {
   protected async showPFPopup(data: any) {
     const featureSubType = appModel.getFeatureSubType();
     if (!data.entryPopUp && featureSubType.toUpperCase() === 'RED') {
-      EventHandler.dispatchEvent(SHOW_FEATURE_WIN_ANIM, { callback: data.callbackFunction });
+      EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: data.callbackFunction });
       return;
     }
     if (!data.skipModalDim) {
