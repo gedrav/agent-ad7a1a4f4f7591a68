@@ -1,5 +1,6 @@
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -10,7 +11,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
 
   public async execute(data: any = null) {
     super.execute(data);
-    if (appModel.subFeatureAwardAnnounced) {
+    if (GameProxy.config.subFeatureAwardAnnounced) {
       StateManager.doNextStep();
       return;
     }
@@ -30,7 +31,8 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     appModel.startFreeSpinsSession(true);
     appModel.setFeatureTriggered();
 
-    this.enteredFromBlue = appModel.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
+    this.enteredFromBlue =
+      GameProxy.config.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
 
     if (this.enteredFromBlue) {
       appModel.fsInfo = {

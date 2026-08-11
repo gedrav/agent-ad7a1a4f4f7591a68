@@ -1,6 +1,7 @@
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
@@ -10,7 +11,7 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
 
   public async execute(data?: any): Promise<void> {
     super.execute(data);
-    if (appModel.subFeatureAwardAnnounced) {
+    if (GameProxy.config.subFeatureAwardAnnounced) {
       StateManager.doNextStep();
       return;
     }
@@ -24,7 +25,7 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
     appModel.startPickFeatureSession();
     appModel.setFeatureTriggered();
 
-    this.enteredFromBlue = appModel.subFeatureAwardAnnounced;
+    this.enteredFromBlue = GameProxy.config.subFeatureAwardAnnounced;
 
     if (this.enteredFromBlue) {
       this.enterPickFeature();

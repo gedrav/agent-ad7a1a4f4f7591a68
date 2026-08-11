@@ -2,6 +2,7 @@ import { StateCommand } from '@core/commands/core/StateCommand';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
@@ -19,7 +20,7 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
 
     if (awardedFromBlueWheel) {
       // The award announcement is shown within the transition instead of blocking here.
-      appModel.subFeatureAwardAnnounced = true;
+      GameProxy.config.subFeatureAwardAnnounced = true;
       this.exitPickFeature();
       return;
     }

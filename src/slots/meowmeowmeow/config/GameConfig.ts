@@ -14,6 +14,7 @@ export const GAME_CONFIG = {
   gameVersion: '0.076',
   gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
+  subFeatureAwardAnnounced: false,
   uiConfig: UIConfig,
   creditValue: 10,
   totalLines: 1,

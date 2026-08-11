@@ -125,15 +125,6 @@ class AppModelService {
   private _nextFeature: string;
   private _nextSubFeature: string = '';
   private _storeJackpotData: any = null;
-  private _subFeatureAwardAnnounced: boolean = false;
-
-  get subFeatureAwardAnnounced(): boolean {
-    return this._subFeatureAwardAnnounced;
-  }
-
-  set subFeatureAwardAnnounced(value: boolean) {
-    this._subFeatureAwardAnnounced = value;
-  }
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;

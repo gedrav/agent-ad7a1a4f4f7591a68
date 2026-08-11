@@ -5,6 +5,7 @@ import { Point, Texture } from 'pixi.js';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -167,7 +168,7 @@ export class GameSlotMachineView extends SlotMachineView {
     const featureSubType = appModel.getIsUnfinishedGame()
       ? appModel.getUnfinishedFeatureSubType()
       : appModel.getFeatureSubType();
-    const isRedFeature = appModel.subFeatureAwardAnnounced ? true : featureSubType?.toUpperCase() !== 'BLUE';
+    const isRedFeature = GameProxy.config.subFeatureAwardAnnounced ? true : featureSubType?.toUpperCase() !== 'BLUE';
     if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
     } else {
@@ -249,7 +250,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
 
-    if (appModel.subFeatureAwardAnnounced) {
+    if (GameProxy.config.subFeatureAwardAnnounced) {
       if (this.vaultAnim) {
         this.vaultAnim.visible = false;
       }
