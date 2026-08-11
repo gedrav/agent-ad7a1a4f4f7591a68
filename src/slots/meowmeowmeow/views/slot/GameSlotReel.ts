@@ -6,6 +6,7 @@ import { Sine } from 'gsap';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 
 export class GameSlotReel extends SlotReelStandard {
   private readonly totalAnims: number;
@@ -121,5 +122,10 @@ export class GameSlotReel extends SlotReelStandard {
     });
     this.symbolsArray = [];
     this.createReel();
+  }
+
+  protected onSymbolClicked(symb: ReelSymbolSprite): void {
+    super.onSymbolClicked(symb);
+    this.symbolPayoutComp.y -= 3;
   }
 }

@@ -14,6 +14,7 @@ export const GAME_CONFIG = {
   gameVersion: '0.076',
   gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
+  subFeatureAwardAnnounced: false,
   uiConfig: UIConfig,
   creditValue: 10,
   totalLines: 1,
@@ -34,7 +35,7 @@ export const GAME_CONFIG = {
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  bigWinValues: [25, 55, 100, 500],
+  bigWinValues: [50, 100, 200, 300],
   reelSpinSettings: {
     firstReelSymbolPassCount: 5,
     otherReelsSymbolPassCount: 1,

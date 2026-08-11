@@ -6,6 +6,7 @@ import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { FillGradient } from 'pixi.js';
 
 function buildFillGradient(colors: number[], offsets: number[] = []): FillGradient {
@@ -23,11 +24,13 @@ function buildFillGradient(colors: number[], offsets: number[] = []): FillGradie
   });
 }
 
-export const SHOW_FEATURE_WIN_ANIM = 'SHOW_FEATURE_WIN_ANIM';
-
 const FEATURE_WIN_COUNTUP_DURATION = 4000;
 const FEATURE_WIN_EXIT_PAUSE_MS = 500;
 const FEATURE_WIN_EXIT_FADE_DURATION = 0.5;
+
+// Same tier ladder and pacing the base class uses for a spin big win.
+const BIG_WIN_LEVEL_STATES = [CONSTANTS.BIG_WIN, CONSTANTS.SUPER_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.EPIC_WIN];
+const BIG_WIN_LEVEL_DURATIONS = [4000, 6000, 8000, 10000];
 
 const TIER_TEXT_FILL: Record<string, number[]> = {
   grand: [0xffe3e3, 0xff5252, 0xe00000, 0x8e0000],
@@ -47,12 +50,20 @@ export class MMMBigWinsComp extends BigWinsComp {
     if (this.featureWinText) {
       this.featureWinText.visible = false;
     }
-    EventHandler.addEventListener(SHOW_FEATURE_WIN_ANIM, this.showFeatureWin.bind(this));
+    EventHandler.addEventListener('SHOW_FEATURE_WIN_ANIM', this.showFeatureWin.bind(this));
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.clearSpinWin.bind(this));
   }
 
   protected showFeatureWin(data: { callback?: () => void }): void {
     this.featureWinCallback = data?.callback ?? null;
+
+    const win = appModel.featureResult?.totalWin ?? 0;
+    const bigWinLevel = this.getBigWinLevel(win);
+    if (bigWinLevel > 0) {
+      this.showFeatureBigWin(bigWinLevel, win);
+      return;
+    }
+
     this.isFeatureWinActive = true;
     this.currentLevel = 3;
     this.targetLevel = 4;
@@ -89,6 +100,51 @@ export class MMMBigWinsComp extends BigWinsComp {
     this.showWinTickerType('bigwin');
     this.playCurrentBigWinSound();
     this.elementsList['winTickerBW'].countUpValue(appModel.featureResult?.totalWin, FEATURE_WIN_COUNTUP_DURATION);
+  }
+
+  // 0 when the win is below the first big win multiplier, otherwise the tier it reaches (1-4).
+  private getBigWinLevel(win: number): number {
+    const bigWinValues = GameProxy.config.bigWinValues;
+    const bet = appModel.getTotalBet();
+    if (!Array.isArray(bigWinValues) || !bet) return 0;
+
+    let level = 0;
+    bigWinValues.forEach((multiplier: number, i: number) => {
+      if (win >= bet * multiplier) level = i + 1;
+    });
+    return Math.min(level, BIG_WIN_LEVEL_STATES.length);
+  }
+
+  // Mirrors the base class's big win branch, driven by the feature win instead of the spin win.
+  private showFeatureBigWin(targetLevel: number, win: number): void {
+    this.isFeatureWinActive = true;
+    this.parent?.addChild(this);
+
+    this.currentLevel = 0;
+    this.targetLevel = targetLevel;
+    this.currentState = BIG_WIN_LEVEL_STATES[0];
+    this.totalDuration = BIG_WIN_LEVEL_DURATIONS[targetLevel - 1];
+
+    if (this.bigWinAnim) {
+      if (this.configData.data.backgroundAlpha > 0) {
+        this.guideRect.visible = true;
+        this.guideRect.alpha = this.configData.data.backgroundAlpha;
+      }
+      this.bigWinAnim.visible = true;
+    }
+    const bigWinText = this.elementsList['bigWinText'];
+    if (bigWinText) {
+      bigWinText.visible = true;
+    }
+
+    this.showWinTickerType('bigwin');
+    this.elementsList['winTickerBW'].countUpValue(win, this.totalDuration);
+    this.playNextWinAnimation();
+
+    this.intervalDelay = (this.totalDuration - 1000) / this.targetLevel;
+    if (this.currentLevel < this.targetLevel - 1) {
+      this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
+    }
   }
 
   protected override onSkipClicked(): void {

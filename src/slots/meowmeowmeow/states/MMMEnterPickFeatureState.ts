@@ -1,17 +1,17 @@
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
-import { MMMExitPickFeatureState } from '@slots/meowmeowmeow/states/MMMExitPickFeatureState';
 
 class MMMEnterPickFeatureStateCommand extends StateCommand {
   private enteredFromBlue: boolean = false;
 
   public async execute(data?: any): Promise<void> {
     super.execute(data);
-    if (MMMExitPickFeatureState.isSubFeatureAwardAnnounced()) {
+    if (GameProxy.config.subFeatureAwardAnnounced) {
       StateManager.doNextStep();
       return;
     }
@@ -25,7 +25,7 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
     appModel.startPickFeatureSession();
     appModel.setFeatureTriggered();
 
-    this.enteredFromBlue = MMMExitPickFeatureState.isSubFeatureAwardAnnounced();
+    this.enteredFromBlue = GameProxy.config.subFeatureAwardAnnounced;
 
     if (this.enteredFromBlue) {
       this.enterPickFeature();

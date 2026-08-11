@@ -417,10 +417,10 @@ export const SLOT_MACHINE_CONFIG: any = {
               type: 'Comp',
               class: SymbolPayoutComp,
               xPadding: 0.05,
-              textXPadding: 0.15,
+              textXPadding: 0.08,
               layoutData: { Portrait: { scale: 1.2 } },
               Elements: [
-                { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG', scale: 1.2 },
+                { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG', scale: 1.25 },
                 {
                   name: 'infoText',
                   type: 'Text',
