@@ -25,7 +25,7 @@ export const GAME_SOUND_CONFIG = {
       playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
       isHistoryRulesSound: true,
       volume: 1,
-      fadeOutDuration: 1000,
+      fadeOutDuration: 100,
     },
     {
       name: 'fsBGM',
@@ -70,26 +70,10 @@ export const GAME_SOUND_CONFIG = {
   lazySoundFiles: [
     // common sound across all games
     {
-      name: 'uiPopupSfx',
+      name: 'ERROR POP UP',
       type: 'game',
       loop: false,
-      playEvents: ['PLAY_GENERIC_POPUP_SOUND', 'PLAY_GENERIC_MSG_POPUP_SOUND', 'SHOW_MESSAGE_POPUP'],
-      volume: 1,
-      fadeOutDuration: 100,
-    },
-    {
-      name: 'featureIntro',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_FS_ENTRY_POPUP_SOUND', 'PLAY_PICK_FEATURE_ENTRY_SOUND'],
-      volume: 1,
-      fadeOutDuration: 100,
-    },
-    {
-      name: 'featureOutro',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_FS_EXIT_POPUP_SOUND', 'PLAY_PF_EXIT_POPUP_SOUND'],
+      playEvents: ['PLAY_GENERIC_MSG_POPUP_SOUND'],
       volume: 1,
       fadeOutDuration: 100,
     },
@@ -111,6 +95,30 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
     },
     // game level sounds
+    {
+      name: 'uiPopupSfx',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_POPUP_SOUND', 'SHOW_MESSAGE_POPUP'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'featureIntro',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_FS_ENTRY_POPUP_SOUND', 'PLAY_PICK_FEATURE_ENTRY_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'featureOutro',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_FS_EXIT_POPUP_SOUND', 'PLAY_PF_EXIT_POPUP_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
     {
       name: 'spinClicked',
       type: 'game',
