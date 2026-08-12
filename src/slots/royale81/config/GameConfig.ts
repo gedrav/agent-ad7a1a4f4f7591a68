@@ -21,6 +21,7 @@ export const GAME_CONFIG = {
   showWinInReelView: true,
   FontFaces: {
     commonFont: 'Mulish',
+    commonFontBold: 'Oswald Bold',
     gameFont1: 'bookosb',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
