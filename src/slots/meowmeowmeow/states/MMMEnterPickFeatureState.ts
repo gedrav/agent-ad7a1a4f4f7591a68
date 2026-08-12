@@ -15,7 +15,11 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
       StateManager.doNextStep();
       return;
     }
-    EventHandler.dispatchEvent('SHOW_KITTIEBANK_BREAK');
+    if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
+    } else {
+      EventHandler.dispatchEvent('SHOW_KITTIEBANK_BREAK');
+    }
   }
 
   public doNextStep(data?: any): void {
@@ -49,7 +53,6 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
     // Add event listner at the game level to create pickFeature UI
     EventHandler.dispatchEvent(SlotEvents.PICKFEATURE_UPDATE_UI_START);
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_BG_SOUND);
     StateManager.next();
   }
 }

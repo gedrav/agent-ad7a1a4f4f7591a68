@@ -65,8 +65,10 @@ export class PFPopupComp extends ResponsiveChildrenView {
     // Hide messageText2 to prevent showing again
     this.messageText2.visible = false;
     this.visible = false;
-    if (this.callbackFunction) {
-      this.callbackFunction();
+    const callback = this.callbackFunction;
+    this.callbackFunction = null;
+    if (callback) {
+      callback();
     }
   }
 }

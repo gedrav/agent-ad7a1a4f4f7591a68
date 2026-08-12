@@ -77,7 +77,6 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_START);
     EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
 
     StateManager.next();
   }

@@ -54,6 +54,33 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.clearSpinWin.bind(this));
   }
 
+  protected override playCurrentBigWinSound(): void {
+    if (this.isFeatureWinActive) {
+      const winningTier: string = appModel.featureResult?.featureData?.winningTier ?? '';
+      const tierName = winningTier.replace(/\d+$/, '').toLowerCase();
+
+      switch (tierName) {
+        case 'grand':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_GRAND_JACKPOT_WIN_SOUND');
+          return;
+        case 'major':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_MAJOR_JACKPOT_WIN_SOUND');
+          return;
+        case 'minor':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_MINOR_JACKPOT_WIN_SOUND');
+          return;
+        case 'mini':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_MINI_JACKPOT_WIN_SOUND');
+          return;
+      }
+    }
+    super.playCurrentBigWinSound();
+  }
+
   protected showFeatureWin(data: { callback?: () => void }): void {
     this.featureWinCallback = data?.callback ?? null;
 
