@@ -216,10 +216,10 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
 
   /** Two columns: even indices go left, odd go right; each row hangs below the row above it. */
   private layoutAsGrid(item: JackPotItem, index: number) {
-    UIUtil.setRelativeScale(item, 0.22, 0.22, null, 0.22, 0.2);
+    UIUtil.setRelativeScale(item, 0.17, 0.17, null, 0.16, 0.2);
 
     const isLeftColumn = index % GRID_COLUMNS === 0;
-    item.x = isLeftColumn ? item.width * 0.45 : UIUtil.getGameWidth() - item.width * 0.5;
+    item.x = isLeftColumn ? item.width * 0.34 : UIUtil.getGameWidth() - item.width * 0.62;
 
     if (index < GRID_COLUMNS) {
       UIUtil.alignVertical(item, { vAlign: 'top', vPaddingPerc: 0.11 });
