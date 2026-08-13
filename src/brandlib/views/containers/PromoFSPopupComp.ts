@@ -71,7 +71,13 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
       this.skipBtn.visible = false;
       this.startBtn.x = 355;
       this.remainingSpins.visible = true;
-      this.remainingSpins.text = Util.parseMessage(Util.getContent('remainingPromoSpins'), [data.remainingPlayCount]);
+      const remaining = data.remainingPlayCount;
+      if (remaining > 1) {
+        this.remainingSpins.text = Util.parseMessage(Util.getContent('remainingPromoSpins'), [remaining]);
+      } else {
+        this.remainingSpins.text = Util.getContent('lastPromoFSText');
+      }
+
       this.startBtn.updateText(Util.getContent('ContinueBtnText'));
     }
     this.visible = true;
