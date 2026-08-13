@@ -27,10 +27,11 @@ export class JackPotItem extends StandardView {
     this.adjustTextSize();
   }
   public adjustTextSize() {
-    this.value.scale.set(1);
+    const fontSize = this.value.configData.style.fontSize;
+    this.value.style.fontSize = fontSize;
     if (this.value.width > this.txtRect.width) {
-      this.value.width = this.txtRect.width * 0.96;
-      this.value.scale.set(this.value.scale.x);
+      const sc = (this.txtRect.width * 0.96) / this.value.width;
+      this.value.style.fontSize = sc * fontSize;
     }
   }
 }
