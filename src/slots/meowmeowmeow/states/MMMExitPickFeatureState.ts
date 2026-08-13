@@ -27,10 +27,10 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
       return;
     }
 
-    if (!appModel.getNextSubFeatureType() && this.isBigWin()) {
-      EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: this.exitPickFeature.bind(this) });
-      return;
-    }
+    // if (!appModel.getNextSubFeatureType() && this.isBigWin()) {
+    //   EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: this.exitPickFeature.bind(this) });
+    //   return;
+    // }
 
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
