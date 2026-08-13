@@ -26,6 +26,7 @@ class GreenEnterTransitionStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
+    EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
     StateManager.next();
   }
 }

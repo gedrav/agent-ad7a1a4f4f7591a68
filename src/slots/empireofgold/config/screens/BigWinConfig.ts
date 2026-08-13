@@ -61,7 +61,7 @@ export const BIG_WIN_CONFIG = {
       name: 'winTickerBW',
       type: 'Comp',
       class: WinTicker,
-      x: 650,
+      x: 625,
       y: 900,
       Elements: [
         {

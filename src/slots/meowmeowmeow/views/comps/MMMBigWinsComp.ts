@@ -6,7 +6,7 @@ import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { GameProxy } from '@core/models/GameConfigProxy';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { FillGradient } from 'pixi.js';
 
 function buildFillGradient(colors: number[], offsets: number[] = []): FillGradient {
@@ -28,10 +28,6 @@ const FEATURE_WIN_COUNTUP_DURATION = 4000;
 const FEATURE_WIN_EXIT_PAUSE_MS = 500;
 const FEATURE_WIN_EXIT_FADE_DURATION = 0.5;
 
-// Same tier ladder and pacing the base class uses for a spin big win.
-const BIG_WIN_LEVEL_STATES = [CONSTANTS.BIG_WIN, CONSTANTS.SUPER_WIN, CONSTANTS.MEGA_WIN, CONSTANTS.EPIC_WIN];
-const BIG_WIN_LEVEL_DURATIONS = [4000, 6000, 8000, 10000];
-
 const TIER_TEXT_FILL: Record<string, number[]> = {
   grand: [0xffe3e3, 0xff5252, 0xe00000, 0x8e0000],
   major: [0xfcdff9, 0xf151f9, 0xeb20fa, 0xcc00cf, 0x6e0047],
@@ -43,6 +39,7 @@ export class MMMBigWinsComp extends BigWinsComp {
   private readonly featureWinText: PixText;
   private featureWinCallback: (() => void) | null = null;
   private isFeatureWinActive: boolean = false;
+  private guideRectBounds: { x: number; y: number; width: number; height: number } | null = null;
 
   constructor(config: any) {
     super(config);
@@ -54,16 +51,35 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.clearSpinWin.bind(this));
   }
 
+  protected override playCurrentBigWinSound(): void {
+    if (this.isFeatureWinActive) {
+      const winningTier: string = appModel.featureResult?.featureData?.winningTier ?? '';
+      const tierName = winningTier.replace(/\d+$/, '').toLowerCase();
+
+      switch (tierName) {
+        case 'grand':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_GRAND_JACKPOT_WIN_SOUND');
+          return;
+        case 'major':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_MAJOR_JACKPOT_WIN_SOUND');
+          return;
+        case 'minor':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_MINOR_JACKPOT_WIN_SOUND');
+          return;
+        case 'mini':
+          EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
+          EventHandler.dispatchEvent('PLAY_MINI_JACKPOT_WIN_SOUND');
+          return;
+      }
+    }
+    super.playCurrentBigWinSound();
+  }
+
   protected showFeatureWin(data: { callback?: () => void }): void {
     this.featureWinCallback = data?.callback ?? null;
-
-    const win = appModel.featureResult?.totalWin ?? 0;
-    const bigWinLevel = this.getBigWinLevel(win);
-    if (bigWinLevel > 0) {
-      this.showFeatureBigWin(bigWinLevel, win);
-      return;
-    }
-
     this.isFeatureWinActive = true;
     this.currentLevel = 3;
     this.targetLevel = 4;
@@ -76,6 +92,7 @@ export class MMMBigWinsComp extends BigWinsComp {
     }
     if (this.bigWinAnim) {
       if (this.configData.data.backgroundAlpha > 0) {
+        this.expandGuideRectToScreen();
         this.guideRect.visible = true;
         this.guideRect.alpha = this.configData.data.backgroundAlpha;
       }
@@ -102,49 +119,38 @@ export class MMMBigWinsComp extends BigWinsComp {
     this.elementsList['winTickerBW'].countUpValue(appModel.featureResult?.totalWin, FEATURE_WIN_COUNTUP_DURATION);
   }
 
-  // 0 when the win is below the first big win multiplier, otherwise the tier it reaches (1-4).
-  private getBigWinLevel(win: number): number {
-    const bigWinValues = GameProxy.config.bigWinValues;
-    const bet = appModel.getTotalBet();
-    if (!Array.isArray(bigWinValues) || !bet) return 0;
+  // The configured guideRect only spans the board area. For a feature win the dim needs to reach the
+  // screen edges, so it is stretched to the game bounds mapped into this comp's own space.
+  private expandGuideRectToScreen(): void {
+    if (!this.guideRect) return;
 
-    let level = 0;
-    bigWinValues.forEach((multiplier: number, i: number) => {
-      if (win >= bet * multiplier) level = i + 1;
-    });
-    return Math.min(level, BIG_WIN_LEVEL_STATES.length);
+    if (!this.guideRectBounds) {
+      this.guideRectBounds = {
+        x: this.guideRect.x,
+        y: this.guideRect.y,
+        width: this.guideRect.width,
+        height: this.guideRect.height,
+      };
+    }
+
+    const topLeft = this.toLocal({ x: 0, y: 0 });
+    const bottomRight = this.toLocal({ x: DeviceProxy.config.gameWidth, y: DeviceProxy.config.gameHeight });
+
+    this.guideRect.x = topLeft.x;
+    this.guideRect.y = topLeft.y;
+    this.guideRect.width = bottomRight.x - topLeft.x;
+    this.guideRect.height = bottomRight.y - topLeft.y;
   }
 
-  // Mirrors the base class's big win branch, driven by the feature win instead of the spin win.
-  private showFeatureBigWin(targetLevel: number, win: number): void {
-    this.isFeatureWinActive = true;
-    this.parent?.addChild(this);
+  // Put the board-sized bounds back, since the comp's layout scale and the win ticker clamp are both
+  // measured off guideRect.
+  private restoreGuideRectBounds(): void {
+    if (!this.guideRect || !this.guideRectBounds) return;
 
-    this.currentLevel = 0;
-    this.targetLevel = targetLevel;
-    this.currentState = BIG_WIN_LEVEL_STATES[0];
-    this.totalDuration = BIG_WIN_LEVEL_DURATIONS[targetLevel - 1];
-
-    if (this.bigWinAnim) {
-      if (this.configData.data.backgroundAlpha > 0) {
-        this.guideRect.visible = true;
-        this.guideRect.alpha = this.configData.data.backgroundAlpha;
-      }
-      this.bigWinAnim.visible = true;
-    }
-    const bigWinText = this.elementsList['bigWinText'];
-    if (bigWinText) {
-      bigWinText.visible = true;
-    }
-
-    this.showWinTickerType('bigwin');
-    this.elementsList['winTickerBW'].countUpValue(win, this.totalDuration);
-    this.playNextWinAnimation();
-
-    this.intervalDelay = (this.totalDuration - 1000) / this.targetLevel;
-    if (this.currentLevel < this.targetLevel - 1) {
-      this.timeoutId = setTimeout(this.playEndAnimation.bind(this), this.intervalDelay);
-    }
+    this.guideRect.x = this.guideRectBounds.x;
+    this.guideRect.y = this.guideRectBounds.y;
+    this.guideRect.width = this.guideRectBounds.width;
+    this.guideRect.height = this.guideRectBounds.height;
   }
 
   protected override onSkipClicked(): void {
@@ -155,6 +161,7 @@ export class MMMBigWinsComp extends BigWinsComp {
   public override clearSpinWin() {
     this.isFeatureWinActive = false;
     super.clearSpinWin();
+    this.restoreGuideRectBounds();
     if (this.featureWinText) {
       this.featureWinText.visible = false;
       this.featureWinText.alpha = 1;
@@ -176,6 +183,9 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
 
+    // The win animation is over, so hand back straight away and let the fade out run behind it.
+    callback();
+
     setTimeout(() => {
       const fadeTargets = [this.bigWinAnim, this.featureWinText].filter(Boolean);
       AnimationProxy.animateTween(fadeTargets, {
@@ -191,7 +201,6 @@ export class MMMBigWinsComp extends BigWinsComp {
           if (this.bigWinAnim) {
             this.bigWinAnim.alpha = 1;
           }
-          callback();
         },
       });
     }, FEATURE_WIN_EXIT_PAUSE_MS);

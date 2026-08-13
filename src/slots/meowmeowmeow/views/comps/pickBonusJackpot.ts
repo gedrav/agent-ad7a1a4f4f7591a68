@@ -122,7 +122,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     if (icon !== this.pickedIcons[this.pickedIcons.length - 1]) return;
 
     this.animateWinningSymbols(appModel.featureResult.featureData.winningTier);
-    this.scheduleExit();
+    EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: this.exit.bind(this) });
   }
 
   private animateWinningSymbols(winningTier: string): void {
@@ -145,10 +145,6 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
 
   private toTierName(jackpotTier: string): JackpotTier {
     return this.toTierGroup(jackpotTier).toLowerCase() as JackpotTier;
-  }
-
-  private scheduleExit(): void {
-    setTimeout(() => this.exit(), 3000);
   }
 
   private exit(): void {
