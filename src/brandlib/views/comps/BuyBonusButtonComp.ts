@@ -57,7 +57,7 @@ export class BuyBonusButtonComp extends StandardView {
     let bbBet: number = 0;
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
-    bbBet = (appModel.getTotalBet() * multiplier) / factor;
+    bbBet = appModel.getTotalBet() * multiplier;
     if (appModel.getBBMaxBet()) {
       if (bbBet > appModel.getBBMaxBet()) {
         this.disableBtn();
