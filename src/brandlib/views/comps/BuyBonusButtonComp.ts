@@ -41,17 +41,17 @@ export class BuyBonusButtonComp extends StandardView {
   }
 
   protected updateBBBetValue(): void {
-    let bbBet: number = 0;
+    const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     if (this.bbBetValue) {
-      const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
       this.bbBetValue.scale.set(1);
       const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
-      bbBet = appModel.getTotalBet() * multiplier * factor;
-      this.bbBetValue.text = Util.formatCurrency(bbBet);
+      const valToShow = (appModel.getTotalBet() * multiplier) / factor;
+      this.bbBetValue.text = Util.formatCurrency(valToShow);
       if (this.bbBetValue.width > this.bbBg.width * 0.8) {
         this.bbBetValue.scale.set((this.bbBg.width * 0.8) / this.bbBetValue.width);
       }
     }
+    const bbBet = appModel.getTotalBet() * multiplier;
     if (appModel.getBBMaxBet()) {
       if (bbBet > appModel.getBBMaxBet()) {
         this.disableBtn();
