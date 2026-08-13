@@ -351,6 +351,8 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingRed.visible = true;
     const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
     pickjackoptFeatureScreen.enter();
+    EventHandler.dispatchEvent('STOP_BLUE_WHEEL_BG_SOUND');
+    EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_BG_SOUND);
   }
 
   private showWheel(): void {
@@ -359,6 +361,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
+    EventHandler.dispatchEvent(SlotEvents.STOP_PICK_FEATURE_BG_SOUND);
+    EventHandler.dispatchEvent('PLAY_BLUE_WHEEL_BG_SOUND');
   }
 
   private makeWheelInteractive(): void {
@@ -516,6 +520,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
     const self = this;
 
+    EventHandler.dispatchEvent('PLAY_TRAIL_SOUND');
+
     AnimationProxy.animateTween(movingSymbol, {
       duration: 1,
       onUpdate: function () {
@@ -541,6 +547,8 @@ export class GameSlotMachineView extends SlotMachineView {
           movingSymbol.parent.removeChild(movingSymbol);
         }
         movingSymbol.destroy();
+
+        EventHandler.dispatchEvent('PLAY_COLLECT_SOUND');
 
         const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
         const collectAnim = `${animPrefix}_Collect`;

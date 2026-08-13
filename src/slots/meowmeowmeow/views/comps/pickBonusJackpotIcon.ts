@@ -1,6 +1,7 @@
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { ColorMatrixFilter } from 'pixi.js';
 import gsap from 'gsap';
 
@@ -87,6 +88,7 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
   private onPointerTap(): void {
     if (!this.canInteract()) return;
     this.isActive = false;
+    EventHandler.dispatchEvent('PLAY_COIN_CLICK_SOUND');
     this.emit(PICK_ICON_EVENT.SELECTED, this);
   }
 
@@ -130,6 +132,8 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
       clearTimeout(this.idleTimeout);
       this.idleTimeout = null;
     }
+
+    EventHandler.dispatchEvent('PLAY_COIN_TURN_SOUND');
     this.jackpotSym.playAnimation({ state: ANIM.FLIP_LOOP, loop: true });
 
     this.flipLoopListener = this.jackpotSym.addEventListener('complete', (entry: any) => {

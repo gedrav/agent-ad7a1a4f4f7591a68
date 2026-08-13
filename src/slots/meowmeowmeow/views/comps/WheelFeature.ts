@@ -191,6 +191,8 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     this.spinState = 'spinning';
     this.interactive = false;
 
+    EventHandler.dispatchEvent('PLAY_WHEEL_SPIN_SOUND');
+
     const now = performance.now();
     this.spinStartTime = now;
     this.lastFrameTime = now;
@@ -293,6 +295,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   }
 
   private onSpinComplete(choosenSector: number): void {
+    EventHandler.dispatchEvent('PLAY_WHEEL_WIN_SOUND');
     const animName = this.animationMap[choosenSector];
 
     this.wheelBG.playAnimation({ state: animName, loop: true });
