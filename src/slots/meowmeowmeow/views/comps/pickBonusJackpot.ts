@@ -5,6 +5,8 @@ import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private static readonly COLS = 4;
@@ -73,6 +75,21 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     });
   }
 
+  private checkForMaxCapWin(): boolean {
+    if (!appModel.getIsMaxCapReached()) {
+      return false;
+    }
+
+    const obj: any = {};
+    obj.title = Util.getContent('infoText');
+    obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
+      Util.formatCurrency(appModel.featureResult.totalWin),
+    ]);
+    obj.callback = this.exit.bind(this);
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    return true;
+  }
+
   private async onIconSelected(icon: PickBonusJackpotIconComp): Promise<void> {
     this.eventMode = 'none';
     icon.startFlipAnimation();
@@ -81,6 +98,9 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
       ? appModel.getUnfinishedFeatureType()
       : appModel.getFeatureType();
     await MessageProxy.requestBonusData(featureType);
+    if (this.checkForMaxCapWin()) {
+      return;
+    }
 
     const { picks, winningTier } = appModel.featureResult.featureData;
     const pickedTier = picks[0].jackpotTier;
