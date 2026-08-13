@@ -25,7 +25,6 @@ class PickFeatureTransitionStateCommand extends StateCommand {
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_BG_SOUND);
     StateManager.next();
   }
 }

@@ -351,6 +351,8 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingRed.visible = true;
     const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
     pickjackoptFeatureScreen.enter();
+    EventHandler.dispatchEvent('STOP_BLUE_WHEEL_BG_SOUND');
+    EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_BG_SOUND);
   }
 
   private showWheel(): void {
@@ -359,6 +361,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
+    EventHandler.dispatchEvent(SlotEvents.STOP_PICK_FEATURE_BG_SOUND);
+    EventHandler.dispatchEvent('PLAY_BLUE_WHEEL_BG_SOUND');
   }
 
   private makeWheelInteractive(): void {
