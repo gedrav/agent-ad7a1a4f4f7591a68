@@ -42,43 +42,4 @@ export const GAME_CONFIG = {
     anticipationSymbolPassCount: 30,
     endJerkDistance: 200,
   },
-  buyBonusData1: {
-    features: [
-      {
-        btn: {
-          name: 'bbBtn1',
-          type: 'Button',
-          action: {
-            press: BuyBonusClickCommand,
-          },
-          soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
-          data: { id: 'FG1' },
-          options: {
-            defaultView: 'bbBtn',
-            hoverView: 'bbBtn',
-            pressedView: 'bbBtn',
-            disabledView: 'bbBtn',
-            textOffset: new Point(0, 0),
-            animations: CoreUIConfig.spinButtonStates,
-          },
-          textConfig: {
-            name: 'bbBtn',
-            type: 'Text',
-            content: 'buyFreeSpinTitle',
-            style: {
-              fontFamily: 'gameFont1',
-              fill: [0xffffff],
-              fontSize: 60,
-              stroke: 0xfcb610,
-              strokeThickness: 2,
-              wordWrap: true,
-              wordWrapWidth: 200,
-              align: 'center',
-            },
-            toUpperCase: true,
-          },
-        },
-      },
-    ],
-  },
 };
