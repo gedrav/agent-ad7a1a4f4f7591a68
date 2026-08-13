@@ -351,6 +351,7 @@ class AppModelService {
         : 0;
 
     this.promoSpinInfo = null;
+    this.promoSpinSession = false;
   }
   setPromoFSBet() {
     const bet = this.promoSpinInfo.betAmount;
@@ -486,6 +487,8 @@ class AppModelService {
       if (data.promoInfo) {
         this.promoSpinInfo = data.promoInfo;
       }
+    } else {
+      this.promoSpinInfo = data.promoInfo;
     }
   }
 
