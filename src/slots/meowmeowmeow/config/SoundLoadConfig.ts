@@ -19,15 +19,6 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 500,
     },
     {
-      name: 'uiButtonClick',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
-      isHistoryRulesSound: true,
-      volume: 1,
-      fadeOutDuration: 100,
-    },
-    {
       name: 'fsBGM',
       type: 'game',
       soundType: 'ambient',
@@ -38,6 +29,35 @@ export const GAME_SOUND_CONFIG = {
       fadeInDuration: 250,
       fadeOutDuration: 500,
     },
+  ],
+  lazySoundFiles: [
+    // common sound across all games
+    {
+      name: 'ERROR POP UP',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_MSG_POPUP_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'Symbol pop up',
+      type: 'game',
+      loop: false,
+      playEvents: ['PLAY_GENERIC_SYMB_PAYOUT_SOUND'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'SLIDER SFX',
+      type: 'game',
+      loop: false,
+      singleton: true,
+      playEvents: ['PLAY_GENERIC_SLIDER_SOUND'],
+      stopEvents: ['STOP_GENERIC_SLIDER_SOUND'],
+      volume: 1,
+    },
+    // game level sounds
     {
       name: 'jackpotBGM',
       type: 'game',
@@ -77,35 +97,15 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
-  ],
-  lazySoundFiles: [
-    // common sound across all games
     {
-      name: 'ERROR POP UP',
+      name: 'uiButtonClick',
       type: 'game',
       loop: false,
-      playEvents: ['PLAY_GENERIC_MSG_POPUP_SOUND'],
+      playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
+      isHistoryRulesSound: true,
       volume: 1,
       fadeOutDuration: 100,
     },
-    {
-      name: 'Symbol pop up',
-      type: 'game',
-      loop: false,
-      playEvents: ['PLAY_GENERIC_SYMB_PAYOUT_SOUND'],
-      volume: 1,
-      fadeOutDuration: 100,
-    },
-    {
-      name: 'SLIDER SFX',
-      type: 'game',
-      loop: false,
-      singleton: true,
-      playEvents: ['PLAY_GENERIC_SLIDER_SOUND'],
-      stopEvents: ['STOP_GENERIC_SLIDER_SOUND'],
-      volume: 1,
-    },
-    // game level sounds
     {
       name: 'uiPopupSfx',
       type: 'game',
