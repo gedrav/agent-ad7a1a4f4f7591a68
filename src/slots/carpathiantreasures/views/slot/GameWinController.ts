@@ -85,13 +85,14 @@ export default class GameWinController extends WinController {
 
     spine.visible = true;
     this.winSymbolsContainer.addChild(spine);
+    spine.scale.set(0.84);
     spine.playAnimation({ state: 'appear_1', loop: false });
 
     if (isLast) {
       setTimeout(() => {
         StateManager.next();
         this.clearAllWildSpines();
-      }, 1000);
+      }, 1500);
     }
 
     this.activeWildSpines.push({ spine, data: wildData });

@@ -166,7 +166,9 @@ export class MMMPFPopupComp extends PFPopupComp {
   protected async showPFPopup(data: any) {
     const featureSubType = appModel.getFeatureSubType();
     if (!data.entryPopUp && featureSubType.toUpperCase() === 'RED') {
-      EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: data.callbackFunction });
+      console.warn(data);
+      data.callbackFunction();
+      // EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: data.callbackFunction });
       return;
     }
     if (!data.skipModalDim) {
