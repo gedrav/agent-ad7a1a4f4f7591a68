@@ -19,7 +19,7 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 500,
     },
     {
-      name: 'genericButtonSound',
+      name: 'uiButtonClick',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_GENERIC_BUTTON_SOUND'],
