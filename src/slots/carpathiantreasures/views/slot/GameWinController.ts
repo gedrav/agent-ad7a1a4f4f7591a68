@@ -25,6 +25,7 @@ export default class GameWinController extends WinController {
   private activeWildSpines: ActiveWildSpine[] = [];
   private readonly activeWinFrames: Map<ReelSymbolSprite, PixSpine> = new Map();
   private scatterTriggerTimeoutId: any;
+  private isLastLineWinOfPass = false;
 
   constructor(data: any) {
     super(data);
@@ -122,7 +123,8 @@ export default class GameWinController extends WinController {
 
   public showScatterTrigger(): void {
     const positions: number[] = appModel.getSpinResult().scatterPositions;
-    if (positions && positions.length > 0) {
+    const scatterWin: number = appModel.getSpinResult().scatterWin;
+    if (positions && positions.length > 0 && scatterWin > 0) {
       const len = positions.length;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);
@@ -190,6 +192,19 @@ export default class GameWinController extends WinController {
     appModel.lineWinIndex++;
     if (appModel.lineWinIndex > appModel.getWinDataLength() - 1) {
       appModel.lineWinIndex = 0;
+    }
+    this.isLastLineWinOfPass = appModel.lineWinIndex === 0;
+  }
+
+  protected override onLineWinAnimComplete(symbol: ReelSymbolSprite): void {
+    this.winSymbolIndex++;
+    if (this.winSymbolIndex === this.totalWinSymbols) {
+      const scatterWin: number = appModel.getSpinResult().scatterWin;
+      if (this.isLastLineWinOfPass && scatterWin > 0) {
+        this.showScatterTrigger();
+      } else {
+        StateManager.doNextStep();
+      }
     }
   }
 }
