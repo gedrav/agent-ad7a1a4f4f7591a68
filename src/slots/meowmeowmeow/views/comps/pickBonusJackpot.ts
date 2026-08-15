@@ -7,6 +7,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private static readonly COLS = 4;
@@ -137,6 +138,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
         icon.disable();
       }
     });
+    EventHandler.dispatchEvent('PLAY_KITTIE_WIN_ANIM', FEATURE_NAMES.RED);
   }
 
   private toTierGroup(jackpotTier: string): string {

@@ -94,7 +94,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'wheelRim',
       type: 'Sprite',
       image: 'wheelRim',
-      alpha: 0.5,
+      alpha: 1,
       visible: true,
       layoutData: {
         Desktop: { x: 310, y: -130 },

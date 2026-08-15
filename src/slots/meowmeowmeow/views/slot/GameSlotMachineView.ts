@@ -18,6 +18,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
@@ -59,7 +60,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hidePickFeatureUI.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
     EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showPickFeatureTransition.bind(this));
@@ -168,7 +169,9 @@ export class GameSlotMachineView extends SlotMachineView {
     const featureSubType = appModel.getIsUnfinishedGame()
       ? appModel.getUnfinishedFeatureSubType()
       : appModel.getFeatureSubType();
-    const isRedFeature = GameProxy.config.subFeatureAwardAnnounced ? true : featureSubType?.toUpperCase() !== 'BLUE';
+    const isRedFeature = GameProxy.config.subFeatureAwardAnnounced
+      ? true
+      : featureSubType?.toUpperCase() !== FEATURE_NAMES.BLUE;
     if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
     } else {
@@ -197,6 +200,79 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
+  private readonly transitionBasePositions = new Map<any, { x: number; y: number }>();
+
+  private getTransitionBasePosition(target: any): { x: number; y: number } {
+    if (!this.transitionBasePositions.has(target)) {
+      this.transitionBasePositions.set(target, { x: target.x, y: target.y });
+    }
+    return this.transitionBasePositions.get(target);
+  }
+
+  // Undoes whatever animateGameElementsTransition(false, ...) left behind (alpha 0,
+  // off-screen x/y) for elements that get shown again through a different code path
+  // (e.g. animateWheelDoor just flips .visible) instead of a matching show(true) call.
+  private restoreFromTransition(target: any): void {
+    AnimationProxy.killTweensOf(target);
+    target.visible = true;
+    target.alpha = 1;
+    const base = this.transitionBasePositions.get(target);
+    if (base) {
+      target.x = base.x;
+      target.y = base.y;
+    }
+  }
+
+  public animateGameElementsTransition(show: boolean, onComplete?: () => void): void {
+    const offscreenDistance = 1600;
+    const offscreenDirections = new Map<any, { x: number; y: number }>([
+      [this.gameTitle, { x: 0, y: -offscreenDistance }],
+      [this.jackpotContainer, { x: -offscreenDistance, y: 0 }],
+      [this.kittiebankComp, { x: 0, y: offscreenDistance }],
+      [this.slotReel, { x: offscreenDistance, y: 0 }],
+    ]);
+
+    const targets = [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel].filter(Boolean);
+    const stagger = 0.08;
+
+    targets.forEach((target: any, index: number) => {
+      AnimationProxy.killTweensOf(target);
+      const delay = index * stagger;
+      const isLast = index === targets.length - 1;
+      const base = this.getTransitionBasePosition(target);
+      const offset = offscreenDirections.get(target) || { x: 0, y: 0 };
+
+      if (show) {
+        target.visible = true;
+        target.alpha = 0;
+        target.x = base.x + offset.x;
+        target.y = base.y + offset.y;
+        AnimationProxy.animateTween(target, {
+          alpha: 1,
+          x: base.x,
+          y: base.y,
+          duration: 0.6,
+          delay,
+          ease: 'back.out(1.3)',
+          onComplete: isLast ? onComplete : undefined,
+        });
+      } else {
+        AnimationProxy.animateTween(target, {
+          alpha: 0,
+          x: base.x + offset.x,
+          y: base.y + offset.y,
+          duration: 0.4,
+          delay,
+          ease: 'power2.in',
+          onComplete: () => {
+            target.visible = false;
+            if (isLast) onComplete?.();
+          },
+        });
+      }
+    });
+  }
+
   private getInterfaceSize(): number {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
     if (!isNaN(interfaceSize) && interfaceSize !== 0) {
@@ -221,7 +297,7 @@ export class GameSlotMachineView extends SlotMachineView {
       this.wheelBaseGreen.visible = false;
       this.feautreHeadingGreen.visible = false;
     }
-    this.kittiebankComp.visible = true;
+    this.restoreFromTransition(this.kittiebankComp);
     this.addChild(this.kittiebankComp);
 
     this.updateAllConfigs('FreeSpins');
@@ -370,7 +446,8 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.interactive = true;
   }
 
-  private hideWheel(): void {
+  private hidePickFeatureUI(): void {
+    EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
     this.wheelBaseRed.visible = false;
     this.wheelBaseBlue.visible = false;
     this.feautreHeadingBlue.visible = false;
@@ -378,7 +455,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingRed.visible = false;
     this.wheelBaseGreen.visible = false;
     this.feautreHeadingGreen.visible = false;
-    this.gameTitle.visible = true;
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = false;
     wheelBG.renderable = false;
@@ -574,7 +650,11 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName,
       callback: () => {
-        StateManager.doNextStep();
+        this.animateGameElementsTransition(false, () => {
+          setTimeout(() => {
+            StateManager.doNextStep();
+          }, 500);
+        });
       },
     });
   }

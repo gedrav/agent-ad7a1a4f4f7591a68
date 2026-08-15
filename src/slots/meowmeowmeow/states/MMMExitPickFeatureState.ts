@@ -6,6 +6,7 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 class MMMExitPickFeatureStateCommand extends StateCommand {
   public async execute(data?: any): Promise<void> {
@@ -18,7 +19,7 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     }
 
     const awardedFromBlueWheel =
-      appModel.getFeatureSubType()?.toUpperCase() === 'BLUE' && !!appModel.getNextSubFeatureType();
+      appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE && !!appModel.getNextSubFeatureType();
 
     if (awardedFromBlueWheel) {
       // The award announcement is shown within the transition instead of blocking here.

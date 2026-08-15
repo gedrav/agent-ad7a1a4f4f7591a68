@@ -7,6 +7,7 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import { StateManager } from '@core/states/StateManagerService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import gsap from 'gsap';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 type SpinState = 'idle' | 'spinning' | 'stopping';
 
@@ -300,6 +301,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
 
     this.wheelBG.playAnimation({ state: animName, loop: true });
     this.glowEffect.visible = true;
+    EventHandler.dispatchEvent('PLAY_KITTIE_WIN_ANIM', FEATURE_NAMES.BLUE);
     setTimeout(() => {
       this.glowEffect.visible = false;
       this.wheelBG.playAnimation({ state: 'inner_circle', loop: true });
