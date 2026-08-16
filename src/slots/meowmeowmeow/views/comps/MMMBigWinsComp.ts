@@ -183,9 +183,6 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
 
-    // The win animation is over, so hand back straight away and let the fade out run behind it.
-    callback();
-
     setTimeout(() => {
       const fadeTargets = [this.bigWinAnim, this.featureWinText].filter(Boolean);
       AnimationProxy.animateTween(fadeTargets, {
@@ -201,6 +198,7 @@ export class MMMBigWinsComp extends BigWinsComp {
           if (this.bigWinAnim) {
             this.bigWinAnim.alpha = 1;
           }
+          callback();
         },
       });
     }, FEATURE_WIN_EXIT_PAUSE_MS);

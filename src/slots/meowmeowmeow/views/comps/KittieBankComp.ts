@@ -82,7 +82,6 @@ export class KittieBankComp extends ResponsiveChildrenView {
       const animPrefix = targetBank === 'meow' ? '3_RED' : targetBank === 'mew' ? '1_GREEN' : '2_BLUE';
       const staticAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
       if (spineAnim && staticAnim && typeof spineAnim.playAnimation === 'function') {
-        console.warn(staticAnim);
         spineAnim.playAnimation({
           state: staticAnim,
           loop: true,

@@ -60,13 +60,18 @@ export class GameSlotMachineView extends SlotMachineView {
     this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hidePickFeatureUI.bind(this));
+    EventHandler.addEventListener('RESET_BG_UI', this.hidePickFeatureUI.bind(this));
+    EventHandler.addEventListener('CLOSE_VAULT', this.closeWheelDoor.bind(this));
+
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
     EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showPickFeatureTransition.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener('SHOW_KITTIEBANK_BREAK', this.showKittieBankBreak.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
+    EventHandler.addEventListener('TRANSITION', (data: { show: boolean; callback?: () => void }) =>
+      this.animateGameElementsTransition(data.show, data.callback),
+    );
 
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.kittiebankComp = this.elementsList['kittiebankComp'];
@@ -117,6 +122,12 @@ export class GameSlotMachineView extends SlotMachineView {
       };
     }
     this.gameTitleBaseLayoutData = this.gameTitle?.configData?.layoutData;
+
+    [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel]
+      .filter(Boolean)
+      .forEach((target: any) => {
+        this.transitionBasePositions.set(target, { x: target.x, y: target.y });
+      });
 
     this.startGameLogoAnimation();
   }
@@ -202,16 +213,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
   private readonly transitionBasePositions = new Map<any, { x: number; y: number }>();
 
-  private getTransitionBasePosition(target: any): { x: number; y: number } {
-    if (!this.transitionBasePositions.has(target)) {
-      this.transitionBasePositions.set(target, { x: target.x, y: target.y });
-    }
-    return this.transitionBasePositions.get(target);
-  }
-
-  // Undoes whatever animateGameElementsTransition(false, ...) left behind (alpha 0,
-  // off-screen x/y) for elements that get shown again through a different code path
-  // (e.g. animateWheelDoor just flips .visible) instead of a matching show(true) call.
   private restoreFromTransition(target: any): void {
     AnimationProxy.killTweensOf(target);
     target.visible = true;
@@ -239,18 +240,19 @@ export class GameSlotMachineView extends SlotMachineView {
       AnimationProxy.killTweensOf(target);
       const delay = index * stagger;
       const isLast = index === targets.length - 1;
-      const base = this.getTransitionBasePosition(target);
+      const restX = target.x;
+      const restY = target.y;
       const offset = offscreenDirections.get(target) || { x: 0, y: 0 };
 
       if (show) {
         target.visible = true;
         target.alpha = 0;
-        target.x = base.x + offset.x;
-        target.y = base.y + offset.y;
+        target.x = restX + offset.x;
+        target.y = restY + offset.y;
         AnimationProxy.animateTween(target, {
           alpha: 1,
-          x: base.x,
-          y: base.y,
+          x: restX,
+          y: restY,
           duration: 0.6,
           delay,
           ease: 'back.out(1.3)',
@@ -259,8 +261,8 @@ export class GameSlotMachineView extends SlotMachineView {
       } else {
         AnimationProxy.animateTween(target, {
           alpha: 0,
-          x: base.x + offset.x,
-          y: base.y + offset.y,
+          x: restX + offset.x,
+          y: restY + offset.y,
           duration: 0.4,
           delay,
           ease: 'power2.in',
@@ -364,10 +366,52 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1.2,
       x: this.vaultAnim.x - shiftX,
       onComplete: () => {
-        this.vaultAnim.visible = false;
+        // this.vaultAnim.visible = false;
         this.makeWheelInteractive();
         onDoorOpened?.();
         StateManager.doNextStep();
+      },
+    });
+  }
+
+  protected closeWheelDoor(onDoorClosed?: () => void): void {
+    if (!this.vaultAnim) {
+      onDoorClosed?.();
+      return;
+    }
+
+    this.doorMask.visible = true;
+    this.vaultAnim.mask = this.doorMask;
+    this.vaultAnim.scale.set(0.6);
+    this.vaultAnim.visible = true;
+
+    const shiftX = 1506;
+
+    if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
+      this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
+      this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
+      this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
+    }
+
+    AnimationProxy.animateTween(this.vaultAnim, {
+      duration: 1.2,
+      x: this.vaultAnim.x + shiftX,
+      onComplete: () => {
+        // TODO: swap 'Unlock' for the real 'Lock' animation once it's available
+        // this.vaultAnim.playAnimation({
+        //   state: 'Unlock',
+        //   loop: false,
+        //   reset: true,
+        // });
+
+        // this.vaultAnim.addEventListener('complete', () => {
+        this.vaultAnim.removeEventListners();
+        setTimeout(() => {
+          // this.vaultAnim.visible = false;
+        }, 1000);
+        onDoorClosed?.();
+        // });
+        // this.hidePickFeatureUI({ callback: onDoorClosed })
       },
     });
   }
@@ -376,7 +420,6 @@ export class GameSlotMachineView extends SlotMachineView {
     const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
 
     if (!extraSpinTextCenter) {
-      console.warn('Missing extraSpinTextCenter element');
       StateManager.goToState(STATES.FS_SPIN_START_STATE);
       return;
     }
@@ -446,21 +489,23 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.interactive = true;
   }
 
-  private hidePickFeatureUI(): void {
-    EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
-    this.wheelBaseRed.visible = false;
-    this.wheelBaseBlue.visible = false;
-    this.feautreHeadingBlue.visible = false;
-    this.feautreHeadingGreen.visible = false;
-    this.feautreHeadingRed.visible = false;
-    this.wheelBaseGreen.visible = false;
-    this.feautreHeadingGreen.visible = false;
-    const wheelBG = this.elementsList['wheelContainer'];
-    wheelBG.visible = false;
-    wheelBG.renderable = false;
-    wheelBG.interactive = false;
-    this.slotReel.visible = true;
+  private hidePickFeatureUI(data?: { callback?: () => void }): void {
     this.resetMachineLayout();
+    EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
+    this.animateGameElementsTransition(true, () => {
+      this.wheelBaseRed.visible = false;
+      this.wheelBaseBlue.visible = false;
+      this.feautreHeadingBlue.visible = false;
+      this.feautreHeadingGreen.visible = false;
+      this.feautreHeadingRed.visible = false;
+      this.wheelBaseGreen.visible = false;
+      this.feautreHeadingGreen.visible = false;
+      const wheelBG = this.elementsList['wheelContainer'];
+      wheelBG.visible = false;
+      wheelBG.renderable = false;
+      wheelBG.interactive = false;
+      data?.callback?.();
+    });
   }
 
   public showCoinAnimations() {
@@ -851,9 +896,8 @@ export class GameSlotMachineView extends SlotMachineView {
     (this.slotReel as any).resizeView();
 
     this.wheelBase.alpha = 1;
-    this.wheelRim.alpha = 0.5;
-    if (this.vaultAnim) this.vaultAnim.visible = false;
-    this.doorMask.visible = false;
+    // if (this.vaultAnim) this.vaultAnim.visible = false;
+    // this.doorMask.visible = false;
     this.wheelBaseGreen.visible = false;
     this.feautreHeadingGreen.visible = false;
 
@@ -873,7 +917,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
   private maskWheelTestToRim(): void {
     if (!this.wheelContainer || !this.wheelRim) {
-      console.warn('wheelTest or wheelRim missing, cannot apply mask');
       return;
     }
 

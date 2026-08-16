@@ -49,6 +49,7 @@ export class MMMPFPopupComp extends PFPopupComp {
   private readonly blueOutroAmountText: PixText;
   private readonly blueOutroFeatureIcon: PixSprite;
   private popupData: any;
+  private isClosing = false;
 
   constructor(config: any) {
     super(config);
@@ -71,14 +72,21 @@ export class MMMPFPopupComp extends PFPopupComp {
   }
 
   protected override async onCloseClicked() {
-    super.onCloseClicked();
-    if (this.popupData?.entryPopUp) {
-      const featureName = appModel.getNextSubFeatureType()
-        ? appModel.getNextSubFeatureType()
-        : appModel.getFeatureSubType();
-      console.warn('----');
-      EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', featureName.toUpperCase() as FeatureName);
-    }
+    if (this.isClosing) return;
+    this.isClosing = true;
+
+    this.animateElementsDropOut(() => {
+      this.isClosing = false;
+      super.onCloseClicked();
+      if (this.popupData?.entryPopUp) {
+        const featureName = appModel.getNextSubFeatureType()
+          ? appModel.getNextSubFeatureType()
+          : appModel.getFeatureSubType();
+        EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', featureName.toUpperCase() as FeatureName);
+      } else {
+        EventHandler.dispatchEvent('RESET_BG_UI');
+      }
+    });
   }
 
   private layoutPrizeRow(row: PixView, order: string[], gap: number, yOffsets: Record<string, number>): void {
@@ -161,31 +169,39 @@ export class MMMPFPopupComp extends PFPopupComp {
     }
   }
   protected async showPFPopup(data: any) {
-    this.popupData = data;
-    const featureSubType = appModel.getFeatureSubType();
-    if (!data.entryPopUp && featureSubType.toUpperCase() === FEATURE_NAMES.RED) {
-      data.callbackFunction();
-      return;
-    }
-    if (!data.skipModalDim) {
-      EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    }
-    this.parent?.addChild(this);
+    EventHandler.dispatchEvent('TRANSITION', {
+      show: false,
+      callback: () => {
+        this.popupData = data;
+        const featureSubType = appModel.getFeatureSubType();
+        if (!data.entryPopUp && featureSubType.toUpperCase() === FEATURE_NAMES.RED) {
+          data.callbackFunction();
+          EventHandler.dispatchEvent('RESET_BG_UI');
+          return;
+        }
+        if (!data.skipModalDim) {
+          EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+        }
+        this.parent?.addChild(this);
 
-    super.showPFPopup(data);
-    (this as any).resizeView?.();
+        super.showPFPopup(data);
+        (this as any).resizeView?.();
 
-    const mewSpine = this.elementsList['mew'] as PixSpine;
-    if (mewSpine?.configData.idle) {
-      let featName = appModel.getNextSubFeatureType() ? appModel.getNextSubFeatureType() : appModel.getFeatureSubType();
-      if (!data.entryPopUp && appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE) {
-        featName = FEATURE_NAMES.BLUE;
-      }
-      const animName = featName.toUpperCase() === FEATURE_NAMES.RED ? '3_RED_Ideal' : '2_BLUE_Ideal';
-      mewSpine.playAnimation({ state: animName, loop: true });
-    }
+        const mewSpine = this.elementsList['mew'] as PixSpine;
+        if (mewSpine?.configData.idle) {
+          let featName = appModel.getNextSubFeatureType()
+            ? appModel.getNextSubFeatureType()
+            : appModel.getFeatureSubType();
+          if (!data.entryPopUp && appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE) {
+            featName = FEATURE_NAMES.BLUE;
+          }
+          const animName = featName.toUpperCase() === FEATURE_NAMES.RED ? '3_RED_Ideal' : '2_BLUE_Ideal';
+          mewSpine.playAnimation({ state: animName, loop: true });
+        }
 
-    this.animateElementsDropIn();
+        this.animateElementsDropIn();
+      },
+    });
   }
 
   private animateElementsDropIn(): void {
@@ -207,6 +223,43 @@ export class MMMPFPopupComp extends PFPopupComp {
         duration: 0.5,
         delay: index * stagger,
         ease: 'bounce.out',
+      });
+    });
+  }
+
+  private animateElementsDropOut(onComplete?: () => void): void {
+    const dropDistance = 700;
+    const stagger = 0.2;
+
+    const children = (this.children as any[])
+      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .reverse();
+
+    if (children.length === 0) {
+      onComplete?.();
+      return;
+    }
+
+    const restPositions = children.map((child: any) => ({ child, y: child.y }));
+
+    children.forEach((child: any, index: number) => {
+      AnimationProxy.killTweensOf(child);
+      const restY = restPositions[index].y;
+      const isLast = index === children.length - 1;
+      AnimationProxy.animateTween(child, {
+        alpha: 0,
+        y: restY + dropDistance,
+        duration: 0.4,
+        delay: index * stagger,
+        ease: 'power2.in',
+        onComplete: () => {
+          if (!isLast) return;
+          restPositions.forEach(({ child: c, y }) => {
+            c.y = y;
+            c.alpha = 1;
+          });
+          onComplete?.();
+        },
       });
     });
   }

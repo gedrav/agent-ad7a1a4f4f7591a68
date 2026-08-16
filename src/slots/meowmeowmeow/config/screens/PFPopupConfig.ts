@@ -361,7 +361,7 @@ export const PF_POPUP_CONFIG = {
       name: 'blueOutroRow',
       type: 'Container',
       visible: false,
-      x: 990,
+      x: 1203,
       y: 1000,
       Elements: [
         {
@@ -370,7 +370,7 @@ export const PF_POPUP_CONFIG = {
           content: 'PickFeatureBlueExitPrefixText',
           style: {
             fontFamily: 'gameFont2',
-            fontSize: 60,
+            fontSize: 70,
             fontWeight: '900',
             fill: ['0xFFFFFF', '0xFFF3D0', '0xFFE066'],
             fillGradientStops: [0, 0.5, 1],
@@ -394,7 +394,7 @@ export const PF_POPUP_CONFIG = {
           visible: false,
           style: {
             fontFamily: 'gameFont2',
-            fontSize: 85,
+            fontSize: 185,
             fontWeight: '900',
             letterSpacing: 2,
             fill: ['0xE8FFE0', '0x7ED957', '0x2FA84F', '0x145A32'],
