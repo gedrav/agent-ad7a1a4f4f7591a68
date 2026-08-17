@@ -6,10 +6,13 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 export class MMMFSPopupComp extends FSPopupComp {
   private readonly congratText: PixText;
   protected _isClicked: boolean = false;
+  private popupData: any;
 
   constructor(config: any) {
     super(config);
@@ -103,8 +106,8 @@ export class MMMFSPopupComp extends FSPopupComp {
 
   protected async showFSPopup(data: any) {
     this._isClicked = false;
+    this.popupData = data;
 
-    // Bypass the extra free spins popup since MMM uses an on-screen text animation
     if (data.entryPopUp == undefined && data.title === (Util.getContent('CongratTitle') || 'CONGRATULATIONS!')) {
       if (data.callbackFunction) {
         data.callbackFunction();
@@ -112,34 +115,92 @@ export class MMMFSPopupComp extends FSPopupComp {
       return;
     }
 
-    super.showFSPopup(data);
-    const scale = this.scale.x;
-    const yy = this.y;
-    const xx = this.x;
+    EventHandler.dispatchEvent('TRANSITION', {
+      show: false,
+      callback: () => {
+        super.showFSPopup(data);
+        this.parent?.addChild(this);
 
-    const dropOffset = 550;
-    this.y -= dropOffset;
-    this.x = xx;
-    const mewSpine = this.elementsList['mew'] as PixSpine;
-    if (mewSpine?.configData.idle) {
-      mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
-    }
-    AnimationProxy.animateTween(this, {
-      scaleX: scale,
-      scaleY: scale,
-      duration: 0.6,
-      y: yy,
-      x: xx,
-      ease: 'bounce.out',
+        const mewSpine = this.elementsList['mew'] as PixSpine;
+        if (mewSpine?.configData.idle) {
+          mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+        }
+
+        this.animateElementsDropIn();
+      },
     });
   }
 
   protected async onCloseClicked() {
-    if (this._isClicked) return;
+    if (this._isClicked || !this.parent) return;
     this._isClicked = true;
 
-    if (this.parent) {
-      super.onCloseClicked();
+    if (!this.popupData?.entryPopUp) {
+      EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
     }
+    this.animateElementsDropOut(() => {
+      this._isClicked = false;
+      super.onCloseClicked();
+    });
+  }
+
+  private animateElementsDropIn(): void {
+    const dropStartY = -600;
+    const stagger = 0.15;
+
+    const children = (this.children as any[])
+      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .reverse();
+
+    children.forEach((child: any, index: number) => {
+      AnimationProxy.killTweensOf(child);
+      const restY = child.y;
+      child.alpha = 0;
+      child.y = dropStartY;
+      AnimationProxy.animateTween(child, {
+        alpha: 1,
+        y: restY,
+        duration: 0.5,
+        delay: index * stagger,
+        ease: 'bounce.out',
+      });
+    });
+  }
+
+  private animateElementsDropOut(onComplete?: () => void): void {
+    const dropDistance = 700;
+    const stagger = 0.15;
+
+    const children = (this.children as any[])
+      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .reverse();
+
+    if (children.length === 0) {
+      onComplete?.();
+      return;
+    }
+
+    const restPositions = children.map((child: any) => ({ child, y: child.y }));
+
+    children.forEach((child: any, index: number) => {
+      AnimationProxy.killTweensOf(child);
+      const restY = restPositions[index].y;
+      const isLast = index === children.length - 1;
+      AnimationProxy.animateTween(child, {
+        alpha: 0,
+        y: restY + dropDistance,
+        duration: 0.4,
+        delay: index * stagger,
+        ease: 'power2.in',
+        onComplete: () => {
+          if (!isLast) return;
+          restPositions.forEach(({ child: c, y }) => {
+            c.y = y;
+            c.alpha = 1;
+          });
+          onComplete?.();
+        },
+      });
+    });
   }
 }

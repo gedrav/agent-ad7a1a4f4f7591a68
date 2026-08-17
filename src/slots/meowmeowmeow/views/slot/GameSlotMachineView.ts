@@ -168,7 +168,11 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName: 'mew',
       callback: () => {
-        StateManager.doNextStep();
+        this.animateGameElementsTransition(false, () => {
+          setTimeout(() => {
+            StateManager.doNextStep();
+          }, 500);
+        });
       },
     });
   }
