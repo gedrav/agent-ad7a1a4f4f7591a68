@@ -30,8 +30,6 @@ export class KittieBankComp extends ResponsiveChildrenView {
     EventHandler.addEventListener('PLAY_KITTIE_WIN_ANIM', this.playWinAnimation.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, this.restartIdleAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.stopIdleAnim.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.resetToNormal.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetToNormal.bind(this));
     EventHandler.addEventListener('RESET_KITTIEBANK_ANIM', this.resetToNormal.bind(this));
     EventHandler.addEventListener('SET_KITTIBANK_FEATURE_STATE', this.showSelectedFeatureBank.bind(this));
   }

@@ -225,7 +225,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       AnimationProxy.animateTween(child, {
         alpha: 1,
         y: restY,
-        duration: 0.5,
+        duration: 0.3,
         delay: index * stagger,
         ease: 'bounce.out',
       });

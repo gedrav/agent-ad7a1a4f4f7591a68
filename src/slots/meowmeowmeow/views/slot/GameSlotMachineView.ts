@@ -162,6 +162,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
     this.changeReelInterface();
+    this.slotReel.alpha = 1;
     this.animateWheelDoor();
   }
 
@@ -288,7 +289,9 @@ export class GameSlotMachineView extends SlotMachineView {
     if (!appModel.getNextFeatureType()) {
       return 0;
     }
-    return appModel.getNextSubFeatureType() === 'Green' ? 5 : 4;
+    const subFeatureType =
+      appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
+    return subFeatureType === FEATURE_NAMES.GREEN ? 5 : 4;
   }
 
   private changeReelInterface(): void {
@@ -296,7 +299,9 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected animateWheelDoor(onDoorOpened?: () => void): void {
-    if (appModel.getNextSubFeatureType() === 'Green') {
+    const doorSubFeatureType =
+      appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
+    if (doorSubFeatureType === FEATURE_NAMES.GREEN) {
       this.slotReel.visible = true;
       this.wheelBaseGreen.visible = true;
       this.feautreHeadingGreen.visible = true;

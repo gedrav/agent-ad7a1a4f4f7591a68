@@ -114,33 +114,52 @@ export class MMMFSPopupComp extends FSPopupComp {
       }
       return;
     }
+    const showBG = data.entryPopUp ? false : true;
+    if (!showBG) {
+      EventHandler.dispatchEvent('TRANSITION', {
+        show: showBG,
+        callback: () => {
+          super.showFSPopup(data);
+          this.parent?.addChild(this);
 
-    EventHandler.dispatchEvent('TRANSITION', {
-      show: false,
-      callback: () => {
+          const mewSpine = this.elementsList['mew'] as PixSpine;
+          if (mewSpine?.configData.idle) {
+            mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+          }
+
+          this.animateElementsDropIn();
+        },
+      });
+    } else {
+      EventHandler.dispatchEvent('CLOSE_VAULT', () => {
         super.showFSPopup(data);
         this.parent?.addChild(this);
-
         const mewSpine = this.elementsList['mew'] as PixSpine;
         if (mewSpine?.configData.idle) {
           mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
         }
-
         this.animateElementsDropIn();
-      },
-    });
+      });
+    }
   }
 
   protected async onCloseClicked() {
     if (this._isClicked || !this.parent) return;
     this._isClicked = true;
 
-    if (!this.popupData?.entryPopUp) {
+    if (this.popupData?.entryPopUp) {
       EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
     }
     this.animateElementsDropOut(() => {
       this._isClicked = false;
       super.onCloseClicked();
+      if (!this.popupData.entryPopUp) {
+        EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
+        EventHandler.dispatchEvent('TRANSITION', {
+          show: true,
+          callback: () => {},
+        });
+      }
     });
   }
 
@@ -160,7 +179,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       AnimationProxy.animateTween(child, {
         alpha: 1,
         y: restY,
-        duration: 0.5,
+        duration: 0.3,
         delay: index * stagger,
         ease: 'bounce.out',
       });
@@ -169,7 +188,7 @@ export class MMMFSPopupComp extends FSPopupComp {
 
   private animateElementsDropOut(onComplete?: () => void): void {
     const dropDistance = 700;
-    const stagger = 0.15;
+    const stagger = 0.1;
 
     const children = (this.children as any[])
       .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
