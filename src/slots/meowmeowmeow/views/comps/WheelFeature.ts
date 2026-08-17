@@ -6,6 +6,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { StateManager } from '@core/states/StateManagerService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { Util } from '@core/utils/UtilService';
 import gsap from 'gsap';
 
 type SpinState = 'idle' | 'spinning' | 'stopping';
@@ -41,10 +42,10 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   private readonly resultToStopIndexMap: Record<string, number> = {
     '15': 0,
     Red: 1,
-    '08': 2,
+    '8': 2,
     '10': 3,
     '80': 4,
-    '05': 5,
+    '5': 5,
     '120': 6,
     Green: 7,
     '40': 8,
@@ -134,7 +135,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     this.renderable = false;
     this.interactive = false;
 
-    this.tapText.text = 'Tap on the Wheel to spin!';
+    this.tapText.text = Util.getContent('TapToSpinWheelText');
   }
 
   private bindEvents(): void {
@@ -190,6 +191,8 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     this.isSpinning = true;
     this.spinState = 'spinning';
     this.interactive = false;
+
+    EventHandler.dispatchEvent('PLAY_WHEEL_SPIN_SOUND');
 
     const now = performance.now();
     this.spinStartTime = now;
@@ -293,6 +296,7 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   }
 
   private onSpinComplete(choosenSector: number): void {
+    EventHandler.dispatchEvent('PLAY_WHEEL_WIN_SOUND');
     const animName = this.animationMap[choosenSector];
 
     this.wheelBG.playAnimation({ state: animName, loop: true });

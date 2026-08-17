@@ -26,7 +26,7 @@ export class BuyBonusButtonComp extends StandardView {
     this.updateBBBetValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateBBBetValue.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_BB_STATE, this.updateBBBetValue.bind(this));
-    EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.validateButtons.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_ANTE_BET_STATUS, this.onAnteBetStatusUpdate.bind(this));
     EventHandler.addEventListener(SlotEvents.DISALBE_ANTE_BB_BUTTON, this.disableBtn.bind(this));
@@ -36,22 +36,28 @@ export class BuyBonusButtonComp extends StandardView {
     if (GameProxy.config.isAnteEnabled) {
       this.disableBtn();
     } else {
-      this.enableBtn();
+      this.validateButtons();
     }
   }
 
   protected updateBBBetValue(): void {
-    let bbBet: number = 0;
+    const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     if (this.bbBetValue) {
-      const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
       this.bbBetValue.scale.set(1);
       const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
-      bbBet = appModel.getTotalBet() * multiplier * factor;
-      this.bbBetValue.text = Util.formatCurrency(bbBet);
+      const valToShow = (appModel.getTotalBet() * multiplier) / factor;
+      this.bbBetValue.text = Util.formatCurrency(valToShow);
       if (this.bbBetValue.width > this.bbBg.width * 0.8) {
         this.bbBetValue.scale.set((this.bbBg.width * 0.8) / this.bbBetValue.width);
       }
     }
+    this.validateButtons();
+  }
+  protected validateButtons(): void {
+    let bbBet: number = 0;
+    const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
+    const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
+    bbBet = appModel.getTotalBet() * multiplier;
     if (appModel.getBBMaxBet()) {
       if (bbBet > appModel.getBBMaxBet()) {
         this.disableBtn();

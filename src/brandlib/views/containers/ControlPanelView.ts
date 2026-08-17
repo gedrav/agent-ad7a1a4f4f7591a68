@@ -17,6 +17,7 @@ import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { Point } from 'pixi.js';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
+import { Util } from '@core/utils/UtilService';
 
 let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -280,11 +281,20 @@ export class ControlPanelView extends ResponsiveChildrenView {
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
     const bbBet = appModel.getTotalBet() * multiplier * factor;
+    const btnString: string = Util.parseMessage(Util.getContent('buyFreeSpinTitleWithValue'), [
+      Util.formatCurrency(bbBet),
+    ]);
     if (appModel.getBBMaxBet()) {
       if (bbBet > appModel.getBBMaxBet()) {
-        this.bbButtonsArray.forEach((btn) => (btn.enabled = false));
+        this.bbButtonsArray.forEach((btn) => {
+          btn.enabled = false;
+          btn.updateText(btnString);
+        });
       } else {
-        this.bbButtonsArray.forEach((btn) => (btn.enabled = true));
+        this.bbButtonsArray.forEach((btn) => {
+          btn.enabled = true;
+          btn.updateText(btnString);
+        });
       }
     }
   }
@@ -316,9 +326,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.infoBtn.enabled = true;
 
     // Enable buy bonus buttons
-    if (this.bbButtonsArray) {
-      this.bbButtonsArray.forEach((btn) => (btn.enabled = true));
-    }
+    this.validateBBButtons();
   }
   protected disablePanel(): void {
     this.spinBtn.enabled = false;

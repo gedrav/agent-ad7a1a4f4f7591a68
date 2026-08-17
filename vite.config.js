@@ -9,9 +9,9 @@ const defaultGameNames = [
   //'royale81',
   //"empireofgold",
   //'empireofgoldnewconquest',
-  // 'sweetsalon',
+   'sweetsalon',
   // 'frostedmarketbonanza',
-  'bookofstorms',
+  //'bookofstorms',
   //'meowmeowmeow',
   //'bookofstormslightningwin',
   //'carpathiantreasures'

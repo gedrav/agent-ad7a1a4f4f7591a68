@@ -85,7 +85,7 @@ export const BIG_WIN_CONFIG = {
       alpha: 0,
     },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 694, y: 125 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 770, y: 144 },
     {
       name: 'winTicker',
       type: 'Comp',

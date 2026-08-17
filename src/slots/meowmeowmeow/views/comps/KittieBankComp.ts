@@ -103,6 +103,14 @@ export class KittieBankComp extends ResponsiveChildrenView {
     const blastAnim = `${animPrefix}_Blast`;
     const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
+    const soundEvent =
+      bankName === 'meow'
+        ? 'PLAY_RED_CAT_TRIGGER'
+        : bankName === 'mew'
+          ? 'PLAY_GREEN_CAT_TRIGGER'
+          : 'PLAY_BLUE_CAT_TRIGGER';
+    EventHandler.dispatchEvent(soundEvent);
+
     this.stopIdleAnim(); // Stop random idle animations from interrupting
 
     if (targetBank && typeof targetBank.playAnimation === 'function') {
