@@ -48,6 +48,7 @@ export class MMMPFPopupComp extends PFPopupComp {
   private readonly blueOutroPrefixText: PixText;
   private readonly blueOutroAmountText: PixText;
   private readonly blueOutroFeatureIcon: PixSprite;
+  private isEntryPopup = false;
 
   constructor(config: any) {
     super(config);
@@ -79,6 +80,12 @@ export class MMMPFPopupComp extends PFPopupComp {
   protected override async onCloseClicked() {
     super.onCloseClicked();
     EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
+    if (!this.isEntryPopup) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+        value: appModel.featureResult?.totalWin,
+        duration: 0,
+      });
+    }
   }
 
   private layoutPrizeRow(row: PixView, order: string[], gap: number, yOffsets: Record<string, number>): void {
@@ -164,9 +171,9 @@ export class MMMPFPopupComp extends PFPopupComp {
     }
   }
   protected async showPFPopup(data: any) {
+    this.isEntryPopup = !!data.entryPopUp;
     const featureSubType = appModel.getFeatureSubType();
     if (!data.entryPopUp && featureSubType.toUpperCase() === 'RED') {
-      console.warn(data);
       data.callbackFunction();
       // EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: data.callbackFunction });
       return;
