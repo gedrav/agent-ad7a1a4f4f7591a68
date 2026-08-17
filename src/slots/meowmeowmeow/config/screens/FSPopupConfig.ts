@@ -238,7 +238,7 @@ export const FS_POPUP_CONFIG = {
     {
       name: 'messageText2',
       type: 'Text',
-      content: 'PRESS ► TO CONTINUE',
+      content: '',
       visible: false,
       style: {
         fontFamily: 'gameFont2',
