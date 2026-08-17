@@ -47,6 +47,7 @@ export class MMMPFPopupComp extends PFPopupComp {
   private readonly blueOutroPrefixText: PixText;
   private readonly blueOutroAmountText: PixText;
   private readonly blueOutroFeatureIcon: PixSprite;
+  private readonly playBtn: PixSprite;
   private popupData: any;
   private isClosing = false;
 
@@ -60,14 +61,17 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.blueOutroPrefixText = this.blueOutroRow?.elementsList['blueOutroPrefixText'];
     this.blueOutroAmountText = this.blueOutroRow?.elementsList['blueOutroAmountText'];
     this.blueOutroFeatureIcon = this.blueOutroRow?.elementsList['blueOutroFeatureIcon'];
+    this.playBtn = this.elementsList['playBtn'];
     this.layoutPrizeRow(this.wheelPrizeRow, WHEEL_PRIZE_ROW_ORDER, WHEEL_PRIZE_ROW_GAP, WHEEL_PRIZE_ROW_Y_OFFSETS);
     this.layoutPrizeRow(this.redPrizeRow, RED_PRIZE_ROW_ORDER, RED_PRIZE_ROW_GAP, RED_PRIZE_ROW_Y_OFFSETS);
     if (this.okBtn) {
       this.okBtn.visible = false;
     }
-    this.interactive = true;
-    this.cursor = 'pointer';
-    this.on('pointerdown', this.onCloseClicked.bind(this));
+    if (this.playBtn) {
+      this.playBtn.interactive = true;
+      this.playBtn.cursor = 'pointer';
+      this.playBtn.on('pointerdown', this.onCloseClicked.bind(this));
+    }
   }
 
   protected override async onCloseClicked() {
@@ -214,7 +218,12 @@ export class MMMPFPopupComp extends PFPopupComp {
     const stagger = 0.15;
 
     const children = (this.children as any[])
-      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .filter(
+        (child) =>
+          child.visible !== false &&
+          child.configData?.name !== 'guideRect' &&
+          child.configData?.name !== 'particleSpine',
+      )
       .reverse();
 
     children.forEach((child: any, index: number) => {
@@ -237,7 +246,12 @@ export class MMMPFPopupComp extends PFPopupComp {
     const stagger = 0.2;
 
     const children = (this.children as any[])
-      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .filter(
+        (child) =>
+          child.visible !== false &&
+          child.configData?.name !== 'guideRect' &&
+          child.configData?.name !== 'particleSpine',
+      )
       .reverse();
 
     if (children.length === 0) {

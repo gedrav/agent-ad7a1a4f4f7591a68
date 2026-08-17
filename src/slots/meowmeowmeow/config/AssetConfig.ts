@@ -50,12 +50,14 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Jackpot_Coin', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Vault_Anim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'reelframes', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'particle_spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Grand', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Major', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Minor', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'Mini', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'GREEN', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'RED', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'playbtn', ASSETTYPE: 'png' },
   ],
 };
 const SECONDARY: AssetBundle = {

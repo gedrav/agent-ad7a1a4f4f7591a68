@@ -11,26 +11,24 @@ import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 export class MMMFSPopupComp extends FSPopupComp {
   private readonly congratText: PixText;
+  private readonly playBtn: PixSprite;
   protected _isClicked: boolean = false;
   private popupData: any;
 
   constructor(config: any) {
     super(config);
     this.congratText = this.elementsList['congratText'];
+    this.playBtn = this.elementsList['playBtn'];
 
     if (this.okBtn) {
       this.okBtn.visible = false;
     }
 
-    if (this.panelBG) {
-      this.panelBG.interactive = true;
-      this.panelBG.cursor = 'pointer';
-      this.panelBG.on('pointerdown', this.onCloseClicked.bind(this));
+    if (this.playBtn) {
+      this.playBtn.interactive = true;
+      this.playBtn.cursor = 'pointer';
+      this.playBtn.on('pointerdown', this.onCloseClicked.bind(this));
     }
-
-    this.interactive = true;
-    this.cursor = 'pointer';
-    this.on('pointerdown', this.onCloseClicked.bind(this));
   }
 
   protected updateMessagePositions(data: any): void {
@@ -168,7 +166,12 @@ export class MMMFSPopupComp extends FSPopupComp {
     const stagger = 0.15;
 
     const children = (this.children as any[])
-      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .filter(
+        (child) =>
+          child.visible !== false &&
+          child.configData?.name !== 'guideRect' &&
+          child.configData?.name !== 'particleSpine',
+      )
       .reverse();
 
     children.forEach((child: any, index: number) => {
@@ -176,12 +179,20 @@ export class MMMFSPopupComp extends FSPopupComp {
       const restY = child.y;
       child.alpha = 0;
       child.y = dropStartY;
+      const isLast = index === children.length - 1;
       AnimationProxy.animateTween(child, {
         alpha: 1,
         y: restY,
         duration: 0.3,
         delay: index * stagger,
         ease: 'bounce.out',
+        onComplete: () => {
+          if (!isLast) return;
+          const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+          if (particleSpine?.configData.idle) {
+            particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
+          }
+        },
       });
     });
   }
@@ -190,8 +201,16 @@ export class MMMFSPopupComp extends FSPopupComp {
     const dropDistance = 700;
     const stagger = 0.1;
 
+    const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+    particleSpine?.stopAnimation();
+
     const children = (this.children as any[])
-      .filter((child) => child.visible !== false && child.configData?.name !== 'guideRect')
+      .filter(
+        (child) =>
+          child.visible !== false &&
+          child.configData?.name !== 'guideRect' &&
+          child.configData?.name !== 'particleSpine',
+      )
       .reverse();
 
     if (children.length === 0) {
