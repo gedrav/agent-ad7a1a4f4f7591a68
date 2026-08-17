@@ -116,7 +116,14 @@ export class MMMBigWinsComp extends BigWinsComp {
 
     this.showWinTickerType('bigwin');
     this.playCurrentBigWinSound();
-    this.elementsList['winTickerBW'].countUpValue(appModel.featureResult?.totalWin, FEATURE_WIN_COUNTUP_DURATION);
+    this.elementsList['winTickerBW'].countUpValue(
+      appModel.featureResult?.featureData?.jackpotWin,
+      FEATURE_WIN_COUNTUP_DURATION,
+    );
+    EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+      value: appModel.featureResult?.totalWin,
+      duration: 0,
+    });
   }
 
   // The configured guideRect only spans the board area. For a feature win the dim needs to reach the
