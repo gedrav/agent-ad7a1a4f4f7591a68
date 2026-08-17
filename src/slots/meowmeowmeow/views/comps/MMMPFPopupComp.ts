@@ -1,7 +1,6 @@
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { PickBonusJackpotComp } from './pickBonusJackpot';
 import { PFPopupComp } from '@brand/views/popups/PickFeaturePopupComp';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
@@ -83,6 +82,12 @@ export class MMMPFPopupComp extends PFPopupComp {
           ? appModel.getNextSubFeatureType()
           : appModel.getFeatureSubType();
         EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', featureName.toUpperCase() as FeatureName);
+        if (
+          appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
+          appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
+        ) {
+          EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
+        }
       } else {
         EventHandler.dispatchEvent('RESET_BG_UI');
       }

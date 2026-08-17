@@ -66,6 +66,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
     EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showPickFeatureTransition.bind(this));
+    EventHandler.addEventListener('HIDE_WHEEL_FEATURE_UI', this.hideWheelFeatureUI.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener('SHOW_KITTIEBANK_BREAK', this.showKittieBankBreak.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
@@ -307,8 +308,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.addChild(this.kittiebankComp);
 
     this.updateAllConfigs('FreeSpins');
-    if (this.configData?.layoutData?.Portrait) {
-    }
 
     UIUtil.adjustElement(this.gameTitle);
     (this.kittiebankComp as any).resizeView();
@@ -334,7 +333,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
     if (GameProxy.config.subFeatureAwardAnnounced) {
       if (this.vaultAnim) {
-        this.vaultAnim.visible = false;
+        // this.vaultAnim.visible = false;
       }
       this.makeWheelInteractive();
       onDoorOpened?.();
@@ -493,21 +492,31 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.interactive = true;
   }
 
+  private hideWheelFeatureUI() {
+    this.feautreHeadingBlue.visible = false;
+    this.wheelBaseBlue.visible = false;
+    const wheelBG = this.elementsList['wheelContainer'];
+    wheelBG.visible = false;
+    wheelBG.renderable = false;
+    wheelBG.interactive = false;
+    if (
+      appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
+      appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
+    ) {
+      this.animateWheelDoor();
+    }
+  }
+
   private hidePickFeatureUI(data?: { callback?: () => void }): void {
     this.resetMachineLayout();
     EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
     this.animateGameElementsTransition(true, () => {
       this.wheelBaseRed.visible = false;
-      this.wheelBaseBlue.visible = false;
-      this.feautreHeadingBlue.visible = false;
-      this.feautreHeadingGreen.visible = false;
-      this.feautreHeadingRed.visible = false;
       this.wheelBaseGreen.visible = false;
       this.feautreHeadingGreen.visible = false;
-      const wheelBG = this.elementsList['wheelContainer'];
-      wheelBG.visible = false;
-      wheelBG.renderable = false;
-      wheelBG.interactive = false;
+      this.feautreHeadingRed.visible = false;
+      this.hideWheelFeatureUI();
+
       data?.callback?.();
     });
   }
@@ -577,7 +586,9 @@ export class GameSlotMachineView extends SlotMachineView {
     const originalSetNewSymbol = targetSymbol.setNewSymbol.bind(targetSymbol);
 
     // Block the reel's automatic reset so the symbol keeps scrolling in grey.
-    targetSymbol.resetSymbol = () => {};
+    targetSymbol.resetSymbol = () => {
+      // intentional no-op
+    };
 
     // Once the reel actually recycles this symbol with a new result, let it land fresh.
     targetSymbol.setNewSymbol = (data: any, reelno: number) => {
@@ -610,7 +621,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const startPos = this.toLocal(strtGlobalPos);
     const endPos = this.toLocal(endGlobalPos);
 
-    const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
+    const skinNameByBank: Record<'meow' | 'mew' | 'mii', string> = { meow: 'red', mew: 'Green', mii: 'Blue' };
+    const skinName = skinNameByBank[bankName];
     const movingSymbol = new ReelSymbolSpine({
       data: {
         name: symbolName,
@@ -643,6 +655,10 @@ export class GameSlotMachineView extends SlotMachineView {
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
+    // The onUpdate callback below is a plain `function`, not an arrow function, because GSAP
+    // rebinds its own `this` there for tween.progress(); this alias is how the view instance
+    // stays reachable inside it.
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     EventHandler.dispatchEvent('PLAY_TRAIL_SOUND');
@@ -675,7 +691,12 @@ export class GameSlotMachineView extends SlotMachineView {
 
         EventHandler.dispatchEvent('PLAY_COLLECT_SOUND');
 
-        const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
+        const animPrefixByBank: Record<'meow' | 'mew' | 'mii', string> = {
+          meow: '3_RED',
+          mew: '1_GREEN',
+          mii: '2_BLUE',
+        };
+        const animPrefix = animPrefixByBank[bankName];
         const collectAnim = `${animPrefix}_Collect`;
         const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
@@ -695,7 +716,12 @@ export class GameSlotMachineView extends SlotMachineView {
 
   private showKittieBankBreak(): void {
     const subFeatureType = appModel.getNextSubFeatureType()?.toUpperCase();
-    const bankName = subFeatureType === 'RED' ? 'meow' : subFeatureType === 'GREEN' ? 'mew' : 'mii';
+    let bankName: 'meow' | 'mew' | 'mii' = 'mii';
+    if (subFeatureType === FEATURE_NAMES.RED) {
+      bankName = 'meow';
+    } else if (subFeatureType === FEATURE_NAMES.GREEN) {
+      bankName = 'mew';
+    }
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName,
       callback: () => {
@@ -809,8 +835,8 @@ export class GameSlotMachineView extends SlotMachineView {
             if (!el || !cfg) return;
             const ox = isPortrait ? cfg.px : cfg.lx;
             const oy = isPortrait ? cfg.py : cfg.ly;
-            el.x = ox != undefined ? ox : cfg.x;
-            el.y = oy != undefined ? oy : cfg.y;
+            el.x = ox == undefined ? cfg.x : ox;
+            el.y = oy == undefined ? cfg.y : oy;
           };
           const els = this.bigWinsComp.elementsList ?? {};
           const bigWinAnim = (this.bigWinsComp as any).bigWinAnim;
