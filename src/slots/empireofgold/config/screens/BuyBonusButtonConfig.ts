@@ -11,7 +11,7 @@ export const BUY_BONUS_BTN_CONFIG: any = {
   lx: 8,
   ly: 140,
   scale: 0.9,
-  pScale: 1.14,
+  pScale: 1.25,
   lScale: 0.9,
   data: { id: 'FG1' },
   Elements: [

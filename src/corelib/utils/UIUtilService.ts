@@ -2180,7 +2180,7 @@ class UIUtilService {
       sc = Math.min(sc, maxScale);
     }
     element.scale.set(sc);
-    if (DeviceProxy.config.isDevice) {
+    /*if (DeviceProxy.config.isDevice) {
       if (element.width < minMobileWidth) {
         element.scale.set(1);
         const sc = minMobileWidth / element.width;
@@ -2191,7 +2191,7 @@ class UIUtilService {
         const sc = minMobileHeight / element.height;
         element.scale.set(sc);
       }
-    }
+    }*/
   }
   public setRelativePosition(
     element: any,
