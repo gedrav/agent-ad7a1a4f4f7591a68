@@ -81,6 +81,7 @@ export class MMMPFPopupComp extends PFPopupComp {
     super.onCloseClicked();
     EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
     if (!this.isEntryPopup) {
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
       EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
         value: appModel.featureResult?.totalWin,
         duration: 0,
@@ -133,7 +134,7 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.messageText1.visible = !isBlueFeatureEntry && !isRedFeatureEntry && !isBlueFeatureExit;
     if (this.messageText2) {
       this.messageText2.visible = true;
-      this.messageText2.text = 'PRESS ► TO CONTINUE';
+      this.messageText2.text = Util.getContent('pressToContinue');
     }
   }
 
