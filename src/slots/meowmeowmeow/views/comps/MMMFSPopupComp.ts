@@ -9,6 +9,7 @@ import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 import { appModel } from '@core/models/services/AppModelService';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class MMMFSPopupComp extends FSPopupComp {
   private readonly congratText: PixText;
@@ -52,6 +53,7 @@ export class MMMFSPopupComp extends FSPopupComp {
         this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
         this.titleText.y = 687;
       }
+      const temp = DeviceProxy.isDevice() ? 1050 : 1150;
       if (freeGamesCountText && freeGamesLabelText) {
         freeGamesCountText.visible = true;
         freeGamesLabelText.visible = true;
@@ -60,7 +62,7 @@ export class MMMFSPopupComp extends FSPopupComp {
         }
         const spacing = 15;
         const totalWidth = freeGamesCountText.width + spacing + freeGamesLabelText.width;
-        const startX = 1150 - totalWidth / 2;
+        const startX = temp - totalWidth / 2;
         freeGamesCountText.anchor.x = 0;
         freeGamesCountText.x = startX;
         freeGamesLabelText.anchor.x = 0;
@@ -72,17 +74,17 @@ export class MMMFSPopupComp extends FSPopupComp {
         waysLabelText.visible = true;
         const spacing = 15;
         const totalWidth = waysCountText.width + spacing + waysLabelText.width;
-        const startX = 1150 - totalWidth / 2;
+        const startX = temp - totalWidth / 2;
         waysCountText.anchor.x = 0;
         waysCountText.x = startX;
         waysLabelText.anchor.x = 0;
         waysLabelText.x = startX + waysCountText.width + spacing;
       }
       if (this.messageText1) this.messageText1.visible = false;
-      if (this.messageText2) {
-        this.messageText2.visible = true;
-        this.messageText2.text = Util.getContent('pressToContinue');
-      }
+      // if (this.messageText2) {
+      //   this.messageText2.visible = true;
+      //   this.messageText2.text = Util.getContent('pressToContinue');
+      // }
     } else {
       if (this.titleText) {
         this.titleText.visible = false;
@@ -96,10 +98,10 @@ export class MMMFSPopupComp extends FSPopupComp {
         this.messageText1.visible = true;
         this.messageText1.y = 1020;
       }
-      if (this.messageText2) {
-        this.messageText2.visible = true;
-        this.messageText2.text = Util.getContent('pressToContinue');
-      }
+      // if (this.messageText2) {
+      //   this.messageText2.visible = true;
+      //   this.messageText2.text = Util.getContent('pressToContinue');
+      // }
     }
   }
 

@@ -93,7 +93,7 @@ export const FS_POPUP_CONFIG = {
       visible: false,
       style: {
         fontFamily: 'gameFont2',
-        fontSize: 60,
+        fontSize: 70,
         fill: 0xffffff,
         align: 'center',
         dropShadow: true,
@@ -103,6 +103,10 @@ export const FS_POPUP_CONFIG = {
       anchor: { x: 0.5, y: 0.5 },
       x: 990,
       y: 1040,
+      px: 990,
+      py: 800,
+      lx: 1056,
+      ly: 960,
     },
     {
       name: 'freeGamesCountText',
