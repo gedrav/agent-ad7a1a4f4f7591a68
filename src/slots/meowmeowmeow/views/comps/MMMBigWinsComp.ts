@@ -120,6 +120,7 @@ export class MMMBigWinsComp extends BigWinsComp {
       appModel.featureResult?.featureData?.jackpotWin,
       FEATURE_WIN_COUNTUP_DURATION,
     );
+    EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
     EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
       value: appModel.featureResult?.totalWin,
       duration: 0,

@@ -302,7 +302,7 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
     },
     {
-      name: 'Trail',
+      name: 'trail',
       type: 'game',
       loop: false,
       playEvents: ['PLAY_TRAIL_SOUND'],

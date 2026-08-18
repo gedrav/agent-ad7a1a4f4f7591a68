@@ -743,7 +743,13 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1,
       onUpdate: function () {
         const t = this.progress();
-        const bezierPoint = getBezierPoint(t, startPos, c1, c2, endPos);
+
+        // Dynamically recalculate end position to handle resize during animation
+        const currentEndGlobalPos = targetBank.getGlobalPosition();
+        const currentEndPos = self.toLocal(currentEndGlobalPos);
+        const currentC2 = new Point(currentEndPos.x, currentEndPos.y + arcHeight);
+
+        const bezierPoint = getBezierPoint(t, startPos, c1, currentC2, currentEndPos);
 
         if (t > 0.85 && movingSymbol.parent !== kittieBankComp && kittieBankComp.visible) {
           const targetIndex = kittieBankComp.getChildIndex(targetBankComp);

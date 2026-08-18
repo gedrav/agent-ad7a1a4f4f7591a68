@@ -141,7 +141,7 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.messageText1.visible = !isBlueFeatureEntry && !isRedFeatureEntry && !isBlueFeatureExit;
     if (this.messageText2) {
       this.messageText2.visible = true;
-      this.messageText2.text = 'PRESS ► TO CONTINUE';
+      this.messageText2.text = Util.getContent('pressToContinue');
     }
   }
 
