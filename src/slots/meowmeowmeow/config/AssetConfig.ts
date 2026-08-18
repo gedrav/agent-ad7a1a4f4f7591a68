@@ -58,6 +58,13 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'GREEN', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'RED', ASSETTYPE: 'png' },
     { TYPE: 'game', NAME: 'playbtn', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'wheelRimBG', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'redWheelRim', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'greenWheelRim', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'blueWheelRim', ASSETTYPE: 'png' },
+    { TYPE: 'game', NAME: 'BGRed', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BGblue', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BGgreen', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {

@@ -20,6 +20,22 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
+const BACKGROUND_NAMES = ['maingameBG', 'BGRed', 'BGblue', 'BGgreen'];
+const WHEEL_RIM_NAMES = ['wheelRim', 'redWheelRim', 'blueWheelRim', 'greenWheelRim'];
+
+const BACKGROUND_BY_COLOR: Record<string, string> = {
+  normal: 'maingameBG',
+  red: 'BGRed',
+  blue: 'BGblue',
+  green: 'BGgreen',
+};
+const WHEEL_RIM_BY_COLOR: Record<string, string> = {
+  normal: 'wheelRim',
+  red: 'redWheelRim',
+  blue: 'blueWheelRim',
+  green: 'greenWheelRim',
+};
+
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
   private readonly kittiebankComp: KittieBankComp;
@@ -31,7 +47,6 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly feautreHeadingGreen: PixSprite;
   private readonly feautreHeadingBlue: PixSprite;
   private readonly feautreHeadingRed: PixSprite;
-  private readonly wheelRim: PixSprite;
   private readonly wheelContainer: PixSprite;
   private readonly doorMask: PixGraphics;
   private readonly vaultAnim: PixSpine;
@@ -73,6 +88,9 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('TRANSITION', (data: { show: boolean; callback?: () => void }) =>
       this.animateGameElementsTransition(data.show, data.callback),
     );
+    EventHandler.addEventListener('TRANSITION_BACKGROUND', (data: { to: string }) =>
+      this.transitionBackground(data.to),
+    );
 
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.kittiebankComp = this.elementsList['kittiebankComp'];
@@ -84,7 +102,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingBlue = this.elementsList['BlueMeow'];
     this.feautreHeadingGreen = this.elementsList['GreenMeow'];
     this.feautreHeadingRed = this.elementsList['RedMeow'];
-    this.wheelRim = this.elementsList['wheelRim'];
     this.wheelContainer = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
@@ -151,6 +168,61 @@ export class GameSlotMachineView extends SlotMachineView {
       this.addChild(this.bigWinsComp);
     }
     super.showSpinWin();
+  }
+
+  protected transitionBackground(to: string): void {
+    const color = this.getColorName(to);
+    this.transitionElementGroup(BACKGROUND_NAMES, BACKGROUND_BY_COLOR[color]);
+    this.transitionElementGroup(WHEEL_RIM_NAMES, WHEEL_RIM_BY_COLOR[color]);
+    this.vaultAnim?.setSkin(color);
+  }
+
+  private transitionElementGroup(groupNames: string[], toName: string): void {
+    const toEl = this.resolveTransitionElement(toName);
+    if (!toEl) return;
+
+    const fromName = groupNames.find((name) => name !== toName && this.resolveTransitionElement(name)?.visible);
+    const fromEl = fromName ? this.resolveTransitionElement(fromName) : null;
+
+    groupNames.forEach((name) => {
+      if (name === toName || name === fromName) return;
+      const el = this.resolveTransitionElement(name);
+      if (el) el.visible = false;
+    });
+
+    toEl.visible = true;
+    toEl.alpha = 1;
+    if (!fromEl) return;
+
+    AnimationProxy.killTweensOf(fromEl);
+    if (fromEl.parent && fromEl.parent === toEl.parent) {
+      fromEl.parent.addChildAt(toEl, fromEl.parent.getChildIndex(fromEl));
+    }
+
+    AnimationProxy.animateTween(fromEl, {
+      alpha: 0,
+      duration: 1.5,
+      ease: 'sine.inOut',
+      onComplete: () => {
+        fromEl.visible = false;
+      },
+    });
+  }
+
+  private resolveTransitionElement(name: string): any {
+    return this.elementsList[name] ?? (this.parent as any)?.elementsList?.['gameBGView']?.elementsList?.[name];
+  }
+
+  private get wheelRim(): PixSprite {
+    const visibleName = WHEEL_RIM_NAMES.find((name) => this.elementsList[name]?.visible);
+    return this.elementsList[visibleName ?? 'wheelRim'];
+  }
+
+  private getColorName(name: string): string {
+    if (/red/i.test(name)) return 'red';
+    if (/blue/i.test(name)) return 'blue';
+    if (/green/i.test(name)) return 'green';
+    return 'normal';
   }
 
   protected showGreenTransition(): void {
@@ -405,12 +477,11 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1.2,
       x: this.vaultAnim.x + shiftX,
       onComplete: () => {
-        // TODO: swap 'Unlock' for the real 'Lock' animation once it's available
-        // this.vaultAnim.playAnimation({
-        //   state: 'Unlock',
-        //   loop: false,
-        //   reset: true,
-        // });
+        this.vaultAnim.playAnimation({
+          state: 'lock',
+          loop: false,
+          reset: true,
+        });
 
         // this.vaultAnim.addEventListener('complete', () => {
         this.vaultAnim.removeEventListners();

@@ -47,7 +47,7 @@ export class MMMPFPopupComp extends PFPopupComp {
   private readonly blueOutroPrefixText: PixText;
   private readonly blueOutroAmountText: PixText;
   private readonly blueOutroFeatureIcon: PixSprite;
-  private readonly playBtn: PixSprite;
+  private readonly playBtn: PixView;
   private popupData: any;
   private isClosing = false;
 
@@ -88,7 +88,8 @@ export class MMMPFPopupComp extends PFPopupComp {
         EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', featureName.toUpperCase() as FeatureName);
         if (
           appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
-          appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
+          (appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED ||
+            appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN)
         ) {
           EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
         }
@@ -215,71 +216,62 @@ export class MMMPFPopupComp extends PFPopupComp {
 
   private animateElementsDropIn(): void {
     const dropStartY = -600;
-    const stagger = 0.15;
 
-    const children = (this.children as any[])
-      .filter(
-        (child) =>
-          child.visible !== false &&
-          child.configData?.name !== 'guideRect' &&
-          child.configData?.name !== 'particleSpine',
-      )
-      .reverse();
+    const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+    if (particleSpine) {
+      particleSpine.visible = false;
+    }
 
-    children.forEach((child: any, index: number) => {
-      AnimationProxy.killTweensOf(child);
-      const restY = child.y;
-      child.alpha = 0;
-      child.y = dropStartY;
-      AnimationProxy.animateTween(child, {
-        alpha: 1,
-        y: restY,
-        duration: 0.3,
-        delay: index * stagger,
-        ease: 'bounce.out',
-      });
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
+    this.alpha = 0;
+    this.y = dropStartY;
+
+    AnimationProxy.animateTween(this, {
+      alpha: 1,
+      y: restY,
+      duration: 0.3,
+      ease: 'power1.in',
+      onComplete: () => {
+        if (particleSpine?.configData.idle) {
+          particleSpine.visible = true;
+          if (this.popupData.entryPopUp) {
+            const featName = appModel.getNextSubFeatureType()
+              ? appModel.getNextSubFeatureType()
+              : appModel.getFeatureSubType();
+            EventHandler.dispatchEvent('TRANSITION_BACKGROUND', {
+              to: featName.toUpperCase() ? featName.toUpperCase() : 'BG',
+            });
+          } else {
+            EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
+          }
+          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
+        }
+      },
     });
   }
 
   private animateElementsDropOut(onComplete?: () => void): void {
     const dropDistance = 700;
-    const stagger = 0.2;
 
-    const children = (this.children as any[])
-      .filter(
-        (child) =>
-          child.visible !== false &&
-          child.configData?.name !== 'guideRect' &&
-          child.configData?.name !== 'particleSpine',
-      )
-      .reverse();
-
-    if (children.length === 0) {
-      onComplete?.();
-      return;
+    const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+    if (particleSpine) {
+      particleSpine.visible = false;
     }
 
-    const restPositions = children.map((child: any) => ({ child, y: child.y }));
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
 
-    children.forEach((child: any, index: number) => {
-      AnimationProxy.killTweensOf(child);
-      const restY = restPositions[index].y;
-      const isLast = index === children.length - 1;
-      AnimationProxy.animateTween(child, {
-        alpha: 0,
-        y: restY + dropDistance,
-        duration: 0.4,
-        delay: index * stagger,
-        ease: 'power2.in',
-        onComplete: () => {
-          if (!isLast) return;
-          restPositions.forEach(({ child: c, y }) => {
-            c.y = y;
-            c.alpha = 1;
-          });
-          onComplete?.();
-        },
-      });
+    AnimationProxy.animateTween(this, {
+      alpha: 0,
+      y: restY + dropDistance,
+      duration: 0.4,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.y = restY;
+        this.alpha = 1;
+        onComplete?.();
+      },
     });
   }
 }

@@ -20,10 +20,6 @@ export const KITTIEBANK_CONFIG: any = {
       scale: 0.4,
       x: -77,
       y: 1427,
-      px: 210, // TODO: set portrait position
-      py: 1217, // TODO: set portrait position
-      lx: 210, // TODO: set landscape position
-      ly: 1217, // TODO: set landscape position
     },
     {
       name: 'meow',

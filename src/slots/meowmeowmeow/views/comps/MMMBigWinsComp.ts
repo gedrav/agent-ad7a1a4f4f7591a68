@@ -124,6 +124,7 @@ export class MMMBigWinsComp extends BigWinsComp {
       value: appModel.featureResult?.totalWin,
       duration: 0,
     });
+    EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
   }
 
   // The configured guideRect only spans the board area. For a feature win the dim needs to reach the

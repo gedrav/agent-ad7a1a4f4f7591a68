@@ -8,6 +8,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
+import { appModel } from '@core/models/services/AppModelService';
 
 export class MMMFSPopupComp extends FSPopupComp {
   private readonly congratText: PixText;
@@ -49,7 +50,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.titleText) {
         this.titleText.visible = true;
         this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
-        this.titleText.y = 880;
+        this.titleText.y = 687;
       }
       if (freeGamesCountText && freeGamesLabelText) {
         freeGamesCountText.visible = true;
@@ -59,7 +60,7 @@ export class MMMFSPopupComp extends FSPopupComp {
         }
         const spacing = 15;
         const totalWidth = freeGamesCountText.width + spacing + freeGamesLabelText.width;
-        const startX = 982 - totalWidth / 2;
+        const startX = 1150 - totalWidth / 2;
         freeGamesCountText.anchor.x = 0;
         freeGamesCountText.x = startX;
         freeGamesLabelText.anchor.x = 0;
@@ -71,7 +72,7 @@ export class MMMFSPopupComp extends FSPopupComp {
         waysLabelText.visible = true;
         const spacing = 15;
         const totalWidth = waysCountText.width + spacing + waysLabelText.width;
-        const startX = 982 - totalWidth / 2;
+        const startX = 1150 - totalWidth / 2;
         waysCountText.anchor.x = 0;
         waysCountText.x = startX;
         waysLabelText.anchor.x = 0;
@@ -112,10 +113,10 @@ export class MMMFSPopupComp extends FSPopupComp {
       }
       return;
     }
-    const showBG = data.entryPopUp ? false : true;
-    if (!showBG) {
+    const showBaseGameUI = data.entryPopUp ? false : true;
+    if (!showBaseGameUI) {
       EventHandler.dispatchEvent('TRANSITION', {
-        show: showBG,
+        show: showBaseGameUI,
         callback: () => {
           super.showFSPopup(data);
           this.parent?.addChild(this);
@@ -129,15 +130,13 @@ export class MMMFSPopupComp extends FSPopupComp {
         },
       });
     } else {
-      EventHandler.dispatchEvent('CLOSE_VAULT', () => {
-        super.showFSPopup(data);
-        this.parent?.addChild(this);
-        const mewSpine = this.elementsList['mew'] as PixSpine;
-        if (mewSpine?.configData.idle) {
-          mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
-        }
-        this.animateElementsDropIn();
-      });
+      super.showFSPopup(data);
+      this.parent?.addChild(this);
+      const mewSpine = this.elementsList['mew'] as PixSpine;
+      if (mewSpine?.configData.idle) {
+        mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+      }
+      this.animateElementsDropIn();
     }
   }
 
@@ -147,6 +146,13 @@ export class MMMFSPopupComp extends FSPopupComp {
 
     if (this.popupData?.entryPopUp) {
       EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
+      if (
+        appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE &&
+        appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN
+      ) {
+        EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
+        EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
+      }
     }
     this.animateElementsDropOut(() => {
       this._isClicked = false;
@@ -161,84 +167,56 @@ export class MMMFSPopupComp extends FSPopupComp {
     });
   }
 
+  // Animates the whole popup as one unit (instead of each child separately), so everything
+  // drops in/out together rather than staggering element by element.
   private animateElementsDropIn(): void {
     const dropStartY = -600;
-    const stagger = 0.15;
 
-    const children = (this.children as any[])
-      .filter(
-        (child) =>
-          child.visible !== false &&
-          child.configData?.name !== 'guideRect' &&
-          child.configData?.name !== 'particleSpine',
-      )
-      .reverse();
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
+    this.alpha = 0;
+    this.y = dropStartY;
 
-    children.forEach((child: any, index: number) => {
-      AnimationProxy.killTweensOf(child);
-      const restY = child.y;
-      child.alpha = 0;
-      child.y = dropStartY;
-      const isLast = index === children.length - 1;
-      AnimationProxy.animateTween(child, {
-        alpha: 1,
-        y: restY,
-        duration: 0.3,
-        delay: index * stagger,
-        ease: 'bounce.out',
-        onComplete: () => {
-          if (!isLast) return;
-          const particleSpine = this.elementsList['particleSpine'] as PixSpine;
-          if (particleSpine?.configData.idle) {
-            particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
-          }
-        },
-      });
+    AnimationProxy.animateTween(this, {
+      alpha: 1,
+      y: restY,
+      duration: 0.3,
+      ease: 'bounce.out',
+      onComplete: () => {
+        const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+        if (particleSpine?.configData.idle) {
+          particleSpine.visible = true;
+          EventHandler.dispatchEvent('TRANSITION_BACKGROUND', {
+            to: this.popupData?.entryPopUp ? 'GREEN' : 'BG',
+          });
+          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
+        }
+      },
     });
   }
 
   private animateElementsDropOut(onComplete?: () => void): void {
     const dropDistance = 700;
-    const stagger = 0.1;
 
     const particleSpine = this.elementsList['particleSpine'] as PixSpine;
-    particleSpine?.stopAnimation();
-
-    const children = (this.children as any[])
-      .filter(
-        (child) =>
-          child.visible !== false &&
-          child.configData?.name !== 'guideRect' &&
-          child.configData?.name !== 'particleSpine',
-      )
-      .reverse();
-
-    if (children.length === 0) {
-      onComplete?.();
-      return;
+    if (particleSpine) {
+      particleSpine.visible = false;
+      particleSpine.stopAnimation();
     }
 
-    const restPositions = children.map((child: any) => ({ child, y: child.y }));
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
 
-    children.forEach((child: any, index: number) => {
-      AnimationProxy.killTweensOf(child);
-      const restY = restPositions[index].y;
-      const isLast = index === children.length - 1;
-      AnimationProxy.animateTween(child, {
-        alpha: 0,
-        y: restY + dropDistance,
-        duration: 0.4,
-        delay: index * stagger,
-        ease: 'power2.in',
-        onComplete: () => {
-          if (!isLast) return;
-          restPositions.forEach(({ child: c, y }) => {
-            c.y = y;
-            c.alpha = 1;
-          });
-          onComplete?.();
-        },
-      });
+    AnimationProxy.animateTween(this, {
+      alpha: 0,
+      y: restY + dropDistance,
+      duration: 0.4,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.y = restY;
+        this.alpha = 1;
+        onComplete?.();
+      },
     });
   }
 }

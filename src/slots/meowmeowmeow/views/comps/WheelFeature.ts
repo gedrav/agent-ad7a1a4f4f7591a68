@@ -299,7 +299,6 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   private onSpinComplete(choosenSector: number): void {
     EventHandler.dispatchEvent('PLAY_WHEEL_WIN_SOUND');
     const animName = this.animationMap[choosenSector];
-    console.log(animName);
     this.wheelBG.playAnimation({ state: animName, loop: true });
     this.glowEffect.visible = true;
     EventHandler.dispatchEvent('PLAY_KITTIE_WIN_ANIM', FEATURE_NAMES.BLUE);

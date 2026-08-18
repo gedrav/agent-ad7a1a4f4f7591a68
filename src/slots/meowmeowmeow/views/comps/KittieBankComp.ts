@@ -15,10 +15,6 @@ export class KittieBankComp extends ResponsiveChildrenView {
   private static readonly FEATURE_REVEAL_POSITION = {
     x: 352,
     y: 1307,
-    px: 210, // TODO: set portrait position
-    py: 1217, // TODO: set portrait position
-    lx: 210, // TODO: set landscape position
-    ly: 1217, // TODO: set landscape position
   };
 
   private idleAnimTimeoutId: any;
@@ -61,35 +57,43 @@ export class KittieBankComp extends ResponsiveChildrenView {
 
   public showSelectedFeatureBank(featureName: string): void {
     const targetBank = KittieBankComp.FEATURE_BANK_MAP[featureName?.toUpperCase() as FeatureName];
-    console.log('showSelectedFeatureBank', { featureName, targetBank, containerVisible: this.visible });
     if (!targetBank) return;
+
+    const isMobile = DeviceProxy.isDevice();
+    const showsOnThisDevice = !isMobile || targetBank === 'mew';
 
     const bankNames = ['meow', 'mew', 'mii'];
     for (const bank of bankNames) {
       const bankComp = this.elementsList[bank];
       if (bankComp) {
-        bankComp.visible = bank === targetBank;
+        bankComp.visible = showsOnThisDevice && bank === targetBank;
       }
     }
 
-    const targetBankComp = this.elementsList[targetBank];
-    if (targetBankComp) {
-      this.setDevicePosition(targetBankComp, KittieBankComp.FEATURE_REVEAL_POSITION);
+    if (showsOnThisDevice) {
+      const targetBankComp = this.elementsList[targetBank];
+      if (targetBankComp) {
+        if (isMobile) {
+          this.setDevicePosition(targetBankComp, targetBankComp.configData || {});
+        } else {
+          this.setDevicePosition(targetBankComp, KittieBankComp.FEATURE_REVEAL_POSITION);
+        }
 
-      const spineAnim = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-      const animPrefix = targetBank === 'meow' ? '3_RED' : targetBank === 'mew' ? '1_GREEN' : '2_BLUE';
-      const staticAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
-      if (spineAnim && staticAnim && typeof spineAnim.playAnimation === 'function') {
-        spineAnim.playAnimation({
-          state: staticAnim,
-          loop: true,
-        });
+        const spineAnim = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
+        const animPrefix = targetBank === 'meow' ? '3_RED' : targetBank === 'mew' ? '1_GREEN' : '2_BLUE';
+        const staticAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
+        if (spineAnim && staticAnim && typeof spineAnim.playAnimation === 'function') {
+          spineAnim.playAnimation({
+            state: staticAnim,
+            loop: true,
+          });
+        }
       }
     }
 
     const coinsComp = this.elementsList['fspopupcoins'];
     if (coinsComp) {
-      coinsComp.visible = true;
+      coinsComp.visible = !isMobile;
     }
   }
 
