@@ -11,7 +11,7 @@ export const ANTE_BET_CONFIG: any = {
   lx: 8,
   ly: 492,
   scale: 0.9,
-  pScale: 1.14,
+  pScale: 1.25,
   lScale: 0.9,
   Elements: [
     { name: 'anteBG', type: 'Sprite', image: 'ante_bg', x: 0, y: 0 },
