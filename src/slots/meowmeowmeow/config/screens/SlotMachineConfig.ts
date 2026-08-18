@@ -349,7 +349,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'reelstripBG',
           type: 'Sprite',
-          image: 'reelframebg',
+          image: 'reelFrame',
+          pScale: 0.5,
+          lScale: 0.5,
           x: 34,
           y: 62,
           px: -4,

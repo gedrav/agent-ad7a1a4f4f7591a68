@@ -116,7 +116,14 @@ export class MMMFSPopupComp extends FSPopupComp {
       return;
     }
     const showBaseGameUI = data.entryPopUp ? false : true;
-    if (!showBaseGameUI) {
+
+    if (
+      !showBaseGameUI &&
+      !(
+        appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE &&
+        appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN
+      )
+    ) {
       EventHandler.dispatchEvent('TRANSITION', {
         show: showBaseGameUI,
         callback: () => {

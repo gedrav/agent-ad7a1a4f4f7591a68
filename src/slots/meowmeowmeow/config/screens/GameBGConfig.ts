@@ -8,7 +8,7 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Sprite',
-      image: 'maingamebg',
+      image: 'maingamebg.jpg',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.003, fitToScreen: true, fullScreenScale: 1 },
         Portrait: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.16, fitToScreen: true, fullScreenScale: 1 },
