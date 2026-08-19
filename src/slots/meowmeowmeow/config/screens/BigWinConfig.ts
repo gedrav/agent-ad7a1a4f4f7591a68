@@ -74,12 +74,13 @@ export const BIG_WIN_CONFIG = {
       class: WinTicker,
       x: 774,
       y: 480,
+      px: 844.5,
       Elements: [
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'bitmapFont', fontSize: 400, fill: 0xffffff },
+          style: { fontFamily: 'bitmapFont', align: 'center', fontSize: 400, fill: 0xffffff },
         },
       ],
     },
