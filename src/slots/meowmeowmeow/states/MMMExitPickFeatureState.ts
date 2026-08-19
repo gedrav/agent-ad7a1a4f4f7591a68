@@ -6,31 +6,29 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Util } from '@core/utils/UtilService';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 class MMMExitPickFeatureStateCommand extends StateCommand {
   public async execute(data?: any): Promise<void> {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
+    EventHandler.dispatchEvent('CLOSE_VAULT', this.afterHidePickFeatureUI.bind(this));
+  }
 
+  private afterHidePickFeatureUI(): void {
     if (this.checkForMaxCapWin()) {
       return;
     }
 
     const awardedFromBlueWheel =
-      appModel.getFeatureSubType()?.toUpperCase() === 'BLUE' && !!appModel.getNextSubFeatureType();
+      appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE && !!appModel.getNextSubFeatureType();
 
     if (awardedFromBlueWheel) {
-      // The award announcement is shown within the transition instead of blocking here.
       GameProxy.config.subFeatureAwardAnnounced = true;
       this.exitPickFeature();
       return;
     }
-
-    // if (!appModel.getNextSubFeatureType() && this.isBigWin()) {
-    //   EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: this.exitPickFeature.bind(this) });
-    //   return;
-    // }
 
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
@@ -64,14 +62,6 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
 
   protected goToNextStep(): void {
     StateManager.next();
-  }
-
-  private isBigWin(): boolean {
-    const bigWinMultiplier = GameProxy.config.bigWinValues?.[0];
-    if (!bigWinMultiplier) return false;
-
-    const win = appModel.featureResult?.totalWin ?? 0;
-    return win >= appModel.getTotalBet() * bigWinMultiplier;
   }
 
   protected async exitPickFeature() {

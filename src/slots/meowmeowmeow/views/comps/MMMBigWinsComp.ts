@@ -125,6 +125,7 @@ export class MMMBigWinsComp extends BigWinsComp {
       value: appModel.featureResult?.totalWin,
       duration: 0,
     });
+    EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
   }
 
   // The configured guideRect only spans the board area. For a feature win the dim needs to reach the
@@ -191,9 +192,6 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.dispatchEvent(SlotEvents.STOP_BIG_WIN_SOUND);
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
 
-    // The win animation is over, so hand back straight away and let the fade out run behind it.
-    callback();
-
     setTimeout(() => {
       const fadeTargets = [this.bigWinAnim, this.featureWinText].filter(Boolean);
       AnimationProxy.animateTween(fadeTargets, {
@@ -209,6 +207,7 @@ export class MMMBigWinsComp extends BigWinsComp {
           if (this.bigWinAnim) {
             this.bigWinAnim.alpha = 1;
           }
+          callback();
         },
       });
     }, FEATURE_WIN_EXIT_PAUSE_MS);

@@ -122,7 +122,7 @@ export const SPLASH_CONFIG: any = {
     {
       name: 'splashbg',
       type: 'Sprite',
-      image: 'maingamebg',
+      image: 'maingamebg.jpg',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },

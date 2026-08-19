@@ -9,7 +9,7 @@ import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
 import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
-import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
+import { MMMExitFreeSpinState } from '@slots/meowmeowmeow/states/MMMExitFreeSpinState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
 import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';
 import { CheckUnfinishedStateV2 } from '@core/commands/states/CheckUnfinishedStateV2';
@@ -53,11 +53,11 @@ export const STATES_CONFIG: any = [
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
   // { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: GreenExitTransitionState },
-  { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
+  { name: STATES.EXIT_FREESPINS_STATE, state: MMMExitFreeSpinState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 
   { name: STATES.ENTER_PICK_FEATURE_STATE, state: MMMEnterPickFeatureState },
-  { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: PickFeatureTransitionState },
+  { name: 'SHOW_PICK_FEATURE_TRANSITION_ANIM', state: PickFeatureTransitionState },
   { name: STATES.PICK_FEATURE_STATE, state: PickFeatureState },
   { name: STATES.EXIT_PICK_FEATURE_STATE, state: MMMExitPickFeatureState },
 ];

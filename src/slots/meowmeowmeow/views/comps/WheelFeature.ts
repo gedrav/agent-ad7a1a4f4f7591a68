@@ -8,6 +8,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
 import gsap from 'gsap';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 type SpinState = 'idle' | 'spinning' | 'stopping';
 
@@ -298,9 +299,9 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
   private onSpinComplete(choosenSector: number): void {
     EventHandler.dispatchEvent('PLAY_WHEEL_WIN_SOUND');
     const animName = this.animationMap[choosenSector];
-
     this.wheelBG.playAnimation({ state: animName, loop: true });
     this.glowEffect.visible = true;
+    EventHandler.dispatchEvent('PLAY_KITTIE_WIN_ANIM', FEATURE_NAMES.BLUE);
     setTimeout(() => {
       this.glowEffect.visible = false;
       this.wheelBG.playAnimation({ state: 'inner_circle', loop: true });

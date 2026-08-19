@@ -18,6 +18,23 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
+
+const BACKGROUND_NAMES = ['maingameBG', 'BGRed', 'BGblue', 'BGgreen'];
+const WHEEL_RIM_NAMES = ['wheelRim', 'redWheelRim', 'blueWheelRim', 'greenWheelRim'];
+
+const BACKGROUND_BY_COLOR: Record<string, string> = {
+  normal: 'maingameBG',
+  red: 'BGRed',
+  blue: 'BGblue',
+  green: 'BGgreen',
+};
+const WHEEL_RIM_BY_COLOR: Record<string, string> = {
+  normal: 'wheelRim',
+  red: 'redWheelRim',
+  blue: 'blueWheelRim',
+  green: 'greenWheelRim',
+};
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly jackpotContainer: MMMJackpotComp;
@@ -30,7 +47,6 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly feautreHeadingGreen: PixSprite;
   private readonly feautreHeadingBlue: PixSprite;
   private readonly feautreHeadingRed: PixSprite;
-  private readonly wheelRim: PixSprite;
   private readonly wheelContainer: PixSprite;
   private readonly doorMask: PixGraphics;
   private readonly vaultAnim: PixSpine;
@@ -59,13 +75,22 @@ export class GameSlotMachineView extends SlotMachineView {
     this.sortableChildren = true;
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
-    EventHandler.addEventListener(SlotEvents.HIDE_PICK_FEATURE_UI, this.hideWheel.bind(this));
+    EventHandler.addEventListener('RESET_BG_UI', this.hidePickFeatureUI.bind(this));
+    EventHandler.addEventListener('CLOSE_VAULT', this.closeWheelDoor.bind(this));
+
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_TRANSITION', this.showGreenTransition.bind(this));
     EventHandler.addEventListener('SHOW_PICK_FEATURE_TRANSITION', this.showPickFeatureTransition.bind(this));
+    EventHandler.addEventListener('HIDE_WHEEL_FEATURE_UI', this.hideWheelFeatureUI.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener('SHOW_KITTIEBANK_BREAK', this.showKittieBankBreak.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
+    EventHandler.addEventListener('TRANSITION', (data: { show: boolean; callback?: () => void }) =>
+      this.animateGameElementsTransition(data.show, data.callback),
+    );
+    EventHandler.addEventListener('TRANSITION_BACKGROUND', (data: { to: string }) =>
+      this.transitionBackground(data.to),
+    );
 
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.kittiebankComp = this.elementsList['kittiebankComp'];
@@ -77,7 +102,6 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingBlue = this.elementsList['BlueMeow'];
     this.feautreHeadingGreen = this.elementsList['GreenMeow'];
     this.feautreHeadingRed = this.elementsList['RedMeow'];
-    this.wheelRim = this.elementsList['wheelRim'];
     this.wheelContainer = this.elementsList['wheelContainer'];
     this.doorMask = this.elementsList['doorMask'];
     this.vaultAnim = this.elementsList['vaultAnim'];
@@ -117,6 +141,12 @@ export class GameSlotMachineView extends SlotMachineView {
     }
     this.gameTitleBaseLayoutData = this.gameTitle?.configData?.layoutData;
 
+    [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel]
+      .filter(Boolean)
+      .forEach((target: any) => {
+        this.transitionBasePositions.set(target, { x: target.x, y: target.y });
+      });
+
     this.startGameLogoAnimation();
   }
 
@@ -140,6 +170,61 @@ export class GameSlotMachineView extends SlotMachineView {
     super.showSpinWin();
   }
 
+  protected transitionBackground(to: string): void {
+    const color = this.getColorName(to);
+    this.transitionElementGroup(BACKGROUND_NAMES, BACKGROUND_BY_COLOR[color]);
+    this.transitionElementGroup(WHEEL_RIM_NAMES, WHEEL_RIM_BY_COLOR[color]);
+    this.vaultAnim?.setSkin(color);
+  }
+
+  private transitionElementGroup(groupNames: string[], toName: string): void {
+    const toEl = this.resolveTransitionElement(toName);
+    if (!toEl) return;
+
+    const fromName = groupNames.find((name) => name !== toName && this.resolveTransitionElement(name)?.visible);
+    const fromEl = fromName ? this.resolveTransitionElement(fromName) : null;
+
+    groupNames.forEach((name) => {
+      if (name === toName || name === fromName) return;
+      const el = this.resolveTransitionElement(name);
+      if (el) el.visible = false;
+    });
+
+    toEl.visible = true;
+    toEl.alpha = 1;
+    if (!fromEl) return;
+
+    AnimationProxy.killTweensOf(fromEl);
+    if (fromEl.parent && fromEl.parent === toEl.parent) {
+      fromEl.parent.addChildAt(toEl, fromEl.parent.getChildIndex(fromEl));
+    }
+
+    AnimationProxy.animateTween(fromEl, {
+      alpha: 0,
+      duration: 1.5,
+      ease: 'sine.inOut',
+      onComplete: () => {
+        fromEl.visible = false;
+      },
+    });
+  }
+
+  private resolveTransitionElement(name: string): any {
+    return this.elementsList[name] ?? (this.parent as any)?.elementsList?.['gameBGView']?.elementsList?.[name];
+  }
+
+  private get wheelRim(): PixSprite {
+    const visibleName = WHEEL_RIM_NAMES.find((name) => this.elementsList[name]?.visible);
+    return this.elementsList[visibleName ?? 'wheelRim'];
+  }
+
+  private getColorName(name: string): string {
+    if (/red/i.test(name)) return 'red';
+    if (/blue/i.test(name)) return 'blue';
+    if (/green/i.test(name)) return 'green';
+    return 'normal';
+  }
+
   protected showGreenTransition(): void {
     if (this.slotReel && (this.slotReel as any).winController) {
       clearTimeout((this.slotReel as any).winController.timeoutId);
@@ -149,6 +234,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
     this.changeReelInterface();
+    this.slotReel.alpha = 1;
     this.animateWheelDoor();
   }
 
@@ -156,7 +242,11 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName: 'mew',
       callback: () => {
-        StateManager.doNextStep();
+        this.animateGameElementsTransition(false, () => {
+          setTimeout(() => {
+            StateManager.doNextStep();
+          }, 500);
+        });
       },
     });
   }
@@ -168,7 +258,9 @@ export class GameSlotMachineView extends SlotMachineView {
     const featureSubType = appModel.getIsUnfinishedGame()
       ? appModel.getUnfinishedFeatureSubType()
       : appModel.getFeatureSubType();
-    const isRedFeature = GameProxy.config.subFeatureAwardAnnounced ? true : featureSubType?.toUpperCase() !== 'BLUE';
+    const isRedFeature = GameProxy.config.subFeatureAwardAnnounced
+      ? true
+      : featureSubType?.toUpperCase() !== FEATURE_NAMES.BLUE;
     if (isRedFeature) {
       this.showPickJackpotFeatureScreen();
     } else {
@@ -197,6 +289,53 @@ export class GameSlotMachineView extends SlotMachineView {
     });
   }
 
+  private readonly transitionBasePositions = new Map<any, { x: number; y: number }>();
+
+  private restoreFromTransition(target: any): void {
+    AnimationProxy.killTweensOf(target);
+    target.visible = true;
+    target.alpha = 1;
+    const base = this.transitionBasePositions.get(target);
+    if (base) {
+      target.x = base.x;
+      target.y = base.y;
+    }
+  }
+
+  public animateGameElementsTransition(show: boolean, onComplete?: () => void): void {
+    const targets = [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel].filter(Boolean);
+    const stagger = 0.08;
+
+    targets.forEach((target: any, index: number) => {
+      AnimationProxy.killTweensOf(target);
+      const delay = index * stagger;
+      const isLast = index === targets.length - 1;
+
+      if (show) {
+        target.visible = true;
+        target.alpha = 0;
+        AnimationProxy.animateTween(target, {
+          alpha: 1,
+          duration: 0.6,
+          delay,
+          ease: 'sine.out',
+          onComplete: isLast ? onComplete : undefined,
+        });
+      } else {
+        AnimationProxy.animateTween(target, {
+          alpha: 0,
+          duration: 0.4,
+          delay,
+          ease: 'sine.in',
+          onComplete: () => {
+            target.visible = false;
+            if (isLast) onComplete?.();
+          },
+        });
+      }
+    });
+  }
+
   private getInterfaceSize(): number {
     const interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
     if (!isNaN(interfaceSize) && interfaceSize !== 0) {
@@ -205,7 +344,9 @@ export class GameSlotMachineView extends SlotMachineView {
     if (!appModel.getNextFeatureType()) {
       return 0;
     }
-    return appModel.getNextSubFeatureType() === 'Green' ? 5 : 4;
+    const subFeatureType =
+      appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
+    return subFeatureType === FEATURE_NAMES.GREEN ? 5 : 4;
   }
 
   private changeReelInterface(): void {
@@ -213,7 +354,9 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected animateWheelDoor(onDoorOpened?: () => void): void {
-    if (appModel.getNextSubFeatureType() === 'Green') {
+    const doorSubFeatureType =
+      appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
+    if (doorSubFeatureType === FEATURE_NAMES.GREEN) {
       this.slotReel.visible = true;
       this.wheelBaseGreen.visible = true;
       this.feautreHeadingGreen.visible = true;
@@ -221,12 +364,10 @@ export class GameSlotMachineView extends SlotMachineView {
       this.wheelBaseGreen.visible = false;
       this.feautreHeadingGreen.visible = false;
     }
-    this.kittiebankComp.visible = true;
+    this.restoreFromTransition(this.kittiebankComp);
     this.addChild(this.kittiebankComp);
 
     this.updateAllConfigs('FreeSpins');
-    if (this.configData?.layoutData?.Portrait) {
-    }
 
     UIUtil.adjustElement(this.gameTitle);
     (this.kittiebankComp as any).resizeView();
@@ -252,7 +393,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
     if (GameProxy.config.subFeatureAwardAnnounced) {
       if (this.vaultAnim) {
-        this.vaultAnim.visible = false;
+        // this.vaultAnim.visible = false;
       }
       this.makeWheelInteractive();
       onDoorOpened?.();
@@ -288,10 +429,51 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1.2,
       x: this.vaultAnim.x - shiftX,
       onComplete: () => {
-        this.vaultAnim.visible = false;
+        // this.vaultAnim.visible = false;
         this.makeWheelInteractive();
         onDoorOpened?.();
         StateManager.doNextStep();
+      },
+    });
+  }
+
+  protected closeWheelDoor(onDoorClosed?: () => void): void {
+    if (!this.vaultAnim) {
+      onDoorClosed?.();
+      return;
+    }
+
+    this.doorMask.visible = true;
+    this.vaultAnim.mask = this.doorMask;
+    this.vaultAnim.scale.set(0.6);
+    this.vaultAnim.visible = true;
+
+    const shiftX = 1506;
+
+    if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
+      this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
+      this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
+      this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
+    }
+
+    AnimationProxy.animateTween(this.vaultAnim, {
+      duration: 1.2,
+      x: this.vaultAnim.x + shiftX,
+      onComplete: () => {
+        this.vaultAnim.playAnimation({
+          state: 'lock',
+          loop: false,
+          reset: true,
+        });
+
+        // this.vaultAnim.addEventListener('complete', () => {
+        this.vaultAnim.removeEventListners();
+        setTimeout(() => {
+          // this.vaultAnim.visible = false;
+        }, 1000);
+        onDoorClosed?.();
+        // });
+        // this.hidePickFeatureUI({ callback: onDoorClosed })
       },
     });
   }
@@ -300,7 +482,6 @@ export class GameSlotMachineView extends SlotMachineView {
     const extraSpinTextCenter: any = this.slotReel?.elementsList?.['extraSpinTextCenter'];
 
     if (!extraSpinTextCenter) {
-      console.warn('Missing extraSpinTextCenter element');
       StateManager.goToState(STATES.FS_SPIN_START_STATE);
       return;
     }
@@ -370,21 +551,33 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.interactive = true;
   }
 
-  private hideWheel(): void {
-    this.wheelBaseRed.visible = false;
-    this.wheelBaseBlue.visible = false;
+  private hideWheelFeatureUI() {
     this.feautreHeadingBlue.visible = false;
-    this.feautreHeadingGreen.visible = false;
-    this.feautreHeadingRed.visible = false;
-    this.wheelBaseGreen.visible = false;
-    this.feautreHeadingGreen.visible = false;
-    this.gameTitle.visible = true;
+    this.wheelBaseBlue.visible = false;
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = false;
     wheelBG.renderable = false;
     wheelBG.interactive = false;
-    this.slotReel.visible = true;
+    if (
+      appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
+      appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
+    ) {
+      this.animateWheelDoor();
+    }
+  }
+
+  private hidePickFeatureUI(data?: { callback?: () => void }): void {
     this.resetMachineLayout();
+    EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
+    this.animateGameElementsTransition(true, () => {
+      this.wheelBaseRed.visible = false;
+      this.wheelBaseGreen.visible = false;
+      this.feautreHeadingGreen.visible = false;
+      this.feautreHeadingRed.visible = false;
+      this.hideWheelFeatureUI();
+
+      data?.callback?.();
+    });
   }
 
   public showCoinAnimations() {
@@ -452,7 +645,9 @@ export class GameSlotMachineView extends SlotMachineView {
     const originalSetNewSymbol = targetSymbol.setNewSymbol.bind(targetSymbol);
 
     // Block the reel's automatic reset so the symbol keeps scrolling in grey.
-    targetSymbol.resetSymbol = () => {};
+    targetSymbol.resetSymbol = () => {
+      // intentional no-op
+    };
 
     // Once the reel actually recycles this symbol with a new result, let it land fresh.
     targetSymbol.setNewSymbol = (data: any, reelno: number) => {
@@ -485,7 +680,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const startPos = this.toLocal(strtGlobalPos);
     const endPos = this.toLocal(endGlobalPos);
 
-    const skinName = bankName === 'meow' ? 'red' : bankName === 'mew' ? 'Green' : 'Blue';
+    const skinNameByBank: Record<'meow' | 'mew' | 'mii', string> = { meow: 'red', mew: 'Green', mii: 'Blue' };
+    const skinName = skinNameByBank[bankName];
     const movingSymbol = new ReelSymbolSpine({
       data: {
         name: symbolName,
@@ -518,6 +714,10 @@ export class GameSlotMachineView extends SlotMachineView {
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
     const c2 = new Point(endPos.x, endPos.y + arcHeight);
+    // The onUpdate callback below is a plain `function`, not an arrow function, because GSAP
+    // rebinds its own `this` there for tween.progress(); this alias is how the view instance
+    // stays reachable inside it.
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     EventHandler.dispatchEvent('PLAY_TRAIL_SOUND');
@@ -556,7 +756,12 @@ export class GameSlotMachineView extends SlotMachineView {
 
         EventHandler.dispatchEvent('PLAY_COLLECT_SOUND');
 
-        const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
+        const animPrefixByBank: Record<'meow' | 'mew' | 'mii', string> = {
+          meow: '3_RED',
+          mew: '1_GREEN',
+          mii: '2_BLUE',
+        };
+        const animPrefix = animPrefixByBank[bankName];
         const collectAnim = `${animPrefix}_Collect`;
         const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
@@ -576,11 +781,20 @@ export class GameSlotMachineView extends SlotMachineView {
 
   private showKittieBankBreak(): void {
     const subFeatureType = appModel.getNextSubFeatureType()?.toUpperCase();
-    const bankName = subFeatureType === 'RED' ? 'meow' : subFeatureType === 'GREEN' ? 'mew' : 'mii';
+    let bankName: 'meow' | 'mew' | 'mii' = 'mii';
+    if (subFeatureType === FEATURE_NAMES.RED) {
+      bankName = 'meow';
+    } else if (subFeatureType === FEATURE_NAMES.GREEN) {
+      bankName = 'mew';
+    }
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName,
       callback: () => {
-        StateManager.doNextStep();
+        this.animateGameElementsTransition(false, () => {
+          setTimeout(() => {
+            StateManager.doNextStep();
+          }, 500);
+        });
       },
     });
   }
@@ -686,8 +900,8 @@ export class GameSlotMachineView extends SlotMachineView {
             if (!el || !cfg) return;
             const ox = isPortrait ? cfg.px : cfg.lx;
             const oy = isPortrait ? cfg.py : cfg.ly;
-            el.x = ox != undefined ? ox : cfg.x;
-            el.y = oy != undefined ? oy : cfg.y;
+            el.x = ox == undefined ? cfg.x : ox;
+            el.y = oy == undefined ? cfg.y : oy;
           };
           const els = this.bigWinsComp.elementsList ?? {};
           const bigWinAnim = (this.bigWinsComp as any).bigWinAnim;
@@ -777,9 +991,8 @@ export class GameSlotMachineView extends SlotMachineView {
     (this.slotReel as any).resizeView();
 
     this.wheelBase.alpha = 1;
-    this.wheelRim.alpha = 0.5;
-    if (this.vaultAnim) this.vaultAnim.visible = false;
-    this.doorMask.visible = false;
+    // if (this.vaultAnim) this.vaultAnim.visible = false;
+    // this.doorMask.visible = false;
     this.wheelBaseGreen.visible = false;
     this.feautreHeadingGreen.visible = false;
 
@@ -799,7 +1012,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
   private maskWheelTestToRim(): void {
     if (!this.wheelContainer || !this.wheelRim) {
-      console.warn('wheelTest or wheelRim missing, cannot apply mask');
       return;
     }
 

@@ -5,6 +5,7 @@ import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 class GreenEnterFreespinsStateCommand extends StateCommand {
   private enteredFromBlue: boolean = false;
@@ -32,7 +33,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     appModel.setFeatureTriggered();
 
     this.enteredFromBlue =
-      GameProxy.config.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === 'BLUE';
+      GameProxy.config.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE;
 
     if (this.enteredFromBlue) {
       appModel.fsInfo = {

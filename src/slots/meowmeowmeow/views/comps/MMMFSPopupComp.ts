@@ -6,28 +6,31 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
+import { appModel } from '@core/models/services/AppModelService';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 
 export class MMMFSPopupComp extends FSPopupComp {
   private readonly congratText: PixText;
+  private readonly playBtn: PixSprite;
   protected _isClicked: boolean = false;
+  private popupData: any;
 
   constructor(config: any) {
     super(config);
     this.congratText = this.elementsList['congratText'];
+    this.playBtn = this.elementsList['playBtn'];
 
     if (this.okBtn) {
       this.okBtn.visible = false;
     }
 
-    if (this.panelBG) {
-      this.panelBG.interactive = true;
-      this.panelBG.cursor = 'pointer';
-      this.panelBG.on('pointerdown', this.onCloseClicked.bind(this));
+    if (this.playBtn) {
+      this.playBtn.interactive = true;
+      this.playBtn.cursor = 'pointer';
+      this.playBtn.on('pointerdown', this.onCloseClicked.bind(this));
     }
-
-    this.interactive = true;
-    this.cursor = 'pointer';
-    this.on('pointerdown', this.onCloseClicked.bind(this));
   }
 
   protected updateMessagePositions(data: any): void {
@@ -48,8 +51,9 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.titleText) {
         this.titleText.visible = true;
         this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
-        this.titleText.y = 880;
+        this.titleText.y = 687;
       }
+      const temp = DeviceProxy.isDevice() ? 1050 : 1150;
       if (freeGamesCountText && freeGamesLabelText) {
         freeGamesCountText.visible = true;
         freeGamesLabelText.visible = true;
@@ -58,7 +62,7 @@ export class MMMFSPopupComp extends FSPopupComp {
         }
         const spacing = 15;
         const totalWidth = freeGamesCountText.width + spacing + freeGamesLabelText.width;
-        const startX = 982 - totalWidth / 2;
+        const startX = temp - totalWidth / 2;
         freeGamesCountText.anchor.x = 0;
         freeGamesCountText.x = startX;
         freeGamesLabelText.anchor.x = 0;
@@ -70,17 +74,17 @@ export class MMMFSPopupComp extends FSPopupComp {
         waysLabelText.visible = true;
         const spacing = 15;
         const totalWidth = waysCountText.width + spacing + waysLabelText.width;
-        const startX = 982 - totalWidth / 2;
+        const startX = temp - totalWidth / 2;
         waysCountText.anchor.x = 0;
         waysCountText.x = startX;
         waysLabelText.anchor.x = 0;
         waysLabelText.x = startX + waysCountText.width + spacing;
       }
       if (this.messageText1) this.messageText1.visible = false;
-      if (this.messageText2) {
-        this.messageText2.visible = true;
-        this.messageText2.text = Util.getContent('pressToContinue');
-      }
+      // if (this.messageText2) {
+      //   this.messageText2.visible = true;
+      //   this.messageText2.text = Util.getContent('pressToContinue');
+      // }
     } else {
       if (this.titleText) {
         this.titleText.visible = false;
@@ -94,52 +98,134 @@ export class MMMFSPopupComp extends FSPopupComp {
         this.messageText1.visible = true;
         this.messageText1.y = 1020;
       }
-      if (this.messageText2) {
-        this.messageText2.visible = true;
-        this.messageText2.text = Util.getContent('pressToContinue');
-      }
+      // if (this.messageText2) {
+      //   this.messageText2.visible = true;
+      //   this.messageText2.text = Util.getContent('pressToContinue');
+      // }
     }
   }
 
   protected async showFSPopup(data: any) {
     this._isClicked = false;
+    this.popupData = data;
 
-    // Bypass the extra free spins popup since MMM uses an on-screen text animation
     if (data.entryPopUp == undefined && data.title === (Util.getContent('CongratTitle') || 'CONGRATULATIONS!')) {
       if (data.callbackFunction) {
         data.callbackFunction();
       }
       return;
     }
+    const showBaseGameUI = data.entryPopUp ? false : true;
 
-    super.showFSPopup(data);
-    const scale = this.scale.x;
-    const yy = this.y;
-    const xx = this.x;
+    if (
+      !showBaseGameUI &&
+      !(
+        appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE &&
+        appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN
+      )
+    ) {
+      EventHandler.dispatchEvent('TRANSITION', {
+        show: showBaseGameUI,
+        callback: () => {
+          super.showFSPopup(data);
+          this.parent?.addChild(this);
 
-    const dropOffset = 550;
-    this.y -= dropOffset;
-    this.x = xx;
-    const mewSpine = this.elementsList['mew'] as PixSpine;
-    if (mewSpine?.configData.idle) {
-      mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+          const mewSpine = this.elementsList['mew'] as PixSpine;
+          if (mewSpine?.configData.idle) {
+            mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+          }
+
+          this.animateElementsDropIn();
+        },
+      });
+    } else {
+      super.showFSPopup(data);
+      this.parent?.addChild(this);
+      const mewSpine = this.elementsList['mew'] as PixSpine;
+      if (mewSpine?.configData.idle) {
+        mewSpine.playAnimation({ state: mewSpine.configData.idle, loop: mewSpine.configData.loop || true });
+      }
+      this.animateElementsDropIn();
     }
-    AnimationProxy.animateTween(this, {
-      scaleX: scale,
-      scaleY: scale,
-      duration: 0.6,
-      y: yy,
-      x: xx,
-      ease: 'bounce.out',
-    });
   }
 
   protected async onCloseClicked() {
-    if (this._isClicked) return;
+    if (this._isClicked || !this.parent) return;
     this._isClicked = true;
 
-    if (this.parent) {
-      super.onCloseClicked();
+    if (this.popupData?.entryPopUp) {
+      EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
+      if (
+        appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE &&
+        appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN
+      ) {
+        EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
+        EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
+      }
     }
+    this.animateElementsDropOut(() => {
+      this._isClicked = false;
+      super.onCloseClicked();
+      if (!this.popupData.entryPopUp) {
+        EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
+        EventHandler.dispatchEvent('TRANSITION', {
+          show: true,
+          callback: () => {},
+        });
+      }
+    });
+  }
+
+  // Animates the whole popup as one unit (instead of each child separately), so everything
+  // drops in/out together rather than staggering element by element.
+  private animateElementsDropIn(): void {
+    const dropStartY = -600;
+
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
+    this.alpha = 0;
+    this.y = dropStartY;
+
+    AnimationProxy.animateTween(this, {
+      alpha: 1,
+      y: restY,
+      duration: 0.3,
+      ease: 'bounce.out',
+      onComplete: () => {
+        const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+        if (particleSpine?.configData.idle) {
+          particleSpine.visible = true;
+          EventHandler.dispatchEvent('TRANSITION_BACKGROUND', {
+            to: this.popupData?.entryPopUp ? 'GREEN' : 'BG',
+          });
+          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
+        }
+      },
+    });
+  }
+
+  private animateElementsDropOut(onComplete?: () => void): void {
+    const dropDistance = 700;
+
+    const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+    if (particleSpine) {
+      particleSpine.visible = false;
+      particleSpine.stopAnimation();
+    }
+
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
+
+    AnimationProxy.animateTween(this, {
+      alpha: 0,
+      y: restY + dropDistance,
+      duration: 0.4,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.y = restY;
+        this.alpha = 1;
+        onComplete?.();
+      },
+    });
   }
 }

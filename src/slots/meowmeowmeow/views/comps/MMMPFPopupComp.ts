@@ -1,7 +1,6 @@
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
-import { PickBonusJackpotComp } from './pickBonusJackpot';
 import { PFPopupComp } from '@brand/views/popups/PickFeaturePopupComp';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
@@ -10,10 +9,11 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { Util } from '@core/utils/UtilService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { Texture } from 'pixi.js';
+import { FEATURE_NAMES, FeatureName } from '@slots/meowmeowmeow/config/FeatureNames';
 
 const OUTRO_FEATURE_ICON_BY_SUBTYPE: Record<string, string> = {
-  RED: 'MEOW',
-  GREEN: 'MII',
+  [FEATURE_NAMES.RED]: 'MEOW',
+  [FEATURE_NAMES.GREEN]: 'MII',
 };
 
 const WHEEL_PRIZE_ROW_ORDER = [
@@ -25,11 +25,11 @@ const WHEEL_PRIZE_ROW_ORDER = [
 ];
 const WHEEL_PRIZE_ROW_GAP = 20;
 const WHEEL_PRIZE_ROW_Y_OFFSETS: Record<string, number> = {
-  wheelPrizeIconGreen: 16,
-  wheelPrizeOr1: 20,
-  wheelPrizeIconRed: 16,
-  wheelPrizeText2: 15,
-  wheelPrizeCashText: 10,
+  wheelPrizeIconGreen: 43.5,
+  wheelPrizeOr1: 35,
+  wheelPrizeIconRed: 33.5,
+  wheelPrizeText2: 35,
+  wheelPrizeCashText: 28.5,
 };
 
 const RED_PRIZE_ROW_ORDER = ['redPrizeIconGrand', 'redPrizeIconMajor', 'redPrizeIconMinor', 'redPrizeIconMini'];
@@ -39,7 +39,6 @@ const RED_PRIZE_ROW_Y_OFFSETS: Record<string, number> = {};
 const BLUE_OUTRO_LINE_GAP = 20;
 
 export class MMMPFPopupComp extends PFPopupComp {
-  private readonly congratText: PixText;
   private readonly wheelPrizeText1: PixText;
   private readonly wheelPrizeRow: PixView;
   private readonly redPrizeText1: PixText;
@@ -48,11 +47,12 @@ export class MMMPFPopupComp extends PFPopupComp {
   private readonly blueOutroPrefixText: PixText;
   private readonly blueOutroAmountText: PixText;
   private readonly blueOutroFeatureIcon: PixSprite;
-  private isEntryPopup = false;
+  private readonly playBtn: PixView;
+  private popupData: any;
+  private isClosing = false;
 
   constructor(config: any) {
     super(config);
-    this.congratText = this.elementsList['congratText'];
     this.wheelPrizeText1 = this.elementsList['wheelPrizeText1'];
     this.wheelPrizeRow = this.elementsList['wheelPrizeRow'];
     this.redPrizeText1 = this.elementsList['redPrizeText1'];
@@ -61,32 +61,42 @@ export class MMMPFPopupComp extends PFPopupComp {
     this.blueOutroPrefixText = this.blueOutroRow?.elementsList['blueOutroPrefixText'];
     this.blueOutroAmountText = this.blueOutroRow?.elementsList['blueOutroAmountText'];
     this.blueOutroFeatureIcon = this.blueOutroRow?.elementsList['blueOutroFeatureIcon'];
+    this.playBtn = this.elementsList['playBtn'];
     this.layoutPrizeRow(this.wheelPrizeRow, WHEEL_PRIZE_ROW_ORDER, WHEEL_PRIZE_ROW_GAP, WHEEL_PRIZE_ROW_Y_OFFSETS);
     this.layoutPrizeRow(this.redPrizeRow, RED_PRIZE_ROW_ORDER, RED_PRIZE_ROW_GAP, RED_PRIZE_ROW_Y_OFFSETS);
     if (this.okBtn) {
       this.okBtn.visible = false;
     }
-    const panelBG = this.elementsList['popupbg'];
-    if (panelBG) {
-      panelBG.interactive = true;
-      panelBG.cursor = 'pointer';
-      panelBG.on('pointerdown', this.onCloseClicked.bind(this));
+    if (this.playBtn) {
+      this.playBtn.interactive = true;
+      this.playBtn.cursor = 'pointer';
+      this.playBtn.on('pointerdown', this.onCloseClicked.bind(this));
     }
-    this.interactive = true;
-    this.cursor = 'pointer';
-    this.on('pointerdown', this.onCloseClicked.bind(this));
   }
 
   protected override async onCloseClicked() {
-    super.onCloseClicked();
-    EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
-    if (!this.isEntryPopup) {
-      EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
-      EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
-        value: appModel.featureResult?.totalWin,
-        duration: 0,
-      });
-    }
+    if (this.isClosing) return;
+    this.isClosing = true;
+
+    this.animateElementsDropOut(() => {
+      this.isClosing = false;
+      super.onCloseClicked();
+      if (this.popupData?.entryPopUp) {
+        const featureName = appModel.getNextSubFeatureType()
+          ? appModel.getNextSubFeatureType()
+          : appModel.getFeatureSubType();
+        EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', featureName.toUpperCase() as FeatureName);
+        if (
+          appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
+          (appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED ||
+            appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN)
+        ) {
+          EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
+        }
+      } else {
+        EventHandler.dispatchEvent('RESET_BG_UI');
+      }
+    });
   }
 
   private layoutPrizeRow(row: PixView, order: string[], gap: number, yOffsets: Record<string, number>): void {
@@ -116,26 +126,23 @@ export class MMMPFPopupComp extends PFPopupComp {
   protected override updateMessagePositions(data: any) {
     super.updateMessagePositions(data);
     this.messageText1.y = 1040;
-    if (this.congratText) {
-      this.congratText.visible = true;
-      this.congratText.text = Util.getContent('CongratTitle');
-    }
-    this.titleText.visible = !data.hideFeatureAwardedTitle;
+
+    this.titleText.visible = !!data.entryPopUp && !data.hideFeatureAwardedTitle;
     this.titleText.text = Util.getContent('FeatureAwardedTitle');
     const featureSubType = appModel.getNextSubFeatureType()
       ? appModel.getNextSubFeatureType()
       : appModel.getFeatureSubType();
-    const isBlueFeatureEntry = !!data.entryPopUp && featureSubType.toUpperCase() === 'BLUE';
-    const isRedFeatureEntry = !!data.entryPopUp && featureSubType.toUpperCase() === 'RED';
-    const isBlueFeatureExit = !data.entryPopUp && featureSubType.toUpperCase() === 'BLUE';
+    const isBlueFeatureEntry = !!data.entryPopUp && featureSubType.toUpperCase() === FEATURE_NAMES.BLUE;
+    const isRedFeatureEntry = !!data.entryPopUp && featureSubType.toUpperCase() === FEATURE_NAMES.RED;
+    const isBlueFeatureExit = !data.entryPopUp && featureSubType.toUpperCase() === FEATURE_NAMES.BLUE;
     this.showBlueFeatureEntryContent(isBlueFeatureEntry);
     this.showRedFeatureEntryContent(isRedFeatureEntry);
     this.showBlueFeatureExitContent(isBlueFeatureExit);
     this.messageText1.visible = !isBlueFeatureEntry && !isRedFeatureEntry && !isBlueFeatureExit;
-    if (this.messageText2) {
-      this.messageText2.visible = true;
-      this.messageText2.text = Util.getContent('pressToContinue');
-    }
+    // if (this.messageText2) {
+    //   this.messageText2.visible = true;
+    //   this.messageText2.text = Util.getContent('pressToContinue');
+    // }
   }
 
   private showBlueFeatureEntryContent(isBlueFeatureEntry: boolean): void {
@@ -172,46 +179,99 @@ export class MMMPFPopupComp extends PFPopupComp {
     }
   }
   protected async showPFPopup(data: any) {
-    this.isEntryPopup = !!data.entryPopUp;
-    const featureSubType = appModel.getFeatureSubType();
-    if (!data.entryPopUp && featureSubType.toUpperCase() === 'RED') {
-      data.callbackFunction();
-      // EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: data.callbackFunction });
-      return;
+    EventHandler.dispatchEvent('TRANSITION', {
+      show: false,
+      callback: () => {
+        this.popupData = data;
+        const featureSubType = appModel.getFeatureSubType();
+        if (!data.entryPopUp && featureSubType.toUpperCase() === FEATURE_NAMES.RED) {
+          data.callbackFunction();
+          EventHandler.dispatchEvent('RESET_BG_UI');
+          return;
+        }
+        if (!data.skipModalDim) {
+          EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+        }
+        this.parent?.addChild(this);
+
+        super.showPFPopup(data);
+        (this as any).resizeView?.();
+
+        const mewSpine = this.elementsList['mew'] as PixSpine;
+        if (mewSpine?.configData.idle) {
+          let featName = appModel.getNextSubFeatureType()
+            ? appModel.getNextSubFeatureType()
+            : appModel.getFeatureSubType();
+          if (!data.entryPopUp && appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE) {
+            featName = FEATURE_NAMES.BLUE;
+          }
+          const animName = featName.toUpperCase() === FEATURE_NAMES.RED ? '3_RED_Ideal' : '2_BLUE_Ideal';
+          mewSpine.playAnimation({ state: animName, loop: true });
+        }
+
+        this.animateElementsDropIn();
+      },
+    });
+  }
+
+  private animateElementsDropIn(): void {
+    const dropStartY = -600;
+
+    const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+    if (particleSpine) {
+      particleSpine.visible = false;
     }
-    if (!data.skipModalDim) {
-      EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
-    }
-    this.parent?.addChild(this);
 
-    super.showPFPopup(data);
-    (this as any).resizeView?.();
-
-    const scale = this.scale.x;
-    const xx = this.x;
-    const yy = this.y;
-    const dropStartY = -400;
-
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
+    this.alpha = 0;
     this.y = dropStartY;
-    this.x = xx;
-
-    const mewSpine = this.elementsList['mew'] as PixSpine;
-    if (mewSpine?.configData.idle) {
-      let featName = appModel.getNextSubFeatureType() ? appModel.getNextSubFeatureType() : appModel.getFeatureSubType();
-      if (!data.entryPopUp && appModel.getFeatureSubType().toUpperCase() === 'BLUE') {
-        featName = 'BLUE';
-      }
-      const animName = featName.toUpperCase() === 'RED' ? '3_RED_Ideal' : '2_BLUE_Ideal';
-      mewSpine.playAnimation({ state: animName, loop: true });
-    }
 
     AnimationProxy.animateTween(this, {
-      scaleX: scale,
-      scaleY: scale,
-      duration: 0.6,
-      y: yy,
-      x: xx,
-      ease: 'bounce.out',
+      alpha: 1,
+      y: restY,
+      duration: 0.3,
+      ease: 'power1.in',
+      onComplete: () => {
+        if (particleSpine?.configData.idle) {
+          particleSpine.visible = true;
+          if (this.popupData.entryPopUp) {
+            const featName = appModel.getNextSubFeatureType()
+              ? appModel.getNextSubFeatureType()
+              : appModel.getFeatureSubType();
+            EventHandler.dispatchEvent('TRANSITION_BACKGROUND', {
+              to: featName.toUpperCase() ? featName.toUpperCase() : 'BG',
+            });
+          } else {
+            EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
+          }
+          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
+        }
+      },
+    });
+  }
+
+  private animateElementsDropOut(onComplete?: () => void): void {
+    const dropDistance = 700;
+
+    const particleSpine = this.elementsList['particleSpine'] as PixSpine;
+    if (particleSpine) {
+      particleSpine.visible = false;
+    }
+
+    AnimationProxy.killTweensOf(this);
+    const restY = this.y;
+
+    AnimationProxy.animateTween(this, {
+      alpha: 0,
+      y: restY + dropDistance,
+      duration: 0.4,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.y = restY;
+        this.alpha = 1;
+        onComplete?.();
+      },
     });
   }
 }

@@ -2,19 +2,32 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { Util } from '@core/utils/UtilService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
+import { FEATURE_NAMES, FeatureName } from '@slots/meowmeowmeow/config/FeatureNames';
 
 export class KittieBankComp extends ResponsiveChildrenView {
+  private static readonly FEATURE_BANK_MAP: Record<FeatureName, 'meow' | 'mew' | 'mii'> = {
+    [FEATURE_NAMES.RED]: 'meow',
+    [FEATURE_NAMES.GREEN]: 'mew',
+    [FEATURE_NAMES.BLUE]: 'mii',
+  };
+
+  private static readonly FEATURE_REVEAL_POSITION = {
+    x: 352,
+    y: 1307,
+  };
+
   private idleAnimTimeoutId: any;
 
   constructor(config: any) {
     super(config);
     EventHandler.addEventListener('PLAY_KITTIE_BLAST', this.playKittyBankBlast.bind(this));
     EventHandler.addEventListener('PLAY_KITTIE_ANTICIPATION', this.playKittyBankAnticipation.bind(this));
+    EventHandler.addEventListener('PLAY_KITTIE_WIN_ANIM', this.playWinAnimation.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, this.restartIdleAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.stopIdleAnim.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_START, this.resetToNormal.bind(this));
-    EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetToNormal.bind(this));
     EventHandler.addEventListener('RESET_KITTIEBANK_ANIM', this.resetToNormal.bind(this));
+    EventHandler.addEventListener('SET_KITTIBANK_FEATURE_STATE', this.showSelectedFeatureBank.bind(this));
   }
 
   public resetToNormal(): void {
@@ -22,6 +35,8 @@ export class KittieBankComp extends ResponsiveChildrenView {
     for (const bank of bankNames) {
       const targetBankComp = this.elementsList[bank];
       if (targetBankComp) {
+        targetBankComp.visible = true;
+        this.setDevicePosition(targetBankComp, targetBankComp.configData || {});
         const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
         const animPrefix = bank === 'meow' ? '3_RED' : bank === 'mew' ? '1_GREEN' : '2_BLUE';
         const defaultAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
@@ -32,6 +47,71 @@ export class KittieBankComp extends ResponsiveChildrenView {
           });
         }
       }
+    }
+
+    const coinsComp = this.elementsList['fspopupcoins'];
+    if (coinsComp) {
+      coinsComp.visible = false;
+    }
+  }
+
+  public showSelectedFeatureBank(featureName: string): void {
+    const targetBank = KittieBankComp.FEATURE_BANK_MAP[featureName?.toUpperCase() as FeatureName];
+    if (!targetBank) return;
+
+    const isMobile = DeviceProxy.isDevice();
+    const showsOnThisDevice = !isMobile || targetBank === 'mew';
+
+    const bankNames = ['meow', 'mew', 'mii'];
+    for (const bank of bankNames) {
+      const bankComp = this.elementsList[bank];
+      if (bankComp) {
+        bankComp.visible = showsOnThisDevice && bank === targetBank;
+      }
+    }
+
+    if (showsOnThisDevice) {
+      const targetBankComp = this.elementsList[targetBank];
+      if (targetBankComp) {
+        if (isMobile) {
+          this.setDevicePosition(targetBankComp, targetBankComp.configData || {});
+        } else {
+          this.setDevicePosition(targetBankComp, KittieBankComp.FEATURE_REVEAL_POSITION);
+        }
+
+        const spineAnim = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
+        const animPrefix = targetBank === 'meow' ? '3_RED' : targetBank === 'mew' ? '1_GREEN' : '2_BLUE';
+        const staticAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
+        if (spineAnim && staticAnim && typeof spineAnim.playAnimation === 'function') {
+          spineAnim.playAnimation({
+            state: staticAnim,
+            loop: true,
+          });
+        }
+      }
+    }
+
+    const coinsComp = this.elementsList['fspopupcoins'];
+    if (coinsComp) {
+      coinsComp.visible = !isMobile;
+    }
+  }
+
+  private setDevicePosition(
+    target: any,
+    position: { x?: number; y?: number; px?: number; py?: number; lx?: number; ly?: number },
+  ): void {
+    if (DeviceProxy.isDevice()) {
+      if (DeviceProxy.config.isPortrait) {
+        if (position.px != undefined) target.x = position.px;
+        if (position.py != undefined) target.y = position.py;
+      } else {
+        if (position.lx != undefined) target.x = position.lx;
+        if (position.ly != undefined) target.y = position.ly;
+      }
+    } else {
+      if (position.x != undefined) target.x = position.x;
+      if (position.y != undefined) target.y = position.y;
     }
   }
 
@@ -135,17 +215,29 @@ export class KittieBankComp extends ResponsiveChildrenView {
     const idleAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
 
     if (targetBank && typeof targetBank.playAnimation === 'function') {
-      if (targetBank.spineAnim) {
-        console.log(
-          'Available animations for KittieBank:',
-          targetBank.spineAnim.state.data.skeletonData.animations.map((a: any) => a.name),
-        );
-      }
       targetBank.playAnimation({
         state: anticipationAnim,
         loop: false,
         nextState: idleAnim,
         nextLoop: true,
+      });
+    }
+  }
+
+  public playWinAnimation(featureName: FeatureName): void {
+    const bankName = KittieBankComp.FEATURE_BANK_MAP[featureName?.toUpperCase() as FeatureName];
+    if (!bankName) return;
+    const targetBankComp = this.elementsList[bankName];
+    if (!targetBankComp) return;
+
+    const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
+    const animPrefix = bankName === 'meow' ? '3_RED' : bankName === 'mew' ? '1_GREEN' : '2_BLUE';
+    const collectAnim = `${animPrefix}_Collect`;
+
+    if (targetBank && typeof targetBank.playAnimation === 'function') {
+      targetBank.playAnimation({
+        state: collectAnim,
+        loop: true,
       });
     }
   }
