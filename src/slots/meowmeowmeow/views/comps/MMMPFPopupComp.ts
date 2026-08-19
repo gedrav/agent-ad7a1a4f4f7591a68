@@ -127,6 +127,22 @@ export class MMMPFPopupComp extends PFPopupComp {
     super.updateMessagePositions(data);
     this.messageText1.y = 1040;
 
+    const playBtnText = (this.playBtn as any)?.elementsList?.['playBtnText'] as PixText;
+    if (playBtnText) {
+      playBtnText.text = data.entryPopUp
+        ? Util.getContent('play_heading') || 'PLAY'
+        : Util.getContent('ContinueBtnText') || 'CONTINUE';
+
+      playBtnText.scale.set(1);
+      const playBtnImage = (this.playBtn as any)?.elementsList?.['playBtnImage'];
+      if (playBtnImage) {
+        const maxWidth = playBtnImage.width * 0.75;
+        if (playBtnText.width > maxWidth) {
+          playBtnText.scale.set(maxWidth / playBtnText.width);
+        }
+      }
+    }
+
     this.titleText.visible = !!data.entryPopUp && !data.hideFeatureAwardedTitle;
     this.titleText.text = Util.getContent('FeatureAwardedTitle');
     const featureSubType = appModel.getNextSubFeatureType()

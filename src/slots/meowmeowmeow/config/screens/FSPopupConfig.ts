@@ -201,7 +201,7 @@ export const FS_POPUP_CONFIG = {
     {
       name: 'playBtn',
       type: 'Container',
-      scale: 0.8,
+      scale: 1,
       pScale: 0.5,
       lScale: 0.5,
       x: 1139,
@@ -278,7 +278,7 @@ export const FS_POPUP_CONFIG = {
       textConfig: {
         name: 'okBtnTxt',
         type: 'Text',
-        content: 'okBtnText',
+        content: 'ContinueBtnText',
         style: {
           fontFamily: 'gameFont2',
           fontSize: 60,

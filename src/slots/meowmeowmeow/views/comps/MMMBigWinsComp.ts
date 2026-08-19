@@ -159,6 +159,22 @@ export class MMMBigWinsComp extends BigWinsComp {
     this.guideRect.height = bottomRight.y - topLeft.y;
   }
 
+  protected override resizeView(): void {
+    const expanded =
+      this.isFeatureWinActive &&
+      this.bigWinAnim &&
+      this.guideRect &&
+      this.guideRectBounds &&
+      this.configData.data.backgroundAlpha > 0;
+    if (expanded) {
+      this.restoreGuideRectBounds();
+    }
+    super.resizeView();
+    if (expanded) {
+      this.expandGuideRectToScreen();
+    }
+  }
+
   // Put the board-sized bounds back, since the comp's layout scale and the win ticker clamp are both
   // measured off guideRect.
   private restoreGuideRectBounds(): void {
