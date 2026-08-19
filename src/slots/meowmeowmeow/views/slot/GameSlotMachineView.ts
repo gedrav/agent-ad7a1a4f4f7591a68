@@ -927,13 +927,23 @@ export class GameSlotMachineView extends SlotMachineView {
             }
             setGuideRect(-60, -297, 1660, 1313.6);
             if (bigWinAnim) {
-              bigWinAnim.x = 776;
+              bigWinAnim.x = 755;
+              bigWinAnim.scale.set(isPortrait ? 1 : 0.84);
+              if (!isPortrait) bigWinAnim.y = 640;
             }
-            if (isPortrait && els['bigWinText']) {
-              els['bigWinText'].x = 756;
+            if (els['bigWinText']) {
+              if (isPortrait) {
+                els['bigWinText'].x = 756;
+              } else {
+                els['bigWinText'].y = -120;
+              }
             }
             if (els['winTickerBW']) {
-              els['winTickerBW'].x = 800;
+              if (isPortrait) {
+                els['winTickerBW'].x = 800;
+              } else {
+                els['winTickerBW'].x = 755;
+              }
             }
           } else if (currentInterfaceSize === 5) {
             this.bigWinsComp.scale.set(0.58);
@@ -944,13 +954,23 @@ export class GameSlotMachineView extends SlotMachineView {
             }
             setGuideRect(-65, -603, 1660, 1623);
             if (bigWinAnim) {
-              bigWinAnim.x = 768;
+              bigWinAnim.x = 752;
+              bigWinAnim.scale.set(isPortrait ? 1 : 0.84);
+              if (!isPortrait) bigWinAnim.y = 650;
             }
-            if (isPortrait && els['bigWinText']) {
-              els['bigWinText'].x = 756;
+            if (els['bigWinText']) {
+              if (isPortrait) {
+                els['bigWinText'].x = 756;
+              } else {
+                els['bigWinText'].y = -120;
+              }
             }
             if (els['winTickerBW']) {
-              els['winTickerBW'].x = 778;
+              if (isPortrait) {
+                els['winTickerBW'].x = 778;
+              } else {
+                els['winTickerBW'].x = 752;
+              }
             }
           } else {
             this.bigWinsComp.scale.set(1);
