@@ -100,6 +100,11 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
       : appModel.getFeatureType();
     await MessageProxy.requestBonusData(featureType);
     if (this.checkForMaxCapWin()) {
+      EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
+      // EventHandler.dispatchEvent('TRANSITION', {
+      //   show: true,
+      //   callback: () => { },
+      // });
       return;
     }
 

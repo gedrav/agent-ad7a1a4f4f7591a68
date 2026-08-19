@@ -176,6 +176,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       this.blueOutroAmountText.text = amountText.charAt(0) + ' ' + amountText.slice(1);
       this.layoutStackedCenter(this.blueOutroRow, ['blueOutroPrefixText', 'blueOutroAmountText'], BLUE_OUTRO_LINE_GAP);
       this.blueOutroPrefixText.y = 20;
+      this.blueOutroAmountText.x = -72;
     }
   }
   protected async showPFPopup(data: any) {
@@ -231,7 +232,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       alpha: 1,
       y: restY,
       duration: 0.3,
-      ease: 'power1.in',
+      ease: 'power1.out',
       onComplete: () => {
         if (particleSpine?.configData.idle) {
           particleSpine.visible = true;

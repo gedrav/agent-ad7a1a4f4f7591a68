@@ -231,7 +231,8 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.dispatchEvent(SlotEvents.PLAY_BIG_WIN_TERMINATION_SOUND);
 
     setTimeout(() => {
-      const fadeTargets = [this.bigWinAnim, this.featureWinText].filter(Boolean);
+      const winTickerBW = this.elementsList['winTickerBW'];
+      const fadeTargets = [this.bigWinAnim, this.featureWinText, winTickerBW].filter(Boolean);
       AnimationProxy.animateTween(fadeTargets, {
         alpha: 0,
         duration: FEATURE_WIN_EXIT_FADE_DURATION,
@@ -244,6 +245,9 @@ export class MMMBigWinsComp extends BigWinsComp {
           }
           if (this.bigWinAnim) {
             this.bigWinAnim.alpha = 1;
+          }
+          if (winTickerBW) {
+            winTickerBW.alpha = 1;
           }
           callback();
         },
