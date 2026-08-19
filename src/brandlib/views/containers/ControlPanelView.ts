@@ -676,7 +676,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vAlign: 'bottomDown',
       vPaddingPerc: midBtnPaddingPerc,
     });
-    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.25);
     UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.turboSelectedBtn, {
       refComponent: 'turboBtn',
@@ -718,7 +718,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vAlign: 'bottomDown',
       vPaddingPerc: midBtnPaddingPerc,
     });
-    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.25);
     UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.turboSelectedBtn, {
       refComponent: 'turboBtn',
@@ -763,7 +763,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vAlign: 'bottomDown',
       vPaddingPerc: midBtnPaddingPerc,
     });
-    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.betBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.turboSelectedBtn, 1, 1, this.turboBtn, 1, 0.4);
     UIUtil.alignHorizontal(this.turboSelectedBtn, { refComponent: 'turboBtn', hAlign: 'center', hPaddingPerc: 0 });
     UIUtil.alignVertical(this.turboSelectedBtn, {
       refComponent: 'turboBtn',
