@@ -31,7 +31,7 @@ export const GAME_CONFIG = {
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
-    gameFont2: 'showg',
+    gameFont2: 'Lobster Regular',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',

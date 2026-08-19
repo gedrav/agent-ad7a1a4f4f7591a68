@@ -17,7 +17,13 @@ export class KittieBankComp extends ResponsiveChildrenView {
     y: 1307,
   };
 
+  private static readonly PORTRAIT_FEATURE_REVEAL_POSITION = {
+    x: 630,
+    y: 314,
+  };
+
   private idleAnimTimeoutId: any;
+  private activeRevealBank: 'meow' | 'mew' | 'mii' | null = null;
 
   constructor(config: any) {
     super(config);
@@ -31,6 +37,7 @@ export class KittieBankComp extends ResponsiveChildrenView {
   }
 
   public resetToNormal(): void {
+    this.activeRevealBank = null;
     const bankNames = ['meow', 'mew', 'mii'];
     for (const bank of bankNames) {
       const targetBankComp = this.elementsList[bank];
@@ -70,14 +77,12 @@ export class KittieBankComp extends ResponsiveChildrenView {
       }
     }
 
+    this.activeRevealBank = showsOnThisDevice ? targetBank : null;
+
     if (showsOnThisDevice) {
       const targetBankComp = this.elementsList[targetBank];
       if (targetBankComp) {
-        if (isMobile) {
-          this.setDevicePosition(targetBankComp, targetBankComp.configData || {});
-        } else {
-          this.setDevicePosition(targetBankComp, KittieBankComp.FEATURE_REVEAL_POSITION);
-        }
+        this.applyRevealPosition(targetBankComp);
 
         const spineAnim = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
         const animPrefix = targetBank === 'meow' ? '3_RED' : targetBank === 'mew' ? '1_GREEN' : '2_BLUE';
@@ -94,6 +99,31 @@ export class KittieBankComp extends ResponsiveChildrenView {
     const coinsComp = this.elementsList['fspopupcoins'];
     if (coinsComp) {
       coinsComp.visible = !isMobile;
+    }
+  }
+
+  // resizeView() re-applies each bank's default configData position on every APP_RESIZE
+  // (e.g. exiting free spins/pick feature triggers resetMachineLayout -> APP_RESIZE), which would
+  // clobber the reveal position set here. repositionView() is called right after that, so re-assert it.
+  protected repositionView(): void {
+    if (!this.activeRevealBank) return;
+    const targetBankComp = this.elementsList[this.activeRevealBank];
+    if (targetBankComp) {
+      this.applyRevealPosition(targetBankComp);
+    }
+  }
+
+  private applyRevealPosition(targetBankComp: any): void {
+    const isMobile = DeviceProxy.isDevice();
+    if (isMobile) {
+      if (DeviceProxy.config.isPortrait) {
+        targetBankComp.x = KittieBankComp.PORTRAIT_FEATURE_REVEAL_POSITION.x;
+        targetBankComp.y = KittieBankComp.PORTRAIT_FEATURE_REVEAL_POSITION.y;
+      } else {
+        this.setDevicePosition(targetBankComp, targetBankComp.configData || {});
+      }
+    } else {
+      this.setDevicePosition(targetBankComp, KittieBankComp.FEATURE_REVEAL_POSITION);
     }
   }
 

@@ -577,7 +577,7 @@ export class GameSlotMachineView extends SlotMachineView {
       appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
       appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
     ) {
-      this.animateWheelDoor();
+      this.animateWheelDoor(this.revealJackpotContainer.bind(this));
     }
   }
 

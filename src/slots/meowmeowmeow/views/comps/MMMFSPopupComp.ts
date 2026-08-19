@@ -176,8 +176,6 @@ export class MMMFSPopupComp extends FSPopupComp {
     });
   }
 
-  // Animates the whole popup as one unit (instead of each child separately), so everything
-  // drops in/out together rather than staggering element by element.
   private animateElementsDropIn(): void {
     const dropStartY = -600;
 
@@ -189,16 +187,16 @@ export class MMMFSPopupComp extends FSPopupComp {
     AnimationProxy.animateTween(this, {
       alpha: 1,
       y: restY,
-      duration: 0.3,
-      ease: 'power1.in',
+      duration: 0.5,
+      ease: 'power1.out',
       onComplete: () => {
         const particleSpine = this.elementsList['particleSpine'] as PixSpine;
         if (particleSpine?.configData.idle) {
           particleSpine.visible = true;
+          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
           EventHandler.dispatchEvent('TRANSITION_BACKGROUND', {
             to: this.popupData?.entryPopUp ? 'GREEN' : 'BG',
           });
-          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
         }
       },
     });

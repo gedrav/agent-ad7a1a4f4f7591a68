@@ -232,7 +232,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       alpha: 1,
       y: restY,
       duration: 0.3,
-      ease: 'power1.in',
+      ease: 'power1.out',
       onComplete: () => {
         if (particleSpine?.configData.idle) {
           particleSpine.visible = true;
