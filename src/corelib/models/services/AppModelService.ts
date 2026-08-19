@@ -307,7 +307,7 @@ class AppModelService {
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameInfo.minBet = data.playerInfo.minBet;
     this.gameInfo.maxBet = data.playerInfo.maxBet;
-    this.gameInfo.bbMaxBet = data.playerInfo.bbMaxBet ? data.playerInfo.bbMaxBet : data.playerInfo.maxBet;
+    this.gameInfo.bbMaxBet = data.opCnf?.bbMaxBet ? data.opCnf.bbMaxBet : data.playerInfo.maxBet;
     this.gameInfo.selectedLines = GameProxy.config.totalLines;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.betsArray = [];
