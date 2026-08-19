@@ -318,7 +318,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: { scale: 0.7, x: 1900, y: 900 },
             Landscape: { scale: 0.7, x: 1840, y: 900 },
-            Portrait: { scale: 0.7, x: 1400, y: 38 },
+            Portrait: { scale: 0.7, x: 850, y: 38 },
           },
         },
         { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: 180, y: 1200 },
@@ -443,8 +443,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       vPaddingPerc: 0,
       hPaddingPerc: 0,
     },
-    Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
-    SmallPortrait: { widthPerc: 1.3, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
+    Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.04 },
+    SmallPortrait: { widthPerc: 1.3, heightPerc: 0.6, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0 },
     Landscape: { widthPerc: 0.7, heightPerc: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.015 },
   },
 };

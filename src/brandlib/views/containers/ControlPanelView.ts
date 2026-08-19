@@ -406,21 +406,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
               this.soundOnBtn.y - (k + 1) * 0.6 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
           }
         } else if (DeviceProxy.config.isPortrait) {
-          UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.16, 0.1, 1);
+          this.bbButtonsArray[k].scale.set(1);
+          UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.2, 0.12, 1);
           this.bbButtonsArray[k].y =
-            this.turboBtn.y - k * 0.5 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.05);
+            this.slotGuideRect.y + this.slotGuideRect.height + this.bbButtonsArray[k].height * 0.5;
         } else {
           UIUtil.setPercentageScale(this.bbButtonsArray[k], 0.18, 0.18, 1);
           this.bbButtonsArray[k].y = UIUtil.getGameHeight() * 0.5; //k + 1) * 0.75 * this.bbButtonsArray[k].height - UIUtil.getPercentageHeight(0.03);
-        }
-        if (DeviceProxy.config.isDevice && DeviceProxy.config.isPortrait) {
-          if (
-            this.bbButtonsArray[k].y - this.bbButtonsArray[k].height * 0.5 <
-            this.slotGuideRect.y + this.slotGuideRect.height
-          ) {
-            this.bbButtonsArray[k].scale.set(this.spinBtn.scale.x * 0.8);
-            this.bbButtonsArray[k].y = this.slotGuideRect.y + this.slotGuideRect.height + this.spinBtn.height * 0.3;
-          }
         }
 
         this.bbButtonsArray[k].x = this.soundOnBtn.x + (this.bbButtonsArray[k].width - this.soundOnBtn.width) / 2;
@@ -513,11 +505,11 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vPaddingPerc: 0,
     });
 
-    UIUtil.setRelativeScale(this.menuBtn, 0.1, 0.1, null, 1, 0.4);
+    UIUtil.setRelativeScale(this.menuBtn, 0.1, 0.08, null, 1, 0.3);
     UIUtil.alignHorizontal(this.menuBtn, { hAlign: 'right', hPaddingPerc: -hPaddingPerc });
     UIUtil.alignVertical(this.menuBtn, { vAlign: 'top', vPaddingPerc: vPaddingPerc });
 
-    UIUtil.setRelativeScale(this.infoBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.infoBtn, 1, 1, this.menuBtn, 1, 0.3);
     UIUtil.alignHorizontal(this.infoBtn, {
       refComponent: 'menuBtn',
       hAlign: 'leftBefore',
@@ -525,7 +517,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.infoBtn, { refComponent: 'menuBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.soundOnBtn, 1, 1, this.menuBtn, 1, 0.3);
     UIUtil.alignHorizontal(this.soundOnBtn, {
       hAlign: 'left',
       hPaddingPerc: hPaddingPerc,
@@ -536,7 +528,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
       vPaddingPerc: -smallBtnHPaddingPerc,
     });
 
-    UIUtil.setRelativeScale(this.soundOffBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.soundOffBtn, 1, 1, this.menuBtn, 1, 0.3);
     UIUtil.alignHorizontal(this.soundOffBtn, {
       refComponent: 'soundOnBtn',
       hAlign: 'center',
@@ -544,7 +536,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     });
     UIUtil.alignVertical(this.soundOffBtn, { refComponent: 'soundOnBtn', vAlign: 'middle', vPaddingPerc: 0 });
 
-    UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.4);
+    UIUtil.setRelativeScale(this.cheatBtn, 1, 1, this.menuBtn, 1, 0.3);
     UIUtil.alignHorizontal(this.cheatBtn, {
       refComponent: 'soundOnBtn',
       hAlign: 'rightAfter',
