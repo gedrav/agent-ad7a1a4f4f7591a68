@@ -20,6 +20,12 @@ class MMMExitFreeSpinStateCommand extends StateCommand {
     }
 
     if (appModel.getIsMaxCapReached()) {
+      EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
+      EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
+      EventHandler.dispatchEvent('TRANSITION', {
+        show: true,
+        callback: () => {},
+      });
       const obj: any = {};
       obj.title = Util.getContent('infoText');
       obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [

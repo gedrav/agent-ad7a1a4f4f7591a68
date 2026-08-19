@@ -45,7 +45,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'jpbanner', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'gameTitle', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Cat', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Wheel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Jackpot_Coin', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Vault_Anim', ASSETTYPE: 'spine' },

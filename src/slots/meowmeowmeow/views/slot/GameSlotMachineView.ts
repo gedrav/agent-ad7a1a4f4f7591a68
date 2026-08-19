@@ -76,6 +76,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener('RESET_BG_UI', this.hidePickFeatureUI.bind(this));
+    EventHandler.addEventListener('RESET_PICK_BONUS', this.hidePickBonusUI.bind(this));
     EventHandler.addEventListener('CLOSE_VAULT', this.closeWheelDoor.bind(this));
 
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
@@ -205,6 +206,9 @@ export class GameSlotMachineView extends SlotMachineView {
       ease: 'sine.inOut',
       onComplete: () => {
         fromEl.visible = false;
+        if (groupNames === WHEEL_RIM_NAMES) {
+          this.maskWheelTestToRim();
+        }
       },
     });
   }
@@ -306,10 +310,20 @@ export class GameSlotMachineView extends SlotMachineView {
     const targets = [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel].filter(Boolean);
     const stagger = 0.08;
 
+    if (targets.length === 0) {
+      onComplete?.();
+      return;
+    }
+
+    let remaining = targets.length;
+    const settle = () => {
+      remaining--;
+      if (remaining === 0) onComplete?.();
+    };
+
     targets.forEach((target: any, index: number) => {
       AnimationProxy.killTweensOf(target);
       const delay = index * stagger;
-      const isLast = index === targets.length - 1;
 
       if (show) {
         target.visible = true;
@@ -319,9 +333,9 @@ export class GameSlotMachineView extends SlotMachineView {
           duration: 0.6,
           delay,
           ease: 'sine.out',
-          onComplete: isLast ? onComplete : undefined,
+          onComplete: settle,
         });
-      } else {
+      } else if (target.visible) {
         AnimationProxy.animateTween(target, {
           alpha: 0,
           duration: 0.4,
@@ -329,9 +343,11 @@ export class GameSlotMachineView extends SlotMachineView {
           ease: 'sine.in',
           onComplete: () => {
             target.visible = false;
-            if (isLast) onComplete?.();
+            settle();
           },
         });
+      } else {
+        settle();
       }
     });
   }
@@ -562,18 +578,23 @@ export class GameSlotMachineView extends SlotMachineView {
       appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
       appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
     ) {
-      this.animateWheelDoor();
+      this.animateWheelDoor(this.revealJackpotContainer.bind(this));
     }
   }
 
+  private hidePickBonusUI() {
+    this.feautreHeadingRed.visible = false;
+    this.jackpotContainer.visible = false;
+  }
+
   private hidePickFeatureUI(data?: { callback?: () => void }): void {
+    this.feautreHeadingRed.visible = false;
     this.resetMachineLayout();
     EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
     this.animateGameElementsTransition(true, () => {
       this.wheelBaseRed.visible = false;
       this.wheelBaseGreen.visible = false;
       this.feautreHeadingGreen.visible = false;
-      this.feautreHeadingRed.visible = false;
       this.hideWheelFeatureUI();
 
       data?.callback?.();
@@ -675,10 +696,8 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-    const endGlobalPos = targetBank.getGlobalPosition();
 
     const startPos = this.toLocal(strtGlobalPos);
-    const endPos = this.toLocal(endGlobalPos);
 
     const skinNameByBank: Record<'meow' | 'mew' | 'mii', string> = { meow: 'red', mew: 'Green', mii: 'Blue' };
     const skinName = skinNameByBank[bankName];
@@ -713,23 +732,17 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
-    const c2 = new Point(endPos.x, endPos.y + arcHeight);
-    // The onUpdate callback below is a plain `function`, not an arrow function, because GSAP
-    // rebinds its own `this` there for tween.progress(); this alias is how the view instance
-    // stays reachable inside it.
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
 
     EventHandler.dispatchEvent('PLAY_TRAIL_SOUND');
 
-    AnimationProxy.animateTween(movingSymbol, {
+    const tween = AnimationProxy.animateTween(movingSymbol, {
       duration: 1,
-      onUpdate: function () {
-        const t = this.progress();
+      onUpdate: () => {
+        const t = tween.progress();
 
         // Dynamically recalculate end position to handle resize during animation
         const currentEndGlobalPos = targetBank.getGlobalPosition();
-        const currentEndPos = self.toLocal(currentEndGlobalPos);
+        const currentEndPos = this.toLocal(currentEndGlobalPos);
         const currentC2 = new Point(currentEndPos.x, currentEndPos.y + arcHeight);
 
         const bezierPoint = getBezierPoint(t, startPos, c1, currentC2, currentEndPos);
@@ -740,7 +753,7 @@ export class GameSlotMachineView extends SlotMachineView {
         }
 
         if (movingSymbol.parent === kittieBankComp) {
-          const localPos = kittieBankComp.toLocal(bezierPoint, self);
+          const localPos = kittieBankComp.toLocal(bezierPoint, this);
           movingSymbol.position.copyFrom(localPos);
         } else {
           movingSymbol.position.copyFrom(bezierPoint);
@@ -927,13 +940,24 @@ export class GameSlotMachineView extends SlotMachineView {
             }
             setGuideRect(-60, -297, 1660, 1313.6);
             if (bigWinAnim) {
-              bigWinAnim.x = 776;
+              bigWinAnim.x = 755;
+              bigWinAnim.scale.set(isPortrait ? 1 : 0.84);
+              if (!isPortrait) bigWinAnim.y = 640;
             }
-            if (isPortrait && els['bigWinText']) {
-              els['bigWinText'].x = 756;
+            if (els['bigWinText']) {
+              if (isPortrait) {
+                els['bigWinText'].x = 756;
+              } else {
+                els['bigWinText'].y = -120;
+              }
             }
             if (els['winTickerBW']) {
-              els['winTickerBW'].x = 800;
+              if (isPortrait) {
+                els['winTickerBW'].x = 800;
+              } else {
+                els['winTickerBW'].x = 755;
+                if (isPortrait) els['winTicker'].x = 855;
+              }
             }
           } else if (currentInterfaceSize === 5) {
             this.bigWinsComp.scale.set(0.58);
@@ -944,13 +968,23 @@ export class GameSlotMachineView extends SlotMachineView {
             }
             setGuideRect(-65, -603, 1660, 1623);
             if (bigWinAnim) {
-              bigWinAnim.x = 768;
+              bigWinAnim.x = 752;
+              bigWinAnim.scale.set(isPortrait ? 1 : 0.84);
+              if (!isPortrait) bigWinAnim.y = 650;
             }
-            if (isPortrait && els['bigWinText']) {
-              els['bigWinText'].x = 756;
+            if (els['bigWinText']) {
+              if (isPortrait) {
+                els['bigWinText'].x = 756;
+              } else {
+                els['bigWinText'].y = -120;
+              }
             }
             if (els['winTickerBW']) {
-              els['winTickerBW'].x = 778;
+              if (isPortrait) {
+                els['winTickerBW'].x = 778;
+              } else {
+                els['winTickerBW'].x = 752;
+              }
             }
           } else {
             this.bigWinsComp.scale.set(1);
@@ -970,6 +1004,7 @@ export class GameSlotMachineView extends SlotMachineView {
         }
         break;
     }
+    if (DeviceProxy.config.isPortrait) this.bigWinsComp.elementsList['winTicker'].x = 855;
   }
 
   // reset all layout mutations made during free spins
