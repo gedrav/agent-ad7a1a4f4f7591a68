@@ -36,6 +36,22 @@ export class MMMFSPopupComp extends FSPopupComp {
   protected updateMessagePositions(data: any): void {
     super.updateMessagePositions(data);
 
+    const playBtnText = (this.playBtn as any)?.elementsList?.['playBtnText'] as PixText;
+    if (playBtnText) {
+      playBtnText.text = data.entryPopUp
+        ? Util.getContent('play_heading') || 'PLAY'
+        : Util.getContent('ContinueBtnText') || 'CONTINUE';
+
+      playBtnText.scale.set(1);
+      const playBtnImage = (this.playBtn as any)?.elementsList?.['playBtnImage'];
+      if (playBtnImage) {
+        const maxWidth = playBtnImage.width * 0.75;
+        if (playBtnText.width > maxWidth) {
+          playBtnText.scale.set(maxWidth / playBtnText.width);
+        }
+      }
+    }
+
     const freeGamesCountText = this.elementsList['freeGamesCountText'];
     const freeGamesLabelText = this.elementsList['freeGamesLabelText'];
     const waysCountText = this.elementsList['waysCountText'];
@@ -153,14 +169,18 @@ export class MMMFSPopupComp extends FSPopupComp {
     if (this._isClicked || !this.parent) return;
     this._isClicked = true;
 
+    const isBlueToGreen =
+      !!this.popupData?.entryPopUp &&
+      appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE &&
+      appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN;
+
     if (this.popupData?.entryPopUp) {
       EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
-      if (
-        appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE &&
-        appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.GREEN
-      ) {
+      if (isBlueToGreen) {
+        const stateCallback = this.callbackFunction;
+        this.callbackFunction = null;
         EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
-        EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
+        EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION', { callback: () => stateCallback?.() });
       }
     }
     this.animateElementsDropOut(() => {

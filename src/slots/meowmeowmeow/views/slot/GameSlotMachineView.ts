@@ -229,7 +229,7 @@ export class GameSlotMachineView extends SlotMachineView {
     return 'normal';
   }
 
-  protected showGreenTransition(): void {
+  protected showGreenTransition(data?: { callback?: () => void }): void {
     if (this.slotReel && (this.slotReel as any).winController) {
       clearTimeout((this.slotReel as any).winController.timeoutId);
     }
@@ -239,7 +239,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.kittiebankComp.visible = false;
     this.changeReelInterface();
     this.slotReel.alpha = 1;
-    this.animateWheelDoor();
+    this.animateWheelDoor(data?.callback);
   }
 
   protected showGreenKittieBankBreak(): void {
@@ -407,7 +407,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.addChild(...featureHeadings);
     this.wheelRim.alpha = 1;
 
-    if (GameProxy.config.subFeatureAwardAnnounced) {
+    if (GameProxy.config.subFeatureAwardAnnounced && doorSubFeatureType !== FEATURE_NAMES.GREEN) {
       if (this.vaultAnim) {
         // this.vaultAnim.visible = false;
       }
@@ -996,8 +996,14 @@ export class GameSlotMachineView extends SlotMachineView {
               winTicker.x = 755;
               winTicker.y = 480;
             }
-            if (isPortrait && els['winTickerBW']) {
-              els['winTickerBW'].x = 800;
+            if (bigWinAnim) {
+              bigWinAnim.x = isPortrait ? 838 : 744;
+              bigWinAnim.y = 711;
+              bigWinAnim.scale.set(0.7);
+            }
+            if (els['winTickerBW']) {
+              els['winTickerBW'].x = isPortrait ? 800 : 750;
+              els['winTickerBW'].y = 887;
             }
             setGuideRect(isPortrait ? 28 : -62, isPortrait ? 56 : 46, 1660, 980);
           }
