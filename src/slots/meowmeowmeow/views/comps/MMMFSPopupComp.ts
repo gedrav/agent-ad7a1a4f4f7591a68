@@ -190,7 +190,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       alpha: 1,
       y: restY,
       duration: 0.3,
-      ease: 'bounce.out',
+      ease: 'power1.in',
       onComplete: () => {
         const particleSpine = this.elementsList['particleSpine'] as PixSpine;
         if (particleSpine?.configData.idle) {

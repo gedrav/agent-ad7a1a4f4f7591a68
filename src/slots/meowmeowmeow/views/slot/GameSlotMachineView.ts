@@ -205,6 +205,9 @@ export class GameSlotMachineView extends SlotMachineView {
       ease: 'sine.inOut',
       onComplete: () => {
         fromEl.visible = false;
+        if (groupNames === WHEEL_RIM_NAMES) {
+          this.maskWheelTestToRim();
+        }
       },
     });
   }
@@ -306,10 +309,20 @@ export class GameSlotMachineView extends SlotMachineView {
     const targets = [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel].filter(Boolean);
     const stagger = 0.08;
 
+    if (targets.length === 0) {
+      onComplete?.();
+      return;
+    }
+
+    let remaining = targets.length;
+    const settle = () => {
+      remaining--;
+      if (remaining === 0) onComplete?.();
+    };
+
     targets.forEach((target: any, index: number) => {
       AnimationProxy.killTweensOf(target);
       const delay = index * stagger;
-      const isLast = index === targets.length - 1;
 
       if (show) {
         target.visible = true;
@@ -319,9 +332,9 @@ export class GameSlotMachineView extends SlotMachineView {
           duration: 0.6,
           delay,
           ease: 'sine.out',
-          onComplete: isLast ? onComplete : undefined,
+          onComplete: settle,
         });
-      } else {
+      } else if (target.visible) {
         AnimationProxy.animateTween(target, {
           alpha: 0,
           duration: 0.4,
@@ -329,9 +342,11 @@ export class GameSlotMachineView extends SlotMachineView {
           ease: 'sine.in',
           onComplete: () => {
             target.visible = false;
-            if (isLast) onComplete?.();
+            settle();
           },
         });
+      } else {
+        settle();
       }
     });
   }

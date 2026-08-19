@@ -516,7 +516,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'gameTitle',
       type: 'Spine',
-      spineName: 'gameTitle',
+      spineName: 'Cat',
       defaultState: 'idle',
       idleState: 'idle',
       loop: true,

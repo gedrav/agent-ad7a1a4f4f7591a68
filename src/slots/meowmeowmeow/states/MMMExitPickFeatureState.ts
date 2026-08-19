@@ -18,7 +18,12 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
 
   private afterHidePickFeatureUI(): void {
     if (this.checkForMaxCapWin()) {
-      return;
+      EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
+      // EventHandler.dispatchEvent('TRANSITION', {
+      //   show: true,
+      //   callback: () => { },
+      // });
+      // return;
     }
 
     const awardedFromBlueWheel =
