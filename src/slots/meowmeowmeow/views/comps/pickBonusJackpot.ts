@@ -76,21 +76,6 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     });
   }
 
-  private checkForMaxCapWin(): boolean {
-    if (!appModel.getIsMaxCapReached()) {
-      return false;
-    }
-
-    const obj: any = {};
-    obj.title = Util.getContent('infoText');
-    obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
-      Util.formatCurrency(appModel.featureResult.totalWin),
-    ]);
-    obj.callback = this.exit.bind(this);
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
-    return true;
-  }
-
   private async onIconSelected(icon: PickBonusJackpotIconComp): Promise<void> {
     this.eventMode = 'none';
     icon.startFlipAnimation();
@@ -99,14 +84,6 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
       ? appModel.getUnfinishedFeatureType()
       : appModel.getFeatureType();
     await MessageProxy.requestBonusData(featureType);
-    if (this.checkForMaxCapWin()) {
-      EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
-      // EventHandler.dispatchEvent('TRANSITION', {
-      //   show: true,
-      //   callback: () => { },
-      // });
-      return;
-    }
 
     const { picks, winningTier } = appModel.featureResult.featureData;
     const pickedTier = picks[0].jackpotTier;
@@ -123,12 +100,33 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     if (!this.isWinAchieved) this.eventMode = 'passive';
   }
 
+  private checkForMaxCapWin(): boolean {
+    if (!appModel.getIsMaxCapReached()) {
+      return false;
+    }
+
+    const obj: any = {};
+    obj.title = Util.getContent('infoText');
+    obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
+      Util.formatCurrency(appModel.featureResult.totalWin),
+    ]);
+    obj.callback = this.exit.bind(this);
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    return true;
+  }
+
   private onIconRevealComplete(icon: PickBonusJackpotIconComp): void {
     if (!this.isWinAchieved) return;
     if (icon !== this.pickedIcons[this.pickedIcons.length - 1]) return;
 
     this.animateWinningSymbols(appModel.featureResult.featureData.winningTier);
-    EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', { callback: this.exit.bind(this) });
+    EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', {
+      callback: () => {
+        if (!this.checkForMaxCapWin()) {
+          this.exit();
+        }
+      },
+    });
   }
 
   private animateWinningSymbols(winningTier: string): void {

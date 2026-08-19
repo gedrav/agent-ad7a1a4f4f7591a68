@@ -8,6 +8,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
 import gsap from 'gsap';
+import { SlotEvents } from '@core/events/SlotEvents';
 import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 type SpinState = 'idle' | 'spinning' | 'stopping';
@@ -296,6 +297,21 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     this.onSpinComplete(choosenSector);
   }
 
+  private checkForMaxCapWin(): boolean {
+    if (!appModel.getIsMaxCapReached()) {
+      return false;
+    }
+
+    const obj: any = {};
+    obj.title = Util.getContent('infoText');
+    obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
+      Util.formatCurrency(appModel.featureResult.totalWin),
+    ]);
+    obj.callback = () => StateManager.next();
+    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+    return true;
+  }
+
   private onSpinComplete(choosenSector: number): void {
     EventHandler.dispatchEvent('PLAY_WHEEL_WIN_SOUND');
     const animName = this.animationMap[choosenSector];
@@ -305,7 +321,9 @@ export class WheelFeatureComp extends ResponsiveChildrenView {
     setTimeout(() => {
       this.glowEffect.visible = false;
       this.wheelBG.playAnimation({ state: 'inner_circle', loop: true });
-      StateManager.next();
+      if (!this.checkForMaxCapWin()) {
+        StateManager.next();
+      }
     }, 3500);
   }
 

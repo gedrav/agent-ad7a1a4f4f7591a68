@@ -433,7 +433,7 @@ export class GameSlotMachineView extends SlotMachineView {
     if (!this.vaultAnim) return;
 
     // Calculate open position
-    const shiftX = 1506;
+    const shiftX = 1556;
 
     if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop - shiftX;
@@ -464,7 +464,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.vaultAnim.scale.set(0.6);
     this.vaultAnim.visible = true;
 
-    const shiftX = 1506;
+    const shiftX = 1556;
 
     if (this.vaultClosedX && this.vaultAnim?.configData?.layoutData) {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;

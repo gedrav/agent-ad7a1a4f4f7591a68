@@ -18,13 +18,11 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
   }
 
   private afterHidePickFeatureUI(): void {
-    if (this.checkForMaxCapWin()) {
+    if (appModel.getIsMaxCapReached()) {
       EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
-      // EventHandler.dispatchEvent('TRANSITION', {
-      //   show: true,
-      //   callback: () => { },
-      // });
-      // return;
+      EventHandler.dispatchEvent('RESET_BG_UI');
+      this.exitPickFeature();
+      return;
     }
 
     const awardedFromBlueWheel =
@@ -49,21 +47,6 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     obj.entryPopUp = false;
     obj.callbackFunction = this.exitPickFeature.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, obj);
-  }
-
-  protected checkForMaxCapWin(): boolean {
-    if (!appModel.getIsMaxCapReached()) {
-      return false;
-    }
-
-    const obj: any = {};
-    obj.title = Util.getContent('infoText');
-    obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
-      Util.formatCurrency(appModel.featureResult.totalWin),
-    ]);
-    obj.callback = this.exitPickFeature.bind(this);
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
-    return true;
   }
 
   protected goToNextStep(): void {
