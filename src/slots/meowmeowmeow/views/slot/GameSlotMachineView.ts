@@ -303,14 +303,6 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   public animateGameElementsTransition(show: boolean, onComplete?: () => void): void {
-    const offscreenDistance = 1600;
-    const offscreenDirections = new Map<any, { x: number; y: number }>([
-      [this.gameTitle, { x: 0, y: -offscreenDistance }],
-      [this.jackpotContainer, { x: -offscreenDistance, y: 0 }],
-      [this.kittiebankComp, { x: 0, y: offscreenDistance }],
-      [this.slotReel, { x: offscreenDistance, y: 0 }],
-    ]);
-
     const targets = [this.gameTitle, this.jackpotContainer, this.kittiebankComp, this.slotReel].filter(Boolean);
     const stagger = 0.08;
 
@@ -318,32 +310,23 @@ export class GameSlotMachineView extends SlotMachineView {
       AnimationProxy.killTweensOf(target);
       const delay = index * stagger;
       const isLast = index === targets.length - 1;
-      const restX = target.x;
-      const restY = target.y;
-      const offset = offscreenDirections.get(target) || { x: 0, y: 0 };
 
       if (show) {
         target.visible = true;
         target.alpha = 0;
-        target.x = restX + offset.x;
-        target.y = restY + offset.y;
         AnimationProxy.animateTween(target, {
           alpha: 1,
-          x: restX,
-          y: restY,
           duration: 0.6,
           delay,
-          ease: 'back.out(1.3)',
+          ease: 'sine.out',
           onComplete: isLast ? onComplete : undefined,
         });
       } else {
         AnimationProxy.animateTween(target, {
           alpha: 0,
-          x: restX + offset.x,
-          y: restY + offset.y,
           duration: 0.4,
           delay,
-          ease: 'power2.in',
+          ease: 'sine.in',
           onComplete: () => {
             target.visible = false;
             if (isLast) onComplete?.();

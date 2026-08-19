@@ -127,7 +127,7 @@ export class MMMPFPopupComp extends PFPopupComp {
     super.updateMessagePositions(data);
     this.messageText1.y = 1040;
 
-    this.titleText.visible = !data.hideFeatureAwardedTitle;
+    this.titleText.visible = !!data.entryPopUp && !data.hideFeatureAwardedTitle;
     this.titleText.text = Util.getContent('FeatureAwardedTitle');
     const featureSubType = appModel.getNextSubFeatureType()
       ? appModel.getNextSubFeatureType()
