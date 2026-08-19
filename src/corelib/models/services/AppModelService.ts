@@ -307,12 +307,11 @@ class AppModelService {
     this.gameInfo.balance = data.playerInfo.balance;
     this.gameInfo.minBet = data.playerInfo.minBet;
     this.gameInfo.maxBet = data.playerInfo.maxBet;
-    this.gameInfo.bbMaxBet = this.opConfig.allowFullBBBet ? 0 : data.playerInfo.maxBet;
+    this.gameInfo.bbMaxBet = data.playerInfo.bbMaxBet ? data.playerInfo.bbMaxBet : data.playerInfo.maxBet;
     this.gameInfo.selectedLines = GameProxy.config.totalLines;
     this.gameInfo.creditValue = GameProxy.config.creditValue;
     this.gameInfo.betsArray = [];
     const len = data.playerInfo.possibleBets.length;
-    const totalBetsArray: number[] = [];
     if (len > 0) {
       data.playerInfo.possibleBets.sort((a: number, b: number) => a - b);
       for (let i = 0; i < len; i++) {
@@ -1143,11 +1142,11 @@ class AppModelService {
       : 0;
   }
   public getSpinRemainingTime(): number {
-    if (!this.opConfig?.spinDuration) {
-      return 0;
-    } else {
+    if (this.opConfig?.spinDuration) {
       const diff: number = Util.getCurrentTimeInMili() - this.spinStartTime;
       return this.opConfig.spinDuration - diff;
+    } else {
+      return 0;
     }
   }
 }
