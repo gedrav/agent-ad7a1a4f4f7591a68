@@ -39,6 +39,7 @@ export class MMMBigWinsComp extends BigWinsComp {
   private readonly featureWinText: PixText;
   private featureWinCallback: (() => void) | null = null;
   private isFeatureWinActive: boolean = false;
+  private isFeatureWinSkipping: boolean = false;
   private guideRectBounds: { x: number; y: number; width: number; height: number } | null = null;
 
   constructor(config: any) {
@@ -81,11 +82,18 @@ export class MMMBigWinsComp extends BigWinsComp {
   protected showFeatureWin(data: { callback?: () => void }): void {
     this.featureWinCallback = data?.callback ?? null;
     this.isFeatureWinActive = true;
+    this.isFeatureWinSkipping = false;
     this.currentLevel = 3;
     this.targetLevel = 4;
     this.currentState = CONSTANTS.EPIC_WIN;
 
     this.parent?.addChild(this);
+
+    const skipRect = this.elementsList['skipRect'];
+    if (skipRect) {
+      skipRect.visible = true;
+    }
+
     const bigWinText = this.elementsList['bigWinText'];
     if (bigWinText) {
       bigWinText.visible = false;
@@ -163,12 +171,37 @@ export class MMMBigWinsComp extends BigWinsComp {
   }
 
   protected override onSkipClicked(): void {
-    if (this.isFeatureWinActive) return;
+    if (this.isFeatureWinActive) {
+      if (!this.isFeatureWinSkipping) {
+        this.isFeatureWinSkipping = true;
+        (this as any).isSkipping = true;
+
+        if (this.bigWinAnim) {
+          this.bigWinAnim.playAnimation({
+            state: this.configData.data.animations[this.currentState].idle,
+            loop: false,
+            defaultMix: 0,
+          });
+        }
+
+        this.playCurrentBigWinSound();
+
+        const winTickerBW = this.elementsList['winTickerBW'];
+        if (winTickerBW) {
+          winTickerBW.skipToFinalValue();
+        }
+
+        EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
+        EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
+      }
+      return;
+    }
     super.onSkipClicked();
   }
 
   public override clearSpinWin() {
     this.isFeatureWinActive = false;
+    this.isFeatureWinSkipping = false;
     super.clearSpinWin();
     this.restoreGuideRectBounds();
     if (this.featureWinText) {
@@ -184,6 +217,11 @@ export class MMMBigWinsComp extends BigWinsComp {
     if (!this.featureWinCallback) {
       super.notifyWinDone();
       return;
+    }
+
+    const skipRect = this.elementsList['skipRect'];
+    if (skipRect) {
+      skipRect.visible = false;
     }
 
     const callback = this.featureWinCallback;

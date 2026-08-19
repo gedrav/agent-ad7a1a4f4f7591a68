@@ -86,10 +86,13 @@ export class GameSlotReel extends SlotReelStandard {
     if (size === 4 || size === 5) {
       // Pad initialReel to prevent engine crash and make the falling strip longer
       const targetLength = size + 2;
+      const padPool = ['H1', 'L2', 'L3', 'H3', 'L4', 'H5'];
       if (this.reelsData.initialReel) {
         for (let k = 0; k < this.reelsData.initialReel.length; k++) {
+          let padIndex = k;
           while (this.reelsData.initialReel[k].length < targetLength) {
-            this.reelsData.initialReel[k].push('H1', 'L2', 'RC');
+            this.reelsData.initialReel[k].push(padPool[padIndex % padPool.length]);
+            padIndex++;
           }
         }
       }
