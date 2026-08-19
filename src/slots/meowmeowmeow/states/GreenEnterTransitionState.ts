@@ -9,7 +9,6 @@ import { Util } from '@core/utils/UtilService';
 class GreenEnterTransitionStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
     if (GameProxy.config.subFeatureAwardAnnounced) {
       GameProxy.config.subFeatureAwardAnnounced = false;
       // Show the same entry popup a directly-triggered Green entry would show,
@@ -21,6 +20,8 @@ class GreenEnterTransitionStateCommand extends StateCommand {
         totalCount: appModel.getTotalFreespins(),
         callbackFunction: () => StateManager.doNextStep(),
       });
+    } else {
+      EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
     }
   }
 
