@@ -13,6 +13,7 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
+    EventHandler.dispatchEvent('RESET_PICK_BONUS');
     EventHandler.dispatchEvent('CLOSE_VAULT', this.afterHidePickFeatureUI.bind(this));
   }
 

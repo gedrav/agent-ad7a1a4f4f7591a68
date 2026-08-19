@@ -76,6 +76,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener(SlotEvents.SHOW_COIN_ANIMATION, this.showCoinAnimations.bind(this));
     // EventHandler.addEventListener(SlotEvents.SHOW_PICK_FEATURE_UI, this.handlePickFeature.bind(this));
     EventHandler.addEventListener('RESET_BG_UI', this.hidePickFeatureUI.bind(this));
+    EventHandler.addEventListener('RESET_PICK_BONUS', this.hidePickBonusUI.bind(this));
     EventHandler.addEventListener('CLOSE_VAULT', this.closeWheelDoor.bind(this));
 
     EventHandler.addEventListener(SlotEvents.SHOW_SCATTER_TRIGGER_ONSCREEN, this.onShowExtraSpinAnim.bind(this));
@@ -581,14 +582,19 @@ export class GameSlotMachineView extends SlotMachineView {
     }
   }
 
+  private hidePickBonusUI() {
+    this.feautreHeadingRed.visible = false;
+    this.jackpotContainer.visible = false;
+  }
+
   private hidePickFeatureUI(data?: { callback?: () => void }): void {
+    this.feautreHeadingRed.visible = false;
     this.resetMachineLayout();
     EventHandler.dispatchEvent('RESET_KITTIEBANK_ANIM');
     this.animateGameElementsTransition(true, () => {
       this.wheelBaseRed.visible = false;
       this.wheelBaseGreen.visible = false;
       this.feautreHeadingGreen.visible = false;
-      this.feautreHeadingRed.visible = false;
       this.hideWheelFeatureUI();
 
       data?.callback?.();
@@ -690,10 +696,8 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const strtGlobalPos = this.slotReel.getSymbolPosition(col, symbolRow);
     const targetBank = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-    const endGlobalPos = targetBank.getGlobalPosition();
 
     const startPos = this.toLocal(strtGlobalPos);
-    const endPos = this.toLocal(endGlobalPos);
 
     const skinNameByBank: Record<'meow' | 'mew' | 'mii', string> = { meow: 'red', mew: 'Green', mii: 'Blue' };
     const skinName = skinNameByBank[bankName];
@@ -728,23 +732,17 @@ export class GameSlotMachineView extends SlotMachineView {
 
     const arcHeight = -700;
     const c1 = new Point(startPos.x, startPos.y + arcHeight);
-    const c2 = new Point(endPos.x, endPos.y + arcHeight);
-    // The onUpdate callback below is a plain `function`, not an arrow function, because GSAP
-    // rebinds its own `this` there for tween.progress(); this alias is how the view instance
-    // stays reachable inside it.
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
 
     EventHandler.dispatchEvent('PLAY_TRAIL_SOUND');
 
-    AnimationProxy.animateTween(movingSymbol, {
+    const tween = AnimationProxy.animateTween(movingSymbol, {
       duration: 1,
-      onUpdate: function () {
-        const t = this.progress();
+      onUpdate: () => {
+        const t = tween.progress();
 
         // Dynamically recalculate end position to handle resize during animation
         const currentEndGlobalPos = targetBank.getGlobalPosition();
-        const currentEndPos = self.toLocal(currentEndGlobalPos);
+        const currentEndPos = this.toLocal(currentEndGlobalPos);
         const currentC2 = new Point(currentEndPos.x, currentEndPos.y + arcHeight);
 
         const bezierPoint = getBezierPoint(t, startPos, c1, currentC2, currentEndPos);
@@ -755,7 +753,7 @@ export class GameSlotMachineView extends SlotMachineView {
         }
 
         if (movingSymbol.parent === kittieBankComp) {
-          const localPos = kittieBankComp.toLocal(bezierPoint, self);
+          const localPos = kittieBankComp.toLocal(bezierPoint, this);
           movingSymbol.position.copyFrom(localPos);
         } else {
           movingSymbol.position.copyFrom(bezierPoint);
@@ -958,6 +956,7 @@ export class GameSlotMachineView extends SlotMachineView {
                 els['winTickerBW'].x = 800;
               } else {
                 els['winTickerBW'].x = 755;
+                if (isPortrait) els['winTicker'].x = 855;
               }
             }
           } else if (currentInterfaceSize === 5) {
@@ -1005,6 +1004,7 @@ export class GameSlotMachineView extends SlotMachineView {
         }
         break;
     }
+    if (DeviceProxy.config.isPortrait) this.bigWinsComp.elementsList['winTicker'].x = 855;
   }
 
   // reset all layout mutations made during free spins
