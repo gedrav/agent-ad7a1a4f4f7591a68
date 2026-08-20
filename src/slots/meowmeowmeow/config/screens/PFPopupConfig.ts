@@ -199,7 +199,7 @@ export const PF_POPUP_CONFIG = {
         {
           name: 'wheelPrizeIconGreen',
           type: 'Image',
-          image: 'GREEN',
+          image: 'RED',
           anchor: { x: 0, y: 0.5 },
           scale: 2,
           x: 0,
@@ -233,7 +233,7 @@ export const PF_POPUP_CONFIG = {
         {
           name: 'wheelPrizeIconRed',
           type: 'Image',
-          image: 'RED',
+          image: 'GREEN',
           anchor: { x: 0, y: 0.5 },
           scale: 2,
           x: 190,
@@ -374,7 +374,7 @@ export const PF_POPUP_CONFIG = {
         {
           name: 'blueOutroPrefixText',
           type: 'AdjustableText',
-          maxWidth: 800,
+          maxWidth: 1500,
           content: 'PickFeatureBlueExitPrefixText',
           style: {
             fontFamily: 'gameFont2',
