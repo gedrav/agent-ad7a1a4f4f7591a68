@@ -267,7 +267,7 @@ export const PF_POPUP_CONFIG = {
         {
           name: 'wheelPrizeCashText',
           type: 'AdjustableText',
-          maxWidth: 300,
+          maxWidth: 521,
           content: 'PickFeatureWheelPrizeCashText',
           style: {
             fontFamily: 'gameFont2',
