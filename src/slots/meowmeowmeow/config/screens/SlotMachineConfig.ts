@@ -100,6 +100,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
         Portrait: { scale: 0.5, x: -30, y: 410 },
+        TPortrait: { scale: 1, x: -30, y: 410 },
         Landscape: { scale: 0.5, x: 314, y: -120 },
       },
     },
@@ -583,7 +584,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.68, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
-    Landscape: { widthPerc: 0.7, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
-    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.88, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.02 },
+    Landscape: { widthPerc: 0.8, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
   },
 };

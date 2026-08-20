@@ -45,6 +45,7 @@ const minMobileWidth: number = 44;
 const minMobileHeight: number = 44;
 const desktopWidth: number = 2424;
 const desktopHeight: number = 1300;
+
 class UIUtilService {
   public getElement(obj: any): any {
     let element: any = null;
@@ -1790,31 +1791,6 @@ class UIUtilService {
     return DeviceProxy.config.gameHeight;
   }
 
-  protected getDeviceSpecificLayout(data: any): any {
-    let obj: any = null;
-    if (data) {
-      if (DeviceProxy.config.isDesktop) {
-        const isWindowPortrait = DeviceProxy.config.isPortrait;
-        if (isWindowPortrait && data.DesktopPortrait) {
-          obj = data.DesktopPortrait;
-        } else {
-          obj = data.Desktop ?? data.Landscape ?? data.Portrait;
-        }
-      } else if (DeviceProxy.config.isLandscape) {
-        if (this.isShortPhone()) {
-          obj = data.SmallLandscape ?? data.SmallLandscape ?? data.Landscape ?? data.Portrait ?? data.Desktop;
-        } else {
-          obj = data.Landscape ?? data.Portrait ?? data.Desktop;
-        }
-      } else if (this.isShortPhone()) {
-        obj = data.SmallPortrait ?? data.SmallPortrait ?? data.Portrait ?? data.Landscape ?? data.Desktop;
-      } else {
-        obj = data.Portrait ?? data.Landscape ?? data.Desktop;
-      }
-    }
-    return obj;
-  }
-
   public updateWordWrapWidth(txt: Text, width: number, align = 'center'): void {
     txt.style.wordWrap = true;
     txt.style.wordWrapWidth = width;
@@ -2219,6 +2195,46 @@ class UIUtilService {
     const shortScreen = Math.min(window.screen.width, window.screen.height);
     const longScreen = Math.max(window.screen.width, window.screen.height);
     return DeviceProxy.config.isIOSDevice && shortScreen <= 375 && longScreen <= 667;
+  }
+
+  private readonly layoutKeyMap: Record<string, string[]> = {
+    desktopPortrait: ['DesktopPortrait', 'Desktop', 'Landscape', 'Portrait'],
+    desktop: ['Desktop', 'Landscape', 'Portrait'],
+    shortLandscape: ['SmallLandscape', 'Landscape', 'Portrait', 'Desktop'],
+    tabletLandscape: ['TLandscape', 'Landscape', 'Portrait', 'Desktop'],
+    landscape: ['Landscape', 'Portrait', 'Desktop'],
+    shortPortrait: ['SmallPortrait', 'Portrait', 'Landscape', 'Desktop'],
+    tabletPortrait: ['TPortrait', 'Portrait', 'Landscape', 'Desktop'],
+    portrait: ['Portrait', 'Landscape', 'Desktop'],
+  };
+
+  private getLayoutVariantKeys(): string[] {
+    const { isDesktop, isPortrait, isLandscape, isTablet } = DeviceProxy.config;
+    const isShort = this.isShortPhone();
+
+    if (isDesktop) {
+      return isPortrait ? this.layoutKeyMap.desktopPortrait : this.layoutKeyMap.desktop;
+    }
+    if (isLandscape) {
+      if (isShort) return this.layoutKeyMap.shortLandscape;
+      if (isTablet) return this.layoutKeyMap.tabletLandscape;
+      return this.layoutKeyMap.landscape;
+    }
+    if (isShort) return this.layoutKeyMap.shortPortrait;
+    if (isTablet) return this.layoutKeyMap.tabletPortrait;
+    return this.layoutKeyMap.portrait;
+  }
+
+  protected getDeviceSpecificLayout(data: any): any {
+    if (!data) return null;
+
+    const keys = this.getLayoutVariantKeys();
+    for (const key of keys) {
+      if (data[key] !== undefined && data[key] !== null) {
+        return data[key];
+      }
+    }
+    return null;
   }
 }
 

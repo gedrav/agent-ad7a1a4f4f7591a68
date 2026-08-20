@@ -242,8 +242,8 @@ export const SPLASH_CONFIG: any = {
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 50,
-              mFontSize: 50,
+              fontSize: 70,
+              mFontSize: 70,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {
                 angle: 0.5235987755982988,
