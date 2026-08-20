@@ -64,29 +64,25 @@ export class KittieBankComp extends ResponsiveChildrenView {
 
   public showSelectedFeatureBank(featureName: string): void {
     const targetBank = KittieBankComp.FEATURE_BANK_MAP[featureName?.toUpperCase() as FeatureName];
-    if (!targetBank) return;
-
-    const isMobile = DeviceProxy.isDevice();
-    const showsOnThisDevice = !isMobile || targetBank === 'mew';
+    const showGreen = targetBank === 'mew';
 
     const bankNames = ['meow', 'mew', 'mii'];
     for (const bank of bankNames) {
       const bankComp = this.elementsList[bank];
       if (bankComp) {
-        bankComp.visible = showsOnThisDevice && bank === targetBank;
+        bankComp.visible = showGreen && bank === 'mew';
       }
     }
 
-    this.activeRevealBank = showsOnThisDevice ? targetBank : null;
+    this.activeRevealBank = showGreen ? 'mew' : null;
 
-    if (showsOnThisDevice) {
-      const targetBankComp = this.elementsList[targetBank];
+    if (showGreen) {
+      const targetBankComp = this.elementsList['mew'];
       if (targetBankComp) {
         this.applyRevealPosition(targetBankComp);
 
         const spineAnim = targetBankComp.elementsList?.['spineAnim'] || targetBankComp;
-        const animPrefix = targetBank === 'meow' ? '3_RED' : targetBank === 'mew' ? '1_GREEN' : '2_BLUE';
-        const staticAnim = targetBankComp.configData?.defaultState || `${animPrefix}_Static`;
+        const staticAnim = targetBankComp.configData?.defaultState || '1_GREEN_Static';
         if (spineAnim && staticAnim && typeof spineAnim.playAnimation === 'function') {
           spineAnim.playAnimation({
             state: staticAnim,
@@ -98,7 +94,7 @@ export class KittieBankComp extends ResponsiveChildrenView {
 
     const coinsComp = this.elementsList['fspopupcoins'];
     if (coinsComp) {
-      coinsComp.visible = !isMobile;
+      coinsComp.visible = showGreen && !DeviceProxy.isDevice();
     }
   }
 

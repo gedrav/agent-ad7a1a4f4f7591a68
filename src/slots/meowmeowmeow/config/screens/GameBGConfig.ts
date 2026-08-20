@@ -8,7 +8,7 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'maingameBG',
       type: 'Sprite',
-      image: 'maingamebg.jpg',
+      image: 'gameBG',
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.003, fitToScreen: true, fullScreenScale: 1 },
         Portrait: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.16, fitToScreen: true, fullScreenScale: 1 },
@@ -18,7 +18,7 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'BGRed',
       type: 'Sprite',
-      image: 'maingameRedBG.jpg',
+      image: 'BGRed',
       visible: false,
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.003, fitToScreen: true, fullScreenScale: 1 },
@@ -29,7 +29,7 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'BGblue',
       type: 'Sprite',
-      image: 'maingameBlueBG.jpg',
+      image: 'BGblue',
       visible: false,
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.003, fitToScreen: true, fullScreenScale: 1 },
@@ -40,7 +40,7 @@ export const GAME_BG_CONFIG: any = {
     {
       name: 'BGgreen',
       type: 'Sprite',
-      image: 'maingameGreenBG.jpg',
+      image: 'BGgreen',
       visible: false,
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: -0.003, fitToScreen: true, fullScreenScale: 1 },

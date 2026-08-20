@@ -436,5 +436,21 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
+    {
+      name: 'Door_open',
+      type: 'game',
+      loop: false,
+      playEvents: ['WHEEL_OPEN'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
+      name: 'Door_close',
+      type: 'game',
+      loop: false,
+      playEvents: ['WHEEL_CLOSE'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
   ],
 };

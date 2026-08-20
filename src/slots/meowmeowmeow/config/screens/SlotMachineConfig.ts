@@ -99,10 +99,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: true,
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
-        Portrait: { scale: 0.5, x: -68, y: 410 },
+        Portrait: { scale: 1, x: -68, y: 410 },
         TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
-        Landscape: { scale: 0.5, x: 314, y: -120 },
+        Landscape: { scale: 1, x: 314, y: -120 },
       },
     },
     {
@@ -113,10 +113,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
-        Portrait: { scale: 0.5, x: -68, y: 410 },
+        Portrait: { scale: 1, x: -68, y: 410 },
         TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
-        Landscape: { scale: 0.5, x: 314, y: -120 },
+        Landscape: { scale: 1, x: 314, y: -120 },
       },
     },
     {
@@ -127,10 +127,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
-        Portrait: { scale: 0.5, x: -68, y: 410 },
+        Portrait: { scale: 1, x: -68, y: 410 },
         TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
-        Landscape: { scale: 0.5, x: 314, y: -120 },
+        Landscape: { scale: 1, x: 314, y: -120 },
       },
     },
     {
@@ -141,10 +141,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
-        Portrait: { scale: 0.5, x: -68, y: 410 },
+        Portrait: { scale: 1, x: -68, y: 410 },
         TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
-        Landscape: { scale: 0.5, x: 314, y: -120 },
+        Landscape: { scale: 1, x: 314, y: -120 },
       },
     },
     {
@@ -357,11 +357,11 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'reelstripBG',
           type: 'Sprite',
-          image: 'reelFrame',
+          image: 'gameElements1',
           layoutData: {
             Desktop: { x: 34, y: 62, scale: 1 },
-            Portrait: { x: -4, y: 62, scale: 0.5 },
-            Landscape: { x: 34, y: 62, scale: 0.5 },
+            Portrait: { x: -4, y: 62, scale: 1 },
+            Landscape: { x: 34, y: 62, scale: 1 },
             TPortrait: { x: 0, y: 62, scale: 1 },
             TLandscape: { x: 34, y: 62, scale: 1 },
           },
@@ -369,7 +369,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'bg4',
           type: 'Sprite',
-          image: '5_4Reelbg',
+          image: 'reelframes-3',
           x: 40,
           y: -180,
           px: 25,
@@ -381,7 +381,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'bg5',
           type: 'Sprite',
-          image: '5_5Reelbg',
+          image: 'reelframes-2',
           x: 34,
           y: -267,
           px: 0,
@@ -558,9 +558,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'BlueMeow',
       visible: false,
       layoutData: {
-        Desktop: { scale: 0.5, x: 940, y: -105 },
-        Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 0.5, x: 610, y: 400 },
+        Desktop: { scale: 1, x: 1020, y: -158 },
+        Landscape: { scale: 1, x: 958, y: -105 },
+        Portrait: { scale: 1, x: 665, y: 370 },
       },
     },
     {
@@ -569,9 +569,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'GreenMeow',
       visible: false,
       layoutData: {
-        Desktop: { scale: 0.5, x: 940, y: -105 },
-        Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 0.5, x: 610, y: 400 },
+        Desktop: { scale: 1, x: 1032, y: -158 },
+        Landscape: { scale: 1, x: 940, y: -105 },
+        Portrait: { scale: 1, x: 604, y: 387 },
       },
     },
     KITTIEBANK_CONFIG,
