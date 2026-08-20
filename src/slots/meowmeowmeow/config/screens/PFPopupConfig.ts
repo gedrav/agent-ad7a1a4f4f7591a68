@@ -17,7 +17,7 @@ export const PF_POPUP_CONFIG = {
       visble: false,
       scale: 0.8,
       x: 900,
-      y: 750,
+      y: 400,
     },
     {
       name: 'fspopupcoins',
