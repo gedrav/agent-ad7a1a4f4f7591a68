@@ -441,6 +441,7 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape - shiftX;
     }
 
+    EventHandler.dispatchEvent('WHEEL_OPEN');
     AnimationProxy.animateTween(this.vaultAnim, {
       duration: 1.2,
       x: this.vaultAnim.x - shiftX,
@@ -471,7 +472,7 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
       this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
     }
-
+    EventHandler.dispatchEvent('WHEEL_CLOSE');
     AnimationProxy.animateTween(this.vaultAnim, {
       duration: 1.2,
       x: this.vaultAnim.x + shiftX,
