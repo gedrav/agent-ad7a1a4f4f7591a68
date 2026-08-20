@@ -158,6 +158,7 @@ class SlotGameApp {
     this.boundResize = this.resize.bind(this);
     this.boundVisibilityChange = this.visibilityChange.bind(this);
     window.addEventListener('resize', this.boundResize);
+    document.addEventListener('fullscreenchange', this.boundResize);
     document.addEventListener('visibilitychange', this.boundVisibilityChange);
 
     this.attachWebGLContextHandlers();
@@ -266,6 +267,7 @@ class SlotGameApp {
     }
     if (this.boundResize) {
       window.removeEventListener('resize', this.boundResize);
+      document.removeEventListener('fullscreenchange', this.boundResize);
     }
     if (this.boundVisibilityChange) {
       document.removeEventListener('visibilitychange', this.boundVisibilityChange);
