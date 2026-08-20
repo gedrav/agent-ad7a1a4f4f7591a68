@@ -855,11 +855,6 @@ export class GameSlotMachineView extends SlotMachineView {
           this.gameTitle.configData.layoutData = this.gameTitle.configData.fsLayoutData;
         }
 
-        if (this.configData?.layoutData?.Portrait) {
-          this.configData.layoutData.Portrait.vPaddingPerc = -0.09;
-          this.configData.layoutData.Portrait.hPaddingPerc = -0.02;
-        }
-
         const kld = this.kittiebankComp?.configData?.layoutData;
         if (this.kittiebankBaseX && kld) {
           const shift = 60;
