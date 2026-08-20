@@ -558,9 +558,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'BlueMeow',
       visible: false,
       layoutData: {
-        Desktop: { scale: 1, x: 1032, y: -158 },
-        Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 0.5, x: 610, y: 400 },
+        Desktop: { scale: 1, x: 1020, y: -158 },
+        Landscape: { scale: 1, x: 958, y: -105 },
+        Portrait: { scale: 1, x: 665, y: 370 },
       },
     },
     {
@@ -570,8 +570,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1, x: 1032, y: -158 },
-        Landscape: { scale: 0.5, x: 940, y: -105 },
-        Portrait: { scale: 0.5, x: 610, y: 400 },
+        Landscape: { scale: 1, x: 940, y: -105 },
+        Portrait: { scale: 1, x: 604, y: 387 },
       },
     },
     KITTIEBANK_CONFIG,

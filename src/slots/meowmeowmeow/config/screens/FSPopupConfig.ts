@@ -37,9 +37,9 @@ export const FS_POPUP_CONFIG = {
       defaultState: '1_GREEN_Static',
       idle: '1_GREEN_Ideal',
       loop: true,
-      scale: 0.6,
+      scale: 0.8,
       x: 980,
-      y: 260,
+      y: 142,
     },
     {
       name: 'titleText',

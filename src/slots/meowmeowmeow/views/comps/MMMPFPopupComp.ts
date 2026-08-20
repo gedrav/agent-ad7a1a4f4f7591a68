@@ -8,7 +8,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { Util } from '@core/utils/UtilService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { Texture } from 'pixi.js';
+import { isMobile, Texture } from 'pixi.js';
 import { FEATURE_NAMES, FeatureName } from '@slots/meowmeowmeow/config/FeatureNames';
 
 const OUTRO_FEATURE_ICON_BY_SUBTYPE: Record<string, string> = {
@@ -227,6 +227,11 @@ export class MMMPFPopupComp extends PFPopupComp {
           }
           const animName = featName.toUpperCase() === FEATURE_NAMES.RED ? '3_RED_Ideal' : '2_BLUE_Ideal';
           mewSpine.playAnimation({ state: animName, loop: true });
+          if (animName === '2_BLUE_Ideal' && isMobile) {
+            mewSpine.scale.set(0.6);
+          } else {
+            mewSpine.scale.set(0.5);
+          }
         }
 
         this.animateElementsDropIn();
