@@ -7,8 +7,25 @@ import { StateManager } from '@core/states/StateManagerService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 
 class MMMExitFreeSpinStateCommand extends StateCommand {
+  private maxCapPopupShown = false;
+
   public async execute(data: any = null) {
     super.execute(data);
+
+    if (appModel.getIsMaxCapReached() && !this.maxCapPopupShown) {
+      this.maxCapPopupShown = true;
+      const obj: any = {};
+      obj.title = Util.getContent('infoText');
+      obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
+        Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
+      ]);
+      // MessagePopupView re-enters CHECK_FS_STATE on close while a freespins session is
+      // active, which routes back into this state once free spins are confirmed finished.
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
+      return;
+    }
+
+    this.maxCapPopupShown = false;
     EventHandler.dispatchEvent('CLOSE_VAULT', this.afterCloseWheelDoor.bind(this));
   }
 
@@ -26,25 +43,25 @@ class MMMExitFreeSpinStateCommand extends StateCommand {
         show: true,
         callback: () => {},
       });
-      const obj: any = {};
-      obj.title = Util.getContent('infoText');
-      obj.message = Util.parseMessage(Util.getContent('maxCapReachedBaseGame'), [
-        Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
-      ]);
-      obj.callback = this.exitFreespin.bind(this);
-      EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
-    } else {
-      const obj: any = {};
-      obj.title = Util.getContent('CongratTitle');
-      obj.message1 = Util.parseMessage(Util.getContent('FSExitText'), [
-        Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
-      ]);
-      obj.entryPopUp = false;
-      obj.callbackFunction = this.exitFreespin.bind(this);
-      EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
-      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
+      this.finishFreespinExitUI();
+      this.exitFreespin();
+      return;
     }
 
+    const obj: any = {};
+    obj.title = Util.getContent('CongratTitle');
+    obj.message1 = Util.parseMessage(Util.getContent('FSExitText'), [
+      Util.formatCurrency(appModel.getTotalFreespinWinAmount()),
+    ]);
+    obj.entryPopUp = false;
+    obj.callbackFunction = this.exitFreespin.bind(this);
+    EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
+    EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
+
+    this.finishFreespinExitUI();
+  }
+
+  private finishFreespinExitUI(): void {
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, true);
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, false);
