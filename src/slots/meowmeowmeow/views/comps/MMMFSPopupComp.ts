@@ -52,10 +52,10 @@ export class MMMFSPopupComp extends FSPopupComp {
       }
     }
 
-    const freeGamesCountText = this.elementsList['freeGamesCountText'];
-    const freeGamesLabelText = this.elementsList['freeGamesLabelText'];
-    const waysCountText = this.elementsList['waysCountText'];
-    const waysLabelText = this.elementsList['waysLabelText'];
+    const freeGamesContainer = this.elementsList['freeGamesContainer'];
+    const waysContainer = this.elementsList['waysContainer'];
+    const freeGamesCountText =
+      freeGamesContainer?.elementsList?.['freeGamesCountText'] || this.elementsList['freeGamesCountText'];
 
     if (this.congratText) {
       this.congratText.visible = true;
@@ -69,33 +69,19 @@ export class MMMFSPopupComp extends FSPopupComp {
         this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
         this.titleText.y = 687;
       }
-      const temp = DeviceProxy.isDevice() ? 1050 : 1150;
-      if (freeGamesCountText && freeGamesLabelText) {
-        freeGamesCountText.visible = true;
-        freeGamesLabelText.visible = true;
-        if (data.totalCount !== undefined) {
-          freeGamesCountText.text = String(data.totalCount);
-        }
-        const spacing = 15;
-        const totalWidth = freeGamesCountText.width + spacing + freeGamesLabelText.width;
-        const startX = temp - totalWidth / 2;
-        freeGamesCountText.anchor.x = 0;
-        freeGamesCountText.x = startX;
-        freeGamesLabelText.anchor.x = 0;
-        freeGamesLabelText.x = startX + freeGamesCountText.width + spacing;
+
+      const outroContainer = this.elementsList['outroMessageContainer'];
+      if (outroContainer) {
+        outroContainer.visible = false;
       }
 
-      if (waysCountText && waysLabelText) {
-        waysCountText.visible = true;
-        waysLabelText.visible = true;
-        const spacing = 15;
-        const totalWidth = waysCountText.width + spacing + waysLabelText.width;
-        const startX = temp - totalWidth / 2;
-        waysCountText.anchor.x = 0;
-        waysCountText.x = startX;
-        waysLabelText.anchor.x = 0;
-        waysLabelText.x = startX + waysCountText.width + spacing;
+      if (freeGamesContainer) freeGamesContainer.visible = true;
+      if (waysContainer) waysContainer.visible = true;
+
+      if (freeGamesCountText && data.totalCount !== undefined) {
+        freeGamesCountText.text = String(data.totalCount);
       }
+
       if (this.messageText1) this.messageText1.visible = false;
       // if (this.messageText2) {
       //   this.messageText2.visible = true;
@@ -105,14 +91,20 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.titleText) {
         this.titleText.visible = false;
       }
-      if (freeGamesCountText) freeGamesCountText.visible = false;
-      if (freeGamesLabelText) freeGamesLabelText.visible = false;
-      if (waysCountText) waysCountText.visible = false;
-      if (waysLabelText) waysLabelText.visible = false;
+      if (freeGamesContainer) freeGamesContainer.visible = false;
+      if (waysContainer) waysContainer.visible = false;
+
+      const outroContainer = this.elementsList['outroMessageContainer'];
+      if (outroContainer) {
+        outroContainer.visible = true;
+        const amountText = outroContainer.elementsList?.['outroAmountText'];
+        if (amountText) {
+          amountText.text = Util.formatCurrency(appModel.getTotalFreespinWinAmount());
+        }
+      }
 
       if (this.messageText1) {
-        this.messageText1.visible = true;
-        this.messageText1.y = 1020;
+        this.messageText1.visible = false;
       }
       // if (this.messageText2) {
       //   this.messageText2.visible = true;
