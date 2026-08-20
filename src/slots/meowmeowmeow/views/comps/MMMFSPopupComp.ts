@@ -197,16 +197,11 @@ export class MMMFSPopupComp extends FSPopupComp {
   }
 
   private animateElementsDropIn(): void {
-    const dropStartY = -600;
-
     AnimationProxy.killTweensOf(this);
-    const restY = this.y;
     this.alpha = 0;
-    this.y = dropStartY;
 
     AnimationProxy.animateTween(this, {
       alpha: 1,
-      y: restY,
       duration: 0.5,
       ease: 'power1.out',
       onComplete: () => {
@@ -223,8 +218,6 @@ export class MMMFSPopupComp extends FSPopupComp {
   }
 
   private animateElementsDropOut(onComplete?: () => void): void {
-    const dropDistance = 700;
-
     const particleSpine = this.elementsList['particleSpine'] as PixSpine;
     if (particleSpine) {
       particleSpine.visible = false;
@@ -232,15 +225,12 @@ export class MMMFSPopupComp extends FSPopupComp {
     }
 
     AnimationProxy.killTweensOf(this);
-    const restY = this.y;
 
     AnimationProxy.animateTween(this, {
       alpha: 0,
-      y: restY + dropDistance,
       duration: 0.4,
       ease: 'power2.in',
       onComplete: () => {
-        this.y = restY;
         this.alpha = 1;
         onComplete?.();
       },

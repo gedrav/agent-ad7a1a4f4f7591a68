@@ -15,7 +15,6 @@ const OUTRO_FEATURE_ICON_BY_SUBTYPE: Record<string, string> = {
   [FEATURE_NAMES.RED]: 'MEOW',
   [FEATURE_NAMES.GREEN]: 'MII',
 };
-
 const WHEEL_PRIZE_ROW_ORDER = [
   'wheelPrizeIconGreen',
   'wheelPrizeOr1',
@@ -23,13 +22,13 @@ const WHEEL_PRIZE_ROW_ORDER = [
   'wheelPrizeText2',
   'wheelPrizeCashText',
 ];
-const WHEEL_PRIZE_ROW_GAP = 20;
+const WHEEL_PRIZE_ROW_GAP = 40;
 const WHEEL_PRIZE_ROW_Y_OFFSETS: Record<string, number> = {
-  wheelPrizeIconGreen: 43.5,
-  wheelPrizeOr1: 35,
-  wheelPrizeIconRed: 33.5,
-  wheelPrizeText2: 35,
-  wheelPrizeCashText: 28.5,
+  wheelPrizeIconGreen: 0,
+  wheelPrizeOr1: 15,
+  wheelPrizeIconRed: 7,
+  wheelPrizeText2: 15,
+  wheelPrizeCashText: 12,
 };
 
 const RED_PRIZE_ROW_ORDER = ['redPrizeIconGrand', 'redPrizeIconMajor', 'redPrizeIconMinor', 'redPrizeIconMini'];
@@ -105,7 +104,10 @@ export class MMMPFPopupComp extends PFPopupComp {
     children.forEach((child, i) => {
       child.y = yOffsets[order[i]] ?? 0;
       if (i > 0) {
-        x += children[i - 1].width / 2 + gap + child.width / 2;
+        const prev = children[i - 1];
+        const prevAnchorX = prev.anchor?.x ?? 0.5;
+        const anchorX = child.anchor?.x ?? 0.5;
+        x += prev.width * (1 - prevAnchorX) + gap + child.width * anchorX;
       }
       child.x = x;
     });
@@ -193,6 +195,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       this.layoutStackedCenter(this.blueOutroRow, ['blueOutroPrefixText', 'blueOutroAmountText'], BLUE_OUTRO_LINE_GAP);
       this.blueOutroPrefixText.y = 20;
       this.blueOutroAmountText.x = -72;
+      this.blueOutroAmountText.y = 245;
     }
   }
   protected async showPFPopup(data: any) {
@@ -232,23 +235,19 @@ export class MMMPFPopupComp extends PFPopupComp {
   }
 
   private animateElementsDropIn(): void {
-    const dropStartY = -600;
-
     const particleSpine = this.elementsList['particleSpine'] as PixSpine;
-    if (particleSpine) {
-      particleSpine.visible = false;
-    }
+    // if (particleSpine) {
+    //   particleSpine.visible = false;
+    // }
+    // particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
 
-    AnimationProxy.killTweensOf(this);
-    const restY = this.y;
     this.alpha = 0;
-    this.y = dropStartY;
+    AnimationProxy.killTweensOf(this);
 
     AnimationProxy.animateTween(this, {
       alpha: 1,
-      y: restY,
-      duration: 0.3,
-      ease: 'power1.out',
+      duration: 1,
+      ease: 'sine.out',
       onComplete: () => {
         if (particleSpine?.configData.idle) {
           particleSpine.visible = true;
@@ -262,30 +261,24 @@ export class MMMPFPopupComp extends PFPopupComp {
           } else {
             EventHandler.dispatchEvent('TRANSITION_BACKGROUND', { to: 'BG' });
           }
-          particleSpine.playAnimation({ state: particleSpine.configData.idle, loop: true });
         }
       },
     });
   }
 
   private animateElementsDropOut(onComplete?: () => void): void {
-    const dropDistance = 700;
-
     const particleSpine = this.elementsList['particleSpine'] as PixSpine;
     if (particleSpine) {
       particleSpine.visible = false;
     }
 
     AnimationProxy.killTweensOf(this);
-    const restY = this.y;
 
     AnimationProxy.animateTween(this, {
       alpha: 0,
-      y: restY + dropDistance,
-      duration: 0.4,
-      ease: 'power2.in',
+      duration: 1,
+      ease: 'sine.out',
       onComplete: () => {
-        this.y = restY;
         this.alpha = 1;
         onComplete?.();
       },

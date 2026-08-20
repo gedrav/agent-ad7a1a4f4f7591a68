@@ -16,6 +16,7 @@ const COMMON: AssetBundle = {
     { TYPE: 'game', NAME: 'ClarendonCondensedBold.otf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'showg.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'common', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameBG', ASSETTYPE: 'sprite' },
