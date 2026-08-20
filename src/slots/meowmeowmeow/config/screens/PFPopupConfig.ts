@@ -42,7 +42,8 @@ export const PF_POPUP_CONFIG = {
     },
     {
       name: 'titleText',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 1500,
       content: 'FeatureAwardedTitle',
       style: {
         fontFamily: 'gameFont2',
@@ -72,7 +73,8 @@ export const PF_POPUP_CONFIG = {
     },
     {
       name: 'messageText1',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 1500,
       content: 'YOU WON \n PICK FEATURE',
       visible: true,
       style: {
@@ -138,7 +140,8 @@ export const PF_POPUP_CONFIG = {
     },
     {
       name: 'messageText2',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 1500,
       content: 'PRESS ► TO CONTINUE',
       style: {
         fontFamily: 'gameFont2',
@@ -158,7 +161,8 @@ export const PF_POPUP_CONFIG = {
     },
     {
       name: 'wheelPrizeText1',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 1500,
       content: 'PickFeatureWheelPrizeText1',
       visible: false,
       style: {
@@ -203,7 +207,8 @@ export const PF_POPUP_CONFIG = {
         },
         {
           name: 'wheelPrizeOr1',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 150,
           content: 'PickFeatureWheelPrizeText2',
           style: {
             fontFamily: 'gameFont2',
@@ -236,7 +241,8 @@ export const PF_POPUP_CONFIG = {
         },
         {
           name: 'wheelPrizeText2',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 150,
           content: 'PickFeatureWheelPrizeText2',
           style: {
             fontFamily: 'gameFont2',
@@ -260,7 +266,8 @@ export const PF_POPUP_CONFIG = {
         },
         {
           name: 'wheelPrizeCashText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 300,
           content: 'PickFeatureWheelPrizeCashText',
           style: {
             fontFamily: 'gameFont2',
@@ -286,7 +293,8 @@ export const PF_POPUP_CONFIG = {
     },
     {
       name: 'redPrizeText1',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 1500,
       content: 'PickFeatureRedPrizeText1',
       visible: false,
       style: {
@@ -365,7 +373,8 @@ export const PF_POPUP_CONFIG = {
       Elements: [
         {
           name: 'blueOutroPrefixText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 800,
           content: 'PickFeatureBlueExitPrefixText',
           style: {
             fontFamily: 'gameFont2',
@@ -389,7 +398,8 @@ export const PF_POPUP_CONFIG = {
         },
         {
           name: 'blueOutroAmountText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 750,
           visible: false,
           style: {
             fontFamily: 'gameFont2',
