@@ -38,7 +38,8 @@ export const BIG_WIN_CONFIG = {
     { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 142, px: 860 },
     {
       name: 'featureWinText',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 1500,
       content: 'FeatureWinCongratsText',
       visible: false,
       style: {

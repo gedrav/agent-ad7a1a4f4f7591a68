@@ -13,7 +13,8 @@ export const PICK_BONUS_JACKPOT_FEATURE_CONFIG: any = {
   Elements: [
     {
       name: 'tapText',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 730,
       visible: true,
       style: {
         fontFamily: 'gameFont2',
@@ -31,7 +32,7 @@ export const PICK_BONUS_JACKPOT_FEATURE_CONFIG: any = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 445,
+      x: 412,
       y: 740,
     },
   ],

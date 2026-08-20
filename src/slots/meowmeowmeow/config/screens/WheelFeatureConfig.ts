@@ -48,7 +48,8 @@ export const WHEEL_CONFIG: any = {
     },
     {
       name: 'tapText',
-      type: 'Text',
+      type: 'AdjustableText',
+      maxWidth: 2000,
       content: 'TAP ON THE WHEEL\nTO SPIN',
       visible: true,
       style: {

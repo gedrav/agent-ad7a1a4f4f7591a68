@@ -25,6 +25,7 @@ import { PixAnimatedSprite } from '@core/pixiwrapper/PixAnimatedSprite';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixFancyButton } from '@core/pixiwrapper/PixFancyButton';
 import { PixText } from '@core/pixiwrapper/PixText';
+import { AdjustableTextBox } from '@core/pixiwrapper/AdjustableTextBox';
 import { GlowFilter, GrayscaleFilter } from 'pixi-filters';
 import { appModel } from '@core/models/services/AppModelService';
 import { PixBMPText } from '@core/pixiwrapper/PixBMPText';
@@ -111,6 +112,9 @@ class UIUtilService {
         break;
       case 'Text':
         element = this.getText(obj);
+        break;
+      case 'AdjustableText':
+        element = this.getAdjustableText(obj);
         break;
       case 'HTMLText':
         element = this.getHTMLText(obj);
@@ -448,6 +452,12 @@ class UIUtilService {
     }
 
     return txt;
+  }
+  public getAdjustableText(obj: any): AdjustableTextBox {
+    const resolved = this.getText(obj);
+    const adjustableText = new AdjustableTextBox({ text: resolved.text, style: resolved.style }, obj);
+    resolved.destroy();
+    return adjustableText;
   }
   public getHTMLText(obj: any): PixHTMLText {
     const cloneData = JSON.parse(JSON.stringify(obj));
