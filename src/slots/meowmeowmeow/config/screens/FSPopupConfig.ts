@@ -18,7 +18,7 @@ export const FS_POPUP_CONFIG = {
       loop: true,
       scale: 0.8,
       x: 980,
-      y: 760,
+      y: 400,
     },
     {
       name: 'fspopupcoins',
@@ -106,7 +106,8 @@ export const FS_POPUP_CONFIG = {
       Elements: [
         {
           name: 'outroPrefixText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 800,
           content: 'PickFeatureBlueExitPrefixText',
           style: {
             fontFamily: 'gameFont2',
@@ -130,7 +131,8 @@ export const FS_POPUP_CONFIG = {
         },
         {
           name: 'outroAmountText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 750,
           contentText: '0.00',
           style: {
             fontFamily: 'gameFont2',
@@ -157,7 +159,7 @@ export const FS_POPUP_CONFIG = {
     {
       name: 'freeGamesContainer',
       type: 'Container',
-      x: 705,
+      x: 980,
       y: 830,
       Elements: [
         {
@@ -211,7 +213,7 @@ export const FS_POPUP_CONFIG = {
     {
       name: 'waysContainer',
       type: 'Container',
-      x: 915,
+      x: 980,
       y: 960,
       Elements: [
         {

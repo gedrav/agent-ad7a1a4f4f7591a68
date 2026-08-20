@@ -111,6 +111,17 @@ export class MMMFSPopupComp extends FSPopupComp {
       //   this.messageText2.text = Util.getContent('pressToContinue');
       // }
     }
+
+    if (freeGamesContainer?.visible) {
+      const bounds = freeGamesContainer.getLocalBounds();
+      freeGamesContainer.pivot.x = bounds.x + bounds.width / 2;
+      freeGamesContainer.x = 980;
+    }
+    if (waysContainer?.visible) {
+      const bounds = waysContainer.getLocalBounds();
+      waysContainer.pivot.x = bounds.x + bounds.width / 2;
+      waysContainer.x = 980;
+    }
   }
 
   protected async showFSPopup(data: any) {

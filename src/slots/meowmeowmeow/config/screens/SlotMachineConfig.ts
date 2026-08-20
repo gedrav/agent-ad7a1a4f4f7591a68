@@ -472,8 +472,8 @@ export const SLOT_MACHINE_CONFIG: any = {
                   type: 'Text',
                   style: {
                     fontFamily: 'gameFont2',
-                    fontWeight: 'bold',
-                    fontSize: 35,
+                    fontWeight: '900',
+                    fontSize: 30,
                     fill: 0xfdd63b,
                     stroke: 0xfdd63b,
                     strokeThickness: 1,
