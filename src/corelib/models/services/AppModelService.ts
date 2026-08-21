@@ -574,7 +574,7 @@ class AppModelService {
   public getNextTotalBet(): number {
     const isAnte = GameProxy.config.isAnteEnabled;
     if (this.gameInfo.betsArray.length > 0) {
-      if (this.gameInfo.betPos < this.gameInfo.betsArray.length - 2) {
+      if (this.gameInfo.betPos <= this.gameInfo.betsArray.length - 2) {
         if (isAnte) {
           if (this.gameInfo.betsArray.length > 0) {
             return this.gameInfo?.betsArray[this.gameInfo.betPos + 1] * this.gameInfo?.anteBet;

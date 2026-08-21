@@ -58,7 +58,7 @@ export class BuyBonusView extends ResponsiveChildrenView {
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     const bbBet = appModel.getNextTotalBet() * multiplier;
     if (appModel.getBBMaxBet()) {
-      this.upStakeBtn.enabled = bbBet <= appModel.getBBMaxBet();
+      this.upStakeBtn.enabled = bbBet <= appModel.getBBMaxBet() && bbBet > 0;
     } else {
       this.upStakeBtn.enabled = appModel.getBetPos() < appModel.getAllBets().length - 1;
     }
