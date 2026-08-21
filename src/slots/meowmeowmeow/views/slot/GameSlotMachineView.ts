@@ -18,7 +18,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
+import { FEATURE_NAMES, FeatureName } from '@slots/meowmeowmeow/config/FeatureNames';
 
 const BACKGROUND_NAMES = ['maingameBG', 'BGRed', 'BGblue', 'BGgreen'];
 const WHEEL_RIM_NAMES = ['wheelRim', 'redWheelRim', 'blueWheelRim', 'greenWheelRim'];
@@ -86,6 +86,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener('SHOW_KITTIEBANK_BREAK', this.showKittieBankBreak.bind(this));
     EventHandler.addEventListener('HIDE_KITTIBANK', this.hideMeowText.bind(this));
+    EventHandler.addEventListener('SHOW_SCATTER_TRIGGER', this.blastKittie.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
     EventHandler.addEventListener('TRANSITION', (data: { show: boolean; callback?: () => void }) =>
       this.animateGameElementsTransition(data.show, data.callback),
@@ -248,6 +249,14 @@ export class GameSlotMachineView extends SlotMachineView {
     this.animateWheelDoor(data?.callback);
   }
 
+  private blastKittie(): void {
+    const bankName = KittieBankComp.FEATURE_BANK_MAP[appModel.getFeatureSubType()?.toUpperCase() as FeatureName];
+    EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
+      bankName,
+      callback: () => {},
+    });
+  }
+
   protected showGreenKittieBankBreak(): void {
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName: 'mew',
@@ -329,7 +338,6 @@ export class GameSlotMachineView extends SlotMachineView {
 
     targets.forEach((target: any, index: number) => {
       AnimationProxy.killTweensOf(target);
-      const delay = index * stagger;
 
       if (show) {
         target.visible = true;
@@ -337,7 +345,6 @@ export class GameSlotMachineView extends SlotMachineView {
         AnimationProxy.animateTween(target, {
           alpha: 1,
           duration: 0.6,
-          delay,
           ease: 'sine.out',
           onComplete: settle,
         });
@@ -345,7 +352,6 @@ export class GameSlotMachineView extends SlotMachineView {
         AnimationProxy.animateTween(target, {
           alpha: 0,
           duration: 0.4,
-          delay,
           ease: 'sine.in',
           onComplete: () => {
             target.visible = false;
@@ -1084,6 +1090,7 @@ export class GameSlotMachineView extends SlotMachineView {
     super.resizeView();
     this.maskWheelTestToRim();
     this.updateBigWinsCompScale();
+    (this.bigWinsComp as any)?.refreshFeatureWinBackground?.();
     const featureType = appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
     const isFeatureActive = this.wheelBaseRed?.visible || this.wheelBaseBlue?.visible || this.wheelBaseGreen?.visible;
     if ((featureType === 'RED' || featureType === 'BLUE') && isFeatureActive) {
