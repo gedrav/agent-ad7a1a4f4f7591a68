@@ -68,7 +68,7 @@ export const PF_POPUP_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 950,
+      x: 900,
       y: 885,
     },
     {
@@ -122,6 +122,7 @@ export const PF_POPUP_CONFIG = {
           style: {
             fontFamily: 'gameFont2',
             fontSize: 95,
+            mFontSize: 160,
             fill: ['0x864201', '0xffc100', '0xffec43', '0xffff9e', '0xffff34', '0xffdf0b', '0xffb800', '0xf99900'],
             stroke: '0x792819',
             strokeThickness: 4,
@@ -323,8 +324,8 @@ export const PF_POPUP_CONFIG = {
       visible: false,
       x: 457,
       y: 1212,
-      pScale: 0.5,
-      lScale: 0.5,
+      pScale: 1,
+      lScale: 1,
       Elements: [
         {
           name: 'redPrizeIconGrand',
@@ -478,7 +479,7 @@ export const PF_POPUP_CONFIG = {
       hPaddingPerc: 0.05,
       vPadding: -20,
     },
-    Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.92, heightPerc: 0.8, hPadding: 7, vPadding: -30 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, hPadding: 14, maxScale: 1 },
+    Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.98, heightPerc: 0.8, vPadding: -30 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.9, hPadding: 14, maxScale: 1 },
   },
 };
