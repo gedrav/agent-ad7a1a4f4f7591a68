@@ -250,6 +250,7 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private blastKittie(): void {
+    if (!appModel.getFeatureSubType()) return;
     const bankName = KittieBankComp.FEATURE_BANK_MAP[appModel.getFeatureSubType()?.toUpperCase() as FeatureName];
     EventHandler.dispatchEvent('PLAY_KITTIE_BLAST', {
       bankName,
