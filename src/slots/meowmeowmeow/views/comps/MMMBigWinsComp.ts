@@ -160,17 +160,28 @@ export class MMMBigWinsComp extends BigWinsComp {
   }
 
   protected override resizeView(): void {
-    const expanded =
-      this.isFeatureWinActive &&
-      this.bigWinAnim &&
-      this.guideRect &&
-      this.guideRectBounds &&
-      this.configData.data.backgroundAlpha > 0;
+    const expanded = this.isFeatureWinExpanded();
     if (expanded) {
       this.restoreGuideRectBounds();
     }
     super.resizeView();
     if (expanded) {
+      this.expandGuideRectToScreen();
+    }
+  }
+
+  private isFeatureWinExpanded(): boolean {
+    return !!(
+      this.isFeatureWinActive &&
+      this.bigWinAnim &&
+      this.guideRect &&
+      this.guideRectBounds &&
+      this.configData.data.backgroundAlpha > 0
+    );
+  }
+
+  public refreshFeatureWinBackground(): void {
+    if (this.isFeatureWinExpanded()) {
       this.expandGuideRectToScreen();
     }
   }

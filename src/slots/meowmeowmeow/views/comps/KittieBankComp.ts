@@ -6,7 +6,7 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { FEATURE_NAMES, FeatureName } from '@slots/meowmeowmeow/config/FeatureNames';
 
 export class KittieBankComp extends ResponsiveChildrenView {
-  private static readonly FEATURE_BANK_MAP: Record<FeatureName, 'meow' | 'mew' | 'mii'> = {
+  public static readonly FEATURE_BANK_MAP: Record<FeatureName, 'meow' | 'mew' | 'mii'> = {
     [FEATURE_NAMES.RED]: 'meow',
     [FEATURE_NAMES.GREEN]: 'mew',
     [FEATURE_NAMES.BLUE]: 'mii',
