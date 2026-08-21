@@ -371,7 +371,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   // Re-enable control panel buttons when autoplay completes
   protected onAutoplayEnded(): void {
     this.spinBtn.renderable = true;
-    if (!appModel.getIsTurboAvailable()) {
+    if (appModel.getIsTurboAvailable()) {
       this.stopSpinBtn.renderable = true;
     }
     this.stopAutoBtn.visible = false;
