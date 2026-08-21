@@ -106,6 +106,7 @@ export const BIG_WIN_CONFIG = {
       hAlign: 'center',
       vAlign: 'middle',
       vPaddingPerc: 0.03,
+      hPaddingPerc: 0.04,
     },
     Portrait: {
       refComponent: 'guideRect',
