@@ -67,7 +67,6 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (this.titleText) {
         this.titleText.visible = true;
         this.titleText.text = Util.getContent('FeatureAwardedTitle') || 'FEATURE AWARDED';
-        this.titleText.y = 687;
       }
 
       const outroContainer = this.elementsList['outroMessageContainer'];

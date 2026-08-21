@@ -19,9 +19,8 @@ export const BIG_WIN_CONFIG = {
       type: 'Spine',
       spineName: 'BigWin_Anim',
       loop: true,
-      x: 744,
-      y: 711,
-      px: 838,
+      x: 830,
+      y: 670,
       scale: 0.7,
     },
     bigWinTextScales: [0.7, 0.7, 0.7, 0.7],
@@ -33,9 +32,9 @@ export const BIG_WIN_CONFIG = {
     },
   },
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: -62, y: 46, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1660, height: 980, color: 0x000000, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -1000, y: -1000, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 757, y: 142, px: 860 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 830, y: 142 },
     {
       name: 'featureWinText',
       type: 'AdjustableText',
@@ -65,17 +64,15 @@ export const BIG_WIN_CONFIG = {
         align: 'center',
       },
       anchor: { x: 0.5, y: 0.5 },
-      x: 757,
-      y: 123,
-      px: 873,
+      x: 830,
+      y: 77,
     },
     {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 774,
-      y: 480,
-      px: 844.5,
+      x: 830,
+      y: 434,
       Elements: [
         {
           name: 'valueText',
@@ -89,9 +86,8 @@ export const BIG_WIN_CONFIG = {
       name: 'winTickerBW',
       type: 'Comp',
       class: WinTicker,
-      x: 750,
-      y: 887,
-      px: 810,
+      x: 830,
+      y: 850,
       Elements: [
         {
           name: 'valueText',
@@ -103,9 +99,9 @@ export const BIG_WIN_CONFIG = {
     },
   ],
   layoutData: {
-    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
-    Portrait: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: -31, y: 1010 },
-    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
-    SmallLandscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 450, y: 294 },
+    Desktop: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 381, y: 335.5 },
+    Portrait: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 0, y: 1065 },
+    Landscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 381, y: 335.5 },
+    SmallLandscape: { refComponent: 'guideRect', widthPerc: 1, maxScale: 1, x: 381, y: 335.5 },
   },
 };
