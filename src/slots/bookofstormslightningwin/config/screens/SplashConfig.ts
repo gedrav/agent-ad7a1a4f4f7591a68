@@ -13,7 +13,7 @@ const fontMLProps = {
   lt: { fontSize: 48 },
   pl: { fontSize: 48 },
   sk: { fontSize: 50 },
-  ro: { fontSize: 48 },
+  ro: { fontSize: 45 },
   hr: { fontSize: 48 },
 };
 
