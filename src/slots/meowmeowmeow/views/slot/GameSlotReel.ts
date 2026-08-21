@@ -50,21 +50,27 @@ export class GameSlotReel extends SlotReelStandard {
         if (maskRect) {
           maskRect.y = -170;
           maskRect.height = 1400;
+          maskRect.x = DeviceProxy.config.isPortrait ? -2 : 39;
         }
         if (tickerComp) tickerComp.y = 1200;
         if (fsAutoCounterComp) {
           fsAutoCounterComp.x = DeviceProxy.config.isPortrait ? 39 : 70;
           fsAutoCounterComp.y = 1150;
+          const winningsText = fsAutoCounterComp.elementsList?.['winningsText'];
+          if (winningsText) winningsText.x = DeviceProxy.config.isPortrait ? 1595 : 1600;
         }
       } else if (size === 5) {
         if (maskRect) {
           maskRect.y = -261;
           maskRect.height = 1750;
+          maskRect.x = DeviceProxy.config.isPortrait ? -2 : 0;
         }
         if (tickerComp) tickerComp.y = 1500;
         if (fsAutoCounterComp) {
           fsAutoCounterComp.x = DeviceProxy.config.isPortrait ? 15 : 45;
           fsAutoCounterComp.y = 1395;
+          const winningsText = fsAutoCounterComp.elementsList?.['winningsText'];
+          if (winningsText) winningsText.x = DeviceProxy.config.isPortrait ? 1595 : 1600;
         }
       } else {
         if (maskRect) {

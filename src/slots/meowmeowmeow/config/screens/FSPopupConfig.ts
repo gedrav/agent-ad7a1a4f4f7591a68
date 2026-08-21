@@ -25,10 +25,10 @@ export const FS_POPUP_CONFIG = {
       type: 'Sprite',
       image: 'Coins',
       alpha: 1,
-      scale: 0.5,
+      scale: 0.6,
       anchor: { x: 0.5, y: 0.5 },
       x: 980,
-      y: 540,
+      y: 580,
     },
     {
       name: 'mew',
@@ -39,7 +39,7 @@ export const FS_POPUP_CONFIG = {
       loop: true,
       scale: 0.6,
       x: 980,
-      y: 220,
+      y: 215,
     },
     {
       name: 'titleText',
@@ -69,7 +69,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 980,
-      y: 648,
+      y: 885,
     },
     {
       name: 'messageText1',
@@ -102,7 +102,7 @@ export const FS_POPUP_CONFIG = {
       type: 'Container',
       visible: false,
       x: 980,
-      y: 848,
+      y: 950,
       Elements: [
         {
           name: 'outroPrefixText',
@@ -160,7 +160,7 @@ export const FS_POPUP_CONFIG = {
       name: 'freeGamesContainer',
       type: 'Container',
       x: 980,
-      y: 830,
+      y: 1068,
       Elements: [
         {
           name: 'freeGamesCountText',
@@ -214,7 +214,7 @@ export const FS_POPUP_CONFIG = {
       name: 'waysContainer',
       type: 'Container',
       x: 980,
-      y: 960,
+      y: 1250,
       Elements: [
         {
           name: 'waysCountText',
@@ -269,7 +269,7 @@ export const FS_POPUP_CONFIG = {
       type: 'Container',
       scale: 1,
       x: 980,
-      y: 1250,
+      y: 1470,
       Elements: [
         {
           name: 'playBtnImage',

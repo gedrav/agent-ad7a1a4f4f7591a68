@@ -7,7 +7,7 @@ export const PICK_BONUS_JACKPOT_FEATURE_CONFIG: any = {
   class: PickBonusJackpotComp,
   layoutData: {
     Desktop: { scale: 1, x: 770, y: 560 },
-    Portrait: { scale: 1, x: 462, y: 1160 },
+    Portrait: { scale: 1, x: 400, y: 1160 },
     Landscape: { scale: 1, x: 770, y: 560 },
   },
   Elements: [

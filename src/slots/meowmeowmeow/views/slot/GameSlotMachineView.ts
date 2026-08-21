@@ -884,7 +884,7 @@ export class GameSlotMachineView extends SlotMachineView {
             reelLd.Desktop.x = 650;
             reelLd.Desktop.y = 436;
             reelLd.Desktop.scale = 0.65;
-            reelLd.Portrait.x = 320;
+            reelLd.Portrait.x = 280;
             reelLd.Portrait.y = 966;
             reelLd.Portrait.scale = 0.65;
             reelLd.Landscape.x = 650;
@@ -894,7 +894,7 @@ export class GameSlotMachineView extends SlotMachineView {
             reelLd.Desktop.x = 718;
             reelLd.Desktop.y = 457;
             reelLd.Desktop.scale = 0.58;
-            reelLd.Portrait.x = 394;
+            reelLd.Portrait.x = 356;
             reelLd.Portrait.y = 987;
             reelLd.Portrait.scale = 0.58;
             reelLd.Landscape.x = 718;
@@ -918,19 +918,8 @@ export class GameSlotMachineView extends SlotMachineView {
           const actualReelRows = (this.slotReel as any)?.reelsData?.noOfRows;
           const currentInterfaceSize = actualReelRows === 3 ? 0 : interfaceSize;
 
-          const applyOrientationPos = (el: any, cfg: any) => {
-            if (!el || !cfg) return;
-            const ox = isPortrait ? cfg.px : cfg.lx;
-            const oy = isPortrait ? cfg.py : cfg.ly;
-            el.x = ox == undefined ? cfg.x : ox;
-            el.y = oy == undefined ? cfg.y : oy;
-          };
           const els = this.bigWinsComp.elementsList ?? {};
           const bigWinAnim = (this.bigWinsComp as any).bigWinAnim;
-          applyOrientationPos(bigWinAnim, this.bigWinsComp.configData?.data?.bigWinAnim);
-          applyOrientationPos(els['bigWinText'], els['bigWinText']?.configData);
-          applyOrientationPos(els['featureWinText'], els['featureWinText']?.configData);
-          applyOrientationPos(els['winTickerBW'], els['winTickerBW']?.configData);
 
           const guideRect = els['guideRect'];
           const setGuideRect = (x: number, y: number, width: number, height: number) => {
@@ -940,81 +929,105 @@ export class GameSlotMachineView extends SlotMachineView {
             guideRect.height = height;
           };
 
+          // Update layoutData for the BigWin container based on the feature size
+          const bwLd = this.bigWinsComp.configData?.layoutData;
+          if (bwLd) {
+            if (currentInterfaceSize === 4) {
+              bwLd.Desktop.x = 676;
+              bwLd.Desktop.y = 321;
+              bwLd.Desktop.scale = 0.65;
+              bwLd.Portrait.x = 290;
+              bwLd.Portrait.y = 850;
+              bwLd.Portrait.scale = 0.65;
+              bwLd.Landscape.x = 676;
+              bwLd.Landscape.y = 321;
+              bwLd.Landscape.scale = 0.65;
+            } else if (currentInterfaceSize === 5) {
+              bwLd.Desktop.x = 743.5;
+              bwLd.Desktop.y = 302.5;
+              bwLd.Desktop.scale = 0.58;
+              bwLd.Portrait.x = 372;
+              bwLd.Portrait.y = 830;
+              bwLd.Portrait.scale = 0.58;
+              bwLd.Landscape.x = 743.5;
+              bwLd.Landscape.y = 302.5;
+              bwLd.Landscape.scale = 0.58;
+            } else {
+              bwLd.Desktop.x = 381;
+              bwLd.Desktop.y = 335.5;
+              bwLd.Desktop.scale = 1;
+              bwLd.Portrait.x = 0;
+              bwLd.Portrait.y = 1065;
+              bwLd.Portrait.scale = 1;
+              bwLd.Landscape.x = 381;
+              bwLd.Landscape.y = 335.5;
+              bwLd.Landscape.scale = 1;
+            }
+          }
+          UIUtil.adjustElement(this.bigWinsComp);
+
           if (currentInterfaceSize === 4) {
             this.bigWinsComp.scale.set(0.65);
-            this.bigWinsComp.position.set(...(isPortrait ? [374, 1048] : [718, 510]));
-            if (winTicker) {
-              winTicker.x = 772;
-              winTicker.y = 320;
-            }
-            setGuideRect(-60, -297, 1660, 1313.6);
-            if (bigWinAnim) {
-              bigWinAnim.x = 755;
-              bigWinAnim.scale.set(isPortrait ? 1 : 0.84);
-              if (!isPortrait) bigWinAnim.y = 640;
-            }
+            // guideRect: h=1313.6 → CenterY = 656.8
+            setGuideRect(0, 0, 1660, 1313.6);
             if (els['bigWinText']) {
-              if (isPortrait) {
-                els['bigWinText'].x = 756;
-              } else {
-                els['bigWinText'].y = -120;
-              }
-            }
-            if (els['winTickerBW']) {
-              if (isPortrait) {
-                els['winTickerBW'].x = 800;
-              } else {
-                els['winTickerBW'].x = 755;
-                if (isPortrait) els['winTicker'].x = 855;
-              }
-            }
-          } else if (currentInterfaceSize === 5) {
-            this.bigWinsComp.scale.set(0.58);
-            this.bigWinsComp.position.set(...(isPortrait ? [428, 1190] : [772, 660]));
-            if (winTicker) {
-              winTicker.x = 762;
-              winTicker.y = 180;
-            }
-            setGuideRect(-65, -603, 1660, 1623);
-            if (bigWinAnim) {
-              bigWinAnim.x = 752;
-              bigWinAnim.scale.set(isPortrait ? 1 : 0.84);
-              if (!isPortrait) bigWinAnim.y = 650;
-            }
-            if (els['bigWinText']) {
-              if (isPortrait) {
-                els['bigWinText'].x = 756;
-              } else {
-                els['bigWinText'].y = -120;
-              }
-            }
-            if (els['winTickerBW']) {
-              if (isPortrait) {
-                els['winTickerBW'].x = 778;
-              } else {
-                els['winTickerBW'].x = 752;
-              }
-            }
-          } else {
-            this.bigWinsComp.scale.set(1);
-            const bwBase = this.bigWinsComp.configData?.layoutData?.[isPortrait ? 'Portrait' : 'Landscape'];
-            if (bwBase) {
-              this.bigWinsComp.position.set(bwBase.x, bwBase.y);
+              els['bigWinText'].x = 830;
+              els['bigWinText'].y = 309;
             }
             if (winTicker) {
-              winTicker.x = 755;
-              winTicker.y = 480;
+              winTicker.x = 830;
+              winTicker.y = 600;
             }
             if (bigWinAnim) {
-              bigWinAnim.x = isPortrait ? 838 : 744;
-              bigWinAnim.y = 711;
+              bigWinAnim.x = 830;
+              bigWinAnim.y = 1000;
               bigWinAnim.scale.set(0.7);
             }
             if (els['winTickerBW']) {
-              els['winTickerBW'].x = isPortrait ? 800 : 750;
-              els['winTickerBW'].y = 887;
+              els['winTickerBW'].x = 830;
+              els['winTickerBW'].y = 1180;
             }
-            setGuideRect(isPortrait ? 28 : -62, isPortrait ? 56 : 46, 1660, 980);
+          } else if (currentInterfaceSize === 5) {
+            this.bigWinsComp.scale.set(0.57, 0.59);
+            // guideRect: h=1623 → CenterY = 811.5
+            setGuideRect(0, 0, 1660, 1623);
+            if (els['bigWinText']) {
+              els['bigWinText'].x = 830;
+              els['bigWinText'].y = 464;
+            }
+            if (winTicker) {
+              winTicker.x = 830;
+              winTicker.y = 756;
+            }
+            if (bigWinAnim) {
+              bigWinAnim.x = 830;
+              bigWinAnim.y = 1304;
+            }
+            if (els['winTickerBW']) {
+              els['winTickerBW'].x = 830;
+              els['winTickerBW'].y = 1490;
+            }
+          } else {
+            this.bigWinsComp.scale.set(1);
+            // guideRect: h=980 → CenterY = 490
+            setGuideRect(0, 0, 1660, 980);
+            if (els['bigWinText']) {
+              els['bigWinText'].x = 830;
+              els['bigWinText'].y = 142;
+            }
+            if (winTicker) {
+              winTicker.x = 830;
+              winTicker.y = 434;
+            }
+            if (bigWinAnim) {
+              bigWinAnim.x = 830;
+              bigWinAnim.y = 670;
+              bigWinAnim.scale.set(0.7);
+            }
+            if (els['winTickerBW']) {
+              els['winTickerBW'].x = 830;
+              els['winTickerBW'].y = 850;
+            }
           }
         }
         break;
