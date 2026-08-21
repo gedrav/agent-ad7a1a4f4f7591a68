@@ -107,7 +107,7 @@ export const FS_POPUP_CONFIG = {
         {
           name: 'outroPrefixText',
           type: 'AdjustableText',
-          maxWidth: 800,
+          maxWidth: 1700,
           content: 'PickFeatureBlueExitPrefixText',
           style: {
             fontFamily: 'gameFont2',

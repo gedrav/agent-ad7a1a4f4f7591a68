@@ -18,7 +18,7 @@ export class KittieBankComp extends ResponsiveChildrenView {
   };
 
   private static readonly PORTRAIT_FEATURE_REVEAL_POSITION = {
-    x: 630,
+    x: 618,
     y: 314,
   };
 
@@ -34,6 +34,11 @@ export class KittieBankComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.stopIdleAnim.bind(this));
     EventHandler.addEventListener('RESET_KITTIEBANK_ANIM', this.resetToNormal.bind(this));
     EventHandler.addEventListener('SET_KITTIBANK_FEATURE_STATE', this.showSelectedFeatureBank.bind(this));
+    EventHandler.addEventListener('HIDE_KITTIBANK', this.hide.bind(this));
+  }
+
+  public hide(): void {
+    this.visible = false;
   }
 
   public resetToNormal(): void {
