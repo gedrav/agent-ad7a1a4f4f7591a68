@@ -199,6 +199,7 @@ export class MMMPFPopupComp extends PFPopupComp {
     }
   }
   protected async showPFPopup(data: any) {
+    EventHandler.dispatchEvent('HIDE_KITTIBANK');
     EventHandler.dispatchEvent('TRANSITION', {
       show: false,
       callback: () => {

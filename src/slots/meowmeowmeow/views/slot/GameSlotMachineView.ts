@@ -85,6 +85,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('HIDE_WHEEL_FEATURE_UI', this.hideWheelFeatureUI.bind(this));
     EventHandler.addEventListener('SHOW_GREEN_KITTIEBANK_BREAK', this.showGreenKittieBankBreak.bind(this));
     EventHandler.addEventListener('SHOW_KITTIEBANK_BREAK', this.showKittieBankBreak.bind(this));
+    EventHandler.addEventListener('HIDE_KITTIBANK', this.hideMeowText.bind(this));
     EventHandler.addEventListener(SlotEvents.FREESPINS_UPDATE_UI_END, this.resetMachineLayout.bind(this));
     EventHandler.addEventListener('TRANSITION', (data: { show: boolean; callback?: () => void }) =>
       this.animateGameElementsTransition(data.show, data.callback),
@@ -151,6 +152,11 @@ export class GameSlotMachineView extends SlotMachineView {
     this.startGameLogoAnimation();
   }
 
+  private hideMeowText(): void {
+    this.feautreHeadingBlue.visible = false;
+    this.feautreHeadingGreen.visible = false;
+    this.feautreHeadingRed.visible = false;
+  }
   protected startGameLogoAnimation(): void {
     if (this.gameTitle) {
       this.gameTitle.playAnimation({ state: 'idle', loop: false });

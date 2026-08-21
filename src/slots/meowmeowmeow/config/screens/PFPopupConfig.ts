@@ -101,8 +101,6 @@ export const PF_POPUP_CONFIG = {
       name: 'playBtn',
       type: 'Container',
       scale: 1,
-      pScale: 0.5,
-      lScale: 0.5,
       x: 900,
       y: 1470,
 
@@ -117,7 +115,8 @@ export const PF_POPUP_CONFIG = {
         },
         {
           name: 'playBtnText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 266,
           content: 'play_heading',
           style: {
             fontFamily: 'gameFont2',
@@ -192,10 +191,6 @@ export const PF_POPUP_CONFIG = {
       visible: false,
       x: 347,
       y: 1180,
-      px: 527,
-      lx: 527.5,
-      pScale: 0.5,
-      lScale: 0.5,
       Elements: [
         {
           name: 'wheelPrizeIconGreen',

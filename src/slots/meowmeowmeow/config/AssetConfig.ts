@@ -52,9 +52,6 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Jackpot_Coin', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Vault_Anim', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'particle_spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'playbtn', ASSETTYPE: 'png' },
-    { TYPE: 'game', NAME: 'RED', ASSETTYPE: 'png' },
-    { TYPE: 'game', NAME: 'GREEN', ASSETTYPE: 'png' },
   ],
 };
 const SECONDARY: AssetBundle = {

@@ -135,7 +135,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       return;
     }
     const showBaseGameUI = data.entryPopUp ? false : true;
-
+    EventHandler.dispatchEvent('HIDE_KITTIBANK');
     if (
       !showBaseGameUI &&
       !(
