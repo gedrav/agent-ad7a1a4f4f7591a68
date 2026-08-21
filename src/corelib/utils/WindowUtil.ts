@@ -26,6 +26,7 @@ declare global {
     getMaxPayout: () => string;
     getMinBet: () => string;
     getMaxBet: () => string;
+    getBBMaxBet: () => string;
     getMaxBBPayout: () => string;
     getGameInitData: () => any;
     getGameVersion: () => string;
@@ -78,6 +79,7 @@ export class WindowUtil {
     window.getMaxBBPayout = () => Util.formatCurrency(getData()?.playerInfo?.bbMaxWin);
     window.getMinBet = () => Util.formatCurrency(appModel.getMinBet());
     window.getMaxBet = () => Util.formatCurrency(appModel.getMaxBet());
+    window.getBBMaxBet = () => Util.formatCurrency(appModel.getBBMaxBet());
     window.getGameInitData = getData;
     window.getGameVersion = () => import.meta.env.VITE_GAME_VERSION + '_' + GameProxy.config.gameVersion;
     window.getIsSoundOn = () => {
