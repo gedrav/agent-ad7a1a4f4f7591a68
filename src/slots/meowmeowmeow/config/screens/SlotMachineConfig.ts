@@ -90,6 +90,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         Desktop: { x: 1208, y: 760 },
         Portrait: { x: 826, y: 1290 },
         Landscape: { x: 1208, y: 760 },
+        TPortrait: { x: 863, y: 1290 },
       },
     },
     {
@@ -570,7 +571,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'GreenMeow',
       visible: false,
       layoutData: {
-        Desktop: { scale: 1, x: 1032, y: -158 },
+        Desktop: { scale: 1, x: 973, y: -123.5 },
         Landscape: { scale: 1, x: 940, y: -105 },
         Portrait: { scale: 1, x: 604, y: 387 },
       },

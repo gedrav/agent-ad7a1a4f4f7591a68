@@ -9,6 +9,8 @@ export const PICK_BONUS_JACKPOT_FEATURE_CONFIG: any = {
     Desktop: { scale: 1, x: 770, y: 560 },
     Portrait: { scale: 1, x: 400, y: 1160 },
     Landscape: { scale: 1, x: 770, y: 560 },
+    TPortrait: { scale: 1, x: 440, y: 1160 },
+    TLandscape: { scale: 1, x: 780, y: 560 },
   },
   Elements: [
     {

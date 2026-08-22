@@ -12,16 +12,6 @@ export const KITTIEBANK_CONFIG: any = {
   },
   Elements: [
     {
-      name: 'fspopupcoins',
-      type: 'Sprite',
-      image: 'Coins',
-      visible: false,
-      alpha: 1,
-      scale: 0.4,
-      x: -77,
-      y: 1427,
-    },
-    {
       name: 'meow',
       type: 'Spine',
       spineName: 'KittieBank',

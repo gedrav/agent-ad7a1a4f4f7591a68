@@ -59,6 +59,11 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
     appModel.endPickFeatureSession();
     appModel.clearUnfinishedData();
+    EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
+    EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+      value: appModel.featureResult?.totalWin,
+      duration: 0,
+    });
     EventHandler.dispatchEvent(SlotEvents.STOP_PICK_FEATURE_BG_SOUND);
     EventHandler.dispatchEvent('STOP_BLUE_WHEEL_BG_SOUND');
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);

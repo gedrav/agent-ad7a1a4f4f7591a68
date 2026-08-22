@@ -129,6 +129,7 @@ export class MMMBigWinsComp extends BigWinsComp {
       FEATURE_WIN_COUNTUP_DURATION,
     );
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
+    EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
     EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
       value: appModel.featureResult?.totalWin,
       duration: 0,
@@ -218,7 +219,6 @@ export class MMMBigWinsComp extends BigWinsComp {
           winTickerBW.skipToFinalValue();
         }
 
-        EventHandler.dispatchEvent(SlotEvents.SKIP_REELTICKER_WIN);
         EventHandler.dispatchEvent(SlotEvents.BIG_WIN_ANIM_COMPLETED);
       }
       return;

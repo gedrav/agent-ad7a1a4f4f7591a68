@@ -341,6 +341,7 @@ export class GameSlotMachineView extends SlotMachineView {
       AnimationProxy.killTweensOf(target);
 
       if (show) {
+        EventHandler.dispatchEvent(SlotEvents.SHOW_ANTE_BUTTON);
         target.visible = true;
         target.alpha = 0;
         AnimationProxy.animateTween(target, {
@@ -350,6 +351,7 @@ export class GameSlotMachineView extends SlotMachineView {
           onComplete: settle,
         });
       } else if (target.visible) {
+        EventHandler.dispatchEvent(SlotEvents.HIDE_ANTE_BUTTON);
         AnimationProxy.animateTween(target, {
           alpha: 0,
           duration: 0.4,
