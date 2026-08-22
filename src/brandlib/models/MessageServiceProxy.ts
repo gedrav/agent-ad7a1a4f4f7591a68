@@ -37,6 +37,7 @@ export class MessageServiceProxy extends AbstractProxy {
     if (!flag) {
       switch (msgName) {
         case 'gameinit':
+          WrapperProxy.playerData.epoch = data.epoch;
           appModel.storeGameInitData(data);
           EventHandler.dispatchEvent(SlotEvents.GAME_INIT_SUCCESS);
           break;
@@ -54,7 +55,12 @@ export class MessageServiceProxy extends AbstractProxy {
 
   public onServerError(msgName: string, error: any): void {
     appModel.isErrorOccurred = true;
-    EventHandler.dispatchEvent(SlotEvents.HANDLE_SERVER_ERROR, { msgName: msgName, data: error });
+    const isSessionActiveElsewhere = error?.extensions?.code === 2301;
+    EventHandler.dispatchEvent(SlotEvents.HANDLE_SERVER_ERROR, {
+      msgName: msgName,
+      data: error,
+      isSessionActiveElsewhere,
+    });
   }
 
   public requestGameInit() {
@@ -84,6 +90,7 @@ export class MessageServiceProxy extends AbstractProxy {
     finalObj.playerId = WrapperProxy.playerData.playerId;
     finalObj.betAmount = appModel.getTotalBet();
     finalObj.token = WrapperProxy.playerData.newToken;
+    finalObj.epoch = WrapperProxy.playerData.epoch;
     if (appModel.getIsPromoFSSession()) {
       finalObj.usePromo = true;
       finalObj.promoId = appModel.promoSpinInfo?.promoId;
@@ -168,6 +175,7 @@ export class MessageServiceProxy extends AbstractProxy {
     finalObj.gameId = GameProxy.config.gameId;
     finalObj.playerId = WrapperProxy.playerData.playerId; //CoreLib.Model.GameConfig.playerId;
     finalObj.token = WrapperProxy.playerData.newToken;
+    finalObj.epoch = WrapperProxy.playerData.epoch;
     finalObj.featureName = name;
     if (selection) {
       finalObj.selection = selection;
