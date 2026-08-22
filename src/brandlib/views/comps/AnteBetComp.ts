@@ -53,8 +53,17 @@ export class AnteBetComp extends StandardView {
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISALBE_ANTE_BB_BUTTON, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_UNFINISHED_ANTE_BET, this.setForUnfinished.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_ANTE_BUTTON, this.hideThis.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_ANTE_BUTTON, this.showThis.bind(this));
     this.disableBtn();
   }
+  protected hideThis(): void {
+    this.visible = false;
+  }
+  protected showThis(): void {
+    this.visible = true;
+  }
+
   protected setForUnfinished(): void {
     this.onToggleClicked();
   }
