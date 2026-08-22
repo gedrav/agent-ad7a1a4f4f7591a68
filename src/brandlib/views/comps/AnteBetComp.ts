@@ -66,7 +66,6 @@ export class AnteBetComp extends StandardView {
       } else {
         this.betAmnt.text = Util.formatCurrency(appModel.getTotalBet() * GameProxy.config.anteBetMultiplier);
       }
-
       this.fitBetAmountText();
       this.disableBtn();
       this.setDeselected();
@@ -214,7 +213,7 @@ export class AnteBetComp extends StandardView {
 
   private fitBetAmountText(): void {
     const bg = this.elementsList['anteBG'];
-    const maxWidth = bg.width * 0.8;
+    const maxWidth = bg ? bg.width * 0.8 : 180;
 
     this.betAmnt.scale.set(1);
 

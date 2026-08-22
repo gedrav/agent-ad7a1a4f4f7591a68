@@ -19,7 +19,7 @@ const COMMON: AssetBundle = {
     { TYPE: 'common', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gameBG-0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gameBGs0', ASSETTYPE: 'sprite' },
   ],
 };
 
@@ -36,9 +36,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'transition-0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'reelframes-0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'transitionbg', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'transition0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'kittiebank', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'KittieBank', ASSETTYPE: 'spine' },

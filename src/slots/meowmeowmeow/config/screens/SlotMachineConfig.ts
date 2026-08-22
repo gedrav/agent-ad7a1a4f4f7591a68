@@ -14,6 +14,7 @@ import { JACKPOT_CONFIG } from './JackpotConfig';
 import { GameSlotReel } from '@slots/meowmeowmeow/views/slot/GameSlotReel';
 import { WHEEL_CONFIG } from './WheelFeatureConfig';
 import { PICK_BONUS_JACKPOT_FEATURE_CONFIG } from './PickBonusjackpotConfig';
+import { ANTE_BET_CONFIG } from '@game/config/screens/AnteBetConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -575,6 +576,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     KITTIEBANK_CONFIG,
+    ANTE_BET_CONFIG,
     WHEEL_CONFIG,
     PICK_BONUS_JACKPOT_FEATURE_CONFIG,
     BIG_WIN_CONFIG,
