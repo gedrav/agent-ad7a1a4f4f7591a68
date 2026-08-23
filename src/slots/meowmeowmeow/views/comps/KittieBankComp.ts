@@ -13,8 +13,8 @@ export class KittieBankComp extends ResponsiveChildrenView {
   };
 
   private static readonly FEATURE_REVEAL_POSITION = {
-    x: 352,
-    y: 1307,
+    x: 266,
+    y: 1600,
   };
 
   private static readonly PORTRAIT_FEATURE_REVEAL_POSITION = {
