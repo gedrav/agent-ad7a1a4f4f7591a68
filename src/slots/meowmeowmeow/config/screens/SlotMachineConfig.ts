@@ -464,7 +464,9 @@ export const SLOT_MACHINE_CONFIG: any = {
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG', scale: 1.25 },
                 {
                   name: 'infoText',
-                  type: 'Text',
+                  type: 'AdjustableText',
+                  maxWidth: 260,
+                  maxHeight: 250,
                   style: {
                     fontFamily: 'gameFont2',
                     fontWeight: '900',
@@ -473,7 +475,7 @@ export const SLOT_MACHINE_CONFIG: any = {
                     stroke: 0xfdd63b,
                     strokeThickness: 1,
                     wordWrap: true,
-                    wordWrapWidth: 200,
+                    wordWrapWidth: 260,
                     letterSpacing: 2,
                     leading: 2,
                   },
