@@ -471,7 +471,7 @@ export const PF_POPUP_CONFIG = {
       widthPerc: 0.6,
       heightPerc: 0.8,
       maxScale: 1,
-      hPaddingPerc: 0.05,
+      hPaddingPerc: 0.04,
       vPadding: -20,
     },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.98, heightPerc: 0.8, vPadding: -30 },
