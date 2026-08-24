@@ -90,7 +90,6 @@ export const SLOT_MACHINE_CONFIG: any = {
         Desktop: { x: 1208, y: 760 },
         Portrait: { x: 826, y: 1290 },
         Landscape: { x: 1208, y: 760 },
-        TPortrait: { x: 863, y: 1290 },
       },
     },
     {
@@ -102,7 +101,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
         Portrait: { scale: 1, x: -68, y: 410 },
-        TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
         Landscape: { scale: 1, x: 314, y: -120 },
       },
@@ -116,7 +114,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
         Portrait: { scale: 1, x: -68, y: 410 },
-        TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
         Landscape: { scale: 1, x: 314, y: -120 },
       },
@@ -130,7 +127,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
         Portrait: { scale: 1, x: -68, y: 410 },
-        TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
         Landscape: { scale: 1, x: 314, y: -120 },
       },
@@ -144,7 +140,6 @@ export const SLOT_MACHINE_CONFIG: any = {
       layoutData: {
         Desktop: { scale: 1, x: 310, y: -130 },
         Portrait: { scale: 1, x: -68, y: 410 },
-        TPortrait: { scale: 1, x: -30, y: 410 },
         TLandscape: { scale: 1, x: 314, y: -120 },
         Landscape: { scale: 1, x: 314, y: -120 },
       },
@@ -364,8 +359,6 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: { x: 34, y: 62, scale: 1 },
             Portrait: { x: -4, y: 62, scale: 1 },
             Landscape: { x: 34, y: 62, scale: 1 },
-            TPortrait: { x: 0, y: 62, scale: 1 },
-            TLandscape: { x: 34, y: 62, scale: 1 },
           },
         },
         {
@@ -593,6 +586,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.68, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
+    TPortrait: { widthPerc: 1, heightPerc: 0.68, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
     Landscape: { widthPerc: 0.8, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
+    TLandscape: { widthPerc: 0.8, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
   },
 };

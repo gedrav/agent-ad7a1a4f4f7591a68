@@ -53,14 +53,21 @@ export class GameSlotMachineView extends SlotMachineView {
   private wheelMask: PixGraphics | null = null;
 
   // Stores the closed position of the door to restore on feature exit
-  private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
+  private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number; TPortrait?: number } | null =
+    null;
 
-  private readonly kittiebankBaseX: { Desktop: number; Portrait: number; Landscape: number } | null = null;
+  private readonly kittiebankBaseX: {
+    Desktop: number;
+    Portrait: number;
+    Landscape: number;
+    TPortrait?: number;
+  } | null = null;
 
   private readonly reelBaseLayoutData: {
     Desktop: { x: number; y: number; scale?: number };
     Portrait: { x: number; y: number; scale?: number };
     Landscape: { x: number; y: number; scale?: number };
+    TPortrait?: { x: number; y: number; scale?: number };
   } | null = null;
 
   private readonly gameTitleBaseLayoutData: any = null;
@@ -117,6 +124,9 @@ export class GameSlotMachineView extends SlotMachineView {
         Portrait: vld.Portrait.x,
         Landscape: vld.Landscape.x,
       };
+      if (vld.TPortrait) {
+        this.vaultClosedX.TPortrait = vld.TPortrait.x;
+      }
     }
     const kld = this.kittiebankComp?.configData?.layoutData;
     if (kld) {
@@ -125,6 +135,9 @@ export class GameSlotMachineView extends SlotMachineView {
         Portrait: kld.Portrait.x,
         Landscape: kld.Landscape.x,
       };
+      if (kld.TPortrait) {
+        this.kittiebankBaseX.TPortrait = kld.TPortrait.x;
+      }
       this.kittiebankBasePortraitY = kld.Portrait.y;
     }
     const mld = this.configData?.layoutData?.Portrait;
@@ -141,6 +154,9 @@ export class GameSlotMachineView extends SlotMachineView {
         Portrait: { x: rld.Portrait.x, y: rld.Portrait.y, scale: rld.Portrait.scale || 1 },
         Landscape: { x: rld.Landscape.x, y: rld.Landscape.y, scale: rld.Landscape.scale || 1 },
       };
+      if (rld.TPortrait) {
+        this.reelBaseLayoutData.TPortrait = { x: rld.TPortrait.x, y: rld.TPortrait.y, scale: rld.TPortrait.scale || 1 };
+      }
     }
     this.gameTitleBaseLayoutData = this.gameTitle?.configData?.layoutData;
 
@@ -454,6 +470,9 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop - shiftX;
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait - shiftX;
       this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape - shiftX;
+      if (this.vaultClosedX.TPortrait !== undefined && this.vaultAnim.configData.layoutData.TPortrait) {
+        this.vaultAnim.configData.layoutData.TPortrait.x = this.vaultClosedX.TPortrait - shiftX;
+      }
     }
 
     EventHandler.dispatchEvent('WHEEL_OPEN');
@@ -486,6 +505,9 @@ export class GameSlotMachineView extends SlotMachineView {
       this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
       this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
       this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
+      if (this.vaultClosedX.TPortrait !== undefined && this.vaultAnim.configData.layoutData.TPortrait) {
+        this.vaultAnim.configData.layoutData.TPortrait.x = this.vaultClosedX.TPortrait;
+      }
     }
     EventHandler.dispatchEvent('WHEEL_CLOSE');
     AnimationProxy.animateTween(this.vaultAnim, {
@@ -842,6 +864,9 @@ export class GameSlotMachineView extends SlotMachineView {
           this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
           this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
           this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
+          if (this.vaultClosedX.TPortrait !== undefined && this.vaultAnim.configData.layoutData.TPortrait) {
+            this.vaultAnim.configData.layoutData.TPortrait.x = this.vaultClosedX.TPortrait;
+          }
           this.vaultAnim.rotation = 0;
         }
 
@@ -849,6 +874,9 @@ export class GameSlotMachineView extends SlotMachineView {
           Object.assign(this.slotReel.configData.layoutData.Desktop, this.reelBaseLayoutData.Desktop);
           Object.assign(this.slotReel.configData.layoutData.Portrait, this.reelBaseLayoutData.Portrait);
           Object.assign(this.slotReel.configData.layoutData.Landscape, this.reelBaseLayoutData.Landscape);
+          if (this.reelBaseLayoutData.TPortrait && this.slotReel.configData.layoutData.TPortrait) {
+            Object.assign(this.slotReel.configData.layoutData.TPortrait, this.reelBaseLayoutData.TPortrait);
+          }
         }
 
         if (this.kittiebankBaseX && this.kittiebankComp?.configData?.layoutData) {
@@ -856,6 +884,9 @@ export class GameSlotMachineView extends SlotMachineView {
           kld.Desktop.x = this.kittiebankBaseX.Desktop;
           kld.Portrait.x = this.kittiebankBaseX.Portrait;
           kld.Landscape.x = this.kittiebankBaseX.Landscape;
+          if (this.kittiebankBaseX.TPortrait !== undefined && kld.TPortrait) {
+            kld.TPortrait.x = this.kittiebankBaseX.TPortrait;
+          }
           if (this.kittiebankBasePortraitY !== null) {
             kld.Portrait.y = this.kittiebankBasePortraitY;
           }
@@ -877,6 +908,9 @@ export class GameSlotMachineView extends SlotMachineView {
           kld.Desktop.x = this.kittiebankBaseX.Desktop - shift;
           kld.Portrait.x = 230;
           kld.Landscape.x = this.kittiebankBaseX.Landscape - shift;
+          if (this.kittiebankBaseX.TPortrait !== undefined && kld.TPortrait) {
+            kld.TPortrait.x = this.kittiebankBaseX.TPortrait - shift;
+          }
           kld.Portrait.y = -90;
         }
 
@@ -892,6 +926,11 @@ export class GameSlotMachineView extends SlotMachineView {
             reelLd.Landscape.x = 650;
             reelLd.Landscape.y = 436;
             reelLd.Landscape.scale = 0.65;
+            if (reelLd.TPortrait) {
+              reelLd.TPortrait.x = 318;
+              reelLd.TPortrait.y = 966;
+              reelLd.TPortrait.scale = 0.65;
+            }
           } else if (interfaceSize === 5) {
             reelLd.Desktop.x = 718;
             reelLd.Desktop.y = 457;
@@ -902,6 +941,11 @@ export class GameSlotMachineView extends SlotMachineView {
             reelLd.Landscape.x = 718;
             reelLd.Landscape.y = 457;
             reelLd.Landscape.scale = 0.58;
+            if (reelLd.TPortrait) {
+              reelLd.TPortrait.x = 394;
+              reelLd.TPortrait.y = 987;
+              reelLd.TPortrait.scale = 0.58;
+            }
           }
         }
 

@@ -7,7 +7,7 @@ export const FS_POPUP_CONFIG = {
   type: 'Comp',
   class: MMMFSPopupComp,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1960, height: 1430, color: 0xff0000, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1960, height: 1600, color: 0xff0000, alpha: 0 },
 
     {
       name: 'particleSpine',
@@ -281,11 +281,13 @@ export const FS_POPUP_CONFIG = {
         },
         {
           name: 'playBtnText',
-          type: 'Text',
+          type: 'AdjustableText',
+          maxWidth: 266,
           content: 'play_heading',
           style: {
             fontFamily: 'gameFont2',
             fontSize: 95,
+            mFontSize: 160,
             fill: ['0x864201', '0xffc100', '0xffec43', '0xffff9e', '0xffff34', '0xffdf0b', '0xffb800', '0xf99900'],
             stroke: '0x792819',
             strokeThickness: 4,
@@ -363,10 +365,12 @@ export const FS_POPUP_CONFIG = {
       widthPerc: 0.6,
       heightPerc: 0.8,
       maxScale: 1,
-      hPadding: 58,
-      vPadding: -24,
+      hPaddingPerc: 0.05,
+      vPadding: -20,
     },
-    Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, heightPerc: 0.8, vPadding: -40 },
-    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.8, maxScale: 1 },
+    Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.98, heightPerc: 0.8, vPadding: -30 },
+    Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.9, hPadding: 14, maxScale: 1 },
+    TPortrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.55, vPadding: -20 },
+    TLandscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.55, vPadding: 40, hPadding: 14 },
   },
 };
