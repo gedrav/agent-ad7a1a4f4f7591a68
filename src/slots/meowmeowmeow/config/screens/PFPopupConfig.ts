@@ -476,5 +476,7 @@ export const PF_POPUP_CONFIG = {
     },
     Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.98, heightPerc: 0.8, vPadding: -30 },
     Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, heightPerc: 0.9, hPadding: 14, maxScale: 1 },
+    TPortrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.55, vPadding: -20 },
+    TLandscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, heightPerc: 0.55, vPadding: 40, hPadding: 14 },
   },
 };
