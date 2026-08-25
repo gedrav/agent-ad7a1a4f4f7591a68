@@ -73,6 +73,10 @@ class WrapperServiceProxy extends AbstractProxy {
     }
   }
 
+  public postEventMessage(data: any): void {
+    this.postDataToWrapper(data);
+  }
+
   // util methods
   protected postDataToWrapper(data: any): void {
     // console.log('POST TO WRAPPER == ', data);
