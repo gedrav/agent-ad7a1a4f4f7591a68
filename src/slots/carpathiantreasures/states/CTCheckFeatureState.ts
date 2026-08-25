@@ -14,6 +14,9 @@ class CTCheckFSStateCommand extends StateCommand {
       StateManager.next();
     }
   }
+  public doNextStep(): void {
+    StateManager.next();
+  }
 }
 
 export const CheckFSStateCT = new CTCheckFSStateCommand();

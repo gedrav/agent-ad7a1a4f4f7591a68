@@ -56,7 +56,7 @@ export const BIG_WIN_CONFIG = {
         type: 'Spine',
         spineName: 'UNBELIEVABLE',
         loop: true,
-        x: 694,
+        x: 775,
         y: 553,
         lx: 842,
         ly: 553,
