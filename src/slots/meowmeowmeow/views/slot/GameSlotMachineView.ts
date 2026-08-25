@@ -197,11 +197,11 @@ export class GameSlotMachineView extends SlotMachineView {
   protected transitionBackground(to: string): void {
     const color = this.getColorName(to);
     this.transitionElementGroup(BACKGROUND_NAMES, BACKGROUND_BY_COLOR[color]);
-    this.transitionElementGroup(WHEEL_RIM_NAMES, WHEEL_RIM_BY_COLOR[color]);
+    this.transitionElementGroup(WHEEL_RIM_NAMES, WHEEL_RIM_BY_COLOR[color], 0);
     this.vaultAnim?.setSkin(color);
   }
 
-  private transitionElementGroup(groupNames: string[], toName: string): void {
+  private transitionElementGroup(groupNames: string[], toName: string, duration: number = 1.5): void {
     const toEl = this.resolveTransitionElement(toName);
     if (!toEl) return;
 
@@ -225,7 +225,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
     AnimationProxy.animateTween(fromEl, {
       alpha: 0,
-      duration: 1.5,
+      duration,
       ease: 'sine.inOut',
       onComplete: () => {
         fromEl.visible = false;
@@ -262,6 +262,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.kittiebankComp.visible = false;
     this.changeReelInterface();
     this.slotReel.alpha = 1;
+    this.transitionBackground('GREEN');
     this.animateWheelDoor(data?.callback);
   }
 
@@ -302,7 +303,13 @@ export class GameSlotMachineView extends SlotMachineView {
     } else {
       this.showWheel();
     }
-    this.animateWheelDoor(isRedFeature ? this.revealJackpotContainer.bind(this) : undefined);
+    this.animateWheelDoor(() => {
+      if (isRedFeature) {
+        this.revealJackpotContainer();
+      } else {
+        EventHandler.dispatchEvent('PLAY_BLUE_WHEEL_BG_SOUND');
+      }
+    });
     this.gameTitle.visible = false;
   }
 
@@ -310,6 +317,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.jackpotContainer.visible = true;
     this.jackpotContainer.alpha = 0;
     this.jackpotContainer.zIndex = 2;
+    EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_BG_SOUND);
 
     const jackpotLd = this.jackpotContainer.configData?.layoutData?.Portrait;
     if (jackpotLd) {
@@ -442,12 +450,14 @@ export class GameSlotMachineView extends SlotMachineView {
       if (this.vaultAnim) {
         // this.vaultAnim.visible = false;
       }
+      EventHandler.dispatchEvent('WHEEL_OPEN');
       this.makeWheelInteractive();
       onDoorOpened?.();
       return;
     }
 
     if (this.vaultAnim) {
+      EventHandler.dispatchEvent('WHEEL_OPEN');
       this.vaultAnim.playAnimation({
         state: 'Unlock',
         loop: false,
@@ -475,7 +485,6 @@ export class GameSlotMachineView extends SlotMachineView {
       }
     }
 
-    EventHandler.dispatchEvent('WHEEL_OPEN');
     AnimationProxy.animateTween(this.vaultAnim, {
       duration: 1.2,
       x: this.vaultAnim.x - shiftX,
@@ -586,8 +595,7 @@ export class GameSlotMachineView extends SlotMachineView {
     this.feautreHeadingRed.visible = true;
     const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
     pickjackoptFeatureScreen.enter();
-    EventHandler.dispatchEvent('STOP_BLUE_WHEEL_BG_SOUND');
-    EventHandler.dispatchEvent(SlotEvents.PLAY_PICK_FEATURE_BG_SOUND);
+    this.transitionBackground('RED');
   }
 
   private showWheel(): void {
@@ -597,7 +605,7 @@ export class GameSlotMachineView extends SlotMachineView {
     wheelBG.visible = true;
     wheelBG.renderable = true;
     EventHandler.dispatchEvent(SlotEvents.STOP_PICK_FEATURE_BG_SOUND);
-    EventHandler.dispatchEvent('PLAY_BLUE_WHEEL_BG_SOUND');
+    this.transitionBackground('BLUE');
   }
 
   private makeWheelInteractive(): void {
@@ -616,6 +624,7 @@ export class GameSlotMachineView extends SlotMachineView {
       appModel.getFeatureSubType().toUpperCase() === FEATURE_NAMES.BLUE &&
       appModel.getNextSubFeatureType()?.toUpperCase() === FEATURE_NAMES.RED
     ) {
+      this.showPickJackpotFeatureScreen();
       this.animateWheelDoor(this.revealJackpotContainer.bind(this));
     }
   }

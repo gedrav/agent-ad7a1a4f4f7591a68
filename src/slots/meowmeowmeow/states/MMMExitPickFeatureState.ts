@@ -11,7 +11,6 @@ import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 class MMMExitPickFeatureStateCommand extends StateCommand {
   public async execute(data?: any): Promise<void> {
     super.execute(data);
-    EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     EventHandler.dispatchEvent(SlotEvents.HIDE_PICK_FEATURE_UI);
     EventHandler.dispatchEvent('RESET_PICK_BONUS');
     EventHandler.dispatchEvent('CLOSE_VAULT', this.afterHidePickFeatureUI.bind(this));
@@ -34,6 +33,7 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
       return;
     }
 
+    EventHandler.dispatchEvent(SlotEvents.PLAY_PF_EXIT_POPUP_SOUND);
     const obj: any = {};
     obj.title = Util.getContent('CongratTitle');
     if (appModel.getNextSubFeatureType()) {

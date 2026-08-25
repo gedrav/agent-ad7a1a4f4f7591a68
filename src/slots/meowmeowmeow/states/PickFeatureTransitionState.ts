@@ -9,17 +9,22 @@ import { Util } from '@core/utils/UtilService';
 class PickFeatureTransitionStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    EventHandler.dispatchEvent('SHOW_PICK_FEATURE_TRANSITION');
     if (GameProxy.config.subFeatureAwardAnnounced) {
       GameProxy.config.subFeatureAwardAnnounced = false;
+      EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
       // Show the same entry popup a directly-triggered Red/Green entry would show,
       // instead of a separate "blue exit" style popup.
       EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, {
         title: Util.getContent('CongratTitle'),
         message1: Util.parseMessage(Util.getContent('PickFeatureEntryText'), [appModel.getNextSubFeatureType()]),
         entryPopUp: true,
-        callbackFunction: () => StateManager.doNextStep(),
+        callbackFunction: () => {
+          EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+          StateManager.doNextStep();
+        },
       });
+    } else {
+      EventHandler.dispatchEvent('SHOW_PICK_FEATURE_TRANSITION');
     }
   }
 

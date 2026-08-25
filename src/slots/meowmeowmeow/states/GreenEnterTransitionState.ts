@@ -11,6 +11,7 @@ class GreenEnterTransitionStateCommand extends StateCommand {
     super.execute(data);
     if (GameProxy.config.subFeatureAwardAnnounced) {
       GameProxy.config.subFeatureAwardAnnounced = false;
+      EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
       // Show the same entry popup a directly-triggered Green entry would show,
       // instead of a separate "blue exit" style popup.
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {

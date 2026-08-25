@@ -76,6 +76,7 @@ export class MMMPFPopupComp extends PFPopupComp {
   protected override async onCloseClicked() {
     if (this.isClosing) return;
     this.isClosing = true;
+    EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_BUTTON_SOUND);
 
     this.animateElementsDropOut(() => {
       this.isClosing = false;

@@ -7,6 +7,7 @@ import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { Util } from '@core/utils/UtilService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 import { appModel } from '@core/models/services/AppModelService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
@@ -79,6 +80,17 @@ export class MMMFSPopupComp extends FSPopupComp {
 
       if (freeGamesCountText && data.totalCount !== undefined) {
         freeGamesCountText.text = String(data.totalCount);
+      }
+
+      const waysCountText = waysContainer?.elementsList?.['waysCountText'] || this.elementsList['waysCountText'];
+      if (waysCountText) {
+        let interfaceSize = Number(appModel.featureResult?.featureData?.interfaceSize);
+        if (isNaN(interfaceSize) || interfaceSize === 0) {
+          const subFeatureType =
+            appModel.getNextSubFeatureType()?.toUpperCase() ?? appModel.getFeatureSubType()?.toUpperCase();
+          interfaceSize = subFeatureType === FEATURE_NAMES.GREEN ? 5 : 4;
+        }
+        waysCountText.text = interfaceSize === 5 ? '3125' : '1024';
       }
 
       if (this.messageText1) this.messageText1.visible = false;
@@ -170,6 +182,7 @@ export class MMMFSPopupComp extends FSPopupComp {
   protected async onCloseClicked() {
     if (this._isClicked || !this.parent) return;
     this._isClicked = true;
+    EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_BUTTON_SOUND);
 
     const isBlueToGreen =
       !!this.popupData?.entryPopUp &&
@@ -181,6 +194,7 @@ export class MMMFSPopupComp extends FSPopupComp {
       if (isBlueToGreen) {
         const stateCallback = this.callbackFunction;
         this.callbackFunction = null;
+        EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
         EventHandler.dispatchEvent('HIDE_WHEEL_FEATURE_UI');
         EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION', { callback: () => stateCallback?.() });
       }

@@ -28,6 +28,14 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 100,
     },
     {
+      name: 'Ante bet button',
+      type: 'game',
+      loop: false,
+      playEvents: ['UPDATE_ANTE_BET_STATUS'],
+      volume: 1,
+      fadeOutDuration: 100,
+    },
+    {
       name: 'fsBGM',
       type: 'game',
       soundType: 'ambient',
