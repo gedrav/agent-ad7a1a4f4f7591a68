@@ -36,6 +36,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       GameProxy.config.subFeatureAwardAnnounced || appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE;
 
     if (this.enteredFromBlue) {
+      const skipBgStop = GameProxy.config.subFeatureAwardAnnounced;
       appModel.fsInfo = {
         ...appModel.fsInfo,
         currentFreespin: 0,
@@ -44,7 +45,7 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
       EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
       EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
-      this.enterFreespin();
+      this.enterFreespin(!skipBgStop);
       return;
     }
 
@@ -73,11 +74,13 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
-  protected async enterFreespin() {
+  protected async enterFreespin(stopBgSound: boolean = true) {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_START);
-    EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+    if (stopBgSound) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+    }
 
     StateManager.next();
   }

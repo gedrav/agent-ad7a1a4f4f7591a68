@@ -32,7 +32,7 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
     this.enteredFromBlue = GameProxy.config.subFeatureAwardAnnounced;
 
     if (this.enteredFromBlue) {
-      this.enterPickFeature();
+      this.enterPickFeature(false);
       return;
     }
 
@@ -48,11 +48,13 @@ class MMMEnterPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP, obj);
   }
 
-  protected async enterPickFeature() {
+  protected async enterPickFeature(stopBgSound: boolean = true) {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     // Add event listner at the game level to create pickFeature UI
     EventHandler.dispatchEvent(SlotEvents.PICKFEATURE_UPDATE_UI_START);
-    EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+    if (stopBgSound) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_BG_SOUND);
+    }
     StateManager.next();
   }
 }
