@@ -44,6 +44,7 @@ export const PICK_ICON_EVENT = {
 } as const;
 
 export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
+  public readonly index: number;
   private readonly jackpotSym: PixSpine;
   private readonly tierSprites: Record<JackpotTier, PixSprite>;
   private state: IconState = 'closed';
@@ -56,8 +57,9 @@ export class PickBonusJackpotIconComp extends ResponsiveChildrenView {
   private idleTimeout: ReturnType<typeof setTimeout> | null = null;
   private dimFilter: ColorMatrixFilter | null = null;
 
-  constructor(config) {
+  constructor(config, index: number) {
     super(config);
+    this.index = index;
     this.jackpotSym = this.elementsList['jackpotIcon'];
     this.jackpotSym.setInteractive(true);
     this.setupInteraction();

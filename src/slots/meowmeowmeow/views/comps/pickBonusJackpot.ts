@@ -35,7 +35,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private createIcons(): void {
     const total = PickBonusJackpotComp.COLS * PickBonusJackpotComp.ROWS;
     for (let i = 0; i < total; i++) {
-      const icon = new PickBonusJackpotIconComp(PICK_BONUS_JACKPOT_ICON_CONFIG);
+      const icon = new PickBonusJackpotIconComp(PICK_BONUS_JACKPOT_ICON_CONFIG, i);
       this.addChild(icon);
       this.icons.push(icon);
     }
@@ -83,7 +83,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     const featureType = appModel.getIsUnfinishedGame()
       ? appModel.getUnfinishedFeatureType()
       : appModel.getFeatureType();
-    await MessageProxy.requestBonusData(featureType);
+    await MessageProxy.requestBonusData(featureType, icon.index.toString());
 
     const { picks, winningTier } = appModel.featureResult.featureData;
     const pickedTier = picks[0].jackpotTier;
