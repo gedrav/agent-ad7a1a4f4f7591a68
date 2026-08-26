@@ -59,18 +59,19 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   public enter(): void {
     this.restoreUnfinishedScreen();
     this.visible = true;
+  }
+
+  public enableInteraction(): void {
     this.eventMode = 'passive';
   }
 
   private restoreUnfinishedScreen(): void {
-    const pickedTiers: string[] = appModel.featureResult?.featureData?.pickedTiers ?? [];
-    if (pickedTiers.length <= 1 || this.pickedIcons.length === pickedTiers.length) return;
-
-    const availableIcons = [...this.icons];
-
-    pickedTiers.forEach((tier) => {
-      const icon = availableIcons.splice(Math.floor(Math.random() * availableIcons.length), 1)[0];
-      icon.setjackpotData(this.toTierName(tier));
+    const pickResults: { selection: string; jackpotTier: string }[] =
+      appModel.featureResult?.featureData?.pickResults ?? [];
+    if (pickResults.length <= 1 || this.pickedIcons.length === pickResults.length) return;
+    pickResults.forEach(({ selection, jackpotTier }) => {
+      const icon = this.icons[Number(selection)];
+      icon.setjackpotData(this.toTierName(jackpotTier));
       icon.revealInstantly();
       this.pickedIcons.push(icon);
     });
@@ -85,8 +86,8 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
       : appModel.getFeatureType();
     await MessageProxy.requestBonusData(featureType, icon.index.toString());
 
-    const { picks, winningTier } = appModel.featureResult.featureData;
-    const pickedTier = picks[0].jackpotTier;
+    const { pickResults } = appModel.featureResult.featureData;
+    const { jackpotTier: pickedTier, isWinningPick } = pickResults[pickResults.length - 1];
 
     icon.setjackpotData(this.toTierName(pickedTier));
     this.pickedIcons.push(icon);
@@ -94,7 +95,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     const jackpotComp = (this.parent as any)?.elementsList?.['jackpotContainer'];
     jackpotComp?.playIdleAnim(this.toTierGroup(pickedTier));
 
-    this.isWinAchieved = !!winningTier;
+    this.isWinAchieved = isWinningPick;
     icon.revealJackpot();
 
     if (!this.isWinAchieved) this.eventMode = 'passive';
@@ -119,7 +120,8 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
     if (!this.isWinAchieved) return;
     if (icon !== this.pickedIcons[this.pickedIcons.length - 1]) return;
 
-    this.animateWinningSymbols(appModel.featureResult.featureData.winningTier);
+    const { pickResults } = appModel.featureResult.featureData;
+    this.animateWinningSymbols(pickResults[pickResults.length - 1].jackpotTier);
     EventHandler.dispatchEvent('SHOW_FEATURE_WIN_ANIM', {
       callback: () => {
         if (!this.checkForMaxCapWin()) {
