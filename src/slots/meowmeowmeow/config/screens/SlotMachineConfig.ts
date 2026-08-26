@@ -555,8 +555,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'BlueMeow',
       visible: false,
       layoutData: {
-        Desktop: { scale: 1, x: 1020, y: -158 },
-        Landscape: { scale: 1, x: 958, y: -105 },
+        Desktop: { scale: 1, x: 1030, y: -100 },
+        Landscape: { scale: 1, x: 1030, y: -70 },
         Portrait: { scale: 1, x: 665, y: 370 },
       },
     },
@@ -566,8 +566,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'GreenMeow',
       visible: false,
       layoutData: {
-        Desktop: { scale: 1, x: 973, y: -123.5 },
-        Landscape: { scale: 1, x: 940, y: -105 },
+        Desktop: { scale: 0.95, x: 986, y: -108 },
+        Landscape: { scale: 0.95, x: 986, y: -70 },
         Portrait: { scale: 1, x: 604, y: 387 },
       },
     },
