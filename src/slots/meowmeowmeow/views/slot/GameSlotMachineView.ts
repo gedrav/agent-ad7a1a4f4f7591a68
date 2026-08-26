@@ -330,6 +330,10 @@ export class GameSlotMachineView extends SlotMachineView {
       alpha: 1,
       duration: 0.5,
       ease: 'back.out(1.7)',
+      onComplete: () => {
+        const pickjackoptFeatureScreen = this.elementsList['pickjackpotContainer'];
+        pickjackoptFeatureScreen.enableInteraction();
+      },
     });
   }
 

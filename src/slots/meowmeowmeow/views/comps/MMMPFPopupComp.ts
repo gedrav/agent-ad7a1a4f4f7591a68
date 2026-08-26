@@ -192,7 +192,7 @@ export class MMMPFPopupComp extends PFPopupComp {
       this.blueOutroFeatureIcon.visible = false;
       this.blueOutroAmountText.visible = true;
       const amountText = Util.formatCurrency(appModel.getPickFeatureWinnings());
-      this.blueOutroAmountText.text = amountText.charAt(0) + ' ' + amountText.slice(1);
+      this.blueOutroAmountText.text = amountText.replace(/^(\D+)(\d)/, '$1 $2');
       this.layoutStackedCenter(this.blueOutroRow, ['blueOutroPrefixText', 'blueOutroAmountText'], BLUE_OUTRO_LINE_GAP);
       this.blueOutroPrefixText.y = 20;
       this.blueOutroAmountText.x = -72;
