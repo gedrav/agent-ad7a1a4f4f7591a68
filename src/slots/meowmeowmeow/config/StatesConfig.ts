@@ -29,7 +29,7 @@ import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
-  { name: STATES.CHECK_UNFINISHED_STATE_V2, state: CheckUnfinishedStateV2 },
+  { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedStateV2 },
 
   { name: STATES.IDLE_STATE, state: GameIdleState },
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
