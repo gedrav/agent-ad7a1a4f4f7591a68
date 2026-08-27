@@ -68,7 +68,7 @@ export class PickBonusJackpotComp extends ResponsiveChildrenView {
   private restoreUnfinishedScreen(): void {
     const pickResults: { selection: string; jackpotTier: string }[] =
       appModel.featureResult?.featureData?.pickResults ?? [];
-    if (pickResults.length <= 1 || this.pickedIcons.length === pickResults.length) return;
+    if (pickResults.length <= 0 || this.pickedIcons.length === pickResults.length) return;
     pickResults.forEach(({ selection, jackpotTier }) => {
       const icon = this.icons[Number(selection)];
       icon.setjackpotData(this.toTierName(jackpotTier));
