@@ -52,9 +52,15 @@ export class MMMBigWinsComp extends BigWinsComp {
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.clearSpinWin.bind(this));
   }
 
+  private getWinningJackpotTier(): string {
+    const pickResults: { jackpotTier: string; isWinningPick: boolean }[] =
+      appModel.featureResult?.featureData?.pickResults ?? [];
+    return pickResults.find((pick) => pick.isWinningPick)?.jackpotTier ?? '';
+  }
+
   protected override playCurrentBigWinSound(): void {
     if (this.isFeatureWinActive) {
-      const winningTier: string = appModel.featureResult?.featureData?.winningTier ?? '';
+      const winningTier = this.getWinningJackpotTier();
       const tierName = winningTier.replace(/\d+$/, '').toLowerCase();
 
       switch (tierName) {
@@ -111,7 +117,7 @@ export class MMMBigWinsComp extends BigWinsComp {
         defaultMix: 0,
       });
     }
-    const winningTier: string = appModel.featureResult?.featureData?.winningTier ?? '';
+    const winningTier = this.getWinningJackpotTier();
     const tierName = winningTier.slice(0, -1);
     this.featureWinText.text = Util.getContent('FeatureWinCongratsText', [tierName]);
     const tierFill = TIER_TEXT_FILL[tierName.toLowerCase()];
