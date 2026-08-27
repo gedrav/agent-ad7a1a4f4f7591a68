@@ -5,12 +5,14 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class GameIdleStateCommand extends StateCommand {
   private readonly intervalId: any;
   private lineWinCounter: number = 0;
   public async execute(data: any = null) {
     super.execute(data);
+    WrapperProxy.postLifecycleEvent('GameIdle');
     const remainingTime = appModel.getSpinRemainingTime();
     if (remainingTime > 0) {
       setTimeout(this.enableGame.bind(this), remainingTime);

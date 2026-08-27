@@ -5,6 +5,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class EnterFreespinsStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -41,6 +42,7 @@ class EnterFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
   protected async enterFreespin() {
+    WrapperProxy.postLifecycleEvent('GameBusy', { reason: 'free_spins' });
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_START);

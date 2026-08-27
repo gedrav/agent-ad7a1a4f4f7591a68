@@ -18,6 +18,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { AppEvents } from '@core/events/AppEvents';
 import { SplashPreloaderComp } from '@brand/views/comps/SplashPreloaderComp';
 import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -85,11 +86,12 @@ export class SplashView extends ResponsiveChildrenView {
     appModel.setPreferencesShow(flag);
     MessageProxy.savePreferences(appModel.getPreferences());
     EventHandler.dispatchEvent(SlotEvents.SHOW_INTRO_STATE_CHANGED, false);
+    WrapperProxy.postActivityEvent('ingame_casino_show_splash', { origin: 'splash', value: flag ? 'show' : 'hide' });
   }
   protected onSoundBtnClick(): void {
     const flag = this.soundBtn.isSelected;
     this.soundBtn.setSelected(!flag);
-    SoundStateChangeCommand.execute(flag);
+    SoundStateChangeCommand.execute({ value: flag, origin: 'splash' });
   }
 
   // ─── Initialisation ────────────────────────────────────────────────────────

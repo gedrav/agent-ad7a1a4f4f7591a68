@@ -497,6 +497,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     {
       name: 'infoBtn',
       type: 'Button',
+      data: 'info_button',
       action: {
         press: ShowGameRulesCommand,
       },
@@ -546,7 +547,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     {
       name: 'soundOnBtn',
       type: 'Button',
-      data: false,
+      data: { value: false, origin: 'game' },
       action: {
         press: SoundStateChangeCommand,
       },
@@ -598,7 +599,7 @@ export const createControlPanelConfig = (freespinInfoCompConfig?: UIElementConfi
     {
       name: 'soundOffBtn',
       type: 'Button',
-      data: true,
+      data: { value: true, origin: 'game' },
       soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: SoundStateChangeCommand,

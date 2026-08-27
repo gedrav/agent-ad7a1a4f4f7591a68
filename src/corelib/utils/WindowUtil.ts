@@ -4,6 +4,7 @@ import { Util } from '@core/utils/UtilService';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { ContentProxy } from '@core/models/ContentServiceProxy';
 import { AssetLoader } from '@core/models/services/AssetLoader';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 declare const __GAME_ID__: string;
 const GAME_PATH_PREFIX = `/src/slots/${__GAME_ID__}/`;
@@ -59,6 +60,7 @@ declare global {
     getCachedCommonContent: () => any;
     getBBRtp: () => any;
     isFunMode: () => boolean;
+    postActivityEvent: (eventName: string, parameters?: any) => void;
   }
 }
 
@@ -130,5 +132,6 @@ export class WindowUtil {
     window.getCachedCommonContent = () => ContentProxy.content;
     window.getBBRtp = () => appModel.getBBRTP();
     window.isFunMode = () => appModel.funMode;
+    window.postActivityEvent = (eventName, parameters = {}) => WrapperProxy.postActivityEvent(eventName, parameters);
   }
 }

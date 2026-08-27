@@ -7,6 +7,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { State } from 'pixi.js';
 import { STATES } from '@core/states/StateConstants';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class EnterPickFeatureStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -38,6 +39,7 @@ class EnterPickFeatureStateCommand extends StateCommand {
   }
 
   protected async enterPickFeature() {
+    WrapperProxy.postLifecycleEvent('GameBusy', { reason: 'bonus' });
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     // Add event listner at the game level to create pickFeature UI
     EventHandler.dispatchEvent(SlotEvents.PICKFEATURE_UPDATE_UI_START);

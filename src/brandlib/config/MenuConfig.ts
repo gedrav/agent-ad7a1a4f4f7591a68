@@ -69,7 +69,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'soundOnBtn',
       type: 'Button',
-      data: false,
+      data: { value: false, origin: 'menu' },
       soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: SoundStateChangeCommand,
@@ -99,7 +99,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'soundOffBtn',
       type: 'Button',
-      data: true,
+      data: { value: true, origin: 'menu' },
       soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: SoundStateChangeCommand,
@@ -128,6 +128,7 @@ export const MENU_CONFIG: any = {
     {
       name: 'infoBtn',
       type: 'Button',
+      data: 'menu',
       soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       action: {
         press: ShowGameRulesCommand,

@@ -7,6 +7,7 @@ import { appModel } from '@core/models/services/AppModelService';
 class HomeClickedCmd extends ActionCommand {
   public execute(data: any = null) {
     super.execute(data);
+    WrapperProxy.postActivityEvent('ingame_casino_menu_click', { value: 'lobby' });
     const homeUrl = appModel.getHomeURL();
     if (homeUrl) {
       window.top.location.href = homeUrl;
