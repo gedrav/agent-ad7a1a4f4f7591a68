@@ -529,21 +529,27 @@ class SlotGameApp {
   }
 
   protected resize(): void {
+    const previousOrientation = DeviceProxy.config.orientation;
+    this.trackOrientationChange(previousOrientation);
     if (!DeviceProxy.config.isIOSDevice) {
       this.resizeNow();
     }
-    setTimeout(this.resizeNow.bind(this), 250);
+    setTimeout(() => {
+      this.resizeNow();
+      this.trackOrientationChange(previousOrientation);
+    }, 250);
   }
-  protected resizeNow(): void {
-    const tempWidth = DeviceProxy.config.windowWidth;
-    const tempHeight = DeviceProxy.config.windowHeight;
-    const previousOrientation = DeviceProxy.config.orientation;
-    DeviceProxy.readDevice();
+  private trackOrientationChange(previousOrientation: number): void {
     if (previousOrientation !== undefined && DeviceProxy.config.orientation !== previousOrientation) {
       WrapperProxy.postActivityEvent('ingame_casino_orientation', {
         value: DeviceProxy.config.isLandscape ? 'landscape' : 'portrait',
       });
     }
+  }
+  protected resizeNow(): void {
+    const tempWidth = DeviceProxy.config.windowWidth;
+    const tempHeight = DeviceProxy.config.windowHeight;
+    DeviceProxy.readDevice();
     if (
       this.isFirstTime ||
       tempWidth != DeviceProxy.config.windowWidth ||

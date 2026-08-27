@@ -12,7 +12,6 @@ class GameIdleStateCommand extends StateCommand {
   private lineWinCounter: number = 0;
   public async execute(data: any = null) {
     super.execute(data);
-    WrapperProxy.postLifecycleEvent('GameIdle');
     const remainingTime = appModel.getSpinRemainingTime();
     if (remainingTime > 0) {
       setTimeout(this.enableGame.bind(this), remainingTime);
@@ -25,6 +24,7 @@ class GameIdleStateCommand extends StateCommand {
       StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
       return;
     }
+    WrapperProxy.postLifecycleEvent('GameIdle');
     EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
