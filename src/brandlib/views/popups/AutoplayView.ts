@@ -10,6 +10,7 @@ import { PixInput } from '@core/pixiwrapper/PixInput';
 import { Util } from '@core/utils/UtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { appModel } from '@core/models/services/AppModelService';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 export class AutoplayView extends ResponsiveChildrenView {
   private readonly valuesArray: number[];
@@ -166,6 +167,10 @@ export class AutoplayView extends ResponsiveChildrenView {
       obj.message = Util.getContent('AutoplayNotPossible');
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, obj);
     } else {
+      WrapperProxy.postActivityEvent('ingame_casino_auto_spin', {
+        number_of_spins: obj.selectedSpins,
+        spending_limit: obj.spendingLimit,
+      });
       StateManager.goToState(STATES.START_AUTOSPIN_STATE, obj);
     }
   }

@@ -1,5 +1,6 @@
 import { AbstractProxy } from '@core/models/AbstractProxy';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 class WrapperServiceProxy extends AbstractProxy {
   get playerData(): any {
@@ -77,10 +78,31 @@ class WrapperServiceProxy extends AbstractProxy {
     this.postDataToWrapper(data);
   }
 
+  private buildEnvelope(type: string, extra: any = {}): any {
+    return {
+      _type: type,
+      gameId: GameProxy.config?.gameId,
+      sessionId: this.getBEToken(),
+      timestamp: Date.now(),
+      ...extra,
+    };
+  }
+
+  public postActivityEvent(eventName: string, parameters: any = {}): void {
+    this.postEventMessage(
+      this.buildEnvelope('gsip.activity.g2wActivityTrackingNotification', { eventName, parameters }),
+    );
+  }
+
+  public postLifecycleEvent(messageName: string, extra: any = {}): void {
+    this.postEventMessage(this.buildEnvelope(`gsip.lifecycle.g2w${messageName}Notification`, extra));
+  }
+
   // util methods
   protected postDataToWrapper(data: any): void {
-    // console.log('POST TO WRAPPER == ', data);
-    window.parent.postMessage(data, '*');
+    const message = JSON.stringify(data);
+    console.warn('[WrapperServiceProxy] ->', message);
+    // TODO: window.parent.postMessage(message, targetOrigin) once wrapper origin is defined
   }
 
   // messages to wrapper

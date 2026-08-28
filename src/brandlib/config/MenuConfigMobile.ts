@@ -134,7 +134,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
-        data: false,
+        data: { value: false, origin: 'menu' },
         soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: SoundStateChangeCommand,
@@ -169,7 +169,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
-        data: true,
+        data: { value: true, origin: 'menu' },
         soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: SoundStateChangeCommand,
@@ -203,6 +203,7 @@ export const MENU_CONFIG_MOBILE: any = {
       type: 'Comp',
       class: MenuButton,
       btnConfig: {
+        data: 'menu',
         soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
         action: {
           press: ShowGameRulesCommand,

@@ -427,12 +427,20 @@ class SlotGameApp {
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
     StateManager.initiate();
+    WrapperProxy.postLifecycleEvent('GameReady');
     EventHandler.dispatchEvent(SlotEvents.PLAY_BG_SOUND);
   }
 
   protected onServerError(obj: any): void {
     if (obj.msgName == 'gameinit') {
       this.initErrorOccured = true;
+      WrapperProxy.postLifecycleEvent('GameError', {
+        error: {
+          code: 'LAUNCH_FAILED',
+          description: obj?.data?.extensions?.public?.displayMessage ?? obj?.data?.message ?? 'Game failed to load',
+          recoverable: false,
+        },
+      });
       // gameinit error can arrive before commonContent.json/gameContent.json
       // finish loading (PRELOADER bundle). Without content, getContent returns
       // empty and the popup shows blank text. Defer until content is ready.
@@ -464,6 +472,13 @@ class SlotGameApp {
       if (!isOfflineError) {
         data.callback = this.refreshGame.bind(this);
       }
+      WrapperProxy.postLifecycleEvent('GameError', {
+        error: {
+          code: isOfflineError ? 'CONNECTION_ERROR' : 'GENERIC_ERROR',
+          description: data.message,
+          recoverable: !isOfflineError,
+        },
+      });
       EventHandler.dispatchEvent(SlotEvents.SHOW_MESSAGE_POPUP, data);
     }
   }
@@ -514,10 +529,22 @@ class SlotGameApp {
   }
 
   protected resize(): void {
+    const previousOrientation = DeviceProxy.config.orientation;
+    this.trackOrientationChange(previousOrientation);
     if (!DeviceProxy.config.isIOSDevice) {
       this.resizeNow();
     }
-    setTimeout(this.resizeNow.bind(this), 250);
+    setTimeout(() => {
+      this.resizeNow();
+      this.trackOrientationChange(previousOrientation);
+    }, 250);
+  }
+  private trackOrientationChange(previousOrientation: number): void {
+    if (previousOrientation !== undefined && DeviceProxy.config.orientation !== previousOrientation) {
+      WrapperProxy.postActivityEvent('ingame_casino_orientation', {
+        value: DeviceProxy.config.isLandscape ? 'landscape' : 'portrait',
+      });
+    }
   }
   protected resizeNow(): void {
     const tempWidth = DeviceProxy.config.windowWidth;

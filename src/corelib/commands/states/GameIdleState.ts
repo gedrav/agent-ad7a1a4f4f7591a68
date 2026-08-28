@@ -5,6 +5,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class GameIdleStateCommand extends StateCommand {
   private readonly intervalId: any;
@@ -23,6 +24,7 @@ class GameIdleStateCommand extends StateCommand {
       StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
       return;
     }
+    WrapperProxy.postLifecycleEvent('GameIdle');
     EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);

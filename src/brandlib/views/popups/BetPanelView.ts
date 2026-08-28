@@ -13,6 +13,7 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixNineSpliceSprite } from '@core/pixiwrapper/PixNineSpliceSprite';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 const btnConfig: any = {
   name: 'btn1',
@@ -59,6 +60,7 @@ export class BetPanelView extends ResponsiveChildrenView {
   private readonly cancelBtn: PixFancyButton;
   private readonly setBtn: PixFancyButton;
   private tempBetPos: number = 0;
+  private lastBetOrigin: 'preset_amount' | 'plus_minus_button' = 'preset_amount';
   private readonly stakebg: PixSprite;
   private readonly stakeContainer: PixView;
   private readonly minmaxbetText: PixText;
@@ -135,10 +137,12 @@ export class BetPanelView extends ResponsiveChildrenView {
   }
 
   protected onTempBetIncrDecrUpdate(data: number): void {
+    this.lastBetOrigin = 'plus_minus_button';
     this.tempBetPos = this.tempBetPos + data;
     this.updateBetPanel();
   }
   protected onTempBetUpdate(data: any): void {
+    this.lastBetOrigin = 'preset_amount';
     const allBets = appModel.getAllBets();
     const pos = allBets.indexOf(data);
     if (pos !== -1) this.tempBetPos = pos;
@@ -147,6 +151,10 @@ export class BetPanelView extends ResponsiveChildrenView {
 
   protected onConfirmBet(): void {
     appModel.setTotalBet(appModel.getAllBets()[this.tempBetPos]);
+    WrapperProxy.postActivityEvent('ingame_casino_set_bet_amount', {
+      origin: this.lastBetOrigin,
+      bet_amount: appModel.getTotalBet(),
+    });
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
     EventHandler.dispatchEvent(SlotEvents.HIDE_BET_PANEL);
   }

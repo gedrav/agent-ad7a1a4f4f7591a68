@@ -8,11 +8,15 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
 import { STATES } from '@core/states/StateConstants';
 import { Util } from '@core/utils/UtilService';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class SpinStartStateCommand extends StateCommand {
   private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
+    if (!appModel.getIsAutoSession() && !appModel.getIsFreeSpinsSession()) {
+      WrapperProxy.postLifecycleEvent('GameBusy', { reason: 'spin' });
+    }
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);

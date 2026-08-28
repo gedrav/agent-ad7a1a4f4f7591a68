@@ -8,11 +8,13 @@ import { STATES } from '@core/states/StateConstants';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { Clock } from '@core/utils/Clock';
 import { Util } from '@core/utils/UtilService';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class BBSpinStartStateCommand extends StateCommand {
   private readonly timeoutId: any;
   public async execute(data: any = null) {
     super.execute(data);
+    WrapperProxy.postLifecycleEvent('GameBusy', { reason: 'bonus' });
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);

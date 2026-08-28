@@ -8,6 +8,7 @@ import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { ShowLowBalanceErrorCommand } from '@core/commands/action/ShowLowBalanceErrorCommand';
 import { ShowBBLowBalanceErrorCommand } from '@core/commands/action/ShowBBLowBalanceErrorCommand';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 class BuyBonusConfirmedCmd extends ActionCommand {
   public async execute(data: any = null) {
@@ -15,6 +16,8 @@ class BuyBonusConfirmedCmd extends ActionCommand {
     EventHandler.dispatchEvent(SlotEvents.HIDE_BUY_BONUS_VIEW);
 
     if (appModel.getIsBBSpinStartPossible(GameProxy.config.selectedBB)) {
+      const betAmount = appModel.getTotalBet() * appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
+      WrapperProxy.postActivityEvent('ingame_casino_buybonus_buy', { bet_amount: betAmount });
       StateManager.goToState(STATES.BB_SPIN_START_STATE);
     } else {
       const action: ActionCommand = ShowBBLowBalanceErrorCommand;
