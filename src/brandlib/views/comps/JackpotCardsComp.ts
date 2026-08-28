@@ -40,13 +40,13 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.cardsConfig = this.configData.cardsConfig;
     this.cardsContainer = this.elementsList['cardsContainer'];
     this.createCards();
-    this.visible = false;
+    this.cardsContainer.visible = false;
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_CARD_GAME, this.showJackPotCard.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
   }
   hideJPCards() {
     this.resetCards();
-    this.visible = false;
+    this.cardsContainer.visible = false;
   }
   onCardClick() {
     this.cardClickCount++;
@@ -57,7 +57,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   protected showJackPotCard() {
     this.updateCards();
-    this.visible = true;
+    this.cardsContainer.visible = true;
   }
   protected createCards() {
     // card count never changes, only how many of them fit in a row
