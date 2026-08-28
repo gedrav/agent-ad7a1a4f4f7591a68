@@ -50,7 +50,7 @@ export class FSAutoCounterComp extends StandardView {
   protected updatePromoFS(): void {
     const data = appModel.promoSpinInfo;
     if (data) {
-      const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount + 1);
+      const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount);
       this.spinsText.text = Util.parseMessage(Util.getContent('promoSpinsCounterText'), [count, data.playCount]);
       this.winningsText.text = Util.parseMessage(Util.getContent('winningsText'), [Util.formatCurrency(data.totalWin)]);
     }

@@ -20,10 +20,6 @@ class GameIdleStateCommand extends StateCommand {
     }
   }
   public enableGame(): void {
-    if (appModel.promoSpinInfo) {
-      StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
-      return;
-    }
     WrapperProxy.postLifecycleEvent('GameIdle');
     EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
@@ -53,6 +49,9 @@ class GameIdleStateCommand extends StateCommand {
   }
 
   protected showLineWin(): void {
+    if (appModel.getIsFreeSpinsSession() && GameProxy.config.dontShowWinAfterFS) {
+      return;
+    }
     if (this.lineWinCounter >= 4) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       return;

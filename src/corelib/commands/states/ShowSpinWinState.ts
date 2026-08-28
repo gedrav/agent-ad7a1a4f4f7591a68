@@ -50,8 +50,7 @@ class ShowSpinWinStateCommand extends StateCommand {
       !appModel.getIsFeatureTriggered() &&
       !appModel.getIsAutoSession() &&
       !appModel.isTumbleRemaining() &&
-      !appModel.getIsMaxCapReached() &&
-      !appModel.getIsPromoFSSession()
+      !appModel.getIsMaxCapReached()
     ) {
       const remainingTime = appModel.getSpinRemainingTime();
       if (remainingTime <= 0) {

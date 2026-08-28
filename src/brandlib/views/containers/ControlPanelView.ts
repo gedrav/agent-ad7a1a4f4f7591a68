@@ -147,7 +147,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected removeButtonsForPromo() {
     //this.removeChild(this.spinBtn, this.stopSpinBtn, this.stopAutoBtn, this.betBtn);
-    this.spinBtn.enabled = false;
+    //this.spinBtn.enabled = false;
     this.stopAutoBtn.enabled = false;
     this.betBtn.enabled = false;
 
@@ -317,14 +317,13 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected enablePanel(): void {
+    this.spinBtn.enabled = true;
+    this.menuBtn.enabled = true;
+    this.infoBtn.enabled = true;
     if (appModel.getIsPromoFSSession()) {
       return;
     }
-    this.spinBtn.enabled = true;
     this.betBtn.enabled = true;
-    this.menuBtn.enabled = true;
-    this.infoBtn.enabled = true;
-
     // Enable buy bonus buttons
     this.validateBBButtons();
   }
