@@ -37,10 +37,7 @@ export class ReelWinTicker extends StandardView {
       AnimationProxy.fadeIn(this.winTicker, 0.25);
       this.winTicker.reset();
     }
-    if (appModel.getIsAutoSession()) {
-      return;
-    }
-    if (appModel.getIsFreeSpinsSession()) {
+    if (appModel.getIsAutoSession() || appModel.getIsFreeSpinsSession() || appModel.getIsPromoFSSession()) {
       return;
     }
 
