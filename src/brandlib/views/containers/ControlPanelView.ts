@@ -134,6 +134,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected addButtonsForPromo() {
     this.spinBtn.enabled = true;
+    this.longPressSprite.visible = true;
     this.stopAutoBtn.enabled = true;
     this.betBtn.enabled = true;
     const len = this.bbButtonsArray.length;
@@ -148,6 +149,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   protected removeButtonsForPromo() {
     //this.removeChild(this.spinBtn, this.stopSpinBtn, this.stopAutoBtn, this.betBtn);
     //this.spinBtn.enabled = false;
+    this.longPressSprite.visible = false;
     this.stopAutoBtn.enabled = false;
     this.betBtn.enabled = false;
 
@@ -164,6 +166,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     }
   }
   protected onLongPress() {
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
     GameProxy.config.isLongPressTriggered = true;
     const action: ActionCommand = AutoplayClickCommand;
     action.execute(this.spinBtn);
