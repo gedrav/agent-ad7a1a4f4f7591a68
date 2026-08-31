@@ -351,6 +351,7 @@ class AppModelService {
 
     this.promoSpinInfo = null;
     this.promoSpinSession = false;
+    console.log('----------------');
   }
   setPromoFSBet() {
     const bet = this.promoSpinInfo.betAmount;
@@ -381,6 +382,9 @@ class AppModelService {
     let flag = false;
     if (this.promoSpinInfo && this.promoSpinInfo.remainingPlayCount > 0) {
       flag = true;
+    }
+    if (this.promoSpinInfo.status === 'COMPLETED') {
+      flag = false;
     }
     return flag;
   }

@@ -222,6 +222,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         appModel.getIsTurboAvailable()
       ) {
         this.stopSpinBtn.click();
+        this.stopSpinBtn.enabled = false;
       }
     }
   }
@@ -325,6 +326,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
 
   protected enablePanel(): void {
     this.spinBtn.enabled = true;
+    this.stopSpinBtn.enabled = false;
     this.menuBtn.enabled = true;
     this.infoBtn.enabled = true;
     if (appModel.getIsPromoFSSession()) {
@@ -357,6 +359,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected showStopSpinButton(): void {
     this.stopSpinBtn.visible = true;
+    this.stopSpinBtn.enabled = true;
     if (appModel.getIsTurboAvailable()) {
       this.spinBtn.visible = false;
     }

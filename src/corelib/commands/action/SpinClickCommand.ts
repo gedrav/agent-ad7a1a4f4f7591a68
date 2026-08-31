@@ -16,6 +16,7 @@ class SpinClickCmd extends ActionCommand {
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
       clearTimeout(GameProxy.config.idleTimeoutId);
+      clearTimeout(GameProxy.config.enablePanelTimer);
       StateManager.goToState(STATES.SPIN_START_STATE);
       const isDesktop = DeviceProxy.config.isDesktop;
       const isTablet = DeviceProxy.config.isTablet;

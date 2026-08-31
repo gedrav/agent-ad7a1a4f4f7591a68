@@ -20,6 +20,7 @@ class CheckPromoFSStateCommand extends StateCommand {
     }
   }
   protected endPromoFS() {
+    appModel.endPromoFSBet();
     EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
     EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP);
   }

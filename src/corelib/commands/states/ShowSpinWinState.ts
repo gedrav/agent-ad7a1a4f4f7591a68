@@ -56,7 +56,7 @@ class ShowSpinWinStateCommand extends StateCommand {
       if (remainingTime <= 0) {
         this.enableGame();
       } else {
-        setTimeout(this.enableGame.bind(this), remainingTime);
+        GameProxy.config.enablePanelTimer = setTimeout(this.enableGame.bind(this), remainingTime);
       }
     }
   }
