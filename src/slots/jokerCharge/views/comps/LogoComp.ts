@@ -26,7 +26,7 @@ export class LogoComp extends StandardView {
   }
 
   protected onAnimComplete(e: any): void {
-    if (e.animation.name === 'Collect') {
+    if (e.animation.name === 'collect') {
       this.playIdle();
     }
   }
