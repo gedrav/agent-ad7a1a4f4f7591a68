@@ -1,3 +1,4 @@
+import 'pixi.js/prepare';
 import { GAME_CONFIG } from '@game/config/GameConfig';
 import { ASSET_CONFIG } from '@game/config/AssetConfig';
 import { STATES_CONFIG } from '@game/config/StatesConfig';

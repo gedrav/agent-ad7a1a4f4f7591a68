@@ -1,17 +1,7 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
-import GameWinController from '@game/views/slot/GameWinController';
-import { ReelsConfig } from '@game/config/ReelsConfig';
-import { GameLineWinAmountComp } from '@game/views/comps/GameLineWinAmountComp';
-import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
-import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
-import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
-import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
-import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
-import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
-import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
-import { RoyalReelFrameComp } from '@game/views/comps/RoyalReelFrameComp';
-import { ReelStripBG } from '@game/views/comps/ReelStripBG';
+import GridReelView from '@slots/jokerCharge/views/slot/GridReelView';
+import GridReelSymbol from '@slots/jokerCharge/views/slot/GridReelSymbol';
+import { GRID_SYMBOL_POOL, GRID_SYMBOL_CLASS_MAP } from '@slots/jokerCharge/config/GridReelsConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -26,249 +16,21 @@ export const SLOT_MACHINE_CONFIG: any = {
       height: 1060,
       alpha: 0,
     },
-
     {
-      name: 'slotReel',
+      name: 'gridReelView',
       type: 'Comp',
-      class: SlotReelStandard,
-      winController: GameWinController,
-      x: -100,
-      y: 10,
+      class: GridReelView,
       data: {
-        symbolClass: ReelSymbolSpine,
-        noOfReels: 4,
-        noOfRows: 3,
-        reelHeight: 660,
-        reelsConfig: ReelsConfig,
-        landingSymbols: ['WD'],
-        deviceLayout: {
-          Desktop: {
-            reelContainerPos: { x: 324, y: 285 },
-            reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 236,
-            symbolScale: 1,
-          },
-          Portrait: {
-            reelContainerPos: { x: 324, y: 285 },
-            reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 236,
-            symbolScale: 1,
-          },
-          Landscape: {
-            reelContainerPos: { x: 324, y: 285 },
-            reelPositionX: [0, 320, 640, 950],
-            symbolHeight: 236,
-            symbolScale: 1,
-          },
-        },
-        initialReel: [
-          ['H1', 'L3', 'L4'],
-          ['L1', 'H2', 'L2'],
-          ['H3', 'L4', 'L1'],
-          ['L4', 'L1', 'H3'],
-        ],
-        symbolsData: {
-          WD: {
-            name: 'WD',
-            spineName: 'wild_Spine',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-            landingAnim: 'Idle',
-          },
-          H1: {
-            name: 'H1',
-            spineName: '777_Spine',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          H2: {
-            name: 'H2',
-            spineName: 'bar_spine',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          H3: {
-            name: 'H3',
-            spineName: 'bells_Spine',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          H4: {
-            name: 'H4',
-            spineName: 'watermelon_Spine',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          L1: {
-            name: 'L1',
-            spineName: 'plum_spine',
-            skin: 'default',
-            idleAnim1: 'Idle',
-            winAnim1: 'Win',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          L2: {
-            name: 'L2',
-            spineName: 'lemon_Spine_pro',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          L3: {
-            name: 'L3',
-            spineName: 'orange_Spine',
-            skin: 'default',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
-          },
-          L4: {
-            name: 'L4',
-            spineName: 'cherry_spine_cuts',
-            skin: 'default',
-            idleAnim: 'idle',
-            winAnim: 'Win_anims',
-          },
-        },
+        columns: 3,
+        rows: 3,
+        // TODO: placeholder cell size - adjust once the grid's real dimensions/art are in.
+        cellWidth: 300,
+        cellHeight: 300,
+        defaultSymbolClass: GridReelSymbol,
+        symbolPool: GRID_SYMBOL_POOL,
+        symbolClassMap: GRID_SYMBOL_CLASS_MAP,
       },
-      Elements: [
-        {
-          name: 'reelstripBG',
-          type: 'Comp',
-          class: ReelStripBG,
-          x: 168,
-          y: 148,
-          Elements: [
-            { name: 'bgg1', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 0, y: 0 },
-            { name: 'bgg2', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 320, y: 0 },
-            { name: 'bgg3', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 640, y: 0 },
-            { name: 'bgg4', tint: 0x000000, type: 'Sprite', image: 'reelstripbg', x: 960, y: 0 },
-            { name: 'bg1', type: 'Sprite', image: 'reelstripbg', x: 0, y: 0 },
-            { name: 'bg2', type: 'Sprite', image: 'reelstripbg', x: 320, y: 0 },
-            { name: 'bg3', type: 'Sprite', image: 'reelstripbg', x: 640, y: 0 },
-            { name: 'bg4', type: 'Sprite', image: 'reelstripbg', x: 960, y: 0 },
-          ],
-        },
-        { name: 'reelReflection', type: 'Sprite', image: 'reel_reflection', y: 952, scale: 0.985 },
-        { name: 'symbolsContainer', type: 'Container' },
-        {
-          name: 'reelFrame',
-          type: 'Comp',
-          class: RoyalReelFrameComp,
-          x: 0,
-          y: 0,
-          Elements: [
-            {
-              name: 'reelFrameAnim',
-              type: 'Spine',
-              spineName: 'reelFrame_spine',
-              defaultState: 'Static',
-              loop: false,
-              x: 800,
-              y: 548,
-            },
-          ],
-        },
-        { name: '81waysLeft', type: 'Sprite', image: '81ways', x: 274, y: 40, scale: 1.2 },
-        { name: '81waysRight', type: 'Sprite', image: '81ways', x: 1234, y: 40, scale: 1.2 },
-        {
-          name: 'modalRect',
-          type: 'Graphics',
-          width: 5000,
-          height: 5000,
-          x: -1000,
-          y: -1000,
-          color: 0xffff00,
-          visible: false,
-        },
-        {
-          name: 'potAnim',
-          type: 'Spine',
-          spineName: 'Pot_spine',
-          defaultState: 'idle',
-          loop: true,
-          layoutData: {
-            Desktop: { scale: 1, x: 0, y: 800 },
-            DesktopPortrait: { scale: 1, x: 345, y: -50 },
-            Landscape: { scale: 1, x: 0, y: 800 },
-            Portrait: { scale: 1, x: 345, y: -50 },
-          },
-        },
-        TICKER_COMP_CONFIG,
-        REEL_WIN_TICKER_CONFIG,
-        FSAUTO_COUNTER_CONFIG,
-        {
-          name: 'gameTitle',
-          type: 'Spine',
-          spineName: 'R81_Logo_Spine',
-          defaultState: 'Static',
-          anchor: { x: 0.5, y: 0.5 },
-          boundingBox: { width: 560, height: 200 },
-          layoutData: {
-            Desktop: {
-              scale: 0.8,
-              x: 580,
-              y: -10,
-            },
-            Landscape: {
-              scale: 0.8,
-              x: 580,
-              y: -10,
-            },
-            Portrait: { scale: 0.8, x: 580, y: -10 },
-          },
-        },
-        { name: 'maskRect', type: 'Graphics', width: 1300, height: 710, x: 132, y: 160, color: 0xffff00 },
-        {
-          name: 'winSymbolsContainer',
-          type: 'Container',
-          Elements: [
-            {
-              name: 'symbolPayoutComp',
-              type: 'Comp',
-              class: SymbolPayoutComp,
-              xPadding: 0.02,
-              textXPadding: 0.08,
-              Elements: [
-                { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
-                {
-                  name: 'infoText',
-                  type: 'Text',
-                  style: { fontFamily: 'gameFont1', fontSize: 25, fill: 0x64cdff, wordWrap: true, wordWrapWidth: 210 },
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: 'lineWinAmountComp',
-          type: 'Comp',
-          class: GameLineWinAmountComp,
-          y: 200,
-          Elements: [
-            {
-              name: 'multiplierImg',
-              type: 'Sprite',
-              image: 'x2',
-              anchor: { x: 0.5, y: 0.5 },
-              y: -60,
-            },
-            {
-              name: 'valueText',
-              type: 'BitmapText',
-              anchor: { x: 0.5, y: 0.5 },
-              style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
-            },
-          ],
-        },
-      ],
     },
-    BIG_WIN_CONFIG,
   ],
   layoutData: {
     Desktop: {

@@ -48,18 +48,7 @@ const PRIMARY: AssetBundle = {
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
-  assets: [
-    { TYPE: 'game', NAME: 'Big_Wins_spine_HD', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: '777_Spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'bar_spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'bells_Spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'watermelon_Spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'plum_spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'lemon_Spine_pro', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'orange_Spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'cherry_spine_cuts', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'wild_Spine', ASSETTYPE: 'spine' },
-  ],
+  assets: [],
 };
 const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FEATURES,

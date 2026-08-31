@@ -101,7 +101,7 @@ class WrapperServiceProxy extends AbstractProxy {
   // util methods
   protected postDataToWrapper(data: any): void {
     const message = JSON.stringify(data);
-    console.warn('[WrapperServiceProxy] ->', message);
+    // console.warn('[WrapperServiceProxy] ->', message);
     // TODO: window.parent.postMessage(message, targetOrigin) once wrapper origin is defined
   }
 
