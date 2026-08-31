@@ -51,6 +51,8 @@ export class GameSlotMachineView extends SlotMachineView {
   private readonly doorMask: PixGraphics;
   private readonly vaultAnim: PixSpine;
   private wheelMask: PixGraphics | null = null;
+  private vaultAnimPhase: 'opening' | 'closing' | null = null;
+  private pendingVaultCallback: (() => void) | null = null;
 
   // Stores the closed position of the door to restore on feature exit
   private readonly vaultClosedX: { Desktop: number; Portrait: number; Landscape: number; TPortrait?: number } | null =
@@ -101,6 +103,7 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('TRANSITION_BACKGROUND', (data: { to: string }) =>
       this.transitionBackground(data.to),
     );
+    EventHandler.addEventListener(AppEvents.APP_RESIZE, this.onVaultResizeInterrupt.bind(this));
 
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.kittiebankComp = this.elementsList['kittiebankComp'];
@@ -462,6 +465,8 @@ export class GameSlotMachineView extends SlotMachineView {
 
     if (this.vaultAnim) {
       EventHandler.dispatchEvent('WHEEL_OPEN');
+      this.vaultAnimPhase = 'opening';
+      this.pendingVaultCallback = onDoorOpened ?? null;
       this.vaultAnim.playAnimation({
         state: 'Unlock',
         loop: false,
@@ -493,7 +498,8 @@ export class GameSlotMachineView extends SlotMachineView {
       duration: 1.2,
       x: this.vaultAnim.x - shiftX,
       onComplete: () => {
-        // this.vaultAnim.visible = false;
+        this.vaultAnimPhase = null;
+        this.pendingVaultCallback = null;
         this.makeWheelInteractive();
         onDoorOpened?.();
         StateManager.doNextStep();
@@ -523,26 +529,58 @@ export class GameSlotMachineView extends SlotMachineView {
       }
     }
     EventHandler.dispatchEvent('WHEEL_CLOSE');
+    this.vaultAnimPhase = 'closing';
+    this.pendingVaultCallback = onDoorClosed ?? null;
     AnimationProxy.animateTween(this.vaultAnim, {
       duration: 1.2,
       x: this.vaultAnim.x + shiftX,
       onComplete: () => {
+        this.vaultAnimPhase = null;
+        this.pendingVaultCallback = null;
         this.vaultAnim.playAnimation({
           state: 'lock',
           loop: false,
           reset: true,
         });
-
-        // this.vaultAnim.addEventListener('complete', () => {
         this.vaultAnim.removeEventListners();
-        setTimeout(() => {
-          // this.vaultAnim.visible = false;
-        }, 1000);
         onDoorClosed?.();
-        // });
-        // this.hidePickFeatureUI({ callback: onDoorClosed })
       },
     });
+  }
+
+  private onVaultResizeInterrupt(): void {
+    if (!this.vaultAnim || !this.vaultAnimPhase) return;
+
+    const phase = this.vaultAnimPhase;
+    const callback = this.pendingVaultCallback;
+    this.vaultAnimPhase = null;
+    this.pendingVaultCallback = null;
+
+    this.vaultAnim.removeEventListners();
+    AnimationProxy.killTweensOf(this.vaultAnim);
+
+    if (phase === 'opening') {
+      // Door was on its way out - just hide it, the wheel/pick screen behind it is already showing.
+      this.vaultAnim.visible = false;
+      this.doorMask.visible = false;
+      this.makeWheelInteractive();
+      callback?.();
+      StateManager.doNextStep();
+    } else {
+      // Door was on its way shut - keep it visible and snap it back to its exact closed position
+      // for whichever orientation we land on, instead of leaving it wherever the tween got interrupted.
+      if (this.vaultClosedX && this.vaultAnim.configData?.layoutData) {
+        this.vaultAnim.configData.layoutData.Desktop.x = this.vaultClosedX.Desktop;
+        this.vaultAnim.configData.layoutData.Portrait.x = this.vaultClosedX.Portrait;
+        this.vaultAnim.configData.layoutData.Landscape.x = this.vaultClosedX.Landscape;
+        if (this.vaultClosedX.TPortrait !== undefined && this.vaultAnim.configData.layoutData.TPortrait) {
+          this.vaultAnim.configData.layoutData.TPortrait.x = this.vaultClosedX.TPortrait;
+        }
+      }
+      this.resizeView();
+      this.vaultAnim.playAnimation({ state: 'lock', loop: false, reset: true });
+      callback?.();
+    }
   }
 
   private onShowExtraSpinAnim(): void {
