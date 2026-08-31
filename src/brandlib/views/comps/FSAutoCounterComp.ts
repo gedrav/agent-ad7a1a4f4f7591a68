@@ -57,6 +57,9 @@ export class FSAutoCounterComp extends StandardView {
     }
   }
   protected updatePromoFSCount(): void {
+    if (appModel.getIsFreeSpinsSession()) {
+      return;
+    }
     const data = appModel.promoSpinInfo;
     if (data) {
       const count = Math.min(data.playCount, data.playCount - data.remainingPlayCount);

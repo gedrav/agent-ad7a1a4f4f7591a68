@@ -13,6 +13,8 @@ class ResumePromoFSStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
       EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
       EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_REELWIN_TICKER);
       StateManager.goToState(STATES.IDLE_STATE);
     }
   }

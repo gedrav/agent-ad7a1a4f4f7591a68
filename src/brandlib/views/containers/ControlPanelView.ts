@@ -143,6 +143,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         this.addChild(this.bbButtonsArray[k]);
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.ENABLE_ANTE_BB_BUTTON);
     this.resizeView();
   }
 
@@ -159,6 +160,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         this.removeChild(this.bbButtonsArray[k]);
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.DISALBE_ANTE_BB_BUTTON);
     this.resizeView();
   }
   protected onFullScreenModeChange(): void {

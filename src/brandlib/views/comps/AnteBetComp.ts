@@ -51,6 +51,7 @@ export class AnteBetComp extends StandardView {
     this.updateValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.ENABLE_ANTE_BB_BUTTON, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISALBE_ANTE_BB_BUTTON, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_UNFINISHED_ANTE_BET, this.setForUnfinished.bind(this));
@@ -217,6 +218,9 @@ export class AnteBetComp extends StandardView {
   }
 
   private enableBtn(): void {
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
     this.interactive = true;
     this.alpha = 1;
   }
