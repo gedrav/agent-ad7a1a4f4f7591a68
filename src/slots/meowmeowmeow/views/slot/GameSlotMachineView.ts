@@ -467,6 +467,8 @@ export class GameSlotMachineView extends SlotMachineView {
       EventHandler.dispatchEvent('WHEEL_OPEN');
       this.vaultAnimPhase = 'opening';
       this.pendingVaultCallback = onDoorOpened ?? null;
+      // Block taps from passing through the door while it animates
+      this.vaultAnim.eventMode = 'static';
       this.vaultAnim.playAnimation({
         state: 'Unlock',
         loop: false,
@@ -500,6 +502,7 @@ export class GameSlotMachineView extends SlotMachineView {
       onComplete: () => {
         this.vaultAnimPhase = null;
         this.pendingVaultCallback = null;
+        this.vaultAnim.eventMode = 'none';
         this.makeWheelInteractive();
         onDoorOpened?.();
         StateManager.doNextStep();
@@ -531,12 +534,15 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.dispatchEvent('WHEEL_CLOSE');
     this.vaultAnimPhase = 'closing';
     this.pendingVaultCallback = onDoorClosed ?? null;
+    // Block taps from passing through the door while it animates
+    this.vaultAnim.eventMode = 'static';
     AnimationProxy.animateTween(this.vaultAnim, {
       duration: 1.2,
       x: this.vaultAnim.x + shiftX,
       onComplete: () => {
         this.vaultAnimPhase = null;
         this.pendingVaultCallback = null;
+        this.vaultAnim.eventMode = 'none';
         this.vaultAnim.playAnimation({
           state: 'lock',
           loop: false,
@@ -558,6 +564,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
     this.vaultAnim.removeEventListners();
     AnimationProxy.killTweensOf(this.vaultAnim);
+    this.vaultAnim.eventMode = 'none';
 
     if (phase === 'opening') {
       // Door was on its way out - just hide it, the wheel/pick screen behind it is already showing.
