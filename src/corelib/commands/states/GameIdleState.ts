@@ -20,6 +20,11 @@ class GameIdleStateCommand extends StateCommand {
     }
   }
   public enableGame(): void {
+    console.log('enableGame', appModel.promoSpinInfo?.status, appModel.promoFSPopupShown);
+    if (appModel.promoSpinInfo?.status === 'ACTIVE' && !appModel.promoFSPopupShown) {
+      StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
+      return;
+    }
     WrapperProxy.postLifecycleEvent('GameIdle');
     EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);

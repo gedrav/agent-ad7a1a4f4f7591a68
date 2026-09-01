@@ -13,9 +13,17 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get promoFSPopupShown(): boolean {
+    return this._promoFSPopupShown;
+  }
+
+  set promoFSPopupShown(value: boolean) {
+    this._promoFSPopupShown = value;
+  }
   get maxCapReached(): boolean {
     return this._maxCapReached;
   }
+  private _promoFSPopupShown: boolean = false;
 
   set maxCapReached(value: boolean) {
     this._maxCapReached = value;
