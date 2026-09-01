@@ -545,7 +545,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 0.5, x: 940, y: -105 },
-        Landscape: { scale: 0.5, x: 940, y: -105 },
+        Landscape: { scale: 0.45, x: 950, y: -66 },
         Portrait: { scale: 0.5, x: 610, y: 400 },
       },
     },
@@ -556,7 +556,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 1, x: 1030, y: -100 },
-        Landscape: { scale: 1, x: 1030, y: -70 },
+        Landscape: { scale: 0.9, x: 1030, y: -66 },
         Portrait: { scale: 1, x: 665, y: 370 },
       },
     },
@@ -567,7 +567,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       visible: false,
       layoutData: {
         Desktop: { scale: 0.95, x: 986, y: -108 },
-        Landscape: { scale: 0.95, x: 986, y: -70 },
+        Landscape: { scale: 0.95, x: 986, y: -66 },
         Portrait: { scale: 1, x: 604, y: 387 },
       },
     },
