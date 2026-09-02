@@ -7,13 +7,24 @@ import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
 
 class GreenEnterTransitionStateCommand extends StateCommand {
+  // true only on reload blue→green, so doNextStep opens vault before advancing
+  private _pendingVaultForReload = false;
+
   public async execute(data: any = null) {
     super.execute(data);
     if (GameProxy.config.subFeatureAwardAnnounced) {
+      // live blue→green: show popup; onCloseClicked handles vault animation
       GameProxy.config.subFeatureAwardAnnounced = false;
       EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
-      // Show the same entry popup a directly-triggered Green entry would show,
-      // instead of a separate "blue exit" style popup.
+      EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {
+        title: Util.getContent('FeatureAwardedTitle'),
+        message1: '',
+        entryPopUp: true,
+        totalCount: appModel.getTotalFreespins(),
+        callbackFunction: () => StateManager.doNextStep(),
+      });
+    } else if (appModel.getIsUnfinishedFreespins()) {
+      this._pendingVaultForReload = true;
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {
         title: Util.getContent('FeatureAwardedTitle'),
         message1: '',
@@ -22,12 +33,18 @@ class GreenEnterTransitionStateCommand extends StateCommand {
         callbackFunction: () => StateManager.doNextStep(),
       });
     } else {
+      this._pendingVaultForReload = false;
       EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
     }
   }
 
   public doNextStep(data: any = null) {
     super.doNextStep(data);
+    if (this._pendingVaultForReload) {
+      this._pendingVaultForReload = false;
+      EventHandler.dispatchEvent('SHOW_GREEN_TRANSITION');
+      return;
+    }
     EventHandler.dispatchEvent(SlotEvents.PLAY_FS_BG_SOUND);
     StateManager.next();
   }
