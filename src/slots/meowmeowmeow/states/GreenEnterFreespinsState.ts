@@ -50,19 +50,10 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       return;
     }
 
-    // reload blue→green: skip popup here, GreenEnterTransitionState handles it
-    const isReloadBlueToGreen =
-      appModel.getIsUnfinishedFreespins() && appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.GREEN;
-
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
     EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
-
-    if (isReloadBlueToGreen) {
-      this.enterFreespin(true);
-      return;
-    }
 
     const obj: any = {};
     obj.title = Util.getContent('FeatureAwardedTitle');
