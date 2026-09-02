@@ -119,7 +119,7 @@ export class MMMBigWinsComp extends BigWinsComp {
     }
     const winningTier = this.getWinningJackpotTier();
     const tierName = winningTier.slice(0, -1);
-    this.featureWinText.text = Util.getContent('FeatureWinCongratsText', [tierName]);
+    this.featureWinText.text = Util.getContent('FeatureWinCongratsText', [tierName.toUpperCase()]);
     const tierFill = TIER_TEXT_FILL[tierName.toLowerCase()];
     if (tierFill) {
       this.featureWinText.style.fill = buildFillGradient(tierFill);
