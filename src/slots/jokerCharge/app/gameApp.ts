@@ -39,6 +39,13 @@ export class gameApp extends SlotGameApp {
     }
   }
   async createView() {
+    // Everything the grid symbols need (bonus_sym, mystery_back/front, etc.) is now in
+    // PRIMARY, not SECONDARY - but ReelSymbolSpine's spine-creation path still gates on this
+    // global flag regardless of which bundle an asset actually lives in. Since jokerCharge
+    // has nothing left in SECONDARY, mark it satisfied before the grid builds so symbols
+    // actually create their spine on first construction instead of waiting on the (empty)
+    // lazy bundle to finish loading in the background.
+    appModel.secondaryAssetsLoaded = true;
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
     this.gameAppScreen.visible = false;
     this.appContainer.addChildAt(this.gameAppScreen, 0);

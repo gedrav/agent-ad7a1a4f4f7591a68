@@ -1,8 +1,8 @@
-import { StandardView } from '@core/pixiwrapper/StandardView';
+import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
-export class LogoComp extends StandardView {
+export class LogoComp extends ResponsiveView {
   private readonly logoAnim: PixSpine;
 
   constructor(config: any) {

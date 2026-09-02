@@ -15,7 +15,6 @@ const COMMON: AssetBundle = {
   assets: [
     { TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
-    { TYPE: 'game', NAME: 'R81_Logo_Spine', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
   ],
 };
@@ -39,11 +38,18 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'logo', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'Pot_spine', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'reelFrame_spine', ASSETTYPE: 'spine' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'reelframes-0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'bonus_sym', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'mystery_front', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'mystery_back', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'bag_collect', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'belt', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'boot', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Chain_lock_sym', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'mask', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {

@@ -1,0 +1,92 @@
+import { JackpotLabelsComp } from '@slots/jokerCharge/views/comps/JackpotLabelsComp';
+
+const VALUE_TEXT_STYLE = {
+  fontFamily: 'commonFont',
+  fontWeight: 700,
+  fill: [0xffed54, 0xf5a100],
+  stroke: { color: 0x000000, width: 4 },
+  fontSize: 60,
+};
+
+// TODO: placeholder positions/maxWidth, computed from the GRAND/MAJOR (1176x537) and
+// MINI/MINOR (1015x528) sprite frame sizes at scale 0.3 - approximates the lower "value box"
+// portion of each badge, confirm against the real art.
+export const JACKPOT_LABELS_CONFIG: any = {
+  name: 'jackpotLabelsComp',
+  type: 'Comp',
+  class: JackpotLabelsComp,
+  Elements: [
+    {
+      name: 'grandLabel',
+      type: 'Sprite',
+      image: 'GRAND',
+      scale: 0.3,
+      y: -323.5,
+    },
+    {
+      name: 'grandValueText',
+      type: 'AdjustableText',
+      contentText: '0.00',
+      maxWidth: 300,
+      anchor: { x: 0.5, y: 0.5 },
+      x: 176,
+      y: -219,
+      style: { ...VALUE_TEXT_STYLE },
+    },
+    {
+      name: 'majorLabel',
+      type: 'Sprite',
+      image: 'MAJOR',
+      scale: 0.3,
+      y: -323.5,
+      x: 1400,
+      anchor: { x: 1, y: 0 },
+    },
+    {
+      name: 'majorValueText',
+      type: 'AdjustableText',
+      contentText: '0.00',
+      maxWidth: 300,
+      anchor: { x: 0.5, y: 0.5 },
+      x: 1224,
+      y: -219,
+      style: { ...VALUE_TEXT_STYLE },
+    },
+    {
+      name: 'minorLabel',
+      type: 'Sprite',
+      image: 'MINOR',
+      scale: 0.3,
+      y: -156,
+    },
+    {
+      name: 'minorValueText',
+      type: 'AdjustableText',
+      contentText: '0.00',
+      maxWidth: 260,
+      anchor: { x: 0.5, y: 0.5 },
+      x: 152,
+      y: -53,
+      style: { ...VALUE_TEXT_STYLE },
+    },
+    {
+      name: 'miniLabel',
+      type: 'Sprite',
+      image: 'MINI',
+      scale: 0.3,
+      y: -156,
+      x: 1400,
+      anchor: { x: 1, y: 0 },
+    },
+    {
+      name: 'miniValueText',
+      type: 'AdjustableText',
+      contentText: '0.00',
+      maxWidth: 260,
+      anchor: { x: 0.5, y: 0.5 },
+      x: 1248,
+      y: -53,
+      style: { ...VALUE_TEXT_STYLE },
+    },
+  ],
+};
