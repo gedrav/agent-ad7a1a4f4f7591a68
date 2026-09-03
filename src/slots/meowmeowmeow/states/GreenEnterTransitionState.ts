@@ -16,6 +16,7 @@ class GreenEnterTransitionStateCommand extends StateCommand {
 
     if (GameProxy.config.subFeatureAwardAnnounced || isReloadBlueToGreen) {
       GameProxy.config.subFeatureAwardAnnounced = false;
+      EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
       EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {
         title: Util.getContent('FeatureAwardedTitle'),
