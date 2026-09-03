@@ -57,6 +57,13 @@ class MMMExitPickFeatureStateCommand extends StateCommand {
     appModel.endPickFeatureSession();
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
+    // Update total win so Autoplay Winnings shows the correct amount after feature ends.
+    const featureTotal = appModel.featureResult?.totalWin ?? 0;
+    if (!appModel.gameResult) {
+      (appModel as any).gameResult = { totalWin: featureTotal };
+    } else {
+      appModel.gameResult.totalWin = featureTotal;
+    }
     appModel.endPickFeatureSession();
     appModel.clearUnfinishedData();
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);

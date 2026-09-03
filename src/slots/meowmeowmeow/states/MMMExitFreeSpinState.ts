@@ -74,7 +74,10 @@ class MMMExitFreeSpinStateCommand extends StateCommand {
     }
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
-    // Update balance with final free spin wins
+    // Update total win so Autoplay Winnings shows the correct amount after feature ends.
+    if (appModel.gameResult && appModel.featureResult?.totalWin != null) {
+      appModel.gameResult.totalWin = appModel.featureResult.totalWin;
+    }
     appModel.endFreeSpinsSession();
     appModel.clearUnfinishedData();
     EventHandler.dispatchEvent('STOP_FREESPIN_BG_MUSIC');
