@@ -26,6 +26,7 @@ class SpinStartStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
     appModel.spinStartTime = Util.getCurrentTimeInMili();
+    appModel.isBusy = true;
     await MessageProxy.requestSpinResult(false);
     EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
     if (!appModel.isErrorOccurred && !appModel.getIsPromoFSSession()) {

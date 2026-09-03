@@ -20,7 +20,7 @@ class GameIdleStateCommand extends StateCommand {
     }
   }
   public enableGame(): void {
-    console.log('enableGame', appModel.promoSpinInfo?.status, appModel.promoFSPopupShown);
+    appModel.isBusy = false;
     if (appModel.promoSpinInfo?.status === 'ACTIVE' && !appModel.promoFSPopupShown) {
       StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
       return;

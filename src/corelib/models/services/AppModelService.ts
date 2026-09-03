@@ -13,6 +13,14 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get isBusy(): boolean {
+    return this._isBusy;
+  }
+
+  set isBusy(value: boolean) {
+    this._isBusy = value;
+  }
+  private _isBusy: boolean = false;
   get promoFSPopupShown(): boolean {
     return this._promoFSPopupShown;
   }
