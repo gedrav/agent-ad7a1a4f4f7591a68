@@ -16,7 +16,11 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       StateManager.doNextStep();
       return;
     }
-    if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0) {
+    const isFromBlue =
+      appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE ||
+      appModel.getUnfinishedFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE;
+
+    if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0 && !isFromBlue) {
       EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
     } else {
       // this is due to kittie bank break
