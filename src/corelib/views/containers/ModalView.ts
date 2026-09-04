@@ -47,7 +47,6 @@ export class ModalView extends ResponsiveChildrenView {
     if (GameProxy.config.isLongPressTriggered || GameProxy.config.isPopupOpened) {
       return;
     }
-    EventHandler.dispatchEvent('PLAY_GENERIC_BUTTON_SOUND');
     EventHandler.dispatchEvent(SlotEvents.MODAL_VIEW_CLICKED);
   }
 }
