@@ -292,6 +292,9 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   protected showPickFeatureTransition(): void {
+    // Lock all interactions on the entire slot machine view during the transition
+    this.interactiveChildren = false;
+
     this.slotReel.visible = false;
     this.jackpotContainer.visible = false;
     this.kittiebankComp.visible = false;
@@ -460,6 +463,7 @@ export class GameSlotMachineView extends SlotMachineView {
       EventHandler.dispatchEvent('WHEEL_OPEN');
       this.makeWheelInteractive();
       onDoorOpened?.();
+      this.interactiveChildren = true;
       return;
     }
 
@@ -506,6 +510,7 @@ export class GameSlotMachineView extends SlotMachineView {
         this.makeWheelInteractive();
         onDoorOpened?.();
         StateManager.doNextStep();
+        this.interactiveChildren = true;
       },
     });
   }
@@ -573,6 +578,7 @@ export class GameSlotMachineView extends SlotMachineView {
       this.makeWheelInteractive();
       callback?.();
       StateManager.doNextStep();
+      this.interactiveChildren = true;
     } else {
       // Door was on its way shut - keep it visible and snap it back to its exact closed position
       // for whichever orientation we land on, instead of leaving it wherever the tween got interrupted.
@@ -653,6 +659,10 @@ export class GameSlotMachineView extends SlotMachineView {
     const wheelBG = this.elementsList['wheelContainer'];
     wheelBG.visible = true;
     wheelBG.renderable = true;
+
+    // Block clicks on the wheel until the door is fully open
+    wheelBG.interactive = false;
+
     EventHandler.dispatchEvent(SlotEvents.STOP_PICK_FEATURE_BG_SOUND);
     this.transitionBackground('BLUE');
   }
