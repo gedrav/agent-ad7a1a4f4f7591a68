@@ -9,6 +9,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { Sine } from 'gsap/gsap-core';
 import { GameProxy } from '@core/models/GameConfigProxy';
 import { ColorMatrixFilter } from 'pixi.js';
+import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 
 export class AnteBetComp extends StandardView {
   protected betAmnt: any;
@@ -50,6 +51,7 @@ export class AnteBetComp extends StandardView {
     this.updateValue();
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValue.bind(this));
     EventHandler.addEventListener(SlotEvents.ENABLE_CONTROLPANEL, this.enableBtn.bind(this));
+    EventHandler.addEventListener(SlotEvents.ENABLE_ANTE_BB_BUTTON, this.enableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISABLE_CONTROLPANEL, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.DISALBE_ANTE_BB_BUTTON, this.disableBtn.bind(this));
     EventHandler.addEventListener(SlotEvents.UPDATE_UNFINISHED_ANTE_BET, this.setForUnfinished.bind(this));
@@ -97,7 +99,7 @@ export class AnteBetComp extends StandardView {
     UIUtil.setHandCursor(this, true);
     this.eventMode = 'static';
     this.cursor = 'pointer';
-    UIUtil.addInteraction(this, this.onToggleClicked.bind(this));
+    UIUtil.addInteraction(this, this.onUserToggleClicked.bind(this));
     this.updateToggleVisuals(false);
     if (GameProxy.config.isAnteEnabled) {
       this.toggleBtn.filters = null;
@@ -142,6 +144,11 @@ export class AnteBetComp extends StandardView {
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
     EventHandler.dispatchEvent(SlotEvents.UPDATE_ANTE_BET_STATUS, GameProxy.config.isAnteEnabled);
+  }
+
+  private onUserToggleClicked(): void {
+    this.onToggleClicked();
+    WrapperProxy.postActivityEvent('ingame_casino_antebet', { value: GameProxy.config.isAnteEnabled ? 'on' : 'off' });
   }
 
   protected updateToggleVisuals(animate: boolean): void {
@@ -211,6 +218,9 @@ export class AnteBetComp extends StandardView {
   }
 
   private enableBtn(): void {
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
     this.interactive = true;
     this.alpha = 1;
   }

@@ -77,7 +77,6 @@ export class BookOpenComp extends StandardView {
 
   private checkPendingAnimation(): void {
     if (this.pendingSymbolCode) {
-      console.log('checkkkkkkk');
       this.playBookAnimation(this.pendingSymbolCode);
       this.pendingSymbolCode = null;
     }

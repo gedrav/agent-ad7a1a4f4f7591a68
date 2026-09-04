@@ -24,7 +24,7 @@ export default class GameWinController extends WinController {
   private maskRect: PixGraphics;
   private activeWildSpines: ActiveWildSpine[] = [];
   private readonly activeWinFrames: Map<ReelSymbolSprite, PixSpine> = new Map();
-  private scatterTriggerTimeoutId: any;
+  private readonly scatterTriggerTimeoutId: any;
   private isLastLineWinOfPass = false;
 
   constructor(data: any) {
@@ -122,26 +122,48 @@ export default class GameWinController extends WinController {
   }
 
   public showScatterTrigger(): void {
-    const positions: number[] = appModel.getSpinResult().scatterPositions;
-    const scatterWin: number = appModel.getSpinResult().scatterWin;
-    if (positions && positions.length > 0 && scatterWin > 0) {
+    const spinResult: any = appModel.getSpinResult();
+    const scatterPositions: number[] = spinResult.scatterPositions || [];
+    const bonusPositions: number[] = spinResult.bonusPositions || [];
+    const positions = scatterPositions.concat(bonusPositions);
+
+    const scatterWin: number = spinResult.scatterWin || 0;
+    const bonusWin: number = spinResult.bonusWin || 0;
+    const totalWin = scatterWin + bonusWin;
+
+    if (positions && positions.length > 0 && totalWin > 0) {
+      if (!this.maskRect) {
+        this.maskRect = this.slotReel?.elementsList['maskRect'];
+      }
+      this.fadeOutAllSymbols();
+      this.winSymbolIndex = 0;
+      this.totalWinSymbols = 0;
+      this.lineWinAmountComp.reset();
+      this.lineWinAmountComp.visible = false;
+
       const len = positions.length;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);
-        if (this.reelsData.isFixedSymbol) {
-          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row]);
-          this.symbolsArray[pos.reel][pos.row].showFeatureTriggerAnimation();
-        } else {
-          this.winSymbolsContainer.addChild(this.symbolsArray[pos.reel][pos.row + 1]);
-          this.symbolsArray[pos.reel][pos.row + 1].showFeatureTriggerAnimation(null, true);
+        const sym = this.reelsData.isFixedSymbol
+          ? this.symbolsArray[pos.reel][pos.row]
+          : this.symbolsArray[pos.reel][pos.row + 1];
+
+        this.winSymbolsContainer.addChild(sym);
+        sym.showWinning(null, true);
+        this.totalWinSymbols++;
+
+        if (j === 0) {
+          this.lineWinAmountComp.visible = true;
+          this.lineWinAmountComp.x = sym.x + this.winSymbolsContainer.x;
+          this.lineWinAmountComp.y = sym.y + this.winSymbolsContainer.y;
+          this.lineWinAmountComp.showWin(totalWin);
         }
       }
-      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions.length);
-      clearTimeout(this.scatterTriggerTimeoutId);
-      this.scatterTriggerTimeoutId = setTimeout(
-        this.notifyFeatureTriggerAnimDone.bind(this),
-        Util.getDefaultValue(GameProxy.config.featureTriggerDelay, 4000),
-      );
+
+      setTimeout(() => {
+        EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+        this.notifyFeatureTriggerAnimDone();
+      }, 4000);
     } else {
       this.notifyFeatureTriggerAnimDone();
     }
@@ -199,12 +221,7 @@ export default class GameWinController extends WinController {
   protected override onLineWinAnimComplete(symbol: ReelSymbolSprite): void {
     this.winSymbolIndex++;
     if (this.winSymbolIndex === this.totalWinSymbols) {
-      const scatterWin: number = appModel.getSpinResult().scatterWin;
-      if (this.isLastLineWinOfPass && scatterWin > 0) {
-        this.showScatterTrigger();
-      } else {
-        StateManager.doNextStep();
-      }
+      StateManager.doNextStep();
     }
   }
 }

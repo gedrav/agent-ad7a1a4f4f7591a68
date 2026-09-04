@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.080',
+  gameVersion: '0.082',
   gameId: 'meowmeowmeow',
   gameName: 'Meow Meow Meow',
   subFeatureAwardAnnounced: false,

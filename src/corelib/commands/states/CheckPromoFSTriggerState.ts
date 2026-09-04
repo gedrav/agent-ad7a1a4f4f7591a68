@@ -30,6 +30,7 @@ class CheckPromoFSTriggerStateCommand extends StateCommand {
     appModel.setPromoFSBet();
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
+    appModel.promoFSPopupShown = true;
     EventHandler.dispatchEvent(SlotEvents.SHOW_PROMO_SPIN_ENTRY_POPUP);
   }
 

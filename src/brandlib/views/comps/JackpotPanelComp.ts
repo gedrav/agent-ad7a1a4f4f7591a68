@@ -41,6 +41,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   protected jackpotIntroAnimVer: PixSpine;
   protected isJackpotIntroAnim: boolean;
   protected isJackpotOutroAnim: boolean;
+  protected isJPSkipping: boolean;
   protected jackPotOutroAnimation: PixSpine;
   protected jackpotWinContainer: PixView;
   protected jpguideRect: PixView;
@@ -76,6 +77,15 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimHor.addEventListener('complete', this.onIntroAnimComplete.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_WIN_TICKER_ANIM, this.showJackpotWinAnimation.bind(this));
+    UIUtil.addInteraction(this.overlayRect, this.onOverlayClicked.bind(this));
+    UIUtil.setClickable(this.overlayRect, true);
+  }
+  protected onOverlayClicked() {
+    if (this.isJackpotOutroAnim && !this.isJPSkipping) {
+      this.isJPSkipping = true;
+      this.winTickerJP.skipToFinalValue();
+      this.onCountUpUpdateBW();
+    }
   }
   public adjustTextSize() {
     this.winTickerJP.scale.set(1);
@@ -87,12 +97,26 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   onCountUpUpdateBW() {
     clearTimeout(this.timeoutId);
     this.adjustTextSize();
+    this.punchWinTickerJP();
     this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
+  }
+  protected punchWinTickerJP() {
+    AnimationProxy.killTweensOf(this.winTickerJP);
+    const normalScale = this.winTickerJP.scale.x;
+    this.winTickerJP.scale.set(normalScale * 1.3);
+    AnimationProxy.animateTween(this.winTickerJP, {
+      scaleX: normalScale,
+      scaleY: normalScale,
+      duration: 0.3,
+      ease: 'back.out(2)',
+    });
   }
   notifyWinDone() {
     this.adjustTextSize();
     this.youwinJPTextimg.visible = false;
+    AnimationProxy.killTweensOf(this.youwinJPTextimg);
     this.winTickerJP.visible = false;
+    AnimationProxy.killTweensOf(this.winTickerJP);
     this.overlayRect.visible = false;
 
     this.jackPotOutroAnimation.stopAnimation();
@@ -109,18 +133,32 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   }
   showJackpotWinAnimation() {
     this.isJackpotOutroAnim = true;
+    this.isJPSkipping = false;
     const winValue = 500;
     this.winTickerJP.visible = true;
     this.winTickerJP.countUpValue(winValue, 5000);
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
     this.jackPotOutroAnimation.visible = true;
     this.youwinJPTextimg.visible = true;
+    this.pulseJPWinText();
     this.jackPotOutroAnimation.playAnimation({ state: 'start_land', loop: false });
+  }
+  protected pulseJPWinText() {
+    AnimationProxy.killTweensOf(this.youwinJPTextimg);
+    this.youwinJPTextimg.scale.set(1);
+    AnimationProxy.animateTween(this.youwinJPTextimg, {
+      scaleX: 0.9,
+      scaleY: 0.9,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.5,
+    });
   }
   hideJackPotOutroAnim() {
     this.youwinJPTextimg.visible = false;
     this.jackPotOutroAnimation.visible = false;
     this.jackPotOutroAnimation.stopAnimation();
+    AnimationProxy.killTweensOf(this.youwinJPTextimg);
   }
   onIntroAnimComplete(e) {
     const animationName = e.animation.name;

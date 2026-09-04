@@ -134,6 +134,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected addButtonsForPromo() {
     this.spinBtn.enabled = true;
+    this.longPressSprite.visible = true;
     this.stopAutoBtn.enabled = true;
     this.betBtn.enabled = true;
     const len = this.bbButtonsArray.length;
@@ -142,12 +143,14 @@ export class ControlPanelView extends ResponsiveChildrenView {
         this.addChild(this.bbButtonsArray[k]);
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.ENABLE_ANTE_BB_BUTTON);
     this.resizeView();
   }
 
   protected removeButtonsForPromo() {
     //this.removeChild(this.spinBtn, this.stopSpinBtn, this.stopAutoBtn, this.betBtn);
-    this.spinBtn.enabled = false;
+    //this.spinBtn.enabled = false;
+    this.longPressSprite.visible = false;
     this.stopAutoBtn.enabled = false;
     this.betBtn.enabled = false;
 
@@ -157,6 +160,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         this.removeChild(this.bbButtonsArray[k]);
       }
     }
+    EventHandler.dispatchEvent(SlotEvents.DISALBE_ANTE_BB_BUTTON);
     this.resizeView();
   }
   protected onFullScreenModeChange(): void {
@@ -164,6 +168,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     }
   }
   protected onLongPress() {
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
     GameProxy.config.isLongPressTriggered = true;
     const action: ActionCommand = AutoplayClickCommand;
     action.execute(this.spinBtn);
@@ -215,6 +222,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
         appModel.getIsTurboAvailable()
       ) {
         this.stopSpinBtn.click();
+        this.stopSpinBtn.enabled = false;
       }
     }
   }
@@ -317,14 +325,14 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
 
   protected enablePanel(): void {
+    this.spinBtn.enabled = true;
+    this.stopSpinBtn.enabled = false;
+    this.menuBtn.enabled = true;
+    this.infoBtn.enabled = true;
     if (appModel.getIsPromoFSSession()) {
       return;
     }
-    this.spinBtn.enabled = true;
     this.betBtn.enabled = true;
-    this.menuBtn.enabled = true;
-    this.infoBtn.enabled = true;
-
     // Enable buy bonus buttons
     this.validateBBButtons();
   }
@@ -351,6 +359,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
   }
   protected showStopSpinButton(): void {
     this.stopSpinBtn.visible = true;
+    this.stopSpinBtn.enabled = true;
     if (appModel.getIsTurboAvailable()) {
       this.spinBtn.visible = false;
     }

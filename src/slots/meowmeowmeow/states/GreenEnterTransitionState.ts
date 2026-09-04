@@ -5,15 +5,19 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
+import { FEATURE_NAMES } from '@slots/meowmeowmeow/config/FeatureNames';
 
 class GreenEnterTransitionStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (GameProxy.config.subFeatureAwardAnnounced) {
+
+    const isReloadBlueToGreen =
+      appModel.getIsUnfinishedFreespins() && appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE;
+
+    if (GameProxy.config.subFeatureAwardAnnounced || isReloadBlueToGreen) {
       GameProxy.config.subFeatureAwardAnnounced = false;
+      EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
       EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
-      // Show the same entry popup a directly-triggered Green entry would show,
-      // instead of a separate "blue exit" style popup.
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {
         title: Util.getContent('FeatureAwardedTitle'),
         message1: '',

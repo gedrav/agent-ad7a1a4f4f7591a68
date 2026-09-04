@@ -13,9 +13,25 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get isBusy(): boolean {
+    return this._isBusy;
+  }
+
+  set isBusy(value: boolean) {
+    this._isBusy = value;
+  }
+  private _isBusy: boolean = false;
+  get promoFSPopupShown(): boolean {
+    return this._promoFSPopupShown;
+  }
+
+  set promoFSPopupShown(value: boolean) {
+    this._promoFSPopupShown = value;
+  }
   get maxCapReached(): boolean {
     return this._maxCapReached;
   }
+  private _promoFSPopupShown: boolean = false;
 
   set maxCapReached(value: boolean) {
     this._maxCapReached = value;
@@ -351,6 +367,7 @@ class AppModelService {
 
     this.promoSpinInfo = null;
     this.promoSpinSession = false;
+    console.log('----------------');
   }
   setPromoFSBet() {
     const bet = this.promoSpinInfo.betAmount;
@@ -381,6 +398,9 @@ class AppModelService {
     let flag = false;
     if (this.promoSpinInfo && this.promoSpinInfo.remainingPlayCount > 0) {
       flag = true;
+    }
+    if (this.promoSpinInfo.status === 'COMPLETED') {
+      flag = false;
     }
     return flag;
   }

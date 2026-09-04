@@ -28,7 +28,10 @@ export class BetValueComp extends ResponsiveView {
   }
 
   protected onBetUpdate(value: number = null): void {
-    const bet = value == null ? appModel.getTotalBet(true) : value;
+    if (appModel.getIsPromoFSSession()) {
+      return;
+    }
+    const bet = value == null ? appModel.getTotalBet() : value;
     this.setValue(Util.formatCurrency(bet));
     this.visible = true;
     if (this.hideTimer != null) {

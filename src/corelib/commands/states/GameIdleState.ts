@@ -20,7 +20,8 @@ class GameIdleStateCommand extends StateCommand {
     }
   }
   public enableGame(): void {
-    if (appModel.promoSpinInfo) {
+    appModel.isBusy = false;
+    if (appModel.promoSpinInfo?.status === 'ACTIVE' && !appModel.promoFSPopupShown) {
       StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
       return;
     }
@@ -53,6 +54,9 @@ class GameIdleStateCommand extends StateCommand {
   }
 
   protected showLineWin(): void {
+    if (appModel.getIsFreeSpinsSession() && GameProxy.config.dontShowWinAfterFS) {
+      return;
+    }
     if (this.lineWinCounter >= 4) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       return;

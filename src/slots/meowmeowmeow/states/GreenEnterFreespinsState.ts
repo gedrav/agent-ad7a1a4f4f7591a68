@@ -16,7 +16,11 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       StateManager.doNextStep();
       return;
     }
-    if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0) {
+    const isFromBlue =
+      appModel.getFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE ||
+      appModel.getUnfinishedFeatureSubType()?.toUpperCase() === FEATURE_NAMES.BLUE;
+
+    if (appModel.getFeatureTriggerPositions() && appModel.getFeatureTriggerPositions().length > 0 && !isFromBlue) {
       EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
     } else {
       // this is due to kittie bank break
@@ -45,9 +49,15 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
       EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
       EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
+      EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
       this.enterFreespin(!skipBgStop);
       return;
     }
+
+    EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
+    EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
+    EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
+    EventHandler.dispatchEvent('SET_KITTIBANK_FEATURE_STATE', FEATURE_NAMES.GREEN);
 
     const obj: any = {};
     obj.title = Util.getContent('FeatureAwardedTitle');
@@ -70,10 +80,8 @@ class GreenEnterFreespinsStateCommand extends StateCommand {
     );
     obj.callbackFunction = this.enterFreespin.bind(this);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
-    EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
-    EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
-    EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
   }
+
   protected async enterFreespin(stopBgSound: boolean = true) {
     EventHandler.dispatchEvent(SlotEvents.HIDE_MAINGAME_ELEMENTS);
     EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);

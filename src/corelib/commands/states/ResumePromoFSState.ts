@@ -10,7 +10,12 @@ class ResumePromoFSStateCommand extends StateCommand {
     super.execute(data);
     if (appModel.getIsPromoFSSession()) {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_INFO);
-      StateManager.goToState(STATES.SPIN_START_STATE);
+      //EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
+      EventHandler.dispatchEvent(SlotEvents.IDLE_STATE_ENTRY);
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+      EventHandler.dispatchEvent(SlotEvents.CLEAR_REELWIN_TICKER);
+      StateManager.goToState(STATES.IDLE_STATE);
     }
   }
 }

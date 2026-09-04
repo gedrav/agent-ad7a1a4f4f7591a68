@@ -9,6 +9,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { StateManager } from '@core/states/StateManagerService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export class PromoFSPopupComp extends ResponsiveChildrenView {
   private readonly bg: PixSprite;
@@ -58,6 +59,7 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_PROMO_SPIN_EXIT_POPUP, this.showPromoExitPopup.bind(this));
   }
   showPromoEntryPopup() {
+    GameProxy.config.isModalOpened = true;
     this.exitContainer.visible = false;
     this.entryContainer.visible = true;
     const data = appModel.promoSpinInfo;
@@ -83,6 +85,7 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
     this.visible = true;
   }
   showPromoExitPopup() {
+    GameProxy.config.isModalOpened = true;
     this.exitContainer.visible = true;
     this.entryContainer.visible = false;
     const data = appModel.promoSpinInfo;
@@ -91,15 +94,18 @@ export class PromoFSPopupComp extends ResponsiveChildrenView {
   }
   protected startBtnClick() {
     this.visible = false;
+    GameProxy.config.isModalOpened = false;
     StateManager.doNextStep(true);
   }
   protected onSkipClicked(): void {
     this.visible = false;
+    GameProxy.config.isModalOpened = false;
     StateManager.doNextStep(false);
   }
   closeBtnClick() {
     StateManager.doNextStep();
     this.visible = false;
+    GameProxy.config.isModalOpened = false;
   }
 
   resizeView() {

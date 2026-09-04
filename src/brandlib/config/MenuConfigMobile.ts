@@ -67,6 +67,7 @@ export const MENU_CONFIG_MOBILE: any = {
     {
       name: 'closeBtn',
       type: 'Button',
+      soundEvent: 'PLAY_GENERIC_BUTTON_SOUND',
       options: {
         defaultView: 'closeBtnMenu',
         hoverView: 'closeBtnMenu',
