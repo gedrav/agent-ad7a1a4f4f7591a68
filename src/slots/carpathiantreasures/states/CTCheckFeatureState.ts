@@ -7,8 +7,11 @@ import { StateManager } from '@core/states/StateManagerService';
 class CTCheckFSStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    const isScatter = appModel.getSpinResult().scatterPositions;
-    if (isScatter.length > 0) {
+    const spinResult: any = appModel.getSpinResult();
+    const scatterPositions = spinResult.scatterPositions || [];
+    const bonusPositions = spinResult.bonusPositions || [];
+
+    if (scatterPositions.length > 0 || bonusPositions.length > 0) {
       EventHandler.dispatchEvent(SlotEvents.SHOW_SCATTER_TRIGGER);
     } else {
       StateManager.next();
