@@ -1,10 +1,12 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { StateManager } from '@core/states/StateManagerService';
+import { appModel } from '@core/models/services/AppModelService';
 import { getRandomSymbolName } from '../../config/SymbolsConfig';
 import HoldNWinReel from './HoldNWinReel';
 
-// Neutral placeholder shown in any cell without an initialReel entry (see createReels()).
+// Neutral placeholder shown in any cell without an initialReel entry.
 const PLACEHOLDER_SYMBOL = 'Blanks';
 
 export interface HoldNWinPosition {
@@ -12,9 +14,8 @@ export interface HoldNWinPosition {
   row: number;
 }
 
-// Config expected under this Comp's `data` (matching how other games nest reel config, e.g.
-// carpathiantreasures's SlotMachineConfig `slotReel` entry):
-//   { rows, columns, symbolWidth, symbolHeight, reelGap?, rowGap?, spinStartGap?, stopGap?, initialReel? }
+// Config nested under this Comp's `data`, matching other games' reel config convention (e.g.
+// carpathiantreasures's `slotReel`).
 export interface HoldNWinReelsContainerData {
   rows: number;
   columns: number;
@@ -24,26 +25,25 @@ export interface HoldNWinReelsContainerData {
   rowGap?: number;
   spinStartGap?: number;
   stopGap?: number;
-  // Static starting grid, column-major (initialReel[column][row]) - same convention as
-  // stopSpin(finalGrid). Falls back to PLACEHOLDER_SYMBOL per cell for anything missing.
+  // Column-major (initialReel[column][row]), same convention as stopSpin(finalGrid). Missing
+  // cells fall back to PLACEHOLDER_SYMBOL.
   initialReel?: string[][];
+  // Floor on how long a spin visibly runs before it's allowed to stop (see tryStopSpin()). Milliseconds.
+  minSpinDuration?: number;
+  minSpinDurationTurbo?: number;
+  // Passed through to every HoldNWinReel. >1 speeds up, <1 slows down. Defaults to 1.
+  spinSpeedMultiplier?: number;
 }
 
 // TODO: replace with the real BE round-trip once the Hold & Win spin-response is finalized (see
-// the TODO in HoldNWinReelsConfig.ts). This is only here so spin()/stopSpin() can be exercised
-// end to end without a backend - it's not a stand-in for actual server timing.
-const DUMMY_RESPONSE_DELAY = 2000;
+// HoldNWinReelsConfig.ts) - not a stand-in for real server timing.
+const DUMMY_RESPONSE_DELAY = 500;
 
-// Manages a Hold & Win grid: one independent HoldNWinReel per position (rows * columns total -
-// every position can be locked independently, so each spins/stops on its own rather than whole
-// columns scrolling together like the main game reel).
+// One independent HoldNWinReel per position - each locks/spins on its own rather than whole
+// columns scrolling together like the main game reel.
 //
-// Grid storage and every (column, row) parameter here are column-major - reels[column][row] -
-// to match both the backend's grid payload (grid[column][row], confirmed against
-// responsetemp/Response.ts: position [0,1] on "cor-2x" lines up with grid[0][1]) and corelib's
-// own SlotReel convention (symbolsArray[reelIndex][rowIndex]). Passing (row, column) anywhere
-// here will silently transpose the grid, so it's called out here rather than left to bite
-// whoever wires this up.
+// Grid access is column-major (reels[column][row]) to match the backend's grid payload and
+// corelib's SlotReel convention; passing (row, column) anywhere here will silently transpose the grid.
 export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private readonly rows: number;
   private readonly columns: number;
@@ -53,11 +53,18 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private readonly rowGap: number;
   private readonly spinStartGap: number;
   private readonly stopGap: number;
+  private readonly minSpinDuration: number;
+  private readonly minSpinDurationTurbo: number;
+  private readonly spinSpeedMultiplier: number;
   private readonly reels: HoldNWinReel[][] = [];
   private readonly initialReel: string[][] | undefined;
   private readonly spinTimeoutIds: any[] = [];
   private readonly stopTimeoutIds: any[] = [];
-  private dummyResponseTimeoutId: any = null;
+  private minDurationTimeoutId: any = null;
+  private responseTimeoutId: any = null;
+  // Reset at the start of every spin; tryStopSpin() only stops once both are ready.
+  private minDurationElapsed = false;
+  private pendingFinalGrid: string[][] | null = null;
 
   constructor(configData: any) {
     super(configData);
@@ -70,20 +77,16 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.rowGap = data.rowGap ?? 0;
     this.spinStartGap = data.spinStartGap ?? 80;
     this.stopGap = data.stopGap ?? 150;
+    this.minSpinDuration = data.minSpinDuration ?? 2000;
+    this.minSpinDurationTurbo = data.minSpinDurationTurbo ?? 750;
+    this.spinSpeedMultiplier = data.spinSpeedMultiplier ?? 1;
     this.initialReel = data.initialReel;
     this.createReels();
-
-    // Same event corelib's own SlotReel listens for on the main reels (see SlotReel.ts) - this
-    // is a dev-stage wire-up so clicking the existing spin button visibly drives this grid too;
-    // once a real Hold & Win state/command exists it'll likely trigger spins on its own terms
-    // instead (e.g. a dedicated respin flow), and this listener should move there.
+    // Dev-stage wiring so the existing spin button drives this grid too; move to a dedicated
+    // Hold & Win flow once one exists.
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.simulateSpinResponse.bind(this));
   }
 
-  // Builds the (rows * columns) grid and positions each reel around this container's local
-  // origin (0,0) as the grid's center, using reelGap (horizontal, between columns) and rowGap
-  // (vertical, between rows) to space them. Each cell starts on initialReel[column][row] if
-  // given (see HoldNWinReelsConfig.ts to edit it), otherwise PLACEHOLDER_SYMBOL.
   private createReels(): void {
     const totalWidth = this.columns * this.symbolWidth + (this.columns - 1) * this.reelGap;
     const totalHeight = this.rows * this.symbolHeight + (this.rows - 1) * this.rowGap;
@@ -96,6 +99,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
           column,
           symbolWidth: this.symbolWidth,
           symbolHeight: this.symbolHeight,
+          spinSpeedMultiplier: this.spinSpeedMultiplier,
         });
         reel.x = column * (this.symbolWidth + this.reelGap) - totalWidth / 2 + this.symbolWidth / 2;
         reel.y = row * (this.symbolHeight + this.rowGap) - totalHeight / 2 + this.symbolHeight / 2;
@@ -106,19 +110,39 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     }
   }
 
-  // TODO (see the class-level TODO on DUMMY_RESPONSE_DELAY): stands in for a real spin-response
-  // round-trip so spin()/stopSpin() can be exercised without a backend. Replace with an actual
-  // request once the Hold & Win spin-response is finalized.
+  // TODO: replace the response side with a real BE round-trip once finalized (see
+  // DUMMY_RESPONSE_DELAY) - the min-duration side in tryStopSpin() is permanent, real behavior.
+  // doNextStep() here stands in for corelib's SlotReel.onReelStripStopped(), since JokerCharge has
+  // no main-game reel wired up yet; move this call there once one exists.
   private simulateSpinResponse(): void {
     this.spin();
-    clearTimeout(this.dummyResponseTimeoutId);
-    this.dummyResponseTimeoutId = setTimeout(() => {
-      this.stopSpin(this.createDummyFinalGrid());
+    this.minDurationElapsed = false;
+    this.pendingFinalGrid = null;
+
+    const minDuration = appModel.turboMode ? this.minSpinDurationTurbo : this.minSpinDuration;
+    clearTimeout(this.minDurationTimeoutId);
+    this.minDurationTimeoutId = setTimeout(() => {
+      this.minDurationElapsed = true;
+      this.tryStopSpin();
+    }, minDuration);
+
+    clearTimeout(this.responseTimeoutId);
+    this.responseTimeoutId = setTimeout(() => {
+      this.pendingFinalGrid = this.createDummyFinalGrid();
+      this.tryStopSpin();
     }, DUMMY_RESPONSE_DELAY);
   }
 
-  // Random columns x rows grid - only used to fake a spin result until the real BE response
-  // lands (see simulateSpinResponse above).
+  // Stops only once both the min duration has elapsed and a response has arrived - whichever
+  // finishes last triggers it.
+  private tryStopSpin(): void {
+    if (!this.minDurationElapsed || !this.pendingFinalGrid) return;
+    const grid = this.pendingFinalGrid;
+    this.pendingFinalGrid = null;
+    this.stopSpin(grid, () => StateManager.doNextStep());
+  }
+
+  // Fakes a spin result until the real BE response lands.
   private createDummyFinalGrid(): string[][] {
     const grid: string[][] = [];
     for (let column = 0; column < this.columns; column++) {
@@ -166,8 +190,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     return this.getEmptyCount() === 0;
   }
 
-  // Starts every non-sticky reel spinning, staggered by spinStartGap so they don't all kick off
-  // in the same frame. Sticky reels are left alone - they keep showing their held symbol.
+  // Staggered by spinStartGap so reels don't all start in the same frame. Sticky reels are skipped.
   public spin(): void {
     this.clearTimeouts(this.spinTimeoutIds);
     let delayIndex = 0;
@@ -178,8 +201,9 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     });
   }
 
-  // Stops every non-sticky reel, staggered by stopGap, revealing finalGrid[column][row] on each;
-  // calls onComplete once the last one has landed. Sticky reels are skipped entirely.
+  // onComplete fires once every reel has actually settled (see HoldNWinReel.stopSpin()'s
+  // onSettled), not merely once told to stop - landing animations keep running after that.
+  // Sticky reels don't count.
   public stopSpin(finalGrid: string[][], onComplete?: () => void): void {
     this.clearTimeouts(this.stopTimeoutIds);
     const pending: { reel: HoldNWinReel; symbolName: string }[] = [];
@@ -193,13 +217,16 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       return;
     }
 
+    let settledCount = 0;
     pending.forEach(({ reel, symbolName }, index) => {
       this.stopTimeoutIds.push(
         setTimeout(() => {
-          reel.stopSpin(symbolName);
-          if (index === pending.length - 1) {
-            onComplete?.();
-          }
+          reel.stopSpin(symbolName, () => {
+            settledCount++;
+            if (settledCount === pending.length) {
+              onComplete?.();
+            }
+          });
         }, index * this.stopGap),
       );
     });
@@ -221,7 +248,8 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   public destroyView(): void {
     this.clearTimeouts(this.spinTimeoutIds);
     this.clearTimeouts(this.stopTimeoutIds);
-    clearTimeout(this.dummyResponseTimeoutId);
+    clearTimeout(this.minDurationTimeoutId);
+    clearTimeout(this.responseTimeoutId);
     super.destroyView();
   }
 }

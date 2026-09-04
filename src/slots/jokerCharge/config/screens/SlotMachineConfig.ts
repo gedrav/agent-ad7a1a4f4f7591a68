@@ -1,6 +1,7 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 import { JACKPOT_LABELS_CONFIG } from './JackpotLabelsConfig';
 import { HOLD_N_WIN_REELS_CONFIG } from './HoldNWinReelsConfig';
+import { RESPIN_COUNTER_CONFIG } from './RespinCounterConfig';
 import { LogoComp } from '@slots/jokerCharge/views/comps/LogoComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
@@ -14,7 +15,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       color: 0xff0000,
       width: 1400,
       height: 954,
-      alpha: 1,
+      alpha: 0,
     },
     {
       name: 'logoComp',
@@ -50,6 +51,15 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     {
+      name: 'lineAnim',
+      type: 'Spine',
+      spineName: 'line',
+      defaultState: 'move_to_right3',
+      loop: true,
+      x: 706,
+      y: 476,
+    },
+    {
       name: 'reelsFrame',
       type: 'Sprite',
       image: 'reels_frame',
@@ -65,7 +75,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'top_panel_bg',
       alpha: 0,
       layoutData: {
-        Desktop: { scale: 0.65 },
+        Desktop: { y: -82, scale: 0.65 },
         Portrait: { scale: 0.65 },
         Landscape: { scale: 0.65 },
       },
@@ -76,13 +86,14 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'top_panel_frame',
       alpha: 0,
       layoutData: {
-        Desktop: { scale: 0.65 },
+        Desktop: { y: -82, scale: 0.65 },
         Portrait: { scale: 0.65 },
         Landscape: { scale: 0.65 },
       },
     },
     HOLD_N_WIN_REELS_CONFIG,
     JACKPOT_LABELS_CONFIG,
+    RESPIN_COUNTER_CONFIG,
   ],
   layoutData: {
     Desktop: {

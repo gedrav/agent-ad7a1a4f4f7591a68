@@ -2,17 +2,14 @@ import { Util } from '@core/utils/UtilService';
 
 export interface JCSymbolData {
   name: string;
-  image?: string;
   spineName?: string;
   skin?: string;
   idleAnim?: string;
   winAnim?: string;
   landingAnim?: string;
   multiplierTextConfig?: any;
-  // Fixed, absolute scale for this symbol in a Hold & Win cell (see
-  // HoldNWinReel.applySymbolScale) - applied as-is, not combined with the cell's dimensions in
-  // any way, so it reads the same regardless of symbolWidth/symbolHeight. Omit to auto-fit the
-  // symbol inside the cell instead (aspect-preserving).
+  // Fixed, absolute scale for this symbol in a Hold & Win cell (see HoldNWinReel.applySymbolScale).
+  // Omit to auto-fit the symbol inside the cell instead.
   cellScale?: number;
 }
 
@@ -27,7 +24,6 @@ const MULTIPLIER_TEXT_STYLE = {
 function bonusSymbolData(multiplier: number): JCSymbolData {
   return {
     name: `cor-${multiplier}x`,
-    image: 'bonus_sym',
     spineName: 'bonus_sym',
     // cor-5x is the top-tier bonus symbol and gets the blue skin, every other cor-Nx uses gold
     skin: multiplier === 5 ? 'blue' : 'gold',
@@ -52,7 +48,6 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
   'cor-5x': bonusSymbolData(5),
   boost: {
     name: 'boost',
-    image: 'bag_collect',
     spineName: 'bag_collect',
     idleAnim: 'idle',
     winAnim: 'win',
@@ -61,7 +56,6 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
   },
   mini: {
     name: 'mini',
-    image: 'belt',
     spineName: 'belt',
     idleAnim: 'idle',
     winAnim: 'win',
@@ -70,7 +64,6 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
   },
   minor: {
     name: 'minor',
-    image: 'boot',
     spineName: 'boot',
     idleAnim: 'idle',
     winAnim: 'win',
@@ -79,18 +72,16 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
   },
   major: {
     name: 'major',
-    image: 'mask',
     spineName: 'mask',
     idleAnim: 'idle',
     winAnim: 'win',
     landingAnim: 'landing',
     cellScale: 1.1,
   },
-  // Rendered from two spines played together (see JCMysterySymbolModifier) - "spineName" here
-  // drives the back layer that ReelSymbolSpine itself creates, the front layer is the extra one.
+  // Rendered from two spines (see JCMysterySymbolModifier) - spineName here drives the back
+  // layer, the front layer is the extra one.
   mystery: {
     name: 'mystery',
-    image: 'mystery_static',
     spineName: 'mystery_back',
     idleAnim: 'idle',
     winAnim: 'win',
@@ -99,14 +90,13 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
   },
   'mystery jackpot': {
     name: 'mystery jackpot',
-    image: 'mystery_static',
     spineName: 'mystery_back',
     idleAnim: 'idle',
     winAnim: 'win',
     landingAnim: 'landing',
     cellScale: 0.65,
   },
-  // No art for this symbol in symbols.json - it renders nothing (see JCReelSymbol.resolveTexture).
+  // No spine - renders as a placeholder rectangle instead (see JCBlanksSymbolModifier).
   Blanks: {
     name: 'Blanks',
   },
@@ -114,12 +104,11 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
 
 const BLANKS_NAME = 'Blanks';
 // Weight for getRandomSymbolName() below - out of 100.
-export const BLANKS_PERCENT = 70;
+export const BLANKS_PERCENT = 50;
 const NON_BLANK_SYMBOL_NAMES = Object.keys(SYMBOLS_DATA).filter((name) => name !== BLANKS_NAME);
 
-// BLANKS_PERCENT chance of Blanks, otherwise any other symbol picked uniformly at random. Used
-// anywhere a symbol needs a name but there's no real spin result to show yet - HoldNWinReel's
-// above-cell placeholder, HoldNWinReelsContainer's dummy spin response, etc.
+// BLANKS_PERCENT chance of Blanks, otherwise any other symbol uniformly at random. Used wherever
+// a placeholder symbol name is needed but there's no real spin result yet.
 export function getRandomSymbolName(): string {
   const isBlank = Util.getRandomRange(1, 100) <= BLANKS_PERCENT;
   return isBlank ? BLANKS_NAME : NON_BLANK_SYMBOL_NAMES[Util.getRandomRange(0, NON_BLANK_SYMBOL_NAMES.length - 1)];

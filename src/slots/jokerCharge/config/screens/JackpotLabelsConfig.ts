@@ -8,9 +8,6 @@ const VALUE_TEXT_STYLE = {
   fontSize: 60,
 };
 
-// TODO: placeholder positions/maxWidth, computed from the GRAND/MAJOR (1176x537) and
-// MINI/MINOR (1015x528) sprite frame sizes at scale 0.3 - approximates the lower "value box"
-// portion of each badge, confirm against the real art.
 export const JACKPOT_LABELS_CONFIG: any = {
   name: 'jackpotLabelsComp',
   type: 'Comp',

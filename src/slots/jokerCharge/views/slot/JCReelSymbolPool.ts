@@ -6,14 +6,13 @@ interface PoolEntry {
   inUse: boolean;
 }
 
-// Pools whole JCReelSymbol instances by backend symbol name, mirroring corelib's SpinePool
-// (which pools the spine sub-object one level below this). Fetch with acquire(name), give it
-// back with release() once the symbol is off-screen / no longer needed.
+// Pools whole JCReelSymbol instances by backend symbol name, mirroring corelib's SpinePool.
+// acquire(name) to get one, release() when done with it.
 export class JCReelSymbolPool {
   private static instance: JCReelSymbolPool;
   private readonly pool: Map<string, PoolEntry[]> = new Map();
-  // Symbols created when the pool was exhausted - not in entries[], so release() can find and
-  // destroy them instead of silently leaking them.
+  // Created when the pool was exhausted - not in entries[], so release() can find and destroy
+  // them instead of leaking.
   private readonly temporarySymbols: Set<JCReelSymbol> = new Set();
 
   static readonly MIN_SIZE = 3;

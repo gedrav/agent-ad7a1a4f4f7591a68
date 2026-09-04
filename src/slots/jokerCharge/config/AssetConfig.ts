@@ -50,6 +50,10 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'boot', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Chain_lock_sym', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mask', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'transition', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'small_square', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'line', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'respinCounter', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {

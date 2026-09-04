@@ -4,11 +4,9 @@ import { UIUtil } from '@core/utils/UIUtilService';
 
 const FRONT_SPINE_NAME = 'mystery_front';
 
-// mystery / mystery jackpot render as two spines played together: ReelSymbolSpine already
-// creates the "mystery_back" layer (configData.data.spineName), this handles the extra
-// "mystery_front" layer on top of it. Not pooled via SpinePool - that pool keys entries by
-// symbol name, and mixing a back-layer and front-layer spine under the same name would
-// hand out the wrong skeleton on reuse.
+// mystery / mystery jackpot render as two spines: ReelSymbolSpine creates the "mystery_back"
+// layer, this adds "mystery_front" on top. Not pooled via SpinePool - that pool keys by symbol
+// name, and mixing back/front spines under the same name would hand out the wrong skeleton on reuse.
 export class JCMysterySymbolModifier {
   private frontSpine: PixSpine | null = null;
 

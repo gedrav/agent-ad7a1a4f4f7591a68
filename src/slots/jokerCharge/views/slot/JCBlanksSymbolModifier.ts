@@ -6,8 +6,7 @@ const BLANKS_WIDTH = 450;
 const BLANKS_HEIGHT = 290;
 const BLANKS_COLOR = 0x800080;
 
-// Placeholder visual for the "Blanks" symbol until real art is ready - a plain rectangle that
-// stays exactly the same across every state (spinning/idle/win/landing all show the same box).
+// Placeholder for the "Blanks" symbol until real art is ready - same box across every state.
 export class JCBlanksSymbolModifier {
   private graphic: PixGraphics | null = null;
 

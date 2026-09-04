@@ -1,7 +1,6 @@
 import { Texture } from 'pixi.js';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
-import { Util } from '@core/utils/UtilService';
 import { appModel } from '@core/models/services/AppModelService';
 import { JCBonusSymbolModifier } from './JCBonusSymbolModifier';
 import { JCMysterySymbolModifier } from './JCMysterySymbolModifier';
@@ -11,23 +10,15 @@ const BONUS_SYMBOL_PREFIX = 'cor-';
 const MYSTERY_SYMBOL_NAMES = ['mystery', 'mystery jackpot'];
 const BLANKS_SYMBOL_NAME = 'Blanks';
 
-// JokerCharge reel symbol. Backed by corelib's ReelSymbolSpine, which already implements the
-// spinning/idle/win/landing state machine (image visible while spinning, spine visible + playing
-// "idle"/"win"/"landing" otherwise) driven by configData.data - see SymbolsConfig.ts for the
-// per-symbol data (image/spineName/skin/idleAnim/winAnim/landingAnim).
+// Spine-only reel symbol (Blanks aside - see blanksModifier), backed by corelib's ReelSymbolSpine
+// and driven by per-symbol data in SymbolsConfig.ts.
 //
-// Two symbol families need extra rendering beyond a single image+spine pair, so this class
-// delegates to them instead of growing its own branches:
-// - cor-Nx symbols share one "bonus_sym" spine and need the "N" multiplier overlaid as text.
-// - mystery / mystery jackpot are rendered from two spines ("mystery_back" + "mystery_front")
-//   played together.
+// cor-Nx bonus symbols and mystery/mystery jackpot need rendering beyond a single spine, so they
+// delegate to their own modifiers below instead of branching here.
 export default class JCReelSymbol extends ReelSymbolSpine {
-  // Lazily created (not field initializers): ReelSymbolSprite's constructor calls
-  // createSymbol() as part of the super() chain, before this class's own field initializers
-  // would run, so an eager `= new JCBlanksSymbolModifier(this)` here is still undefined the
-  // first time createSymbol() needs it. `declare` keeps useDefineForClassFields from also
-  // re-defining (and wiping back to undefined) whatever the getter assigned during that
-  // mid-super-chain call, once this class's own field-init step runs after super() returns.
+  // Lazily created via the getters below. `declare` is needed because createSymbol() (called
+  // during the super() chain) may init these before this class's own field initializers run;
+  // without it, useDefineForClassFields would reset them back to undefined afterward.
   declare private _bonusModifier: JCBonusSymbolModifier;
   declare private _mysteryModifier: JCMysterySymbolModifier;
   declare private _blanksModifier: JCBlanksSymbolModifier;
@@ -56,9 +47,8 @@ export default class JCReelSymbol extends ReelSymbolSpine {
     return this.configData.data.name === BLANKS_SYMBOL_NAME;
   }
 
-  // Blanks has no real art yet - createSymbol() runs once at construction, setNewSymbol() runs
-  // on every reuse, so both need to stay in sync with whichever symbol currently occupies this
-  // instance.
+  // createSymbol() runs once at construction, setNewSymbol() on every reuse - both must stay in
+  // sync with whatever symbol currently occupies this instance.
   private syncBlanksVisual(): void {
     if (this.isBlanksSymbol()) {
       this.blanksModifier.create();
@@ -72,36 +62,49 @@ export default class JCReelSymbol extends ReelSymbolSpine {
     this.syncBlanksVisual();
   }
 
-  // Multiple backend symbol names share one texture frame (all cor-Nx use "bonus_sym", mystery
-  // and mystery jackpot both use "mystery_static"), so the frame name comes from data.image
-  // rather than data.name. Blanks has no frame in symbols.json at all, so it renders nothing
-  // here - see blanksModifier for its placeholder rectangle instead.
+  // Base sprite stays empty - corelib's ReelSymbol/ReelSymbolSprite reference this.symbol
+  // directly and assume it exists. Blanks is the exception - see blanksModifier.
   protected createSymbol(): void {
     this.destroySymbol();
-    const imageName = this.configData.data.image;
-    this.symbol = imageName ? UIUtil.getSprite(imageName) : UIUtil.getSpriteFromTexture(Texture.EMPTY);
+    this.symbol = UIUtil.getSpriteFromTexture(Texture.EMPTY);
     this.symbol.label = 'SYMBOL';
     this.symbol.anchor.set(0.5, 0.5);
-    this.symbol.scale.set(Util.getDefaultValue(this.configData.data.scale, 1.5));
     this.addChild(this.symbol);
     this.handleGameProp();
     this.syncBlanksVisual();
   }
 
-  // corelib's ReelSymbolSpine plays the idle animation once (loop: false) by default. JokerCharge
-  // wants idle anims to loop continuously, which is game-specific, so it's overridden here rather
-  // than changed in corelib (shared by every other game).
+  // Overridden to loop idle continuously (JokerCharge-specific); corelib's default is loop: false.
   public showIdle(): void {
     if (!appModel.secondaryAssetsLoaded) return;
     if (!this.configData.data.idleAnim || this.configData.data.idleAnim === 'none') return;
     this.playSpineAnimation(this.configData.data.idleAnim, true);
   }
 
+  // TODO: swap to dedicated static/staticBlur spine anims once that art exists; plays idle as a
+  // placeholder for now.
+  public setStaticAnimation(): void {
+    this.showIdle();
+  }
+
+  // corelib's showLanding() takes no completion callback (unlike showWinning()); this mirrors
+  // showWinning()'s spineAnimCompleteCallback pattern so callers can chain into showIdle() without
+  // guessing at a delay. Falls back to firing immediately if landing can't actually play.
+  public showLanding(onComplete?: () => void): void {
+    if (!appModel.secondaryAssetsLoaded || !this.configData.data.landingAnim) {
+      onComplete?.();
+      return;
+    }
+    this.spineAnimCompleteCallback = onComplete;
+    if (!this.playSpineAnimation(this.configData.data.landingAnim, false)) {
+      this.spineAnimCompleteCallback = null;
+      onComplete?.();
+    }
+  }
+
+  // Always empty - see createSymbol() above.
   protected resolveTexture(): Texture {
-    const imageName = this.configData.data.image;
-    if (!imageName) return Texture.EMPTY;
-    const name = this.isBlurred ? `${imageName}_blur` : imageName;
-    return UIUtil.getTexture(name);
+    return Texture.EMPTY;
   }
 
   protected createExtraElements(): void {

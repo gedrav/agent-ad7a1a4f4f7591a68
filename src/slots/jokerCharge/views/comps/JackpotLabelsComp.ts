@@ -5,7 +5,6 @@ import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { AdjustableTextBox } from '@core/pixiwrapper/AdjustableTextBox';
 
-// Fixed win multipliers per jackpot tier - value shown is multiplier x current total bet.
 const MULTIPLIERS = {
   mini: 10,
   minor: 20,
