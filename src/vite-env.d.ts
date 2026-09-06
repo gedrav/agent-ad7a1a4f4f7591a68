@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_EXTERNAL_URL: string;
   readonly VITE_HISTORY_URL: string;
   readonly VITE_HISTORY_API_URL: string;
+  readonly VITE_REALTIME_URL: string;
 }
 
 interface ImportMeta {

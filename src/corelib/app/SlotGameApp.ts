@@ -19,6 +19,7 @@ import { PreloaderScreen } from '@brand/views/preloader/PreloaderScreen';
 import { PRELOADER_CONFIG } from '@brand/config/PreloaderConfig';
 import { INIT_ERROR_POPUP_CONFIG } from '@brand/config/InitErrorPopupConfig';
 import { appModel } from '@core/models/services/AppModelService';
+import { RealtimeConnection } from '@core/models/services/RealtimeConnectionService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { BaseTexture, SCALE_MODES } from '@pixi/core';
@@ -76,6 +77,7 @@ class SlotGameApp {
     GameProxy.registerProxy(this);
     DeviceProxy.registerProxy(this);
     WrapperProxy.readURLParams(this);
+    RealtimeConnection.connect(WrapperProxy.playerData.newToken);
     WrapperProxy.notifyLoadingStart();
     GameProxy.config.textsToClear = [];
     GameProxy.config.imagesToClear = [];
