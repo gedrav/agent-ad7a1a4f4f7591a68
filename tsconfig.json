@@ -9,7 +9,8 @@
         "src/slots/sweetsalon/*",
         "src/slots/bookofstorms/*",
         "src/slots/bookofstormslightningwin/*",
-        "src/slots/carpathiantreasures/*"
+        "src/slots/carpathiantreasures/*",
+        "src/slots/houseofcards/*"
       ],
       "@assets/*": [
         "../feg_games_assets/empireofgold/*",
@@ -18,7 +19,8 @@
         "../feg_games_assets/sweetsalon/*",
         "../feg_games_assets/bookofstorms/*",
         "../feg_games_assets/bookofstormslightningwin/*",
-        "../feg_games_assets/carpathiantreasures/*"
+        "../feg_games_assets/carpathiantreasures/*",
+        "../feg_games_assets/houseofcards/*"
       ],
       "@common/*": [
         "../feg_games_assets/common/*"
