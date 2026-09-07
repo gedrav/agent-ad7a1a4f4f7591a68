@@ -444,14 +444,6 @@ class AppModelService {
     this.fsInfo.retrigger = this.unfinishedData.featureResults[this.unfinishedData.featureResults.length - 1].retrigger;
   }
 
-  public setAfterSpinBalance(): void {
-    this.gameInfo.balance = this.gameInfo.updatedBalance;
-  }
-  updateBalance(data: any) {
-    if (data?.balance) {
-      this.gameInfo.updatedBalance = data.balance;
-    }
-  }
   setUpdatedBalance(data: any): void {
     if (data?.balance) {
       this.gameInfo.balance = data.balance;
@@ -460,7 +452,7 @@ class AppModelService {
   public storeSpinResult(data: any): void {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
-    this.gameInfo.updatedBalance = data.playerInfo.balance;
+    this.gameInfo.balance = data.playerInfo.balance;
     this.gameResult = null;
     this.gameResult = data.result;
     this._nextFeature = data.result.nextFeature;

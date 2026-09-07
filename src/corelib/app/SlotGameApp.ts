@@ -231,10 +231,9 @@ class SlotGameApp {
   }
 
   protected onRealTimeUpdate(msg: any): void {
+    appModel.setUpdatedBalance(msg.data);
     if (appModel.isBusy) {
-      appModel.updateBalance(msg.data);
     } else {
-      appModel.setUpdatedBalance(msg.data);
       EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     }
   }
