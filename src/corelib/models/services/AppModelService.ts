@@ -13,6 +13,13 @@ type ParamItem = {
   value: number;
 };
 class AppModelService {
+  get spinRequestSent(): boolean {
+    return this._spinRequestSent;
+  }
+
+  set spinRequestSent(value: boolean) {
+    this._spinRequestSent = value;
+  }
   get isBusy(): boolean {
     return this._isBusy;
   }
@@ -21,6 +28,7 @@ class AppModelService {
     this._isBusy = value;
   }
   private _isBusy: boolean = false;
+  private _spinRequestSent: boolean = false;
   get promoFSPopupShown(): boolean {
     return this._promoFSPopupShown;
   }

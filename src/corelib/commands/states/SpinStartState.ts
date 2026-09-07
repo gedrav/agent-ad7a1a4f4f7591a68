@@ -27,13 +27,9 @@ class SpinStartStateCommand extends StateCommand {
     }
     appModel.spinStartTime = Util.getCurrentTimeInMili();
     appModel.isBusy = true;
-    GameProxy.config.balanceAfterSpinRequest = appModel.getBalance() - appModel.getTotalBet();
+    appModel.spinRequestSent = true;
     await MessageProxy.requestSpinResult(false);
     EventHandler.dispatchEvent(SlotEvents.CREATE_FINAL_REEL_SYMBOLS);
-    if (!appModel.isErrorOccurred && !appModel.getIsPromoFSSession()) {
-      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE_FOR_SPIN);
-    }
-
     await Clock.wait(250);
     if (!appModel.isErrorOccurred) {
       StateManager.next();
