@@ -447,6 +447,16 @@ class AppModelService {
   public setAfterSpinBalance(): void {
     this.gameInfo.balance = this.gameInfo.updatedBalance;
   }
+  updateBalance(data: any) {
+    if (data?.balance) {
+      this.gameInfo.updatedBalance = data.balance;
+    }
+  }
+  setUpdatedBalance(data: any): void {
+    if (data?.balance) {
+      this.gameInfo.balance = data.balance;
+    }
+  }
   public storeSpinResult(data: any): void {
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;

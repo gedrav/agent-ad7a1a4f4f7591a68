@@ -5,16 +5,16 @@ export const REEL_WIN_TICKER_CONFIG: any = {
   name: 'reelWinTicker',
   type: 'Comp',
   class: ReelWinTicker,
-  x: 70,
-  y: 1030,
+  x: 0,
+  y: 884,
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1410, height: 80, color: 0xffff00, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1390, height: 60, color: 0xffff00, alpha: 0 },
     {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 705,
-      y: 40,
+      x: 695,
+      y: 30,
       Elements: [
         {
           name: 'valueText',
