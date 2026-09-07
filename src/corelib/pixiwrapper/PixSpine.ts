@@ -1,3 +1,5 @@
+import { Container } from 'pixi.js';
+import 'pixi.js/prepare';
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { AnimationStateListener, Spine } from '@esotericsoftware/spine-pixi-v8';
 import { UIUtil } from '@core/utils/UIUtilService';
@@ -170,6 +172,19 @@ export class PixSpine extends StandardView {
       return this.height;
     }
   }
+
+  public addSlotObject(slot: string, container: Container, options?: { followAttachmentTimeline?: boolean }): void {
+    this.spineAnim.addSlotObject(slot, container, options);
+  }
+
+  public removeSlotObject(slot: string): void {
+    this.spineAnim.removeSlotObject(slot);
+  }
+
+  public getSlotObject(slot: string): Container | undefined {
+    return this.spineAnim.getSlotObject(slot);
+  }
+
   public removeSpineEvent(listener: AnimationStateListener): void {
     if (!this.spineAnim || !listener) return;
     this.spineAnim.state.removeListener(listener);

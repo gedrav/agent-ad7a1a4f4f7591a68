@@ -55,7 +55,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Spine',
       spineName: 'line',
       defaultState: 'move_to_right3',
-      loop: true,
+      loop: false,
       x: 706,
       y: 476,
     },

@@ -5,6 +5,8 @@ export interface JCSymbolData {
   spineName?: string;
   skin?: string;
   idleAnim?: string;
+  staticAnim?: string;
+  blurAnim?: string;
   winAnim?: string;
   landingAnim?: string;
   multiplierTextConfig?: any;
@@ -24,13 +26,15 @@ const MULTIPLIER_TEXT_STYLE = {
 function bonusSymbolData(multiplier: number): JCSymbolData {
   return {
     name: `cor-${multiplier}x`,
-    spineName: 'bonus_sym',
+    spineName: 'hat',
     // cor-5x is the top-tier bonus symbol and gets the blue skin, every other cor-Nx uses gold
     skin: multiplier === 5 ? 'blue' : 'gold',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1.1,
+    cellScale: 0.6,
     multiplierTextConfig: {
       name: 'multiplierVal',
       type: 'Text',
@@ -50,33 +54,41 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     name: 'boost',
     spineName: 'bag_collect',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1.1,
+    cellScale: 0.6,
   },
   mini: {
     name: 'mini',
     spineName: 'belt',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1.1,
+    cellScale: 0.6,
   },
   minor: {
     name: 'minor',
     spineName: 'boot',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1.1,
+    cellScale: 0.6,
   },
   major: {
     name: 'major',
     spineName: 'mask',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1.1,
+    cellScale: 0.6,
   },
   // Rendered from two spines (see JCMysterySymbolModifier) - spineName here drives the back
   // layer, the front layer is the extra one.
@@ -84,17 +96,21 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     name: 'mystery',
     spineName: 'mystery_back',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.65,
+    cellScale: 0.3,
   },
   'mystery jackpot': {
     name: 'mystery jackpot',
     spineName: 'mystery_back',
     idleAnim: 'idle',
+    staticAnim: 'static',
+    blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.65,
+    cellScale: 0.3,
   },
   // No spine - renders as a placeholder rectangle instead (see JCBlanksSymbolModifier).
   Blanks: {

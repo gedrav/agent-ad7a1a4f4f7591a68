@@ -186,18 +186,18 @@ export default class HoldNWinReel extends Container {
     this.phase = 'stopping';
   }
 
-  // Symbols are spine-only, so "spinning" just plays the spin-state animation. Placeholder,
-  // pending real static/staticBlur art - see JCReelSymbol.setStaticAnimation().
+  // Symbols are spine-only, so "spinning" plays the looping blur-state animation. Landing/idle
+  // (see stopSpin()/finishSettle() below) takes over once the reel actually stops.
   private setSpinningVisual(symbol: JCReelSymbol): void {
-    symbol.setStaticAnimation();
+    symbol.setBlurredTexture();
   }
 
-  // setNewSymbol() always tears down the spine; setStaticAnimation() recreates it immediately so
+  // setNewSymbol() always tears down the spine; setBlurredTexture() recreates it immediately so
   // recycled symbols don't go blank.
   private setSymbolContentForSpin(symbol: JCReelSymbol, name: string): void {
     symbol.setNewSymbol(SYMBOLS_DATA[name], this.column);
     this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale);
-    symbol.setStaticAnimation();
+    symbol.setBlurredTexture();
   }
 
   private onSpinTick(ticker: Ticker): void {

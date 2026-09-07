@@ -1,29 +1,24 @@
-import { Container } from 'pixi.js';
 import { UIUtil } from '@core/utils/UIUtilService';
+import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
 
 const BONUS_SYMBOL_PREFIX = 'cor-';
+const MULTIPLIER_SLOT_NAME = 'root_txt';
 
-// Overlays the "Nx" multiplier value on top of a cor-Nx bonus symbol (e.g. cor-2x -> "2").
+// Overlays the "Nx" multiplier value on top of a cor-Nx bonus symbol (e.g. cor-2x -> "2"), attached
+// to the hat rig's root_txt placeholder slot so it follows the symbol's own spine animation.
 export class JCBonusSymbolModifier {
-  private text: any = null;
-
-  constructor(private readonly host: Container) {}
+  constructor(private readonly host: ReelSymbolSpineExtended) {}
 
   public create(symbolName: string, textConfig: any): void {
     this.destroy();
     if (!textConfig) return;
-    this.text = UIUtil.getElement(textConfig);
-    this.text.anchor?.set(textConfig.anchor?.x ?? 0.5, textConfig.anchor?.y ?? 0.5);
-    this.text.x = textConfig.x ?? 0;
-    this.text.y = textConfig.y ?? 0;
-    this.text.text = symbolName.slice(BONUS_SYMBOL_PREFIX.length, -1);
-    this.host.addChild(this.text);
+    const text = UIUtil.getElement(textConfig);
+    text.anchor?.set(textConfig.anchor?.x ?? 0.5, textConfig.anchor?.y ?? 0.5);
+    text.text = symbolName.slice(BONUS_SYMBOL_PREFIX.length, -1);
+    this.host.addSlotObject(MULTIPLIER_SLOT_NAME, text);
   }
 
   public destroy(): void {
-    if (!this.text) return;
-    this.host.removeChild(this.text);
-    this.text.destroy();
-    this.text = null;
+    this.host.removeSlotObject(MULTIPLIER_SLOT_NAME);
   }
 }

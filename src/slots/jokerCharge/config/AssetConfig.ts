@@ -42,7 +42,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'reelframes-0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'bonus_sym', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'hat', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mystery_front', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mystery_back', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'bag_collect', ASSETTYPE: 'spine' },
