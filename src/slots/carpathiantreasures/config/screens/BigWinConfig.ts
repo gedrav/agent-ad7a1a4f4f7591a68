@@ -24,7 +24,7 @@ export const BIG_WIN_CONFIG = {
         y: 553,
         lx: 842,
         ly: 553,
-        scale: 0.5,
+        scale: 1,
       },
       SUPER_WIN: {
         name: 'bigWinAnimMega',
@@ -36,7 +36,7 @@ export const BIG_WIN_CONFIG = {
         y: 553,
         lx: 842,
         ly: 553,
-        scale: 0.5,
+        scale: 1,
       },
       MEGA_WIN: {
         name: 'bigWinAnimGigantic',
@@ -48,7 +48,7 @@ export const BIG_WIN_CONFIG = {
         y: 553,
         lx: 842,
         ly: 553,
-        scale: 0.5,
+        scale: 1,
       },
       EPIC_WIN: {
         name: 'bigWinAnimUnbelievable',
@@ -60,7 +60,7 @@ export const BIG_WIN_CONFIG = {
         y: 553,
         lx: 842,
         ly: 553,
-        scale: 0.5,
+        scale: 1,
       },
     },
     bigWinTextScales: [0.8, 0.9, 0.9, 0.9],
@@ -90,7 +90,7 @@ export const BIG_WIN_CONFIG = {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 694,
+      x: 740,
       y: 360,
       Elements: [
         {
@@ -108,6 +108,7 @@ export const BIG_WIN_CONFIG = {
       x: 774,
       y: 760,
       Elements: [
+        { name: 'bg', type: 'Sprite', image: 'splashBtn', anchor: { x: 0.5, y: 0.5 }, y: 30, scale: 0.8 },
         {
           name: 'valueText',
           type: 'BitmapText',
