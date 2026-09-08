@@ -1,11 +1,10 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
-import { MinedashFSPopupComp } from '@game/views/comps/MinedashFSPopupComp';
-import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
+import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
-  class: MinedashFSPopupComp,
+  class: FSPopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
     // {
