@@ -94,7 +94,7 @@ export default class HoldNWinReel extends Container {
     // Uses symbolHeight, not measured bounds - a mid-animation spine's bounds vary and would
     // jitter this offset.
     const topSymbolName = getRandomSymbolName();
-    this.topSymbolView = JCReelSymbolPool.getInstance().acquire(topSymbolName, this.column);
+    this.topSymbolView = JCReelSymbolPool.getInstance().acquire(topSymbolName, this.column, this.row);
     this.applySymbolScale(this.topSymbolView, SYMBOLS_DATA[topSymbolName]?.cellScale);
     this.topSymbolView.y = -this.symbolHeight;
     this.topSymbolView.visible = false;
@@ -126,13 +126,21 @@ export default class HoldNWinReel extends Container {
     return this.symbolView?.getSymbolName() ?? null;
   }
 
+  // Both symbolView and topSymbolView are refreshed - topSymbolView can be visible mid-spin (see
+  // spin()), and either can be sitting idle as a Blanks symbol whose brightness needs to react to
+  // a line-count/respin change that happened after it was placed.
+  public refreshBlanksVisual(): void {
+    this.symbolView?.refreshBlanksVisual();
+    this.topSymbolView?.refreshBlanksVisual();
+  }
+
   // Bypasses sticky, unlike spin()/stopSpin() below.
   public showSymbol(name: string): void {
     const pool = JCReelSymbolPool.getInstance();
     if (this.symbolView) {
       pool.release(this.symbolView);
     }
-    this.symbolView = pool.acquire(name, this.column);
+    this.symbolView = pool.acquire(name, this.column, this.row);
     this.applySymbolScale(this.symbolView, SYMBOLS_DATA[name]?.cellScale);
     this.symbolView.y = 0;
     this.spinContainer.addChild(this.symbolView);
@@ -195,7 +203,7 @@ export default class HoldNWinReel extends Container {
   // setNewSymbol() always tears down the spine; setBlurredTexture() recreates it immediately so
   // recycled symbols don't go blank.
   private setSymbolContentForSpin(symbol: JCReelSymbol, name: string): void {
-    symbol.setNewSymbol(SYMBOLS_DATA[name], this.column);
+    symbol.setNewSymbol({ ...SYMBOLS_DATA[name], row: this.row }, this.column);
     this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale);
     symbol.setBlurredTexture();
   }

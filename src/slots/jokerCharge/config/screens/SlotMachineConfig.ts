@@ -2,6 +2,7 @@ import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 import { JACKPOT_LABELS_CONFIG } from './JackpotLabelsConfig';
 import { HOLD_N_WIN_REELS_CONFIG } from './HoldNWinReelsConfig';
 import { RESPIN_COUNTER_CONFIG } from './RespinCounterConfig';
+import { BUY_BONUS_LINES_CONFIG } from './BuyBonusLinesConfig';
 import { LogoComp } from '@slots/jokerCharge/views/comps/LogoComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
@@ -43,7 +44,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'reelsBgDark',
       type: 'Sprite',
-      image: 'reels_bg_dark',
+      image: 'reels_bg_light',
       layoutData: {
         Desktop: { scale: 0.65 },
         Portrait: { scale: 0.65 },
@@ -94,6 +95,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     HOLD_N_WIN_REELS_CONFIG,
     JACKPOT_LABELS_CONFIG,
     RESPIN_COUNTER_CONFIG,
+    BUY_BONUS_LINES_CONFIG,
   ],
   layoutData: {
     Desktop: {

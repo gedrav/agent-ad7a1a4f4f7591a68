@@ -3,7 +3,7 @@ import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExte
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { appModel } from '@core/models/services/AppModelService';
-import { JCBonusSymbolModifier } from './JCBonusSymbolModifier';
+import { JCBonusSymbolModifier, ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModifier';
 import { JCMysterySymbolModifier } from './JCMysterySymbolModifier';
 import { JCBlanksSymbolModifier } from './JCBlanksSymbolModifier';
 
@@ -52,10 +52,16 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // sync with whatever symbol currently occupies this instance.
   private syncBlanksVisual(): void {
     if (this.isBlanksSymbol()) {
-      this.blanksModifier.create();
+      this.blanksModifier.create(this.configData.data.row);
     } else {
       this.blanksModifier.destroy();
     }
+  }
+
+  // Re-checks the active-row/respin state for a symbol that's already on screen (as opposed to
+  // one just being placed) - see HoldNWinReel.refreshBlanksVisual(). No-op for non-Blanks symbols.
+  public refreshBlanksVisual(): void {
+    this.syncBlanksVisual();
   }
 
   // setNewSymbol() reassigns configData.data to a different symbol's data but never used to
@@ -128,6 +134,9 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       this.bonusModifier.create(this.configData.data.name, this.configData.data.multiplierTextConfig);
     } else if (this.isMysterySymbol()) {
       this.mysteryModifier.create(this.configData.data.animScale);
+    } else if (this.configData.data.labelTextConfig) {
+      const label = UIUtil.getElement(this.configData.data.labelTextConfig);
+      this.addSlotObject(ROOT_TEXT_SLOT_NAME, label);
     }
   }
 

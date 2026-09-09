@@ -25,6 +25,9 @@ export const GAME_CONFIG = {
     gameFont1: 'bookosb',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
+    // AssetLoader.loadFont() registers the FontFace using the asset NAME verbatim (extension
+    // included), so this must match 'Belwe-Condensed.ttf' exactly, not just the font's own name.
+    belweCondensed: 'Belwe-Condensed.ttf',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',

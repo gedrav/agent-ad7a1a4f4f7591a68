@@ -4,6 +4,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { getRandomSymbolName } from '../../config/SymbolsConfig';
+import { JCEvents } from '../../events/JCEvents';
 import HoldNWinReel from './HoldNWinReel';
 
 // Neutral placeholder shown in any cell without an initialReel entry.
@@ -85,6 +86,13 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     // Dev-stage wiring so the existing spin button drives this grid too; move to a dedicated
     // Hold & Win flow once one exists.
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.simulateSpinResponse.bind(this));
+    // Blanks symbols already sitting on the grid need their brightness re-checked the moment the
+    // line count changes, not just the next time a cell gets (re)placed - see JCLinesState.
+    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.refreshBlanksVisuals.bind(this));
+  }
+
+  public refreshBlanksVisuals(): void {
+    this.forEachReel((reel) => reel.refreshBlanksVisual());
   }
 
   private createReels(): void {

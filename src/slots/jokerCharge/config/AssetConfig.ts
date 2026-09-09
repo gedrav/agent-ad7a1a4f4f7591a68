@@ -8,6 +8,7 @@ const PRELOADER: AssetBundle = {
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'Belwe-Condensed.ttf', ASSETTYPE: 'font' },
   ],
 };
 const COMMON: AssetBundle = {
@@ -34,6 +35,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
+    { TYPE: 'game', NAME: 'Bitmap1.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bg', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'logo', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
@@ -54,6 +56,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'small_square', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'line', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'respinCounter', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BuyBonus', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {

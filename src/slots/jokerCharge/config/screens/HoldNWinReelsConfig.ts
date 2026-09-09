@@ -3,9 +3,9 @@ import { HoldNWinReelsContainer } from '@slots/jokerCharge/views/slot/HoldNWinRe
 // Starting grid, column-major (INITIAL_REEL[column][row]). Each value must be a key in
 // config/SymbolsConfig.ts's SYMBOLS_DATA.
 const INITIAL_REEL: string[][] = [
-  ['cor-1x', 'Blanks', 'major'], // column 0
-  ['cor-3x', 'Blanks', 'boost'], // column 1
-  ['cor-5x', 'minor', 'mystery'], // column 2
+  ['cor-1x', 'major', 'mini'], // column 0
+  ['Blanks', 'Blanks', 'boost'], // column 1
+  ['cor-5x', 'minor', 'Blanks'], // column 2
 ];
 
 // TODO: rows/columns/symbolWidth/symbolHeight/reelGap/rowGap are placeholders. setSticky() isn't

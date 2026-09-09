@@ -44,26 +44,26 @@ export class JCReelSymbolPool {
     }
   }
 
-  public acquire(name: string, reelNumber: number = 0): JCReelSymbol {
+  public acquire(name: string, reelNumber: number = 0, row: number = 0): JCReelSymbol {
     const entries = this.pool.get(name) ?? [];
 
     const free = entries.find((e) => !e.inUse);
     if (free) {
       free.inUse = true;
-      free.symbol.setNewSymbol(this.getData(name), reelNumber);
+      free.symbol.setNewSymbol({ ...this.getData(name), row }, reelNumber);
       free.symbol.visible = true;
       return free.symbol;
     }
 
     if (entries.length < JCReelSymbolPool.MAX_SIZE) {
-      const entry: PoolEntry = { symbol: this.createSymbol(name, reelNumber), inUse: true };
+      const entry: PoolEntry = { symbol: this.createSymbol(name, reelNumber, row), inUse: true };
       entries.push(entry);
       this.pool.set(name, entries);
       return entry.symbol;
     }
 
     console.warn(`JCReelSymbolPool: pool exhausted for symbol "${name}", creating temporary symbol.`);
-    const tempSymbol = this.createSymbol(name, reelNumber);
+    const tempSymbol = this.createSymbol(name, reelNumber, row);
     this.temporarySymbols.add(tempSymbol);
     return tempSymbol;
   }
@@ -107,7 +107,7 @@ export class JCReelSymbolPool {
     return data;
   }
 
-  private createSymbol(name: string, reelNumber: number = 0): JCReelSymbol {
-    return new JCReelSymbol({ data: { ...this.getData(name), reelNumber } });
+  private createSymbol(name: string, reelNumber: number = 0, row: number = 0): JCReelSymbol {
+    return new JCReelSymbol({ data: { ...this.getData(name), reelNumber, row } });
   }
 }
