@@ -108,7 +108,7 @@ export const BIG_WIN_CONFIG = {
       x: 774,
       y: 760,
       Elements: [
-        { name: 'bg', type: 'Sprite', image: 'splashBtn', anchor: { x: 0.5, y: 0.5 }, y: 30, scale: 0.8 },
+        { name: 'bg', type: 'Sprite', image: 'winTickerBg', anchor: { x: 0.5, y: 0.5 }, y: 30, scale: 0.8 },
         {
           name: 'valueText',
           type: 'BitmapText',
