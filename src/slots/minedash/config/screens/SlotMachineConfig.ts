@@ -10,8 +10,6 @@ import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig'
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
-import { BookSlotReel } from '@game/views/slot/BookSloReel';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -43,7 +41,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: BookSlotReel,
+      class: SlotReelStandard,
       winController: GameWinController,
       x: 0,
       y: 100,

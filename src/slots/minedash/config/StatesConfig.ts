@@ -14,10 +14,7 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
-import { BookShowSymbolExpansionState } from '@game/states/BookShowSymbolExpansionState';
-import { BookShowSymbolAfterExpansionState } from '@game/states/BookShowSymbolAfterExpansionState';
-import { ShowFSEnterTransitionState } from '@game/states/ShowFSEnterTransitionState';
-import { ShowFSExitTransitionState } from '@game/states/ShowFSExitTransitionState';
+
 import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTriggerState';
 import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';
 import { ResumePromoFSState } from '@core/commands/states/ResumePromoFSState';
@@ -32,8 +29,6 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
-  { name: STATES.SHOW_SYMBOL_EXPANSION_STATE, state: BookShowSymbolExpansionState },
-  { name: STATES.SHOW_POST_EXPANSION_WIN_STATE, state: BookShowSymbolAfterExpansionState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
@@ -46,11 +41,9 @@ export const STATES_CONFIG: any = [
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
   { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
-  { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: ShowFSEnterTransitionState },
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
   { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
-  { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: ShowFSExitTransitionState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 
   { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
