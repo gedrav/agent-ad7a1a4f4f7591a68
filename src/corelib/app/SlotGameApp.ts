@@ -227,6 +227,19 @@ class SlotGameApp {
     this.bindEvent(AppEvents.SOUNDS_LOADING_COMPLETE, this.onSoundsLoaded);
     this.bindEvent(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit);
     this.bindEvent(SlotEvents.CHECK_TO_RESUME_SOUND, this.checkForIOSAudiioResume);
+    this.bindEvent(SlotEvents.REALTIME_BALANCE_UPDATE, this.onRealTimeUpdate);
+  }
+
+  protected onRealTimeUpdate(msg: any): void {
+    appModel.setUpdatedBalance(msg.data);
+    if (appModel.spinRequestSent) {
+      appModel.spinRequestSent = false;
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
+    }
+    if (appModel.isBusy) {
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
+    }
   }
 
   private bindEvent(event: string, method: (...args: any[]) => void): void {

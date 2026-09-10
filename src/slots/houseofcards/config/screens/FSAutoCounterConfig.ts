@@ -6,15 +6,15 @@ export const FSAUTO_COUNTER_CONFIG: any = {
   name: 'fsAutoCounterComp',
   type: 'Comp',
   class: FSAutoCounterComp,
-  x: 80,
-  y: 1034,
+  x: 8,
+  y: 884,
   Elements: [
     {
       name: 'spinsText',
       type: 'Text',
       anchor: { x: 0, y: 0.5 },
       x: 0,
-      y: 34,
+      y: 30,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 32,
@@ -28,8 +28,8 @@ export const FSAUTO_COUNTER_CONFIG: any = {
       name: 'winningsText',
       type: 'Text',
       anchor: { x: 1, y: 0.5 },
-      x: 1385,
-      y: 34,
+      x: 1380,
+      y: 30,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 32,

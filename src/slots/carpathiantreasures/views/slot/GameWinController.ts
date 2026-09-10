@@ -18,13 +18,13 @@ interface ActiveWildSpine {
   data: SymbolConfig['data'];
 }
 
-const WIN_FRAME_SCALE = 0.5;
+const WIN_FRAME_SCALE = 1;
 
 export default class GameWinController extends WinController {
   private maskRect: PixGraphics;
   private activeWildSpines: ActiveWildSpine[] = [];
   private readonly activeWinFrames: Map<ReelSymbolSprite, PixSpine> = new Map();
-  private readonly scatterTriggerTimeoutId: any;
+  private scatterTriggerTimeoutId: any;
   private isLastLineWinOfPass = false;
 
   constructor(data: any) {
@@ -125,11 +125,11 @@ export default class GameWinController extends WinController {
     const spinResult: any = appModel.getSpinResult();
     const scatterPositions: number[] = spinResult.scatterPositions || [];
     const bonusPositions: number[] = spinResult.bonusPositions || [];
-    const positions = scatterPositions.concat(bonusPositions);
 
     const scatterWin: number = spinResult.scatterWin || 0;
     const bonusWin: number = spinResult.bonusWin || 0;
     const totalWin = scatterWin + bonusWin;
+    const positions = (scatterWin > 0 ? scatterPositions : []).concat(bonusWin > 0 ? bonusPositions : []);
 
     if (positions && positions.length > 0 && totalWin > 0) {
       if (!this.maskRect) {
@@ -154,19 +154,38 @@ export default class GameWinController extends WinController {
 
         if (j === 0) {
           this.lineWinAmountComp.visible = true;
-          this.lineWinAmountComp.x = sym.x + this.winSymbolsContainer.x;
+          this.lineWinAmountComp.x = this.maskRect
+            ? this.maskRect.x + this.maskRect.width / 2
+            : sym.x + this.winSymbolsContainer.x;
           this.lineWinAmountComp.y = sym.y + this.winSymbolsContainer.y;
           this.lineWinAmountComp.showWin(totalWin);
         }
       }
 
-      setTimeout(() => {
+      if (this.scatterTriggerTimeoutId) clearTimeout(this.scatterTriggerTimeoutId);
+      this.scatterTriggerTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
         this.notifyFeatureTriggerAnimDone();
       }, 4000);
     } else {
       this.notifyFeatureTriggerAnimDone();
     }
+  }
+
+  protected override notifyFeatureTriggerAnimDone(): void {
+    if (this.scatterTriggerTimeoutId) {
+      clearTimeout(this.scatterTriggerTimeoutId);
+      this.scatterTriggerTimeoutId = null;
+    }
+    super.notifyFeatureTriggerAnimDone();
+  }
+
+  public override clearSpinWin(): void {
+    if (this.scatterTriggerTimeoutId) {
+      clearTimeout(this.scatterTriggerTimeoutId);
+      this.scatterTriggerTimeoutId = null;
+    }
+    super.clearSpinWin();
   }
 
   public override showLineWin(): void {
