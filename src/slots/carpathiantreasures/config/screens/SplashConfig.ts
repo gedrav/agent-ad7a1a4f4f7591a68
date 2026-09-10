@@ -239,7 +239,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, -2),
+            textOffset: new Point(0, -16),
           },
           textConfig: {
             content: 'playGameText',
@@ -263,11 +263,11 @@ export const SPLASH_CONFIG: any = {
             anchor: { x: 0.5, y: 0.5 },
             fontMLProps: { lt: { fontSize: 36 } },
           },
+          layoutData: {
+            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 1, maxScale: 1.2 },
+          },
           x: 274,
           y: 85,
-          layoutData: {
-            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.7, maxScale: 1 },
-          },
         },
         {
           name: 'showIntroBtn',
