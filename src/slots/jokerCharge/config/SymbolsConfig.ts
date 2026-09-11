@@ -33,7 +33,7 @@ export const MULTIPLIER_TEXT_STYLE = {
   fillGradientStops: [0, 0.35, 0.7, 1],
   stroke: {
     fill: ['0x8A0000', '0x6B0000', '0x4A0000'],
-    width: 6,
+    width: 16,
     join: 'round',
   },
   strokeGradientStops: [0, 0.5, 1],
@@ -41,7 +41,7 @@ export const MULTIPLIER_TEXT_STYLE = {
     color: 0x000000,
     alpha: 0.6,
     blur: 2,
-    distance: 16,
+    distance: 6,
     angle: Math.PI / 2,
   },
   align: 'center',
@@ -51,10 +51,10 @@ export const MULTIPLIER_TEXT_STYLE = {
 // "MINOR" reference image.
 const MINOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
-  fill: ['0xFFFFFF', '0x4FC3F7', '0x0D47A1'],
+  fill: ['0x526bbf', '0x677dc6', '0x34498e', '0x2543a5', '0x042454'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
-    fill: ['0xFFF9C4', '0xFFD700', '0xE8890C'],
+    fill: ['0xFFD700', '0xE8890C'],
     width: 16,
     join: 'round',
   },
@@ -66,7 +66,7 @@ const MAJOR_TEXT_STYLE = {
   fill: ['0xE8FFB0', '0x66CC33', '0x1B5E20'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
-    fill: ['0xFFF9C4', '0xFFD700', '0xE8890C'],
+    fill: ['0xFFD700', '0xE8890C'],
     width: 16,
     join: 'round',
   },
@@ -78,7 +78,19 @@ const MINI_TEXT_STYLE = {
   fill: ['0xFFD9F5', '0xD946C4', '0x5A0F6B'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
-    fill: ['0xFFF9C4', '0xFFD700', '0xE8890C'],
+    fill: ['0xFFD700', '0xE8890C'],
+    width: 16,
+    join: 'round',
+  },
+};
+
+// Same gold stroke as MINOR/MAJOR/MINI_TEXT_STYLE, red fill to match the "GRAND" reference image.
+const GRAND_TEXT_STYLE = {
+  ...MULTIPLIER_TEXT_STYLE,
+  fill: ['0xFF7B6B', '0xE53911', '0xB71C1C'],
+  fillGradientStops: [0, 0.5, 1],
+  stroke: {
+    fill: ['0xFFD700', '0xE8890C'],
     width: 16,
     join: 'round',
   },
@@ -110,7 +122,9 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
       name: 'multiplierVal',
       type: 'Text',
       anchor: { x: 0.5, y: 0.5 },
-      style: MULTIPLIER_TEXT_STYLE,
+      // Max multiplier tier (5x) gets the gold/orange GRAND look; every other cor-Nx keeps the
+      // base gold style.
+      style: multiplier === 5 ? GRAND_TEXT_STYLE : MULTIPLIER_TEXT_STYLE,
     },
   };
 }

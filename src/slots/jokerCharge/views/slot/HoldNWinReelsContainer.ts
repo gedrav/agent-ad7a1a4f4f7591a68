@@ -1,11 +1,13 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { AppEvents } from '@core/events/AppEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { getRandomSymbolName } from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
 import HoldNWinReel from './HoldNWinReel';
+import { JCReelSymbolPool } from './JCReelSymbolPool';
 
 // Neutral placeholder shown in any cell without an initialReel entry.
 const PLACEHOLDER_SYMBOL = 'Blanks';
@@ -89,6 +91,10 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     // Blanks symbols already sitting on the grid need their brightness re-checked the moment the
     // line count changes, not just the next time a cell gets (re)placed - see JCLinesState.
     EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.refreshBlanksVisuals.bind(this));
+    // Without this, every symbol name's first pool entry gets built (spine + GPU upload) on the
+    // spot the first time recycling asks for it mid-spin, instead of once up front - warms all of
+    // them as soon as their spines are actually loaded.
+    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, () => JCReelSymbolPool.getInstance().prewarm());
   }
 
   public refreshBlanksVisuals(): void {

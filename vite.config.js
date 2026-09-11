@@ -15,9 +15,9 @@ const defaultGameNames = [
   //'meowmeowmeow',
   //'bookofstormslightningwin',
   // 'carpathiantreasures',
-  // 'jokerCharge',
+  'jokerCharge',
   //'houseofcards'
-  'minedash'
+  // 'minedash'
 
 ];
 

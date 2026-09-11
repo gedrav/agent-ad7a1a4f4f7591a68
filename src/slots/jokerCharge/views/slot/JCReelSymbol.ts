@@ -23,6 +23,11 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   declare private _bonusModifier: JCBonusSymbolModifier;
   declare private _mysteryModifier: JCMysterySymbolModifier;
   declare private _blanksModifier: JCBlanksSymbolModifier;
+  // Set around setBlurredTexture() below - skips rebuilding the bonus/mystery/label overlay while
+  // merely showing the spin-blur placeholder, since that overlay (a gradient+drop-shadow Text, or
+  // a second spine for mystery) is expensive to recreate and destroySpine() forces a full rebuild
+  // on every recycle - recreating it dozens of times a second while a reel spins was tanking FPS.
+  private skipOverlayOnCreate = false;
 
   private get bonusModifier(): JCBonusSymbolModifier {
     return (this._bonusModifier ??= new JCBonusSymbolModifier(this));
@@ -117,8 +122,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     this.playSpineAnimation(this.configData.data.idleAnim, true);
   }
 
-  public setStaticAnimation(): void {
-    this.showStatic();
+  public setBlurredTexture(): void {
+    this.skipOverlayOnCreate = true;
+    super.setBlurredTexture();
+    this.skipOverlayOnCreate = false;
   }
 
   // this.symbol's real visual is the spine built in createSymbol() above, not a texture - stays
@@ -129,7 +136,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
 
   protected createExtraElements(): void {
     super.createExtraElements();
-    if (!this.spine) return;
+    if (!this.spine || this.skipOverlayOnCreate) return;
     if (this.isBonusSymbol()) {
       this.bonusModifier.create(this.configData.data.name, this.configData.data.multiplierTextConfig);
     } else if (this.isMysterySymbol()) {

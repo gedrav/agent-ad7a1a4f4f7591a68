@@ -100,17 +100,23 @@ export default class HoldNWinReel extends Container {
     this.topSymbolView.visible = false;
     this.spinContainer.addChild(this.topSymbolView);
 
-    // Added directly to this reel, not spinContainer, so the spin mask never clips it.
+    // Added directly to this reel, not spinContainer, so the spin mask never clips it. Starts with
+    // autoUpdate off - a Spine ticks its own skeleton every frame via Ticker.shared regardless of
+    // visible, so leaving 9 of these (one per reel) always-on while permanently hidden was pure
+    // wasted per-frame work; setSmallSquareVisible() below turns it back on only while shown.
     this.smallSquareAnim = UIUtil.getSpineAnim(SMALL_SQUARE_SPINE_NAME, { spineName: SMALL_SQUARE_SPINE_NAME });
     this.smallSquareAnim.visible = false;
     this.smallSquareAnim.scale.set(0.65);
     this.smallSquareAnim.y = -23;
+    this.smallSquareAnim.setAutoUpdate(false);
     this.addChild(this.smallSquareAnim);
 
-    // Same as smallSquareAnim above - added directly to this reel so the spin mask never clips it.
+    // Same as smallSquareAnim above, both for the mask and the autoUpdate toggling (see
+    // playChainLockAppear()/playChainLockDisappear()).
     this.chainLockAnim = UIUtil.getSpineAnim(CHAIN_LOCK_SPINE_NAME, { spineName: CHAIN_LOCK_SPINE_NAME });
     this.chainLockAnim.visible = false;
     this.chainLockAnim.scale.set(1.2);
+    this.chainLockAnim.setAutoUpdate(false);
     this.addChild(this.chainLockAnim);
   }
 
@@ -294,10 +300,12 @@ export default class HoldNWinReel extends Container {
   public setSmallSquareVisible(flag: boolean): void {
     if (flag) {
       this.smallSquareAnim.visible = true;
+      this.smallSquareAnim.setAutoUpdate(true);
       this.smallSquareAnim.playAnimation({ state: SMALL_SQUARE_ANIM_STATE, loop: true });
     } else {
       this.smallSquareAnim.stopAnimation();
       this.smallSquareAnim.visible = false;
+      this.smallSquareAnim.setAutoUpdate(false);
     }
   }
 
@@ -306,6 +314,7 @@ export default class HoldNWinReel extends Container {
   public playChainLockAppear(): void {
     if (!this.sticky) return;
     this.chainLockAnim.visible = true;
+    this.chainLockAnim.setAutoUpdate(true);
     this.chainLockAnim.playAnimation({
       state: CHAIN_LOCK_APPEARING_STATE,
       loop: false,
@@ -319,6 +328,7 @@ export default class HoldNWinReel extends Container {
     const listener = this.chainLockAnim.addEventListener('complete', () => {
       if (listener) this.chainLockAnim.removeSpineEvent(listener);
       this.chainLockAnim.visible = false;
+      this.chainLockAnim.setAutoUpdate(false);
       this.setSticky(false);
     });
     this.chainLockAnim.playAnimation({ state: CHAIN_LOCK_DISAPPEARING_STATE, loop: false });
