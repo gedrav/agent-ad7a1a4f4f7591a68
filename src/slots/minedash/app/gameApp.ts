@@ -38,6 +38,7 @@ export class gameApp extends SlotGameApp {
     }
   }
   async createView() {
+    appModel.secondaryAssetsLoaded = true;
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
     this.gameAppScreen.visible = false;
     this.appContainer.addChildAt(this.gameAppScreen, 0);
