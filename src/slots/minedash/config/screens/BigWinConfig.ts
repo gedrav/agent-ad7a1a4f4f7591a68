@@ -13,16 +13,18 @@ export const BIG_WIN_CONFIG = {
       MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic' },
       EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable' },
     },
-    bigWinAnim: {
-      name: 'bigWinAnim',
-      dontCreateView: true,
-      type: 'Spine',
-      spineName: 'bigWins',
-      loop: true,
-      x: 694,
-      y: 460,
-      scale: 1.2,
-    },
+    // TODO: 'bigWins' spine asset isn't delivered for this game yet (no files under
+    // assets/spines, not registered in AssetConfig.ts) - re-enable once it lands.
+    // bigWinAnim: {
+    //   name: 'bigWinAnim',
+    //   dontCreateView: true,
+    //   type: 'Spine',
+    //   spineName: 'bigWins',
+    //   loop: true,
+    //   x: 694,
+    //   y: 460,
+    //   scale: 1.2,
+    // },
     bigWinTextScales: [0.8, 0.9, 0.9, 0.9],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
