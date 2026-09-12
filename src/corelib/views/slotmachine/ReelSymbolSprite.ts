@@ -44,7 +44,9 @@ export default class ReelSymbolSprite extends ReelSymbol {
 
   protected createSymbol(): void {
     this.destroySymbol();
-
+    if (this.configData.data.staticAnim) {
+      return;
+    }
     this.symbol = UIUtil.getSprite(this.configData.data.name);
     this.symbol.label = 'SYMBOL';
     this.symbol.anchor.set(0.5, 0.5);
@@ -91,6 +93,10 @@ export default class ReelSymbolSprite extends ReelSymbol {
   // -------------------------
 
   public setNewSymbol(data: any, reelno: number): void {
+    if (!this.symbol) {
+      this.handleGameProp();
+      return;
+    }
     this.configData.data = { reelNumber: reelno, ...data };
     this.symbol.texture = this.resolveTexture();
     this.symbol.scale.set(this.getDefaultScale());
@@ -132,7 +138,9 @@ export default class ReelSymbolSprite extends ReelSymbol {
   }
 
   public showFaded(): void {
-    this.symbol.tint = 0x333333;
+    if (this.symbol) {
+      this.symbol.tint = 0x333333;
+    }
   }
 
   public showFeatureTriggerAnimation(onComplete?: () => void, loop: boolean = false): void {
@@ -168,12 +176,14 @@ export default class ReelSymbolSprite extends ReelSymbol {
       this.winningTimeoutId = null;
     }
     this.disposeGlowFilter();
+    if (!this.symbol) return;
     this.symbol.tint = 0xffffff;
     AnimationProxy.killTweensOf(this.symbol);
     this.symbol.scale.set(this.getDefaultScale());
   }
 
   private disposeGlowFilter(): void {
+    if (!this.symbol) return;
     if (this.activeGlowFilter) {
       AnimationProxy.killTweensOf(this.activeGlowFilter);
       this.symbol.filters = null;
