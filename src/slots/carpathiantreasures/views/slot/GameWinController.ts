@@ -142,6 +142,9 @@ export default class GameWinController extends WinController {
       this.lineWinAmountComp.visible = false;
 
       const len = positions.length;
+      let minX = Infinity;
+      let maxX = -Infinity;
+      let firstSymY = 0;
       for (let j = 0; j < len; j++) {
         const pos = this.getReelPosition(positions[j]);
         const sym = this.reelsData.isFixedSymbol
@@ -152,15 +155,15 @@ export default class GameWinController extends WinController {
         sym.showWinning(null, true);
         this.totalWinSymbols++;
 
-        if (j === 0) {
-          this.lineWinAmountComp.visible = true;
-          this.lineWinAmountComp.x = this.maskRect
-            ? this.maskRect.x + this.maskRect.width / 2
-            : sym.x + this.winSymbolsContainer.x;
-          this.lineWinAmountComp.y = sym.y + this.winSymbolsContainer.y;
-          this.lineWinAmountComp.showWin(totalWin);
-        }
+        if (sym.x < minX) minX = sym.x;
+        if (sym.x > maxX) maxX = sym.x;
+        if (j === 0) firstSymY = sym.y;
       }
+
+      this.lineWinAmountComp.visible = true;
+      this.lineWinAmountComp.x = (minX + maxX) / 2 + this.winSymbolsContainer.x;
+      this.lineWinAmountComp.y = firstSymY + this.winSymbolsContainer.y;
+      this.lineWinAmountComp.showWin(totalWin);
 
       if (this.scatterTriggerTimeoutId) clearTimeout(this.scatterTriggerTimeoutId);
       this.scatterTriggerTimeoutId = setTimeout(() => {

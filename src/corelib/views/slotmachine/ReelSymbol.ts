@@ -52,7 +52,10 @@ export default class ReelSymbol extends StandardView {
 
   protected setSpineVisible(flag: boolean): void {
     if (!this.spine) return;
-    this.symbol.visible = !flag;
+    if (this.symbol) {
+      this.symbol.visible = !flag;
+    }
+
     this.spine.visible = flag;
     // Detach hidden spines from Ticker.shared so they don't consume CPU/GPU
     // while invisible (idle symbols on screen, popups closed, etc.).

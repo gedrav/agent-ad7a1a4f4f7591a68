@@ -1,5 +1,6 @@
 import { Container } from 'pixi.js';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 export interface ExtendedSymbolData {
   name: string;
@@ -18,8 +19,11 @@ export interface ExtendedSymbolConfig {
   data: ExtendedSymbolData;
 }
 
+// There is no static image fallback here - symbols are shown using spine only, so these
+// overrides make sure the static spine pose is always shown when nothing else is playing.
 export default class ReelSymbolSpineExtended extends ReelSymbolSpine {
   private readonly slotObjects: Map<string, Container> = new Map();
+  private isSpineBlurred = false;
 
   protected destroySpine(): void {
     this.clearSlotObjects();
@@ -29,10 +33,37 @@ export default class ReelSymbolSpineExtended extends ReelSymbolSpine {
   public showStatic(): void {
     const anim = this.configData.data.staticAnim;
     if (!anim || anim === 'none') return;
-    this.playSpineAnimation(anim, false);
+    this.playSpineAnimation(anim, true);
+  }
+
+  constructor(configData: any) {
+    super(configData);
+    this.showStatic();
+  }
+
+  public setNewSymbol(data: any, reelno: number): void {
+    super.setNewSymbol(data, reelno);
+    if (this.isSpineBlurred) {
+      this.setBlurredTexture();
+    } else {
+      this.showStatic();
+    }
+  }
+
+  public recreateAnimation(): void {
+    const hadPendingWin = this.hasPendingWinCallback();
+    super.recreateAnimation();
+    if (!hadPendingWin) this.showStatic();
+  }
+
+  protected onAnimComplete(data: { loop: boolean; animation: { name: string } }): void {
+    super.onAnimComplete(data);
+    if (data.loop) return;
+    this.showStatic();
   }
 
   public setBlurredTexture(): void {
+    this.isSpineBlurred = true;
     if (!this.configData.data.blurAnim) {
       super.setBlurredTexture();
       return;
@@ -41,11 +72,33 @@ export default class ReelSymbolSpineExtended extends ReelSymbolSpine {
   }
 
   public setNormalTexture(): void {
+    this.isSpineBlurred = false;
     if (!this.configData.data.blurAnim) {
       super.setNormalTexture();
       return;
     }
     this.destroySpine();
+    this.showStatic();
+  }
+
+  public resetSymbol(): void {
+    this.isSpineBlurred = false;
+    super.resetSymbol();
+    this.showStatic();
+  }
+
+  public stopIdleAnim(): void {
+    AnimationProxy.killTweensOf(this.symbol);
+  }
+
+  public cleanUpSymbolWin(): void {
+    super.cleanUpSymbolWin();
+    this.showStatic();
+  }
+
+  public clearCallBackAnimation(): void {
+    super.clearCallBackAnimation();
+    this.showStatic();
   }
 
   public showWinning(onComplete?: () => void, loop: boolean = false): void {

@@ -38,9 +38,18 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
+    // { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
+
+    { TYPE: 'game', NAME: 'lowpayingsymbols', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'H1', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'H2', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'H3', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'wild', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Gem_Red', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Gem_Pink', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Gem_Orange', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Gem_Green', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
