@@ -231,7 +231,7 @@ class SlotGameApp {
   }
 
   protected onRealTimeUpdate(msg: any): void {
-    console.log('update -- ', msg);
+    //console.log('update -- ', msg);
     appModel.setUpdatedBalance(msg.data);
     if (appModel.spinRequestSent) {
       appModel.spinRequestSent = false;
