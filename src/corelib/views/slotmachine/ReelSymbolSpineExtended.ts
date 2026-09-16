@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Rectangle } from 'pixi.js';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
@@ -39,6 +39,10 @@ export default class ReelSymbolSpineExtended extends ReelSymbolSpine {
   constructor(configData: any) {
     super(configData);
     this.showStatic();
+  }
+
+  public setupInteractionArea(hitW: number, hitH: number): void {
+    this.hitArea = new Rectangle(-hitW / 2, -hitH / 2, hitW, hitH);
   }
 
   public setNewSymbol(data: any, reelno: number): void {
