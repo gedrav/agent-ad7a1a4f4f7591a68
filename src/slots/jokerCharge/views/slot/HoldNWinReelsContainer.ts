@@ -1,13 +1,10 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { AppEvents } from '@core/events/AppEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { appModel } from '@core/models/services/AppModelService';
-import { getRandomSymbolName } from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
 import HoldNWinReel from './HoldNWinReel';
-import { JCReelSymbolPool } from './JCReelSymbolPool';
 
 // Neutral placeholder shown in any cell without an initialReel entry.
 const PLACEHOLDER_SYMBOL = 'Blanks';
@@ -38,10 +35,6 @@ export interface HoldNWinReelsContainerData {
   spinSpeedMultiplier?: number;
 }
 
-// TODO: replace with the real BE round-trip once the Hold & Win spin-response is finalized (see
-// HoldNWinReelsConfig.ts) - not a stand-in for real server timing.
-const DUMMY_RESPONSE_DELAY = 500;
-
 // One independent HoldNWinReel per position - each locks/spins on its own rather than whole
 // columns scrolling together like the main game reel.
 //
@@ -64,7 +57,6 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private readonly spinTimeoutIds: any[] = [];
   private readonly stopTimeoutIds: any[] = [];
   private minDurationTimeoutId: any = null;
-  private responseTimeoutId: any = null;
   // Reset at the start of every spin; tryStopSpin() only stops once both are ready.
   private minDurationElapsed = false;
   private pendingFinalGrid: string[][] | null = null;
@@ -85,16 +77,14 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.spinSpeedMultiplier = data.spinSpeedMultiplier ?? 1;
     this.initialReel = data.initialReel;
     this.createReels();
-    // Dev-stage wiring so the existing spin button drives this grid too; move to a dedicated
-    // Hold & Win flow once one exists.
-    EventHandler.addEventListener(SlotEvents.START_SPIN, this.simulateSpinResponse.bind(this));
+    // START_SPIN (dispatched by SpinStartState before the BE round-trip) kicks off the spinning
+    // visual; the actual result arrives later via JCSpinResponseReceivedState once the response
+    // lands, decoupled from how long the request takes.
+    EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
+    EventHandler.addEventListener(JCEvents.SPIN_RESULT_RECEIVED, this.onSpinResultReceived.bind(this));
     // Blanks symbols already sitting on the grid need their brightness re-checked the moment the
     // line count changes, not just the next time a cell gets (re)placed - see JCLinesState.
     EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.refreshBlanksVisuals.bind(this));
-    // Without this, every symbol name's first pool entry gets built (spine + GPU upload) on the
-    // spot the first time recycling asks for it mid-spin, instead of once up front - warms all of
-    // them as soon as their spines are actually loaded.
-    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, () => JCReelSymbolPool.getInstance().prewarm());
   }
 
   public refreshBlanksVisuals(): void {
@@ -124,11 +114,9 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     }
   }
 
-  // TODO: replace the response side with a real BE round-trip once finalized (see
-  // DUMMY_RESPONSE_DELAY) - the min-duration side in tryStopSpin() is permanent, real behavior.
   // doNextStep() here stands in for corelib's SlotReel.onReelStripStopped(), since JokerCharge has
   // no main-game reel wired up yet; move this call there once one exists.
-  private simulateSpinResponse(): void {
+  private onSpinStart(): void {
     this.spin();
     this.minDurationElapsed = false;
     this.pendingFinalGrid = null;
@@ -139,12 +127,13 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       this.minDurationElapsed = true;
       this.tryStopSpin();
     }, minDuration);
+  }
 
-    clearTimeout(this.responseTimeoutId);
-    this.responseTimeoutId = setTimeout(() => {
-      this.pendingFinalGrid = this.createDummyFinalGrid();
-      this.tryStopSpin();
-    }, DUMMY_RESPONSE_DELAY);
+  // See JCSpinResponseReceivedState - dispatched once the BE spin response has landed, carrying
+  // the real final grid (column-major, matching stopSpin()'s convention) instead of a random one.
+  private onSpinResultReceived(grid: string[][]): void {
+    this.pendingFinalGrid = grid;
+    this.tryStopSpin();
   }
 
   // Stops only once both the min duration has elapsed and a response has arrived - whichever
@@ -154,18 +143,6 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     const grid = this.pendingFinalGrid;
     this.pendingFinalGrid = null;
     this.stopSpin(grid, () => StateManager.doNextStep());
-  }
-
-  // Fakes a spin result until the real BE response lands.
-  private createDummyFinalGrid(): string[][] {
-    const grid: string[][] = [];
-    for (let column = 0; column < this.columns; column++) {
-      grid[column] = [];
-      for (let row = 0; row < this.rows; row++) {
-        grid[column][row] = getRandomSymbolName();
-      }
-    }
-    return grid;
   }
 
   public getReel(column: number, row: number): HoldNWinReel {
@@ -263,7 +240,6 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.clearTimeouts(this.spinTimeoutIds);
     this.clearTimeouts(this.stopTimeoutIds);
     clearTimeout(this.minDurationTimeoutId);
-    clearTimeout(this.responseTimeoutId);
     super.destroyView();
   }
 }

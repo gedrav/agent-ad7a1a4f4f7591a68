@@ -21,6 +21,8 @@ class CheckFeatureStateV2Command extends StateCommand {
           }
         } else if (fType === CONSTANTS.FEATURE_TYPE_PICK) {
           StateManager.goToState(STATES.ENTER_PICK_FEATURE_STATE);
+        } else if (fType === CONSTANTS.FEATURE_TYPE_RESPIN) {
+          StateManager.goToState(STATES.ENTER_RESPIN_STATE);
         } else {
           console.log('New Feature Typen:', fType, 'not handled yet, going to game feature state');
           StateManager.goToState(STATES.GAME_FEATURE_STATE);

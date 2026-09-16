@@ -16,6 +16,7 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     super(config);
     this.respinCounterComp = this.elementsList['respinCounterComp'];
     this.holdNWinReelsContainer = this.elementsList['holdNWinReelsContainer'];
+    EventHandler.addEventListener(JCEvents.SET_BONUS_TRIGGER_LAYOUT, this.onSetBonusTriggerLayout.bind(this));
     // Testing
     // // TEMPORARY: cycles the respin counter for visual testing - remove once not needed.
     // this.setBonusTriggerLayout(true);
@@ -33,9 +34,16 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     // }, 2000);
   }
 
-  // To set the BONUS game screen
-  public setBonusTriggerLayout(bonusTrigger: boolean): void {
-    EventHandler.dispatchEvent(JCEvents.PLAY_TRANSITION);
+  // Entry point for the respin states (see EnterRespinState/ExitRespinState), which have no view
+  // reference of their own.
+  private onSetBonusTriggerLayout(data: { active: boolean; onConfirm?: () => void }): void {
+    this.setBonusTriggerLayout(data.active, data.onConfirm);
+  }
+
+  // To set the BONUS game screen. onConfirm (entering the feature) holds the transition on an OK
+  // button and fires once the player confirms - see TransitionComp.
+  public setBonusTriggerLayout(bonusTrigger: boolean, onConfirm?: () => void): void {
+    EventHandler.dispatchEvent(JCEvents.PLAY_TRANSITION, { onConfirm });
     // Starts hidden (see RespinCounterConfig.ts); only shown as part of this bonus-trigger flow.
     this.respinCounterComp.visible = bonusTrigger;
     // Hold & Win cells all show their "active" blank variant for the duration of a respin,

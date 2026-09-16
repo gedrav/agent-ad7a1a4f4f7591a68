@@ -1,5 +1,6 @@
 import { Texture } from 'pixi.js';
 import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
+import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { appModel } from '@core/models/services/AppModelService';
@@ -23,11 +24,6 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   declare private _bonusModifier: JCBonusSymbolModifier;
   declare private _mysteryModifier: JCMysterySymbolModifier;
   declare private _blanksModifier: JCBlanksSymbolModifier;
-  // Set around setBlurredTexture() below - skips rebuilding the bonus/mystery/label overlay while
-  // merely showing the spin-blur placeholder, since that overlay (a gradient+drop-shadow Text, or
-  // a second spine for mystery) is expensive to recreate and destroySpine() forces a full rebuild
-  // on every recycle - recreating it dozens of times a second while a reel spins was tanking FPS.
-  private skipOverlayOnCreate = false;
 
   private get bonusModifier(): JCBonusSymbolModifier {
     return (this._bonusModifier ??= new JCBonusSymbolModifier(this));
@@ -122,12 +118,6 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     this.playSpineAnimation(this.configData.data.idleAnim, true);
   }
 
-  public setBlurredTexture(): void {
-    this.skipOverlayOnCreate = true;
-    super.setBlurredTexture();
-    this.skipOverlayOnCreate = false;
-  }
-
   // this.symbol's real visual is the spine built in createSymbol() above, not a texture - stays
   // empty so the inherited .texture assignments in a few corelib paths are harmless no-ops.
   protected resolveTexture(): Texture {
@@ -136,7 +126,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
 
   protected createExtraElements(): void {
     super.createExtraElements();
-    if (!this.spine || this.skipOverlayOnCreate) return;
+    if (!this.spine) return;
     if (this.isBonusSymbol()) {
       this.bonusModifier.create(this.configData.data.name, this.configData.data.multiplierTextConfig);
     } else if (this.isMysterySymbol()) {
@@ -159,6 +149,20 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       this.mysteryModifier.play(state, loop, this.configData.data.skin);
     }
     return played;
+  }
+
+  // ReelSymbolSpineExtended.onAnimComplete unconditionally falls back to showStatic() after any
+  // non-looping animation, even when a spineAnimCompleteCallback was set (e.g. HoldNWinReel's
+  // showLanding(() => showIdle())) - that fallback ran right after the callback and stomped the
+  // just-started idle animation back to static in the same tick, before it was ever visible. Skip
+  // ReelSymbolSpineExtended's own override and go straight to ReelSymbolSpine's version so that
+  // fallback only fires when nothing else already decided what plays next.
+  protected onAnimComplete(data: { loop: boolean; animation: { name: string } }): void {
+    const hadCallback = !!this.spineAnimCompleteCallback;
+    (ReelSymbolSpine.prototype as any).onAnimComplete.call(this, data);
+    if (!data.loop && !hadCallback) {
+      this.showStatic();
+    }
   }
 
   protected setSpineVisible(flag: boolean): void {
