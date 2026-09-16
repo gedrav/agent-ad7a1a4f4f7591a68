@@ -2,7 +2,7 @@ import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
-import { Point, Ticker } from 'pixi.js';
+import { Point, Ticker, Rectangle } from 'pixi.js';
 import WinController from '@core/views/slotmachine/WinController';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -326,6 +326,13 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
+        if (symb.constructor.name === 'ReelSymbolSpineExtended') {
+          const hitW = this.reelsData.reelPositionX
+            ? this.reelsData.reelPositionX[1] - this.reelsData.reelPositionX[0]
+            : this.reelsData.symbolWidth || this.reelsData.symbolHeight || 240;
+          const hitH = this.reelsData.symbolHeight || 240;
+          symb.hitArea = new Rectangle(-hitW / 2, -hitH / 2, hitW, hitH);
+        }
 
         UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
       }
