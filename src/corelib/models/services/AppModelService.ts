@@ -982,6 +982,9 @@ class AppModelService {
   // WHEN: Called before starting autoplay or next spin
   // WHY: Prevents autoplay from starting/continuing without funds
   public getIsSpinStartPossible(): boolean {
+    if (this.getIsPromoFSSession()) {
+      return true;
+    }
     return this.getBalance() >= this.getTotalBet();
   }
   public getIsBBSpinStartPossible(bbId): boolean {
