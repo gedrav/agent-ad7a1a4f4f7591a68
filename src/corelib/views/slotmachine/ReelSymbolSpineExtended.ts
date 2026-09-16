@@ -1,6 +1,9 @@
 import { Container, Rectangle } from 'pixi.js';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import { GameProxy } from '@core/models/GameConfigProxy';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { AppEvents } from '@core/events/AppEvents';
 
 export interface ExtendedSymbolData {
   name: string;
@@ -24,6 +27,7 @@ export interface ExtendedSymbolConfig {
 export default class ReelSymbolSpineExtended extends ReelSymbolSpine {
   private readonly slotObjects: Map<string, Container> = new Map();
   private isSpineBlurred = false;
+  private disposeResize: () => void = () => {};
 
   protected destroySpine(): void {
     this.clearSlotObjects();
@@ -39,10 +43,23 @@ export default class ReelSymbolSpineExtended extends ReelSymbolSpine {
   constructor(configData: any) {
     super(configData);
     this.showStatic();
+    this.setupInteractionArea();
   }
 
-  public setupInteractionArea(hitW: number, hitH: number): void {
-    this.hitArea = new Rectangle(-hitW / 2, -hitH / 2, hitW, hitH);
+  private setupInteractionArea(): void {
+    this.updateHitArea();
+    this.disposeResize = EventHandler.bind(AppEvents.APP_RESIZE, this.updateHitArea.bind(this));
+  }
+
+  private updateHitArea(): void {
+    const cell = GameProxy.config.reelCellSize;
+    if (!cell?.width || !cell?.height) return;
+    this.hitArea = new Rectangle(-cell.width / 2, -cell.height / 2, cell.width, cell.height);
+  }
+
+  public destroyView(): void {
+    this.disposeResize();
+    super.destroyView();
   }
 
   public setNewSymbol(data: any, reelno: number): void {
