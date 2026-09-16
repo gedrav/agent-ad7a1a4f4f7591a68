@@ -19,6 +19,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
   // -------------------------
   public setNewSymbol(data: any, reelno: number): void {
     this.destroySpine();
+    this.configData.data = { reelNumber: reelno, ...data };
     super.setNewSymbol(data, reelno);
   }
 
