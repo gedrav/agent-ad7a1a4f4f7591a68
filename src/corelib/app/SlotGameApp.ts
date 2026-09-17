@@ -363,6 +363,7 @@ class SlotGameApp {
           this.createView();
           this.isViewCreated = true;
           EventHandler.dispatchEvent(AppEvents.PRIMARY_ASSETS_LOADED);
+          WrapperProxy.postLifecycleEvent('GameReady');
           if (appModel.getPreferences()?.showIntro !== false) {
           } else {
             EventHandler.dispatchEvent(SlotEvents.SPLASH_START_CLICKED);
@@ -443,7 +444,6 @@ class SlotGameApp {
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
     StateManager.initiate();
-    WrapperProxy.postLifecycleEvent('GameReady');
     EventHandler.dispatchEvent(SlotEvents.PLAY_BG_SOUND);
   }
 
