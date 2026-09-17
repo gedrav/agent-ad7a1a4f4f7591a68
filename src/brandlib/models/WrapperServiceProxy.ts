@@ -101,7 +101,7 @@ class WrapperServiceProxy extends AbstractProxy {
   // util methods
   protected postDataToWrapper(data: any): void {
     const message = JSON.stringify(data);
-    //console.log('[WrapperServiceProxy] ->', message);
+    console.log('[WrapperServiceProxy] ->', message);
     window.parent.postMessage(message, '*');
   }
 
