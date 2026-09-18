@@ -14,7 +14,7 @@ export const GAME_CONFIG = {
   gamePath: '/',
   gameVersion: '0.100',
   gameId: 'minedash',
-  gameName: 'Minedash',
+  gameName: 'Mine Dash',
   uiConfig: UIConfig,
   creditValue: 1,
   totalLines: 9,

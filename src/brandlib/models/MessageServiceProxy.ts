@@ -147,17 +147,8 @@ export class MessageServiceProxy extends AbstractProxy {
         if (GameProxy.config.cheatObject.forceNudgeReels) {
           finalObj.extraData.forceNudgeReels = cheatObj.forceNudgeReels;
         }
-      } else if (GameProxy.config.cheatObject.forceBookSymbol || GameProxy.config.cheatObject.forceFeatureType) {
-        if (cheatObj.forceBookSymbol) {
-          finalObj.extraData.forceBookSymbol = cheatObj.forceBookSymbol;
-          finalObj.extraData.combination = cheatObj.combination;
-        }
-        if (cheatObj.forceFeatureType) {
-          // Lightning_Trigger-style cheat: { forceFeatureType, forceWildCount, forceLightningWildCount }
-          finalObj.extraData.forceFeatureType = cheatObj.forceFeatureType;
-          finalObj.extraData.forceWildCount = cheatObj.forceWildCount;
-          finalObj.extraData.forceLightningWildCount = cheatObj.forceLightningWildCount;
-        }
+      } else if (GameProxy.config.cheatObject.forceFeatureType) {
+        Object.assign(finalObj.extraData, cheatObj);
       } else if (cheatObj.extraData) {
         Object.assign(finalObj.extraData, cheatObj.extraData);
       } else {
