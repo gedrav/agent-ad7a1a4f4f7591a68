@@ -137,6 +137,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.winController.winSymbolsContainer = this.winSymbolsContainer;
     this.winController.lineWinAmountComp = this.lineWinAmountComp;
     this.winController.slotReel = this;
+    this.setDeviceWisePositionData();
     this.createReel();
 
     this.ticker = new Ticker();
@@ -326,8 +327,9 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.defaultReel[k].push(symb.getSymbolName());
         this.symbolsContainer.addChild(symb);
         this.symbolsArray[k].push(symb);
-
-        UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
+        if (this.reelsData.isSymbolInteractive !== false) {
+          UIUtil.addInteraction(symb, this.onSymbolClicked.bind(this, symb));
+        }
       }
     }
     this.winController.symbolsArray = this.symbolsArray;
@@ -1029,6 +1031,16 @@ export default class SlotReel extends ResponsiveChildrenView {
       }
     }
     this.winController.reelsData = this.reelsData;
+    this.publishReelCellSize();
+  }
+
+  protected publishReelCellSize(): void {
+    const scale = this.reelsData.symbolScale || 1;
+    const width = this.reelsData.reelPositionX
+      ? this.reelsData.reelPositionX[1] - this.reelsData.reelPositionX[0]
+      : this.reelsData.symbolWidth || this.reelsData.symbolHeight;
+    if (!width || !this.reelsData.symbolHeight) return;
+    GameProxy.config.reelCellSize = { width: width / scale, height: this.reelsData.symbolHeight / scale };
   }
 
   protected resizeView(): void {

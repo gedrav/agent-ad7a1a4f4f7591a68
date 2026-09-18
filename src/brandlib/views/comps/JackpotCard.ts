@@ -2,6 +2,7 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Graphics } from 'pixi.js';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 
 enum CardStatus {
   CLOSE = 'CLOSE',
@@ -36,6 +37,7 @@ export class JackpotCard extends StandardView {
   }
   private onAnimationComplete(e) {
     if (e.animation.name === animationState.ROTATION) {
+      EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_TURN');
       this.emit('onCardClick');
       this.playCardAnimation({ state: animationState.STATIC, loop: false });
     }
@@ -50,6 +52,7 @@ export class JackpotCard extends StandardView {
     if (this.cardStatus === CardStatus.CLOSE) {
       this.cardGuideRect.interactive = false;
       this.cardStatus = CardStatus.OPEN;
+      EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_CLICK');
       this.playCardAnimation({ state: animationState.ROTATION, loop: false });
     }
   }
