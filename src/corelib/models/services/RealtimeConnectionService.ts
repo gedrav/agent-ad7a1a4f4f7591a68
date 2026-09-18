@@ -47,7 +47,7 @@ class RealtimeConnectionService {
       openWhenHidden: true,
       signal: this.abortController.signal,
       onopen: async (response) => {
-        console.log('[realtime] connection opened');
+        // console.log('[realtime] connection opened');
         this.retryDelay = MIN_RETRY_MS;
         if (!response.ok) {
           console.log('[realtime] connection rejected', response.status);
@@ -58,14 +58,14 @@ class RealtimeConnectionService {
       },
       onmessage: (msg) => {
         this.resetWatchdog();
-        console.log('[realtime]', msg.event, msg.data);
+        // console.log('[realtime]', msg.event, msg.data);
         if (msg.event && msg.data) {
           const parsedData: BalanceUpdatedData = JSON.parse(msg.data);
           EventHandler.dispatchEvent(SlotEvents.REALTIME_BALANCE_UPDATE, { event: msg.event, data: parsedData });
         }
       },
       onclose: () => {
-        console.log('[realtime] connection closed by server');
+        // console.log('[realtime] connection closed by server');
         this.markDisconnected();
       },
       onerror: (err) => {
@@ -79,13 +79,13 @@ class RealtimeConnectionService {
   }
 
   private readonly handleOffline = (): void => {
-    console.log('[realtime] browser reported network offline');
+    // console.log('[realtime] browser reported network offline');
     this.markDisconnected();
     this.abortController?.abort();
   };
 
   private readonly handleOnline = (): void => {
-    console.log('[realtime] browser reported network online');
+    // console.log('[realtime] browser reported network online');
     if (!this.isConnected && this.sessionToken) {
       this.retryDelay = MIN_RETRY_MS;
       this.connect(this.sessionToken);
@@ -95,7 +95,7 @@ class RealtimeConnectionService {
   private resetWatchdog(): void {
     window.clearTimeout(this.watchdogTimer);
     this.watchdogTimer = window.setTimeout(() => {
-      console.log('[realtime] no data received within timeout, assuming dead connection');
+      // console.log('[realtime] no data received within timeout, assuming dead connection');
       this.markDisconnected();
       this.abortController?.abort();
     }, this.HEARTBEAT_TIMEOUT_MS);

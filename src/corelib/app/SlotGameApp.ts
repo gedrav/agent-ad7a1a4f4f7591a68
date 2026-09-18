@@ -233,7 +233,13 @@ class SlotGameApp {
   }
 
   protected onConnectionLost(): void {
-    console.log('connection lost');
+    WrapperProxy.postLifecycleEvent('GameError', {
+      error: {
+        code: 'CONNECTION_ERROR',
+        description: 'Connection lost',
+        recoverable: true,
+      },
+    });
   }
   protected onConnectionRestored(): void {
     console.log('connection restored');
