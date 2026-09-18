@@ -165,6 +165,13 @@ export default class GameWinController extends WinController {
       this.lineWinAmountComp.y = firstSymY + this.winSymbolsContainer.y;
       this.lineWinAmountComp.showWin(totalWin);
 
+      if (scatterWin > 0) {
+        EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_SC');
+      }
+      if (bonusWin > 0) {
+        EventHandler.dispatchEvent('PLAY_SYMBOL_LINE_WIN_BN');
+      }
+
       if (this.scatterTriggerTimeoutId) clearTimeout(this.scatterTriggerTimeoutId);
       this.scatterTriggerTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
