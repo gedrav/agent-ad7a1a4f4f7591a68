@@ -51,6 +51,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'belt', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'boot', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Chain_lock_sym', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'reel_sym_add', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mask', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'transition', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'small_square', ASSETTYPE: 'spine' },

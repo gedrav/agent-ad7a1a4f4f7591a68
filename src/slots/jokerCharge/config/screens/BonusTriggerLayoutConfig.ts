@@ -18,6 +18,7 @@ const DESKTOP_BONUS_TRIGGER_LAYOUT: ElementLayoutMap = {
   reelsFrame: { x: 0, y: 133 },
   topPanelBg: { alpha: 1 },
   topPanelFrame: { alpha: 1 },
+  bonusReelsContainer: { alpha: 1 },
   logoComp: { x: 0, y: -70 },
   holdNWinReelsContainer: { x: 706, y: 617 },
   jackpotLabelsComp: { x: 0, y: -72 },

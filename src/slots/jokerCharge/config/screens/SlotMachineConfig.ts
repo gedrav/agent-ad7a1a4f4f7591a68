@@ -1,6 +1,7 @@
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
 import { JACKPOT_LABELS_CONFIG } from './JackpotLabelsConfig';
 import { HOLD_N_WIN_REELS_CONFIG } from './HoldNWinReelsConfig';
+import { BONUS_REELS_CONFIG } from './BonusReelsConfig';
 import { RESPIN_COUNTER_CONFIG } from './RespinCounterConfig';
 import { BUY_BONUS_LINES_CONFIG } from './BuyBonusLinesConfig';
 import { LogoComp } from '@slots/jokerCharge/views/comps/LogoComp';
@@ -81,6 +82,8 @@ export const SLOT_MACHINE_CONFIG: any = {
         Landscape: { scale: 0.65 },
       },
     },
+    // Between the panel's bg and frame, so the frame's gold border overlays the cell edges.
+    BONUS_REELS_CONFIG,
     {
       name: 'topPanelFrame',
       type: 'Sprite',

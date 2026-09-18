@@ -5,33 +5,27 @@ import { BonusLayoutOverride, BONUS_TRIGGER_LAYOUT } from '@slots/jokerCharge/co
 import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
 import { RespinCounterComp } from '@slots/jokerCharge/views/comps/RespinCounterComp';
 import { HoldNWinReelsContainer } from '@slots/jokerCharge/views/slot/HoldNWinReelsContainer';
+import { BonusReelsContainer } from '@slots/jokerCharge/views/slot/BonusReelsContainer';
 import { setRespinActive } from '@slots/jokerCharge/models/JCLinesState';
 
 export class GameSlotMachineView extends ResponsiveChildrenView {
   private readonly savedLayout: Record<string, BonusLayoutOverride> = {};
   private readonly respinCounterComp: RespinCounterComp;
   private readonly holdNWinReelsContainer: HoldNWinReelsContainer;
+  private readonly bonusReelsContainer: BonusReelsContainer;
 
   constructor(config: any) {
     super(config);
     this.respinCounterComp = this.elementsList['respinCounterComp'];
     this.holdNWinReelsContainer = this.elementsList['holdNWinReelsContainer'];
+    this.bonusReelsContainer = this.elementsList['bonusReelsContainer'];
     EventHandler.addEventListener(JCEvents.SET_BONUS_TRIGGER_LAYOUT, this.onSetBonusTriggerLayout.bind(this));
     // Testing
     // // TEMPORARY: cycles the respin counter for visual testing - remove once not needed.
-    // this.setBonusTriggerLayout(true);
-    // setTimeout(() => {
-    //   this.testShowRespinCounter(3);
-    //   setTimeout(() => {
-    //     this.testShowRespinCounter(2);
-    //     setTimeout(() => {
-    //       this.testShowRespinCounter(1);
-    //       setTimeout(() => {
-    //         this.testShowRespinCounter(3);
-    //       }, 2000);
-    //     }, 2000);
-    //   }, 2000);
-    // }, 2000);
+    this.setBonusTriggerLayout(true);
+    // TEMPORARY: gives the bonus layout a beat to settle, then spins the top panel - remove
+    // alongside testSpinBonusReels() once the respin response drives these reels.
+    setTimeout(() => this.testSpinBonusReels(), 2000);
   }
 
   // Entry point for the respin states (see EnterRespinState/ExitRespinState), which have no view
@@ -83,5 +77,17 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
   public testShowRespinCounter(remaining: number): void {
     this.respinCounterComp.visible = true;
     this.respinCounterComp.setRemainingRespins(remaining);
+  }
+
+  // TEMPORARY: manual test hook, e.g. slotMachineView.testSpinBonusReels() from the console -
+  // spins the top panel and lands it on random symbols. Remove once the respin response drives
+  // these reels for real.
+  public testSpinBonusReels(stopAfter = 2000): void {
+    this.bonusReelsContainer.spin();
+    setTimeout(() => {
+      this.bonusReelsContainer.stopSpinRandom((finalSymbols) => {
+        console.log('[BonusReels] settled on', finalSymbols);
+      });
+    }, stopAfter);
   }
 }

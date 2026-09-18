@@ -51,6 +51,7 @@ export const MULTIPLIER_TEXT_STYLE = {
 // "MINOR" reference image.
 const MINOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
+  fontSize: 150,
   fill: ['0x526bbf', '0x677dc6', '0x34498e', '0x2543a5', '0x042454'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
@@ -63,6 +64,7 @@ const MINOR_TEXT_STYLE = {
 // Same recipe again, green fill to match the "MAJOR" reference image.
 const MAJOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
+  fontSize: 150,
   fill: ['0xE8FFB0', '0x66CC33', '0x1B5E20'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
@@ -75,6 +77,7 @@ const MAJOR_TEXT_STYLE = {
 // Same recipe again, magenta/purple fill to match the "MINI" reference image.
 const MINI_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
+  fontSize: 150,
   fill: ['0xFFD9F5', '0xD946C4', '0x5A0F6B'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
@@ -87,6 +90,7 @@ const MINI_TEXT_STYLE = {
 // Same gold stroke as MINOR/MAJOR/MINI_TEXT_STYLE, red fill to match the "GRAND" reference image.
 const GRAND_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
+  fontSize: 150,
   fill: ['0xFF7B6B', '0xE53911', '0xB71C1C'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
@@ -100,7 +104,7 @@ function labelTextConfig(text: string, style: any = MULTIPLIER_TEXT_STYLE): any 
   return {
     name: 'labelText',
     type: 'Text',
-    anchor: { x: 0.5, y: 0.5 },
+    anchor: { x: 0.5, y: 0.25 },
     contentText: text,
     style,
   };
@@ -117,11 +121,11 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 1,
     multiplierTextConfig: {
       name: 'multiplierVal',
       type: 'Text',
-      anchor: { x: 0.5, y: 0.5 },
+      anchor: { x: 0.5, y: 0.75 },
       // Max multiplier tier (5x) gets the gold/orange GRAND look; every other cor-Nx keeps the
       // base gold style.
       style: multiplier === 5 ? GRAND_TEXT_STYLE : MULTIPLIER_TEXT_STYLE,
@@ -143,7 +147,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 1,
   },
   mini: {
     name: 'mini',
@@ -153,7 +157,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 1,
     labelTextConfig: labelTextConfig('MINI', MINI_TEXT_STYLE),
   },
   minor: {
@@ -164,7 +168,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 1,
     labelTextConfig: labelTextConfig('MINOR', MINOR_TEXT_STYLE),
   },
   major: {
@@ -175,7 +179,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 1,
     labelTextConfig: labelTextConfig('MAJOR', MAJOR_TEXT_STYLE),
   },
   // Rendered from two spines (see JCMysterySymbolModifier) - spineName here drives the back
