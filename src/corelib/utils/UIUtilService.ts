@@ -782,7 +782,11 @@ class UIUtilService {
   }
   public getTexture(name: string): Texture {
     if (name.length > 0) {
-      return PIXI.Texture.from(name);
+      const texture = PIXI.Texture.from(name);
+      if (texture && texture.source) {
+        texture.source.scaleMode = 'linear';
+      }
+      return texture;
     }
   }
 

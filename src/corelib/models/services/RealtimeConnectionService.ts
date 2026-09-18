@@ -19,6 +19,12 @@ interface EventResponse {
 
 class RealtimeConnectionService {
   private retryDelay = MIN_RETRY_MS;
+  private isConnected = false;
+  private abortController?: AbortController;
+  private watchdogTimer?: number;
+  private sessionToken?: string;
+  private listenersRegistered = false;
+  private readonly HEARTBEAT_TIMEOUT_MS = 45000; // ~2x the 20s server heartbeat + buffer
 
   connect(sessionToken: string): void {
     const baseUrl = import.meta.env.VITE_REALTIME_URL;
@@ -27,31 +33,87 @@ class RealtimeConnectionService {
       return;
     }
 
+    this.sessionToken = sessionToken;
+    this.abortController = new AbortController();
+
+    if (!this.listenersRegistered) {
+      window.addEventListener('offline', this.handleOffline);
+      window.addEventListener('online', this.handleOnline);
+      this.listenersRegistered = true;
+    }
+
     fetchEventSource(`${baseUrl}/sse/balance`, {
       headers: { Authorization: `Bearer ${sessionToken}` },
       openWhenHidden: true,
+      signal: this.abortController.signal,
       onopen: async (response) => {
+        console.log('[realtime] connection opened');
         this.retryDelay = MIN_RETRY_MS;
         if (!response.ok) {
           console.log('[realtime] connection rejected', response.status);
+          return;
         }
+        this.markConnected();
+        this.resetWatchdog();
       },
-      onmessage(msg) {
-        //console.log('[realtime]', msg.event, msg.data);
-        if (msg.event) {
+      onmessage: (msg) => {
+        this.resetWatchdog();
+        console.log('[realtime]', msg.event, msg.data);
+        if (msg.event && msg.data) {
           const parsedData: BalanceUpdatedData = JSON.parse(msg.data);
           EventHandler.dispatchEvent(SlotEvents.REALTIME_BALANCE_UPDATE, { event: msg.event, data: parsedData });
         }
-        if (msg.event) {
-        }
+      },
+      onclose: () => {
+        console.log('[realtime] connection closed by server');
+        this.markDisconnected();
       },
       onerror: (err) => {
         console.log('[realtime] connection error, retrying', err);
+        this.markDisconnected();
         const delay = this.retryDelay;
         this.retryDelay = Math.min(this.retryDelay * 2, MAX_RETRY_MS);
         return delay;
       },
     });
+  }
+
+  private readonly handleOffline = (): void => {
+    console.log('[realtime] browser reported network offline');
+    this.markDisconnected();
+    this.abortController?.abort();
+  };
+
+  private readonly handleOnline = (): void => {
+    console.log('[realtime] browser reported network online');
+    if (!this.isConnected && this.sessionToken) {
+      this.retryDelay = MIN_RETRY_MS;
+      this.connect(this.sessionToken);
+    }
+  };
+
+  private resetWatchdog(): void {
+    window.clearTimeout(this.watchdogTimer);
+    this.watchdogTimer = window.setTimeout(() => {
+      console.log('[realtime] no data received within timeout, assuming dead connection');
+      this.markDisconnected();
+      this.abortController?.abort();
+    }, this.HEARTBEAT_TIMEOUT_MS);
+  }
+
+  private markConnected(): void {
+    if (!this.isConnected) {
+      this.isConnected = true;
+      EventHandler.dispatchEvent(SlotEvents.REALTIME_CONNECTION_RESTORED, {});
+    }
+  }
+
+  private markDisconnected(): void {
+    window.clearTimeout(this.watchdogTimer);
+    if (this.isConnected) {
+      this.isConnected = false;
+      EventHandler.dispatchEvent(SlotEvents.REALTIME_CONNECTION_LOST, {});
+    }
   }
 }
 

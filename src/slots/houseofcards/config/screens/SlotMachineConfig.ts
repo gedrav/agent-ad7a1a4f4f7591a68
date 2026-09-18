@@ -168,11 +168,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H1: {
             name: 'H1',
-            spineName: 'StormSeeker',
+            spineName: 'king',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.65,
+            animScale: 1,
           },
           H2: {
             name: 'H2',

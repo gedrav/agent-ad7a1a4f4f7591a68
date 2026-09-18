@@ -18,6 +18,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { Point } from 'pixi.js';
 import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { Util } from '@core/utils/UtilService';
+import { DropShadowFilter } from 'pixi-filters';
 
 let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -68,6 +69,18 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.stopAutoBtn = this.elementsList['stopAutoBtn'];
     this.betBtn = this.elementsList['betBtn'];
     this.brandLogo = this.elementsList['brandLogo'];
+
+    if (this.brandLogo && GameProxy.config.applyShadowForBrandLogo) {
+      const dropShadow = new DropShadowFilter({
+        offset: { x: 1, y: 1 },
+        color: 0x000000,
+        alpha: 1,
+        blur: 0,
+        quality: 5,
+        pixelSize: { x: 1, y: 1 },
+      });
+      this.brandLogo.filters = [dropShadow];
+    }
 
     if (!appModel.getIsCheatMode()) {
       this.removeChild(this.cheatBtn);

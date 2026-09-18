@@ -93,13 +93,13 @@ class SlotGameApp {
     this.app = new Application();
     if (isIOSMobile) {
       await this.app.init({
-        resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
+        resolution: Math.min(window.devicePixelRatio, 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         preference: ['webgl'] as any,
         antialias: false,
         autoDensity: true,
-        roundPixels: true,
+        roundPixels: false,
         powerPreference: 'low-power',
         preferWebGLVersion: 1, // A/B test this on iOS
         backgroundAlpha: 1,
@@ -115,12 +115,12 @@ class SlotGameApp {
       // the WebGL backbuffer 200-400MB on its own — invisible visual gain,
       // huge memory cost. Capping at 2 keeps sharpness and slashes GPU memory.
       await this.app.init({
-        resolution: Math.min(Math.ceil(window.devicePixelRatio), 2),
+        resolution: Math.min(window.devicePixelRatio, 2),
         backgroundColor: GameProxy.config.gameBGColor,
         hello: true,
         antialias: true,
         autoDensity: true,
-        roundPixels: true,
+        roundPixels: false,
         powerPreference: 'high-performance',
       });
     }
@@ -228,6 +228,15 @@ class SlotGameApp {
     this.bindEvent(SlotEvents.GAME_INIT_SUCCESS, this.onGameInit);
     this.bindEvent(SlotEvents.CHECK_TO_RESUME_SOUND, this.checkForIOSAudiioResume);
     this.bindEvent(SlotEvents.REALTIME_BALANCE_UPDATE, this.onRealTimeUpdate);
+    this.bindEvent(SlotEvents.REALTIME_CONNECTION_LOST, this.onConnectionLost);
+    this.bindEvent(SlotEvents.REALTIME_CONNECTION_RESTORED, this.onConnectionRestored);
+  }
+
+  protected onConnectionLost(): void {
+    console.log('connection lost');
+  }
+  protected onConnectionRestored(): void {
+    console.log('connection restored');
   }
 
   protected onRealTimeUpdate(msg: any): void {

@@ -19,6 +19,8 @@ import { AppEvents } from '@core/events/AppEvents';
 import { SplashPreloaderComp } from '@brand/views/comps/SplashPreloaderComp';
 import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
+import { DropShadowFilter } from 'pixi-filters';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -33,6 +35,7 @@ export class SplashView extends ResponsiveChildrenView {
   private readonly cGuideRect: PixGraphics;
   private preloaderComp: SplashPreloaderComp;
   private readonly disposers: (() => void)[] = [];
+  private readonly brandLogo: PixSprite;
 
   constructor(config: any) {
     super(config);
@@ -61,6 +64,19 @@ export class SplashView extends ResponsiveChildrenView {
     this.showIntroBtn.setSelected(!prefs.showIntro);
     SoundFactory.ambientState = prefs.sound;
     SoundFactory.sfxState = prefs.sound;
+
+    this.brandLogo = this.elementsList['brandLogo'];
+    if (this.brandLogo && GameProxy.config.applyShadowForBrandLogo) {
+      const dropShadow = new DropShadowFilter({
+        offset: { x: 1, y: 1 },
+        color: 0x000000,
+        alpha: 1,
+        blur: 0,
+        quality: 5,
+        pixelSize: { x: 1, y: 1 },
+      });
+      this.brandLogo.filters = [dropShadow];
+    }
 
     this.addChild(this.itemContainer);
     this.initItems();
