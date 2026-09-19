@@ -16,6 +16,9 @@ class ExitFreespinsStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.AUTOPLAY_UPDATE_COUNT);
     }
 
+    EventHandler.dispatchEvent(SlotEvents.CLEAR_REELWIN_TICKER);
+    EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
+
     if (appModel.getIsMaxCapReached()) {
       const obj: any = {};
       obj.title = Util.getContent('infoText');
@@ -33,10 +36,8 @@ class ExitFreespinsStateCommand extends StateCommand {
       obj.entryPopUp = false;
       obj.callbackFunction = this.exitFreespin.bind(this);
       EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, obj);
-      EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS_FS);
     }
 
-    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, true);
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, false);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
@@ -53,6 +54,14 @@ class ExitFreespinsStateCommand extends StateCommand {
     EventHandler.dispatchEvent('STOP_FREESPIN_BG_MUSIC');
     EventHandler.dispatchEvent(SlotEvents.STOP_FS_BG_SOUND);
     EventHandler.dispatchEvent(SlotEvents.RESUME_BG_SOUND);
+    EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END_FSCOMP, true);
+    if (appModel.getTotalFreespinWinAmount() > 0 && !appModel.getIsAutoSession()) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_REELTICKER_WIN, {
+        value: appModel.getTotalFreespinWinAmount(),
+        duration: 0,
+        toShowTotalWin: true,
+      });
+    }
     EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
     StateManager.next();
   }
