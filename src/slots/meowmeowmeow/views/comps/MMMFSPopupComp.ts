@@ -215,11 +215,10 @@ export class MMMFSPopupComp extends FSPopupComp {
   private animateElementsDropIn(): void {
     AnimationProxy.killTweensOf(this);
     this.alpha = 0;
-
     AnimationProxy.animateTween(this, {
       alpha: 1,
-      duration: 0.5,
-      ease: 'power1.out',
+      duration: 2,
+      ease: 'linear.in',
       onComplete: () => {
         const particleSpine = this.elementsList['particleSpine'] as PixSpine;
         if (particleSpine?.configData.idle) {
