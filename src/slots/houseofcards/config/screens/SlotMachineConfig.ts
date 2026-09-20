@@ -113,7 +113,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             reelContainerPos: { x: 170, y: 160 },
             reelPositionX: [0, 258, 520, 780, 1040],
             symbolHeight: 250,
-            symbolScale: 0.5,
+            symbolScale: 1,
           },
           Portrait: {
             reelContainerPos: { x: 214, y: 258 },
@@ -140,11 +140,12 @@ export const SLOT_MACHINE_CONFIG: any = {
           WD: {
             name: 'WD',
             spineName: 'Wild',
+            scale: 0.5,
             skin: 'default',
             idleAnim: 'idle',
             landingAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            animScale: 1,
           },
           HH: {
             name: 'HH',
@@ -152,7 +153,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim1: 'idle',
             winAnim1: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           BS: {
             name: 'BS',
@@ -160,7 +162,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim1: 'idle',
             winAnim1: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           H1: {
             name: 'H1',
@@ -168,6 +171,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           H2: {
@@ -176,7 +180,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           H3: {
             name: 'H3',
@@ -184,7 +189,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           H4: {
             name: 'H4',
@@ -192,7 +198,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           H5: {
             name: 'H5',
@@ -200,7 +207,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim1: 'idle',
             winAnim1: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           L1: {
             name: 'L1',
@@ -209,7 +217,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim1: 'win',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           L2: {
             name: 'L2',
@@ -217,7 +226,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           L3: {
             name: 'L3',
@@ -225,7 +235,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           L4: {
             name: 'L4',
@@ -233,7 +244,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           L5: {
             name: 'L5',
@@ -241,7 +253,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
           L6: {
             name: 'L6',
@@ -249,7 +262,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'Idle',
             winAnim: 'Win Animation',
-            animScale: 2,
+            scale: 0.5,
+            animScale: 1,
           },
         },
       },
@@ -311,7 +325,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Portrait: { scale: 0.9, x: 775, y: 56 },
           },
         },
-        { name: 'maskRect', type: 'Graphics', width: 1300, height: 744, x: 40, y: 38, color: 0xffff00 },
+        { name: 'maskRect1', type: 'Graphics', width: 1300, height: 744, x: 40, y: 38, color: 0xffff00, alpha: 0 },
         { name: 'anticipationContainer', type: 'Container' },
         {
           name: 'winSymbolsContainer',
