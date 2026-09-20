@@ -4,6 +4,7 @@ import { SpinePool } from './SpinePool';
 import { AnimationStateListener } from '@esotericsoftware/spine-pixi-v8';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 
 export default class ReelSymbolSpine extends ReelSymbolSprite {
   protected animState: string;
@@ -21,6 +22,7 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     this.destroySpine();
     this.configData.data = { reelNumber: reelno, ...data };
     super.setNewSymbol(data, reelno);
+    const s = this.symbol;
   }
 
   protected createExtraElements(): void {

@@ -59,6 +59,9 @@ class GameIdleStateCommand extends StateCommand {
     }
     if (this.lineWinCounter >= 4) {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+      GameProxy.config.idleTimeoutId = setTimeout(() => {
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+      }, 1000);
       return;
     }
     if (appModel.lineWinIndex >= appModel.getWinData().length - 1) {

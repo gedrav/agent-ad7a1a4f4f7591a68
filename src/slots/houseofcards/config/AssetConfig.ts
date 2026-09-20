@@ -45,7 +45,19 @@ const PRIMARY: AssetBundle = {
 };
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
-  assets: [{ TYPE: 'game', NAME: 'king', ASSETTYPE: 'spine' }],
+  assets: [
+    { TYPE: 'game', NAME: 'king', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Queen', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'prince 3', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'crown', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Wild', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'A_Symbol', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'K_Symbol', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Q_Symbol', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'J_Symbol', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: '10_Symbol', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: '9_Symbol', ASSETTYPE: 'spine' },
+  ],
 };
 const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FEATURES,

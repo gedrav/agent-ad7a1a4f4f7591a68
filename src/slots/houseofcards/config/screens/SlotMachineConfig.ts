@@ -4,14 +4,12 @@ import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
-import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import { BOOK_OPEN_CONFIG } from '@game/config/screens/BookOpenConfig';
-import { BookSlotReel } from '@game/views/slot/BookSloReel';
+import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -34,7 +32,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: BookSlotReel,
+      class: SlotReelStandard,
       winController: GameWinController,
       x: 0,
       y: 100,
@@ -115,7 +113,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             reelContainerPos: { x: 170, y: 160 },
             reelPositionX: [0, 258, 520, 780, 1040],
             symbolHeight: 250,
-            symbolScale: 1,
+            symbolScale: 0.5,
           },
           Portrait: {
             reelContainerPos: { x: 214, y: 258 },
@@ -139,32 +137,30 @@ export const SLOT_MACHINE_CONFIG: any = {
           ['H2', 'L2', 'H3'],
         ],
         symbolsData: {
-          BS: {
-            name: 'BS',
-            spineName: 'Book',
+          WD: {
+            name: 'WD',
+            spineName: 'Wild',
             skin: 'default',
             idleAnim: 'idle',
             landingAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.65,
+            animScale: 2,
           },
           HH: {
             name: 'HH',
-            spineName: 'Book',
+            spineName1: 'king',
             skin: 'default',
-            idleAnim: 'idle',
-            landingAnim: 'idle',
-            winAnim: 'win',
-            animScale: 0.65,
+            idleAnim1: 'idle',
+            winAnim1: 'win',
+            animScale: 2,
           },
-          WD: {
-            name: 'WD',
-            spineName: 'Book',
+          BS: {
+            name: 'BS',
+            spineName1: 'king',
             skin: 'default',
-            idleAnim: 'idle',
-            landingAnim: 'idle',
-            winAnim: 'win',
-            animScale: 0.65,
+            idleAnim1: 'idle',
+            winAnim1: 'win',
+            animScale: 2,
           },
           H1: {
             name: 'H1',
@@ -176,84 +172,84 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H2: {
             name: 'H2',
-            spineName: 'eagle',
+            spineName: 'Queen',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.65,
+            animScale: 2,
           },
           H3: {
             name: 'H3',
-            spineName: 'Mask',
+            spineName: 'prince 3',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.65,
+            animScale: 2,
           },
           H4: {
             name: 'H4',
-            spineName: 'Castle',
+            spineName: 'crown',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.65,
+            animScale: 2,
           },
           H5: {
             name: 'H5',
             spineName: 'Castle',
             skin: 'default',
-            idleAnim: 'idle',
-            winAnim: 'win',
-            animScale: 0.65,
+            idleAnim1: 'idle',
+            winAnim1: 'win',
+            animScale: 2,
           },
           L1: {
             name: 'L1',
-            spineName: 'A',
+            spineName: 'A_Symbol',
             skin: 'default',
             winAnim1: 'win',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.72,
+            animScale: 2,
           },
           L2: {
             name: 'L2',
-            spineName: 'K',
+            spineName: 'K_Symbol',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.72,
+            animScale: 2,
           },
           L3: {
             name: 'L3',
-            spineName: 'Q',
+            spineName: 'Q_Symbol',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.72,
+            animScale: 2,
           },
           L4: {
             name: 'L4',
-            spineName: 'J',
+            spineName: 'J_Symbol',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.72,
+            animScale: 2,
           },
           L5: {
             name: 'L5',
-            spineName: '10',
+            spineName: '10_Symbol',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
-            animScale: 0.72,
+            animScale: 2,
           },
           L6: {
             name: 'L6',
-            spineName: '10',
+            spineName: '9_Symbol',
             skin: 'default',
-            idleAnim: 'idle',
-            winAnim: 'win',
-            animScale: 0.72,
+            idleAnim: 'Idle',
+            winAnim: 'Win Animation',
+            animScale: 2,
           },
         },
       },

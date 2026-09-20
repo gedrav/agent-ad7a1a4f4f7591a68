@@ -1,4 +1,4 @@
-import { Application, Container, Renderer, Sprite, TextStyle, TextureSource, loadTextures } from 'pixi.js';
+import { Application, Container, Renderer, Sprite, TextStyle, TextureSource, loadTextures, Assets } from 'pixi.js';
 import { WindowUtil } from '@core/utils/WindowUtil';
 import { InitErrorPopup } from '@brand/views/popups/InitErrorPopup';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -120,7 +120,7 @@ class SlotGameApp {
         hello: true,
         antialias: true,
         autoDensity: true,
-        roundPixels: false,
+        roundPixels: true,
         powerPreference: 'high-performance',
       });
     }
