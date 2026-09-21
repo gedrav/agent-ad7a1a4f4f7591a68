@@ -23,7 +23,7 @@ export const GAME_CONFIG = {
   showWinInReelView: true,
   dontShowAllWinForFeature: true,
   featureTriggerDelay: 3500,
-  idleTimerDelay: 8000,
+  idleTimerDelay: 2000,
   dontShowWinAfterFS: true,
   applyShadowForBrandLogo: true,
   FontFaces: {
