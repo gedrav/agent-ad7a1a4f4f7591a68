@@ -110,9 +110,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 170, y: 160 },
+            reelContainerPos: { x: 170, y: 168 },
             reelPositionX: [0, 258, 520, 780, 1040],
-            symbolHeight: 250,
+            symbolHeight: 242,
             symbolScale: 1,
           },
           Portrait: {
@@ -131,10 +131,10 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         initialReel: [
           ['H2', 'H2', 'H2'],
-          ['H4', 'H4', 'H4'],
-          ['L3', 'H4', 'L5'],
-          ['L2', 'L6', 'H4'],
-          ['H2', 'L2', 'H3'],
+          ['H2', 'H2', 'H2'],
+          ['H2', 'H2', 'H2'],
+          ['H2', 'H2', 'H2'],
+          ['H2', 'H2', 'H2'],
         ],
         symbolsData: {
           WD: {
@@ -144,6 +144,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'idle',
             landingAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           HH: {
@@ -152,6 +153,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim1: 'idle',
             winAnim1: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           BS: {
@@ -160,6 +162,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim1: 'idle',
             winAnim1: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           H1: {
@@ -168,6 +171,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           H2: {
@@ -176,6 +180,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           H3: {
@@ -184,6 +189,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           H4: {
@@ -192,6 +198,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           H5: {
@@ -200,6 +207,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim1: 'idle',
             winAnim1: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           L1: {
@@ -209,6 +217,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim1: 'win',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           L2: {
@@ -217,6 +226,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           L3: {
@@ -225,6 +235,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           L4: {
@@ -233,6 +244,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           L5: {
@@ -241,6 +253,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
+            scale: 0.5,
             animScale: 1,
           },
           L6: {
@@ -249,6 +262,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             skin: 'default',
             idleAnim: 'Idle',
             winAnim: 'Win Animation',
+            scale: 0.5,
             animScale: 1,
           },
         },
