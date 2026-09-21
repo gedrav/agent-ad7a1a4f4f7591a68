@@ -61,6 +61,10 @@ declare global {
     getBBRtp: () => any;
     isFunMode: () => boolean;
     postActivityEvent: (eventName: string, parameters?: any) => void;
+    openRoundDetailModal?: (url: string) => void;
+    closeRoundDetailModal?: () => void;
+    handleHistoryRowClick?: (url: string) => void;
+    isAndroidApp?: () => boolean;
   }
 }
 
