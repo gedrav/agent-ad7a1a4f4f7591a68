@@ -7,10 +7,8 @@ import { STATES } from '@core/states/StateConstants';
 import { JCEvents } from '../events/JCEvents';
 import { isRespinActive } from '../models/JCLinesState';
 
-// Replaces corelib's SpinResponseReceivedState: that class hands the response off to SlotReel (via
-// STOP_SPIN_AFTER_RESPONSE), but JokerCharge's grid is driven by HoldNWinReelsContainer instead,
-// which has no corelib SlotReel to hand off to. Keeps the same shared UI bookkeeping corelib's
-// version does, but replaces the SlotReel hand-off with the real backend grid instead.
+// Replaces corelib's SpinResponseReceivedState, which hands off to a SlotReel this game doesn't
+// have - the grid goes to HoldNWinReelsContainer instead. Shared UI bookkeeping is kept as-is.
 class JCSpinResponseReceivedStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
@@ -20,24 +18,26 @@ class JCSpinResponseReceivedStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_COUNT);
     }
 
-    // Column-major (grid[column][row]), matching HoldNWinReelsContainer.stopSpin()'s convention.
-    const grid: string[][] = appModel.getSpinResult()?.grid;
-    EventHandler.dispatchEvent(JCEvents.SPIN_RESULT_RECEIVED, grid);
+    EventHandler.dispatchEvent(JCEvents.SPIN_RESULT_RECEIVED, this.resolveGrid());
   }
 
-  // Fires once HoldNWinReelsContainer reports every reel settled (see its stopSpin() onComplete),
-  // not right after execute() - mirrors corelib's SpinResponseReceivedState.doNextStep().
+  // Column-major (grid[column][row]), matching HoldNWinReelsContainer.stopSpin().
   //
-  // Mid-respin, this reuses the same SPIN_RESPONSE_RECEIVED_STATE slot (see RespinSpinStartState)
-  // rather than a dedicated one, so route the settle onward here: a respin round has no paylines
-  // to present, so it skips straight to CheckRespinState instead of the normal SpinStoppedState/
-  // GamePreWinState/ShowSpinWinState pipeline (and keeps the spin button hidden throughout, same
-  // as a freespins session).
+  // Base spins and respin rounds land in different places: storeSpinResult() puts result on
+  // gameResult, but storeFeatureResult() repoints gameResult at featureResults[].spinResults[] and
+  // nulls it when the feature response has no spinResults at all. Hence the fallback - without it
+  // a respin round yields no grid, and the container waits on one forever.
+  private resolveGrid(): string[][] | undefined {
+    return appModel.getSpinResult()?.grid ?? appModel.featureResult?.grid;
+  }
+
+  // Fires once every reel has settled, not right after execute(). Respin rounds reuse this same
+  // state slot, so they're routed onward here - straight to CheckRespinState, skipping the
+  // win-presentation pipeline they have no paylines for.
   //
-  // Keyed off isRespinActive() - set once EnterRespinState has actually run - and NOT off
-  // appModel.featureResult.featureType: corelib's storeSpinResult() already fills featureResult
-  // from the base spin that *triggers* the feature, so checking the type here would skip the
-  // CheckFeatureStateV2 -> EnterRespinState intro entirely and jump straight into the loop.
+  // Keyed off isRespinActive() and NOT featureResult.featureType: corelib fills featureResult from
+  // the base spin that *triggers* the feature, so the type would already match before
+  // EnterRespinState has run and would skip the intro entirely.
   public doNextStep(data: any = null) {
     super.doNextStep(data);
     if (isRespinActive()) {

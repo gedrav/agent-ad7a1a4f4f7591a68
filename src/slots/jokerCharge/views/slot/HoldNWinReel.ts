@@ -21,22 +21,19 @@ export interface HoldNWinReelConfig {
   column: number;
   symbolWidth: number;
   symbolHeight: number;
-  // Scales windUpSpeed/spinAccel/spinMaxSpeed/stopMinSpeed together (not windUpDistance) so
-  // stopMinSpeed stays <= spinMaxSpeed at any multiplier. Defaults to 1.
+  // Scales every speed except windUpDistance, so stopMinSpeed stays <= spinMaxSpeed. Defaults to 1.
   spinSpeedMultiplier?: number;
 }
 
 type SpinPhase = 'idle' | 'windup' | 'spin' | 'stopping';
 
-// A single Hold & Win cell: no scrolling strip, just two symbols (symbolView + topSymbolView,
-// exactly symbolHeight apart) swapped to fake an endless strip, landing at (0,0) with no bounce.
-// Once sticky, ignores further spin()/stopSpin() until setSticky(false).
+// A single Hold & Win cell: two symbols symbolHeight apart, swapped to fake an endless strip.
+// Once sticky, ignores spin()/stopSpin() until setSticky(false).
 export default class HoldNWinReel extends Container {
   public readonly row: number;
   public readonly column: number;
   private readonly symbolWidth: number;
   private readonly symbolHeight: number;
-  // smallSquareAnim/chainLockAnim are deliberately kept outside this so the mask never clips them.
   private readonly spinContainer: Container;
   private readonly maskShape: PixGraphics;
   private readonly smallSquareAnim: PixSpine;
@@ -45,8 +42,6 @@ export default class HoldNWinReel extends Container {
   private symbolView: JCReelSymbol | null = null;
   private topSymbolView: JCReelSymbol | null = null;
 
-  // Ratios lifted from corelib's SlotReel, rescaled against this cell's symbolHeight rather than
-  // copying its raw pixel values.
   private readonly windUpSpeed: number;
   private readonly windUpDistance: number;
   private readonly spinAccel: number;
@@ -55,11 +50,8 @@ export default class HoldNWinReel extends Container {
 
   private phase: SpinPhase = 'idle';
   private spinSpeed = 0;
-  // Consumed once a symbol reaches rest (see checkSettle()) - not necessarily symbolView, since
-  // spinning may have swapped which object is settling.
   private pendingFinalSymbolName: string | null = null;
   private settlingSymbol: JCReelSymbol | null = null;
-  // Fires once finishSettle() actually completes, not when stopSpin() is called.
   private onSettled: (() => void) | null = null;
 
   constructor(config: HoldNWinReelConfig) {
@@ -79,8 +71,7 @@ export default class HoldNWinReel extends Container {
     this.spinContainer = new Container();
     this.addChild(this.spinContainer);
 
-    // Only applied (spinContainer.mask = maskShape) while spinning - a spine's bbox can bleed
-    // past the cell mid-animation otherwise.
+    // Only applied while spinning - a spine's bbox can bleed past the cell mid-animation.
     this.maskShape = UIUtil.getRectangle(
       this.symbolWidth,
       this.symbolHeight,
@@ -91,8 +82,7 @@ export default class HoldNWinReel extends Container {
     this.maskShape.alpha = 0;
     this.spinContainer.addChild(this.maskShape);
 
-    // Uses symbolHeight, not measured bounds - a mid-animation spine's bounds vary and would
-    // jitter this offset.
+    // Offset by symbolHeight, not measured bounds - a mid-animation spine's bounds jitter.
     const topSymbolName = getRandomSymbolName();
     this.topSymbolView = JCReelSymbolPool.getInstance().acquire(topSymbolName, this.column, this.row);
     this.applySymbolScale(this.topSymbolView, SYMBOLS_DATA[topSymbolName]?.cellScale);
@@ -100,14 +90,14 @@ export default class HoldNWinReel extends Container {
     this.topSymbolView.visible = false;
     this.spinContainer.addChild(this.topSymbolView);
 
-    // Added directly to this reel, not spinContainer, so the spin mask never clips it.
+    // Outside spinContainer so the spin mask never clips it.
     this.smallSquareAnim = UIUtil.getSpineAnim(SMALL_SQUARE_SPINE_NAME, { spineName: SMALL_SQUARE_SPINE_NAME });
     this.smallSquareAnim.visible = false;
     this.smallSquareAnim.scale.set(0.65);
     this.smallSquareAnim.y = -23;
     this.addChild(this.smallSquareAnim);
 
-    // Same as smallSquareAnim above - added directly to this reel so the spin mask never clips it.
+    // Outside spinContainer so the spin mask never clips it.
     this.chainLockAnim = UIUtil.getSpineAnim(CHAIN_LOCK_SPINE_NAME, { spineName: CHAIN_LOCK_SPINE_NAME });
     this.chainLockAnim.visible = false;
     this.chainLockAnim.scale.set(1.2);
@@ -126,15 +116,12 @@ export default class HoldNWinReel extends Container {
     return this.symbolView?.getSymbolName() ?? null;
   }
 
-  // Both symbolView and topSymbolView are refreshed - topSymbolView can be visible mid-spin (see
-  // spin()), and either can be sitting idle as a Blanks symbol whose brightness needs to react to
-  // a line-count/respin change that happened after it was placed.
+  // Both are refreshed - topSymbolView can be visible mid-spin.
   public refreshBlanksVisual(): void {
     this.symbolView?.refreshBlanksVisual();
     this.topSymbolView?.refreshBlanksVisual();
   }
 
-  // Bypasses sticky, unlike spin()/stopSpin() below.
   public showSymbol(name: string): void {
     const pool = JCReelSymbolPool.getInstance();
     if (this.symbolView) {
@@ -148,9 +135,8 @@ export default class HoldNWinReel extends Container {
     this.spinContainer.mask = null;
   }
 
-  // cellScale (see SymbolsConfig.ts - every real symbol has one) is applied directly. Without one
-  // (only Blanks), falls back to auto-fit measurement. Scale is reset to 1 first since instances
-  // are pooled/reused and could carry over a stale scale.
+  // Reset to 1 first: pooled instances can carry a stale scale. Only Blanks lacks a cellScale and
+  // falls back to auto-fit.
   private applySymbolScale(symbol: JCReelSymbol, cellScale?: number): void {
     symbol.scale.set(1);
     let appliedScale: number;
@@ -177,13 +163,10 @@ export default class HoldNWinReel extends Container {
     Ticker.shared.add(this.onSpinTick, this);
   }
 
-  // Hands off the final symbol to whichever object next reaches rest (see checkSettle()), then
-  // lands with no bounce/overshoot. onSettled fires once the symbol actually reaches rest, not
-  // when stopSpin() is called.
+  // onSettled fires once the symbol reaches rest, not when stopSpin() is called.
   public stopSpin(finalSymbolName: string, onSettled?: () => void): void {
     if (this.sticky) return;
     if (this.phase === 'idle') {
-      // spin() wasn't running for this position - just show the result directly.
       this.showSymbol(finalSymbolName);
       this.symbolView.showLanding(() => this.symbolView.showIdle());
       onSettled?.();
@@ -194,14 +177,11 @@ export default class HoldNWinReel extends Container {
     this.phase = 'stopping';
   }
 
-  // Symbols are spine-only, so "spinning" plays the looping blur-state animation. Landing/idle
-  // (see stopSpin()/finishSettle() below) takes over once the reel actually stops.
   private setSpinningVisual(symbol: JCReelSymbol): void {
     symbol.setBlurredTexture();
   }
 
-  // setNewSymbol() always tears down the spine; setBlurredTexture() recreates it immediately so
-  // recycled symbols don't go blank.
+  // setNewSymbol() tears the spine down; setBlurredTexture() rebuilds it so the cell isn't blank.
   private setSymbolContentForSpin(symbol: JCReelSymbol, name: string): void {
     symbol.setNewSymbol({ ...SYMBOLS_DATA[name], row: this.row }, this.column);
     this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale);
@@ -247,8 +227,7 @@ export default class HoldNWinReel extends Container {
     this.setSymbolContentForSpin(symbol, getRandomSymbolName());
   }
 
-  // Exactly one of the two symbols has y <= 0 at a time; that one receives the final result and
-  // settles with no bounce-back.
+  // Exactly one of the two symbols has y <= 0 at a time; that one takes the final result.
   private checkSettle(): void {
     if (this.pendingFinalSymbolName && !this.settlingSymbol) {
       const front = this.symbolView.y <= 0 ? this.symbolView : this.topSymbolView;
@@ -281,8 +260,6 @@ export default class HoldNWinReel extends Container {
     onSettled?.();
   }
 
-  // Visual-only; HoldNWinReelsContainer decides when to call these based on grid-wide state this
-  // reel can't see.
   public showAnticipation(): void {
     this.symbolView?.showFeatureTriggerAnimation();
   }
@@ -301,8 +278,7 @@ export default class HoldNWinReel extends Container {
     }
   }
 
-  // Only plays while sticky. nextState/nextLoop queues idle directly on the spine track, no JS
-  // completion handling needed here (contrast playChainLockDisappear below).
+  // nextState queues idle on the spine track, so no JS completion handling is needed here.
   public playChainLockAppear(): void {
     if (!this.sticky) return;
     this.chainLockAnim.visible = true;
@@ -314,7 +290,6 @@ export default class HoldNWinReel extends Container {
     });
   }
 
-  // Waits for the disappear animation to actually finish before hiding and clearing sticky.
   public playChainLockDisappear(): void {
     const listener = this.chainLockAnim.addEventListener('complete', () => {
       if (listener) this.chainLockAnim.removeSpineEvent(listener);

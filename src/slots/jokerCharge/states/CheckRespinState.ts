@@ -5,17 +5,13 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { JCEvents } from '../events/JCEvents';
 
-// Loop/exit decision after each respin round settles - mirrors corelib's CheckFSState. Reached
-// directly from JCSpinResponseReceivedState.doNextStep(), bypassing the generic SpinStoppedState/
-// GamePreWinState/ShowSpinWinState win-presentation pipeline entirely: a respin round has no
-// paylines to show, only whatever the backend locked this round.
+// Loop/exit decision after each respin round, reached from JCSpinResponseReceivedState.doNextStep()
+// rather than the usual win-presentation pipeline - a respin round has no paylines to show.
 //
-// appModel.fsInfo is corelib's generic per-feature-round bookkeeping - storeFeatureResult() fills
-// it from featureResults[].currentCount/totalCount/totalWin/closed for any feature type, despite
-// the "fs" naming - reused here instead of adding respin-specific fields to corelib.
+// appModel.fsInfo is generic per-feature-round bookkeeping despite the "fs" naming:
+// storeFeatureResult() fills it from featureResults[] for any feature type.
 //
-// ASSUMPTION pending a real respin featureResult sample: "remaining respins" is
-// totalFreespins - currentFreespin. Confirm/adjust once the backend contract is known.
+// ASSUMPTION, unverified against a real respin response: remaining = totalFreespins - currentFreespin.
 class CheckRespinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);

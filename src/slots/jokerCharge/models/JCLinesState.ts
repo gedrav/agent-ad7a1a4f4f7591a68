@@ -9,10 +9,8 @@ const TOP_ROW = 0;
 let selectedLines = MIN_LINES;
 let respinActive = false;
 
-// BuyBonusLinesComp calls this directly (alongside dispatching JCEvents.SELECTED_LINES for
-// listeners like HoldNWinReelsContainer) - this module can't self-subscribe to that event, since a
-// module-top-level EventHandler.addEventListener() runs at import time, before
-// EventHandler.setScope() is ever called (see SlotGameApp.setupApp()), and silently no-ops.
+// Called directly by BuyBonusLinesComp: this module can't self-subscribe to SELECTED_LINES,
+// because a module-level addEventListener() runs before EventHandler.setScope() and no-ops.
 export function setSelectedLines(lines: number): void {
   selectedLines = lines;
 }
@@ -29,8 +27,7 @@ export function isRespinActive(): boolean {
   return respinActive;
 }
 
-// Whether a Hold & Win cell in the given row should show its "active" (bright) blank symbol
-// variant right now, per the selected line count - or unconditionally during a respin.
+// Whether a row shows the bright blank variant: per selected lines, or always during a respin.
 export function isRowActive(row: number): boolean {
   if (respinActive) return true;
   if (row === MIDDLE_ROW) return true;

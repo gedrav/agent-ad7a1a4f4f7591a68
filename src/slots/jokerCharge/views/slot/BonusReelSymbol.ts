@@ -3,9 +3,8 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { BONUS_SPINE_NAME, BONUS_SYMBOLS_DATA } from '../../config/BonusSymbolsConfig';
 
-// One bonus-round top-panel symbol. There's no animation to play or stop here and nothing to pool
-// or rebuild between spins - reel_sym_add's only animation is empty, so both the symbol and its
-// blurred variant are a single setSkin() call (see BonusSymbolsConfig).
+// reel_sym_add's only animation is empty, so there's nothing to play here - picking a symbol and
+// blurring it are both just setSkin() (see BonusSymbolsConfig).
 export default class BonusReelSymbol extends Container {
   private readonly spine: PixSpine;
   private symbolName: string;
@@ -42,8 +41,7 @@ export default class BonusReelSymbol extends Container {
     this.spine.setSkin(this.blurred ? data.blurSkin : data.staticSkin);
   }
 
-  // PixSpine's own teardown - a plain Container.destroy() leaves its skeleton/atlas GPU resources
-  // behind unless {children: true} is passed all the way down.
+  // Container.destroy() alone leaves the skeleton/atlas GPU resources behind.
   public destroy(options?: any): void {
     this.spine.destroySpine();
     super.destroy(options);

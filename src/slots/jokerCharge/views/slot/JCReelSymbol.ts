@@ -12,15 +12,11 @@ const BONUS_SYMBOL_PREFIX = 'cor-';
 const MYSTERY_SYMBOL_NAMES = ['mystery', 'mystery jackpot'];
 const BLANKS_SYMBOL_NAME = 'Blanks';
 
-// Spine-only reel symbol (Blanks aside - see blanksModifier), backed by corelib's
-// ReelSymbolSpineExtended and driven by per-symbol data in SymbolsConfig.ts.
-//
-// cor-Nx bonus symbols and mystery/mystery jackpot need rendering beyond a single spine, so they
-// delegate to their own modifiers below instead of branching here.
+// Spine-only reel symbol (Blanks aside), driven by per-symbol data in SymbolsConfig. Symbols
+// needing more than a single spine delegate to their own modifiers.
 export default class JCReelSymbol extends ReelSymbolSpineExtended {
-  // Lazily created via the getters below. `declare` is needed because createSymbol() (called
-  // during the super() chain) may init these before this class's own field initializers run;
-  // without it, useDefineForClassFields would reset them back to undefined afterward.
+  // `declare` matters: createSymbol() runs during the super() chain and may init these before
+  // this class's field initializers, which useDefineForClassFields would otherwise reset.
   declare private _bonusModifier: JCBonusSymbolModifier;
   declare private _mysteryModifier: JCMysterySymbolModifier;
   declare private _blanksModifier: JCBlanksSymbolModifier;
@@ -49,8 +45,6 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     return this.configData.data.name === BLANKS_SYMBOL_NAME;
   }
 
-  // createSymbol() runs once at construction, setNewSymbol() on every reuse - both must stay in
-  // sync with whatever symbol currently occupies this instance.
   private syncBlanksVisual(): void {
     if (this.isBlanksSymbol()) {
       this.blanksModifier.create(this.configData.data.row);
@@ -59,27 +53,20 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     }
   }
 
-  // Re-checks the active-row/respin state for a symbol that's already on screen (as opposed to
-  // one just being placed) - see HoldNWinReel.refreshBlanksVisual(). No-op for non-Blanks symbols.
+  // For a symbol already on screen rather than one being placed. No-op for non-Blanks.
   public refreshBlanksVisual(): void {
     this.syncBlanksVisual();
   }
 
-  // setNewSymbol() reassigns configData.data to a different symbol's data but never used to
-  // recreate this.symbol - only fine while it was an inert empty sprite. Now that it's spine-
-  // backed (see createSymbol() below), it must be rebuilt here too, since a pooled instance
-  // reused for a different symbol needs a different rig (e.g. bag_collect -> mystery_back).
+  // The spine has to be rebuilt here too: a pooled instance reused for a different symbol needs
+  // a different rig, and the inherited setNewSymbol() only swaps configData.
   public setNewSymbol(data: any, reelno: number): void {
     super.setNewSymbol(data, reelno);
     this.createSymbol();
   }
 
-  // this.symbol is spine-backed for every real symbol (Blanks aside - see blanksModifier) rather
-  // than an empty sprite, since JC symbols are spine-only anyway. corelib's ReelSymbol/
-  // ReelSymbolSprite type this.symbol as PixSprite and touch sprite-only props on it
-  // (texture/tint/anchor) in a few inherited paths JC never actually exercises (all real JC
-  // symbols already have their own winAnim etc., so those fallbacks don't fire) - those become
-  // harmless no-ops against a PixSpine, which is why the `as any` below is safe here.
+  // this.symbol is spine-backed, though corelib types it as PixSprite. The inherited paths that
+  // touch sprite-only props are ones this game never exercises, so the cast below is safe.
   protected createSymbol(): void {
     this.destroySymbol();
     if (this.configData.data.spineName) {
@@ -99,10 +86,8 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     this.syncBlanksVisual();
   }
 
-  // Plain Container.destroy() (what the inherited destroySymbol() calls) doesn't cascade into a
-  // PixSpine's own child Spine object/GPU resources without {children: true} - use PixSpine's own
-  // thorough teardown first so recreating this.symbol on every setNewSymbol() doesn't leak a full
-  // skeleton+atlas each time.
+  // The inherited destroySymbol() won't cascade into the spine's GPU resources, so every
+  // setNewSymbol() would leak a skeleton+atlas without this.
   public destroySymbol(): void {
     const symbol: any = this.symbol;
     if (symbol instanceof PixSpine) {
@@ -118,8 +103,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     this.playSpineAnimation(this.configData.data.idleAnim, true);
   }
 
-  // this.symbol's real visual is the spine built in createSymbol() above, not a texture - stays
-  // empty so the inherited .texture assignments in a few corelib paths are harmless no-ops.
+  // The real visual is the spine, so this stays empty and inherited .texture writes are no-ops.
   protected resolveTexture(): Texture {
     return Texture.EMPTY;
   }
@@ -151,12 +135,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     return played;
   }
 
-  // ReelSymbolSpineExtended.onAnimComplete unconditionally falls back to showStatic() after any
-  // non-looping animation, even when a spineAnimCompleteCallback was set (e.g. HoldNWinReel's
-  // showLanding(() => showIdle())) - that fallback ran right after the callback and stomped the
-  // just-started idle animation back to static in the same tick, before it was ever visible. Skip
-  // ReelSymbolSpineExtended's own override and go straight to ReelSymbolSpine's version so that
-  // fallback only fires when nothing else already decided what plays next.
+  // ReelSymbolSpineExtended.onAnimComplete always falls back to showStatic() after a non-looping
+  // animation, stomping whatever a completion callback just started (landing -> idle) in the same
+  // tick. Skip that override and call its parent, so the fallback only fires when nothing else
+  // decided what plays next.
   protected onAnimComplete(data: { loop: boolean; animation: { name: string } }): void {
     const hadCallback = !!this.spineAnimCompleteCallback;
     (ReelSymbolSpine.prototype as any).onAnimComplete.call(this, data);

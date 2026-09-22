@@ -8,24 +8,18 @@ export interface BonusReelConfig {
   column: number;
   symbolWidth: number;
   symbolHeight: number;
-  // Absolute scale for the reel_sym_add rig in this cell - its tiles are authored at 2x the sheet
-  // art the top panel uses, so this is roughly the panel's own scale halved.
   symbolScale: number;
   initialSymbol: string;
-  // Scales windUpSpeed/spinAccel/spinMaxSpeed/stopMinSpeed together (not windUpDistance) so
-  // stopMinSpeed stays <= spinMaxSpeed at any multiplier. Defaults to 1.
+  // Scales every speed except windUpDistance, so stopMinSpeed stays <= spinMaxSpeed. Defaults to 1.
   spinSpeedMultiplier?: number;
 }
 
 type SpinPhase = 'idle' | 'windup' | 'spin' | 'stopping';
 
-// One bonus-round top-panel reel. Same fake-endless-strip trick as HoldNWinReel: two symbols
-// exactly symbolHeight apart, recycled with throwaway filler as they scroll past, landing at y 0
-// with no bounce. Unlike the Hold & Win cells these never go sticky and have no landing/idle
-// animation to play on arrival - "spinning" is just the blurred skin (see BonusSymbolsConfig).
+// One top-panel reel, same two-symbol fake-endless-strip as HoldNWinReel. These never go sticky
+// and have no landing animation - "spinning" is just the blurred skin (see BonusSymbolsConfig).
 //
-// Invariant: whenever phase is 'idle', symbolView sits at y 0 and topSymbolView is hidden at
-// -symbolHeight, ready for the next spin() to reveal.
+// Invariant: while idle, symbolView sits at y 0 and topSymbolView is hidden at -symbolHeight.
 export default class BonusReel extends Container {
   public readonly column: number;
   private readonly symbolHeight: number;
@@ -34,8 +28,6 @@ export default class BonusReel extends Container {
   private symbolView: BonusReelSymbol;
   private topSymbolView: BonusReelSymbol;
 
-  // Ratios lifted from HoldNWinReel, which in turn rescaled corelib's SlotReel against cell height
-  // rather than copying its raw pixel values.
   private readonly windUpSpeed: number;
   private readonly windUpDistance: number;
   private readonly spinAccel: number;
@@ -44,11 +36,8 @@ export default class BonusReel extends Container {
 
   private phase: SpinPhase = 'idle';
   private spinSpeed = 0;
-  // Consumed once a symbol reaches rest (see checkSettle()) - not necessarily symbolView, since
-  // spinning may have swapped which object is settling.
   private pendingFinalSymbolName: string | null = null;
   private settlingSymbol: BonusReelSymbol | null = null;
-  // Fires once finishSettle() actually completes, not when stopSpin() is called.
   private onSettled: (() => void) | null = null;
 
   constructor(config: BonusReelConfig) {
@@ -66,8 +55,7 @@ export default class BonusReel extends Container {
     this.spinContainer = new Container();
     this.addChild(this.spinContainer);
 
-    // Only applied (spinContainer.mask = maskShape) while spinning - the blurred skins are taller
-    // than the static ones and would otherwise bleed past the cell once landed.
+    // Only applied while spinning - the blurred skins are taller and would bleed past the cell.
     this.maskShape = UIUtil.getRectangle(
       config.symbolWidth,
       config.symbolHeight,
@@ -81,8 +69,7 @@ export default class BonusReel extends Container {
     this.symbolView = new BonusReelSymbol(config.initialSymbol, config.symbolScale);
     this.spinContainer.addChild(this.symbolView);
 
-    // Uses symbolHeight, not measured bounds - a blurred skin measures taller and would jitter
-    // this offset every time the strip recycled.
+    // Offset by symbolHeight, not measured bounds - a blurred skin measures taller and would jitter.
     this.topSymbolView = new BonusReelSymbol(getRandomBonusSymbolName(), config.symbolScale);
     this.topSymbolView.y = -this.symbolHeight;
     this.topSymbolView.visible = false;
@@ -93,7 +80,6 @@ export default class BonusReel extends Container {
     return this.symbolView.getSymbolName();
   }
 
-  // Places a symbol directly, skipping the spin entirely.
   public showSymbol(name: string): void {
     this.symbolView.setSymbol(name);
     this.symbolView.setBlurred(false);
@@ -118,12 +104,9 @@ export default class BonusReel extends Container {
     Ticker.shared.add(this.onSpinTick, this);
   }
 
-  // Hands off the final symbol to whichever object next reaches rest (see checkSettle()), then
-  // lands with no bounce/overshoot. onSettled fires once the symbol actually reaches rest, not
-  // when stopSpin() is called.
+  // onSettled fires once the symbol reaches rest, not when stopSpin() is called.
   public stopSpin(finalSymbolName: string, onSettled?: () => void): void {
     if (this.phase === 'idle') {
-      // spin() wasn't running for this reel - just show the result directly.
       this.showSymbol(finalSymbolName);
       onSettled?.();
       return;
@@ -172,8 +155,7 @@ export default class BonusReel extends Container {
     symbol.setBlurred(true);
   }
 
-  // Exactly one of the two symbols has y <= 0 at a time; that one receives the final result and
-  // settles with no bounce-back.
+  // Exactly one of the two symbols has y <= 0 at a time; that one takes the final result.
   private checkSettle(): void {
     if (this.pendingFinalSymbolName && !this.settlingSymbol) {
       const front = this.symbolView.y <= 0 ? this.symbolView : this.topSymbolView;

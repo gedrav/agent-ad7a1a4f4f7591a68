@@ -1,8 +1,7 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
-import { BLANK_BONUS_SYMBOL_NAME, getRandomBonusSymbolName } from '../../config/BonusSymbolsConfig';
+import { BLANK_BONUS_SYMBOL_NAME } from '../../config/BonusSymbolsConfig';
 import BonusReel from './BonusReel';
 
-// Config nested under this Comp's `data`, same convention as HoldNWinReelsContainer's.
 export interface BonusReelsContainerData {
   columns: number;
   symbolWidth: number;
@@ -12,18 +11,13 @@ export interface BonusReelsContainerData {
   spinStartGap?: number;
   stopGap?: number;
   spinSpeedMultiplier?: number;
-  // One entry per column; missing cells fall back to the blank/lightning tile.
+  // One entry per column; missing cells fall back to the blank tile.
   initialReel?: string[];
 }
 
-// The bonus round's top-panel reels: one row of independent BonusReels laid out left to right,
-// centred on this Comp's origin so it can sit straight on top of top_panel_bg (see
-// BonusReelsConfig.ts). Each reel masks its own cell rather than the row sharing one mask, since
-// every reel starts and stops on its own stagger.
-//
-// Unlike HoldNWinReelsContainer this listens for nothing and drives nothing on its own: visibility
-// rides the bonus layout's alpha (see BonusTriggerLayoutConfig), and spin()/stopSpin() are called
-// by whoever knows the round's result.
+// The bonus round's top-panel reels, centred on this Comp's origin so it sits over top_panel_bg.
+// Visibility rides the bonus layout's alpha (see BonusTriggerLayoutConfig); spin()/stopSpin() are
+// called by whoever knows the round's result.
 export class BonusReelsContainer extends ResponsiveChildrenView {
   private readonly columns: number;
   private readonly symbolWidth: number;
@@ -75,12 +69,10 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
     return this.reels[column]?.getSymbolName() ?? null;
   }
 
-  // Places a whole row directly, skipping the spin entirely.
   public showSymbols(names: string[]): void {
     this.forEachReel((reel, column) => reel.showSymbol(names[column] ?? BLANK_BONUS_SYMBOL_NAME));
   }
 
-  // Staggered by spinStartGap so the reels don't all start in the same frame.
   public spin(): void {
     this.clearTimeouts(this.spinTimeoutIds);
     this.forEachReel((reel, column) => {
@@ -88,8 +80,7 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
     });
   }
 
-  // onComplete fires once every reel has actually settled (see BonusReel.stopSpin()'s onSettled),
-  // not merely once told to stop.
+  // onComplete fires once every reel has settled, not when they were told to stop.
   public stopSpin(finalSymbols: string[], onComplete?: () => void): void {
     this.clearTimeouts(this.stopTimeoutIds);
     let settledCount = 0;
@@ -105,14 +96,6 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
         }, column * this.stopGap),
       );
     });
-  }
-
-  // Stand-in for a real result while the backend field carrying these symbols is still undefined -
-  // lands every reel on its own random symbol. Returns what it landed on so a caller can report it.
-  public stopSpinRandom(onComplete?: (finalSymbols: string[]) => void): string[] {
-    const finalSymbols = this.reels.map(() => getRandomBonusSymbolName());
-    this.stopSpin(finalSymbols, () => onComplete?.(finalSymbols));
-    return finalSymbols;
   }
 
   private clearTimeouts(ids: any[]): void {

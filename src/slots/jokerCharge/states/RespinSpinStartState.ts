@@ -9,15 +9,9 @@ import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { Clock } from '@core/utils/Clock';
 import { Util } from '@core/utils/UtilService';
 
-// Auto-starts each respin round - no button press, mirrors corelib's FSSpinStartState. Requests
-// the round from the same dedicated feature endpoint freespins/pick already use
-// (MessageProxy.requestBonusData(), message name 'featureResult'), passing the feature-type
-// constant directly rather than appModel.getFeatureName() - that field is only ever populated for
-// FEATURE_TYPE_FREESPIN (see AppModelService.storeSpinResult()), so it would be empty here.
-//
-// Hands off to JCSpinResponseReceivedState like a normal spin; that state's doNextStep() routes
-// back into CheckRespinState instead of completing the round, since appModel.featureResult is
-// still a 'respin' result at that point.
+// Auto-starts each respin round, no button press. Passes the feature-type constant to
+// requestBonusData() rather than appModel.getFeatureName(), which corelib only ever populates for
+// FEATURE_TYPE_FREESPIN and so would be empty here.
 class RespinSpinStartStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);

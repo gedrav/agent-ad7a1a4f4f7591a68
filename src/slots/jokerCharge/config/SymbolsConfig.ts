@@ -10,21 +10,15 @@ export interface JCSymbolData {
   winAnim?: string;
   landingAnim?: string;
   multiplierTextConfig?: any;
-  // Static label attached to the rig's root_txt slot (see JCReelSymbol.createExtraElements()) -
-  // unlike multiplierTextConfig, the text never changes after creation.
+  // Static label on the rig's root_txt slot; unlike multiplierTextConfig it never changes.
   labelTextConfig?: any;
-  // Fixed, absolute scale for this symbol in a Hold & Win cell (see HoldNWinReel.applySymbolScale).
-  // Omit to auto-fit the symbol inside the cell instead.
+  // Absolute scale in a Hold & Win cell; omit to auto-fit instead.
   cellScale?: number;
-  // Which Hold & Win grid row (0-2) this instance currently occupies - set at placement time by
-  // HoldNWinReel/JCReelSymbolPool, not part of a symbol's static definition. Used by
-  // JCBlanksSymbolModifier to pick the bright/dim blank variant (see JCLinesState.isRowActive()).
+  // Set at placement time, not part of a symbol's static definition - picks the blank variant.
   row?: number;
 }
 
-// Gold-coin look (gradient fill + gradient stroke + drop shadow) - a bitmap font can't render any
-// of this, since its glyphs are pre-rendered flat images. Recipe matches meowmeowmeow's
-// BigWinConfig.ts featureWinText style, scaled down for a small symbol overlay instead of a banner.
+// Gold-coin look. A bitmap font can't render any of this - its glyphs are pre-rendered flat.
 export const MULTIPLIER_TEXT_STYLE = {
   fontFamily: 'belweCondensed',
   fontWeight: '900',
@@ -47,8 +41,6 @@ export const MULTIPLIER_TEXT_STYLE = {
   align: 'center',
 };
 
-// Same gold stroke/shadow recipe as MULTIPLIER_TEXT_STYLE, but with a blue fill to match the
-// "MINOR" reference image.
 const MINOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 150,
@@ -61,7 +53,6 @@ const MINOR_TEXT_STYLE = {
   },
 };
 
-// Same recipe again, green fill to match the "MAJOR" reference image.
 const MAJOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 150,
@@ -74,7 +65,6 @@ const MAJOR_TEXT_STYLE = {
   },
 };
 
-// Same recipe again, magenta/purple fill to match the "MINI" reference image.
 const MINI_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 150,
@@ -87,10 +77,9 @@ const MINI_TEXT_STYLE = {
   },
 };
 
-// Same gold stroke as MINOR/MAJOR/MINI_TEXT_STYLE, red fill to match the "GRAND" reference image.
 const GRAND_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
-  fontSize: 150,
+  fontSize: 200,
   fill: ['0xFF7B6B', '0xE53911', '0xB71C1C'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
@@ -126,8 +115,6 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
       name: 'multiplierVal',
       type: 'Text',
       anchor: { x: 0.5, y: 0.75 },
-      // Max multiplier tier (5x) gets the gold/orange GRAND look; every other cor-Nx keeps the
-      // base gold style.
       style: multiplier === 5 ? GRAND_TEXT_STYLE : MULTIPLIER_TEXT_STYLE,
     },
   };
@@ -182,8 +169,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     cellScale: 1,
     labelTextConfig: labelTextConfig('MAJOR', MAJOR_TEXT_STYLE),
   },
-  // Rendered from two spines (see JCMysterySymbolModifier) - spineName here drives the back
-  // layer, the front layer is the extra one.
+  // Two spines: spineName is the back layer, the front is added by JCMysterySymbolModifier.
   mystery: {
     name: 'mystery',
     spineName: 'mystery_back',
@@ -212,12 +198,11 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
 };
 
 const BLANKS_NAME = 'Blanks';
-// Weight for getRandomSymbolName() below - out of 100.
+// Out of 100.
 export const BLANKS_PERCENT = 50;
 const NON_BLANK_SYMBOL_NAMES = Object.keys(SYMBOLS_DATA).filter((name) => name !== BLANKS_NAME);
 
-// BLANKS_PERCENT chance of Blanks, otherwise any other symbol uniformly at random. Used wherever
-// a placeholder symbol name is needed but there's no real spin result yet.
+// Placeholder symbol for when there's no real spin result yet.
 export function getRandomSymbolName(): string {
   const isBlank = Util.getRandomRange(1, 100) <= BLANKS_PERCENT;
   return isBlank ? BLANKS_NAME : NON_BLANK_SYMBOL_NAMES[Util.getRandomRange(0, NON_BLANK_SYMBOL_NAMES.length - 1)];

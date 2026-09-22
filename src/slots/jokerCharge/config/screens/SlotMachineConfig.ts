@@ -45,7 +45,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'reelsBgDark',
       type: 'Sprite',
-      image: 'reels_bg_light',
+      image: 'reels_bg_dark',
       layoutData: {
         Desktop: { scale: 0.65 },
         Portrait: { scale: 0.65 },
@@ -56,10 +56,10 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'lineAnim',
       type: 'Spine',
       spineName: 'line',
-      defaultState: 'move_to_right3',
-      loop: false,
-      x: 706,
-      y: 476,
+      defaultState: 'move_to_left3',
+      loop: true,
+      x: 707,
+      y: -140,
     },
     {
       name: 'reelsFrame',

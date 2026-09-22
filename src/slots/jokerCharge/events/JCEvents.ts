@@ -1,18 +1,15 @@
-// JokerCharge custom events, mirroring corelib's SlotEvents/AppEvents pattern.
 export const JCEvents = {
-  // See TransitionComp.playTransition().
   PLAY_TRANSITION: 'PLAY_TRANSITION',
-  // Dispatch with the number of respins remaining as data, e.g. EventHandler.dispatchEvent(
-  // JCEvents.UPDATE_RESPIN_COUNTER, 2). See RespinCounterComp.setRemainingRespins().
+  // Data: respins remaining.
   UPDATE_RESPIN_COUNTER: 'UPDATE_RESPIN_COUNTER',
-  // Dispatched with the newly selected line count (1-3) as data. See BuyBonusLinesComp.
+  // Data: selected line count (1-3).
   SELECTED_LINES: 'SELECTED_LINES',
-  // Dispatched with the backend's final grid (string[][], column-major) once the spin response
-  // lands. See JCSpinResponseReceivedState and HoldNWinReelsContainer.
+  // Data: the backend's final grid, column-major.
   SPIN_RESULT_RECEIVED: 'SPIN_RESULT_RECEIVED',
-  // Switches the screen between base-game and respin (bonus) layout. Dispatch with
-  // { active, onConfirm? } - see GameSlotMachineView.setBonusTriggerLayout() and EnterRespinState.
+  // Data: { active }.
   SET_BONUS_TRIGGER_LAYOUT: 'SET_BONUS_TRIGGER_LAYOUT',
+  // Data: { onConfirm? }.
+  SHOW_RESPIN_INTRO: 'SHOW_RESPIN_INTRO',
 } as const;
 
 export type JCEvent = keyof typeof JCEvents;

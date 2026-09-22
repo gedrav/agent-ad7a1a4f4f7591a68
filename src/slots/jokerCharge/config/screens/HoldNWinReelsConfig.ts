@@ -28,7 +28,7 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     stopGap: 0,
     minSpinDuration: 2000,
     minSpinDurationTurbo: 750,
-    spinSpeedMultiplier: 0.5,
+    spinSpeedMultiplier: 0.6,
     initialReel: INITIAL_REEL,
   },
 };

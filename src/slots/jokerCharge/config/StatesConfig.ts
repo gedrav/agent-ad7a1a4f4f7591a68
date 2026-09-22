@@ -9,9 +9,9 @@ import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
-import { PreSpinWinState } from '@core/commands/states/PreSpinWinState';
 import { GamePreWinState } from '../states/GamePreWinState';
 import { EnterRespinState } from '../states/EnterRespinState';
+import { RespinIntroState } from '../states/RespinIntroState';
 import { RespinSpinStartState } from '../states/RespinSpinStartState';
 import { CheckRespinState } from '../states/CheckRespinState';
 import { ExitRespinState } from '../states/ExitRespinState';
@@ -36,10 +36,12 @@ export const STATES_CONFIG: any = [
   // Respin (Hold & Win) feature loop. ENTER_RESPIN_STATE must immediately follow
   // CHECK_FEATURE_STATE (its StateManager.next() lands here), and EXIT_RESPIN_STATE must
   // immediately precede COMPLETE_GAMEROUND_STATE (its StateManager.next() lands there) - see
-  // EnterRespinState/ExitRespinState. RESPIN_SPIN_START_STATE and CHECK_RESPIN_STATE are only
-  // ever reached via explicit goToState(), so their array position doesn't matter, but they're
-  // kept here for readability.
+  // EnterRespinState/ExitRespinState. The intro sits between them for the same reason: the
+  // transition's OK button advances into RESPIN_INTRO_STATE, and the player's tap on the intro
+  // advances into RESPIN_SPIN_START_STATE. CHECK_RESPIN_STATE is only ever reached via explicit
+  // goToState(), so its array position doesn't matter, but it's kept here for readability.
   { name: STATES.ENTER_RESPIN_STATE, state: EnterRespinState },
+  { name: STATES.RESPIN_INTRO_STATE, state: RespinIntroState },
   { name: STATES.RESPIN_SPIN_START_STATE, state: RespinSpinStartState },
   { name: STATES.CHECK_RESPIN_STATE, state: CheckRespinState },
   { name: STATES.EXIT_RESPIN_STATE, state: ExitRespinState },
