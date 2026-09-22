@@ -27,6 +27,9 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
+  ],
+  lazySoundFiles: [
+    // common sound across all games
     {
       name: 'Ante bet button',
       type: 'game',
@@ -35,20 +38,6 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
       fadeOutDuration: 100,
     },
-    {
-      name: 'fsBGM',
-      type: 'game',
-      soundType: 'ambient',
-      loop: true,
-      playEvents: ['PLAY_FS_BG_SOUND', 'RESUME_FS_BG_SOUND'],
-      stopEvents: ['STOP_FS_BG_SOUND', 'STOP_BG_SOUND'],
-      volume: 0.6,
-      fadeInDuration: 250,
-      fadeOutDuration: 500,
-    },
-  ],
-  lazySoundFiles: [
-    // common sound across all games
     {
       name: 'ERROR POP UP',
       type: 'game',
@@ -75,6 +64,17 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
     },
     // game level sounds
+    {
+      name: 'fsBGM',
+      type: 'game',
+      soundType: 'ambient',
+      loop: true,
+      playEvents: ['PLAY_FS_BG_SOUND', 'RESUME_FS_BG_SOUND'],
+      stopEvents: ['STOP_FS_BG_SOUND', 'STOP_BG_SOUND'],
+      volume: 0.6,
+      fadeInDuration: 250,
+      fadeOutDuration: 500,
+    },
     {
       name: 'jackpotBGM',
       type: 'game',
