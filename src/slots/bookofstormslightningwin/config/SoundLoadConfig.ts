@@ -21,17 +21,6 @@ export const GAME_SOUND_CONFIG = {
       fadeOutDuration: 200,
     },
     {
-      name: 'FBGM',
-      type: 'game',
-      soundType: 'ambient',
-      loop: true,
-      playEvents: ['PLAY_FS_BG_SOUND', 'RESUME_FS_BG_SOUND'],
-      stopEvents: ['STOP_FS_BG_SOUND'],
-      volume: 0.5,
-      fadeInDuration: 200,
-      fadeOutDuration: 200,
-    },
-    {
       name: 'uiButtonClick',
       type: 'game',
       loop: false,
@@ -61,6 +50,17 @@ export const GAME_SOUND_CONFIG = {
       volume: 1,
     },
     // game level sounds
+    {
+      name: 'FBGM',
+      type: 'game',
+      soundType: 'ambient',
+      loop: true,
+      playEvents: ['PLAY_FS_BG_SOUND', 'RESUME_FS_BG_SOUND'],
+      stopEvents: ['STOP_FS_BG_SOUND'],
+      volume: 0.5,
+      fadeInDuration: 200,
+      fadeOutDuration: 200,
+    },
     {
       name: 'spinClicked',
       type: 'game',
