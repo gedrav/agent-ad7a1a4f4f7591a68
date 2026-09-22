@@ -592,6 +592,9 @@ class AppModelService {
     return Math.round(bet * GameProxy.config.anteBetMultiplier * 100) / 100;
   }
 
+  public getTotalBetWithoutAnte(): number {
+    return this.gameInfo?.betsArray[this.gameInfo.betPos];
+  }
   public getTotalBet(): number {
     const isAnte = GameProxy.config.isAnteEnabled;
     if (this.gameInfo.betsArray.length > 0) {
