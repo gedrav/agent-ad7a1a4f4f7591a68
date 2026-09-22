@@ -592,10 +592,12 @@ class AppModelService {
     if (this.gameInfo.betsArray.length > 0) {
       if (isAnte) {
         if (this.gameInfo.betsArray.length > 0) {
-          return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.anteBet;
+          const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+          return Math.round(bet * this.gameInfo?.anteBet * 100) / 100;
         }
       } else {
-        return this.gameInfo?.betsArray[this.gameInfo.betPos];
+        const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+        return Math.round(bet * 100) / 100;
       }
     } else {
       return 0;
