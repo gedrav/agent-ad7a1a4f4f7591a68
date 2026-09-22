@@ -587,6 +587,11 @@ class AppModelService {
     return this.gameInfo.creditValue;
   }
 
+  public getAnteBetValue(): number {
+    const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+    return Math.round(bet * GameProxy.config.anteBetMultiplier * 100) / 100;
+  }
+
   public getTotalBet(): number {
     const isAnte = GameProxy.config.isAnteEnabled;
     if (this.gameInfo.betsArray.length > 0) {
