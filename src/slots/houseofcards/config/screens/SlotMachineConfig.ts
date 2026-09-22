@@ -26,7 +26,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       pHeight: 1150,
       lWidth: 1610,
       lHeight: 1140,
-      alpha: 0,
+      alpha: 1,
     },
 
     {
@@ -133,8 +133,8 @@ export const SLOT_MACHINE_CONFIG: any = {
           ['H2', 'H2', 'H2'],
           ['H2', 'H2', 'H2'],
           ['H2', 'H2', 'H2'],
-          ['H2', 'H2', 'H2'],
-          ['H2', 'H2', 'H2'],
+          ['H4', 'H4', 'H4'],
+          ['H4', 'H4', 'H4'],
         ],
         symbolsData: {
           WD: {
