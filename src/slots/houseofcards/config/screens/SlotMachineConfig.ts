@@ -26,7 +26,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       pHeight: 1150,
       lWidth: 1610,
       lHeight: 1140,
-      alpha: 0,
+      alpha: 1,
     },
 
     {
@@ -110,8 +110,8 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 170, y: 165 },
-            reelPositionX: [0, 259, 520, 780, 1040],
+            reelContainerPos: { x: 166, y: 165 },
+            reelPositionX: [0, 258, 520, 780, 1040],
             symbolHeight: 244,
             symbolScale: 1,
           },
@@ -269,11 +269,11 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
       Elements: [
         {
-          name: 'reelstripBG',
+          name: 'reelFrame',
           type: 'Sprite',
-          image: 'reelframebg',
-          x: 26,
-          y: 12,
+          image: 'ReelFrame',
+          x: -62,
+          y: -62,
         },
         { name: 'symbolsContainer', type: 'Container' },
         {
@@ -286,23 +286,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           color: 0xffff00,
           visible: false,
         },
-        { name: 'tickerbg', type: 'Sprite', image: 'last_win', x: -60, y: 805, scale: 1 },
-        {
-          name: 'reelFrame',
-          type: 'Comp',
-          class: ReelFrameComp,
-          x: 0,
-          y: 0,
-          Elements: [
-            {
-              name: 'reelFrame',
-              type: 'Sprite',
-              image: 'ReelFrame',
-              x: 0,
-              y: 0,
-            },
-          ],
-        },
+
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
@@ -315,7 +299,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 690,
-              y: -10,
+              y: -32,
             },
             Landscape: {
               scale: 0.9,
@@ -325,7 +309,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Portrait: { scale: 0.9, x: 775, y: 56 },
           },
         },
-        { name: 'maskRect1', type: 'Graphics', width: 1300, height: 744, x: 40, y: 38, color: 0xffff00, alpha: 0 },
+        { name: 'maskRect', type: 'Graphics', width: 1300, height: 744, x: 40, y: 38, color: 0xffff00 },
         { name: 'anticipationContainer', type: 'Container' },
         {
           name: 'winSymbolsContainer',
