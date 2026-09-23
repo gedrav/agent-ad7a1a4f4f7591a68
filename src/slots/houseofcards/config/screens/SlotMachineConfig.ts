@@ -110,9 +110,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 170, y: 168 },
+            reelContainerPos: { x: 170, y: 165 },
             reelPositionX: [0, 258, 520, 780, 1040],
-            symbolHeight: 242,
+            symbolHeight: 244,
             symbolScale: 1,
           },
           Portrait: {
@@ -130,11 +130,11 @@ export const SLOT_MACHINE_CONFIG: any = {
           landingSymbols: ['WD'],
         },
         initialReel: [
-          ['H2', 'H2', 'H2'],
-          ['H2', 'H2', 'H2'],
-          ['H2', 'H2', 'H2'],
-          ['H4', 'H4', 'H4'],
-          ['H4', 'H4', 'H4'],
+          ['L2', 'H2', 'H5'],
+          ['H1', 'H4', 'WD'],
+          ['L1', 'L3', 'L4'],
+          ['L5', 'H4', 'H3'],
+          ['L6', 'BS', 'H4'],
         ],
         symbolsData: {
           WD: {
@@ -185,7 +185,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H3: {
             name: 'H3',
-            spineName: 'prince 3',
+            spineName: 'prince',
             skin: 'default',
             idleAnim: 'idle',
             winAnim: 'win',
@@ -203,12 +203,12 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           H5: {
             name: 'H5',
-            spineName: 'Castle',
-            skin: 'default',
-            idleAnim1: 'idle',
-            winAnim1: 'win',
+            // spineName: 'Castle',
+            // skin: 'default',
+            // idleAnim1: 'idle',
+            // winAnim1: 'win',
             scale: 0.5,
-            animScale: 1,
+            // animScale: 1,
           },
           L1: {
             name: 'L1',

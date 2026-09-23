@@ -119,7 +119,7 @@ class AssetLoaderClass {
         const data: any = { name: this.assetConfig[i].name, assets: [] };
         if (this.assetConfig[i]?.assets?.length > 0) {
           this.assetConfig[i].assets.forEach((item: any) => {
-            const { TYPE, NAME, ASSETTYPE, file, TEXTURES } = item;
+            const { TYPE, NAME, ASSETTYPE, file, TEXTURES, spineImageType } = item;
             if (
               ASSETTYPE === 'svg' ||
               ASSETTYPE === 'png' ||
@@ -152,14 +152,20 @@ class AssetLoaderClass {
                 TEXTURES.forEach((textureIndex: string) => {
                   data.assets.push({
                     alias: textureIndex,
-                    src: TYPE == 'lang' ? this.langSpinePath + NAME + '.png' : this.spinePath + NAME + '.png',
+                    src:
+                      TYPE == 'lang'
+                        ? this.langSpinePath + NAME + (spineImageType ? '.' + spineImageType : '.png')
+                        : this.spinePath + NAME + (spineImageType ? '.' + spineImageType : '.png'),
                   });
                 });
               } else {
                 // Single texture file (default behavior)
                 data.assets.push({
                   alias: NAME + 'Texture',
-                  src: TYPE == 'lang' ? this.langSpinePath + NAME + '.png' : this.spinePath + NAME + '.png',
+                  src:
+                    TYPE == 'lang'
+                      ? this.langSpinePath + NAME + (spineImageType ? '.' + spineImageType : '.png')
+                      : this.spinePath + NAME + (spineImageType ? '.' + spineImageType : '.png'),
                 });
               }
             } else {
