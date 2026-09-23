@@ -18,6 +18,7 @@ export const GAME_CONFIG = {
   creditValue: 20,
   anteBetMultiplier: 1.25,
   totalLines: 1,
+  isCascadeGame: true,
   unloadAssets: ['splashAssets'],
   FontFaces: {
     commonFont: 'Mulish',
