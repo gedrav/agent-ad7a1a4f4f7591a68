@@ -26,7 +26,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       pHeight: 1150,
       lWidth: 1610,
       lHeight: 1140,
-      alpha: 1,
+      alpha: 0,
     },
 
     {
@@ -111,7 +111,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         deviceLayout: {
           Desktop: {
             reelContainerPos: { x: 170, y: 165 },
-            reelPositionX: [0, 258, 520, 780, 1040],
+            reelPositionX: [0, 259, 520, 780, 1040],
             symbolHeight: 244,
             symbolScale: 1,
           },
@@ -130,7 +130,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           landingSymbols: ['WD'],
         },
         initialReel: [
-          ['L2', 'H2', 'H5'],
+          ['H2', 'WD', 'WD'],
           ['H1', 'H4', 'WD'],
           ['L1', 'L3', 'L4'],
           ['L5', 'H4', 'H3'],
