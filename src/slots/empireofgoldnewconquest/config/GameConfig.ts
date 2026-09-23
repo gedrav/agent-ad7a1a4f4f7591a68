@@ -15,6 +15,7 @@ export const GAME_CONFIG = {
   gameId: 'empireofgoldnewconquest',
   gameName: 'Empire of Gold: New Conquest',
   uiConfig: UIConfig,
+  isCascadeGame: true,
   creditValue: 20,
   anteBetMultiplier: 1.25,
   totalLines: 1,
