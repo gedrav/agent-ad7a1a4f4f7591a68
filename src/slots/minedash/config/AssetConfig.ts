@@ -50,6 +50,8 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'Gem_Pink', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Gem_Orange', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Gem_Green', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'GoldCard', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'skeleton', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
