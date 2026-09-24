@@ -7,16 +7,17 @@ export const FS_POPUP_CONFIG = {
   class: FSPopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
-    // {
-    //   name: 'popupbg',
-    //   type: 'NineSliceSprite',
-    //   image: 'popup1',
-    //   nineSlice: [200, 200, 200, 200],
-    //   anchor: { x: 0.5, y: 0.5 },
-    //   width: 1106,
-    //   x: 448,
-    //   y: 540,
-    // },
+    {
+      name: 'popupbg',
+      type: 'NineSliceSprite',
+      image: 'popupbg',
+      nineSlice: [40, 40, 40, 40],
+      anchor: { x: 0.5, y: 0.5 },
+      width: 900,
+      height: 600,
+      x: 450,
+      y: 350,
+    },
     {
       name: 'titleText',
       type: 'Text',
@@ -43,27 +44,6 @@ export const FS_POPUP_CONFIG = {
       x: 450,
       y: 270,
     },
-    // {
-    //   ...BOOK_OPEN_CONFIG,
-    //   layoutData: undefined,
-    //   scale: 1,
-    //   x: -402,
-    //   y: -62,
-    // },
-    {
-      name: 'expandingSymbolText',
-      type: 'Text',
-      content: 'expandingSymbolText',
-      style: {
-        fontFamily: 'gameFont1',
-        fontSize: 45,
-        fill: 0xffff00,
-        align: 'center',
-      },
-      anchor: { x: 0.5, y: 0.5 },
-      x: 450,
-      y: 730,
-    },
     {
       name: 'messageText2',
       type: 'Text',
@@ -78,7 +58,7 @@ export const FS_POPUP_CONFIG = {
       },
       anchor: { x: 0.5, y: 0.5 },
       x: 450,
-      y: 842,
+      y: 400,
     },
     {
       name: 'okBtn',
@@ -91,7 +71,7 @@ export const FS_POPUP_CONFIG = {
         disabledView: 'okBtn_Inactive',
         animations: CoreUIConfig.buttonStates,
       },
-      scale: 0.9,
+      scale: 0.6,
       textConfig: {
         name: 'okBtnTxt',
         type: 'Text',
@@ -111,7 +91,7 @@ export const FS_POPUP_CONFIG = {
         toUpperCase: true,
       },
       x: 450,
-      y: 994,
+      y: 565,
     },
   ],
   layoutData: {

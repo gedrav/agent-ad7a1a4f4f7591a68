@@ -10,7 +10,8 @@
         "src/slots/bookofstorms/*",
         "src/slots/bookofstormslightningwin/*",
         "src/slots/carpathiantreasures/*",
-        "src/slots/houseofcards/*"
+        "src/slots/houseofcards/*",
+        "src/slots/minedash/*"
       ],
       "@assets/*": [
         "../feg_games_assets/empireofgold/*",
@@ -20,7 +21,8 @@
         "../feg_games_assets/bookofstorms/*",
         "../feg_games_assets/bookofstormslightningwin/*",
         "../feg_games_assets/carpathiantreasures/*",
-        "../feg_games_assets/houseofcards/*"
+        "../feg_games_assets/houseofcards/*",
+        "../feg_games_assets/minedash/*"
       ],
       "@common/*": [
         "../feg_games_assets/common/*"
