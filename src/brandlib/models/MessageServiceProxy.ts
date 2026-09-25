@@ -106,6 +106,13 @@ export class MessageServiceProxy extends AbstractProxy {
     if (GameProxy.config.isAnteEnabled) {
       finalObj.extraData.ante = true;
     }
+    // Per-game request extras, e.g. a game where the player picks how many lines to play. Games
+    // that don't define getExtraSpinData() send exactly what they sent before. Placed ahead of the
+    // cheats so a dev cheat can still override any key it sets.
+    const extraSpinData = GameProxy.config.getExtraSpinData?.();
+    if (extraSpinData) {
+      Object.assign(finalObj.extraData, extraSpinData);
+    }
     if (GameProxy.config.cheatObject && appModel.getIsDevMode()) {
       const cheatObj = GameProxy.config.cheatObject;
       if (cheatObj.length <= 0) {

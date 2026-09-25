@@ -1,4 +1,4 @@
-import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { Container } from 'pixi.js';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 const TINT_REST = 0xe0e0e0;
@@ -16,7 +16,9 @@ const PRESS_DURATION = 0.08;
 // Only the scale is tweened. tint is a packed colour, so tweening it as a plain number counts
 // through the integers between two colours rather than fading between them, and it would need
 // GSAP's pixi plugin wrapper to do properly - so it's set outright instead.
-export function setupButtonInteraction(btn: PixSprite, onClick: () => void): void {
+// Takes a Container as readily as a Sprite: a button whose art and labels are separate objects
+// has to be hooked as a group, or only the art reacts and anything drawn over it eats the click.
+export function setupButtonInteraction(btn: Container, onClick: () => void): void {
   // Whatever the config gave it, so a scaled button isn't resized by hovering.
   const baseScale = btn.scale.x;
 

@@ -29,9 +29,8 @@ export class BuyBonusLinesComp extends ResponsiveView {
     this.updateLinesText();
   }
 
-  // TODO: replace with the real Buy Bonus flow once it's ready.
   private onBuyBonusClicked(): void {
-    alert('Buy Bonus clicked');
+    EventHandler.dispatchEvent(JCEvents.SHOW_BUY_BONUS_SCREEN);
   }
 
   private onLinesMinusClicked(): void {

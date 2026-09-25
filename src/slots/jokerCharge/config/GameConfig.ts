@@ -2,6 +2,7 @@ import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand
 import { Point } from 'pixi.js';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { UIConfig } from '@game/config/UIConfig';
+import { getSelectedLines } from '@slots/jokerCharge/models/JCLinesState';
 
 export const GAME_CONFIG = {
   gameDesktopWidth: 2424,
@@ -31,5 +32,8 @@ export const GAME_CONFIG = {
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
+  // Read by MessageServiceProxy on every spin, buy bonus included: the backend prices the round
+  // by how many lines the player is playing.
+  getExtraSpinData: () => ({ activePaylines: getSelectedLines() }),
   bigWinValues: [25, 50, 100, 500],
 };

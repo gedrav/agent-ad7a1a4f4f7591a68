@@ -143,12 +143,38 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     steps[index](() => this.playEffectSteps(steps, index + 1, onComplete));
   }
 
+  private resolveTargetLayout(): Record<string, BonusLayoutOverride> {
+    if (!DeviceProxy.config.isDevice) return BONUS_TRIGGER_LAYOUT.Desktop;
+    return DeviceProxy.config.isPortrait ? BONUS_TRIGGER_LAYOUT.Portrait : BONUS_TRIGGER_LAYOUT.Landscape;
+  }
+
+  // Each element's base state, remembered the first time the feature takes it over.
+  private captureLayout(targetLayout: Record<string, BonusLayoutOverride>): void {
+    for (const name of Object.keys(targetLayout)) {
+      const element = this.elementsList[name];
+      if (!element || this.savedLayout[name]) continue;
+      this.savedLayout[name] = {
+        x: element.x,
+        y: element.y,
+        alpha: element.alpha,
+        visible: element.visible,
+        scaleX: element.scale.x,
+        scaleY: element.scale.y,
+      };
+    }
+  }
+
   private onSetBonusTriggerLayout(data: { active: boolean }): void {
     this.setBonusTriggerLayout(data.active);
   }
 
   // The respin states call this from the transition's midpoint, so the swap is hidden by the wipe.
   public setBonusTriggerLayout(bonusTrigger: boolean): void {
+    const targetLayout = this.resolveTargetLayout();
+    // Taken before anything below touches an element: the counter is flipped on entry, and if its
+    // snapshot were taken after that, leaving would restore it as visible.
+    this.captureLayout(targetLayout);
+
     this.respinCounterComp.visible = bonusTrigger;
     // Blanks already on the grid need re-checking now, not just on their next placement.
     setRespinActive(bonusTrigger);
@@ -165,25 +191,9 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
       this.holdNWinReelsContainer?.stopMysteryReels();
     }
 
-    let targetLayout = BONUS_TRIGGER_LAYOUT.Desktop;
-    if (DeviceProxy.config.isDevice) {
-      targetLayout = DeviceProxy.config.isPortrait ? BONUS_TRIGGER_LAYOUT.Portrait : BONUS_TRIGGER_LAYOUT.Landscape;
-    }
-
     for (const name of Object.keys(targetLayout)) {
       const element = this.elementsList[name];
       if (!element) continue;
-
-      if (!this.savedLayout[name]) {
-        this.savedLayout[name] = {
-          x: element.x,
-          y: element.y,
-          alpha: element.alpha,
-          visible: element.visible,
-          scaleX: element.scale.x,
-          scaleY: element.scale.y,
-        };
-      }
 
       const target = bonusTrigger ? targetLayout[name] : this.savedLayout[name];
       if (target.x !== undefined) {

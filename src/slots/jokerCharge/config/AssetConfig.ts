@@ -63,7 +63,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'line', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'coins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'respinCounter', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'BuyBonus', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BuyBonus-0', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {
