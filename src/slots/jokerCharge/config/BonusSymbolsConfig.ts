@@ -20,9 +20,19 @@ export const BONUS_SYMBOLS_DATA: Record<string, BonusSymbolData> = {
 };
 
 export const BLANK_BONUS_SYMBOL_NAME = 'Blank';
+export const MULTI_SYMBOL_NAME = 'Multi';
+export const SUPER_MULTI_SYMBOL_NAME = 'Super-Multi';
+export const CHARGED_SYMBOL_NAME = 'Charged';
+export const SUPER_CHARGED_SYMBOL_NAME = 'Super-charged';
 // Out of 100.
 export const BONUS_BLANK_PERCENT = 50;
 const NON_BLANK_BONUS_SYMBOL_NAMES = Object.keys(BONUS_SYMBOLS_DATA).filter((name) => name !== BLANK_BONUS_SYMBOL_NAME);
+
+// The backend's modifierRow uses the main grid's blank name ('Blanks'), and anything it sends that
+// isn't a known top-panel symbol falls back to the blank tile rather than rendering nothing.
+export function resolveBonusSymbolName(name: string): string {
+  return BONUS_SYMBOLS_DATA[name] ? name : BLANK_BONUS_SYMBOL_NAME;
+}
 
 // Filler for the symbols that scroll past mid-spin.
 export function getRandomBonusSymbolName(): string {

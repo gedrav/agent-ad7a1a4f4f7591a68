@@ -1,8 +1,11 @@
-// x/y are optional - some elements (topPanelBg/topPanelFrame) only need alpha changed.
+// Every field is optional - some elements (topPanelBg/topPanelFrame) only need alpha changed,
+// others only a scale.
 export interface BonusLayoutOverride {
   x?: number;
   y?: number;
   alpha?: number;
+  scaleX?: number;
+  scaleY?: number;
 }
 
 // Per-element x/y/alpha applied by GameSlotMachineView.setBonusTriggerLayout(true), keyed by
@@ -15,7 +18,8 @@ type ElementLayoutMap = Record<string, BonusLayoutOverride>;
 
 const DESKTOP_BONUS_TRIGGER_LAYOUT: ElementLayoutMap = {
   reelsBgDark: { x: 0, y: 133 },
-  reelsFrame: { x: 0, y: 133 },
+  reelbgAnim: { scaleX: 0.66, scaleY: 0.81 },
+  reelsFrame: { x: 0, y: 450 },
   topPanelBg: { alpha: 1 },
   topPanelFrame: { alpha: 1 },
   bonusReelsContainer: { alpha: 1 },

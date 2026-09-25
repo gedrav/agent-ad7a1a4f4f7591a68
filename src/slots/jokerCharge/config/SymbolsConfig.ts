@@ -14,6 +14,8 @@ export interface JCSymbolData {
   labelTextConfig?: any;
   // Absolute scale in a Hold & Win cell; omit to auto-fit instead.
   cellScale?: number;
+  // Vertical scale, when it differs from cellScale. Defaults to cellScale.
+  cellScaleY?: number;
   // Set at placement time, not part of a symbol's static definition - picks the blank variant.
   row?: number;
 }
@@ -41,59 +43,131 @@ export const MULTIPLIER_TEXT_STYLE = {
   align: 'center',
 };
 
+// The top tier, so it can't read as a paler version of the gold ones. Electric blue picks up the
+// charge the symbol is wrapped in, outranks gold rather than competing with it, and the cyan glow
+// carries it clear of the violet behind.
+const GRAND_TEXT_STYLE = {
+  ...MULTIPLIER_TEXT_STYLE,
+  fontSize: 200,
+  fill: ['0xFFFFFF', '0xB6F3FF', '0x45CBFF', '0x0E7BE0'],
+  fillGradientStops: [0, 0.3, 0.65, 1],
+  stroke: {
+    fill: ['0x2A0A45', '0x140425'],
+    width: 18,
+    join: 'round',
+  },
+  dropShadow: {
+    color: 0x21c8ff,
+    alpha: 0.9,
+    blur: 14,
+    distance: 0,
+    angle: Math.PI / 2,
+  },
+};
+
 const MINOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 150,
-  fill: ['0x526bbf', '0x677dc6', '0x34498e', '0x2543a5', '0x042454'],
+  fill: ['0xBFD9FF', '0x2A63D8', '0x081C5E'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
     fill: ['0xFFD700', '0xE8890C'],
     width: 16,
     join: 'round',
+  },
+  // Its own shadow, not the base style's glow: a wide blur behind a gold outline reads as haze.
+  dropShadow: {
+    color: 0x000000,
+    alpha: 0.95,
+    blur: 1,
+    distance: 5,
+    angle: Math.PI / 2,
   },
 };
 
 const MAJOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 150,
-  fill: ['0xE8FFB0', '0x66CC33', '0x1B5E20'],
+  fill: ['0xD2F09A', '0x3D9E27', '0x0A3A14'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
     fill: ['0xFFD700', '0xE8890C'],
     width: 16,
     join: 'round',
+  },
+  dropShadow: {
+    color: 0x000000,
+    alpha: 0.95,
+    blur: 1,
+    distance: 5,
+    angle: Math.PI / 2,
   },
 };
 
 const MINI_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 150,
-  fill: ['0xFFD9F5', '0xD946C4', '0x5A0F6B'],
+  // Deeper than the symbol's own magenta, so it reads against it rather than into it.
+  fill: ['0xF7A8DC', '0xB01F78', '0x3D0333'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
     fill: ['0xFFD700', '0xE8890C'],
     width: 16,
     join: 'round',
   },
+  dropShadow: {
+    color: 0x000000,
+    alpha: 0.95,
+    blur: 1,
+    distance: 5,
+    angle: Math.PI / 2,
+  },
 };
 
-const GRAND_TEXT_STYLE = {
+// The mystery rigs are blue with white lightning, so the label keeps the gold-coin look the cor
+// symbols used to carry rather than the charge palette, which would disappear into them.
+const MYSTERY_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
-  fontSize: 200,
-  fill: ['0xFF7B6B', '0xE53911', '0xB71C1C'],
+  fontSize: 250,
+  dropShadow: {
+    color: 0x000000,
+    alpha: 0.8,
+    blur: 2,
+    distance: 16,
+    angle: Math.PI / 2,
+  },
+};
+
+const MYSTERY_JACKPOT_TEXT_STYLE = {
+  ...MYSTERY_TEXT_STYLE,
+  fontSize: 250,
+  lineHeight: 270,
+  // MYSTERY's gold-on-red flipped to red-on-gold, to mark the bigger prize.
+  fill: ['0xFF7A5E', '0xE62B18', '0xB0130B'],
   fillGradientStops: [0, 0.5, 1],
   stroke: {
-    fill: ['0xFFD700', '0xE8890C'],
-    width: 16,
+    fill: ['0xFFE47A', '0xFFC42B', '0xE8890C'],
+    width: 26,
     join: 'round',
   },
 };
 
-function labelTextConfig(text: string, style: any = MULTIPLIER_TEXT_STYLE): any {
+// The jackpot labels a mystery symbol's mini reel can land on, keyed by the backend's own names.
+export const JACKPOT_TEXT_STYLES: Record<string, any> = {
+  mini: MINI_TEXT_STYLE,
+  minor: MINOR_TEXT_STYLE,
+  major: MAJOR_TEXT_STYLE,
+};
+
+function labelTextConfig(
+  text: string,
+  style: any = MULTIPLIER_TEXT_STYLE,
+  anchor: { x: number; y: number } = { x: 0.5, y: 0.25 },
+): any {
   return {
     name: 'labelText',
     type: 'Text',
-    anchor: { x: 0.5, y: 0.25 },
+    anchor,
     contentText: text,
     style,
   };
@@ -110,7 +184,7 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1,
+    cellScale: 0.6,
     multiplierTextConfig: {
       name: 'multiplierVal',
       type: 'Text',
@@ -134,7 +208,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1,
+    cellScale: 0.6,
   },
   mini: {
     name: 'mini',
@@ -144,7 +218,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1,
+    cellScale: 0.6,
     labelTextConfig: labelTextConfig('MINI', MINI_TEXT_STYLE),
   },
   minor: {
@@ -155,7 +229,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1,
+    cellScale: 0.6,
     labelTextConfig: labelTextConfig('MINOR', MINOR_TEXT_STYLE),
   },
   major: {
@@ -166,7 +240,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 1,
+    cellScale: 0.6,
     labelTextConfig: labelTextConfig('MAJOR', MAJOR_TEXT_STYLE),
   },
   // Two spines: spineName is the back layer, the front is added by JCMysterySymbolModifier.
@@ -178,7 +252,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.3,
+    cellScale: 0.33,
+    labelTextConfig: labelTextConfig('MYSTERY', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
   },
   'mystery jackpot': {
     name: 'mystery jackpot',
@@ -188,12 +263,14 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.3,
+    cellScale: 0.33,
+    labelTextConfig: labelTextConfig(`MYSTERY\nJACKPOT`, MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
   },
-  // No spine - renders as a sprite instead (see JCBlanksSymbolModifier).
+  // Rendered by JCBlanksSymbolModifier off reel_sym_add's tile skins, whose art is 1427x972.
   Blanks: {
     name: 'Blanks',
-    cellScale: 0.2,
+    cellScale: 0.31,
+    cellScaleY: 0.29,
   },
 };
 

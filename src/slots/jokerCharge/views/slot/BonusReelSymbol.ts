@@ -17,6 +17,7 @@ export default class BonusReelSymbol extends Container {
       spineName: BONUS_SPINE_NAME,
       defaultSkin: BONUS_SYMBOLS_DATA[symbolName]?.staticSkin,
     });
+    this.spine.label = 'bonusSymbol';
     this.spine.scale.set(scale);
     this.addChild(this.spine);
   }

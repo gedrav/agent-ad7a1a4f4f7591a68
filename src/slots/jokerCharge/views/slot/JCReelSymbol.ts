@@ -5,7 +5,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { appModel } from '@core/models/services/AppModelService';
 import { JCBonusSymbolModifier, ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModifier';
-import { JCMysterySymbolModifier } from './JCMysterySymbolModifier';
+import { JCMysterySymbolModifier, MysteryReelResult } from './JCMysterySymbolModifier';
 import { JCBlanksSymbolModifier } from './JCBlanksSymbolModifier';
 
 const BONUS_SYMBOL_PREFIX = 'cor-';
@@ -56,6 +56,32 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // For a symbol already on screen rather than one being placed. No-op for non-Blanks.
   public refreshBlanksVisual(): void {
     this.syncBlanksVisual();
+  }
+
+  public spinMysteryReel(result: MysteryReelResult, bet: number, delayMs = 0): Promise<void> {
+    if (!this.isMysterySymbol()) return Promise.resolve();
+    return this.mysteryModifier.spinReel(result, bet, delayMs);
+  }
+
+  // Sets the mini reel turning with no result yet - it lands when spinMysteryReel() gives it one.
+  public startMysteryReel(bet: number, delayMs = 0): void {
+    if (!this.isMysterySymbol()) return;
+    this.mysteryModifier.startSpin(bet, delayMs);
+  }
+
+  public stopMysteryReel(): void {
+    if (!this.isMysterySymbol()) return;
+    this.mysteryModifier.stopReel();
+  }
+
+  public isMysteryReelSpinning(): boolean {
+    return this.isMysterySymbol() && this.mysteryModifier.isSpinning;
+  }
+
+  // Blanks has no blurAnim, so the inherited blur path can't reach it - its rig carries blur skins
+  // of its own instead. No-op for non-Blanks.
+  public setBlanksBlurred(flag: boolean): void {
+    this.blanksModifier.setBlurred(flag);
   }
 
   // The spine has to be rebuilt here too: a pooled instance reused for a different symbol needs
@@ -115,7 +141,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       this.bonusModifier.create(this.configData.data.name, this.configData.data.multiplierTextConfig);
     } else if (this.isMysterySymbol()) {
       this.mysteryModifier.create(this.configData.data.animScale);
-    } else if (this.configData.data.labelTextConfig) {
+    }
+    // Not an else: the mystery rigs carry a root_txt slot of their own, so their label rides the
+    // same path as mini/minor/major on top of the front spine the modifier just added.
+    if (this.configData.data.labelTextConfig) {
       const label = UIUtil.getElement(this.configData.data.labelTextConfig);
       this.addSlotObject(ROOT_TEXT_SLOT_NAME, label);
     }

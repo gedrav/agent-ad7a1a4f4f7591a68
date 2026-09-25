@@ -53,6 +53,7 @@ export default class BonusReel extends Container {
     this.stopMinSpeed = this.symbolHeight * 0.35 * speed;
 
     this.spinContainer = new Container();
+    this.spinContainer.label = 'bonusSpinContainer';
     this.addChild(this.spinContainer);
 
     // Only applied while spinning - the blurred skins are taller and would bleed past the cell.
@@ -63,6 +64,7 @@ export default class BonusReel extends Container {
       -config.symbolWidth / 2,
       -config.symbolHeight / 2,
     );
+    this.maskShape.label = 'bonusSpinMask';
     this.maskShape.alpha = 0;
     this.spinContainer.addChild(this.maskShape);
 
@@ -147,10 +149,12 @@ export default class BonusReel extends Container {
     this.recycleIfNeeded(this.topSymbolView);
   }
 
+  // See HoldNWinReel.recycleIfNeeded(): wrapping by the strip's length keeps the two symbols a
+  // fixed distance apart.
   private recycleIfNeeded(symbol: BonusReelSymbol): void {
     if (symbol === this.settlingSymbol) return;
     if (symbol.y < this.symbolHeight) return;
-    symbol.y = -this.symbolHeight;
+    symbol.y -= this.symbolHeight * 2;
     symbol.setSymbol(getRandomBonusSymbolName());
     symbol.setBlurred(true);
   }

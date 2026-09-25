@@ -13,6 +13,9 @@ class ExitRespinStateCommand extends StateCommand {
       onHalfway: () => {
         EventHandler.dispatchEvent(JCEvents.SET_BONUS_TRIGGER_LAYOUT, { active: false });
         EventHandler.dispatchEvent(SlotEvents.ENABLE_CONTROLPANEL);
+        // The last round left the stop-spin button up: respin rounds route out of
+        // JCSpinResponseReceivedState before it can restore the spin face.
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_BUTTON);
         EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
         StateManager.next();
       },

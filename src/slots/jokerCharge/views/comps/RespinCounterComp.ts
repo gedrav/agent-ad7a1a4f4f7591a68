@@ -2,8 +2,7 @@ import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
-
-const TOTAL_RESPINS = 3;
+import { TOTAL_RESPINS } from '@slots/jokerCharge/models/JCRespinState';
 export class RespinCounterComp extends ResponsiveView {
   private readonly lightBgs: PixSprite[];
   private readonly darkBgs: PixSprite[];

@@ -8,6 +8,11 @@ import { STATES } from '@core/states/StateConstants';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { Clock } from '@core/utils/Clock';
 import { Util } from '@core/utils/UtilService';
+import { JCEvents } from '../events/JCEvents';
+import { registerRespinRound } from '../models/JCRespinState';
+
+// Lets the round that just settled be read before the reels move again.
+const ROUND_GAP = 500;
 
 // Auto-starts each respin round, no button press. Passes the feature-type constant to
 // requestBonusData() rather than appModel.getFeatureName(), which corelib only ever populates for
@@ -17,6 +22,10 @@ class RespinSpinStartStateCommand extends StateCommand {
     super.execute(data);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
+    await Clock.wait(ROUND_GAP);
+    // Judges the round that just finished, so the counter moves as this spin starts.
+    const remaining = registerRespinRound(appModel.featureResult?.holdField?.length ?? 0);
+    EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, remaining);
     EventHandler.dispatchEvent(SlotEvents.START_SPIN);
     appModel.spinStartTime = Util.getCurrentTimeInMili();
 

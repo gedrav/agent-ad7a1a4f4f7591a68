@@ -9,7 +9,7 @@ export const GAME_BG_CONFIG: any = {
       name: 'maingameBG',
       type: 'Spine',
       spineName: 'bg',
-      defaultState: 'idle',
+      defaultState: 'idle_active',
       defaultSkin: 'default',
       loop: true,
       boundingBox: { width: 3000, height: 1700 },

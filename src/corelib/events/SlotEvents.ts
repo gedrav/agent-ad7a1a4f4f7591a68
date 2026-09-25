@@ -102,6 +102,9 @@ export const SlotEvents = {
   CLOSE_MESSAGE_POPUP: 'CLOSE_MESSAGE_POPUP',
   SHOW_MESSAGE_POPUP: 'SHOW_MESSAGE_POPUP',
   SHOW_FS_POPUP: 'SHOW_FS_POPUP',
+  // Dispatched by RespinPreWinState once a respin round's reels have settled, with
+  // { hold, onComplete } - see that state.
+  SHOW_RESPIN_ROUND_ANIMATION: 'SHOW_RESPIN_ROUND_ANIMATION',
   SHOW_SCATTER_TRIGGER: 'SHOW_SCATTER_TRIGGER',
   SHOW_SCATTER_TRIGGER_ONSCREEN: 'SHOW_SCATTER_TRIGGER_ONSCREEN',
 

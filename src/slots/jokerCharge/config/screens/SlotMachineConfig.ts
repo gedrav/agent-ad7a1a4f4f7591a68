@@ -20,32 +20,22 @@ export const SLOT_MACHINE_CONFIG: any = {
       alpha: 0,
     },
     {
-      name: 'logoComp',
-      type: 'Comp',
-      class: LogoComp,
-      Elements: [
-        { name: 'guideRect', type: 'Graphics', width: 560, height: 200, color: 0xff0000, alpha: 0 },
-        {
-          name: 'logoAnim',
-          type: 'Spine',
-          spineName: 'logo',
-          defaultState: 'idle',
-          loop: true,
-          scale: 1.3,
-          x: 700,
-          y: -115,
-        },
-      ],
+      name: 'reelbgAnim',
+      type: 'Spine',
+      spineName: 'big_square',
+      defaultState: 'animation',
+      loop: true,
       layoutData: {
-        Desktop: {},
-        Portrait: {},
-        Landscape: {},
+        Desktop: { scale: 0.66, x: 706, y: 476 },
+        Portrait: { scale: 0.66 },
+        Landscape: { scale: 0.66 },
       },
     },
+
     {
       name: 'reelsBgDark',
       type: 'Sprite',
-      image: 'reels_bg_dark',
+      image: 'reels_bg_light',
       layoutData: {
         Desktop: { scale: 0.65 },
         Portrait: { scale: 0.65 },
@@ -57,16 +47,18 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Spine',
       spineName: 'line',
       defaultState: 'move_to_left3',
-      loop: true,
+      loop: false,
+      visible: false,
       x: 707,
       y: -140,
     },
     {
       name: 'reelsFrame',
       type: 'Sprite',
-      image: 'reels_frame',
+      // alpha: 0,
+      image: 'center_line_frame',
       layoutData: {
-        Desktop: { scale: 0.65 },
+        Desktop: { scale: 0.65, x: -11, y: 311 },
         Portrait: { scale: 0.65 },
         Landscape: { scale: 0.65 },
       },
@@ -82,6 +74,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         Landscape: { scale: 0.65 },
       },
     },
+
     // Between the panel's bg and frame, so the frame's gold border overlays the cell edges.
     BONUS_REELS_CONFIG,
     {
@@ -96,6 +89,42 @@ export const SLOT_MACHINE_CONFIG: any = {
       },
     },
     HOLD_N_WIN_REELS_CONFIG,
+    {
+      name: 'logoComp',
+      type: 'Comp',
+      class: LogoComp,
+      Elements: [
+        { name: 'guideRect', type: 'Graphics', width: 560, height: 200, color: 0xff0000, alpha: 0 },
+        {
+          name: 'logoAnim',
+          type: 'Spine',
+          spineName: 'logo',
+          defaultState: 'idle',
+          loop: true,
+          scale: 1.3,
+          x: 700,
+          y: -98,
+        },
+      ],
+      layoutData: {
+        Desktop: {},
+        Portrait: {},
+        Landscape: {},
+      },
+    },
+    // TEMPORARY: visible and looping from load so the placement can be set. The real entry is
+    // driven by JCEvents.PLAY_COINS_ANIMATION - drop defaultState, set loop/visible back to false.
+    {
+      name: 'coinsAnim',
+      type: 'Spine',
+      spineName: 'coins',
+      defaultState: 'all_animations',
+      loop: false,
+      visible: false,
+      scale: 0.8,
+      x: 666.5,
+      y: -167,
+    },
     JACKPOT_LABELS_CONFIG,
     RESPIN_COUNTER_CONFIG,
     BUY_BONUS_LINES_CONFIG,

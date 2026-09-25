@@ -5,11 +5,10 @@ import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
-import { Clock } from '@core/utils/Clock';
 import { JCEvents } from '../events/JCEvents';
-
-// Lets the triggering win stay readable before the screen wipes over.
-const INTRO_DELAY = 3000;
+import { startRespinSession } from '../models/JCRespinState';
+import { MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
+import { MetamorphicSymbol } from '../views/slot/HoldNWinReelsContainer';
 
 // The feature-type guard is load-bearing: CheckFeatureStateV2's final `else { StateManager.next()
 // }` (an ordinary spin, no feature) falls through onto this state, so without it every non-feature
@@ -23,14 +22,44 @@ class EnterRespinStateCommand extends StateCommand {
     }
     EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
     EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
-    await Clock.wait(INTRO_DELAY);
+    const metamorphic: MetamorphicSymbol[] = appModel.getSpinResult()?.metamorphicSymbolPosition ?? [];
+    if (metamorphic.length) {
+      EventHandler.dispatchEvent(JCEvents.PLAY_COINS_ANIMATION);
+      await this.revealMetamorphicSymbols(metamorphic);
+    }
+    // The beat before the wipe, and late enough that the symbols the shower just brought in
+    // celebrate with the rest of the line.
+    await this.playTriggerWins();
     // Both happen at the wipe's midpoint, hidden behind it: the layout swaps (which flips
     // respinActive, routing later rounds into CheckRespinState) and next() shows the intro.
     EventHandler.dispatchEvent(JCEvents.PLAY_TRANSITION, {
       onHalfway: () => {
         EventHandler.dispatchEvent(JCEvents.SET_BONUS_TRIGGER_LAYOUT, { active: true });
+        // Seeded with whatever the triggering spin already collected, so the first round can tell
+        // a new symbol from one that was already there.
+        const remaining = startRespinSession(appModel.featureResult?.holdField?.length ?? 0);
+        EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, remaining);
         StateManager.next();
       },
+    });
+  }
+
+  // Resolves once the last active-line symbol has finished its win animation, or straight away if
+  // nothing is listening.
+  private playTriggerWins(): Promise<void> {
+    return new Promise((resolve) => {
+      const request: TriggerWinData = { hold: false, onComplete: () => resolve() };
+      EventHandler.dispatchEvent(JCEvents.PLAY_TRIGGER_WIN_ANIMATION, request);
+      if (!request.hold) resolve();
+    });
+  }
+
+  // Resolves once the last symbol has landed, or straight away if nothing is listening.
+  private revealMetamorphicSymbols(entries: MetamorphicSymbol[]): Promise<void> {
+    return new Promise((resolve) => {
+      const request: MetamorphicRevealData = { entries, hold: false, onComplete: () => resolve() };
+      EventHandler.dispatchEvent(JCEvents.PLAY_METAMORPHIC_SYMBOLS, request);
+      if (!request.hold) resolve();
     });
   }
 }

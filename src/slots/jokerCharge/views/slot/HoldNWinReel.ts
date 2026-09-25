@@ -1,8 +1,29 @@
 import { Container, Ticker } from 'pixi.js';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
+import {
+  MULTIPLIER_BADGE_ARRIVE_DURATION,
+  MULTIPLIER_BADGE_ARRIVE_EASE,
+  MULTIPLIER_BADGE_INSET,
+  MULTIPLIER_BADGE_MOVE_DELAY,
+  MULTIPLIER_BADGE_MOVE_DURATION,
+  MULTIPLIER_BADGE_PULSE_DURATION,
+  MULTIPLIER_BADGE_PULSE_EASE,
+  MULTIPLIER_BADGE_PULSE_REPEAT,
+  MULTIPLIER_BADGE_PULSE_SCALE,
+  MULTIPLIER_BADGE_POP_SCALE,
+  MULTIPLIER_BADGE_SCALE_DURATION,
+  MULTIPLIER_BADGE_STYLE,
+  MULTIPLIER_EFFECT_SCALE,
+  MULTIPLIER_EFFECT_SPINE,
+  MULTIPLIER_EFFECT_STATE,
+} from '../../config/MultiplierBadgeConfig';
 import { SYMBOLS_DATA, getRandomSymbolName } from '../../config/SymbolsConfig';
+import { appModel } from '@core/models/services/AppModelService';
+import { MysteryReelResult } from './JCMysterySymbolModifier';
 import JCReelSymbol from './JCReelSymbol';
 import { JCReelSymbolPool } from './JCReelSymbolPool';
 
@@ -16,19 +37,36 @@ const CHAIN_LOCK_APPEARING_STATE = 'appearing';
 const CHAIN_LOCK_IDLE_STATE = 'idle';
 const CHAIN_LOCK_DISAPPEARING_STATE = 'disappearing';
 
+// TODO: stands in for the trail animation, which isn't in the assets yet.
+const METAMORPHIC_TRAIL_DELAY = 1000;
+const METAMORPHIC_REVEAL_DURATION = 0.25;
+
+const WIN_ANIMATION_PASSES = 2;
+
+const LANDING_DIP_DURATION = 0.09;
+const LANDING_RETURN_DURATION = 0.14;
+
 export interface HoldNWinReelConfig {
   row: number;
   column: number;
   symbolWidth: number;
   symbolHeight: number;
+  // How much of the cell the spin mask shows. Defaults to symbolHeight.
+  maskHeight?: number;
+  // How far past its stop a landing symbol dips before settling back, in px. Defaults to 0.
+  landingOvershoot?: number;
+  // Called whenever the cell takes a new symbol, however it got there.
+  onSymbolPlaced?: () => void;
   // Scales every speed except windUpDistance, so stopMinSpeed stays <= spinMaxSpeed. Defaults to 1.
   spinSpeedMultiplier?: number;
+  // How much slower an anticipating reel decelerates and creeps to its stop. Defaults to 0.35.
+  anticipationSpeedFactor?: number;
 }
 
 type SpinPhase = 'idle' | 'windup' | 'spin' | 'stopping';
 
 // A single Hold & Win cell: two symbols symbolHeight apart, swapped to fake an endless strip.
-// Once sticky, ignores spin()/stopSpin() until setSticky(false).
+// Ignores spin()/stopSpin() while sticky or held.
 export default class HoldNWinReel extends Container {
   public readonly row: number;
   public readonly column: number;
@@ -38,7 +76,14 @@ export default class HoldNWinReel extends Container {
   private readonly maskShape: PixGraphics;
   private readonly smallSquareAnim: PixSpine;
   private readonly chainLockAnim: PixSpine;
+  private readonly multiplierEffect: PixSpine;
+  private multiplierText: PixText | null = null;
+  private multiplierEffectListener: any = null;
+  private metamorphicTimeoutId: any = null;
   private sticky = false;
+  // Distinct from sticky: a cell already holding a symbol sits out the respin rounds, with no lock
+  // animation - it just doesn't take part.
+  private held = false;
   private symbolView: JCReelSymbol | null = null;
   private topSymbolView: JCReelSymbol | null = null;
 
@@ -47,8 +92,12 @@ export default class HoldNWinReel extends Container {
   private readonly spinAccel: number;
   private readonly spinMaxSpeed: number;
   private readonly stopMinSpeed: number;
+  private readonly anticipationSpeedFactor: number;
+  private readonly landingOvershoot: number;
+  private readonly onSymbolPlaced: (() => void) | undefined;
 
   private phase: SpinPhase = 'idle';
+  private anticipating = false;
   private spinSpeed = 0;
   private pendingFinalSymbolName: string | null = null;
   private settlingSymbol: JCReelSymbol | null = null;
@@ -67,45 +116,281 @@ export default class HoldNWinReel extends Container {
     this.spinAccel = this.symbolHeight * 0.007 * speed;
     this.spinMaxSpeed = this.symbolHeight * 0.42 * speed;
     this.stopMinSpeed = this.symbolHeight * 0.35 * speed;
+    this.anticipationSpeedFactor = config.anticipationSpeedFactor ?? 0.35;
+    this.landingOvershoot = config.landingOvershoot ?? 0;
+    this.onSymbolPlaced = config.onSymbolPlaced;
 
     this.spinContainer = new Container();
+    this.spinContainer.label = 'spinContainer';
     this.addChild(this.spinContainer);
 
     // Only applied while spinning - a spine's bbox can bleed past the cell mid-animation.
+    const maskHeight = config.maskHeight ?? this.symbolHeight;
     this.maskShape = UIUtil.getRectangle(
       this.symbolWidth,
-      this.symbolHeight,
+      maskHeight,
       0xff0000,
       -this.symbolWidth / 2,
-      -this.symbolHeight / 2,
+      -maskHeight / 2,
     );
+    this.maskShape.label = 'spinMask';
     this.maskShape.alpha = 0;
     this.spinContainer.addChild(this.maskShape);
 
     // Offset by symbolHeight, not measured bounds - a mid-animation spine's bounds jitter.
     const topSymbolName = getRandomSymbolName();
     this.topSymbolView = JCReelSymbolPool.getInstance().acquire(topSymbolName, this.column, this.row);
-    this.applySymbolScale(this.topSymbolView, SYMBOLS_DATA[topSymbolName]?.cellScale);
+    this.applySymbolScale(
+      this.topSymbolView,
+      SYMBOLS_DATA[topSymbolName]?.cellScale,
+      SYMBOLS_DATA[topSymbolName]?.cellScaleY,
+    );
     this.topSymbolView.y = -this.symbolHeight;
     this.topSymbolView.visible = false;
     this.spinContainer.addChild(this.topSymbolView);
 
     // Outside spinContainer so the spin mask never clips it.
     this.smallSquareAnim = UIUtil.getSpineAnim(SMALL_SQUARE_SPINE_NAME, { spineName: SMALL_SQUARE_SPINE_NAME });
+    this.smallSquareAnim.label = 'anticipationAnim';
     this.smallSquareAnim.visible = false;
     this.smallSquareAnim.scale.set(0.65);
     this.smallSquareAnim.y = -23;
     this.addChild(this.smallSquareAnim);
 
-    // Outside spinContainer so the spin mask never clips it.
     this.chainLockAnim = UIUtil.getSpineAnim(CHAIN_LOCK_SPINE_NAME, { spineName: CHAIN_LOCK_SPINE_NAME });
+    this.chainLockAnim.label = 'chainLockAnim';
     this.chainLockAnim.visible = false;
     this.chainLockAnim.scale.set(1.2);
     this.addChild(this.chainLockAnim);
+
+    this.multiplierEffect = UIUtil.getSpineAnim(MULTIPLIER_EFFECT_SPINE, { spineName: MULTIPLIER_EFFECT_SPINE });
+    this.multiplierEffect.label = 'multiplierEffect';
+    this.multiplierEffect.visible = false;
+    this.multiplierEffect.label = 'multiplierEffect';
+    this.multiplierEffect.scale.set(MULTIPLIER_EFFECT_SCALE);
+    this.addChild(this.multiplierEffect);
+  }
+
+  public getMultiplier(): number {
+    return this.multiplierText ? Number(this.multiplierText.text.replace('x', '')) : 0;
+  }
+
+  private badgeRestX(): number {
+    return this.symbolWidth / 2 - MULTIPLIER_BADGE_INSET.x;
+  }
+
+  private badgeRestY(): number {
+    return -this.symbolHeight / 2 + MULTIPLIER_BADGE_INSET.y;
+  }
+
+  // Restored from an unfinished round: already earned, so no burst and no arrival animation.
+  public setMultiplier(value: number): void {
+    const badge = this.ensureMultiplierText();
+    AnimationProxy.killTweensOf(badge);
+    AnimationProxy.killTweensOf(badge.scale);
+    badge.text = `x${value}`;
+    badge.position.set(this.badgeRestX(), this.badgeRestY());
+    badge.scale.set(1);
+    badge.visible = true;
+  }
+
+  // Lands a new badge or updates an existing one. A repeat of the value on show is left alone.
+  public showMultiplier(value: number, onComplete?: () => void): void {
+    if (!this.multiplierText) {
+      this.landMultiplier(value, onComplete);
+      return;
+    }
+    if (this.getMultiplier() === value) {
+      onComplete?.();
+      return;
+    }
+    this.updateMultiplier(this.multiplierText, value, onComplete);
+  }
+
+  private landMultiplier(value: number, onComplete?: () => void): void {
+    const badge = this.ensureMultiplierText();
+    badge.text = `x${value}`;
+    badge.position.set(0, 0);
+    badge.scale.set(0);
+    badge.visible = true;
+
+    this.playMultiplierEffect();
+    AnimationProxy.animateTween(badge.scale, {
+      duration: MULTIPLIER_BADGE_ARRIVE_DURATION,
+      x: 1,
+      y: 1,
+      ease: MULTIPLIER_BADGE_ARRIVE_EASE,
+      onComplete: () => this.pulseArrival(badge, onComplete),
+    });
+  }
+
+  private pulseArrival(badge: PixText, onComplete?: () => void): void {
+    AnimationProxy.animateTween(badge.scale, {
+      duration: MULTIPLIER_BADGE_PULSE_DURATION,
+      x: MULTIPLIER_BADGE_PULSE_SCALE,
+      y: MULTIPLIER_BADGE_PULSE_SCALE,
+      ease: MULTIPLIER_BADGE_PULSE_EASE,
+      repeat: MULTIPLIER_BADGE_PULSE_REPEAT,
+      yoyo: true,
+      onComplete: () => {
+        AnimationProxy.animateTween(badge, {
+          duration: MULTIPLIER_BADGE_MOVE_DURATION,
+          delay: MULTIPLIER_BADGE_MOVE_DELAY,
+          x: this.badgeRestX(),
+          y: this.badgeRestY(),
+          onComplete,
+        });
+      },
+    });
+  }
+
+  // Update: the badge keeps its corner, swells with the burst behind it, takes the new value at
+  // the peak and settles once the burst ends.
+  private updateMultiplier(badge: PixText, value: number, onComplete?: () => void): void {
+    let effectDone = false;
+    let swellDone = false;
+    const settle = () => {
+      if (!effectDone || !swellDone) return;
+      AnimationProxy.animateTween(badge.scale, {
+        duration: MULTIPLIER_BADGE_SCALE_DURATION,
+        x: 1,
+        y: 1,
+        onComplete,
+      });
+    };
+
+    this.playMultiplierEffect(badge.position, () => {
+      effectDone = true;
+      settle();
+    });
+    AnimationProxy.animateTween(badge.scale, {
+      duration: MULTIPLIER_BADGE_SCALE_DURATION,
+      x: MULTIPLIER_BADGE_POP_SCALE,
+      y: MULTIPLIER_BADGE_POP_SCALE,
+      onComplete: () => {
+        badge.text = `x${value}`;
+        swellDone = true;
+        settle();
+      },
+    });
+  }
+
+  // Runs when the feature ends and on destroy: no tween, spine listener or text left behind.
+  public clearMultiplier(): void {
+    this.releaseMultiplierEffectListener();
+    this.multiplierEffect.stopAnimation();
+    this.multiplierEffect.visible = false;
+    if (!this.multiplierText) return;
+    AnimationProxy.killTweensOf(this.multiplierText);
+    AnimationProxy.killTweensOf(this.multiplierText.scale);
+    this.removeChild(this.multiplierText);
+    this.multiplierText.destroy();
+    this.multiplierText = null;
+  }
+
+  private releaseMultiplierEffectListener(): void {
+    if (!this.multiplierEffectListener) return;
+    this.multiplierEffect.removeSpineEvent(this.multiplierEffectListener);
+    this.multiplierEffectListener = null;
+  }
+
+  private ensureMultiplierText(): PixText {
+    if (!this.multiplierText) {
+      this.multiplierText = UIUtil.getElement({
+        name: 'multiplierBadge',
+        type: 'Text',
+        contentText: '',
+        anchor: { x: 0.5, y: 0.5 },
+        style: MULTIPLIER_BADGE_STYLE,
+      });
+      this.multiplierText.label = 'multiplierBadge';
+      this.addChild(this.multiplierText);
+    }
+    return this.multiplierText;
+  }
+
+  // Centred on the cell unless a position is given, which an updating badge uses to keep the
+  // burst behind itself.
+  private playMultiplierEffect(at?: { x: number; y: number }, onComplete?: () => void): void {
+    this.releaseMultiplierEffectListener();
+    this.multiplierEffectListener = this.multiplierEffect.addEventListener('complete', () => {
+      this.releaseMultiplierEffectListener();
+      this.multiplierEffect.visible = false;
+      onComplete?.();
+    });
+    this.multiplierEffect.position.set(at?.x ?? 0, at?.y ?? 0);
+    this.multiplierEffect.visible = true;
+    this.multiplierEffect.playAnimation({ state: MULTIPLIER_EFFECT_STATE, loop: false });
+  }
+
+  public revealMetamorphicSymbol(name: string, onComplete?: () => void): void {
+    clearTimeout(this.metamorphicTimeoutId);
+    this.metamorphicTimeoutId = setTimeout(() => {
+      this.showSymbol(name);
+      const symbol = this.symbolView;
+      const restScale = symbol.scale.x;
+      symbol.scale.set(0);
+      AnimationProxy.animateTween(symbol.scale, {
+        duration: METAMORPHIC_REVEAL_DURATION,
+        x: restScale,
+        y: restScale,
+        onComplete: () => {
+          symbol.showIdle();
+          onComplete?.();
+        },
+      });
+    }, METAMORPHIC_TRAIL_DELAY);
+  }
+
+  // The bet comes from the model rather than the caller, so every cell formats against the same
+  // one. No-op unless the cell holds a mystery symbol.
+  public spinMysteryReel(result: MysteryReelResult, delayMs = 0): Promise<void> {
+    return this.symbolView?.spinMysteryReel(result, appModel.getTotalBet(), delayMs) ?? Promise.resolve();
+  }
+
+  public startMysteryReel(delayMs = 0): void {
+    this.symbolView?.startMysteryReel(appModel.getTotalBet(), delayMs);
+  }
+
+  public stopMysteryReel(): void {
+    this.symbolView?.stopMysteryReel();
+  }
+
+  public isMysterySpinning(): boolean {
+    return this.symbolView?.isMysteryReelSpinning() ?? false;
+  }
+
+  public playWinAnimation(onComplete?: () => void): void {
+    const symbol = this.symbolView;
+    if (!symbol) {
+      onComplete?.();
+      return;
+    }
+    this.playWinPass(symbol, WIN_ANIMATION_PASSES, onComplete);
+  }
+
+  private playWinPass(symbol: JCReelSymbol, remaining: number, onComplete?: () => void): void {
+    if (remaining <= 0) {
+      symbol.showIdle();
+      onComplete?.();
+      return;
+    }
+    symbol.showWinning(() => this.playWinPass(symbol, remaining - 1, onComplete), false);
   }
 
   public isSticky(): boolean {
     return this.sticky;
+  }
+
+  public isHeld(): boolean {
+    return this.held;
+  }
+
+  public setHeld(flag: boolean): void {
+    this.held = flag;
+    // Nothing is going to scroll through this cell, so the window that trims a symbol to the cell
+    // has no reason to stay on.
+    if (flag) this.spinContainer.mask = null;
   }
 
   public setSticky(flag: boolean): void {
@@ -125,19 +410,21 @@ export default class HoldNWinReel extends Container {
   public showSymbol(name: string): void {
     const pool = JCReelSymbolPool.getInstance();
     if (this.symbolView) {
+      AnimationProxy.killTweensOf(this.symbolView);
       pool.release(this.symbolView);
     }
     this.symbolView = pool.acquire(name, this.column, this.row);
-    this.applySymbolScale(this.symbolView, SYMBOLS_DATA[name]?.cellScale);
+    this.applySymbolScale(this.symbolView, SYMBOLS_DATA[name]?.cellScale, SYMBOLS_DATA[name]?.cellScaleY);
     this.symbolView.y = 0;
     this.spinContainer.addChild(this.symbolView);
     this.symbolView.showIdle();
     this.spinContainer.mask = null;
+    this.onSymbolPlaced?.();
   }
 
-  // Reset to 1 first: pooled instances can carry a stale scale. Only Blanks lacks a cellScale and
-  // falls back to auto-fit.
-  private applySymbolScale(symbol: JCReelSymbol, cellScale?: number): void {
+  // Reset to 1 first: pooled instances can carry a stale scale. A symbol with no cellScale is
+  // auto-fitted; cellScaleY only matters where the two axes differ.
+  private applySymbolScale(symbol: JCReelSymbol, cellScale?: number, cellScaleY?: number): void {
     symbol.scale.set(1);
     let appliedScale: number;
     if (cellScale != null) {
@@ -147,16 +434,19 @@ export default class HoldNWinReel extends Container {
     } else {
       appliedScale = Math.min(this.symbolWidth / symbol.width, this.symbolHeight / symbol.height);
     }
-    symbol.scale.set(appliedScale);
+    symbol.scale.set(appliedScale, cellScaleY ?? appliedScale);
   }
 
   public spin(): void {
-    if (this.sticky || this.phase !== 'idle' || !this.symbolView || !this.topSymbolView) return;
+    if (this.sticky || this.held || this.phase !== 'idle' || !this.symbolView || !this.topSymbolView) return;
     this.spinContainer.mask = this.maskShape;
     this.pendingFinalSymbolName = null;
     this.settlingSymbol = null;
     this.spinSpeed = 0;
     this.phase = 'windup';
+    // A landing tween from the last stop would otherwise fight the strip.
+    AnimationProxy.killTweensOf(this.symbolView);
+    AnimationProxy.killTweensOf(this.topSymbolView);
     this.setSpinningVisual(this.symbolView);
     this.setSpinningVisual(this.topSymbolView);
     this.topSymbolView.visible = true;
@@ -165,7 +455,7 @@ export default class HoldNWinReel extends Container {
 
   // onSettled fires once the symbol reaches rest, not when stopSpin() is called.
   public stopSpin(finalSymbolName: string, onSettled?: () => void): void {
-    if (this.sticky) return;
+    if (this.sticky || this.held) return;
     if (this.phase === 'idle') {
       this.showSymbol(finalSymbolName);
       this.symbolView.showLanding(() => this.symbolView.showIdle());
@@ -179,12 +469,13 @@ export default class HoldNWinReel extends Container {
 
   private setSpinningVisual(symbol: JCReelSymbol): void {
     symbol.setBlurredTexture();
+    symbol.setBlanksBlurred(true);
   }
 
   // setNewSymbol() tears the spine down; setBlurredTexture() rebuilds it so the cell isn't blank.
   private setSymbolContentForSpin(symbol: JCReelSymbol, name: string): void {
     symbol.setNewSymbol({ ...SYMBOLS_DATA[name], row: this.row }, this.column);
-    this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale);
+    this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale, SYMBOLS_DATA[name]?.cellScaleY);
     symbol.setBlurredTexture();
   }
 
@@ -203,11 +494,15 @@ export default class HoldNWinReel extends Container {
         this.spinSpeed = Math.min(this.spinSpeed + this.spinAccel * delta, this.spinMaxSpeed);
         this.advance(this.spinSpeed * delta);
         break;
-      case 'stopping':
-        this.spinSpeed = Math.max(this.spinSpeed - this.spinAccel * delta, this.stopMinSpeed);
+      case 'stopping': {
+        // Anticipating reels ease off more gently and creep in at a lower floor speed, which is
+        // what stretches the stop out.
+        const factor = this.anticipating ? this.anticipationSpeedFactor : 1;
+        this.spinSpeed = Math.max(this.spinSpeed - this.spinAccel * factor * delta, this.stopMinSpeed * factor);
         this.advance(this.spinSpeed * delta);
         this.checkSettle();
         break;
+      }
       default:
         break;
     }
@@ -220,10 +515,13 @@ export default class HoldNWinReel extends Container {
     this.recycleIfNeeded(this.topSymbolView);
   }
 
+  // Wrapped by the strip's length rather than snapped to a fixed y: at these speeds a symbol
+  // crosses the threshold mid-step, and dropping that overshoot would change the gap between the
+  // two symbols on every wrap.
   private recycleIfNeeded(symbol: JCReelSymbol): void {
     if (symbol === this.settlingSymbol) return;
     if (symbol.y < this.symbolHeight) return;
-    symbol.y = -this.symbolHeight;
+    symbol.y -= this.symbolHeight * 2;
     this.setSymbolContentForSpin(symbol, getRandomSymbolName());
   }
 
@@ -244,28 +542,59 @@ export default class HoldNWinReel extends Container {
     Ticker.shared.remove(this.onSpinTick, this);
     this.phase = 'idle';
     this.settlingSymbol = null;
+    this.setAnticipating(false);
 
     const back = front === this.symbolView ? this.topSymbolView : this.symbolView;
     back.visible = false;
     back.y = -this.symbolHeight;
     this.symbolView = front;
     this.topSymbolView = back;
-    this.spinContainer.mask = null;
+    this.onSymbolPlaced?.();
 
-    front.y = 0;
-    front.showLanding(() => front.showIdle());
+    // Blanks has no landing animation to clear the blur for it.
+    front.setBlanksBlurred(false);
 
     const onSettled = this.onSettled;
     this.onSettled = null;
-    onSettled?.();
+    this.playLanding(front, onSettled);
   }
 
-  public showAnticipation(): void {
-    this.symbolView?.showFeatureTriggerAnimation();
+  // Carries on past the stop position and rides back up to it, rather than snapping to 0 from
+  // wherever the symbol happened to cross it. The cell stays masked until it comes to rest, so the
+  // dip reads as movement behind the window rather than a symbol hanging out of it.
+  private playLanding(front: JCReelSymbol, onSettled: (() => void) | null): void {
+    if (!this.landingOvershoot) {
+      front.y = 0;
+      this.spinContainer.mask = null;
+      front.showLanding(() => front.showIdle());
+      onSettled?.();
+      return;
+    }
+    AnimationProxy.animateTween(front, {
+      duration: LANDING_DIP_DURATION,
+      y: this.landingOvershoot,
+      onComplete: () => {
+        front.showLanding(() => front.showIdle());
+        AnimationProxy.animateTween(front, {
+          duration: LANDING_RETURN_DURATION,
+          y: 0,
+          onComplete: () => {
+            this.spinContainer.mask = null;
+            onSettled?.();
+          },
+        });
+      },
+    });
   }
 
-  public hideAnticipation(): void {
-    this.symbolView?.cleanUpSymbolWin();
+  // Turned on while the reel is still spinning, and cleared by finishSettle().
+  public setAnticipating(flag: boolean): void {
+    this.anticipating = flag;
+    this.setSmallSquareVisible(flag);
+  }
+
+  public isAnticipating(): boolean {
+    return this.anticipating;
   }
 
   public setSmallSquareVisible(flag: boolean): void {
@@ -301,6 +630,8 @@ export default class HoldNWinReel extends Container {
 
   public destroy(options?: any): void {
     Ticker.shared.remove(this.onSpinTick, this);
+    clearTimeout(this.metamorphicTimeoutId);
+    this.clearMultiplier();
     if (this.symbolView) {
       JCReelSymbolPool.getInstance().release(this.symbolView);
       this.symbolView = null;

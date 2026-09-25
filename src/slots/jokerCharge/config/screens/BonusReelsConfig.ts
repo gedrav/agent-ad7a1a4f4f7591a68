@@ -22,6 +22,8 @@ export const BONUS_REELS_CONFIG: any = {
     reelGap: 0,
     spinStartGap: 0,
     stopGap: 0,
+    minSpinDuration: 2000,
+    minSpinDurationTurbo: 750,
     spinSpeedMultiplier: 0.5,
     initialReel: INITIAL_REEL,
   },

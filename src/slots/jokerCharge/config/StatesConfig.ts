@@ -13,6 +13,7 @@ import { GamePreWinState } from '../states/GamePreWinState';
 import { EnterRespinState } from '../states/EnterRespinState';
 import { RespinIntroState } from '../states/RespinIntroState';
 import { RespinSpinStartState } from '../states/RespinSpinStartState';
+import { RespinPreWinState } from '@core/commands/states/RespinPreWinState';
 import { CheckRespinState } from '../states/CheckRespinState';
 import { ExitRespinState } from '../states/ExitRespinState';
 import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTriggerState';
@@ -43,6 +44,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.ENTER_RESPIN_STATE, state: EnterRespinState },
   { name: STATES.RESPIN_INTRO_STATE, state: RespinIntroState },
   { name: STATES.RESPIN_SPIN_START_STATE, state: RespinSpinStartState },
+  { name: STATES.RESPIN_PRE_WIN_STATE, state: RespinPreWinState },
   { name: STATES.CHECK_RESPIN_STATE, state: CheckRespinState },
   { name: STATES.EXIT_RESPIN_STATE, state: ExitRespinState },
 

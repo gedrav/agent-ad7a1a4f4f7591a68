@@ -6,6 +6,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { JCEvents } from '../events/JCEvents';
 import { isRespinActive } from '../models/JCLinesState';
+import { SpinResultPayload } from '../views/slot/HoldNWinReelsContainer';
 
 // Replaces corelib's SpinResponseReceivedState, which hands off to a SlotReel this game doesn't
 // have - the grid goes to HoldNWinReelsContainer instead. Shared UI bookkeeping is kept as-is.
@@ -18,21 +19,27 @@ class JCSpinResponseReceivedStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_COUNT);
     }
 
-    EventHandler.dispatchEvent(JCEvents.SPIN_RESULT_RECEIVED, this.resolveGrid());
+    EventHandler.dispatchEvent(JCEvents.SPIN_RESULT_RECEIVED, this.resolveSpinResult());
+    EventHandler.dispatchEvent(JCEvents.TOP_REEL_RESULT_RECEIVED, this.resolveModifierRow());
   }
 
-  // Column-major (grid[column][row]), matching HoldNWinReelsContainer.stopSpin().
-  //
-  // Base spins and respin rounds land in different places: storeSpinResult() puts result on
-  // gameResult, but storeFeatureResult() repoints gameResult at featureResults[].spinResults[] and
-  // nulls it when the feature response has no spinResults at all. Hence the fallback - without it
-  // a respin round yields no grid, and the container waits on one forever.
-  private resolveGrid(): string[][] | undefined {
-    return appModel.getSpinResult()?.grid ?? appModel.featureResult?.grid;
+  // Only the respin response carries this; BonusReelsContainer ignores it outside the feature.
+  private resolveModifierRow(): string[] | undefined {
+    return appModel.featureResult?.modifierRow ?? appModel.getSpinResult()?.modifierRow;
+  }
+
+  // A respin response carries no spinResults, so corelib nulls gameResult and its top-level
+  // result.grid never gets stored - the collected cells arrive as featureResult.holdField instead.
+  // The container turns whichever of the two shows up into a grid.
+  private resolveSpinResult(): SpinResultPayload {
+    return {
+      grid: appModel.getSpinResult()?.grid,
+      holdField: appModel.featureResult?.holdField,
+    };
   }
 
   // Fires once every reel has settled, not right after execute(). Respin rounds reuse this same
-  // state slot, so they're routed onward here - straight to CheckRespinState, skipping the
+  // state slot, so they're routed onward here - into RespinPreWinState, skipping the base game's
   // win-presentation pipeline they have no paylines for.
   //
   // Keyed off isRespinActive() and NOT featureResult.featureType: corelib fills featureResult from
@@ -41,7 +48,7 @@ class JCSpinResponseReceivedStateCommand extends StateCommand {
   public doNextStep(data: any = null) {
     super.doNextStep(data);
     if (isRespinActive()) {
-      StateManager.goToState(STATES.CHECK_RESPIN_STATE);
+      StateManager.goToState(STATES.RESPIN_PRE_WIN_STATE);
       return;
     }
     EventHandler.dispatchEvent(SlotEvents.SHOW_SPIN_BUTTON);

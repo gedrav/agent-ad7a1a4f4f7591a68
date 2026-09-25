@@ -6,10 +6,20 @@ export const JCEvents = {
   SELECTED_LINES: 'SELECTED_LINES',
   // Data: the backend's final grid, column-major.
   SPIN_RESULT_RECEIVED: 'SPIN_RESULT_RECEIVED',
+  // Data: the respin response's modifierRow, one symbol per top-reel column.
+  TOP_REEL_RESULT_RECEIVED: 'TOP_REEL_RESULT_RECEIVED',
   // Data: { active }.
   SET_BONUS_TRIGGER_LAYOUT: 'SET_BONUS_TRIGGER_LAYOUT',
   // Data: { onConfirm? }.
   SHOW_RESPIN_INTRO: 'SHOW_RESPIN_INTRO',
+  // The coin shower a metamorphic trigger plays before the wipe.
+  PLAY_COINS_ANIMATION: 'PLAY_COINS_ANIMATION',
+  // Data: { hold, onComplete } - see TriggerWinData.
+  PLAY_TRIGGER_WIN_ANIMATION: 'PLAY_TRIGGER_WIN_ANIMATION',
+  // Data: the MysteryReelResult the symbol landed on.
+  MYSTERY_REEL_LANDED: 'MYSTERY_REEL_LANDED',
+  // Data: { entries, hold, onComplete } - see MetamorphicRevealData.
+  PLAY_METAMORPHIC_SYMBOLS: 'PLAY_METAMORPHIC_SYMBOLS',
 } as const;
 
 export type JCEvent = keyof typeof JCEvents;
