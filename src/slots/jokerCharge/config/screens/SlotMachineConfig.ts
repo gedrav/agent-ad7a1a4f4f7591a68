@@ -69,7 +69,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'top_panel_bg',
       alpha: 0,
       layoutData: {
-        Desktop: { y: -82, scale: 0.65 },
+        Desktop: { y: -72, scale: 0.65 },
         Portrait: { scale: 0.65 },
         Landscape: { scale: 0.65 },
       },
@@ -83,7 +83,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'top_panel_frame',
       alpha: 0,
       layoutData: {
-        Desktop: { y: -82, scale: 0.65 },
+        Desktop: { y: -72, scale: 0.65 },
         Portrait: { scale: 0.65 },
         Landscape: { scale: 0.65 },
       },

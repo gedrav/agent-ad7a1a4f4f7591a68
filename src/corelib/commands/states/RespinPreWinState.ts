@@ -5,15 +5,10 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 
 export interface RespinRoundAnimationData {
-  // A listener that needs to hold the round sets this true and calls onComplete when it's done.
-  // Left false, the round carries on immediately.
   hold: boolean;
   onComplete: () => void;
 }
 
-// Runs once a respin round's reels have settled and before CheckRespinState decides whether to
-// spin again - the respin equivalent of PreSpinWinState, and the place for per-round animations.
-// Games hook SHOW_RESPIN_ROUND_ANIMATION; StateManager.doNextStep() resumes it either way.
 class RespinPreWinStateCommand extends StateCommand {
   private advanced = false;
 
@@ -30,7 +25,6 @@ class RespinPreWinStateCommand extends StateCommand {
     this.advance();
   }
 
-  // Guarded so a listener calling onComplete after the round already moved on can't advance twice.
   private advance(): void {
     if (this.advanced) return;
     this.advanced = true;

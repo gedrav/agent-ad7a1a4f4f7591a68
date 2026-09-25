@@ -14,7 +14,7 @@ import { EnterRespinState } from '../states/EnterRespinState';
 import { RespinIntroState } from '../states/RespinIntroState';
 import { RespinSpinStartState } from '../states/RespinSpinStartState';
 import { RespinPreWinState } from '@core/commands/states/RespinPreWinState';
-import { CheckRespinState } from '../states/CheckRespinState';
+import { CheckRespinState } from '@core/commands/states/CheckRespinState';
 import { ExitRespinState } from '../states/ExitRespinState';
 import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTriggerState';
 import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';

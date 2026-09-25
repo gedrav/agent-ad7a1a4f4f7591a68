@@ -4,6 +4,8 @@ export interface BonusLayoutOverride {
   x?: number;
   y?: number;
   alpha?: number;
+  // Prefer this over alpha where the element has nothing to fade: alpha 0 still renders.
+  visible?: boolean;
   scaleX?: number;
   scaleY?: number;
 }
@@ -22,7 +24,7 @@ const DESKTOP_BONUS_TRIGGER_LAYOUT: ElementLayoutMap = {
   reelsFrame: { x: 0, y: 450 },
   topPanelBg: { alpha: 1 },
   topPanelFrame: { alpha: 1 },
-  bonusReelsContainer: { alpha: 1 },
+  bonusReelsContainer: { visible: true },
   logoComp: { x: 0, y: -70 },
   holdNWinReelsContainer: { x: 706, y: 617 },
   jackpotLabelsComp: { x: 0, y: -72 },

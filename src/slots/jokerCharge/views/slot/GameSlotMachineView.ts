@@ -179,6 +179,7 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
           x: element.x,
           y: element.y,
           alpha: element.alpha,
+          visible: element.visible,
           scaleX: element.scale.x,
           scaleY: element.scale.y,
         };
@@ -193,6 +194,9 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
       }
       if (target.alpha !== undefined) {
         element.alpha = target.alpha;
+      }
+      if (target.visible !== undefined) {
+        element.visible = target.visible;
       }
       if (target.scaleX !== undefined) {
         element.scale.x = target.scaleX;

@@ -1,37 +1,27 @@
-import { StateCommand } from '@core/commands/core/StateCommand';
-import { SlotEvents } from '@core/events/SlotEvents';
+import { EnterRespinStateCommand } from '@core/commands/states/EnterRespinState';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
-import { STATES } from '@core/states/StateConstants';
-import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { JCEvents } from '../events/JCEvents';
 import { startRespinSession } from '../models/JCRespinState';
 import { MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
 import { MetamorphicSymbol } from '../views/slot/HoldNWinReelsContainer';
 
-// The feature-type guard is load-bearing: CheckFeatureStateV2's final `else { StateManager.next()
-// }` (an ordinary spin, no feature) falls through onto this state, so without it every non-feature
-// spin would enter the respin feature.
-class EnterRespinStateCommand extends StateCommand {
-  public async execute(data: any = null) {
-    super.execute(data);
-    if (appModel.getNextFeatureType() !== CONSTANTS.FEATURE_TYPE_RESPIN) {
-      StateManager.goToState(STATES.COMPLETE_GAMEROUND_STATE);
-      return;
-    }
-    EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);
-    EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
+class JCEnterRespinStateCommand extends EnterRespinStateCommand {
+  // A metamorphic trigger showers coins and brings its symbols in one by one, then the active
+  // line celebrates - late enough that the symbols the shower just brought in join in.
+  protected async playTriggerPresentation(): Promise<void> {
     const metamorphic: MetamorphicSymbol[] = appModel.getSpinResult()?.metamorphicSymbolPosition ?? [];
     if (metamorphic.length) {
       EventHandler.dispatchEvent(JCEvents.PLAY_COINS_ANIMATION);
       await this.revealMetamorphicSymbols(metamorphic);
     }
-    // The beat before the wipe, and late enough that the symbols the shower just brought in
-    // celebrate with the rest of the line.
     await this.playTriggerWins();
-    // Both happen at the wipe's midpoint, hidden behind it: the layout swaps (which flips
-    // respinActive, routing later rounds into CheckRespinState) and next() shows the intro.
+  }
+
+  // Both happen at the wipe's midpoint, hidden behind it: the layout swaps (which flips
+  // respinActive, routing later rounds into CheckRespinState) and next() shows the intro.
+  protected openFeature(): void {
     EventHandler.dispatchEvent(JCEvents.PLAY_TRANSITION, {
       onHalfway: () => {
         EventHandler.dispatchEvent(JCEvents.SET_BONUS_TRIGGER_LAYOUT, { active: true });
@@ -64,4 +54,4 @@ class EnterRespinStateCommand extends StateCommand {
   }
 }
 
-export const EnterRespinState = new EnterRespinStateCommand();
+export const EnterRespinState = new JCEnterRespinStateCommand();

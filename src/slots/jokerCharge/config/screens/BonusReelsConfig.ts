@@ -9,9 +9,10 @@ export const BONUS_REELS_CONFIG: any = {
   class: BonusReelsContainer,
   // The top panel's centre: its art is 2211x347 anchored top-left at (0, -82) and drawn at 0.65.
   x: 719,
-  y: 31,
-  // BONUS_TRIGGER_LAYOUT raises this alongside topPanelBg/topPanelFrame.
-  alpha: 0,
+  y: 45,
+  // BONUS_TRIGGER_LAYOUT shows this alongside topPanelBg/topPanelFrame. Hidden rather than
+  // transparent: a whole reel set at alpha 0 still renders every frame.
+  visible: false,
   data: {
     columns: 3,
     symbolWidth: 460,
