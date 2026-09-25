@@ -10,6 +10,7 @@ import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
+import { JACKPOT_CONFIG } from '@game/config/screens/JackpotConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -21,7 +22,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Graphics',
       color: 0xff0000,
       width: 1380,
-      height: 1060,
+      height: 1165,
       pWidth: 1420,
       pHeight: 1150,
       lWidth: 1610,
@@ -35,7 +36,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: SlotReelStandard,
       winController: GameWinController,
       x: 0,
-      y: 100,
+      y: 210,
       px: -65,
       py: 0,
       lx: 30,
@@ -268,6 +269,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
       },
       Elements: [
+        JACKPOT_CONFIG,
         {
           name: 'reelFrame',
           type: 'Sprite',
@@ -299,7 +301,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             Desktop: {
               scale: 1,
               x: 690,
-              y: -32,
+              y: -147,
             },
             Landscape: {
               scale: 0.9,
@@ -360,11 +362,11 @@ export const SLOT_MACHINE_CONFIG: any = {
   layoutData: {
     Desktop: {
       widthPerc: 0.85,
-      heightPerc: 0.9,
+      heightPerc: 0.97,
       hAlign: 'center',
       vAlign: 'middle',
       maxScale: 1,
-      vPaddingPerc: 0.02,
+      vPaddingPerc: 0,
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.1 },
