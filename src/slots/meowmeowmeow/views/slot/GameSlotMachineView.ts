@@ -380,7 +380,7 @@ export class GameSlotMachineView extends SlotMachineView {
         target.alpha = 0;
         AnimationProxy.animateTween(target, {
           alpha: 1,
-          duration: 0.6,
+          duration: 1,
           ease: 'sine.out',
           onComplete: settle,
         });
@@ -388,7 +388,7 @@ export class GameSlotMachineView extends SlotMachineView {
         EventHandler.dispatchEvent(SlotEvents.HIDE_ANTE_BUTTON);
         AnimationProxy.animateTween(target, {
           alpha: 0,
-          duration: 0.4,
+          duration: 1,
           ease: 'sine.in',
           onComplete: () => {
             target.visible = false;

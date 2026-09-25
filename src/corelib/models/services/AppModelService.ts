@@ -587,15 +587,25 @@ class AppModelService {
     return this.gameInfo.creditValue;
   }
 
+  public getAnteBetValue(): number {
+    const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+    return Math.round(bet * GameProxy.config.anteBetMultiplier * 100) / 100;
+  }
+
+  public getTotalBetWithoutAnte(): number {
+    return this.gameInfo?.betsArray[this.gameInfo.betPos];
+  }
   public getTotalBet(): number {
     const isAnte = GameProxy.config.isAnteEnabled;
     if (this.gameInfo.betsArray.length > 0) {
       if (isAnte) {
         if (this.gameInfo.betsArray.length > 0) {
-          return this.gameInfo?.betsArray[this.gameInfo.betPos] * this.gameInfo?.anteBet;
+          const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+          return Math.round(bet * this.gameInfo?.anteBet * 100) / 100;
         }
       } else {
-        return this.gameInfo?.betsArray[this.gameInfo.betPos];
+        const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+        return Math.round(bet * 100) / 100;
       }
     } else {
       return 0;

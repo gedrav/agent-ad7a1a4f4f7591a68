@@ -45,6 +45,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
   }
   hideJPCards() {
+    EventHandler.dispatchEvent('STOP_JACKPOT_BGM');
+    EventHandler.dispatchEvent('RESUME_BG_SOUND');
     this.resetCards();
     this.cardsContainer.visible = false;
   }
@@ -56,6 +58,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     }
   }
   protected showJackPotCard() {
+    EventHandler.dispatchEvent('STOP_BG_SOUND');
+    EventHandler.dispatchEvent('PLAY_JACKPOT_BGM');
     this.updateCards();
     this.cardsContainer.visible = true;
   }

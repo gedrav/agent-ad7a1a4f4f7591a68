@@ -45,8 +45,7 @@ export class BuyBonusButtonComp extends StandardView {
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     if (this.bbBetValue) {
       this.bbBetValue.scale.set(1);
-      const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
-      const valToShow = (appModel.getTotalBet() * multiplier) / factor;
+      const valToShow = appModel.getTotalBetWithoutAnte() * multiplier;
       this.bbBetValue.text = Util.formatCurrency(valToShow);
       if (this.bbBetValue.width > this.bbBg.width * 0.8) {
         this.bbBetValue.scale.set((this.bbBg.width * 0.8) / this.bbBetValue.width);
@@ -57,8 +56,7 @@ export class BuyBonusButtonComp extends StandardView {
   protected validateButtons(): void {
     let bbBet: number = 0;
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
-    const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
-    bbBet = appModel.getTotalBet() * multiplier;
+    bbBet = appModel.getTotalBetWithoutAnte() * multiplier;
     if (appModel.getBBMaxBet()) {
       if (bbBet > appModel.getBBMaxBet()) {
         this.disableBtn();

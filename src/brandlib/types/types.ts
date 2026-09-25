@@ -4,6 +4,7 @@ export type AssetEntry = {
   ASSETTYPE?: string;
   file?: [number, number];
   TEXTURES?: number[];
+  spineImageType?: string;
 };
 
 export type AssetBundle = {
