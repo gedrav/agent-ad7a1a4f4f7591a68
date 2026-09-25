@@ -124,6 +124,9 @@ export class ControlPanelView extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.REMOVE_BUTTONS_FOR_PROMO_SPIN, this.removeButtonsForPromo.bind(this));
     EventHandler.addEventListener(SlotEvents.ADD_BUTTONS_FOR_PROMO_SPIN, this.addButtonsForPromo.bind(this));
 
+    EventHandler.addEventListener(SlotEvents.DISALBE_ANTE_BB_BUTTON, this.disableBBButtons.bind(this));
+    EventHandler.addEventListener(SlotEvents.ENABLE_ANTE_BB_BUTTON, this.validateBBButtons.bind(this));
+
     const soundOn = !appModel.getPreferences()?.sound === false;
     this.onSoundStateChanged(soundOn);
     SoundFactory.ambientState = soundOn;
@@ -355,6 +358,10 @@ export class ControlPanelView extends ResponsiveChildrenView {
     this.infoBtn.enabled = false;
 
     // Disable buy bonus buttons during spins
+    this.disableBBButtons();
+  }
+
+  protected disableBBButtons(): void {
     if (this.bbButtonsArray) {
       const len = this.bbButtonsArray.length;
       if (len > 0) {
