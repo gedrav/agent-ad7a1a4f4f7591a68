@@ -304,9 +304,12 @@ export class ControlPanelView extends ResponsiveChildrenView {
     const multiplier = appModel.getBuyBonusMultiplier(GameProxy.config.selectedBB);
     const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
     const bbBet = appModel.getTotalBet() * multiplier * factor;
-    const btnString: string = Util.parseMessage(Util.getContent('buyFreeSpinTitleWithValue'), [
-      Util.formatCurrency(bbBet),
-    ]);
+    let btnString: string;
+    if (GameProxy.config.buyBonusData.stylizedText) {
+      btnString = Util.parseMessage(Util.getContent('buyFreeSpinTitleWithValueStylized'), [Util.formatCurrency(bbBet)]);
+    } else {
+      btnString = Util.parseMessage(Util.getContent('buyFreeSpinTitleWithValue'), [Util.formatCurrency(bbBet)]);
+    }
     if (appModel.getBBMaxBet()) {
       if (bbBet > appModel.getBBMaxBet()) {
         this.bbButtonsArray.forEach((btn) => {

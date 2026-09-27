@@ -111,9 +111,9 @@ export const SLOT_MACHINE_CONFIG: any = {
         },
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 166, y: 165 },
+            reelContainerPos: { x: 166, y: 160 },
             reelPositionX: [0, 258, 520, 780, 1040],
-            symbolHeight: 244,
+            symbolHeight: 248,
             symbolScale: 1,
           },
           Portrait: {
@@ -271,7 +271,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       Elements: [
         JACKPOT_CONFIG,
         {
-          name: 'reelFrame',
+          name: 'reelFrame1',
           type: 'Sprite',
           image: 'ReelFrame',
           x: -62,

@@ -15,6 +15,11 @@ export const SPLASH_CONFIG: any = {
   itemsDesktopScale: 1,
   unloadAssets: true,
   requiredBundle: LOAD_CONSTANTS.SPLASH,
+  itemYPaddingPerc: -0.18,
+  desktopElementsWidthPerc: 0.8,
+  portraitElementsHeightPerc: 0.6,
+  landscapeElementsHeightPerc: 1.2,
+  landscapeItemHeightPerc: 1.2,
   contents: [
     {
       name: 'item1',
@@ -138,7 +143,7 @@ export const SPLASH_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0, widthPerc: 0.8 },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
     {
       name: 'brandLogo',
       type: 'Sprite',

@@ -23,8 +23,11 @@ export const TICKER_COMP_CONFIG: any = {
             fontFamily: 'gameFont1',
             fontSize: 40,
             mFontSize: 44,
-            fill: 0xc0e3fb,
+            fill: 0xfff0a9,
             fontWeight: 'bold',
+            tagStyles: {
+              color1: { fill: 0xff9000 },
+            },
           },
         },
         {
@@ -35,8 +38,11 @@ export const TICKER_COMP_CONFIG: any = {
             fontFamily: 'gameFont1',
             fontSize: 40,
             mFontSize: 44,
-            fill: 0xc0e3fb,
+            fill: 0xfff0a9,
             fontWeight: 'bold',
+            tagStyles: {
+              color1: { fill: 0xff9000 },
+            },
           },
         },
       ],

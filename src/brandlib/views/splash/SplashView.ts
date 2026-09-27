@@ -132,17 +132,20 @@ export class SplashView extends ResponsiveChildrenView {
 
   protected positionElements(): void {
     if (DeviceProxy.config.isDesktop) {
-      this.guideRect.width = UIUtil.getGameWidth() * Util.getDefaultValue(this.guideRect.configData.widthPerc, 0.96);
+      this.guideRect.width =
+        UIUtil.getGameWidth() * Util.getDefaultValue(this.configData.desktopElementsWidthPerc, 0.96);
       this.guideRect.height = UIUtil.getGameHeight() * 0.5;
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
     } else if (DeviceProxy.config.isPortrait) {
       this.guideRect.width = UIUtil.getGameWidth() * 0.96;
-      this.guideRect.height = UIUtil.getGameHeight() * 0.5;
+      this.guideRect.height =
+        UIUtil.getGameHeight() * Util.getDefaultValue(this.configData.portraitElementsHeightPerc, 0.5);
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
     } else {
-      this.guideRect.width = UIUtil.getGameWidth() * Util.getDefaultValue(this.guideRect.configData.widthPerc, 0.96);
+      this.guideRect.width =
+        UIUtil.getGameWidth() * Util.getDefaultValue(this.configData.landscapeElementsHeightPerc, 0.96);
       this.guideRect.height = UIUtil.getGameHeight() * 0.5;
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
@@ -172,10 +175,11 @@ export class SplashView extends ResponsiveChildrenView {
         }
       } else {
         const colGap = UIUtil.getGameWidth() * 0.05;
-        const rowGap = UIUtil.getGameHeight() * 0.02;
+        const rowGap =
+          UIUtil.getGameHeight() * 0.01 +
+          UIUtil.getGameHeight() * Util.getDefaultValue(this.configData.itemYPaddingPerc, 0);
         let colWidth = 0;
         const rowHeights: number[] = [];
-
         for (let i = 0; i < len; i += 2) {
           const item1 = this.itemsArray[i];
           const item2 = this.itemsArray[i + 1];
@@ -267,8 +271,12 @@ export class SplashView extends ResponsiveChildrenView {
       }
 
       this.itemContainer.scale.set(1);
-      const sc = this.guideRect.width / this.itemContainer.width;
-      const hsc = this.guideRect.height / this.itemContainer.height;
+      const sc =
+        (this.guideRect.width / this.itemContainer.width) *
+        Util.getDefaultValue(this.configData.landscapeItemWidthPerc, 1);
+      const hsc =
+        (this.guideRect.height / this.itemContainer.height) *
+        Util.getDefaultValue(this.configData.landscapeItemHeightPerc, 1);
       this.itemContainer.scale.set(Math.min(sc, hsc));
 
       this.itemContainer.x = this.guideRect.x + (this.guideRect.width - this.itemContainer.width) / 2;
