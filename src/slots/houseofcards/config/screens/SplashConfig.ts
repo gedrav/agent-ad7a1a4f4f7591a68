@@ -23,8 +23,7 @@ export const SPLASH_CONFIG: any = {
       image: 'screen1',
       content: 'splash1',
       content1: 'splash1_1',
-      textY: 440,
-      text1YPadding: 36,
+      textY: 480,
       textX: 300,
       textAreaHeight: 220,
       textStyle: {
@@ -41,29 +40,9 @@ export const SPLASH_CONFIG: any = {
           fontSize: 24,
           mFontSize: 24,
           anchor: { x: 0.5, y: 0.5 },
-          dropShadow: {
-            angle: 0.5235987755982988,
-            blur: 4, // use 0 or a positive value in v8
-            color: '0x000000',
-            distance: 3,
-            alpha: 1,
+          tagStyles: {
+            bigFont: { fontSize: 44 },
           },
-        },
-      },
-      textStyle1: {
-        name: 'contentTxt',
-        type: 'Text',
-        destroy: true,
-        style: {
-          fontFamily: 'gameFont1',
-          fontWeight: 700,
-          breakWords: true,
-          fill: [0xffed54, 0xf5a100],
-          stroke: 0x000000,
-          strokeThickness: 2,
-          fontSize: 42,
-          mFontSize: 42,
-          anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -80,9 +59,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      content1: 'splash2_1',
-      textY: 440,
-      text1YPadding: 36,
+      textY: 480,
       textX: 260,
       textAreaHeight: 220,
       textStyle: {
@@ -99,29 +76,9 @@ export const SPLASH_CONFIG: any = {
           fontSize: 24,
           mFontSize: 24,
           anchor: { x: 0.5, y: 0.5 },
-          dropShadow: {
-            angle: 0.5235987755982988,
-            blur: 4, // use 0 or a positive value in v8
-            color: '0x000000',
-            distance: 3,
-            alpha: 1,
+          tagStyles: {
+            bigFont: { fontSize: 44 },
           },
-        },
-      },
-      textStyle1: {
-        name: 'contentTxt',
-        type: 'Text',
-        destroy: true,
-        style: {
-          fontFamily: 'gameFont1',
-          fontWeight: 700,
-          breakWords: true,
-          fill: [0xffed54, 0xf5a100],
-          stroke: 0x000000,
-          strokeThickness: 2,
-          fontSize: 42,
-          mFontSize: 42,
-          anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -138,9 +95,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      content1: 'splash3_1',
-      textY: 440,
-      text1YPadding: 36,
+      textY: 480,
       textX: 260,
       textAreaHeight: 220,
       textStyle: {
@@ -157,29 +112,9 @@ export const SPLASH_CONFIG: any = {
           fontSize: 24,
           mFontSize: 24,
           anchor: { x: 0.5, y: 0.5 },
-          dropShadow: {
-            angle: 0.5235987755982988,
-            blur: 4, // use 0 or a positive value in v8
-            color: '0x000000',
-            distance: 3,
-            alpha: 1,
+          tagStyles: {
+            bigFont: { fontSize: 44 },
           },
-        },
-      },
-      textStyle1: {
-        name: 'contentTxt',
-        type: 'Text',
-        destroy: true,
-        style: {
-          fontFamily: 'gameFont1',
-          fontWeight: 700,
-          breakWords: true,
-          fill: [0xffed54, 0xf5a100],
-          stroke: 0x000000,
-          strokeThickness: 2,
-          fontSize: 42,
-          mFontSize: 42,
-          anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8

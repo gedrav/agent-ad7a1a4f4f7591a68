@@ -14,13 +14,6 @@ export class SplashItemComp extends StandardView {
 
     this.splashImage = UIUtil.getSprite(this.configData.image);
     this.contentTxt = UIUtil.getText(this.configData.textStyle);
-    if (this.configData.content1) {
-      this.contentTxt1 = UIUtil.getText(this.configData.textStyle1);
-      UIUtil.updateWordWrapWidth(this.contentTxt1, this.splashImage.width * 0.75);
-      this.contentTxt1.text = Util.getContent(this.configData.content1);
-      this.contentTxt1.anchor.set(0.5, 0);
-      this.contentTxt1.x = this.configData.textX ? this.configData.textX : this.splashImage.width / 2;
-    }
     UIUtil.updateWordWrapWidth(this.contentTxt, this.splashImage.width * 0.75);
 
     this.contentTxt.text = Util.getContent(this.configData.content);
@@ -31,9 +24,5 @@ export class SplashItemComp extends StandardView {
     // Center text vertically, clamped so it never goes above textY (prevents overlapping reel images)
     const centeredY = this.configData.textY + (this.configData.textAreaHeight - this.contentTxt.height) / 2;
     this.contentTxt.y = Math.max(this.configData.textY, centeredY);
-    if (this.contentTxt1) {
-      this.addChild(this.contentTxt1);
-      this.contentTxt1.y = this.contentTxt.y + this.configData.text1YPadding;
-    }
   }
 }
