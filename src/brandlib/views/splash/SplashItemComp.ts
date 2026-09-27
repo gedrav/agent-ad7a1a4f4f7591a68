@@ -27,7 +27,6 @@ export class SplashItemComp extends StandardView {
     this.contentTxt.anchor.set(0.5, 0);
 
     this.addChild(this.splashImage, this.contentTxt);
-    console.log('aaa -- ', this.configData.textX);
     this.contentTxt.x = this.configData.textX ? this.configData.textX : this.splashImage.width / 2;
     // Center text vertically, clamped so it never goes above textY (prevents overlapping reel images)
     const centeredY = this.configData.textY + (this.configData.textAreaHeight - this.contentTxt.height) / 2;
