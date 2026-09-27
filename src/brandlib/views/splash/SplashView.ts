@@ -21,6 +21,7 @@ import { SPLASH_PRELOADER_CONFIG } from '@brand/config/SplashPreloaderConfig';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 import { DropShadowFilter } from 'pixi-filters';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { Util } from '@core/utils/UtilService';
 
 type OrientationMode = 'portrait' | 'landscape' | 'desktop';
 
@@ -131,7 +132,7 @@ export class SplashView extends ResponsiveChildrenView {
 
   protected positionElements(): void {
     if (DeviceProxy.config.isDesktop) {
-      this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+      this.guideRect.width = UIUtil.getGameWidth() * Util.getDefaultValue(this.guideRect.configData.widthPerc, 0.96);
       this.guideRect.height = UIUtil.getGameHeight() * 0.5;
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
@@ -141,7 +142,7 @@ export class SplashView extends ResponsiveChildrenView {
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
     } else {
-      this.guideRect.width = UIUtil.getGameWidth() * 0.96;
+      this.guideRect.width = UIUtil.getGameWidth() * Util.getDefaultValue(this.guideRect.configData.widthPerc, 0.96);
       this.guideRect.height = UIUtil.getGameHeight() * 0.5;
       this.guideRect.x = (UIUtil.getGameWidth() - this.guideRect.width) / 2;
       this.guideRect.y = UIUtil.getGameHeight() * 0.2;
@@ -224,7 +225,11 @@ export class SplashView extends ResponsiveChildrenView {
       if (len === 3) {
         for (let k = 0; k < len; k++) {
           this.itemsArray[k].x =
-            k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.01;
+            k === 0
+              ? 0
+              : this.itemsArray[k - 1].x +
+                this.itemsArray[k - 1].width +
+                UIUtil.getGameWidth() * Util.getDefaultValue(this.configData.itemPaddingPerc, 0.01);
           this.itemsArray[k].y = 0;
         }
       } else {
@@ -281,7 +286,11 @@ export class SplashView extends ResponsiveChildrenView {
       if (len === 3) {
         for (let k = 0; k < len; k++) {
           this.itemsArray[k].x =
-            k === 0 ? 0 : this.itemsArray[k - 1].x + this.itemsArray[k - 1].width + UIUtil.getGameWidth() * 0.01;
+            k === 0
+              ? 0
+              : this.itemsArray[k - 1].x +
+                this.itemsArray[k - 1].width +
+                UIUtil.getGameWidth() * Util.getDefaultValue(this.configData.itemPaddingPerc, 0.01);
           this.itemsArray[k].y = 0;
         }
       } else {

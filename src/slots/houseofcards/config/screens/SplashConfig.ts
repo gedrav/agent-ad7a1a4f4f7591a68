@@ -8,15 +8,6 @@ import { AutoPlayNoOfSpinsBtnCommand } from '@core/commands/action/AutoPlayNoOfS
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
-const fontMLProps = {
-  en: { fontSize: 40 },
-  cs: { fontSize: 30 },
-  lt: { fontSize: 30 },
-  pl: { fontSize: 30 },
-  sk: { fontSize: 30 },
-  ro: { fontSize: 30 },
-};
-
 export const SPLASH_CONFIG: any = {
   name: 'splashView',
   type: 'Comp',
@@ -31,13 +22,15 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 490,
+      content1: 'splash1_1',
+      textY: 440,
+      text1YPadding: 36,
+      textX: 300,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -45,8 +38,31 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 24,
+          mFontSize: 24,
+          anchor: { x: 0.5, y: 0.5 },
+          dropShadow: {
+            angle: 0.5235987755982988,
+            blur: 4, // use 0 or a positive value in v8
+            color: '0x000000',
+            distance: 3,
+            alpha: 1,
+          },
+        },
+      },
+      textStyle1: {
+        name: 'contentTxt',
+        type: 'Text',
+        destroy: true,
+        style: {
+          fontFamily: 'gameFont1',
+          fontWeight: 700,
+          breakWords: true,
+          fill: [0xffed54, 0xf5a100],
+          stroke: 0x000000,
+          strokeThickness: 2,
+          fontSize: 42,
+          mFontSize: 42,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -64,13 +80,15 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 490,
+      content1: 'splash2_1',
+      textY: 440,
+      text1YPadding: 36,
+      textX: 260,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -78,8 +96,31 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 24,
+          mFontSize: 24,
+          anchor: { x: 0.5, y: 0.5 },
+          dropShadow: {
+            angle: 0.5235987755982988,
+            blur: 4, // use 0 or a positive value in v8
+            color: '0x000000',
+            distance: 3,
+            alpha: 1,
+          },
+        },
+      },
+      textStyle1: {
+        name: 'contentTxt',
+        type: 'Text',
+        destroy: true,
+        style: {
+          fontFamily: 'gameFont1',
+          fontWeight: 700,
+          breakWords: true,
+          fill: [0xffed54, 0xf5a100],
+          stroke: 0x000000,
+          strokeThickness: 2,
+          fontSize: 42,
+          mFontSize: 42,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -97,13 +138,15 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 490,
+      content1: 'splash3_1',
+      textY: 440,
+      text1YPadding: 36,
+      textX: 260,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
         type: 'Text',
         destroy: true,
-        fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
           fontWeight: 700,
@@ -111,8 +154,31 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 24,
+          mFontSize: 24,
+          anchor: { x: 0.5, y: 0.5 },
+          dropShadow: {
+            angle: 0.5235987755982988,
+            blur: 4, // use 0 or a positive value in v8
+            color: '0x000000',
+            distance: 3,
+            alpha: 1,
+          },
+        },
+      },
+      textStyle1: {
+        name: 'contentTxt',
+        type: 'Text',
+        destroy: true,
+        style: {
+          fontFamily: 'gameFont1',
+          fontWeight: 700,
+          breakWords: true,
+          fill: [0xffed54, 0xf5a100],
+          stroke: 0x000000,
+          strokeThickness: 2,
+          fontSize: 42,
+          mFontSize: 42,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -125,18 +191,19 @@ export const SPLASH_CONFIG: any = {
       },
     },
   ],
+  itemPaddingPerc: 0,
   Elements: [
     {
-      name: 'maingameBG',
+      name: 'splashBG',
       type: 'Sprite',
       image: 'splashbg',
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Desktop: { hAlign: 'left', vAlign: 'middle', fitToScreen: true },
         Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
-    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 200, height: 200, color: 0xff0000, alpha: 0, widthPerc: 0.8 },
     {
       name: 'brandLogo',
       type: 'Sprite',
@@ -239,26 +306,19 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, -2),
+            textOffset: new Point(0, -14),
           },
           textConfig: {
             content: 'playGameText',
             style: {
               fontFamily: 'gameFont1',
               fontWeight: 700,
-              fill: [0xffed54, 0xf5a100],
+              fill: [0xffd632, 0xffcb39, 0xfec65a, 0xfff7b5, 0xfeb300, 0xfff0a9],
               stroke: 0x000000,
-              strokeThickness: 2,
-              fontSize: 40,
-              mFontSize: 40,
+              strokeThickness: 6,
+              fontSize: 54,
+              mFontSize: 54,
               anchor: { x: 0.5, y: 0.5 },
-              dropShadow: {
-                angle: 0.5235987755982988,
-                blur: 4, // use 0 or a positive value in v8
-                color: '0x000000',
-                distance: 3,
-                alpha: 1,
-              },
             },
             anchor: { x: 0.5, y: 0.5 },
             fontMLProps: { lt: { fontSize: 36 } },
@@ -348,7 +408,7 @@ export const SPLASH_CONFIG: any = {
       image: 'gamelogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.3, maxScale: 1, hAlign: 'center', vPosition: 0.1 },
         Portrait: {
           widthPerc: 0.6,
           heightPerc: 0.12,
