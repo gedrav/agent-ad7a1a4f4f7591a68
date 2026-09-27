@@ -29,6 +29,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'Caudex',
+    gameFont2: 'Mencken-Std-Narrow-Extra-Bold',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',

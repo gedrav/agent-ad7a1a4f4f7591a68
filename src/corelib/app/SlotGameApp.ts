@@ -600,76 +600,18 @@ class SlotGameApp {
     }
   }
 
-  private isAndroidApp(): boolean {
-    if (typeof (window as any).isAndroidApp === 'function') {
-      return (window as any).isAndroidApp();
-    }
-
-    // 1. Explicit query parameters (used for developer testing or host app launcher)
-    const urlParams = new URLSearchParams(window.location.search);
-    const platform = (urlParams.get('platform') || '').toLowerCase();
-    const appParam = (urlParams.get('app') || urlParams.get('client') || urlParams.get('target') || '').toLowerCase();
-
-    if (
-      platform === 'android' ||
-      platform === 'android_app' ||
-      platform === 'app' ||
-      platform === 'webview' ||
-      appParam === 'android' ||
-      appParam === 'app' ||
-      appParam === 'webview' ||
-      appParam === 'native' ||
-      appParam === 'true'
-    ) {
-      return true;
-    }
-
-    const ua = (navigator.userAgent || '').toLowerCase();
-
-    // 2. Explicitly exclude iOS, iPad, iPhone, iPod, Mac
-    if (/iphone|ipad|ipod|macintosh/i.test(ua)) return false;
-
-    // 3. Real Android App runtime detection (production APK without query params):
-    if (!ua.includes('android')) return false;
-
-    const isWebView = /;\s*wv\b/.test(ua) || (/version\/[\d.]+/.test(ua) && /chrome\/[\d.]+/.test(ua));
-    const hasAndroidBridge = !!(
-      (window as any).Android ||
-      (window as any).AndroidBridge ||
-      (window as any).JSBridge ||
-      (window as any).ReactNativeWebView ||
-      (window as any).flutter_inappwebview
-    );
-    const isCapacitor = !!(
-      (window as any).Capacitor?.isNativePlatform?.() ||
-      (window as any).cordova ||
-      window.location.protocol === 'capacitor:'
-    );
-    return isWebView || hasAndroidBridge || isCapacitor;
-  }
-
   protected visibilityChange(): void {
     if (document.visibilityState === 'hidden') {
       this.stopPixiApp();
-    } else if (this.isAndroidApp()) {
-      // Android App recovery: Always restart Pixi app on resume so the canvas is
-      // never left blank/frozen, even if a panel was open when the app was backgrounded
-      this.startPixiApp();
-
-      if ((globalThis as any)._isPanelOpen) {
-        // Keep sounds muted while a panel is still covering the screen
-        SoundFactory.muteAllSounds();
-      }
-
-      // Force canvas re-render and resize to restore WebGL state on mobile
-      requestAnimationFrame(() => {
-        this.resize();
-        this.app?.renderer?.render?.(this.app.stage);
-      });
     } else {
-      // Non-Android platforms (iOS, Desktop, Web) - original behavior
       if ((globalThis as any)._isPanelOpen) {
-        if (DeviceProxy.config.isIOSDevice) SoundFactory.resumeAudioContext();
+        // Panel still open (returning from the detailed-history tab): keep
+        // Pixi stopped, but kick the iOS audio context now — it comes back
+        // 'interrupted' and Howler stays muted until the panel closes, so
+        // this is inaudible and lets audio recover before the close click.
+        if (DeviceProxy.config.isIOSDevice) {
+          SoundFactory.resumeAudioContext();
+        }
         return;
       }
       this.startPixiApp();
