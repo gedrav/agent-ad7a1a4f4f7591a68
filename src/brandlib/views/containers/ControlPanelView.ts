@@ -305,7 +305,7 @@ export class ControlPanelView extends ResponsiveChildrenView {
     const factor = GameProxy.config.isAnteEnabled ? GameProxy.config.anteBetMultiplier : 1;
     const bbBet = appModel.getTotalBet() * multiplier * factor;
     let btnString: string;
-    if (GameProxy.config.buyBonusData.stylizedText) {
+    if (GameProxy.config?.buyBonusData?.stylizedText) {
       btnString = Util.parseMessage(Util.getContent('buyFreeSpinTitleWithValueStylized'), [Util.formatCurrency(bbBet)]);
     } else {
       btnString = Util.parseMessage(Util.getContent('buyFreeSpinTitleWithValue'), [Util.formatCurrency(bbBet)]);
