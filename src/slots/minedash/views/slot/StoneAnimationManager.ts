@@ -184,7 +184,7 @@ export class StoneAnimationManager {
   private createMovingSymbol(symbolName: string, spineName: string, startPos: Point): ReelSymbolSpine {
     let cardSkin = '';
     if (spineName === 'GoldCard' || symbolName === 'SG') {
-      const firedStone = (appModel as any).gameResult?.firedStone;
+      const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired');
       const megawinModifier = appModel.getReelModifiers()?.find((m: any) => m.type === 'megawinCollect');
       const targetSym =
         firedStone?.value || megawinModifier?.symbol || this.view.getStoneState()?.megawinStone?.drawnValue || 'H1';
