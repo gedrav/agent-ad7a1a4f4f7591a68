@@ -5,6 +5,7 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
 const WIN_ANIM_REPEAT_COUNT = 4;
+const JP_VALUE_WIDTH = 300;
 
 export class JPItemComp extends StandardView {
   private readonly valueText: PixText;
@@ -22,8 +23,8 @@ export class JPItemComp extends StandardView {
   public updateJPValue(value: string): void {
     this.valueText.text = value;
     this.valueText.scale.set(1);
-    if (this.valueText.width >= this.titleImage.width) {
-      this.valueText.scale.set((this.titleImage.width * 0.9) / this.valueText.width);
+    if (this.valueText.width >= JP_VALUE_WIDTH) {
+      this.valueText.scale.set((JP_VALUE_WIDTH * 0.9) / this.valueText.width);
     }
   }
   public showIdle(): void {
