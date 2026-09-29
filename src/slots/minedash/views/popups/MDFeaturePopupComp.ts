@@ -12,7 +12,7 @@ const DEFAULT_AUTO_CLOSE_DELAY = 4500;
 const TICKER_COUNT_DURATION = 1500;
 const TICKER_HOLD_DELAY = 3000;
 
-export class MineDashFeaturePopupComp extends ResponsiveChildrenView {
+export class MDFeaturePopupComp extends ResponsiveChildrenView {
   protected titleText: PixText;
   protected messageText1: PixText;
 
