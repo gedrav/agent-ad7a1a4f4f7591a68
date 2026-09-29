@@ -1,10 +1,10 @@
-import { FeaturePopupComp } from '@game/views/popups/FeaturePopupComp';
+import { MineDashFeaturePopupComp } from '@game/views/popups/MineDashFeaturePopupComp';
 import { WinTicker } from '@core/views/comps/WinTicker';
 
-export const FS_POPUP_CONFIG = {
+export const MINEDASH_FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
-  class: FeaturePopupComp,
+  class: MineDashFeaturePopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1800, height: 1500, color: 0xff0000, alpha: 0 },
     {
