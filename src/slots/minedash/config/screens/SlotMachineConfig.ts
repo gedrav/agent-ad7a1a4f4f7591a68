@@ -404,8 +404,9 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGA: {
-            name: 'SGA',
+
+          SG_L1: {
+            name: 'SG_L1',
             spineName: 'GoldCard',
             skin: 'A',
             idleAnim: 'Static',
@@ -415,8 +416,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGK: {
-            name: 'SGK',
+          SG_L2: {
+            name: 'SG_L2',
             spineName: 'GoldCard',
             skin: 'K',
             idleAnim: 'Static',
@@ -426,8 +427,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGQ: {
-            name: 'SGQ',
+          SG_L3: {
+            name: 'SG_L3',
             spineName: 'GoldCard',
             skin: 'Q',
             idleAnim: 'Static',
@@ -437,8 +438,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGJ: {
-            name: 'SGJ',
+          SG_L4: {
+            name: 'SG_L4',
             spineName: 'GoldCard',
             skin: 'J',
             idleAnim: 'Static',
@@ -448,8 +449,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SG10: {
-            name: 'SG10',
+          SG_L5: {
+            name: 'SG_L5',
             spineName: 'GoldCard',
             skin: '10',
             idleAnim: 'Static',
@@ -459,8 +460,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGH: {
-            name: 'SGH',
+          SG_H1: {
+            name: 'SG_H1',
             spineName: 'GoldCard',
             skin: 'Helmate',
             idleAnim: 'Static',
@@ -470,8 +471,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGL: {
-            name: 'SGL',
+          SG_H2: {
+            name: 'SG_H2',
             spineName: 'GoldCard',
             skin: 'Lamp',
             idleAnim: 'Static',
@@ -481,10 +482,32 @@ export const SLOT_MACHINE_CONFIG: any = {
             scale: 1,
             animScale: 0.25,
           },
-          SGP: {
-            name: 'SGP',
+          SG_H3: {
+            name: 'SG_H3',
             spineName: 'GoldCard',
             skin: 'Pickaxe',
+            idleAnim: 'Static',
+            winAnim: 'Static',
+            blurAnim: 'Blur',
+            staticAnim: 'Static',
+            scale: 1,
+            animScale: 0.25,
+          },
+          SG_H4: {
+            name: 'SG_H4',
+            spineName: 'GoldCard',
+            skin: 'Helmate',
+            idleAnim: 'Static',
+            winAnim: 'Static',
+            blurAnim: 'Blur',
+            staticAnim: 'Static',
+            scale: 1,
+            animScale: 0.25,
+          },
+          SG_H5: {
+            name: 'SG_H5',
+            spineName: 'GoldCard',
+            skin: 'Lamp',
             idleAnim: 'Static',
             winAnim: 'Static',
             blurAnim: 'Blur',

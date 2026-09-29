@@ -20,14 +20,14 @@ export const GEM_BOXES_CONFIG: any = {
       yAlone: 60,
       yWithValue: 15,
     },
-    //     value: {
-    //       fontFamily: 'gameFont1',
-    //       fontWeight: 'bold',
-    //       fontSize: 60,
-    //       fill: 0xffea00,
-    //       stroke: { color: 0x110500, width: 8 },
-    //       y: 115,
-    //     },
+    value: {
+      fontFamily: 'gameFont1',
+      fontWeight: 'bold',
+      fontSize: 60,
+      fill: 0xffea00,
+      stroke: { color: 0x110500, width: 8 },
+      y: 115,
+    },
   },
   Elements: [
     {
