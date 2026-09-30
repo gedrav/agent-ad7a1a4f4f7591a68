@@ -3,7 +3,7 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
-import { MIN_LINES, MAX_LINES, setSelectedLines } from '@slots/jokerCharge/models/JCLinesState';
+import { MIN_LINES, MAX_LINES, getSelectedLines, setSelectedLines } from '@slots/jokerCharge/models/JCLinesState';
 import { setupButtonInteraction } from '@slots/jokerCharge/views/comps/buttonInteraction';
 
 // Buy Bonus button + Lines selector, positioned inside SlotMachineConfig.ts's Elements array.
@@ -13,7 +13,8 @@ export class BuyBonusLinesComp extends ResponsiveChildrenView {
   private readonly linesMinusBtn: PixSprite;
   private readonly linesPlusBtn: PixSprite;
   private readonly linesValueText: PixText;
-  private currentLines: number = MIN_LINES;
+  // From the state, not MIN_LINES: a restored sticky session sets it before this is built.
+  private currentLines: number = getSelectedLines();
 
   constructor(configData: any) {
     super(configData);
@@ -28,6 +29,16 @@ export class BuyBonusLinesComp extends ResponsiveChildrenView {
     setupButtonInteraction(bonusBtnGroup, this.onBuyBonusClicked.bind(this));
     setupButtonInteraction(this.linesMinusBtn, this.onLinesMinusClicked.bind(this));
     setupButtonInteraction(this.linesPlusBtn, this.onLinesPlusClicked.bind(this));
+    // Also listened to, not just dispatched: a restored sticky session sets the count before any
+    // of this exists, and the announcement that follows is what this catches up on.
+    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.onSelectedLines.bind(this));
+    this.updateLinesText();
+  }
+
+  // From the state rather than the payload, and no re-dispatch: this is the same event this comp
+  // sends when the player uses the buttons.
+  private onSelectedLines(): void {
+    this.currentLines = getSelectedLines();
     this.updateLinesText();
   }
 

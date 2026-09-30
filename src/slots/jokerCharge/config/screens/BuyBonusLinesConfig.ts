@@ -2,13 +2,15 @@ import { BuyBonusLinesComp } from '@slots/jokerCharge/views/comps/BuyBonusLinesC
 import { MULTIPLIER_TEXT_STYLE } from '../SymbolsConfig';
 
 // Sprite sizes at runtime (the sheet is packed at meta.scale 0.25, so Pixi reports 4x the frame):
-// buy_bonus_btn 880x1308, cart 380x336, BONUS_txt 744x188, choose_lines_panel 1180x352,
-// lines_minus_btn/lines_plus_btn 392x348.
+// buy_bonus_btn 880x1308, cart 380x336, BONUS_txt 744x188, buy_bonus_panel 1176x356,
+// choose_lines_panel 1180x352, lines_minus_btn/lines_plus_btn 392x348.
 //
-// Desktop and landscape stack the two groups in the margin left of the machine. Portrait has no
-// such margin, so the row sits under the reels as a bar: a wide bonus button on the left with the
-// cart and label side by side, the lines selector on the right. Portrait keeps every parent at
-// scale 1 so its numbers are machine units, where 1400 is the full width of the machine.
+// Desktop and landscape stack the two groups in the margin left of the machine, building the
+// button out of three pieces: the tall plate with the cart above the label. Portrait has no such
+// margin, so the row sits under the reels as a bar, and there the button is a single sprite,
+// buy_bonus_panel, which has the cart and the label drawn into it - the three pieces are hidden
+// rather than rearranged. Portrait keeps every parent at scale 1 so its numbers are machine
+// units, where 1400 is the full width of the machine.
 //
 // Every element lists all three orientations. The fallback order is Landscape > Portrait > Desktop,
 // so an element with only a Portrait entry would hand its portrait values to the other two as well.
@@ -40,6 +42,23 @@ export const BUY_BONUS_LINES_CONFIG: any = {
       },
       Elements: [
         {
+          // Portrait's whole button, cart and label included. Hidden elsewhere, where the three
+          // pieces below make the tall version instead.
+          name: 'buyBonusPanel',
+          type: 'Sprite',
+          image: 'buy_bonus_panel',
+          anchor: { x: 0.5, y: 0.5 },
+          x: 0,
+          y: 0,
+          layoutData: {
+            Desktop: { visible: false },
+            // Its own 1176x356 scaled to the bar from the mock, the same box the three pieces
+            // used to fill: the aspect matches, so nothing is squashed.
+            Portrait: { visible: true, x: 0, y: 0, width: 560, height: 170 },
+            Landscape: { visible: false },
+          },
+        },
+        {
           name: 'buyBonusBtn',
           type: 'Sprite',
           image: 'buy_bonus_btn',
@@ -47,11 +66,9 @@ export const BUY_BONUS_LINES_CONFIG: any = {
           x: 0,
           y: 0,
           layoutData: {
-            Desktop: { x: 0, y: 0, scale: 1 },
-            // The plate is a plain rounded rectangle, so width/height reshape it into the bar
-            // from the mock. Its own aspect is 880x1308, hence the heavy vertical squash.
-            Portrait: { x: 0, y: 0, width: 560, height: 170 },
-            Landscape: { x: 0, y: 0, scale: 1 },
+            Desktop: { visible: true, x: 0, y: 0, scale: 1 },
+            Portrait: { visible: false },
+            Landscape: { visible: true, x: 0, y: 0, scale: 1 },
           },
         },
         {
@@ -62,9 +79,9 @@ export const BUY_BONUS_LINES_CONFIG: any = {
           x: 0,
           y: -160,
           layoutData: {
-            Desktop: { x: 0, y: -160, scale: 1 },
-            Portrait: { x: -170, y: 0, scale: 0.33 },
-            Landscape: { x: 0, y: -160, scale: 1 },
+            Desktop: { visible: true, x: 0, y: -160, scale: 1 },
+            Portrait: { visible: false },
+            Landscape: { visible: true, x: 0, y: -160, scale: 1 },
           },
         },
         {
@@ -75,9 +92,9 @@ export const BUY_BONUS_LINES_CONFIG: any = {
           x: 0,
           y: 280,
           layoutData: {
-            Desktop: { x: 0, y: 280, scale: 1 },
-            Portrait: { x: 70, y: 0, scale: 0.45 },
-            Landscape: { x: 0, y: 280, scale: 1 },
+            Desktop: { visible: true, x: 0, y: 280, scale: 1 },
+            Portrait: { visible: false },
+            Landscape: { visible: true, x: 0, y: 280, scale: 1 },
           },
         },
       ],

@@ -8,16 +8,18 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import {
   BLANK_SYMBOL_NAME,
   CHARGE_LADDER,
+  SYMBOLS_DATA,
   MYSTERY_SYMBOL_NAMES,
   OVERSIZED_SYMBOL_NAMES,
   STICKY_SYMBOL_NAMES,
   TRAIL_SYMBOL_NAMES,
 } from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
-import { isRespinActive, isRowActive } from '../../models/JCLinesState';
+import { getSelectedLines, isRespinActive, isRowActive } from '../../models/JCLinesState';
 import {
   getHoldField,
   getModifierMultipliers,
+  getInitialStickyCells,
   getStopGrid,
   HoldFieldEntry,
   MetamorphicSymbol,
@@ -111,6 +113,9 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private readonly spinTimeoutIds: any[] = [];
   private readonly stopTimeoutIds: any[] = [];
   private minDurationTimeoutId: any = null;
+  // The bet and line count the grid's locks were made at - see rememberStickyContext.
+  private stickyBet = 0;
+  private stickyLines = 0;
   private minDurationElapsed = false;
   // createReels() places a symbol per cell as it goes, so the grid is only walkable once it ends.
   private reelsBuilt = false;
@@ -138,6 +143,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.initialReel = data.initialReel;
     this.sortableChildren = true;
     this.createReels();
+    this.restoreStickyCells();
     this.createColumnEffects(data);
     this.createTriangleEffects(data);
     this.createBorderEffects(data);
@@ -146,6 +152,11 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     EventHandler.addEventListener(JCEvents.SPIN_RESULT_RECEIVED, this.onSpinResultReceived.bind(this));
     // Blanks already on the grid need re-checking on a line-count change, not just on placement.
     EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.refreshBlanksVisuals.bind(this));
+    // A cell is sticky for the bet and the line count it landed on, which is how the backend holds
+    // it too - progressData.stickyState carries both. Change either and the locks come off and the
+    // cells spin with the rest.
+    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.onStickyContextEvent.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.onStickyContextEvent.bind(this));
     EventHandler.addEventListener(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedGrid.bind(this));
   }
 
@@ -548,7 +559,21 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
 
   // Base game only: a sticky symbol chains its cell shut, so it survives the following spins
   // until the feature starts. Already-locked cells are left alone so the lock does not replay.
+  // What the locks currently on the grid belong to. Compared rather than trusting the event
+  // itself: UPDATE_TOTALBET is also dispatched at startup and around promo spins, where the bet
+  // has not actually moved and a restored lock has to survive.
+  private rememberStickyContext(): void {
+    this.stickyBet = appModel.getTotalBet();
+    this.stickyLines = getSelectedLines();
+  }
+
+  private onStickyContextEvent(): void {
+    if (appModel.getTotalBet() === this.stickyBet && getSelectedLines() === this.stickyLines) return;
+    this.releaseStickyCells();
+  }
+
   public lockStickySymbols(): void {
+    this.rememberStickyContext();
     this.forEachReel((reel) => {
       if (reel.isSticky() || !STICKY_SYMBOL_NAMES.includes(reel.getSymbolName() ?? '')) return;
       reel.setSticky(true);
@@ -556,7 +581,23 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     });
   }
 
-  // Entering the respin releases every lock: the chain animation clears the flag as it finishes.
+  // Cells the backend was still holding when the player last left, placed and locked as the grid
+  // is built. Nothing spins them back in: they are simply already there.
+  private restoreStickyCells(): void {
+    this.rememberStickyContext();
+    getInitialStickyCells().forEach(({ position, symbol }) => {
+      const reel = this.getReel(position[0], position[1]);
+      // A name this build has no art for would throw out of the symbol pool.
+      if (!reel || !SYMBOLS_DATA[symbol]) return;
+      reel.showSymbol(symbol);
+      reel.setSticky(true);
+      reel.playChainLockAppear();
+    });
+    this.raiseOversizedReels();
+  }
+
+  // Called on entering the respin, and whenever the bet or the line count changes. A cell is free
+  // the moment this runs; the chain coming apart plays out behind it.
   public releaseStickyCells(): void {
     this.forEachReel((reel) => {
       if (reel.isSticky()) reel.playChainLockDisappear();

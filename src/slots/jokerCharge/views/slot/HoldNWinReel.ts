@@ -650,11 +650,14 @@ export default class HoldNWinReel extends Container {
     });
   }
 
+  // The flag goes now, not when the animation ends: a cell released by a bet or line change has to
+  // be free the moment the player can press spin, and the chain coming apart is only the picture
+  // of it.
   public playChainLockDisappear(): void {
+    this.setSticky(false);
     const listener = this.chainLockAnim.addEventListener('complete', () => {
       if (listener) this.chainLockAnim.removeSpineEvent(listener);
       this.chainLockAnim.visible = false;
-      this.setSticky(false);
     });
     this.chainLockAnim.playAnimation({ state: CHAIN_LOCK_DISAPPEARING_STATE, loop: false });
   }

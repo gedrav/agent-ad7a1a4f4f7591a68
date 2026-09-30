@@ -51,6 +51,30 @@ export interface RespinFeatureData {
   mysteryReveals?: MysteryRevealEntry[];
 }
 
+// A cell the backend is holding sticky. It rides on the init response rather than on a spin:
+// stickiness outlives a finished round, so it is not part of unfinishedInfo.
+export interface StickyCell {
+  position: number[];
+  symbol: string;
+}
+
+// A lock only holds for the bet and line count it was made at, so the backend sends both with the
+// cells and the game puts them back before the UI is built.
+export interface StickyState {
+  cells?: StickyCell[];
+  betAmount?: number;
+  activePaylines?: number;
+}
+
+// Whatever was still locked when the player last left. Undefined for a fresh session.
+export function getStickyState(): StickyState | undefined {
+  return appModel.gameData?.progressData?.stickyState;
+}
+
+export function getInitialStickyCells(): StickyCell[] {
+  return getStickyState()?.cells ?? [];
+}
+
 function featureData(): RespinFeatureData {
   return appModel.featureResult?.featureData ?? {};
 }
