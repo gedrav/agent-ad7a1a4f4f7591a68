@@ -134,6 +134,7 @@ export class GameSlotMachineView extends SlotMachineView {
                 symbol: symbolName,
                 boxName: STONE_CONFIG[symbolName].boxName,
                 spineName: STONE_CONFIG[symbolName].spineName,
+                skin: STONE_CONFIG[symbolName].skin,
               });
             }
           });
