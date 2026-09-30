@@ -6,6 +6,7 @@ import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { BLANK_BONUS_SYMBOL_NAME, resolveBonusSymbolName } from '../../config/BonusSymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
 import { isRespinActive } from '../../models/JCLinesState';
+import { getModifierRow } from '../../models/JCSpinData';
 import BonusReel from './BonusReel';
 
 export interface BonusReelsContainerData {
@@ -60,7 +61,7 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
 
   // Resume after a reconnect - see HoldNWinReelsContainer.renderUnfinishedGrid().
   private renderUnfinishedRow(): void {
-    const modifierRow: string[] = appModel.featureResult?.modifierRow ?? appModel.getSpinResult()?.modifierRow;
+    const modifierRow = getModifierRow();
     if (modifierRow) this.showSymbols(modifierRow.map(resolveBonusSymbolName));
   }
 

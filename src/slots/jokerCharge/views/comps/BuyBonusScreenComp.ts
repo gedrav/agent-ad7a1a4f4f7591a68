@@ -13,7 +13,7 @@ import {
   BUY_BONUS_CLOSE_EASE,
   BUY_BONUS_CONTENT_PIVOT,
   BUY_BONUS_DIM_ALPHA,
-  BUY_BONUS_MULTIPLIERS,
+  BUY_BONUS_FEATURE_IDS,
   BUY_BONUS_OPEN_DURATION,
   BUY_BONUS_OPEN_EASE,
   BUY_BONUS_START_SCALE,
@@ -49,7 +49,7 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
     setupButtonInteraction(betBar.elementsList['minusBtn'], () => this.changeBet(-1));
     setupButtonInteraction(betBar.elementsList['plusBtn'], () => this.changeBet(1));
 
-    for (let index = 0; index < BUY_BONUS_MULTIPLIERS.length; index++) {
+    for (let index = 0; index < BUY_BONUS_FEATURE_IDS.length; index++) {
       const card = this.content.elementsList[`card${index}`];
       this.cards.push(card);
       setupButtonInteraction(card.elementsList['buyGroup'], () => this.buy(index));
@@ -97,14 +97,13 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
     });
   }
 
-  // Prices follow the bet.
+  // Prices follow the bet, at each card's own multiplier from bbBetMultiplierSettings.
   private refresh(): void {
     const bet = appModel.getTotalBet();
     this.betValue.text = Util.formatCurrencyNoSymbol(bet);
     this.cards.forEach((card, index) => {
-      card.elementsList['buyGroup'].elementsList['priceText'].text = Util.formatCurrencyNoSymbol(
-        BUY_BONUS_MULTIPLIERS[index] * bet,
-      );
+      const multiplier = appModel.getBuyBonusMultiplier(BUY_BONUS_FEATURE_IDS[index]);
+      card.elementsList['buyGroup'].elementsList['priceText'].text = Util.formatCurrencyNoSymbol(multiplier * bet);
     });
   }
 
@@ -117,12 +116,11 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
     this.refresh();
   }
 
-  // BBSpinStartState copies selectedBB into the request's buyBonus.feature, so the backend is told
-  // which of the three was bought.
-  // TODO: start the buy-bonus round once the backend's buy bonus is in - the id below is the
-  // card's own index until it defines its own.
+  // BBSpinStartState copies selectedBB into the request's buyBonus.feature and looks its
+  // multiplier up from the same id, so the backend is told which of the three was bought.
+  // TODO: start the buy-bonus round once the backend's buy bonus is in.
   private buy(index: number): void {
-    GameProxy.config.selectedBB = index;
+    GameProxy.config.selectedBB = BUY_BONUS_FEATURE_IDS[index];
     this.hide();
   }
 }

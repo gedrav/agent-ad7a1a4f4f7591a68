@@ -9,7 +9,6 @@ import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
-import { GamePreWinState } from '../states/GamePreWinState';
 import { EnterRespinState } from '../states/EnterRespinState';
 import { RespinIntroState } from '../states/RespinIntroState';
 import { RespinSpinStartState } from '../states/RespinSpinStartState';
@@ -29,18 +28,9 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: JCSpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
-  { name: STATES.PRE_SPIN_WIN_STATE, state: GamePreWinState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureStateV2 },
-
-  // Respin (Hold & Win) feature loop. ENTER_RESPIN_STATE must immediately follow
-  // CHECK_FEATURE_STATE (its StateManager.next() lands here), and EXIT_RESPIN_STATE must
-  // immediately precede COMPLETE_GAMEROUND_STATE (its StateManager.next() lands there) - see
-  // EnterRespinState/ExitRespinState. The intro sits between them for the same reason: the
-  // transition's OK button advances into RESPIN_INTRO_STATE, and the player's tap on the intro
-  // advances into RESPIN_SPIN_START_STATE. CHECK_RESPIN_STATE is only ever reached via explicit
-  // goToState(), so its array position doesn't matter, but it's kept here for readability.
   { name: STATES.ENTER_RESPIN_STATE, state: EnterRespinState },
   { name: STATES.RESPIN_INTRO_STATE, state: RespinIntroState },
   { name: STATES.RESPIN_SPIN_START_STATE, state: RespinSpinStartState },

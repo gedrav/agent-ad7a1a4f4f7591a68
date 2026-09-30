@@ -37,9 +37,10 @@ const CHAIN_LOCK_APPEARING_STATE = 'appearing';
 const CHAIN_LOCK_IDLE_STATE = 'idle';
 const CHAIN_LOCK_DISAPPEARING_STATE = 'disappearing';
 
-// TODO: stands in for the trail animation, which isn't in the assets yet.
-const METAMORPHIC_TRAIL_DELAY = 1000;
 const METAMORPHIC_REVEAL_DURATION = 0.25;
+// Half the pop: it runs out and back.
+const CHARGE_POP_DURATION = 0.15;
+const CHARGE_POP_SCALE = 1.15;
 
 const WIN_ANIMATION_PASSES = 2;
 
@@ -79,7 +80,6 @@ export default class HoldNWinReel extends Container {
   private readonly multiplierEffect: PixSpine;
   private multiplierText: PixText | null = null;
   private multiplierEffectListener: any = null;
-  private metamorphicTimeoutId: any = null;
   private sticky = false;
   // Distinct from sticky: a cell already holding a symbol sits out the respin rounds, with no lock
   // animation - it just doesn't take part.
@@ -323,23 +323,49 @@ export default class HoldNWinReel extends Container {
     this.multiplierEffect.playAnimation({ state: MULTIPLIER_EFFECT_STATE, loop: false });
   }
 
+  // Swaps the cell to the symbol one step up the ladder and pops it, so the new face is what
+  // swells. showSymbol releases the old instance back to the pool and kills its tweens, so nothing
+  // is left holding the one that went.
+  public chargeSymbol(name: string, onComplete?: () => void): void {
+    this.showSymbol(name);
+    const symbol = this.symbolView;
+    if (!symbol) {
+      onComplete?.();
+      return;
+    }
+    // Read after the swap: the new symbol may rest at a different scale, as C5 does turning into
+    // the mystery jackpot.
+    const restX = symbol.scale.x;
+    const restY = symbol.scale.y;
+    AnimationProxy.animateTween(symbol.scale, {
+      duration: CHARGE_POP_DURATION,
+      x: restX * CHARGE_POP_SCALE,
+      y: restY * CHARGE_POP_SCALE,
+      repeat: 1,
+      yoyo: true,
+      onComplete: () => {
+        symbol.scale.set(restX, restY);
+        onComplete?.();
+      },
+    });
+  }
+
+  // Straight away: the trail that brings the symbol in has already finished by the time the
+  // caller gets here.
   public revealMetamorphicSymbol(name: string, onComplete?: () => void): void {
-    clearTimeout(this.metamorphicTimeoutId);
-    this.metamorphicTimeoutId = setTimeout(() => {
-      this.showSymbol(name);
-      const symbol = this.symbolView;
-      const restScale = symbol.scale.x;
-      symbol.scale.set(0);
-      AnimationProxy.animateTween(symbol.scale, {
-        duration: METAMORPHIC_REVEAL_DURATION,
-        x: restScale,
-        y: restScale,
-        onComplete: () => {
-          symbol.showIdle();
-          onComplete?.();
-        },
-      });
-    }, METAMORPHIC_TRAIL_DELAY);
+    this.showSymbol(name);
+    const symbol = this.symbolView;
+    const restScale = symbol.scale.x;
+    symbol.scale.set(0);
+    AnimationProxy.animateTween(symbol.scale, {
+      duration: METAMORPHIC_REVEAL_DURATION,
+      x: restScale,
+      y: restScale,
+      onComplete: () => {
+        symbol.showIdle();
+        onComplete?.();
+      },
+    });
   }
 
   // The bet comes from the model rather than the caller, so every cell formats against the same
@@ -410,7 +436,10 @@ export default class HoldNWinReel extends Container {
   public showSymbol(name: string): void {
     const pool = JCReelSymbolPool.getInstance();
     if (this.symbolView) {
+      // scale is its own tween target, so killing the view alone leaves a pop or a reveal running
+      // against an instance the pool has already handed to another cell.
       AnimationProxy.killTweensOf(this.symbolView);
+      AnimationProxy.killTweensOf(this.symbolView.scale);
       pool.release(this.symbolView);
     }
     this.symbolView = pool.acquire(name, this.column, this.row);
@@ -446,7 +475,9 @@ export default class HoldNWinReel extends Container {
     this.phase = 'windup';
     // A landing tween from the last stop would otherwise fight the strip.
     AnimationProxy.killTweensOf(this.symbolView);
+    AnimationProxy.killTweensOf(this.symbolView.scale);
     AnimationProxy.killTweensOf(this.topSymbolView);
+    AnimationProxy.killTweensOf(this.topSymbolView.scale);
     this.setSpinningVisual(this.symbolView);
     this.setSpinningVisual(this.topSymbolView);
     this.topSymbolView.visible = true;
@@ -630,7 +661,6 @@ export default class HoldNWinReel extends Container {
 
   public destroy(options?: any): void {
     Ticker.shared.remove(this.onSpinTick, this);
-    clearTimeout(this.metamorphicTimeoutId);
     this.clearMultiplier();
     if (this.symbolView) {
       JCReelSymbolPool.getInstance().release(this.symbolView);

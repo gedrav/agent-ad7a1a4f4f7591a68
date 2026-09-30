@@ -1,14 +1,15 @@
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
-import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
 import { MIN_LINES, MAX_LINES, setSelectedLines } from '@slots/jokerCharge/models/JCLinesState';
 import { setupButtonInteraction } from '@slots/jokerCharge/views/comps/buttonInteraction';
 
 // Buy Bonus button + Lines selector, positioned inside SlotMachineConfig.ts's Elements array.
-export class BuyBonusLinesComp extends ResponsiveView {
-  private readonly buyBonusBtn: PixSprite;
+// ResponsiveChildrenView, not ResponsiveView: the latter only adjusts the comp itself, so the
+// per-orientation layoutData on bonusBtnGroup and linesGroup would never be read.
+export class BuyBonusLinesComp extends ResponsiveChildrenView {
   private readonly linesMinusBtn: PixSprite;
   private readonly linesPlusBtn: PixSprite;
   private readonly linesValueText: PixText;
@@ -18,12 +19,13 @@ export class BuyBonusLinesComp extends ResponsiveView {
     super(configData);
     const bonusBtnGroup = this.elementsList['bonusBtnGroup'];
     const linesGroup = this.elementsList['linesGroup'];
-    this.buyBonusBtn = bonusBtnGroup.elementsList['buyBonusBtn'];
     this.linesMinusBtn = linesGroup.elementsList['linesMinusBtn'];
     this.linesPlusBtn = linesGroup.elementsList['linesPlusBtn'];
     this.linesValueText = linesGroup.elementsList['linesValueText'];
 
-    setupButtonInteraction(this.buyBonusBtn, this.onBuyBonusClicked.bind(this));
+    // The group, not the plate: the cart and the label sit on top of the plate, so hooking the
+    // plate alone lets them swallow a click and leaves them behind when the button scales.
+    setupButtonInteraction(bonusBtnGroup, this.onBuyBonusClicked.bind(this));
     setupButtonInteraction(this.linesMinusBtn, this.onLinesMinusClicked.bind(this));
     setupButtonInteraction(this.linesPlusBtn, this.onLinesPlusClicked.bind(this));
     this.updateLinesText();

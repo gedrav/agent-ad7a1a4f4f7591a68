@@ -7,10 +7,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { JCBonusSymbolModifier, ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModifier';
 import { JCMysterySymbolModifier, MysteryReelResult } from './JCMysterySymbolModifier';
 import { JCBlanksSymbolModifier } from './JCBlanksSymbolModifier';
-
-const BONUS_SYMBOL_PREFIX = 'cor-';
-const MYSTERY_SYMBOL_NAMES = ['mystery', 'mystery jackpot'];
-const BLANKS_SYMBOL_NAME = 'Blanks';
+import { BLANK_SYMBOL_NAME, MYSTERY_SYMBOL_NAMES } from '../../config/SymbolsConfig';
 
 // Spine-only reel symbol (Blanks aside), driven by per-symbol data in SymbolsConfig. Symbols
 // needing more than a single spine delegate to their own modifiers.
@@ -33,8 +30,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     return (this._blanksModifier ??= new JCBlanksSymbolModifier(this));
   }
 
+  // The cash-value symbols are the ones carrying a multiplier label, which is a property of the
+  // symbol rather than of its name - so this survives the backend renaming them.
   private isBonusSymbol(): boolean {
-    return this.configData.data.name.startsWith(BONUS_SYMBOL_PREFIX);
+    return !!this.configData.data.multiplierTextConfig;
   }
 
   private isMysterySymbol(): boolean {
@@ -42,7 +41,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   }
 
   private isBlanksSymbol(): boolean {
-    return this.configData.data.name === BLANKS_SYMBOL_NAME;
+    return this.configData.data.name === BLANK_SYMBOL_NAME;
   }
 
   private syncBlanksVisual(): void {
@@ -107,9 +106,35 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       this.symbol.anchor.set(0.5, 0.5);
     }
     this.symbol.label = 'SYMBOL';
+    this.addLabel(this.symbol as any);
     this.addChild(this.symbol);
     this.handleGameProp();
     this.syncBlanksVisual();
+  }
+
+  // Each symbol has two rigs: this.symbol, built here, and corelib's pooled this.spine, built
+  // lazily by the first playSpineAnimation - which then hides this.symbol in its favour. The label
+  // goes on both, or a symbol reads blank until something animates it.
+  private addLabel(target: PixSpine | null): void {
+    const config = this.configData.data.labelTextConfig;
+    if (!config || !target?.addSlotObject) return;
+    target.addSlotObject(ROOT_TEXT_SLOT_NAME, UIUtil.getElement(config));
+  }
+
+  // The mystery mini reel runs its own text through the very slot the label sits in, so the
+  // modifier takes the label off both rigs while the strip is up and puts it back when it goes.
+  public setLabelVisible(flag: boolean): void {
+    [this.symbol as any, this.spine].forEach((rig: PixSpine | null) => {
+      if (!rig?.addSlotObject) return;
+      if (flag) {
+        if (!rig.getSlotObject(ROOT_TEXT_SLOT_NAME)) this.addLabel(rig);
+        return;
+      }
+      const label: any = rig.getSlotObject(ROOT_TEXT_SLOT_NAME);
+      rig.removeSlotObject(ROOT_TEXT_SLOT_NAME);
+      // Detached, not destroyed, by the spine - and a fresh one is built on the way back.
+      label?.destroy();
+    });
   }
 
   // The inherited destroySymbol() won't cascade into the spine's GPU resources, so every
@@ -143,11 +168,8 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       this.mysteryModifier.create(this.configData.data.animScale);
     }
     // Not an else: the mystery rigs carry a root_txt slot of their own, so their label rides the
-    // same path as mini/minor/major on top of the front spine the modifier just added.
-    if (this.configData.data.labelTextConfig) {
-      const label = UIUtil.getElement(this.configData.data.labelTextConfig);
-      this.addSlotObject(ROOT_TEXT_SLOT_NAME, label);
-    }
+    // same path as MN/MR/MJ on top of the front spine the modifier just added.
+    this.addLabel(this.spine);
   }
 
   protected destroySpine(): void {

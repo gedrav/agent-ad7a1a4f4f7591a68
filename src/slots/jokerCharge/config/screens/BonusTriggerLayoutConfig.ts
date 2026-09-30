@@ -14,8 +14,10 @@ export interface BonusLayoutOverride {
 // element name in SlotMachineConfig.ts's Elements array; setBonusTriggerLayout(false) restores
 // each element's original values.
 //
-// TODO: Portrait/Landscape are duplicated from Desktop as a placeholder until real per-orientation
-// positions exist.
+// These are machine-space coordinates and the machine's internal layout is the same in every
+// orientation (only the whole comp's scale and screen position change), so all three orientations
+// share one map. The buy/lines row is not listed here: it is hidden outright for the duration of
+// the feature, in GameSlotMachineView.setBonusTriggerLayout.
 type ElementLayoutMap = Record<string, BonusLayoutOverride>;
 
 const DESKTOP_BONUS_TRIGGER_LAYOUT: ElementLayoutMap = {

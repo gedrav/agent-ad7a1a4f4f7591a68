@@ -152,11 +152,13 @@ const MYSTERY_JACKPOT_TEXT_STYLE = {
   },
 };
 
-// The jackpot labels a mystery symbol's mini reel can land on, keyed by the backend's own names.
-export const JACKPOT_TEXT_STYLES: Record<string, any> = {
-  mini: MINI_TEXT_STYLE,
-  minor: MINOR_TEXT_STYLE,
-  major: MAJOR_TEXT_STYLE,
+// The jackpots a mystery symbol's mini reel can land on, keyed by the backend's own names. The
+// key is what the backend sends, the text is what the player reads: the two differ now that the
+// backend uses short codes.
+export const JACKPOT_LABELS: Record<string, { text: string; style: any }> = {
+  MN: { text: 'MINI', style: MINI_TEXT_STYLE },
+  MR: { text: 'MINOR', style: MINOR_TEXT_STYLE },
+  MJ: { text: 'MAJOR', style: MAJOR_TEXT_STYLE },
 };
 
 function labelTextConfig(
@@ -175,9 +177,9 @@ function labelTextConfig(
 
 function bonusSymbolData(multiplier: number): JCSymbolData {
   return {
-    name: `cor-${multiplier}x`,
+    name: `C${multiplier}`,
     spineName: 'hat',
-    // cor-5x is the top-tier bonus symbol and gets the blue skin, every other cor-Nx uses gold
+    // C5 is the top-tier bonus symbol and gets the blue skin, every other CN uses gold
     skin: multiplier === 5 ? 'blue' : 'gold',
     idleAnim: 'idle',
     staticAnim: 'static',
@@ -194,24 +196,53 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
   };
 }
 
+// Two spines: spineName is the back layer, the front is added by JCMysterySymbolModifier.
+const MYSTERY_SYMBOL: JCSymbolData = {
+  name: 'MY',
+  spineName: 'mystery_back',
+  idleAnim: 'idle',
+  staticAnim: 'static',
+  blurAnim: 'static_blur',
+  winAnim: 'win',
+  landingAnim: 'landing',
+  cellScale: 0.33,
+  labelTextConfig: labelTextConfig('MYSTERY', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+};
+
+const MYSTERY_JACKPOT_SYMBOL: JCSymbolData = {
+  name: 'MJP',
+  spineName: 'mystery_back',
+  idleAnim: 'idle',
+  staticAnim: 'static',
+  blurAnim: 'static_blur',
+  winAnim: 'win',
+  landingAnim: 'landing',
+  cellScale: 0.33,
+  labelTextConfig: labelTextConfig(`MYSTERY\nJACKPOT`, MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+};
+
+// An empty cell, as the backend names it in reelView/holdField.
+export const BLANK_SYMBOL_NAME = 'BL';
+
+// Keyed by the backend's symbol names, as sent in reelView/holdField.
 export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
-  'cor-1x': bonusSymbolData(1),
-  'cor-2x': bonusSymbolData(2),
-  'cor-3x': bonusSymbolData(3),
-  'cor-4x': bonusSymbolData(4),
-  'cor-5x': bonusSymbolData(5),
-  boost: {
-    name: 'boost',
+  C1: bonusSymbolData(1),
+  C2: bonusSymbolData(2),
+  C3: bonusSymbolData(3),
+  C4: bonusSymbolData(4),
+  C5: bonusSymbolData(5),
+  BST: {
+    name: 'BST',
     spineName: 'bag_collect',
     idleAnim: 'idle',
     staticAnim: 'static',
     blurAnim: 'static_blur',
-    winAnim: 'win',
+    winAnim: 'landing',
     landingAnim: 'landing',
     cellScale: 0.6,
   },
-  mini: {
-    name: 'mini',
+  MN: {
+    name: 'MN',
     spineName: 'belt',
     idleAnim: 'idle',
     staticAnim: 'static',
@@ -221,8 +252,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     cellScale: 0.6,
     labelTextConfig: labelTextConfig('MINI', MINI_TEXT_STYLE),
   },
-  minor: {
-    name: 'minor',
+  MR: {
+    name: 'MR',
     spineName: 'boot',
     idleAnim: 'idle',
     staticAnim: 'static',
@@ -232,8 +263,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     cellScale: 0.6,
     labelTextConfig: labelTextConfig('MINOR', MINOR_TEXT_STYLE),
   },
-  major: {
-    name: 'major',
+  MJ: {
+    name: 'MJ',
     spineName: 'mask',
     idleAnim: 'idle',
     staticAnim: 'static',
@@ -243,44 +274,61 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     cellScale: 0.6,
     labelTextConfig: labelTextConfig('MAJOR', MAJOR_TEXT_STYLE),
   },
-  // Two spines: spineName is the back layer, the front is added by JCMysterySymbolModifier.
-  mystery: {
-    name: 'mystery',
-    spineName: 'mystery_back',
+  MY: MYSTERY_SYMBOL,
+  MJP: MYSTERY_JACKPOT_SYMBOL,
+  SCR: {
+    name: 'SCR',
+    spineName: 'hat',
+    skin: 'gold',
     idleAnim: 'idle',
     staticAnim: 'static',
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.33,
-    labelTextConfig: labelTextConfig('MYSTERY', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+    cellScale: 0.6,
   },
-  'mystery jackpot': {
-    name: 'mystery jackpot',
-    spineName: 'mystery_back',
-    idleAnim: 'idle',
-    staticAnim: 'static',
-    blurAnim: 'static_blur',
-    winAnim: 'win',
-    landingAnim: 'landing',
-    cellScale: 0.33,
-    labelTextConfig: labelTextConfig(`MYSTERY\nJACKPOT`, MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
-  },
+  SMY: { ...MYSTERY_SYMBOL, name: 'SMY' },
+  SMJP: { ...MYSTERY_JACKPOT_SYMBOL, name: 'SMJP' },
   // Rendered by JCBlanksSymbolModifier off reel_sym_add's tile skins, whose art is 1427x972.
-  Blanks: {
-    name: 'Blanks',
+  [BLANK_SYMBOL_NAME]: {
+    name: BLANK_SYMBOL_NAME,
     cellScale: 0.31,
     cellScaleY: 0.29,
   },
 };
 
-const BLANKS_NAME = 'Blanks';
+// Landing one of these on an active payline in the base game earns a trail up to the logo.
+export const TRAIL_SYMBOL_NAMES = ['C1', 'C2', 'C3', 'C4', 'C5', 'MN', 'MR', 'MJ'];
+
+// What a Charged or Super-Charged symbol on the top panel turns a held cash symbol into: one step
+// up, and past the top it becomes the mystery jackpot. A cell holding anything not listed here is
+// left alone.
+export const CHARGE_LADDER: Record<string, string> = {
+  C1: 'C2',
+  C2: 'C3',
+  C3: 'C4',
+  C4: 'C5',
+  C5: 'MJP',
+};
+
+// Base game only: landing one of these locks its cell until the respin feature starts.
+export const STICKY_SYMBOL_NAMES = ['SCR', 'SMY', 'SMJP'];
+
+// Every symbol that runs the mystery mini reel and its front spine. The sticky pair behave exactly
+// like the two they lock, which is why they are listed here too.
+export const MYSTERY_SYMBOL_NAMES = ['MY', 'MJP', 'SMY', 'SMJP'];
+
+// Drawn above their neighbours: their art overflows the cell.
+export const OVERSIZED_SYMBOL_NAMES = [...MYSTERY_SYMBOL_NAMES, 'BST'];
+
 // Out of 100.
 export const BLANKS_PERCENT = 50;
-const NON_BLANK_SYMBOL_NAMES = Object.keys(SYMBOLS_DATA).filter((name) => name !== BLANKS_NAME);
+const NON_BLANK_SYMBOL_NAMES = Object.keys(SYMBOLS_DATA).filter((name) => name !== BLANK_SYMBOL_NAME);
 
 // Placeholder symbol for when there's no real spin result yet.
 export function getRandomSymbolName(): string {
   const isBlank = Util.getRandomRange(1, 100) <= BLANKS_PERCENT;
-  return isBlank ? BLANKS_NAME : NON_BLANK_SYMBOL_NAMES[Util.getRandomRange(0, NON_BLANK_SYMBOL_NAMES.length - 1)];
+  return isBlank
+    ? BLANK_SYMBOL_NAME
+    : NON_BLANK_SYMBOL_NAMES[Util.getRandomRange(0, NON_BLANK_SYMBOL_NAMES.length - 1)];
 }

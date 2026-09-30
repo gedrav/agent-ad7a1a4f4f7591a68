@@ -26,9 +26,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       defaultState: 'animation',
       loop: true,
       layoutData: {
-        Desktop: { scale: 0.66, x: 706, y: 476 },
-        Portrait: { scale: 0.66 },
-        Landscape: { scale: 0.66 },
+        Desktop: { scale: 0.66, x: 706, y: 458 },
+        Portrait: { scale: 0.66, x: 706, y: 458 },
+        Landscape: { scale: 0.66, x: 706, y: 458 },
       },
     },
 
@@ -42,16 +42,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         Landscape: { scale: 0.65 },
       },
     },
-    {
-      name: 'lineAnim',
-      type: 'Spine',
-      spineName: 'line',
-      defaultState: 'move_to_left3',
-      loop: false,
-      visible: false,
-      x: 707,
-      y: -140,
-    },
+
     {
       name: 'reelsFrame',
       type: 'Sprite',
@@ -59,8 +50,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       image: 'center_line_frame',
       layoutData: {
         Desktop: { scale: 0.65, x: -11, y: 311 },
-        Portrait: { scale: 0.65 },
-        Landscape: { scale: 0.65 },
+        Portrait: { scale: 0.65, x: -11, y: 311 },
+        Landscape: { scale: 0.65, x: -11, y: 311 },
       },
     },
     {
@@ -70,8 +61,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       alpha: 0,
       layoutData: {
         Desktop: { y: -72, scale: 0.65 },
-        Portrait: { scale: 0.65 },
-        Landscape: { scale: 0.65 },
+        Portrait: { y: -72, scale: 0.65 },
+        Landscape: { y: -72, scale: 0.65 },
       },
     },
 
@@ -84,8 +75,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       alpha: 0,
       layoutData: {
         Desktop: { y: -72, scale: 0.65 },
-        Portrait: { scale: 0.65 },
-        Landscape: { scale: 0.65 },
+        Portrait: { y: -72, scale: 0.65 },
+        Landscape: { y: -72, scale: 0.65 },
       },
     },
     HOLD_N_WIN_REELS_CONFIG,
@@ -112,14 +103,25 @@ export const SLOT_MACHINE_CONFIG: any = {
         Landscape: {},
       },
     },
-    // TEMPORARY: visible and looping from load so the placement can be set. The real entry is
-    // driven by JCEvents.PLAY_COINS_ANIMATION - drop defaultState, set loop/visible back to false.
+    {
+      name: 'lineAnim',
+      type: 'Spine',
+      spineName: 'line',
+      // No defaultState on purpose: UIUtil.getSpineAnim plays it the moment the element is built,
+      // and this one is fired per reveal by GameSlotMachineView.playTrail. The spine also holds a
+      // single animation, 'trail' - the name that was here before does not exist in line.json, and
+      // spine's setAnimation throws on an unknown name.
+      // Starting point only: every play sets x, y, rotation and scale from TRAIL_PLACEMENTS.
+      visible: false,
+      x: 707,
+      y: -140,
+    },
+    // No defaultState: the shower is fired by JCEvents.PLAY_COINS_ANIMATION, and getSpineAnim
+    // would otherwise play it once at build time.
     {
       name: 'coinsAnim',
       type: 'Spine',
       spineName: 'coins',
-      defaultState: 'all_animations',
-      loop: false,
       visible: false,
       scale: 0.8,
       x: 666.5,
@@ -129,6 +131,13 @@ export const SLOT_MACHINE_CONFIG: any = {
     RESPIN_COUNTER_CONFIG,
     BUY_BONUS_LINES_CONFIG,
   ],
+  // guideRect measures 1400x954, but the jackpot labels and the logo sit roughly 350 units above
+  // its top and the buy/lines row sits below its bottom in portrait, so the block that has to fit
+  // on screen is nearer 1300 units tall (1600 in portrait). heightPerc is set against 954, hence
+  // the values well below 1. Portrait is width-bound, so there heightPerc only acts as a cap and
+  // the negative vPadding lifts the block clear of the control panel. Landscape sets y outright
+  // instead of aligning: positionElement applies x/y first and vAlign second, so a vAlign here
+  // would overwrite the y.
   layoutData: {
     Desktop: {
       widthPerc: 0.5,
@@ -138,8 +147,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       vPaddingPerc: 0.07,
       hPaddingPerc: 0,
     },
-    Portrait: { widthPerc: 1, heightPerc: 0.6, vPaddingPerc: -0.02 },
+    // widthPerc is the size knob here: it alone decides the scale, one point being one percent.
+    Portrait: { widthPerc: 0.92, heightPerc: 0.72, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.05 },
     Landscape: { widthPerc: 0.7, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
-    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.88, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.002 },
+    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.62, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.06 },
   },
 };

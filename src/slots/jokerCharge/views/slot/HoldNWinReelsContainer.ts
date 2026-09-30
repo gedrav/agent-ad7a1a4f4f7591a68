@@ -5,20 +5,36 @@ import { StateManager } from '@core/states/StateManagerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
+import {
+  BLANK_SYMBOL_NAME,
+  CHARGE_LADDER,
+  MYSTERY_SYMBOL_NAMES,
+  OVERSIZED_SYMBOL_NAMES,
+  STICKY_SYMBOL_NAMES,
+  TRAIL_SYMBOL_NAMES,
+} from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
 import { isRespinActive, isRowActive } from '../../models/JCLinesState';
+import {
+  getHoldField,
+  getModifierMultipliers,
+  getStopGrid,
+  HoldFieldEntry,
+  MetamorphicSymbol,
+  ModifierMultiplier,
+} from '../../models/JCSpinData';
 import HoldNWinReel from './HoldNWinReel';
 import { MYSTERY_REEL_CONFIG, MysteryReelResult } from './JCMysterySymbolModifier';
 
-const MYSTERY_SYMBOLS = ['mystery', 'mystery jackpot'];
-
-const PLACEHOLDER_SYMBOL = 'Blanks';
 const COLUMN_EFFECT_SPINE = 'electr_effect';
 const COLUMN_EFFECT_STATE = 'animation';
 const BORDER_EFFECT_SPINE = 'saber_down';
 const BORDER_EFFECT_STATE = 'animation';
+// Three triangles rising up the column in turn, 0.17s apart, over one second. One rig covers a
+// single column: all three of its bones sit on the same x.
+const TRIANGLE_EFFECT_SPINE = 'triangle';
+const TRIANGLE_EFFECT_STATE = 'animation';
 // Their art overflows the cell, so the reels holding them are lifted above their neighbours.
-const OVERSIZED_SYMBOLS = ['mystery', 'mystery jackpot', 'boost'];
 const REEL_DEPTH_NORMAL = 0;
 const REEL_DEPTH_OVERSIZED = 1;
 const EFFECT_DEPTH = 2;
@@ -27,32 +43,15 @@ export interface HoldNWinPosition {
   row: number;
 }
 
-export interface HoldFieldEntry {
-  position: number[];
-  symbol: string;
-  value?: number;
-}
-
 // Base spins carry a full grid; respin rounds carry only the collected cells.
 export interface SpinResultPayload {
   grid?: string[][];
   holdField?: HoldFieldEntry[];
 }
 
-export interface MetamorphicSymbol {
-  position: number[];
-  symbol: string;
-  value?: number;
-}
-
 export interface MysteryReveal {
   position: number[];
   result: MysteryReelResult;
-}
-
-export interface ModifierMultiplier {
-  position: number[];
-  multiplier: number;
 }
 
 export interface HoldNWinReelsContainerData {
@@ -68,7 +67,7 @@ export interface HoldNWinReelsContainerData {
   rowOffsetsY?: number[];
   spinStartGap?: number;
   stopGap?: number;
-  // Column-major; missing cells fall back to PLACEHOLDER_SYMBOL.
+  // Column-major; missing cells fall back to BLANK_SYMBOL_NAME.
   initialReel?: string[][];
   // Floor on how long a spin visibly runs before it's allowed to stop, in ms.
   minSpinDuration?: number;
@@ -79,6 +78,8 @@ export interface HoldNWinReelsContainerData {
   anticipationSpeedFactor?: number;
   columnEffectScale?: number;
   columnEffectOffsetY?: number;
+  triangleEffectScale?: number;
+  triangleEffectOffsetY?: number;
   borderEffectScale?: number;
   borderEffectOffsetY?: number;
 }
@@ -104,6 +105,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private readonly anticipationSpeedFactor: number;
   private readonly reels: HoldNWinReel[][] = [];
   private readonly columnEffects: PixSpine[] = [];
+  private readonly triangleEffects: PixSpine[] = [];
   private readonly borderEffects: PixSpine[] = [];
   private readonly initialReel: string[][] | undefined;
   private readonly spinTimeoutIds: any[] = [];
@@ -137,6 +139,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.sortableChildren = true;
     this.createReels();
     this.createColumnEffects(data);
+    this.createTriangleEffects(data);
     this.createBorderEffects(data);
     // START_SPIN fires before the BE round-trip; the result arrives later on SPIN_RESULT_RECEIVED.
     EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
@@ -158,6 +161,24 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       effect.label = 'Multi/SuperMultiEffect';
       effect.zIndex = EFFECT_DEPTH;
       this.columnEffects[column] = effect;
+      this.addChild(effect);
+    }
+  }
+
+  // One rig per column, centred on it like the column effects. Played by a Charged symbol in the
+  // top panel, alongside that column's borders.
+  private createTriangleEffects(data: HoldNWinReelsContainerData): void {
+    const totalWidth = this.columns * this.symbolWidth + (this.columns - 1) * this.reelGap;
+
+    for (let column = 0; column < this.columns; column++) {
+      const effect = UIUtil.getSpineAnim(TRIANGLE_EFFECT_SPINE, { spineName: TRIANGLE_EFFECT_SPINE });
+      effect.scale.set(data.triangleEffectScale ?? 1);
+      effect.x = column * (this.symbolWidth + this.reelGap) - totalWidth / 2 + this.symbolWidth / 2;
+      effect.y = data.triangleEffectOffsetY ?? 0;
+      effect.visible = false;
+      effect.label = 'TriangleEffect';
+      effect.zIndex = EFFECT_DEPTH;
+      this.triangleEffects[column] = effect;
       this.addChild(effect);
     }
   }
@@ -189,6 +210,41 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   // Sequencing between steps is the caller's business - see GameSlotMachineView.
   public playColumnEffects(columns: number[], onComplete?: () => void): void {
     this.playEffects(this.columnEffects, columns, COLUMN_EFFECT_STATE, onComplete);
+  }
+
+  // Every cash symbol in these columns moves one step up the charge ladder, all together. A cell
+  // holding anything else, a blank included, is left where it is.
+  public chargeColumns(columns: number[], onComplete?: () => void): void {
+    const targets: { reel: HoldNWinReel; name: string }[] = [];
+    columns.forEach((column) => {
+      for (let row = 0; row < this.rows; row++) {
+        const reel = this.getReel(column, row);
+        const charged = CHARGE_LADDER[reel?.getSymbolName() ?? ''];
+        if (charged) targets.push({ reel, name: charged });
+      }
+    });
+
+    if (!targets.length) {
+      onComplete?.();
+      return;
+    }
+
+    let finished = 0;
+    targets.forEach(({ reel, name }) =>
+      reel.chargeSymbol(name, () => {
+        finished++;
+        if (finished < targets.length) return;
+        // A C5 charged into a mystery jackpot has to start churning like the ones that landed as
+        // one. Already-spinning cells are skipped, so the rest are untouched.
+        this.startMysteryReels();
+        onComplete?.();
+      }),
+    );
+  }
+
+  // Same, for the triangles rising up a column.
+  public playTriangleEffects(columns: number[], onComplete?: () => void): void {
+    this.playEffects(this.triangleEffects, columns, TRIANGLE_EFFECT_STATE, onComplete);
   }
 
   // Same, for the column borders - indexes run 0..columns.
@@ -264,10 +320,21 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     );
   }
 
-  // One cell at a time, so each trail reads on its own - turbo reveals them together.
-  public playMetamorphicSymbols(entries: MetamorphicSymbol[], onComplete?: () => void): void {
+  // One cell at a time, so each reveal reads on its own - turbo reveals them together. beforeReveal
+  // is the cell's lead-in, the trail down from the logo: its own reveal waits on it, the others
+  // do not.
+  public playMetamorphicSymbols(
+    entries: MetamorphicSymbol[],
+    onComplete?: () => void,
+    beforeReveal?: (column: number, row: number, done: () => void) => void,
+  ): void {
     const targets = entries
-      .map(({ position, symbol }) => ({ reel: this.getReel(position[0], position[1]), symbol }))
+      .map(({ position, symbol }) => ({
+        column: position[0],
+        row: position[1],
+        reel: this.getReel(position[0], position[1]),
+        symbol,
+      }))
       .filter(({ reel }) => !!reel);
 
     if (!targets.length) {
@@ -275,10 +342,19 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       return;
     }
 
+    const reveal = (target: (typeof targets)[number], done: () => void): void => {
+      const show = () => target.reel.revealMetamorphicSymbol(target.symbol, done);
+      if (!beforeReveal) {
+        show();
+        return;
+      }
+      beforeReveal(target.column, target.row, show);
+    };
+
     if (appModel.turboMode) {
       let finished = 0;
-      targets.forEach(({ reel, symbol }) =>
-        reel.revealMetamorphicSymbol(symbol, () => {
+      targets.forEach((target) =>
+        reveal(target, () => {
           finished++;
           if (finished === targets.length) onComplete?.();
         }),
@@ -291,7 +367,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
         onComplete?.();
         return;
       }
-      targets[index].reel.revealMetamorphicSymbol(targets[index].symbol, () => revealNext(index + 1));
+      reveal(targets[index], () => revealNext(index + 1));
     };
     revealNext(0);
   }
@@ -299,7 +375,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   public startMysteryReels(): void {
     let index = 0;
     this.forEachReel((reel) => {
-      if (!reel || !MYSTERY_SYMBOLS.includes(reel.getSymbolName()) || reel.isMysterySpinning()) return;
+      if (!reel || !MYSTERY_SYMBOL_NAMES.includes(reel.getSymbolName()) || reel.isMysterySpinning()) return;
       reel.startMysteryReel(index++ * MYSTERY_REEL_CONFIG.staggerMs);
     });
   }
@@ -336,11 +412,11 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   // the grid arrives through the same field a live spin uses.
   private renderUnfinishedGrid(): void {
     const grid = this.toGrid({
-      grid: appModel.getSpinResult()?.grid,
-      holdField: appModel.featureResult?.holdField,
+      grid: getStopGrid(),
+      holdField: getHoldField(),
     });
     if (grid) this.showGrid(grid);
-    this.restoreMultipliers(appModel.featureResult?.modifierMultipliers ?? []);
+    this.restoreMultipliers(getModifierMultipliers());
   }
 
   public showGrid(grid: string[][]): void {
@@ -358,7 +434,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     if (!this.reelsBuilt) return;
     this.forEachReel((reel) => {
       if (!reel) return;
-      reel.zIndex = OVERSIZED_SYMBOLS.includes(reel.getSymbolName()) ? REEL_DEPTH_OVERSIZED : REEL_DEPTH_NORMAL;
+      reel.zIndex = OVERSIZED_SYMBOL_NAMES.includes(reel.getSymbolName()) ? REEL_DEPTH_OVERSIZED : REEL_DEPTH_NORMAL;
     });
   }
 
@@ -386,7 +462,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
           totalHeight / 2 +
           this.symbolHeight / 2 +
           (this.rowOffsetsY?.[row] ?? 0);
-        reel.showSymbol(this.initialReel?.[column]?.[row] ?? PLACEHOLDER_SYMBOL);
+        reel.showSymbol(this.initialReel?.[column]?.[row] ?? BLANK_SYMBOL_NAME);
         this.reels[column][row] = reel;
         this.addChild(reel);
       }
@@ -417,11 +493,13 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   // blank. holdField positions are [column, row], matching this grid's own convention.
   private toGrid(result?: SpinResultPayload): string[][] | null {
     if (result?.grid) return result.grid;
-    if (!result?.holdField) return null;
+    // Empty counts as nothing to show, not as a grid of blanks: outside the feature there is no
+    // holdField at all, and a round that holds nothing can't have been sent.
+    if (!result?.holdField?.length) return null;
 
     const grid: string[][] = [];
     for (let column = 0; column < this.columns; column++) {
-      grid[column] = new Array(this.rows).fill(PLACEHOLDER_SYMBOL);
+      grid[column] = new Array(this.rows).fill(BLANK_SYMBOL_NAME);
     }
     result.holdField.forEach(({ position, symbol }) => {
       const [column, row] = position;
@@ -436,7 +514,14 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     const grid = this.pendingFinalGrid;
     this.pendingFinalGrid = null;
     this.stopSpin(grid, () => {
-      if (isRespinActive()) this.holdFilledCells();
+      if (isRespinActive()) {
+        this.holdFilledCells();
+        // A mystery that just landed joins the ones already churning - they all land together on
+        // the round that closes the feature.
+        this.startMysteryReels();
+      } else {
+        this.lockStickySymbols();
+      }
       StateManager.doNextStep();
     });
   }
@@ -461,12 +546,29 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     return this.getReel(column, row)?.isSticky() ?? false;
   }
 
+  // Base game only: a sticky symbol chains its cell shut, so it survives the following spins
+  // until the feature starts. Already-locked cells are left alone so the lock does not replay.
+  public lockStickySymbols(): void {
+    this.forEachReel((reel) => {
+      if (reel.isSticky() || !STICKY_SYMBOL_NAMES.includes(reel.getSymbolName() ?? '')) return;
+      reel.setSticky(true);
+      reel.playChainLockAppear();
+    });
+  }
+
+  // Entering the respin releases every lock: the chain animation clears the flag as it finishes.
+  public releaseStickyCells(): void {
+    this.forEachReel((reel) => {
+      if (reel.isSticky()) reel.playChainLockDisappear();
+    });
+  }
+
   // A cell already holding a symbol sits out the remaining respin rounds. Nothing to do with the
   // sticky/chain-lock mechanic - it only stops the cell taking part. Called when the feature starts
   // and again after every round settles.
   public holdFilledCells(): void {
     this.forEachReel((reel) => {
-      if (reel.getSymbolName() !== PLACEHOLDER_SYMBOL) reel.setHeld(true);
+      if (reel.getSymbolName() !== BLANK_SYMBOL_NAME) reel.setHeld(true);
     });
   }
 
@@ -477,7 +579,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   public getFilledCount(): number {
     let count = 0;
     this.forEachReel((reel) => {
-      if (reel.getSymbolName() !== PLACEHOLDER_SYMBOL) count++;
+      if (reel.getSymbolName() !== BLANK_SYMBOL_NAME) count++;
     });
     return count;
   }
@@ -509,10 +611,10 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       this.getReel(column, row)?.setAnticipating(true),
     );
 
-    const pending: { reel: HoldNWinReel; symbolName: string }[] = [];
+    const pending: { reel: HoldNWinReel; symbolName: string; column: number; row: number }[] = [];
     this.forEachReel((reel, column, row) => {
       if (reel.isSticky() || reel.isHeld()) return;
-      pending.push({ reel, symbolName: finalGrid[column][row] });
+      pending.push({ reel, symbolName: finalGrid[column][row], column, row });
     });
 
     if (pending.length === 0) {
@@ -521,11 +623,14 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     }
 
     let settledCount = 0;
-    pending.forEach(({ reel, symbolName }, index) => {
+    pending.forEach(({ reel, symbolName, column, row }, index) => {
       const delay = index * this.stopGap + (reel.isAnticipating() ? this.anticipationDelay : 0);
       this.stopTimeoutIds.push(
         setTimeout(() => {
           reel.stopSpin(symbolName, () => {
+            // On this cell's own landing, not once the whole grid has settled: the reels stop
+            // one after another, and a trail that waited would be seconds late.
+            this.requestTrail(column, row);
             settledCount++;
             if (settledCount === pending.length) {
               onComplete?.();
@@ -534,6 +639,14 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
         }, delay),
       );
     });
+  }
+
+  // Base game only, and only for a symbol that earns one on an active payline.
+  private requestTrail(column: number, row: number): void {
+    if (isRespinActive() || !isRowActive(row)) return;
+    const name = this.getReel(column, row)?.getSymbolName();
+    if (!name || !TRAIL_SYMBOL_NAMES.includes(name)) return;
+    EventHandler.dispatchEvent(JCEvents.PLAY_TRAIL_ANIMATION, { column, row });
   }
 
   // A payline is a row, active per the selected line count (see JCLinesState). When every column
@@ -564,7 +677,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
 
   private hasLandedSymbol(finalGrid: string[][], column: number, row: number): boolean {
     const name = finalGrid[column]?.[row];
-    return !!name && name !== PLACEHOLDER_SYMBOL;
+    return !!name && name !== BLANK_SYMBOL_NAME;
   }
 
   private clearTimeouts(ids: any[]): void {

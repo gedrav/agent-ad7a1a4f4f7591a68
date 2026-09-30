@@ -19,11 +19,23 @@ const PRESS_DURATION = 0.08;
 // Takes a Container as readily as a Sprite: a button whose art and labels are separate objects
 // has to be hooked as a group, or only the art reacts and anything drawn over it eats the click.
 export function setupButtonInteraction(btn: Container, onClick: () => void): void {
-  // Whatever the config gave it, so a scaled button isn't resized by hovering.
-  const baseScale = btn.scale.x;
+  // Read when the pointer arrives rather than once up front: layoutData sets a button's scale on
+  // the first resize, which lands after this runs, and that scale differs per orientation and can
+  // be non-uniform where a sprite is reshaped with width/height. Capturing at construction would
+  // snap the button to a stale size the first time it was hovered.
+  let baseX = btn.scale.x;
+  let baseY = btn.scale.y;
+  let engaged = false;
+
+  const engage = () => {
+    if (engaged) return;
+    baseX = btn.scale.x;
+    baseY = btn.scale.y;
+    engaged = true;
+  };
 
   const scaleTo = (factor: number, duration: number) => {
-    AnimationProxy.animateTween(btn.scale, { duration, x: baseScale * factor, y: baseScale * factor });
+    AnimationProxy.animateTween(btn.scale, { duration, x: baseX * factor, y: baseY * factor });
   };
 
   btn.tint = TINT_REST;
@@ -31,14 +43,17 @@ export function setupButtonInteraction(btn: Container, onClick: () => void): voi
   btn.cursor = 'pointer';
 
   btn.on('pointerover', () => {
+    engage();
     btn.tint = TINT_HOVER;
     scaleTo(HOVER_SCALE, TWEEN_DURATION);
   });
   btn.on('pointerout', () => {
     btn.tint = TINT_REST;
     scaleTo(1, TWEEN_DURATION);
+    engaged = false;
   });
   btn.on('pointerdown', () => {
+    engage();
     btn.tint = TINT_PRESS;
     scaleTo(PRESS_SCALE, PRESS_DURATION);
   });
@@ -50,6 +65,7 @@ export function setupButtonInteraction(btn: Container, onClick: () => void): voi
   btn.on('pointerupoutside', () => {
     btn.tint = TINT_REST;
     scaleTo(1, PRESS_DURATION);
+    engaged = false;
   });
   btn.on('pointertap', onClick);
 }

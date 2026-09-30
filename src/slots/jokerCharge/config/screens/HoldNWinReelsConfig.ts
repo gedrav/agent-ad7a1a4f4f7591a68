@@ -2,9 +2,9 @@ import { HoldNWinReelsContainer } from '@slots/jokerCharge/views/slot/HoldNWinRe
 
 // Starting grid
 const INITIAL_REEL: string[][] = [
-  ['cor-1x', 'Blanks', 'mini'],
-  ['Blanks', 'Blanks', 'Blanks'],
-  ['cor-5x', 'mystery jackpot', 'minor'],
+  ['C1', 'BL', 'MN'],
+  ['BL', 'BL', 'BL'],
+  ['C5', 'MJP', 'MR'],
 ];
 
 export const HOLD_N_WIN_REELS_CONFIG: any = {
@@ -27,6 +27,8 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     stopGap: 20,
     columnEffectScale: 0.65,
     columnEffectOffsetY: 0,
+    triangleEffectScale: 0.6,
+    triangleEffectOffsetY: 0,
     borderEffectScale: 1.55,
     borderEffectOffsetY: 0,
     anticipationDelay: 1200,

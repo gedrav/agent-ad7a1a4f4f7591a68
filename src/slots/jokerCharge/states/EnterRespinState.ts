@@ -1,17 +1,16 @@
 import { EnterRespinStateCommand } from '@core/commands/states/EnterRespinState';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
 import { JCEvents } from '../events/JCEvents';
-import { startRespinSession } from '../models/JCRespinState';
+import { startRespinSession, TOTAL_RESPINS } from '../models/JCRespinState';
+import { getCollectedCount, getGrantedRespins, getMetamorphicSymbols, MetamorphicSymbol } from '../models/JCSpinData';
 import { MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
-import { MetamorphicSymbol } from '../views/slot/HoldNWinReelsContainer';
 
 class JCEnterRespinStateCommand extends EnterRespinStateCommand {
   // A metamorphic trigger showers coins and brings its symbols in one by one, then the active
   // line celebrates - late enough that the symbols the shower just brought in join in.
   protected async playTriggerPresentation(): Promise<void> {
-    const metamorphic: MetamorphicSymbol[] = appModel.getSpinResult()?.metamorphicSymbolPosition ?? [];
+    const metamorphic: MetamorphicSymbol[] = getMetamorphicSymbols();
     if (metamorphic.length) {
       EventHandler.dispatchEvent(JCEvents.PLAY_COINS_ANIMATION);
       await this.revealMetamorphicSymbols(metamorphic);
@@ -25,9 +24,9 @@ class JCEnterRespinStateCommand extends EnterRespinStateCommand {
     EventHandler.dispatchEvent(JCEvents.PLAY_TRANSITION, {
       onHalfway: () => {
         EventHandler.dispatchEvent(JCEvents.SET_BONUS_TRIGGER_LAYOUT, { active: true });
-        // Seeded with whatever the triggering spin already collected, so the first round can tell
-        // a new symbol from one that was already there.
-        const remaining = startRespinSession(appModel.featureResult?.holdField?.length ?? 0);
+        // The triggering spin carries the count the feature opens on, and whatever it already
+        // collected, so the first round can tell a new symbol from one that was already there.
+        const remaining = startRespinSession(getGrantedRespins() ?? TOTAL_RESPINS, getCollectedCount());
         EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, remaining);
         StateManager.next();
       },

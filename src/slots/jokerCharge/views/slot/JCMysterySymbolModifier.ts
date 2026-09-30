@@ -7,17 +7,24 @@ import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { JACKPOT_TEXT_STYLES, MULTIPLIER_TEXT_STYLE } from '../../config/SymbolsConfig';
+import { JACKPOT_LABELS, MULTIPLIER_TEXT_STYLE } from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
-import { ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModifier';
 
 const FRONT_SPINE_NAME = 'mystery_front';
 
 // What the backend says this symbol turned out to be. amount is the cor multiplier of a value
 // result, multiplied by the bet at display time - never worked out here.
 export interface MysteryReelResult {
-  type: 'value' | 'mini' | 'minor' | 'major';
+  // 'value' is a cash amount; anything else is a key of JACKPOT_LABELS, i.e. a backend jackpot code.
+  type: 'value' | 'MN' | 'MR' | 'MJ';
   amount?: number;
+}
+
+// A backend reveal, which names the symbol the mystery turned into, read as a reel result: a
+// jackpot code lands on its own label, anything else on its cash value.
+export function toMysteryReelResult(symbol: string, value?: number): MysteryReelResult {
+  if (JACKPOT_LABELS[symbol]) return { type: symbol as MysteryReelResult['type'], amount: value };
+  return { type: 'value', amount: value };
 }
 
 export const MYSTERY_REEL_CONFIG = {
@@ -214,6 +221,9 @@ export class JCMysterySymbolModifier {
       this.resultLabel.destroy();
       this.resultLabel = null;
     }
+    // Nothing of the reel's is left in the window now, so the symbol reads MYSTERY again - which
+    // is how it sits in the base game.
+    this.setSymbolLabelVisible(true);
   }
 
   private get cellHeight(): number {
@@ -229,7 +239,7 @@ export class JCMysterySymbolModifier {
   }
 
   private buildReel(): void {
-    this.clearSymbolLabel();
+    this.setSymbolLabelVisible(false);
     const container = new Container();
     container.label = 'mysteryReel';
     this.reelContainer = container;
@@ -265,9 +275,10 @@ export class JCMysterySymbolModifier {
   }
 
   // The symbol's own MYSTERY label sits on the rig's text slot, right where the strip is about to
-  // run. Cast because the modifier is handed a plain Container, but only ever a spine symbol.
-  private clearSymbolLabel(): void {
-    (this.host as any).removeSlotObject?.(ROOT_TEXT_SLOT_NAME);
+  // run. The host is the reel symbol, which owns both rigs the label goes on - it can't be taken
+  // off here, because only one of the two is ever on screen at a time.
+  private setSymbolLabelVisible(flag: boolean): void {
+    (this.host as any).setLabelVisible?.(flag);
   }
 
   // The glass belongs over the strip, and both were added after the symbol's own rig.
@@ -299,14 +310,16 @@ export class JCMysterySymbolModifier {
   }
 
   private randomJackpotItem(): ReelItem {
-    const names = Object.keys(JACKPOT_TEXT_STYLES);
+    const names = Object.keys(JACKPOT_LABELS);
     return this.jackpotItem(names[Util.getRandomRange(0, names.length - 1)]);
   }
 
+  // Keyed by the backend's short code, labelled with the word the player reads.
   private jackpotItem(name: string): ReelItem {
+    const jackpot = JACKPOT_LABELS[name];
     return {
-      text: name.toUpperCase(),
-      style: resolveTextStyle(JACKPOT_TEXT_STYLES[name], MYSTERY_REEL_CONFIG.jackpotFontSize),
+      text: jackpot.text,
+      style: resolveTextStyle(jackpot.style, MYSTERY_REEL_CONFIG.jackpotFontSize),
     };
   }
 

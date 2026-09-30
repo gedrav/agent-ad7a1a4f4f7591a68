@@ -1,65 +1,52 @@
 import { BuyBonusScreenComp } from '@slots/jokerCharge/views/comps/BuyBonusScreenComp';
 
-const GUIDE_WIDTH = 1500;
+const GUIDE_WIDTH = 1800;
 const GUIDE_HEIGHT = 1600;
 const CENTER_X = GUIDE_WIDTH / 2;
 
-// The comp pivots the content group around this so it scales from the middle - UIUtil doesn't
-// apply a pivot given in config, so it is set in code.
 export const BUY_BONUS_CONTENT_PIVOT = { x: CENTER_X, y: GUIDE_HEIGHT / 2 };
 
 const DIM_SIZE = 10000;
-export const BUY_BONUS_DIM_ALPHA = 0.85;
+export const BUY_BONUS_DIM_ALPHA = 0.95;
 
-// How the screen arrives and leaves: the group grows past its size and settles, the dim fades.
 export const BUY_BONUS_OPEN_DURATION = 0.35;
 export const BUY_BONUS_CLOSE_DURATION = 0.2;
 export const BUY_BONUS_OPEN_EASE = 'back.out(1.6)';
 export const BUY_BONUS_CLOSE_EASE = 'power2.in';
 export const BUY_BONUS_START_SCALE = 0.85;
-
-// The three cards, left to right. bonus_N_panel is 1429x2656, so at CARD_SCALE a card is about
-// 457x850 - every scale below is worked back from that width.
-const CARD_SCALE = 0.32;
+const CARD_SCALE = 0.4;
 const CARD_WIDTH = 1429 * CARD_SCALE;
 const CARD_HEIGHT = 2656 * CARD_SCALE;
-const CARD_GAP = 24;
+const CARD_GAP = 70;
 const CARD_XS = [CENTER_X - (CARD_WIDTH + CARD_GAP), CENTER_X, CENTER_X + (CARD_WIDTH + CARD_GAP)];
-const CARD_Y = 740;
+const CARD_Y = 900;
 
-// Fractions of the card's width, so the art fills the panel the way the mock does.
-const HEADER_SCALE = (CARD_WIDTH * 0.9) / 1180;
-const FOOTER_SCALE = (CARD_WIDTH * 0.5) / 860;
+const HEADER_SCALE = (CARD_WIDTH * 0.8) / 1180;
+const FOOTER_SCALE = (CARD_WIDTH * 0.8) / 860;
 const BUY_BUTTON_SCALE = (CARD_WIDTH * 0.88) / 1116;
 const BUY_LABEL_SCALE = (CARD_WIDTH * 0.26) / 373;
 const CHARGED_TITLE_SCALE = (CARD_WIDTH * 0.72) / 852;
-const SUPERCHARGED_TITLE_SCALE = (CARD_WIDTH * 0.95) / 1402;
-// One per card: the three art frames differ in size, so each gets its own.
+const SUPERCHARGED_TITLE_SCALE = CARD_WIDTH / 1402;
 const ART_SCALES = [(CARD_WIDTH * 0.9) / 1875, (CARD_WIDTH * 0.75) / 1217, (CARD_WIDTH * 0.85) / 1458];
 
-// Fractions of the card's height, measured from its centre.
-const HEADER_Y = -CARD_HEIGHT * 0.425;
-const ART_Y = -CARD_HEIGHT * 0.08;
-const FOOTER_Y = CARD_HEIGHT * 0.19;
+const HEADER_Y = -CARD_HEIGHT * 0.4;
+const ART_Y = -CARD_HEIGHT * 0.1;
+const FOOTER_Y = CARD_HEIGHT * 0.22;
 const BUY_BUTTON_Y = CARD_HEIGHT * 0.335;
 const BUY_LABEL_Y = CARD_HEIGHT * 0.295;
 const PRICE_Y = CARD_HEIGHT * 0.37;
 const TITLE_Y = -CARD_HEIGHT * 0.525;
 
-// bet_panel is 3206x581 and spans the full row of cards.
 const BET_ROW_WIDTH = CARD_WIDTH * 3 + CARD_GAP * 2;
-const BET_PANEL_SCALE = BET_ROW_WIDTH / 3206;
+const BET_PANEL_SCALE = BET_ROW_WIDTH / 3806;
 const BET_LABEL_SCALE = (BET_ROW_WIDTH * 0.15) / 336;
 const BET_BUTTON_SCALE = (BET_ROW_WIDTH * 0.18) / 644;
 const BET_BUTTON_X = BET_ROW_WIDTH * 0.34;
-const BET_ROW_Y = CARD_Y + CARD_HEIGHT * 0.5 + 135;
+const BET_ROW_Y = CARD_Y + CARD_HEIGHT * 0.5 + 235;
 
-// lines_btn is 393x349, standing in for the close button.
-const CLOSE_SCALE = 132 / 393;
+const CLOSE_SCALE = 200 / 393;
 
-// What each card costs, as a multiple of the current bet - the price text is worked out from the
-// bet at display time, never hardcoded.
-export const BUY_BONUS_MULTIPLIERS = [30, 30, 30];
+export const BUY_BONUS_FEATURE_IDS = ['FG1', 'FG2', 'FG3'];
 
 const PRICE_STYLE = {
   fontFamily: 'belweCondensed',
@@ -96,8 +83,6 @@ function text(name: string, contentText: string, x: number, y: number, style: an
   return { name, type: 'Text', contentText, anchor: { x: 0.5, y: 0.5 }, x, y, style };
 }
 
-// One card: panel, header, art, footer and the buy button, all local to the card's own centre so
-// the whole thing moves as a unit.
 function card(index: number, artImage: string, footerImage: string): any {
   return {
     name: `card${index}`,
@@ -113,7 +98,7 @@ function card(index: number, artImage: string, footerImage: string): any {
         name: 'buyGroup',
         type: 'Container',
         x: 0,
-        y: BUY_BUTTON_Y,
+        y: BUY_BUTTON_Y + 20,
         Elements: [
           sprite('buyBtn', 'BUY_button', 0, 0, BUY_BUTTON_SCALE),
           sprite('buyLabel', 'BUY_txt', 0, BUY_LABEL_Y - BUY_BUTTON_Y, BUY_LABEL_SCALE),
@@ -139,7 +124,7 @@ export const BUY_BONUS_SCREEN_CONFIG: any = {
       color: 0xff0000,
       alpha: 0,
     },
-    // First, so everything else draws over it.
+
     {
       name: 'dim',
       type: 'Graphics',
@@ -150,20 +135,17 @@ export const BUY_BONUS_SCREEN_CONFIG: any = {
       x: CENTER_X - DIM_SIZE / 2,
       y: GUIDE_HEIGHT / 2 - DIM_SIZE / 2,
     },
-    // Everything the screen draws, grouped so it can be scaled in and out as one - the dim stays
-    // behind it and fades on its own.
     {
       name: 'content',
       type: 'Container',
       x: 0,
       y: 0,
       Elements: [
-        // Card one is the random bonus and has no title above it.
-        sprite('chargedTitle', 'CHARGED_txt', CARD_XS[1], CARD_Y + TITLE_Y, CHARGED_TITLE_SCALE),
-        sprite('superChargedTitle', 'SUPERCHARGED_txt', CARD_XS[2], CARD_Y + TITLE_Y, SUPERCHARGED_TITLE_SCALE),
         card(0, 'bonus_1_art', 'RANDOM_txt'),
         card(1, 'bonus_2_art', 'GUARANTEED_txt'),
         card(2, 'bonus_3_art', 'GUARANTEED_txt'),
+        sprite('chargedTitle', 'CHARGED_txt', CARD_XS[1], CARD_Y + TITLE_Y + 40, CHARGED_TITLE_SCALE),
+        sprite('superChargedTitle', 'SUPERCHARGED_txt', CARD_XS[2], CARD_Y + TITLE_Y + 40, SUPERCHARGED_TITLE_SCALE),
         {
           name: 'betBar',
           type: 'Container',
@@ -177,13 +159,11 @@ export const BUY_BONUS_SCREEN_CONFIG: any = {
             sprite('plusBtn', 'plus_btn', BET_BUTTON_X, 0, BET_BUTTON_SCALE),
           ],
         },
-        // TODO: no close-button art in the BuyBonus sheets - lines_btn stands in for it. Swap for
-        // the round blue X once it exists.
         {
           name: 'closeBtn',
           type: 'Container',
-          x: GUIDE_WIDTH - 120,
-          y: 120,
+          x: GUIDE_WIDTH,
+          y: 210,
           Elements: [sprite('icon', 'lines_btn', 0, 0, CLOSE_SCALE), text('label', 'X', 0, 0, CLOSE_STYLE)],
         },
       ],

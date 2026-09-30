@@ -6,6 +6,7 @@ import { StateManager } from '@core/states/StateManagerService';
 import { STATES } from '@core/states/StateConstants';
 import { JCEvents } from '../events/JCEvents';
 import { isRespinActive } from '../models/JCLinesState';
+import { getHoldField, getModifierRow, getStopGrid } from '../models/JCSpinData';
 import { SpinResultPayload } from '../views/slot/HoldNWinReelsContainer';
 
 // Replaces corelib's SpinResponseReceivedState, which hands off to a SlotReel this game doesn't
@@ -23,18 +24,17 @@ class JCSpinResponseReceivedStateCommand extends StateCommand {
     EventHandler.dispatchEvent(JCEvents.TOP_REEL_RESULT_RECEIVED, this.resolveModifierRow());
   }
 
-  // Only the respin response carries this; BonusReelsContainer ignores it outside the feature.
+  // Only a response that carries the feature has this; BonusReelsContainer ignores it outside.
   private resolveModifierRow(): string[] | undefined {
-    return appModel.featureResult?.modifierRow ?? appModel.getSpinResult()?.modifierRow;
+    return getModifierRow();
   }
 
-  // A respin response carries no spinResults, so corelib nulls gameResult and its top-level
-  // result.grid never gets stored - the collected cells arrive as featureResult.holdField instead.
-  // The container turns whichever of the two shows up into a grid.
+  // A respin round sends the same full matrix a base spin does, so holdField is only the fallback
+  // for a response that carries the collected cells and nothing else.
   private resolveSpinResult(): SpinResultPayload {
     return {
-      grid: appModel.getSpinResult()?.grid,
-      holdField: appModel.featureResult?.holdField,
+      grid: getStopGrid(),
+      holdField: getHoldField(),
     };
   }
 

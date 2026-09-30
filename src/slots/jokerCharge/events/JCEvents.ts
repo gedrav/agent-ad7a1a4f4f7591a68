@@ -18,10 +18,15 @@ export const JCEvents = {
   PLAY_COINS_ANIMATION: 'PLAY_COINS_ANIMATION',
   // Data: { hold, onComplete } - see TriggerWinData.
   PLAY_TRIGGER_WIN_ANIMATION: 'PLAY_TRIGGER_WIN_ANIMATION',
+  // Data: { hold, onComplete } - see ModifierEffectsData. Plays whatever the top panel is
+  // showing: Multi, Super-Multi, Charged, Super-Charged.
+  PLAY_MODIFIER_EFFECTS: 'PLAY_MODIFIER_EFFECTS',
   // Data: the MysteryReelResult the symbol landed on.
   MYSTERY_REEL_LANDED: 'MYSTERY_REEL_LANDED',
   // Data: { entries, hold, onComplete } - see MetamorphicRevealData.
   PLAY_METAMORPHIC_SYMBOLS: 'PLAY_METAMORPHIC_SYMBOLS',
+  // Data: { column, row } - runs the trail from that cell up to the logo.
+  PLAY_TRAIL_ANIMATION: 'PLAY_TRAIL_ANIMATION',
 } as const;
 
 export type JCEvent = keyof typeof JCEvents;
