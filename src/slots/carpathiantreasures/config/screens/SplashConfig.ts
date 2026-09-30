@@ -9,12 +9,13 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 40 },
-  cs: { fontSize: 30 },
-  lt: { fontSize: 30 },
-  pl: { fontSize: 30 },
-  sk: { fontSize: 30 },
-  ro: { fontSize: 30 },
+  en: { fontSize: 35 },
+  cs: { fontSize: 35 },
+  lt: { fontSize: 35 },
+  pl: { fontSize: 35 },
+  sk: { fontSize: 35 },
+  ro: { fontSize: 35 },
+  hr: { fontSize: 35 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -39,7 +40,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'gameFont1',
+          fontFamily: 'commonFont',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
@@ -72,7 +73,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'gameFont1',
+          fontFamily: 'commonFont',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
@@ -105,7 +106,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'gameFont1',
+          fontFamily: 'commonFont',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
@@ -244,7 +245,7 @@ export const SPLASH_CONFIG: any = {
           textConfig: {
             content: 'playGameText',
             style: {
-              fontFamily: 'gameFont1',
+              fontFamily: 'commonFont',
               fontWeight: 700,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
