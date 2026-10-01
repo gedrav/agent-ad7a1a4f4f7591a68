@@ -8,6 +8,7 @@ const PRELOADER: AssetBundle = {
     { TYPE: 'commoncontent', NAME: 'commonContent.json' },
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'Belwe-Condensed.ttf', ASSETTYPE: 'font' },
   ],
 };
 const COMMON: AssetBundle = {
@@ -34,6 +35,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
+    { TYPE: 'game', NAME: 'Bitmap1.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bg', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'logo', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
@@ -49,11 +51,19 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'belt', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'boot', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Chain_lock_sym', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'reel_sym_add', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'electr_effect', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'saber_down', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'multiplier_effect', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'triangle', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mask', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'transition', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'small_square', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'big_square', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'line', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'coins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'respinCounter', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'BuyBonus-0', ASSETTYPE: 'sprite' },
   ],
 };
 const SECONDARY: AssetBundle = {

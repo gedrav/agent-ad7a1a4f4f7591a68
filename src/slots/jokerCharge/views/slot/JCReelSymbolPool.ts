@@ -44,31 +44,35 @@ export class JCReelSymbolPool {
     }
   }
 
-  public acquire(name: string, reelNumber: number = 0): JCReelSymbol {
+  public acquire(name: string, reelNumber: number = 0, row: number = 0): JCReelSymbol {
     const entries = this.pool.get(name) ?? [];
 
     const free = entries.find((e) => !e.inUse);
     if (free) {
       free.inUse = true;
-      free.symbol.setNewSymbol(this.getData(name), reelNumber);
+      free.symbol.setNewSymbol({ ...this.getData(name), row }, reelNumber);
       free.symbol.visible = true;
       return free.symbol;
     }
 
     if (entries.length < JCReelSymbolPool.MAX_SIZE) {
-      const entry: PoolEntry = { symbol: this.createSymbol(name, reelNumber), inUse: true };
+      const entry: PoolEntry = { symbol: this.createSymbol(name, reelNumber, row), inUse: true };
       entries.push(entry);
       this.pool.set(name, entries);
       return entry.symbol;
     }
 
     console.warn(`JCReelSymbolPool: pool exhausted for symbol "${name}", creating temporary symbol.`);
-    const tempSymbol = this.createSymbol(name, reelNumber);
+    const tempSymbol = this.createSymbol(name, reelNumber, row);
     this.temporarySymbols.add(tempSymbol);
     return tempSymbol;
   }
 
   public release(symbol: JCReelSymbol): void {
+    // Always detach first: a symbol left parented stays in the reel it came from, and anything
+    // that made it visible again would draw it over whatever landed there since.
+    symbol.parent?.removeChild(symbol);
+
     if (this.temporarySymbols.has(symbol)) {
       this.temporarySymbols.delete(symbol);
       symbol.destroySymbol();
@@ -76,16 +80,25 @@ export class JCReelSymbolPool {
       return;
     }
 
-    const name = symbol.getSymbolName();
-    const entries = this.pool.get(name);
-    if (!entries) return;
-
-    const entry = entries.find((e) => e.symbol === symbol);
+    const entry = this.findEntry(symbol);
     if (!entry) return;
 
     symbol.resetSymbol();
     symbol.visible = false;
     entry.inUse = false;
+  }
+
+  // Found by instance, not by name: setNewSymbol() renames an instance in place while it stays in
+  // the bucket it was created in, so a name lookup alone would miss it and leak the entry. acquire()
+  // re-applies the bucket's data, so the bucket stays the truth about what an instance is for.
+  private findEntry(symbol: JCReelSymbol): PoolEntry | undefined {
+    const named = this.pool.get(symbol.getSymbolName())?.find((e) => e.symbol === symbol);
+    if (named) return named;
+    for (const entries of this.pool.values()) {
+      const found = entries.find((e) => e.symbol === symbol);
+      if (found) return found;
+    }
+    return undefined;
   }
 
   public getStats(): Record<string, { total: number; inUse: number }> {
@@ -107,7 +120,7 @@ export class JCReelSymbolPool {
     return data;
   }
 
-  private createSymbol(name: string, reelNumber: number = 0): JCReelSymbol {
-    return new JCReelSymbol({ data: { ...this.getData(name), reelNumber } });
+  private createSymbol(name: string, reelNumber: number = 0, row: number = 0): JCReelSymbol {
+    return new JCReelSymbol({ data: { ...this.getData(name), reelNumber, row } });
   }
 }

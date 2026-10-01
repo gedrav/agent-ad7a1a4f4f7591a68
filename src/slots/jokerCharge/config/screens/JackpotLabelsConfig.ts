@@ -1,11 +1,11 @@
 import { JackpotLabelsComp } from '@slots/jokerCharge/views/comps/JackpotLabelsComp';
 
 const VALUE_TEXT_STYLE = {
-  fontFamily: 'commonFont',
-  fontWeight: 700,
+  fontFamily: 'belweCondensed',
+  fontWeight: 900,
   fill: [0xffed54, 0xf5a100],
   stroke: { color: 0x000000, width: 4 },
-  fontSize: 60,
+  fontSize: 80,
 };
 
 export const JACKPOT_LABELS_CONFIG: any = {

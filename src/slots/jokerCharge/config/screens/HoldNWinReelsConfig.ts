@@ -1,16 +1,12 @@
 import { HoldNWinReelsContainer } from '@slots/jokerCharge/views/slot/HoldNWinReelsContainer';
 
-// Starting grid, column-major (INITIAL_REEL[column][row]). Each value must be a key in
-// config/SymbolsConfig.ts's SYMBOLS_DATA.
+// Starting grid
 const INITIAL_REEL: string[][] = [
-  ['cor-1x', 'Blanks', 'major'], // column 0
-  ['cor-3x', 'Blanks', 'boost'], // column 1
-  ['cor-5x', 'minor', 'mystery'], // column 2
+  ['C1', 'BL', 'MN'],
+  ['BL', 'BL', 'BL'],
+  ['C5', 'MJP', 'MR'],
 ];
 
-// TODO: rows/columns/symbolWidth/symbolHeight/reelGap/rowGap are placeholders. setSticky() isn't
-// called yet; spin()/stopSpin() only run via the dummy simulateSpinResponse() until the real BE
-// spin-response is finalized (rough shape in responsetemp/Response.ts - unconfirmed).
 export const HOLD_N_WIN_REELS_CONFIG: any = {
   name: 'holdNWinReelsContainer',
   type: 'Comp',
@@ -22,13 +18,24 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     columns: 3,
     symbolWidth: 448,
     symbolHeight: 292,
+    maskHeight: 285,
+    landingOvershoot: 35,
     reelGap: 15,
-    rowGap: 15,
-    spinStartGap: 110,
-    stopGap: 110,
-    minSpinDuration: 2000,
+    rowGap: 30,
+    rowOffsetsY: [11, 0, -7],
+    spinStartGap: 20,
+    stopGap: 20,
+    columnEffectScale: 0.65,
+    columnEffectOffsetY: 0,
+    triangleEffectScale: 0.6,
+    triangleEffectOffsetY: 0,
+    borderEffectScale: 1.55,
+    borderEffectOffsetY: 0,
+    anticipationDelay: 1200,
+    anticipationSpeedFactor: 0.35,
+    minSpinDuration: 1500,
     minSpinDurationTurbo: 750,
-    spinSpeedMultiplier: 1,
+    spinSpeedMultiplier: 0.45,
     initialReel: INITIAL_REEL,
   },
 };

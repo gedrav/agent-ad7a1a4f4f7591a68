@@ -7,6 +7,7 @@ export const CONSTANTS = {
   EPIC_WIN: 'EPIC_WIN',
   FEATURE_TYPE_FREESPIN: 'freespins',
   FEATURE_TYPE_PICK: 'pickFeature',
+  FEATURE_TYPE_RESPIN: 'respins',
 } as const;
 
 export type ConstantKey = keyof typeof CONSTANTS;

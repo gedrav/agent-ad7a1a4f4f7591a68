@@ -11,12 +11,17 @@ import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 import { PROMOFS_POPUP_CONFIG } from '@brand/config/PromoFSPopupConfig';
 import { TRANSITION_CONFIG } from './TransitionConfig';
+import { BUY_BONUS_SCREEN_CONFIG } from './BuyBonusScreenConfig';
+import { RESPIN_INTRO_CONFIG } from './RespinIntroConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
   Elements: [
     GAME_BG_CONFIG,
     SLOT_MACHINE_CONFIG,
+    // Before TRANSITION_CONFIG so the transition animation plays over the top of the intro.
+    RESPIN_INTRO_CONFIG,
+    BUY_BONUS_SCREEN_CONFIG,
     TRANSITION_CONFIG,
     createControlPanelConfig(null),
     MODAL_VIEW_CONFIG,
