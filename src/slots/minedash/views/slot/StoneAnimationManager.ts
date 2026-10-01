@@ -24,11 +24,11 @@ export interface StoneData {
 }
 
 export const SYMBOL_TO_GOLDCARD_SKIN: Record<string, string> = {
-  H1: 'Helmate',
-  H2: 'Lamp',
-  H3: 'Pickaxe',
-  H4: 'Helmate',
-  H5: 'Lamp',
+  H1: 'HELMATE',
+  H2: 'LANTERN',
+  H3: 'PICKAXE',
+  H4: 'HELMATE',
+  H5: 'LANTERN',
   L1: 'A',
   L2: 'K',
   L3: 'Q',
@@ -37,10 +37,10 @@ export const SYMBOL_TO_GOLDCARD_SKIN: Record<string, string> = {
 };
 
 export const STONE_CONFIG: Record<string, StoneMapping> = {
-  SM: { boxName: 'box1', spineName: 'Gems_Final', skin: 'Crystal' },
-  SF: { boxName: 'box2', spineName: 'Gems_Final', skin: 'Triangle' },
-  SY: { boxName: 'box3', spineName: 'Gems_Final', skin: 'Drop' },
-  SW: { boxName: 'box4', spineName: 'Gems_Final', skin: 'Eye' },
+  SM: { boxName: 'box1', spineName: 'gems', skin: 'Crystal' },
+  SF: { boxName: 'box2', spineName: 'gems', skin: 'Triangle' },
+  SY: { boxName: 'box3', spineName: 'gems', skin: 'Drop' },
+  SW: { boxName: 'box4', spineName: 'gems', skin: 'Eye' },
   SG: { boxName: 'box5', spineName: 'GoldCard' },
 };
 
@@ -196,7 +196,7 @@ export class StoneAnimationManager {
       const megawinModifier = appModel.getReelModifiers()?.find((m: any) => m.type === 'megawinCollect');
       const targetSym =
         firedStone?.value || megawinModifier?.symbol || this.view.getStoneState()?.megawinStone?.drawnValue || 'H1';
-      cardSkin = SYMBOL_TO_GOLDCARD_SKIN[targetSym] || 'Helmate';
+      cardSkin = SYMBOL_TO_GOLDCARD_SKIN[targetSym] || 'HELMATE';
     }
 
     const symbolConfig = GameProxy.config.reelSymbolsConfig?.[symbolName];
@@ -207,12 +207,12 @@ export class StoneAnimationManager {
         name: symbolName,
         spineName: spineName,
         skin: cardSkin,
-        idleAnim: 'Static',
-        winAnim: symbolConfig?.winAnim || 'Win',
+        idleAnim: symbolConfig?.idleAnim || (spineName === 'GoldCard' ? 'static' : 'Static'),
+        winAnim: symbolConfig?.winAnim || (spineName === 'GoldCard' ? 'win' : 'Win'),
         animScale: animScale !== undefined ? animScale : 1,
       } as any,
     });
-    movingSymbol.showWinning(null, true);
+    movingSymbol.showWinning(null, false);
     movingSymbol.position.copyFrom(startPos);
 
     return movingSymbol;
@@ -237,10 +237,10 @@ export class StoneAnimationManager {
       onComplete: () => {
         this.removeActiveTween(popTween);
 
-        // Step 2: Hold for 1 second, then drop
+        // Step 2: Hold briefly, then drop
         this.stoneAnimationTimeout = setTimeout(() => {
           this.playDropAnimation(movingSymbol, endPos, 1, targetDropScale, targetBox, boxName, onComplete);
-        }, 1000);
+        }, 600);
       },
     });
 
@@ -263,7 +263,7 @@ export class StoneAnimationManager {
     const c2 = new Point(midX, endPos.y - 30);
 
     const dropTween = AnimationProxy.animateTween(movingSymbol, {
-      duration: 0.35,
+      duration: 0.25,
       ease: 'power2.in',
       onUpdate: () => {
         const t = dropTween.progress();
@@ -306,8 +306,8 @@ export class StoneAnimationManager {
       this.stoneAnimationTimeout = setTimeout(() => {
         (this.view as any).applyBoxState(boxName, true);
         if (onComplete) onComplete();
-      }, 3200);
-    }, 500);
+      }, 300);
+    }, 100);
   }
 
   private getNormalSymbolScale(): number {
