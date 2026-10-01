@@ -5,8 +5,8 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { RespinRoundAnimationData } from '@core/commands/states/RespinPreWinState';
-import { EffectStep, playEffectSteps } from '@slots/jokerCharge/views/effects/EffectSteps';
-import { resolveModifierSteps } from '@slots/jokerCharge/views/effects/ModifierEffects';
+import { EffectStep, playEffectSteps } from '@slots/temp/views/effects/EffectSteps';
+import { resolveModifierSteps } from '@slots/temp/views/effects/ModifierEffects';
 
 type TrailCell = { column: number; row: number };
 
@@ -32,8 +32,8 @@ const COINS_ANIM_STATE = 'all_animations';
 // Runs under the whole metamorphic reveal, whose length depends on how many symbols land, so it
 // loops until hideCoinsAnimation ends it as the feature opens.
 const COINS_ANIM_LOOP = true;
-import { BonusLayoutOverride, BONUS_TRIGGER_LAYOUT } from '@slots/jokerCharge/config/screens/BonusTriggerLayoutConfig';
-import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
+import { BonusLayoutOverride, BONUS_TRIGGER_LAYOUT } from '@slots/temp/config/screens/BonusTriggerLayoutConfig';
+import { JCEvents } from '@slots/temp/events/JCEvents';
 import {
   getTrailPlacement,
   TRAIL_ANIMATION,
@@ -41,20 +41,20 @@ import {
   TRAIL_SPINE_NAME,
   TrailDirection,
   TrailPlacement,
-} from '@slots/jokerCharge/config/screens/TrailAnimConfig';
+} from '@slots/temp/config/screens/TrailAnimConfig';
 
-import { RespinCounterComp } from '@slots/jokerCharge/views/comps/RespinCounterComp';
-import { BuyBonusLinesComp } from '@slots/jokerCharge/views/comps/BuyBonusLinesComp';
-import { HoldNWinReelsContainer, MysteryReveal } from '@slots/jokerCharge/views/slot/HoldNWinReelsContainer';
-import { toMysteryReelResult } from '@slots/jokerCharge/views/slot/JCMysterySymbolModifier';
-import { setRespinActive } from '@slots/jokerCharge/models/JCLinesState';
+import { RespinCounterComp } from '@slots/temp/views/comps/RespinCounterComp';
+import { BuyBonusLinesComp } from '@slots/temp/views/comps/BuyBonusLinesComp';
+import { HoldNWinReelsContainer, MysteryReveal } from '@slots/temp/views/slot/HoldNWinReelsContainer';
+import { toMysteryReelResult } from '@slots/temp/views/slot/JCMysterySymbolModifier';
+import { setRespinActive } from '@slots/temp/models/JCLinesState';
 import {
   getModifierMultipliers,
   getModifierRow,
   getMysteryReveals,
   MetamorphicSymbol,
   ModifierMultiplier,
-} from '@slots/jokerCharge/models/JCSpinData';
+} from '@slots/temp/models/JCSpinData';
 
 export class GameSlotMachineView extends ResponsiveChildrenView {
   private readonly savedLayout: Record<string, BonusLayoutOverride> = {};

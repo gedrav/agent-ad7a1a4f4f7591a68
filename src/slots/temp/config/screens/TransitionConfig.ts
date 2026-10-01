@@ -1,4 +1,4 @@
-import { TransitionComp } from '@slots/jokerCharge/views/comps/TransitionComp';
+import { TransitionComp } from '@slots/temp/views/comps/TransitionComp';
 
 // TODO: placeholder size - replace with the real spine's dimensions once known (affects centering
 // only, not rendering).

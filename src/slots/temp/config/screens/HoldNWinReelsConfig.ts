@@ -1,4 +1,4 @@
-import { HoldNWinReelsContainer } from '@slots/jokerCharge/views/slot/HoldNWinReelsContainer';
+import { HoldNWinReelsContainer } from '@slots/temp/views/slot/HoldNWinReelsContainer';
 
 // Starting grid
 const INITIAL_REEL: string[][] = [

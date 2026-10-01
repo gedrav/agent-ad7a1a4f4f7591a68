@@ -1,7 +1,7 @@
 import { Container } from 'pixi.js';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
-import { isRowActive } from '@slots/jokerCharge/models/JCLinesState';
+import { isRowActive } from '@slots/temp/models/JCLinesState';
 
 // Same rig the bonus panel uses, on its tile skins - see BonusReelSymbol. Its only animation is
 // empty, so the skin is the whole picture and there's nothing to play.

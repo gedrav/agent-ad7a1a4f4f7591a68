@@ -1,8 +1,8 @@
 import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
-import { TOTAL_RESPINS } from '@slots/jokerCharge/models/JCRespinState';
+import { JCEvents } from '@slots/temp/events/JCEvents';
+import { TOTAL_RESPINS } from '@slots/temp/models/JCRespinState';
 export class RespinCounterComp extends ResponsiveView {
   private readonly lightBgs: PixSprite[];
   private readonly darkBgs: PixSprite[];

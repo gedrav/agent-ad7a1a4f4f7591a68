@@ -17,9 +17,9 @@ import {
   BUY_BONUS_OPEN_DURATION,
   BUY_BONUS_OPEN_EASE,
   BUY_BONUS_START_SCALE,
-} from '@slots/jokerCharge/config/screens/BuyBonusScreenConfig';
-import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
-import { setupButtonInteraction } from '@slots/jokerCharge/views/comps/buttonInteraction';
+} from '@slots/temp/config/screens/BuyBonusScreenConfig';
+import { JCEvents } from '@slots/temp/events/JCEvents';
+import { setupButtonInteraction } from '@slots/temp/views/comps/buttonInteraction';
 
 // The Buy Bonus screen: three cards and a bet selector, over its own dim. Lives at app level (see
 // SlotGameAppConfig) so it covers the whole game.

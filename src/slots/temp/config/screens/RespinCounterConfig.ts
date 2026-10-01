@@ -1,4 +1,4 @@
-import { RespinCounterComp } from '@slots/jokerCharge/views/comps/RespinCounterComp';
+import { RespinCounterComp } from '@slots/temp/views/comps/RespinCounterComp';
 
 function compartment(index: 1 | 2 | 3, digitImage: string, x: number): any[] {
   return [

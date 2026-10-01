@@ -1,4 +1,4 @@
-import { RespinIntroComp } from '@slots/jokerCharge/views/comps/RespinIntroComp';
+import { RespinIntroComp } from '@slots/temp/views/comps/RespinIntroComp';
 
 const GUIDE_WIDTH = 900;
 const GUIDE_HEIGHT = 980;

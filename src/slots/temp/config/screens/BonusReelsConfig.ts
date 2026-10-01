@@ -1,4 +1,4 @@
-import { BonusReelsContainer } from '@slots/jokerCharge/views/slot/BonusReelsContainer';
+import { BonusReelsContainer } from '@slots/temp/views/slot/BonusReelsContainer';
 
 // One entry per column, each a key in BONUS_SYMBOLS_DATA.
 const INITIAL_REEL: string[] = ['Blank', 'Blank', 'Blank'];

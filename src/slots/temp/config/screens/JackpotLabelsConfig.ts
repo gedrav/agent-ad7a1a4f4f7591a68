@@ -1,4 +1,4 @@
-import { JackpotLabelsComp } from '@slots/jokerCharge/views/comps/JackpotLabelsComp';
+import { JackpotLabelsComp } from '@slots/temp/views/comps/JackpotLabelsComp';
 
 const VALUE_TEXT_STYLE = {
   fontFamily: 'belweCondensed',

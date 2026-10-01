@@ -2,9 +2,9 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
-import { MIN_LINES, MAX_LINES, getSelectedLines, setSelectedLines } from '@slots/jokerCharge/models/JCLinesState';
-import { setupButtonInteraction } from '@slots/jokerCharge/views/comps/buttonInteraction';
+import { JCEvents } from '@slots/temp/events/JCEvents';
+import { MIN_LINES, MAX_LINES, getSelectedLines, setSelectedLines } from '@slots/temp/models/JCLinesState';
+import { setupButtonInteraction } from '@slots/temp/views/comps/buttonInteraction';
 
 // Buy Bonus button + Lines selector, positioned inside SlotMachineConfig.ts's Elements array.
 // ResponsiveChildrenView, not ResponsiveView: the latter only adjusts the comp itself, so the
