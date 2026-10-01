@@ -8,23 +8,21 @@ export const BIG_WIN_CONFIG = {
   data: {
     backgroundAlpha: 0.7,
     animations: {
-      BIG_WIN: { start: 'big_start', idle: 'big' },
-      SUPER_WIN: { start: 'mega_start', idle: 'mega' },
-      MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic' },
-      EPIC_WIN: { start: 'unbelievable_start', idle: 'unbelievable' },
+      BIG_WIN: { start: '1_Big_Intro', idle: '1_Big_Ideal' },
+      SUPER_WIN: { start: '2_Mega_Intro', idle: '2_Mega_Ideal' },
+      MEGA_WIN: { start: '3_Super_Intro', idle: '3_Super_Ideal' },
+      EPIC_WIN: { start: '4_Epic_Intro', idle: '4_Epic_Ideal' },
     },
-    // TODO: 'bigWins' spine asset isn't delivered for this game yet (no files under
-    // assets/spines, not registered in AssetConfig.ts) - re-enable once it lands.
-    // bigWinAnim: {
-    //   name: 'bigWinAnim',
-    //   dontCreateView: true,
-    //   type: 'Spine',
-    //   spineName: 'bigWins',
-    //   loop: true,
-    //   x: 694,
-    //   y: 460,
-    //   scale: 1.2,
-    // },
+    bigWinAnim: {
+      name: 'bigWinAnim',
+      dontCreateView: true,
+      type: 'Spine',
+      spineName: 'bigWins',
+      loop: true,
+      x: 694,
+      y: 460,
+      scale: 0.3,
+    },
     bigWinTextScales: [0.8, 0.9, 0.9, 0.9],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
@@ -34,7 +32,7 @@ export const BIG_WIN_CONFIG = {
     },
   },
   Elements: [
-    { name: 'guideRect', type: 'Graphics', width: 1400, height: 830, color: 0x000000, x: 0, y: 0, alpha: 0 },
+    { name: 'guideRect', type: 'Graphics', width: 1340, height: 830, color: 0x000000, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
     { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 694, y: 125 },
     {
@@ -76,7 +74,8 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      vPaddingPerc: -0.03,
+      hPaddingPerc: -0.01,
+      vPaddingPerc: -0.05,
     },
     Landscape: {
       refComponent: 'guideRect',
@@ -85,6 +84,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      hPaddingPerc: -0.1,
       vPaddingPerc: -0.03,
     },
     Portrait: {
@@ -94,6 +94,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      hPaddingPerc: -0.1,
       vPaddingPerc: -0.03,
     },
   },

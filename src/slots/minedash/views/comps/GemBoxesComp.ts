@@ -23,6 +23,19 @@ export const BOX_STATE_KEYS: Record<string, { key: keyof StoneStateData; suffix:
   box5: { key: 'megawinStone', suffix: '', title: 'MEGA' },
 };
 
+const CART_SYMBOL_TO_SKIN: Record<string, string> = {
+  H1: 'Helmate',
+  H2: 'Lantern',
+  H3: 'Pickaxe',
+  H4: 'Helmate',
+  H5: 'Lantern',
+  L1: 'A',
+  L2: 'K',
+  L3: 'Q',
+  L4: 'J',
+  L5: '10',
+};
+
 export class GemBoxesComp extends ResponsiveChildrenView {
   private boxLabels: Record<string, { titleLabel: Text; valueLabel: Text }> = {};
   private currentBoxPipStates: Record<string, number> = {};
@@ -96,12 +109,22 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     if (!group) return;
 
     const valStr = this.formatBoxValue(feature, suffix);
-    group.valueLabel.text = valStr;
-
     const box = this.getBox(boxName);
     const isSpine = typeof box?.playAnimation === 'function';
 
-    if (valStr !== '') {
+    if (boxName === 'box5') {
+      group.valueLabel.text = '';
+      group.titleLabel.text = '';
+      if (isSpine && typeof box.setSkin === 'function') {
+        const rawVal = feature?.bankedValue ?? feature?.drawnValue;
+        const skinName = rawVal ? CART_SYMBOL_TO_SKIN[String(rawVal)] || 'default' : 'default';
+        box.setSkin(skinName);
+      }
+    } else {
+      group.valueLabel.text = valStr;
+    }
+
+    if (valStr !== '' && boxName !== 'box5') {
       if (isSpine) {
         group.titleLabel.position.set(0, this.labelStyle.title?.yWithValue || 0);
         group.titleLabel.style.fontSize = this.labelStyle.title?.fontSizeWithValue || 24;
@@ -130,7 +153,7 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     }
 
     this.currentBoxPipStates[boxName] = clampedPips;
-    box.playAnimation({ state: `Gem${clampedPips}`, loop: false });
+    box.playAnimation({ state: `Normal/Gem${clampedPips}`, loop: false });
   }
 
   public applyState(
@@ -158,10 +181,7 @@ export class GemBoxesComp extends ResponsiveChildrenView {
   public playWin(boxName: string): void {
     const box = this.getBox(boxName);
     if (box && typeof box.playAnimation === 'function') {
-      // Looped: the Win clip is short and would otherwise finish and sit static well before
-      // pulseCartBox's hold window ends. Looping keeps it visibly animating until that hold
-      // is over and the box is explicitly settled back to its resting Gem state.
-      box.playAnimation({ state: 'Win', loop: true });
+      box.playAnimation({ state: 'Normal/Win', loop: false });
     }
   }
 }
