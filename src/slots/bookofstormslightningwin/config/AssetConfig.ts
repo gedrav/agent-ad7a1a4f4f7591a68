@@ -40,7 +40,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
-    // { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'lightning_fx', ASSETTYPE: 'spine' },
   ],
 };
