@@ -4,7 +4,7 @@ import { HOLD_N_WIN_REELS_CONFIG } from './HoldNWinReelsConfig';
 import { BONUS_REELS_CONFIG } from './BonusReelsConfig';
 import { RESPIN_COUNTER_CONFIG } from './RespinCounterConfig';
 import { BUY_BONUS_LINES_CONFIG } from './BuyBonusLinesConfig';
-import { LogoComp } from '@slots/temp/views/comps/LogoComp';
+import { LogoComp } from '@slots/jokercharge/views/comps/LogoComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',

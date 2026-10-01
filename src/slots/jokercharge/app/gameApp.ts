@@ -11,9 +11,9 @@ import SlotGameApp from '@core/app/SlotGameApp';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { getSelectedLines, MAX_LINES, MIN_LINES, setSelectedLines } from '@slots/temp/models/JCLinesState';
-import { JCEvents } from '@slots/temp/events/JCEvents';
-import { getStickyState } from '@slots/temp/models/JCSpinData';
+import { getSelectedLines, MAX_LINES, MIN_LINES, setSelectedLines } from '@slots/jokercharge/models/JCLinesState';
+import { JCEvents } from '@slots/jokercharge/events/JCEvents';
+import { getStickyState } from '@slots/jokercharge/models/JCSpinData';
 
 export class gameApp extends SlotGameApp {
   constructor() {

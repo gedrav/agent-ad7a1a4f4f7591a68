@@ -1,4 +1,4 @@
-import { BuyBonusScreenComp } from '@slots/temp/views/comps/BuyBonusScreenComp';
+import { BuyBonusScreenComp } from '@slots/jokercharge/views/comps/BuyBonusScreenComp';
 
 const GUIDE_WIDTH = 1800;
 const GUIDE_HEIGHT = 1600;

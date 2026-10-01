@@ -1,7 +1,7 @@
 import { Rectangle } from 'pixi.js';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { JCEvents } from '@slots/temp/events/JCEvents';
+import { JCEvents } from '@slots/jokercharge/events/JCEvents';
 
 export interface RespinIntroData {
   // Fires once the player taps to dismiss - see RespinIntroState.

@@ -2,7 +2,7 @@ import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand
 import { Point } from 'pixi.js';
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { UIConfig } from '@game/config/UIConfig';
-import { getSelectedLines } from '@slots/temp/models/JCLinesState';
+import { getSelectedLines } from '@slots/jokercharge/models/JCLinesState';
 
 export const GAME_CONFIG = {
   gameDesktopWidth: 2424,
