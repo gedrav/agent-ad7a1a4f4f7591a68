@@ -27,7 +27,7 @@ class GamePreWinStateCommand extends StateCommand {
 
     EventHandler.dispatchEvent(SlotEvents.CLEAR_ROUND);
 
-    const firedStone = appModel.gameResult?.firedStone;
+    const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired');
 
     const reelView = appModel.getReelsView();
     if (hasStones(reelView) || firedStone) {

@@ -1,0 +1,57 @@
+import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { StandardView } from '@core/pixiwrapper/StandardView';
+import { PixText } from '@core/pixiwrapper/PixText';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
+import { PixSpine } from '@core/pixiwrapper/PixSpine';
+
+const WIN_ANIM_REPEAT_COUNT = 4;
+const JP_VALUE_WIDTH = 300;
+
+export class JPItemComp extends StandardView {
+  private readonly valueText: PixText;
+  private readonly titleImage: PixSprite;
+  private readonly bg: PixSpine;
+  private winAnimListener: any = null;
+
+  constructor(config: any) {
+    super(config);
+    this.valueText = this.elementsList['value'];
+    this.titleImage = this.elementsList['title'];
+    this.bg = this.elementsList['bg'];
+  }
+
+  public updateJPValue(value: string): void {
+    this.valueText.text = value;
+    this.valueText.scale.set(1);
+    if (this.valueText.width >= JP_VALUE_WIDTH) {
+      this.valueText.scale.set((JP_VALUE_WIDTH * 0.9) / this.valueText.width);
+    }
+  }
+  public showIdle(): void {
+    this.bg.playAnimation({ state: this.bg.configData.idleState, loop: false });
+  }
+  public showWin(): void {
+    this.clearWinAnimListener();
+    let completions = 0;
+    this.bg.playAnimation({ state: this.bg.configData.winState, loop: true });
+    this.winAnimListener = this.bg.addEventListener('complete', () => {
+      completions++;
+      if (completions >= WIN_ANIM_REPEAT_COUNT) {
+        this.clearWinAnimListener();
+        this.bg.playAnimation({ state: this.bg.configData.winState, loop: false });
+      }
+    });
+  }
+
+  private clearWinAnimListener(): void {
+    if (this.winAnimListener) {
+      this.bg.removeSpineEvent(this.winAnimListener);
+      this.winAnimListener = null;
+    }
+  }
+
+  public stopAnimation(): void {
+    this.clearWinAnimListener();
+    this.bg.stopAnimation();
+  }
+}

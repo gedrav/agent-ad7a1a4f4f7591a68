@@ -50,7 +50,8 @@ export class GameSlotMachineView extends SlotMachineView {
 
   // Box state
   public getFiredStoneBoxName(): string | undefined {
-    const firedStoneKey = (appModel as any).gameResult?.firedStone?.stone as keyof StoneStateData | undefined;
+    const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired');
+    const firedStoneKey = firedStone?.stone as keyof StoneStateData | undefined;
     if (!firedStoneKey) return undefined;
     return Object.keys(BOX_STATE_KEYS).find((name) => BOX_STATE_KEYS[name].key === firedStoneKey);
   }
@@ -106,24 +107,19 @@ export class GameSlotMachineView extends SlotMachineView {
     this.stoneAnimationManager.clearActiveAnimations();
 
     const allStones = this.extractAllStones();
+    this.pendingCollectionBoxes = new Set(allStones.map((s) => s.boxName));
+    this.updateStoneState();
 
     if (allStones.length === 0) {
-      this.updateStoneState();
       StateManager.doNextStep();
       return;
     }
 
-    this.pendingCollectionBoxes = new Set(allStones.map((s) => s.boxName));
-    this.updateStoneState();
-
-    this.stoneAnimationManager.playStonesSequence(allStones, () => {
-      StateManager.doNextStep();
-    });
+    this.stoneAnimationManager.playStonesSequence(allStones, () => StateManager.doNextStep());
   }
 
   private extractAllStones(): StoneData[] {
     const allStones: StoneData[] = [];
-    const reel: any = this.slotReel;
 
     // 1. Scan appModel reelView
     const reelView = (appModel as any).getReelsView() || (appModel as any).gameResult?.reelView;
@@ -138,27 +134,12 @@ export class GameSlotMachineView extends SlotMachineView {
                 symbol: symbolName,
                 boxName: STONE_CONFIG[symbolName].boxName,
                 spineName: STONE_CONFIG[symbolName].spineName,
+                skin: STONE_CONFIG[symbolName].skin,
               });
             }
           });
         }
       });
-    }
-    // 3. Check firedStone from server result
-    const firedStone = (appModel as any).gameResult?.firedStone;
-    if (allStones.length === 0 && firedStone && Array.isArray(firedStone.triggerPosition)) {
-      const [col, row] = firedStone.triggerPosition;
-      const stoneTypeMap: Record<string, { boxName: string; spineName: string; symbol: string }> = {
-        multiStone: { boxName: 'box1', spineName: 'Gem_Green', symbol: 'SM' },
-        freespinsStone: { boxName: 'box2', spineName: 'Gem_Orange', symbol: 'SF' },
-        mysteryStone: { boxName: 'box3', spineName: 'Gem_Pink', symbol: 'SY' },
-        wildsStone: { boxName: 'box4', spineName: 'Gem_Red', symbol: 'SW' },
-        megawinStone: { boxName: 'box5', spineName: 'GoldCard', symbol: 'SG' },
-      };
-      const info = stoneTypeMap[firedStone.stone];
-      if (info && !allStones.some((s) => s.col === col && s.row === row)) {
-        allStones.push({ col, row, symbol: info.symbol, boxName: info.boxName, spineName: info.spineName });
-      }
     }
 
     return allStones;

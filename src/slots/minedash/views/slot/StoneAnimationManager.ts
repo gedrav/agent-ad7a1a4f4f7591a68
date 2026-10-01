@@ -1,15 +1,17 @@
 import { Point } from 'pixi.js';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
-import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
+import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { GameSlotMachineView } from './GameSlotMachineView';
 import { StoneStateData } from '@game/views/comps/GemBoxesComp';
 
 export interface StoneMapping {
   boxName: string;
   spineName: string;
+  skin?: string;
 }
 
 export interface StoneData {
@@ -18,6 +20,7 @@ export interface StoneData {
   symbol: string;
   boxName: string;
   spineName: string;
+  skin?: string;
 }
 
 export const SYMBOL_TO_GOLDCARD_SKIN: Record<string, string> = {
@@ -34,10 +37,10 @@ export const SYMBOL_TO_GOLDCARD_SKIN: Record<string, string> = {
 };
 
 export const STONE_CONFIG: Record<string, StoneMapping> = {
-  SM: { boxName: 'box1', spineName: 'Gem_Green' },
-  SF: { boxName: 'box2', spineName: 'Gem_Orange' },
-  SY: { boxName: 'box3', spineName: 'Gem_Pink' },
-  SW: { boxName: 'box4', spineName: 'Gem_Red' },
+  SM: { boxName: 'box1', spineName: 'Gems_Final', skin: 'Crystal' },
+  SF: { boxName: 'box2', spineName: 'Gems_Final', skin: 'Triangle' },
+  SY: { boxName: 'box3', spineName: 'Gems_Final', skin: 'Drop' },
+  SW: { boxName: 'box4', spineName: 'Gems_Final', skin: 'Eye' },
   SG: { boxName: 'box5', spineName: 'GoldCard' },
 };
 
@@ -65,7 +68,7 @@ export class StoneAnimationManager {
   }
 
   private animateStoneToCartBox(stone: StoneData, onComplete: () => void): void {
-    const { col, row, symbol, boxName, spineName } = stone;
+    const { col, row, symbol, boxName, spineName, skin } = stone;
     const reel: any = this.view.slotReel;
     if (!reel || typeof reel.getSymbolPosition !== 'function') {
       onComplete();
@@ -85,7 +88,7 @@ export class StoneAnimationManager {
     }
 
     const endPos = this.calculateTargetBoxPosition(targetBox);
-    const movingSymbol = this.createMovingSymbol(symbol, spineName, startPos);
+    const movingSymbol = this.createMovingSymbol(symbol, spineName, skin || '', startPos);
 
     this.view.addChild(movingSymbol);
     EventHandler.dispatchEvent('SHOW_TRANSITION_ANIM');
@@ -181,35 +184,42 @@ export class StoneAnimationManager {
     return this.view.toLocal(targetGlobalPos);
   }
 
-  private createMovingSymbol(symbolName: string, spineName: string, startPos: Point): ReelSymbolSpine {
-    let cardSkin = '';
+  private createMovingSymbol(
+    symbolName: string,
+    spineName: string,
+    symbolSkin: string,
+    startPos: Point,
+  ): ReelSymbolSpineExtended {
+    let cardSkin = symbolSkin;
     if (spineName === 'GoldCard' || symbolName === 'SG') {
-      const firedStone = (appModel as any).gameResult?.firedStone;
+      const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired');
       const megawinModifier = appModel.getReelModifiers()?.find((m: any) => m.type === 'megawinCollect');
       const targetSym =
         firedStone?.value || megawinModifier?.symbol || this.view.getStoneState()?.megawinStone?.drawnValue || 'H1';
       cardSkin = SYMBOL_TO_GOLDCARD_SKIN[targetSym] || 'Helmate';
     }
 
-    const movingSymbol = new ReelSymbolSpine({
+    const symbolConfig = GameProxy.config.reelSymbolsConfig?.[symbolName];
+    const animScale = symbolConfig?.animScale;
+
+    const movingSymbol = new ReelSymbolSpineExtended({
       data: {
         name: symbolName,
         spineName: spineName,
         skin: cardSkin,
         idleAnim: 'Static',
-        winAnim: 'Static',
-        animScale: 0.25,
+        winAnim: symbolConfig?.winAnim || 'Win',
+        animScale: animScale !== undefined ? animScale : 1,
       } as any,
     });
     movingSymbol.showWinning(null, true);
     movingSymbol.position.copyFrom(startPos);
-    movingSymbol.scale.set(0.9);
 
     return movingSymbol;
   }
   // playing animation for stone
   private playStoneAnimation(
-    movingSymbol: ReelSymbolSpine,
+    movingSymbol: ReelSymbolSpineExtended,
     startPos: Point,
     endPos: Point,
     targetBox: any,
@@ -217,21 +227,19 @@ export class StoneAnimationManager {
     onComplete: () => void,
   ): void {
     const peakY = startPos.y - 30;
-    const peakScale = 1.4;
     const targetDropScale = 0.2;
 
-    // Step 1: Popout and increase size
+    // Step 1: Popout (no extra scaling, spine handles it)
     const popTween = AnimationProxy.animateTween(movingSymbol, {
       duration: 0.25,
       y: peakY,
       ease: 'back.out(2)',
-      onUpdate: () => movingSymbol.scale.set(lerp(0.9, peakScale, popTween.progress())),
       onComplete: () => {
         this.removeActiveTween(popTween);
 
         // Step 2: Hold for 1 second, then drop
         this.stoneAnimationTimeout = setTimeout(() => {
-          this.playDropAnimation(movingSymbol, endPos, peakScale, targetDropScale, targetBox, boxName, onComplete);
+          this.playDropAnimation(movingSymbol, endPos, 1, targetDropScale, targetBox, boxName, onComplete);
         }, 1000);
       },
     });
@@ -240,7 +248,7 @@ export class StoneAnimationManager {
   }
 
   private playDropAnimation(
-    movingSymbol: ReelSymbolSpine,
+    movingSymbol: ReelSymbolSpineExtended,
     endPos: Point,
     peakScale: number,
     targetDropScale: number,

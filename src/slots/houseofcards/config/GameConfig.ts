@@ -29,6 +29,7 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     gameFont1: 'Caudex',
+    gameFont2: 'Mencken-Std-Narrow-Extra-Bold',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
@@ -43,6 +44,7 @@ export const GAME_CONFIG = {
   bbImage: 'screen1',
   bigWinValues: [25, 50, 100, 500],
   buyBonusData: {
+    stylizedText: true,
     features: [
       {
         btn: {
@@ -76,6 +78,9 @@ export const GAME_CONFIG = {
               wordWrap: true,
               wordWrapWidth: 300,
               align: 'center',
+              tagStyles: {
+                bbbold: { fontSize: 50, fill: 0xfecd42 },
+              },
             },
             toUpperCase: true,
           },

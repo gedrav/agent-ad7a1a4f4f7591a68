@@ -14,6 +14,7 @@ const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
     { TYPE: 'game', NAME: 'Caudex.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'Mencken-Std-Narrow-Extra-Bold.otf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameLogo', ASSETTYPE: 'sprite' },
@@ -39,6 +40,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'jackpot', ASSETTYPE: 'spine', spineImageType: 'webp' },
     // { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     // { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
   ],
