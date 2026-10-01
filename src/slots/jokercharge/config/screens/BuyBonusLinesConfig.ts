@@ -1,4 +1,4 @@
-import { BuyBonusLinesComp } from '@slots/jokerCharge/views/comps/BuyBonusLinesComp';
+import { BuyBonusLinesComp } from '@slots/jokercharge/views/comps/BuyBonusLinesComp';
 import { MULTIPLIER_TEXT_STYLE } from '../SymbolsConfig';
 
 // Sprite sizes at runtime (the sheet is packed at meta.scale 0.25, so Pixi reports 4x the frame):

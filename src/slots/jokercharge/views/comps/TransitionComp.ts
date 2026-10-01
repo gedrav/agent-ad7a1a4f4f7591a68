@@ -3,8 +3,8 @@ import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
-import { JCEvents } from '@slots/jokerCharge/events/JCEvents';
-import { setupButtonInteraction } from '@slots/jokerCharge/views/comps/buttonInteraction';
+import { JCEvents } from '@slots/jokercharge/events/JCEvents';
+import { setupButtonInteraction } from '@slots/jokercharge/views/comps/buttonInteraction';
 
 const TRANSITION_STATE = 'animation';
 const TRANSITION_SPEED = 0.5;
