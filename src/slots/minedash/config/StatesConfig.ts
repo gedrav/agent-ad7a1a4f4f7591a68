@@ -20,7 +20,7 @@ import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';
 import { ResumePromoFSState } from '@core/commands/states/ResumePromoFSState';
 import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
 import { GamePreWinState } from '@slots/minedash/states/GamePreWinState';
-import { ShowMysteryAwardState } from '@game/states/ShowMysteryAwardState';
+import { MDStoneFeatureState } from '@slots/minedash/states/MDStoneFeatureState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
@@ -31,7 +31,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
   { name: STATES.PRE_SPIN_WIN_STATE, state: GamePreWinState },
-  { name: STATES.SHOW_MYSTERY_AWARD_STATE, state: ShowMysteryAwardState },
+  { name: STATES.MD_STONE_FEATURE_STATE, state: MDStoneFeatureState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
   { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
