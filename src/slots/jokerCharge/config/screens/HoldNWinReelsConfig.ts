@@ -24,7 +24,7 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     rowGap: 30,
     rowOffsetsY: [11, 0, -7],
     spinStartGap: 20,
-    stopGap: 20,
+    stopGap: 70,
     columnEffectScale: 0.65,
     columnEffectOffsetY: 0,
     triangleEffectScale: 0.6,
