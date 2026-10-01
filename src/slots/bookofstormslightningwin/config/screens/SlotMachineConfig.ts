@@ -53,7 +53,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           element: {
             name: 'anticipation',
             type: 'Spine',
-            spineName: 'reelFrame',
+            spineName: 'reelFrameAnti',
             defaultState: 'animation',
             loop: true,
             y: 318,
