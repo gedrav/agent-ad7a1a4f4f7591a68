@@ -141,6 +141,11 @@ export class JCMysterySymbolModifier {
     this.setVisible(false);
   }
 
+  // The topmost of the symbol's layers: this one covers the back rig.
+  public get rig(): PixSpine | null {
+    return this.frontSpine;
+  }
+
   public play(state: string, loop: boolean, skin?: string): void {
     if (!this.frontSpine) return;
     if (skin) {
@@ -216,14 +221,19 @@ export class JCMysterySymbolModifier {
     const onLanded = this.onLanded;
     this.onLanded = null;
     onLanded?.();
-    if (this.resultLabel) {
-      this.host.removeChild(this.resultLabel);
-      this.resultLabel.destroy();
-      this.resultLabel = null;
-    }
+    this.clearResultLabel();
     // Nothing of the reel's is left in the window now, so the symbol reads MYSTERY again - which
     // is how it sits in the base game.
     this.setSymbolLabelVisible(true);
+  }
+
+  // The landed prize is drawn over the symbol, not through its rig, so no animation can take it
+  // away - whatever ends the reveal has to clear it by hand.
+  public clearResultLabel(): void {
+    if (!this.resultLabel) return;
+    this.host.removeChild(this.resultLabel);
+    this.resultLabel.destroy();
+    this.resultLabel = null;
   }
 
   private get cellHeight(): number {

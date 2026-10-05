@@ -96,6 +96,28 @@ export const SLOT_MACHINE_CONFIG: any = {
           x: 700,
           y: -98,
         },
+        // Behind the panel only, and only for its last beat. Centred on the logo, sized to cover
+        // the screen from wherever that is.
+        {
+          name: 'totalWinDim',
+          type: 'Graphics',
+          width: 10000,
+          height: 10000,
+          color: 0x000000,
+          alpha: 0,
+          x: 700 - 5000,
+          y: -98 - 5000,
+        },
+        // Travels with the logo, the feature's layout shift included. No defaultState: it is held
+        // back until the feature closes - see JCExitRespinState.
+        {
+          name: 'totalWinPanel',
+          type: 'Spine',
+          spineName: 'total_win_panel',
+          visible: false,
+          x: 700,
+          y: -98,
+        },
       ],
       layoutData: {
         Desktop: {},

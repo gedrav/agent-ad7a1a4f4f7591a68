@@ -62,6 +62,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'big_square', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'line', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'coins', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'total_win_panel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'respinCounter', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'BuyBonus-0', ASSETTYPE: 'sprite' },
   ],
