@@ -10,6 +10,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { JCBonusSymbolModifier, ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModifier';
 import { JCMysterySymbolModifier, MysteryReelResult } from './JCMysterySymbolModifier';
 import { JCBlanksSymbolModifier } from './JCBlanksSymbolModifier';
+import { JCSymbolRigPool } from './JCSymbolRigPool';
 import { BLANK_SYMBOL_NAME, MYSTERY_SYMBOL_NAMES } from '../../config/SymbolsConfig';
 import { getCellValue } from '../../models/JCSpinData';
 import { MULTIPLIER_APPLY_COUNT_EASE } from '../../config/MultiplierBadgeConfig';
@@ -54,12 +55,15 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     return this.configData.data.name === BLANK_SYMBOL_NAME;
   }
 
+  // Hidden rather than destroyed when the cell is not Blanks: the strip draws a blank in roughly
+  // every other cell, and rebuilding its rig costs the same as a symbol's.
+  // The raw field, not the getter: a symbol that has never been Blanks should not build one.
   private syncBlanksVisual(): void {
     if (this.isBlanksSymbol()) {
       this.blanksModifier.create(this.configData.data.row);
-    } else {
-      this.blanksModifier.destroy();
+      return;
     }
+    this._blanksModifier?.setVisible(false);
   }
 
   // For a symbol already on screen rather than one being placed. No-op for non-Blanks.
@@ -165,12 +169,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   protected createSymbol(): void {
     this.destroySymbol();
     if (this.configData.data.spineName) {
-      const spine = UIUtil.getSpineAnim(this.configData.data.spineName, this.configData.data);
-      spine.stopAnimation();
-      if (this.configData.data.animScale) {
-        spine.scale.set(this.configData.data.animScale);
-      }
-      this.symbol = spine as any;
+      this.symbol = JCSymbolRigPool.getInstance().acquire(this.configData.data) as any;
     } else {
       this.symbol = UIUtil.getSpriteFromTexture(Texture.EMPTY);
       this.symbol.anchor.set(0.5, 0.5);
@@ -194,18 +193,32 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     return rigs;
   }
 
-  // Idempotent: addSlotObject does not replace, so adding twice orphans the first Text on a slot
-  // nothing will clear.
   // Spine overwrites a slot object's whole transform and alpha every frame, so the text goes
   // inside a holder rather than being the slot object itself.
+  //
+  // Keyed on the words themselves: a pooled rig arrives still carrying the last symbol's label, and
+  // building a Text rasterises a texture, so one is only built when it would read differently.
+  // mystery_back is the rig that needs it - MY and MJP share it and do not share a label.
   private addLabel(target: PixSpine | null): void {
     const config = this.configData.data.labelTextConfig;
-    if (!config || !target?.addSlotObject) return;
-    if (target.getSlotObject(ROOT_TEXT_SLOT_NAME)) return;
-    const holder = new Container();
+    if (!target?.addSlotObject) return;
+    const existing: any = target.getSlotObject(ROOT_TEXT_SLOT_NAME);
+    if (existing && existing.labelKey === config?.contentText) return;
+    if (existing) this.clearLabel(target);
+    if (!config) return;
+    const holder: any = new Container();
     holder.label = 'labelHolder';
+    holder.labelKey = config.contentText;
     holder.addChild(UIUtil.getElement(config));
     target.addSlotObject(ROOT_TEXT_SLOT_NAME, holder);
+  }
+
+  private clearLabel(target: PixSpine | null): void {
+    const holder: any = target?.getSlotObject?.(ROOT_TEXT_SLOT_NAME);
+    if (!holder) return;
+    target.removeSlotObject(ROOT_TEXT_SLOT_NAME);
+    // Detached, not destroyed, by the spine.
+    holder.destroy({ children: true });
   }
 
   private labelTextOf(rig: PixSpine | null): PixText | null {
@@ -228,20 +241,19 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
         this.addLabel(rig);
         return;
       }
-      const holder: any = rig.getSlotObject(ROOT_TEXT_SLOT_NAME);
-      rig.removeSlotObject(ROOT_TEXT_SLOT_NAME);
-      // Detached, not destroyed, by the spine - and a fresh one is built on the way back.
-      holder?.destroy({ children: true });
+      this.clearLabel(rig);
     });
   }
 
-  // The inherited destroySymbol() won't cascade into the spine's GPU resources, so every
-  // setNewSymbol() would leak a skeleton+atlas without this.
+  // The rig goes back to the pool rather than being destroyed - see JCSymbolRigPool. Nulled first
+  // so the inherited destroySymbol(), which would destroy() it outright, leaves it alone.
   public destroySymbol(): void {
     this.killLabelCount();
     const symbol: any = this.symbol;
     if (symbol instanceof PixSpine) {
-      symbol.destroySpine();
+      this.clearLabel(symbol);
+      JCSymbolRigPool.getInstance().release(symbol);
+      this.symbol = null;
     }
     super.destroySymbol();
   }
@@ -294,8 +306,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
 
   protected destroySpine(): void {
     this.killLabelCount();
-    this.bonusModifier.destroy();
-    this.mysteryModifier.destroy();
+    // Raw fields: destroying through the getters would build a modifier for every symbol only to
+    // tear it straight down again.
+    this._bonusModifier?.destroy();
+    this._mysteryModifier?.destroy();
     super.destroySpine();
   }
 
@@ -321,6 +335,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
 
   protected setSpineVisible(flag: boolean): void {
     super.setSpineVisible(flag);
-    this.mysteryModifier.setVisible(flag);
+    // corelib detaches the spine it hides, but not the rig it hid it for - an invisible rig would
+    // otherwise go on ticking a skeleton every frame, once per cell.
+    (this.symbol as any)?.setAutoUpdate?.(!flag);
+    // The raw field, not the getter: asking for the modifier would build one for every symbol.
+    this._mysteryModifier?.setVisible(flag);
   }
 }

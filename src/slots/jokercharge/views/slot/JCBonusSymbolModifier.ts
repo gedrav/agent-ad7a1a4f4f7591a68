@@ -23,22 +23,36 @@ export class JCBonusSymbolModifier {
   private value = 0;
   // The count-up runs on this, not on a display object, so teardown has to kill it by hand.
   private countTarget: { value: number } | null = null;
+  // The style the current Text was built with. C1 to C4 share one, C5 has its own, so only that
+  // boundary needs a rebuild.
+  private styleRef: any = null;
 
   constructor(private readonly host: ReelSymbolSpineExtended) {}
 
   // value is the backend's figure for the cell and wins where there is one; the name is the
   // fallback, for a symbol belonging to no held cell.
+  // Called again every time the host's rig is rebuilt, which on a moving strip is a few times a
+  // second per cell, so the Text is kept and rewritten rather than built afresh - building one
+  // measures and rasterises a texture. Only the slot attachment is redone, the rig being new.
   public create(symbolName: string, textConfig: any, value?: number): void {
-    this.destroy();
-    if (!textConfig) return;
-    const text = UIUtil.getElement(textConfig);
-    text.anchor?.set(textConfig.anchor?.x ?? 0.5, textConfig.anchor?.y ?? 0.5);
+    if (!textConfig) {
+      this.destroy();
+      return;
+    }
+    if (this.text && textConfig.style !== this.styleRef) {
+      this.destroy();
+    }
     this.value = value ?? Number(symbolName.slice(BONUS_SYMBOL_PREFIX.length));
-    text.text = this.format(this.value);
-    this.text = text;
-    this.holder = new Container();
-    this.holder.label = 'bonusValueHolder';
-    this.holder.addChild(text);
+    if (!this.text) {
+      const text = UIUtil.getElement(textConfig);
+      text.anchor?.set(textConfig.anchor?.x ?? 0.5, textConfig.anchor?.y ?? 0.5);
+      this.text = text;
+      this.styleRef = textConfig.style;
+      this.holder = new Container();
+      this.holder.label = 'bonusValueHolder';
+      this.holder.addChild(text);
+    }
+    this.text.text = this.format(this.value);
     this.host.addSlotObject(ROOT_TEXT_SLOT_NAME, this.holder);
   }
 
@@ -96,6 +110,7 @@ export class JCBonusSymbolModifier {
     this.holder?.destroy({ children: true });
     this.holder = null;
     this.text = null;
+    this.styleRef = null;
     this.value = 0;
   }
 }

@@ -13,9 +13,9 @@ const defaultGameNames = [
   // 'frostedmarketbonanza',
   //'bookofstorms',
   //'meowmeowmeow',
-  'bookofstormslightningwin',
+  // 'bookofstormslightningwin',
   //'carpathiantreasures',
-  // 'jokercharge',
+  'jokercharge',
   //'houseofcards'
   //'minedash'
 ];

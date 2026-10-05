@@ -76,6 +76,9 @@ export class JCReelSymbolPool {
     if (this.temporarySymbols.has(symbol)) {
       this.temporarySymbols.delete(symbol);
       symbol.destroySymbol();
+      // destroyView(), not destroy(): the APP_RESIZE binding ReelSymbolSpineExtended makes in its
+      // constructor is only disposed there, and would otherwise keep firing against a dead symbol.
+      symbol.destroyView();
       symbol.destroy();
       return;
     }
