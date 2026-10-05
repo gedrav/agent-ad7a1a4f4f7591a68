@@ -15,5 +15,16 @@ export const GAME_BG_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
       },
     },
+    {
+      name: 'freegameBG',
+      type: 'Sprite',
+      image: 'freegameBG',
+      unload: true,
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
+      },
+    },
   ],
 };
