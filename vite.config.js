@@ -15,9 +15,9 @@ const defaultGameNames = [
   //'meowmeowmeow',
   // 'bookofstormslightningwin',
   //'carpathiantreasures',
-  'jokercharge',
+  // 'jokercharge',
   //'houseofcards'
-  //'minedash'
+  'minedash'
 ];
 
 // SINGLE CONTROL POINT (with env override)

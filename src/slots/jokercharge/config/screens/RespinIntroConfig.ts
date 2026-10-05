@@ -123,9 +123,14 @@ export const RESPIN_INTRO_CONFIG: any = {
       ],
     },
   ],
+  // heightPerc as well as widthPerc: with both set the engine scales by min(wsc, hsc), and the
+  // guide is taller than it is wide, so on a short landscape screen width alone would run it off
+  // the top and bottom.
   layoutData: {
-    Desktop: { widthPerc: 0.42, hAlign: 'center', vAlign: 'middle' },
-    Portrait: { widthPerc: 0.92, hAlign: 'center', vAlign: 'middle' },
-    Landscape: { widthPerc: 0.46, hAlign: 'center', vAlign: 'middle' },
+    Desktop: { widthPerc: 0.42, heightPerc: 0.86, hAlign: 'center', vAlign: 'middle' },
+    Portrait: { widthPerc: 0.92, heightPerc: 0.8, hAlign: 'center', vAlign: 'middle' },
+    // No SmallLandscape of its own: the guide holds all of this screen's content, so the height
+    // budget is the same on every landscape phone.
+    Landscape: { widthPerc: 0.46, heightPerc: 0.88, hAlign: 'center', vAlign: 'middle' },
   },
 };

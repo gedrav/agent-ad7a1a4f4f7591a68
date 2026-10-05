@@ -15,8 +15,10 @@ import {
   TOTAL_WIN_LABEL_SLOT,
   TOTAL_WIN_PRESENT_DURATION,
   TOTAL_WIN_PRESENT_EASE,
+  TOTAL_WIN_PANEL_WIDTH,
   TOTAL_WIN_PRESENT_HOLD_MS,
-  TOTAL_WIN_PRESENT_SCALE,
+  TOTAL_WIN_PRESENT_MAX_SCALE,
+  TOTAL_WIN_PRESENT_WIDTH_PERC,
   TOTAL_WIN_VALUE_CONFIG,
   TOTAL_WIN_VALUE_SLOT,
 } from '@slots/jokercharge/config/screens/TotalWinPanelConfig';
@@ -146,6 +148,7 @@ export class LogoComp extends ResponsiveView {
     this.fadeTotalWinDim(TOTAL_WIN_DIM_ALPHA, TOTAL_WIN_DIM_DURATION);
 
     const center = this.toLocal({ x: UIUtil.getGameWidth() / 2, y: UIUtil.getGameHeight() / 2 });
+    const presentScale = this.resolvePresentScale(panel);
     AnimationProxy.animateTween(panel, {
       duration: TOTAL_WIN_PRESENT_DURATION,
       x: center.x,
@@ -154,11 +157,21 @@ export class LogoComp extends ResponsiveView {
     });
     AnimationProxy.animateTween(panel.scale, {
       duration: TOTAL_WIN_PRESENT_DURATION,
-      x: this.panelRestScale * TOTAL_WIN_PRESENT_SCALE,
-      y: this.panelRestScale * TOTAL_WIN_PRESENT_SCALE,
+      x: presentScale,
+      y: presentScale,
       ease: TOTAL_WIN_PRESENT_EASE,
       onComplete: () => setTimeout(() => this.hideTotalWinPanelAnimated(onComplete), TOTAL_WIN_PRESENT_HOLD_MS),
     });
+  }
+
+  // The scale that makes the panel the intended share of the screen's width, whatever the machine
+  // has been scaled to. Read off the world transform so the whole parent chain is accounted for.
+  private resolvePresentScale(panel: PixSpine): number {
+    const restScale = this.panelRestScale;
+    const chainScale = Math.abs(panel.worldTransform.a) / (panel.scale.x || 1);
+    if (!chainScale) return restScale * TOTAL_WIN_PRESENT_MAX_SCALE;
+    const target = (UIUtil.getGameWidth() * TOTAL_WIN_PRESENT_WIDTH_PERC) / (TOTAL_WIN_PANEL_WIDTH * chainScale);
+    return Math.min(Math.max(target, restScale), restScale * TOTAL_WIN_PRESENT_MAX_SCALE);
   }
 
   private hideTotalWinPanelAnimated(onComplete?: () => void): void {

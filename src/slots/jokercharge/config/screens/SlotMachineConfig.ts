@@ -171,7 +171,12 @@ export const SLOT_MACHINE_CONFIG: any = {
     },
     // widthPerc is the size knob here: it alone decides the scale, one point being one percent.
     Portrait: { widthPerc: 0.92, heightPerc: 0.72, hAlign: 'center', vAlign: 'middle', vPaddingPerc: -0.05 },
-    Landscape: { widthPerc: 0.7, heightPerc: 0.94, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.002 },
+    // Both landscape keys carry the same height budget. heightPerc is measured against the 954-unit
+    // guide while the block that has to fit is about 1.6 times that, so fitting needs heightPerc
+    // <= 0.62 - a ratio, and so the same on every screen. SmallLandscape only reaches phones that
+    // pass UIUtil.isShortPhone(), which is iPhone SE sized and below; everything larger lands on
+    // Landscape, where 0.94 ran the jackpot row and the logo off the top.
+    Landscape: { widthPerc: 0.7, heightPerc: 0.62, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.06 },
     SmallLandscape: { widthPerc: 0.7, heightPerc: 0.62, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.06 },
   },
 };
