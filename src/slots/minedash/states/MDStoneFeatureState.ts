@@ -34,9 +34,10 @@ class MDStoneFeatureStateCommand extends StateCommand {
         break;
 
       case 'multiStone':
-        // Placeholder for Multi feature handling
-        // EventHandler.dispatchEvent('SHOW_MULTI_WIN', firedStone);
-        StateManager.next();
+        if (appModel.gameResult) {
+          appModel.gameResult.spinWin = appModel.gameResult.totalWin;
+        }
+        EventHandler.dispatchEvent('SHOW_MULTI_WIN', firedStone);
         break;
 
       case 'megawinStone':
