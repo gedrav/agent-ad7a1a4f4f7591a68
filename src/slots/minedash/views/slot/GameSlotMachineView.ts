@@ -1,4 +1,4 @@
-import { Point } from 'pixi.js';
+import { Point, Graphics, Text, Container, BitmapText, FillGradient, TextStyle } from 'pixi.js';
 import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -27,11 +27,12 @@ export class GameSlotMachineView extends SlotMachineView {
     EventHandler.addEventListener('SHOW_STONE_TRANSITION', this.showStoneTransition.bind(this));
     EventHandler.addEventListener('EXPAND_WILD', this.expandWildSym.bind(this));
     EventHandler.addEventListener('SHOW_MEGA_WIN', this.showMegaWin.bind(this));
+    EventHandler.addEventListener('SHOW_MULTI_WIN', this.showMultiWin.bind(this));
 
-    EventHandler.addEventListener(
-      SlotEvents.CLEAR_ROUND,
-      this.stoneAnimationManager.clearActiveAnimations.bind(this.stoneAnimationManager),
-    );
+    EventHandler.addEventListener(SlotEvents.CLEAR_ROUND, () => {
+      this.stoneAnimationManager.clearActiveAnimations();
+      this.pendingCollectionBoxes.clear();
+    });
     EventHandler.addEventListener(
       SlotEvents.START_SPIN,
       this.stoneAnimationManager.clearActiveAnimations.bind(this.stoneAnimationManager),
@@ -165,6 +166,136 @@ export class GameSlotMachineView extends SlotMachineView {
       return;
     }
     this.playFeatureExpansion(data.positions, 'box5', data.symbol, false);
+  }
+
+  private showMultiWin(data: any): void {
+    const slotReel = this.slotReel as any;
+    const positions: number[] = data.positions || [];
+    const value = data.value || 0;
+
+    if (positions.length === 0) {
+      StateManager.doNextStep();
+      return;
+    }
+
+    if (this.boxesComp && typeof this.boxesComp.playWin === 'function') {
+      this.boxesComp.playWin('box1');
+    }
+
+    // After box win, show multiplier on the symbols
+    setTimeout(() => {
+      const badges: Container[] = [];
+      positions.forEach((pos) => {
+        const col = pos % 5;
+        const row = Math.floor(pos / 5);
+        const symbol = slotReel.symbolsArray?.[col]?.[row + 1];
+
+        if (symbol) {
+          // create a multiplier badge and add it to the symbol
+          const badge = this.createMultiplierBadge(symbol, value, slotReel, col, row + 1);
+          if (badge) badges.push(badge);
+        }
+      });
+
+      // Wait 1.5 seconds then continue
+      setTimeout(() => {
+        if (badges.length > 0) {
+          badges.forEach((b) => {
+            AnimationProxy.animateTween(b.scale, {
+              duration: 0.4,
+              x: 0,
+              y: 0,
+              ease: 'back.in(2)',
+              onComplete: () => {
+                if (b.parent) b.parent.removeChild(b);
+                b.destroy();
+              },
+            });
+          });
+
+          // Wait for the disappear animation to finish before moving to next step
+          setTimeout(() => {
+            this.applyBoxState('box1', true);
+            StateManager.doNextStep();
+          }, 400);
+        } else {
+          this.applyBoxState('box1', true);
+          StateManager.doNextStep();
+        }
+      }, 1500);
+    }, 1000);
+  }
+
+  private createMultiplierBadge(symbol: any, value: number, slotReel: any, col: number, row: number): Container {
+    const container = new Container();
+    container.name = 'multiBadge';
+
+    // Drop shadow behind the badge
+    const shadow = new Graphics();
+    shadow.beginFill(0x000000, 0.75);
+    shadow.drawRoundedRect(-44, -24, 96, 56, 28); // Offset down and right
+    shadow.endFill();
+    container.addChild(shadow);
+
+    // Main background (Vibrant Ruby Red for high contrast and premium feel)
+    const bg = new Graphics();
+    bg.beginFill(0x990000, 1);
+    bg.lineStyle(4, 0xffd700, 1); // Bright premium gold outer border
+    bg.drawRoundedRect(-48, -28, 96, 56, 28); // Fully rounded pill shape
+    bg.endFill();
+
+    // Inner border for a polished gem/plaque effect
+    bg.lineStyle(2, 0x4a0000, 1); // Dark red inner ring for depth
+    bg.drawRoundedRect(-42, -22, 84, 44, 22);
+
+    container.addChild(bg);
+
+    const goldGradient = new FillGradient(0, 0, 0, 50);
+    goldGradient.addColorStop(0, '#FFFBE0');
+    goldGradient.addColorStop(0.35, '#FFE14D');
+    goldGradient.addColorStop(0.65, '#FFB01F');
+    goldGradient.addColorStop(1, '#E06A00');
+
+    const multiplierStyle = new TextStyle({
+      fontFamily: ['Oswald-Bold', 'Arial Black', 'sans-serif'],
+      fontSize: 42,
+      fill: goldGradient,
+      stroke: { color: '#3A0F00', width: 8, join: 'round' },
+      dropShadow: { color: '#000000', alpha: 0.7, blur: 4, angle: Math.PI / 2, distance: 4 },
+      letterSpacing: 1,
+      padding: 12,
+    });
+
+    const text = new Text({
+      text: `x${value}`,
+      style: multiplierStyle,
+      resolution: 2, // High resolution for crisper text rendering
+    });
+    text.anchor.set(0.5);
+    text.position.set(0, -2); // Optical center adjustment
+
+    container.addChild(text);
+
+    // Position it appropriately on the symbol (bottom center of the gem)
+    const symbolPos =
+      typeof symbol.getGlobalPosition === 'function'
+        ? symbol.getGlobalPosition()
+        : slotReel.getSymbolPosition(col, row);
+    const localPos = this.toLocal(symbolPos);
+
+    container.position.set(localPos.x, localPos.y + 35);
+    this.addChild(container);
+
+    // Add satisfying pop-in bounce animation
+    container.scale.set(0);
+    AnimationProxy.animateTween(container.scale, {
+      duration: 0.5,
+      x: 1,
+      y: 1,
+      ease: 'back.out(2.5)', // Extra springy
+    });
+
+    return container;
   }
 
   private playFeatureExpansion(positions: number[], boxName: string, respectedSymbol: string, isWild: boolean): void {
