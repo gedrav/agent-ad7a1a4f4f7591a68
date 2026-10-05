@@ -12,7 +12,8 @@ function hasStones(reelView: string[][]): boolean {
     const column = reelView[col];
     if (Array.isArray(column)) {
       for (let row = 0; row < column.length; row++) {
-        if (STONE_SYMBOLS.includes(column[row])) {
+        const symbol = column[row];
+        if (STONE_SYMBOLS.includes(symbol) || (typeof symbol === 'string' && symbol.startsWith('SG_'))) {
           return true;
         }
       }
