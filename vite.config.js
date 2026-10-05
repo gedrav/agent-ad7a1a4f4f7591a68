@@ -13,11 +13,11 @@ const defaultGameNames = [
   // 'frostedmarketbonanza',
   //'bookofstorms',
   //'meowmeowmeow',
-  'bookofstormslightningwin',
+  // 'bookofstormslightningwin',
   //'carpathiantreasures',
   // 'jokercharge',
   //'houseofcards'
-  //'minedash'
+  'minedash'
 ];
 
 // SINGLE CONTROL POINT (with env override)

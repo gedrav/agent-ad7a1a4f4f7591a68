@@ -5,6 +5,11 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import {
+  MULTIPLIER_APPLY_COUNT_DURATION,
+  MULTIPLIER_APPLY_MOVE_DURATION,
+  MULTIPLIER_APPLY_MOVE_EASE,
+  MULTIPLIER_APPLY_SHRINK_DURATION,
+  MULTIPLIER_APPLY_SHRINK_EASE,
   MULTIPLIER_BADGE_ARRIVE_DURATION,
   MULTIPLIER_BADGE_ARRIVE_EASE,
   MULTIPLIER_BADGE_INSET,
@@ -21,7 +26,7 @@ import {
   MULTIPLIER_EFFECT_SPINE,
   MULTIPLIER_EFFECT_STATE,
 } from '../../config/MultiplierBadgeConfig';
-import { SYMBOLS_DATA, getRandomSymbolName } from '../../config/SymbolsConfig';
+import { MYSTERY_SYMBOL_NAMES, SYMBOLS_DATA, getRandomSymbolName } from '../../config/SymbolsConfig';
 import { appModel } from '@core/models/services/AppModelService';
 import { MysteryReelResult } from './JCMysterySymbolModifier';
 import JCReelSymbol from './JCReelSymbol';
@@ -39,8 +44,13 @@ const CHAIN_LOCK_DISAPPEARING_STATE = 'disappearing';
 
 const METAMORPHIC_REVEAL_DURATION = 0.25;
 // Half the pop: it runs out and back.
-const CHARGE_POP_DURATION = 0.15;
-const CHARGE_POP_SCALE = 1.15;
+const SYMBOL_POP_DURATION = 0.15;
+const SYMBOL_POP_SCALE = 1.15;
+
+// C5's handover into the mystery jackpot: one symbol shrinking away, another growing in.
+const SYMBOL_TRANSFORM_DURATION = 0.2;
+const SYMBOL_TRANSFORM_OUT_EASE = 'back.in(1.7)';
+const SYMBOL_TRANSFORM_IN_EASE = 'power2.out';
 
 const WIN_ANIMATION_PASSES = 2;
 
@@ -275,6 +285,44 @@ export default class HoldNWinReel extends Container {
     });
   }
 
+  // The badge spending itself on the symbol: in from the corner, down to nothing, and the cell's
+  // figure climbs to what it is now worth.
+  public applyMultiplierToSymbol(onComplete?: () => void): void {
+    const badge = this.multiplierText;
+    const multiplier = this.getMultiplier();
+    if (!badge || !multiplier) {
+      onComplete?.();
+      return;
+    }
+    AnimationProxy.killTweensOf(badge);
+    AnimationProxy.killTweensOf(badge.scale);
+    AnimationProxy.animateTween(badge, {
+      duration: MULTIPLIER_APPLY_MOVE_DURATION,
+      x: 0,
+      y: 0,
+      ease: MULTIPLIER_APPLY_MOVE_EASE,
+      onComplete: () => this.shrinkMultiplierIntoSymbol(badge, multiplier, onComplete),
+    });
+  }
+
+  private shrinkMultiplierIntoSymbol(badge: PixText, multiplier: number, onComplete?: () => void): void {
+    AnimationProxy.animateTween(badge.scale, {
+      duration: MULTIPLIER_APPLY_SHRINK_DURATION,
+      x: 0,
+      y: 0,
+      ease: MULTIPLIER_APPLY_SHRINK_EASE,
+      onComplete: () => {
+        this.clearMultiplier();
+        const symbol = this.symbolView;
+        if (!symbol) {
+          onComplete?.();
+          return;
+        }
+        symbol.applyMultiplier(multiplier, MULTIPLIER_APPLY_COUNT_DURATION, onComplete);
+      },
+    });
+  }
+
   // Runs when the feature ends and on destroy: no tween, spine listener or text left behind.
   public clearMultiplier(): void {
     this.releaseMultiplierEffectListener();
@@ -326,27 +374,111 @@ export default class HoldNWinReel extends Container {
   // Swaps the cell to the symbol one step up the ladder and pops it, so the new face is what
   // swells. showSymbol releases the old instance back to the pool and kills its tweens, so nothing
   // is left holding the one that went.
+  // The top rung is the exception: C5 changes symbol rather than tier, so it hands over instead.
   public chargeSymbol(name: string, onComplete?: () => void): void {
+    if (MYSTERY_SYMBOL_NAMES.includes(name)) {
+      this.transformSymbol(name, onComplete);
+      return;
+    }
+    this.showSymbol(name);
+    this.popSymbol(onComplete);
+  }
+
+  private transformSymbol(name: string, onComplete?: () => void): void {
+    const outgoing = this.symbolView;
+    if (!outgoing) {
+      this.showSymbol(name);
+      this.popSymbol(onComplete);
+      return;
+    }
+    this.scaleSymbolOut(outgoing, () => this.scaleSymbolIn(name, onComplete));
+  }
+
+  private scaleSymbolOut(symbol: JCReelSymbol, onComplete: () => void): void {
+    AnimationProxy.animateTween(symbol.scale, {
+      duration: SYMBOL_TRANSFORM_DURATION,
+      x: 0,
+      y: 0,
+      ease: SYMBOL_TRANSFORM_OUT_EASE,
+      onComplete,
+    });
+  }
+
+  // showSymbol releases the shrunken instance and kills the tween still on it, so nothing of the
+  // old symbol goes back into the pool.
+  private scaleSymbolIn(name: string, onComplete?: () => void): void {
     this.showSymbol(name);
     const symbol = this.symbolView;
     if (!symbol) {
       onComplete?.();
       return;
     }
-    // Read after the swap: the new symbol may rest at a different scale, as C5 does turning into
-    // the mystery jackpot.
+    const restX = symbol.scale.x;
+    const restY = symbol.scale.y;
+    symbol.scale.set(0, 0);
+    AnimationProxy.animateTween(symbol.scale, {
+      duration: SYMBOL_TRANSFORM_DURATION,
+      x: restX,
+      y: restY,
+      ease: SYMBOL_TRANSFORM_IN_EASE,
+      onComplete: () => {
+        symbol.scale.set(restX, restY);
+        symbol.showLanding(() => {
+          symbol.showIdle();
+          onComplete?.();
+        });
+      },
+    });
+  }
+
+  // Out and back on whatever the cell is holding. The rest scale is read now rather than cached:
+  // symbols rest at different scales, as C5 does turning into the mystery jackpot.
+  private popSymbol(onComplete?: () => void): void {
+    const symbol = this.symbolView;
+    if (!symbol) {
+      onComplete?.();
+      return;
+    }
     const restX = symbol.scale.x;
     const restY = symbol.scale.y;
     AnimationProxy.animateTween(symbol.scale, {
-      duration: CHARGE_POP_DURATION,
-      x: restX * CHARGE_POP_SCALE,
-      y: restY * CHARGE_POP_SCALE,
+      duration: SYMBOL_POP_DURATION,
+      x: restX * SYMBOL_POP_SCALE,
+      y: restY * SYMBOL_POP_SCALE,
       repeat: 1,
       yoyo: true,
       onComplete: () => {
         symbol.scale.set(restX, restY);
         onComplete?.();
       },
+    });
+  }
+
+  // One cell's whole reveal. The strip is already turning when this is called - see
+  // startMysteryReels.
+  public revealMysterySymbol(result: MysteryReelResult, symbolName: string, onComplete?: () => void): void {
+    this.spinMysteryReel(result).then(() => {
+      this.popSymbol(() => {
+        const mystery = this.symbolView;
+        if (!mystery) {
+          onComplete?.();
+          return;
+        }
+        // The badge goes with the mystery rather than hanging over the empty cell while it hides.
+        this.clearMultiplier();
+        mystery.showHiding(() => {
+          this.showSymbol(symbolName);
+          const revealed = this.symbolView;
+          if (!revealed) {
+            onComplete?.();
+            return;
+          }
+          revealed.showLanding(() => {
+            revealed.showIdle();
+            onComplete?.();
+          });
+        });
+      });
     });
   }
 
@@ -425,6 +557,11 @@ export default class HoldNWinReel extends Container {
 
   public getSymbolName(): string | null {
     return this.symbolView?.getSymbolName() ?? null;
+  }
+
+  // In bet multiples, what this cell pays at the end of the feature.
+  public getCollectValue(): number {
+    return this.symbolView?.getCollectValue() ?? 0;
   }
 
   // Both are refreshed - topSymbolView can be visible mid-spin.
