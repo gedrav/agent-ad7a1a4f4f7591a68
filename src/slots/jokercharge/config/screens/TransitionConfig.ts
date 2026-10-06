@@ -42,7 +42,7 @@ export const TRANSITION_CONFIG: any = {
         {
           name: 'okText',
           type: 'Text',
-          contentText: 'OK',
+          content: 'okBtnText',
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
           y: 0,

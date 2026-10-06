@@ -157,14 +157,20 @@ const MYSTERY_JACKPOT_TEXT_STYLE = {
 // The jackpots a mystery symbol's mini reel can land on, keyed by the backend's own names. The
 // key is what the backend sends, the text is what the player reads: the two differ now that the
 // backend uses short codes.
-export const JACKPOT_LABELS: Record<string, { text: string; style: any }> = {
-  MN: { text: 'MINI', style: MINI_TEXT_STYLE },
-  MR: { text: 'MINOR', style: MINOR_TEXT_STYLE },
-  MJ: { text: 'MAJOR', style: MAJOR_TEXT_STYLE },
+// content is a key into the loaded content, not the words themselves - the three names live in
+// commonContent, which every game shares. Resolved where it is drawn rather than here: this module
+// is evaluated at import time, before the content files have loaded.
+export const JACKPOT_LABELS: Record<string, { content: string; style: any }> = {
+  MN: { content: 'miniTitle', style: MINI_TEXT_STYLE },
+  MR: { content: 'minorTitle', style: MINOR_TEXT_STYLE },
+  MJ: { content: 'majorTitle', style: MAJOR_TEXT_STYLE },
 };
 
+// content, not contentText: UIUtil.getText() resolves it against the loaded content, so the words
+// are translatable. toUpperCase is applied after that, so the content files can hold them written
+// normally and the symbol still reads in caps in every language.
 function labelTextConfig(
-  text: string,
+  content: string,
   style: any = MULTIPLIER_TEXT_STYLE,
   anchor: { x: number; y: number } = { x: 0.5, y: 0.25 },
 ): any {
@@ -172,7 +178,8 @@ function labelTextConfig(
     name: 'labelText',
     type: 'Text',
     anchor,
-    contentText: text,
+    content,
+    toUpperCase: true,
     style,
   };
 }
@@ -188,7 +195,7 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 0.75,
     multiplierTextConfig: {
       name: 'multiplierVal',
       type: 'Text',
@@ -209,7 +216,7 @@ const MYSTERY_SYMBOL: JCSymbolData = {
   landingAnim: 'landing',
   hideAnim: 'hide',
   cellScale: 0.33,
-  labelTextConfig: labelTextConfig('MYSTERY', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+  labelTextConfig: labelTextConfig('mysterySymbolLabel', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
 };
 
 const MYSTERY_JACKPOT_SYMBOL: JCSymbolData = {
@@ -222,7 +229,7 @@ const MYSTERY_JACKPOT_SYMBOL: JCSymbolData = {
   landingAnim: 'landing',
   hideAnim: 'hide',
   cellScale: 0.33,
-  labelTextConfig: labelTextConfig(`MYSTERY\nJACKPOT`, MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+  labelTextConfig: labelTextConfig('mysteryJackpotSymbolLabel', MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
 };
 
 // An empty cell, as the backend names it in reelView/holdField.
@@ -243,7 +250,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'landing',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 0.75,
   },
   MN: {
     name: 'MN',
@@ -253,8 +260,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
-    labelTextConfig: labelTextConfig('MINI', MINI_TEXT_STYLE),
+    cellScale: 0.75,
+    labelTextConfig: labelTextConfig('miniTitle', MINI_TEXT_STYLE),
   },
   MR: {
     name: 'MR',
@@ -264,8 +271,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
-    labelTextConfig: labelTextConfig('MINOR', MINOR_TEXT_STYLE),
+    cellScale: 0.75,
+    labelTextConfig: labelTextConfig('minorTitle', MINOR_TEXT_STYLE),
   },
   MJ: {
     name: 'MJ',
@@ -275,8 +282,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
-    labelTextConfig: labelTextConfig('MAJOR', MAJOR_TEXT_STYLE),
+    cellScale: 0.75,
+    labelTextConfig: labelTextConfig('majorTitle', MAJOR_TEXT_STYLE),
   },
   MY: MYSTERY_SYMBOL,
   MJP: MYSTERY_JACKPOT_SYMBOL,
@@ -289,7 +296,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 0.75,
   },
   SMY: { ...MYSTERY_SYMBOL, name: 'SMY' },
   SMJP: { ...MYSTERY_JACKPOT_SYMBOL, name: 'SMJP' },

@@ -26,7 +26,7 @@ export const TOTAL_WIN_VALUE_SLOT = 'frame';
 export const TOTAL_WIN_LABEL_CONFIG = {
   name: 'totalWinLabel',
   type: 'Text',
-  contentText: 'TOTAL WIN',
+  content: 'totalWinPanelTitle',
   toUpperCase: true,
   anchor: { x: 0.5, y: 0.5 },
   style: {
