@@ -1168,7 +1168,7 @@ class AppModelService {
     return this.gameResult;
   }
   public getSymbolPayoutValue(multi: number): number {
-    return (this.getTotalBet() / (this.gameInfo.creditValue * this.gameInfo.selectedLines)) * multi;
+    return (this.getTotalBetForPaytable() / (this.gameInfo.creditValue * this.gameInfo.selectedLines)) * multi;
   }
   public getSymbMultiplierValue(reel: number, row: number) {
     const multiplierPositions = this.gameResult.cascadeData[this.tumbleIndex]?.multiplierPositions;
