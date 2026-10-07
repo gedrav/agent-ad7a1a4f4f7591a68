@@ -21,6 +21,11 @@ class GameIdleStateCommand extends StateCommand {
   }
   public enableGame(): void {
     appModel.isBusy = false;
+    if (appModel.jackpotReinitPending) {
+      appModel.jackpotReinitPending = false;
+      appModel.jackpotInfo = null;
+      EventHandler.dispatchEvent(SlotEvents.JACKPOT_INFO_READY, null);
+    }
     if (appModel.promoSpinInfo?.status === 'ACTIVE' && !appModel.promoFSPopupShown) {
       StateManager.goToState(STATES.CHECK_PROMOFS_TRIGGER_STATE);
       return;

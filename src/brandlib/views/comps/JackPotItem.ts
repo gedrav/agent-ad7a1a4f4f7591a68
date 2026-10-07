@@ -1,17 +1,15 @@
-import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 export class JackPotItem extends StandardView {
   private readonly jackpotBg: PixSpine;
   private readonly value: PixText;
-  private readonly currentValue: number = 1000;
-  private readonly stackJackpotValues: number[] = [];
-  private isCountingUp: boolean = false;
+  private readonly counter = { current: 0 };
   constructor(config) {
     super(config);
     this.jackpotBg = this.elementsList['jackpotBg'];
@@ -25,31 +23,23 @@ export class JackPotItem extends StandardView {
   public changeAnimation({ state, loop }) {
     this.jackpotBg.playAnimation({ state, loop, reset: false });
   }
-  public stackJackpotValue(value: number) {
-    this.stackJackpotValues.push(value);
-    this.processJackpotQueue();
+  public setValue(value: number) {
+    AnimationProxy.killTweensOf(this.counter);
+    this.counter.current = value;
+    this.updateJackpotValue(value);
   }
-  private processJackpotQueue() {
-    if (this.isCountingUp || this.stackJackpotValues.length === 0) {
-      return;
-    }
-    const nextValue = this.stackJackpotValues.shift();
-    this.isCountingUp = true;
-    AnimationProxy.animateTween(this, {
-      currentValue: nextValue,
-      delay: 0.3,
-      duration: 1.5,
-      onUpdate: this.updateJackpotText.bind(this),
-      onComplete: this.onScoreDone.bind(this),
+  public tweenToValue(value: number, duration: number) {
+    AnimationProxy.killTweensOf(this.counter);
+    AnimationProxy.animateTween(this.counter, {
+      current: value,
+      duration,
+      ease: 'none',
+      onUpdate: () => this.updateJackpotValue(this.counter.current),
     });
+  }
+  public updateJackpotValue(value: number) {
+    this.value.text = Util.formatCurrency(value);
     this.adjustTextSize();
-  }
-  private onScoreDone() {
-    this.isCountingUp = false;
-    this.processJackpotQueue();
-  }
-  private updateJackpotText() {
-    this.value.text = Util.formatCurrency(this.currentValue);
   }
   public adjustTextSize() {
     const fontSize = this.value.configData.style.fontSize;

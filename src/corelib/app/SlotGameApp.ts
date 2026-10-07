@@ -450,11 +450,6 @@ class SlotGameApp {
         this.rafId = requestAnimationFrame(this.animBound);
       }
     }
-    // demo purpose added this can remove once socket connected
-    // const timer = setTimeout(()=>{
-    //   appModel.storeJackpotData = true;
-    //   StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
-    // },5000);
   }
   protected makeGameVisible() {}
   protected async onSplashDestroyed() {
@@ -482,6 +477,7 @@ class SlotGameApp {
       }
     } else {
       appModel.resetGameResult();
+      if (!appModel.jackpotRound) appModel.unfreezeJackpotMeters();
       const data: any = {};
       let isOfflineError = false;
       data.title = Util.getContent('infoText');

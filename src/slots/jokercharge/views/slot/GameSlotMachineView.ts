@@ -7,6 +7,9 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { RespinRoundAnimationData } from '@core/commands/states/RespinPreWinState';
 import { EffectStep, playEffectSteps } from '@slots/jokercharge/views/effects/EffectSteps';
 import { resolveModifierSteps } from '@slots/jokercharge/views/effects/ModifierEffects';
+import { resolveMysteryRevealSteps } from '@slots/jokercharge/views/effects/MysteryRevealEffect';
+import { resolveMultiplierApplySteps } from '@slots/jokercharge/views/effects/MultiplierApplyEffect';
+import { playTotalWinCollect, TotalWinCollectHost } from '@slots/jokercharge/views/effects/TotalWinCollectEffect';
 
 type TrailCell = { column: number; row: number };
 
@@ -18,6 +21,12 @@ export interface TriggerWinData {
 
 // Same shape as TriggerWinData: the state waits only if a listener claims the request.
 export interface ModifierEffectsData {
+  hold: boolean;
+  onComplete: () => void;
+}
+
+// Same again, for the feature's payout - see TotalWinCollectEffect.
+export interface TotalWinCollectData {
   hold: boolean;
   onComplete: () => void;
 }
@@ -43,24 +52,24 @@ import {
   TrailPlacement,
 } from '@slots/jokercharge/config/screens/TrailAnimConfig';
 
+import { LogoComp } from '@slots/jokercharge/views/comps/LogoComp';
 import { RespinCounterComp } from '@slots/jokercharge/views/comps/RespinCounterComp';
 import { BuyBonusLinesComp } from '@slots/jokercharge/views/comps/BuyBonusLinesComp';
-import { HoldNWinReelsContainer, MysteryReveal } from '@slots/jokercharge/views/slot/HoldNWinReelsContainer';
-import { toMysteryReelResult } from '@slots/jokercharge/views/slot/JCMysterySymbolModifier';
+import { HoldNWinReelsContainer } from '@slots/jokercharge/views/slot/HoldNWinReelsContainer';
 import { setRespinActive } from '@slots/jokercharge/models/JCLinesState';
 import {
   getModifierMultipliers,
   getModifierRow,
-  getMysteryReveals,
   MetamorphicSymbol,
   ModifierMultiplier,
 } from '@slots/jokercharge/models/JCSpinData';
 
-export class GameSlotMachineView extends ResponsiveChildrenView {
+export class GameSlotMachineView extends ResponsiveChildrenView implements TotalWinCollectHost {
   private readonly savedLayout: Record<string, BonusLayoutOverride> = {};
   private readonly respinCounterComp: RespinCounterComp;
   private readonly buyBonusLinesComp: BuyBonusLinesComp;
   private readonly holdNWinReelsContainer: HoldNWinReelsContainer;
+  private readonly logoComp: LogoComp;
   private readonly coinsAnim: PixSpine;
   private readonly lineAnim: PixSpine;
   // lineAnim plus however many extra trail spines a spin has needed at once.
@@ -71,6 +80,7 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     this.respinCounterComp = this.elementsList['respinCounterComp'];
     this.buyBonusLinesComp = this.elementsList['buyBonusLinesComp'];
     this.holdNWinReelsContainer = this.elementsList['holdNWinReelsContainer'];
+    this.logoComp = this.elementsList['logoComp'];
     this.coinsAnim = this.elementsList['coinsAnim'];
     this.lineAnim = this.elementsList['lineAnim'];
     this.trailPool.push(this.lineAnim);
@@ -82,6 +92,7 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     EventHandler.addEventListener(JCEvents.PLAY_METAMORPHIC_SYMBOLS, this.onPlayMetamorphicSymbols.bind(this));
     EventHandler.addEventListener(JCEvents.PLAY_TRIGGER_WIN_ANIMATION, this.onPlayTriggerWins.bind(this));
     EventHandler.addEventListener(JCEvents.PLAY_MODIFIER_EFFECTS, this.onPlayModifierEffects.bind(this));
+    EventHandler.addEventListener(JCEvents.PLAY_TOTAL_WIN_COLLECT, this.onPlayTotalWinCollect.bind(this));
   }
 
   private onPlayCoinsAnimation(): void {
@@ -105,6 +116,10 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     }
 
     placements.forEach((placement) => this.playTrailOn(this.acquireTrail(), placement));
+    // Only the trails running up to the logo, never the ones it sends back down.
+    if (direction === 'toLogo') {
+      setTimeout(() => EventHandler.dispatchEvent(JCEvents.PLAY_LOGO_COLLECT_ANIM), TRAIL_ARRIVAL_MS);
+    }
     // Off the arrival time, not the spine's 'complete': the trails all start together, and what
     // the caller is waiting for is the head landing, not the tail finishing dissolving.
     if (onComplete) setTimeout(onComplete, TRAIL_ARRIVAL_MS);
@@ -171,7 +186,8 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     const steps = [
       ...resolveModifierSteps(this.holdNWinReelsContainer, modifierRow),
       ...this.resolveMultiplierSteps(multipliers),
-      ...this.resolveMysterySteps(),
+      ...resolveMysteryRevealSteps(this.holdNWinReelsContainer),
+      ...resolveMultiplierApplySteps(this.holdNWinReelsContainer),
     ];
     if (!steps.length) return;
     round.hold = true;
@@ -182,27 +198,42 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
   // round spins. The panel is already showing what the triggering spin landed, but nothing has
   // played it: the round animation only ever covers the round that just settled.
   private onPlayModifierEffects(request: ModifierEffectsData): void {
-    const steps = resolveModifierSteps(this.holdNWinReelsContainer, getModifierRow() ?? []);
+    const steps = [
+      ...resolveModifierSteps(this.holdNWinReelsContainer, getModifierRow() ?? []),
+      ...this.resolveMultiplierSteps(getModifierMultipliers()),
+    ];
     if (!steps.length) return;
     request.hold = true;
     playEffectSteps(steps, 0, request.onComplete);
   }
 
+  // JCExitRespinState's hook, after the panel has arrived and before the wipe home.
+  private onPlayTotalWinCollect(request: TotalWinCollectData): void {
+    if (!this.holdNWinReelsContainer.getCollectTargets().length) return;
+    request.hold = true;
+    playTotalWinCollect(this.holdNWinReelsContainer, this, request.onComplete);
+  }
+
+  // TotalWinCollectHost.
+  public sendTrailToLogo(column: number, row: number, onArrive: () => void): void {
+    this.playTrails([{ column, row }], onArrive, 'toLogo');
+  }
+
+  public resetTotalWin(): void {
+    this.logoComp?.resetTotalWin();
+  }
+
+  public addTotalWin(value: number, duration: number, onComplete: () => void): void {
+    if (!this.logoComp) {
+      onComplete();
+      return;
+    }
+    this.logoComp.addTotalWin(value, duration, onComplete);
+  }
+
   private resolveMultiplierSteps(multipliers: ModifierMultiplier[]): EffectStep[] {
     if (!multipliers.length) return [];
     return [(done) => this.holdNWinReelsContainer.applyMultipliers(multipliers, done)];
-  }
-
-  // Held mystery symbols have been spinning since the feature opened; the round that closes it is
-  // the one that says what they are, and they land together.
-  private resolveMysterySteps(): EffectStep[] {
-    const reveals = getMysteryReveals();
-    if (!reveals.length) return [];
-    const entries: MysteryReveal[] = reveals.map(({ position, symbol, value }) => ({
-      position,
-      result: toMysteryReelResult(symbol, value),
-    }));
-    return [(done) => this.holdNWinReelsContainer.revealMysterySymbols(entries, done)];
   }
 
   private resolveTargetLayout(): Record<string, BonusLayoutOverride> {
@@ -249,6 +280,8 @@ export class GameSlotMachineView extends ResponsiveChildrenView {
     // every cell takes part again.
     if (bonusTrigger) {
       this.hideCoinsAnimation();
+      // Left over from the feature before this one, which closed on it.
+      this.logoComp?.hideTotalWinPanel();
       // The locks only hold through the base game; inside the feature every filled cell is held
       // anyway, by holdFilledCells.
       this.holdNWinReelsContainer?.releaseStickyCells();

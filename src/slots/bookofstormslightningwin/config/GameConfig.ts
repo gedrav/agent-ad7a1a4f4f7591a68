@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.084',
+  gameVersion: '0.090',
   gameId: 'bookofstormslightningwin',
   gameName: 'Book Of Storms Lightning Win',
   uiConfig: UIConfig,

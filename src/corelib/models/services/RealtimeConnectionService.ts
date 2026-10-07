@@ -1,6 +1,7 @@
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { appModel } from '@core/models/services/AppModelService';
 
 const MIN_RETRY_MS = 1000;
 const MAX_RETRY_MS = 30000;
@@ -42,7 +43,7 @@ class RealtimeConnectionService {
       this.listenersRegistered = true;
     }
 
-    fetchEventSource(`${baseUrl}/sse/balance`, {
+    fetchEventSource(`${baseUrl}/sse/events?jp=1`, {
       headers: { Authorization: `Bearer ${sessionToken}` },
       openWhenHidden: true,
       signal: this.abortController.signal,
@@ -60,8 +61,7 @@ class RealtimeConnectionService {
         this.resetWatchdog();
         // console.log('[realtime]', msg.event, msg.data);
         if (msg.event && msg.data) {
-          const parsedData: BalanceUpdatedData = JSON.parse(msg.data);
-          EventHandler.dispatchEvent(SlotEvents.REALTIME_BALANCE_UPDATE, { event: msg.event, data: parsedData });
+          this.routeMessage(msg.event, JSON.parse(msg.data));
         }
       },
       onclose: () => {
@@ -76,6 +76,29 @@ class RealtimeConnectionService {
         return delay;
       },
     });
+  }
+
+  private routeMessage(event: string, data: any): void {
+    switch (event) {
+      case 'balance_updated':
+        EventHandler.dispatchEvent(SlotEvents.REALTIME_BALANCE_UPDATE, { event, data: data as BalanceUpdatedData });
+        break;
+      case 'jackpot_meters': {
+        const info = appModel.jackpotInfo;
+        if (!info || data.p !== info.poolId) return;
+        appModel.applyJackpotTick({ values: data.t, v: data.v });
+        break;
+      }
+      case 'jackpot_won':
+        EventHandler.dispatchEvent(SlotEvents.JACKPOT_WON, { tier: data.tier, amount: data.amt, currency: data.c });
+        break;
+      case 'jackpot_pool_changed':
+        if (appModel.jackpotInfo) appModel.jackpotReinitPending = true;
+        EventHandler.dispatchEvent(SlotEvents.JACKPOT_POOL_CHANGED, { poolId: data.p });
+        break;
+      default:
+        break;
+    }
   }
 
   private readonly handleOffline = (): void => {

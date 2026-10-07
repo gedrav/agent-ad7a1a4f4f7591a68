@@ -14,7 +14,7 @@ class CheckAutoSpinStateCommand extends StateCommand {
       appModel.incrementAutoSpin();
       appModel.setAutoPlayWin(appModel.getTotalBaseWin());
       const status = appModel.getNextAutoPossible();
-      if (status === 1 && appModel.getIsSpinStartPossible()) {
+      if (status === 1 && !appModel.jackpotPending && appModel.getIsSpinStartPossible()) {
         setTimeout(() => StateManager.goToState('SPIN_START_STATE'), Math.max(remainingTime, 250));
       } else {
         appModel.resetAutoplayData();

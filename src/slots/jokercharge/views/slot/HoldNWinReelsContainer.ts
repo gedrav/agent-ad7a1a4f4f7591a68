@@ -51,9 +51,19 @@ export interface SpinResultPayload {
   holdField?: HoldFieldEntry[];
 }
 
+// value is in bet multiples, the units the backend sends.
+export interface CollectTarget {
+  column: number;
+  row: number;
+  value: number;
+}
+
 export interface MysteryReveal {
   position: number[];
+  // What the strip lands on, which is the same prize read as a reel result.
   result: MysteryReelResult;
+  // What the cell becomes once the mystery has hidden itself.
+  symbol: string;
 }
 
 export interface HoldNWinReelsContainerData {
@@ -302,6 +312,39 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     });
   }
 
+  // In reading order, which is the order their trails leave in.
+  public getCollectTargets(): CollectTarget[] {
+    const targets: CollectTarget[] = [];
+    for (let row = 0; row < this.rows; row++) {
+      for (let column = 0; column < this.columns; column++) {
+        const value = this.getReel(column, row)?.getCollectValue() ?? 0;
+        if (value) targets.push({ column, row, value });
+      }
+    }
+    return targets;
+  }
+
+  // All at once: the cells are independent, and one at a time would drag out the exit.
+  public applyMultipliersToSymbols(onComplete?: () => void): void {
+    const targets: HoldNWinReel[] = [];
+    this.forEachReel((reel) => {
+      if (reel?.getMultiplier()) targets.push(reel);
+    });
+
+    if (!targets.length) {
+      onComplete?.();
+      return;
+    }
+
+    let finished = 0;
+    targets.forEach((reel) =>
+      reel.applyMultiplierToSymbol(() => {
+        finished++;
+        if (finished === targets.length) onComplete?.();
+      }),
+    );
+  }
+
   // Already-earned badges from a resumed round: placed at rest, not replayed.
   private restoreMultipliers(entries: ModifierMultiplier[]): void {
     entries.forEach(({ position, multiplier }) => this.getReel(position[0], position[1])?.setMultiplier(multiplier));
@@ -395,9 +438,11 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.forEachReel((reel) => reel?.stopMysteryReel());
   }
 
+  // Every mystery on the grid has been turning since the feature opened, so they come to rest one
+  // after another rather than together: each cell plays its whole reveal before the next one lands.
   public revealMysterySymbols(entries: MysteryReveal[], onComplete?: () => void): void {
     const targets = entries
-      .map(({ position, result }) => ({ reel: this.getReel(position[0], position[1]), result }))
+      .map(({ position, result, symbol }) => ({ reel: this.getReel(position[0], position[1]), result, symbol }))
       .filter(({ reel }) => !!reel);
 
     if (!targets.length) {
@@ -405,13 +450,15 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       return;
     }
 
-    let finished = 0;
-    targets.forEach(({ reel, result }, index) => {
-      reel.spinMysteryReel(result, index * MYSTERY_REEL_CONFIG.staggerMs).then(() => {
-        finished++;
-        if (finished === targets.length) onComplete?.();
-      });
-    });
+    const revealNext = (index: number): void => {
+      if (index >= targets.length) {
+        onComplete?.();
+        return;
+      }
+      const { reel, result, symbol } = targets[index];
+      reel.revealMysterySymbol(result, symbol, () => revealNext(index + 1));
+    };
+    revealNext(0);
   }
 
   public refreshBlanksVisuals(): void {

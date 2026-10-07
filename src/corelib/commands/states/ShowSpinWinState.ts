@@ -47,6 +47,7 @@ class ShowSpinWinStateCommand extends StateCommand {
   }
   checkToActivateButtons(): void {
     if (
+      !appModel.jackpotRound &&
       !appModel.getIsFeatureTriggered() &&
       !appModel.getIsAutoSession() &&
       !appModel.isTumbleRemaining() &&

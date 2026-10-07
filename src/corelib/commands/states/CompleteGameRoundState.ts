@@ -4,7 +4,9 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
+import { canShowJackpot, getPostJackpotState } from '@core/commands/states/JackpotFlowHelper';
 import { STATES } from '@core/states/StateConstants';
+import { AutoStopSpinCommand } from '@core/commands/action/AutoStopSpinCommand';
 
 class CompleteGameRoundStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -13,12 +15,11 @@ class CompleteGameRoundStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
-    if (appModel.storeJackpotData) {
+    if (canShowJackpot()) {
+      if (appModel.getIsAutoSession()) AutoStopSpinCommand.execute();
       StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
-    } else if (appModel.getIsPromoFSSession()) {
-      StateManager.goToState(STATES.CHECK_PROMOFS_STATE);
     } else {
-      StateManager.goToState(STATES.CHECK_AUTOSPIN_STATE);
+      StateManager.goToState(getPostJackpotState());
     }
   }
 }

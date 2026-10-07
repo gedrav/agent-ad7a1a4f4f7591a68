@@ -27,6 +27,7 @@ export class JCBlanksSymbolModifier {
     // A symbol being placed is always at rest, whatever the last spin left behind.
     this.blurred = false;
     if (this.spine) {
+      this.spine.visible = true;
       this.applySkin();
       return;
     }
@@ -35,7 +36,16 @@ export class JCBlanksSymbolModifier {
       defaultSkin: this.resolveSkin(),
     });
     this.spine.label = 'blanksTile';
+    // The rig's only animation is empty, so it never needs a frame: setSkin() updates the pose by
+    // itself. One idle skeleton per cell adds up otherwise.
+    this.spine.setAutoUpdate(false);
     this.host.addChild(this.spine);
+  }
+
+  // Kept for reuse rather than destroyed when the cell holds something else: the same instance is
+  // handed back the next time this cell draws a blank, which on a moving strip is constant.
+  public setVisible(flag: boolean): void {
+    if (this.spine) this.spine.visible = flag;
   }
 
   public setBlurred(flag: boolean): void {

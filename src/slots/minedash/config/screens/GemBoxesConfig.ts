@@ -4,24 +4,29 @@ export const GEM_BOXES_CONFIG: any = {
   name: 'boxesContainer',
   type: 'Comp',
   class: GemBoxesComp,
-  x: 144,
+  x: 155,
   y: 865,
-  px: 144,
+  px: 155,
   py: 865,
   scale: 0.3,
   labelStyle: {
+    xOffsets: {
+      box1: -20, // MULTI
+      box2: -30, // FREESPIN
+      box3: 10, // MYSTERY
+      box4: 20, // WILD
+      box5: -4, // MEGA (no label drawn)
+    },
     title: {
-      fontFamily: 'gameFont1',
+      fontFamily: 'gameFont2',
       fontWeight: 'bold',
       fill: 0xffffff,
       stroke: { color: 0x110500, width: 8 },
-      fontSizeAlone: 80,
-      fontSizeWithValue: 80,
-      yAlone: 60,
-      yWithValue: 15,
+      fontSize: 80,
+      y: 15,
     },
     value: {
-      fontFamily: 'gameFont1',
+      fontFamily: 'gameFont2',
       fontWeight: 'bold',
       fontSize: 60,
       fill: 0xffea00,

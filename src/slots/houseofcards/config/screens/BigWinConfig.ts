@@ -7,7 +7,7 @@ export const BIG_WIN_CONFIG = {
   class: BigWinsComp,
   data: {
     backgroundAlpha: 0.7,
-    animations1: {
+    animations: {
       BIG_WIN: { start: 'big_start', idle: 'big' },
       SUPER_WIN: { start: 'mega_start', idle: 'mega' },
       MEGA_WIN: { start: 'gigantic_start', idle: 'gigantic' },
