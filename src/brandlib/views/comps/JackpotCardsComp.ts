@@ -10,13 +10,16 @@ import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { IJackpotPick, IJackpotRound, JACKPOT_SKINS, JACKPOT_TIERS, JackpotTier } from '@core/models/jackpot.types';
 
 const REVEAL_HOLD_MS = 1500;
+const OPEN_FALLBACK_MS = 3000;
 
 export class JackpotCardsComp extends ResponsiveChildrenView {
   cardsContainer: PixView;
   cardsConfig: any;
   cardArray: JackpotCard[] = [];
   protected pickInFlight = false;
-  protected finishAfterOpen = false;
+  protected expectedOpenPosition: number | null = null;
+  protected revealFinished = false;
+  protected openFallbackId: number;
   protected finishTimeoutId: number;
   constructor(config) {
     super(config);
@@ -34,7 +37,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     EventHandler.dispatchEvent('RESUME_BG_SOUND');
     clearTimeout(this.finishTimeoutId);
     this.pickInFlight = false;
-    this.finishAfterOpen = false;
+    this.clearOpenWait();
+    this.revealFinished = false;
     this.resetCards();
     this.cardsContainer.visible = false;
   }
@@ -46,7 +50,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   protected onCardOpened() {
     if (this.finishAfterOpen) {
-      this.finishAfterOpen = false;
+      this.clearOpenWait();
+      this.revealFinished = false;
       this.finishReveal();
     }
   }
@@ -56,7 +61,11 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.setAllLocked(false);
   }
   protected onPickResult(round: IJackpotRound) {
-    if (!round) return;
+    if (!round) {
+      this.pickInFlight = false;
+      this.setAllLocked(false);
+      return;
+    }
     this.pickInFlight = false;
     const pick = round.pick;
     round.picks.forEach((p) => {
@@ -71,7 +80,11 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     }
     this.setAllLocked(true);
     if (animatePick) {
-      this.finishAfterOpen = true;
+      this.expectedOpenPosition = pick.position;
+      this.openFallbackId = window.setTimeout(() => {
+        this.clearOpenWait();
+        this.finishReveal();
+      }, OPEN_FALLBACK_MS);
       pickedCard.openAnimated(this.skinOf(pick.tier));
     } else {
       this.finishReveal();
@@ -79,7 +92,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   protected finishReveal() {
     const round = appModel.jackpotRound;
-    if (!round) return;
+    if (!round || this.revealFinished) return;
+    this.revealFinished = true;
     const rest = round.remaining ?? [];
     rest.forEach((p) => this.cardArray[p.position]?.openStatic(this.skinOf(p.tier)));
     const winning = [...round.picks, ...rest].filter((p) => p.tier === round.wonTier).map((p) => p.position);
@@ -100,7 +114,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     EventHandler.dispatchEvent('PLAY_JACKPOT_BGM');
     this.resetCards();
     this.pickInFlight = false;
-    this.finishAfterOpen = false;
+    this.clearOpenWait();
+    this.revealFinished = false;
     appModel.jackpotRound?.picks.forEach((p: IJackpotPick) =>
       this.cardArray[p.position]?.openStatic(this.skinOf(p.tier)),
     );
@@ -115,7 +130,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       this.cardsContainer.addChild(card);
       this.cardArray.push(card);
       card.on('onCardPressed', () => this.onCardPressed(i));
-      card.on('onCardOpened', this.onCardOpened.bind(this));
+      card.on('onCardOpened', () => this.onCardOpened(i));
     }
     this.layoutCards(this.cardsConfig.maxcCol);
   }
