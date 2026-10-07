@@ -121,7 +121,7 @@ export class WindowUtil {
       });
     };
     window.getTotalCredit = function () {
-      return appModel.getTotalBet() / (GameProxy.config.totalLines * GameProxy.config.creditValue);
+      return appModel.getTotalBetForPaytable() / (GameProxy.config.totalLines * GameProxy.config.creditValue);
     };
     window.getGameConfig = () => GameProxy.config;
     window.stopPixiApp = () => {};

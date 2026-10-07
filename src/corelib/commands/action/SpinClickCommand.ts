@@ -12,6 +12,7 @@ import { GameProxy } from '@core/models/GameConfigProxy';
 class SpinClickCmd extends ActionCommand {
   public async execute(data: any = null) {
     super.execute(data);
+    if (appModel.jackpotPending) return;
 
     if (appModel.getIsSpinStartPossible()) {
       EventHandler.dispatchEvent(SlotEvents.DISABLE_CONTROLPANEL);

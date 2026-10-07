@@ -38,23 +38,41 @@ export class JackpotCard extends StandardView {
   private onAnimationComplete(e) {
     if (e.animation.name === animationState.ROTATION) {
       EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_TURN');
-      this.emit('onCardClick');
+      this.emit('onCardOpened');
       this.playCardAnimation({ state: animationState.STATIC, loop: false });
     }
   }
   public onSkinChange(skinName: string) {
     this.card.setSkin(skinName);
   }
-  private playCardAnimation({ state, loop }) {
-    this.card.playAnimation({ state, loop, reset: false });
+  private playCardAnimation({ state, loop, reset = false }) {
+    this.card.playAnimation({ state, loop, reset });
   }
   private onCardClick() {
     if (this.cardStatus === CardStatus.CLOSE) {
-      this.cardGuideRect.interactive = false;
-      this.cardStatus = CardStatus.OPEN;
-      EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_CLICK');
-      this.playCardAnimation({ state: animationState.ROTATION, loop: false });
+      this.emit('onCardPressed');
     }
+  }
+  public isClosed(): boolean {
+    return this.cardStatus === CardStatus.CLOSE;
+  }
+  public setLocked(locked: boolean) {
+    this.cardGuideRect.interactive = !locked && this.isClosed();
+  }
+  public openAnimated(skinName: string) {
+    if (!this.isClosed()) return;
+    this.onSkinChange(skinName);
+    this.cardGuideRect.interactive = false;
+    this.cardStatus = CardStatus.OPEN;
+    EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_CLICK');
+    this.playCardAnimation({ state: animationState.ROTATION, loop: false, reset: true });
+  }
+  public openStatic(skinName: string) {
+    if (!this.isClosed()) return;
+    this.onSkinChange(skinName);
+    this.cardGuideRect.interactive = false;
+    this.cardStatus = CardStatus.OPEN;
+    this.playCardAnimation({ state: animationState.STATIC, loop: false });
   }
   public reset() {
     this.cardGuideRect.interactive = true;

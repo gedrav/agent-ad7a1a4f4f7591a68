@@ -47,6 +47,10 @@ export class MessageServiceProxy extends AbstractProxy {
         case 'featureResult':
           appModel.storeFeatureResult(data);
           break;
+        case 'jackpotPick':
+          appModel.storeJackpotPick(data);
+          EventHandler.dispatchEvent(SlotEvents.JACKPOT_PICK_RESULT, appModel.jackpotRound);
+          break;
         default:
           break;
       }
@@ -63,12 +67,25 @@ export class MessageServiceProxy extends AbstractProxy {
     this.communicationService.getServerResponse('gameinit', gameinitObj, 'init', 'POST');
   }
   async requestSpinResult(isBuyBonus = false) {
+    appModel.freezeJackpotMeters();
     const spinRequest = this.getSpinRequestObject(isBuyBonus);
     await this.communicationService.getServerResponse('spinresult', spinRequest, 'spin', 'POST');
   }
   async requestBonusData(name, selection = '') {
+    appModel.freezeJackpotMeters();
     const bonusRequest = this.getBonusRequestObject(name, selection);
     await this.communicationService.getServerResponse('featureResult', bonusRequest, 'feature', 'POST');
+  }
+  requestJackpotPick(position: number): void {
+    const finalObj: any = {};
+    finalObj.gameId = GameProxy.config.gameId;
+    finalObj.token = WrapperProxy.playerData.newToken;
+    if (WrapperProxy.playerData.epoch !== undefined) {
+      finalObj.epoch = WrapperProxy.playerData.epoch;
+    }
+    finalObj.roundId = appModel.jackpotRound.roundId;
+    finalObj.position = position;
+    this.communicationService.getServerResponse('jackpotPick', this.encryptObject(finalObj), 'jackpot/pick', 'POST');
   }
 
   getGameInitRequestObject() {

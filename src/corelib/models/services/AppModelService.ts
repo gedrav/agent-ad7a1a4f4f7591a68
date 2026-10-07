@@ -5,6 +5,9 @@ import { CONSTANTS } from '@core/utils/CONSTANTS';
 import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 import { i } from 'vite/dist/node/chunks/moduleRunnerTransport';
 import { settings } from '@pixi/core';
+import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
+import { IJackpotInfo, IJackpotPickResponse, IJackpotRound } from '@core/models/jackpot.types';
 
 type ParamsObject = Record<string, number>;
 
@@ -130,11 +133,45 @@ class AppModelService {
     }
     return false;
   }
-  set storeJackpotData(value: any) {
-    this._storeJackpotData = value;
+  public jackpotInfo: IJackpotInfo | null = null;
+  public jackpotRound: IJackpotRound | null = null;
+  public jackpotMetersFrozen: boolean = false;
+  public jackpotReinitPending: boolean = false;
+  public jackpotMetersV: number = 0;
+  public jackpotMeters: number[] = [];
+  public latestJackpotTick: { values: number[]; v: number } | null = null;
+
+  get jackpotPending(): boolean {
+    return !!this.jackpotRound;
   }
-  get storeJackpotData() {
-    return this._storeJackpotData;
+
+  public storeJackpotPick(data: IJackpotPickResponse): void {
+    this.jackpotRound = data.jackpot;
+    if (data.jackpot?.status === 'COMPLETED' && data.playerInfo?.balance !== undefined) {
+      this.gameInfo.balance = data.playerInfo.balance;
+    }
+  }
+
+  public applyJackpotTick(tick: { values: number[]; v: number }): void {
+    if (tick.v <= this.jackpotMetersV) return;
+    if (this.jackpotMetersFrozen) {
+      this.latestJackpotTick = tick;
+      return;
+    }
+    this.jackpotMeters = tick.values;
+    this.jackpotMetersV = tick.v;
+    EventHandler.dispatchEvent(SlotEvents.JACKPOT_METERS_UPDATE, { values: tick.values, v: tick.v });
+  }
+
+  public freezeJackpotMeters(): void {
+    this.jackpotMetersFrozen = true;
+  }
+
+  public unfreezeJackpotMeters(): void {
+    this.jackpotMetersFrozen = false;
+    const tick = this.latestJackpotTick;
+    this.latestJackpotTick = null;
+    if (tick) this.applyJackpotTick(tick);
   }
 
   private _promoSpinSession: boolean;
@@ -165,7 +202,6 @@ class AppModelService {
   public isSymbolExpanded: boolean = false;
   private _nextFeature: string;
   private _nextSubFeature: string = '';
-  private _storeJackpotData: any = null;
 
   get isErrorOccurred(): boolean {
     return this._isErrorOccurred;
@@ -355,10 +391,19 @@ class AppModelService {
 
     this.gameInfo.paytable = data.gameInfo.payTable;
     this.promoSpinInfo = data.promoInfo;
-    this.unfinishedData = data.unfinishedInfo;
+    const pendingJackpot = data.unfinishedInfo?.jackpot ?? null;
+    // A pending jackpot arrives as { roundId, jackpot } without spin data
+    this.unfinishedData = pendingJackpot ? null : data.unfinishedInfo;
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
     }
+    this.jackpotInfo = data.jackpotInfo ?? null;
+    this.latestJackpotTick = null;
+    this.jackpotMeters = this.jackpotInfo ? this.jackpotInfo.tiers.map((t) => t.value) : [];
+    this.jackpotMetersV = this.jackpotInfo?.v ?? 0;
+    this.jackpotRound = pendingJackpot;
+    this.jackpotMetersFrozen = !!this.jackpotRound;
+    EventHandler.dispatchEvent(SlotEvents.JACKPOT_INFO_READY, this.jackpotInfo);
   }
   public getBBMaxBet(): number {
     return this.gameInfo.bbMaxBet;
@@ -458,6 +503,8 @@ class AppModelService {
     }
   }
   public storeSpinResult(data: any): void {
+    this.jackpotRound = data.jackpot ?? null;
+    if (!this.jackpotRound) this.unfreezeJackpotMeters();
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
@@ -481,6 +528,8 @@ class AppModelService {
     this.promoSpinInfo = data.promoInfo;
   }
   public storeFeatureResult(data: any): void {
+    this.jackpotRound = data.jackpot ?? null;
+    if (!this.jackpotRound) this.unfreezeJackpotMeters();
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
@@ -594,6 +643,10 @@ class AppModelService {
 
   public getTotalBetWithoutAnte(): number {
     return this.gameInfo?.betsArray[this.gameInfo.betPos];
+  }
+  public getTotalBetForPaytable(): number {
+    const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
+    return Math.round(bet * 100) / 100;
   }
   public getTotalBet(): number {
     const isAnte = GameProxy.config.isAnteEnabled;
@@ -1164,7 +1217,7 @@ class AppModelService {
     return this.gameResult;
   }
   public getSymbolPayoutValue(multi: number): number {
-    return (this.getTotalBet() / (this.gameInfo.creditValue * this.gameInfo.selectedLines)) * multi;
+    return (this.getTotalBetForPaytable() / (this.gameInfo.creditValue * this.gameInfo.selectedLines)) * multi;
   }
   public getSymbMultiplierValue(reel: number, row: number) {
     const multiplierPositions = this.gameResult.cascadeData[this.tumbleIndex]?.multiplierPositions;
