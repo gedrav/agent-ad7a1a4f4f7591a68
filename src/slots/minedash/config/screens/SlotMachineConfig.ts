@@ -5,7 +5,7 @@ import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
 import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
-import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
+import MDReelSymbol from '@game/views/slot/MDReelSymbol';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
@@ -21,11 +21,11 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'guideRect',
       type: 'Graphics',
       color: 0xff0000,
-      width: 1380,
+      width: 1700,
       height: 1060,
       pWidth: 1380,
       pHeight: 1150,
-      lWidth: 1380,
+      lWidth: 1700,
       lHeight: 1060,
       alpha: 0,
     },
@@ -34,9 +34,9 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Sprite',
       image: 'MD_Chara',
       layoutData: {
-        Desktop: { x: -380, y: 380 },
-        Landscape: { x: -350, y: 380 },
-        Portrait: { scale: 0 },
+        Desktop: { x: 0, y: 380 },
+        Landscape: { x: 0, y: 380 },
+        Portrait: { scale: 1, x: 140, y: -360 },
       },
     },
     {
@@ -44,14 +44,14 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: SlotReelStandard,
       winController: GameWinController,
-      x: 0,
+      x: 320,
       y: 100,
       px: 10,
       py: 160,
-      lx: 0,
+      lx: 320,
       ly: 100,
       data: {
-        symbolClass: ReelSymbolSpineExtended,
+        symbolClass: MDReelSymbol,
         noOfReels: 5,
         noOfRows: 3,
         reelHeight: 800,
@@ -199,7 +199,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'Win',
             blurAnim: 'Blur',
             staticAnim: 'Static',
-            scale: 1,
+            scale: 0.85,
           },
           SY: {
             name: 'SY',
@@ -209,7 +209,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'Win',
             blurAnim: 'Blur',
             staticAnim: 'Static',
-            scale: 1,
+            scale: 0.85,
           },
           SF: {
             name: 'SF',
@@ -219,7 +219,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'Win',
             blurAnim: 'Blur',
             staticAnim: 'Static',
-            scale: 1,
+            scale: 0.85,
           },
           SM: {
             name: 'SM',
@@ -229,7 +229,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             winAnim: 'Win',
             blurAnim: 'Blur',
             staticAnim: 'Static',
-            scale: 1,
+            scale: 0.85,
           },
           SG_H1: {
             name: 'SG_H1',
@@ -340,7 +340,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           class: ReelFrameComp,
           scale: { x: 1.1, y: 1 },
           x: 0,
-          y: -150,
+          y: -130,
           Elements: [
             {
               name: 'reelFrame',
@@ -355,25 +355,25 @@ export const SLOT_MACHINE_CONFIG: any = {
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
-        // {
-        //   name: 'gameTitle',
-        //   type: 'Sprite',
-        //   image: 'gamelogo',
-        //   anchor: { x: 0.5, y: 0.5 },
-        //   layoutData: {
-        //     Desktop: {
-        //       scale: 1,
-        //       x: 690,
-        //       y: -10,
-        //     },
-        //     Landscape: {
-        //       scale: 0.9,
-        //       x: 780,
-        //       y: 58,
-        //     },
-        //     Portrait: { scale: 0.9, x: 775, y: 56 },
-        //   },
-        // },
+        {
+          name: 'gameTitle',
+          type: 'Sprite',
+          image: 'gamelogo',
+          anchor: { x: 0.5, y: 0.5 },
+          layoutData: {
+            Desktop: {
+              scale: 0.5,
+              x: 685,
+              y: -70,
+            },
+            Landscape: {
+              scale: 0.5,
+              x: 685,
+              y: -70,
+            },
+            Portrait: { scale: 0.5, x: 688, y: -64 },
+          },
+        },
         { name: 'maskRect', type: 'Graphics', width: 1300, height: 744, x: 40, y: 0, color: 0xffff00 },
         { name: 'anticipationContainer', type: 'Container' },
         {

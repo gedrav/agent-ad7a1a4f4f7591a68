@@ -1,4 +1,5 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
+import { GameProxy } from '@core/models/GameConfigProxy';
 import { Text } from 'pixi.js';
 
 export interface StoneFeature {
@@ -17,11 +18,22 @@ export interface StoneStateData {
 
 export const BOX_STATE_KEYS: Record<string, { key: keyof StoneStateData; suffix: string; title: string }> = {
   box1: { key: 'multiStone', suffix: 'x', title: 'MULTI' },
-  box2: { key: 'freespinsStone', suffix: '', title: 'FREE SPIN' },
+  box2: { key: 'freespinsStone', suffix: '', title: 'FREESPIN' },
   box3: { key: 'mysteryStone', suffix: 'x', title: 'MYSTERY' },
   box4: { key: 'wildsStone', suffix: '', title: 'WILD' },
   box5: { key: 'megawinStone', suffix: '', title: 'MEGA' },
 };
+
+const BOX_LABEL_COLORS: Record<string, string> = {
+  box1: '#24ff00', // MULTI
+  box2: '#ffea00', // FREESPIN
+  box3: '#d162ff', // MYSTERY
+  box4: '#ff3c00', // WILD
+  box5: '#ffaa00', // MEGA (Gold)
+};
+const DEFAULT_LABEL_COLOR = '#ffffff';
+const LABEL_STROKE_COLOR = '#1a0b00';
+const CART_CENTER_X = -4;
 
 const CART_SYMBOL_TO_SKIN: Record<string, string> = {
   H1: 'Helmate',
@@ -44,6 +56,22 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     return this.configData?.labelStyle || {};
   }
 
+  private resolveFont(alias: string): string {
+    return GameProxy.config.FontFaces?.[alias] || alias;
+  }
+
+  private xOffsetFor(boxName: string): number {
+    return this.labelStyle.xOffsets?.[boxName] ?? this.labelStyle.xOffset ?? CART_CENTER_X;
+  }
+
+  private get titleY(): number {
+    return this.labelStyle.title?.y ?? 0;
+  }
+
+  private get titleFontSize(): number {
+    return this.labelStyle.title?.fontSize || 80;
+  }
+
   private getBox(boxName: string): any {
     return this.elementsList?.[boxName];
   }
@@ -52,17 +80,24 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     const box = this.getBox(boxName);
     if (!box || this.boxLabels[boxName]) return;
 
+    const labelColor = BOX_LABEL_COLORS[boxName] || DEFAULT_LABEL_COLOR;
+
     const titleLabel = new Text({
       text: BOX_STATE_KEYS[boxName]?.title ?? '',
       style: {
-        fontFamily: this.labelStyle.title?.fontFamily,
-        fontSize: this.labelStyle.title?.fontSizeAlone,
-        fontWeight: this.labelStyle.title?.fontWeight,
-        fill: this.labelStyle.title?.fill,
-        stroke: this.labelStyle.title?.stroke,
+        fontFamily: this.resolveFont(this.labelStyle.title?.fontFamily || 'gameFont1'),
+        fontSize: this.titleFontSize,
+        fontWeight: '900',
+        fill: labelColor,
+        stroke: { color: LABEL_STROKE_COLOR, width: 10, join: 'round' },
+        dropShadow: {
+          alpha: 0.95,
+          angle: Math.PI / 2,
+          blur: 1,
+          color: '#000000',
+          distance: 5,
+        },
         align: 'center',
-        wordWrap: true,
-        wordWrapWidth: box.width || 220,
       },
     });
     titleLabel.anchor.set(0.5);
@@ -70,22 +105,29 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     const valueLabel = new Text({
       text: '',
       style: {
-        fontFamily: this.labelStyle.value?.fontFamily || 'gameFont1',
-        fontSize: this.labelStyle.value?.fontSize || 20,
-        fontWeight: this.labelStyle.value?.fontWeight || 'normal',
-        fill: this.labelStyle.value?.fill || 0xffffff,
-        stroke: this.labelStyle.value?.stroke,
+        fontFamily: this.resolveFont(this.labelStyle.value?.fontFamily || 'gameFont1'),
+        fontSize: this.labelStyle.value?.fontSize || 50,
+        fontWeight: '900',
+        fill: labelColor,
+        stroke: { color: LABEL_STROKE_COLOR, width: 8, join: 'round' },
+        dropShadow: {
+          alpha: 0.9,
+          angle: Math.PI / 2,
+          blur: 2,
+          color: '#000000',
+          distance: 4,
+        },
         align: 'center',
       },
     });
     valueLabel.anchor.set(0.5);
 
     if (typeof box.playAnimation === 'function') {
-      titleLabel.position.set(0, this.labelStyle.title?.yAlone || 0);
-      valueLabel.position.set(0, this.labelStyle.value?.y || 0);
+      titleLabel.position.set(this.xOffsetFor(boxName), this.titleY);
+      valueLabel.position.set(this.xOffsetFor(boxName), this.labelStyle.value?.y || 0);
     } else {
-      titleLabel.position.set(box.width * 0.5, box.height * 0.55);
-      valueLabel.position.set(box.width * 0.5, box.height * 0.8);
+      titleLabel.position.set(box.width * 0.5 + this.xOffsetFor(boxName), box.height * 0.55);
+      valueLabel.position.set(box.width * 0.5 + this.xOffsetFor(boxName), box.height * 0.8);
     }
 
     box.addChild(titleLabel);
@@ -113,10 +155,11 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     const isSpine = typeof box?.playAnimation === 'function';
 
     if (boxName === 'box5') {
+      const rawVal = feature?.bankedValue ?? feature?.drawnValue;
       group.valueLabel.text = '';
-      group.titleLabel.text = '';
+      group.titleLabel.text = rawVal ? '' : BOX_STATE_KEYS[boxName].title;
+
       if (isSpine && typeof box.setSkin === 'function') {
-        const rawVal = feature?.bankedValue ?? feature?.drawnValue;
         const skinName = rawVal ? CART_SYMBOL_TO_SKIN[String(rawVal)] || 'default' : 'default';
         box.setSkin(skinName);
       }
@@ -124,21 +167,14 @@ export class GemBoxesComp extends ResponsiveChildrenView {
       group.valueLabel.text = valStr;
     }
 
-    if (valStr !== '' && boxName !== 'box5') {
-      if (isSpine) {
-        group.titleLabel.position.set(0, this.labelStyle.title?.yWithValue || 0);
-        group.titleLabel.style.fontSize = this.labelStyle.title?.fontSizeWithValue || 24;
-        group.valueLabel.position.set(0, this.labelStyle.value?.y || 0);
-      } else {
-        group.titleLabel.position.set(box.width * 0.5, box.height * 0.5);
-        group.valueLabel.position.set(box.width * 0.5, box.height * 0.8);
-      }
-    } else if (isSpine) {
-      group.titleLabel.position.set(0, this.labelStyle.title?.yAlone || 0);
-      group.titleLabel.style.fontSize = this.labelStyle.title?.fontSizeAlone || 28;
+    if (isSpine) {
+      group.titleLabel.position.set(this.xOffsetFor(boxName), this.titleY);
+      group.valueLabel.position.set(this.xOffsetFor(boxName), this.labelStyle.value?.y || 0);
     } else {
-      group.titleLabel.position.set(box.width * 0.5, box.height * 0.65);
+      group.titleLabel.position.set(box.width * 0.5 + this.xOffsetFor(boxName), box.height * 0.55);
+      group.valueLabel.position.set(box.width * 0.5 + this.xOffsetFor(boxName), box.height * 0.8);
     }
+    group.titleLabel.style.fontSize = this.titleFontSize;
   }
 
   private updateBoxSpineAnimation(boxName: string, feature?: StoneFeature, force: boolean = false): void {

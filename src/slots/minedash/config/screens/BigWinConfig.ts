@@ -23,7 +23,7 @@ export const BIG_WIN_CONFIG = {
       y: 460,
       scale: 0.3,
     },
-    bigWinTextScales: [0.8, 0.9, 0.9, 0.9],
+    bigWinTextScales: [0.5, 0.55, 0.55, 0.55],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
       SUPER_WIN: 'superWinText',
@@ -74,7 +74,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      hPaddingPerc: -0.01,
+      hPaddingPerc: 0.09,
       vPaddingPerc: -0.05,
     },
     Landscape: {
@@ -84,7 +84,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      hPaddingPerc: -0.1,
+      hPaddingPerc: 0.02,
       vPaddingPerc: -0.03,
     },
     Portrait: {
