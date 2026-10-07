@@ -23,6 +23,9 @@ export class JCBonusSymbolModifier {
   private value = 0;
   // The count-up runs on this, not on a display object, so teardown has to kill it by hand.
   private countTarget: { value: number } | null = null;
+  // Callers of addValue() still waiting: an add that lands mid-climb takes the climb over, and the
+  // one it replaced would otherwise never call back.
+  private pendingAdds: (() => void)[] = [];
   // The style the current Text was built with. C1 to C4 share one, C5 has its own, so only that
   // boundary needs a rebuild.
   private styleRef: any = null;
@@ -52,8 +55,44 @@ export class JCBonusSymbolModifier {
       this.holder.label = 'bonusValueHolder';
       this.holder.addChild(text);
     }
-    this.text.text = this.format(this.value);
+    this.show(this.value);
     this.host.addSlotObject(ROOT_TEXT_SLOT_NAME, this.holder);
+  }
+
+  // Nothing shows at zero: a boost starts empty and fills as it collects.
+  private show(value: number): void {
+    if (!this.text) return;
+    this.text.text = this.format(value);
+    this.text.visible = value > 0;
+  }
+
+  // The figure climbs by amount from whatever it is showing, so adds that overlap all land.
+  public addValue(amount: number, duration: number, onComplete?: () => void): void {
+    if (!this.text) {
+      onComplete?.();
+      return;
+    }
+    if (onComplete) this.pendingAdds.push(onComplete);
+    const from = this.countTarget?.value ?? this.value;
+    if (this.countTarget) AnimationProxy.killTweensOf(this.countTarget);
+    const finalValue = this.value + amount;
+    this.value = finalValue;
+    const target = { value: from };
+    this.countTarget = target;
+
+    AnimationProxy.animateTween(target, {
+      duration,
+      value: finalValue,
+      ease: MULTIPLIER_APPLY_COUNT_EASE,
+      onUpdate: () => this.show(target.value),
+      onComplete: () => {
+        this.countTarget = null;
+        this.show(finalValue);
+        const waiting = this.pendingAdds;
+        this.pendingAdds = [];
+        waiting.forEach((callback) => callback());
+      },
+    });
   }
 
   // In bet multiples, what the cell is worth now - the figure on screen, before the bet is applied.
@@ -77,13 +116,11 @@ export class JCBonusSymbolModifier {
       duration,
       value: finalValue,
       ease: MULTIPLIER_APPLY_COUNT_EASE,
-      onUpdate: () => {
-        text.text = this.format(target.value);
-      },
+      onUpdate: () => this.show(target.value),
       onComplete: () => {
         this.countTarget = null;
         // Set outright rather than left on the tween's last frame, which stops a hair short.
-        text.text = this.format(finalValue);
+        this.show(finalValue);
         onComplete?.();
       },
     });
@@ -98,6 +135,7 @@ export class JCBonusSymbolModifier {
       AnimationProxy.killTweensOf(this.countTarget);
       this.countTarget = null;
     }
+    this.pendingAdds = [];
     // removeSlotObject only detaches, so the Text has to be destroyed here or every placement
     // leaves one behind.
     if (this.text) {

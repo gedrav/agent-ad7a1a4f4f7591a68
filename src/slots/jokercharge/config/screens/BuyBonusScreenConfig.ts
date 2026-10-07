@@ -1,7 +1,10 @@
 import { BuyBonusScreenComp } from '@slots/jokercharge/views/comps/BuyBonusScreenComp';
 
 const GUIDE_WIDTH = 1800;
-const GUIDE_HEIGHT = 1600;
+// Sized to what is actually drawn - close button top to bet bar bottom is about 1693 - and the
+// layout below sits inside it. The comp is centred by this guide (PixView.getHeight), so content
+// spilling past it is what made the screen sit low.
+const GUIDE_HEIGHT = 1700;
 const CENTER_X = GUIDE_WIDTH / 2;
 
 export const BUY_BONUS_CONTENT_PIVOT = { x: CENTER_X, y: GUIDE_HEIGHT / 2 };
@@ -19,7 +22,7 @@ const CARD_WIDTH = 1429 * CARD_SCALE;
 const CARD_HEIGHT = 2656 * CARD_SCALE;
 const CARD_GAP = 70;
 const CARD_XS = [CENTER_X - (CARD_WIDTH + CARD_GAP), CENTER_X, CENTER_X + (CARD_WIDTH + CARD_GAP)];
-const CARD_Y = 900;
+const CARD_Y = 782;
 
 const HEADER_SCALE = (CARD_WIDTH * 0.8) / 1180;
 const FOOTER_SCALE = (CARD_WIDTH * 0.8) / 860;
@@ -163,7 +166,7 @@ export const BUY_BONUS_SCREEN_CONFIG: any = {
           name: 'closeBtn',
           type: 'Container',
           x: GUIDE_WIDTH,
-          y: 210,
+          y: 92,
           Elements: [sprite('icon', 'lines_btn', 0, 0, CLOSE_SCALE), text('label', 'X', 0, 0, CLOSE_STYLE)],
         },
       ],
@@ -171,7 +174,7 @@ export const BUY_BONUS_SCREEN_CONFIG: any = {
   ],
   layoutData: {
     Desktop: { widthPerc: 0.42, hAlign: 'center', vAlign: 'middle' },
-    Portrait: { widthPerc: 0.95, hAlign: 'center', vAlign: 'middle' },
-    Landscape: { widthPerc: 0.5, hAlign: 'center', vAlign: 'middle' },
+    Portrait: { widthPerc: 0.85, hAlign: 'center', vAlign: 'middle' },
+    Landscape: { widthPerc: 0.45, heightPerc: 0.85, hAlign: 'center', vAlign: 'middle' },
   },
 };

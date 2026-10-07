@@ -1,3 +1,4 @@
+import { Container, Graphics } from 'pixi.js';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -106,19 +107,32 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
   private createReels(data: BonusReelsContainerData): void {
     const totalWidth = this.columns * this.symbolWidth + (this.columns - 1) * this.reelGap;
 
+    // One mask for the whole panel: every spinning strip is drawn in this layer. Added first, so
+    // it sits under the reels.
+    const spinLayer = new Container();
+    spinLayer.label = 'bonusSpinLayer';
+    const spinMask = new Graphics();
+    spinMask.label = 'bonusSpinMask';
+    spinLayer.addChild(spinMask);
+    spinLayer.mask = spinMask;
+    this.addChild(spinLayer);
+
     for (let column = 0; column < this.columns; column++) {
       const reel = new BonusReel({
         column,
-        symbolWidth: this.symbolWidth,
         symbolHeight: data.symbolHeight,
+        spinLayer,
         symbolScale: data.symbolScale,
         spinSpeedMultiplier: data.spinSpeedMultiplier,
         initialSymbol: data.initialReel?.[column] ?? BLANK_BONUS_SYMBOL_NAME,
       });
       reel.x = column * (this.symbolWidth + this.reelGap) - totalWidth / 2 + this.symbolWidth / 2;
+      // One window per cell, so the reel gaps stay trimmed as they were with a mask per reel.
+      spinMask.rect(reel.x - this.symbolWidth / 2, -data.symbolHeight / 2, this.symbolWidth, data.symbolHeight);
       this.reels[column] = reel;
       this.addChild(reel);
     }
+    spinMask.fill(0xff0000);
   }
 
   public getReel(column: number): BonusReel {

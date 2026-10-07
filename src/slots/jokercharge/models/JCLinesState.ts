@@ -6,7 +6,8 @@ const MIDDLE_ROW = 1;
 const BOTTOM_ROW = 2;
 const TOP_ROW = 0;
 
-let selectedLines = MIN_LINES;
+// A fresh session starts on every line; a restored sticky session overrides this - see gameApp.
+let selectedLines = MAX_LINES;
 let respinActive = false;
 
 // Called directly by BuyBonusLinesComp: this module can't self-subscribe to SELECTED_LINES,

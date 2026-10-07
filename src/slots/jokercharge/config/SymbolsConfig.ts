@@ -9,6 +9,8 @@ export interface JCSymbolData {
   blurAnim?: string;
   winAnim?: string;
   landingAnim?: string;
+  // Only the boost has one: what plays each time a collect trail reaches it.
+  collectAnim?: string;
   // Only the mystery rigs have one: what plays as the symbol gives way to what it revealed.
   hideAnim?: string;
   multiplierTextConfig?: any;
@@ -48,7 +50,7 @@ export const MULTIPLIER_TEXT_STYLE = {
 // The top tier, so it can't read as a paler version of the gold ones. Electric blue picks up the
 // charge the symbol is wrapped in, outranks gold rather than competing with it, and the cyan glow
 // carries it clear of the violet behind.
-const GRAND_TEXT_STYLE = {
+export const GRAND_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 200,
   fill: ['0xFFFFFF', '0xB6F3FF', '0x45CBFF', '0x0E7BE0'],
@@ -250,7 +252,16 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'landing',
     landingAnim: 'landing',
+    collectAnim: 'collect',
     cellScale: 0.75,
+    // The boost's running total, in C5's colours, on the rig's empty root_txt slot. It starts with
+    // nothing showing and fills as the boost collects. TODO: tune the anchor against the bag art.
+    multiplierTextConfig: {
+      name: 'multiplierVal',
+      type: 'Text',
+      anchor: { x: 0.5, y: 0.5 },
+      style: GRAND_TEXT_STYLE,
+    },
   },
   MN: {
     name: 'MN',
@@ -307,6 +318,11 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     cellScaleY: 0.29,
   },
 };
+
+export const BOOST_SYMBOL_NAME = 'BST';
+// What a boost collects from: the bonus symbols and the jackpots. Never another boost, and never a
+// mystery that has not revealed yet - its name is not on this list until it has.
+export const BOOST_SOURCE_SYMBOL_NAMES = ['C1', 'C2', 'C3', 'C4', 'C5', 'MN', 'MR', 'MJ'];
 
 // Landing one of these on an active payline in the base game earns a trail up to the logo.
 export const TRAIL_SYMBOL_NAMES = ['C1', 'C2', 'C3', 'C4', 'C5', 'MN', 'MR', 'MJ'];

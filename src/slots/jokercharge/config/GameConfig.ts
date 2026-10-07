@@ -16,8 +16,8 @@ export const GAME_CONFIG = {
   gameId: 'jokercharge',
   gameName: 'Joker Charge',
   uiConfig: UIConfig,
-  creditValue: 20,
-  totalLines: 1,
+  creditValue: 1,
+  totalLines: 3,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
   FontFaces: {

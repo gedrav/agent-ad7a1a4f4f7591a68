@@ -1,3 +1,4 @@
+import { Container, Graphics } from 'pixi.js';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -7,6 +8,8 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import {
   BLANK_SYMBOL_NAME,
+  BOOST_SOURCE_SYMBOL_NAMES,
+  BOOST_SYMBOL_NAME,
   CHARGE_LADDER,
   SYMBOLS_DATA,
   MYSTERY_SYMBOL_NAMES,
@@ -36,6 +39,8 @@ const BORDER_EFFECT_STATE = 'animation';
 // single column: all three of its bones sit on the same x.
 const TRIANGLE_EFFECT_SPINE = 'triangle';
 const TRIANGLE_EFFECT_STATE = 'animation';
+// Below every reel, so a cell's own overlays still draw over its spinning strip.
+const SPIN_LAYER_DEPTH = -1;
 // Their art overflows the cell, so the reels holding them are lifted above their neighbours.
 const REEL_DEPTH_NORMAL = 0;
 const REEL_DEPTH_OVERSIZED = 1;
@@ -116,6 +121,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private readonly anticipationDelay: number;
   private readonly anticipationSpeedFactor: number;
   private readonly reels: HoldNWinReel[][] = [];
+  private readonly rowSpinLayers: Container[] = [];
   private readonly columnEffects: PixSpine[] = [];
   private readonly triangleEffects: PixSpine[] = [];
   private readonly borderEffects: PixSpine[] = [];
@@ -324,6 +330,31 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     return targets;
   }
 
+  // Every boost on the grid, in the order the reels stop: column by column, top to bottom.
+  public getBoostPositions(): HoldNWinPosition[] {
+    const positions: HoldNWinPosition[] = [];
+    this.forEachReel((reel, column, row) => {
+      if (reel?.getSymbolName() === BOOST_SYMBOL_NAME) positions.push({ column, row });
+    });
+    return positions;
+  }
+
+  // What a boost collects from, in reading order - see BOOST_SOURCE_SYMBOL_NAMES.
+  public getBoostSources(): HoldNWinPosition[] {
+    const positions: HoldNWinPosition[] = [];
+    for (let row = 0; row < this.rows; row++) {
+      for (let column = 0; column < this.columns; column++) {
+        const name = this.getReel(column, row)?.getSymbolName();
+        if (name && BOOST_SOURCE_SYMBOL_NAMES.includes(name)) positions.push({ column, row });
+      }
+    }
+    return positions;
+  }
+
+  public settleBoostBadges(positions: HoldNWinPosition[]): void {
+    positions.forEach(({ column, row }) => this.getReel(column, row)?.settleBoostBadge());
+  }
+
   // All at once: the cells are independent, and one at a time would drag out the exit.
   public applyMultipliersToSymbols(onComplete?: () => void): void {
     const targets: HoldNWinReel[] = [];
@@ -452,13 +483,20 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
 
     const revealNext = (index: number): void => {
       if (index >= targets.length) {
+        this.setReelsDimmed(false);
         onComplete?.();
         return;
       }
       const { reel, result, symbol } = targets[index];
+      this.setReelsDimmed(true, reel);
       reel.revealMysterySymbol(result, symbol, () => revealNext(index + 1));
     };
     revealNext(0);
+  }
+
+  // Every reel but the one revealing steps back, so each reveal reads on its own.
+  private setReelsDimmed(flag: boolean, except?: HoldNWinReel): void {
+    this.forEachReel((reel) => reel?.setDimmed(flag && reel !== except));
   }
 
   public refreshBlanksVisuals(): void {
@@ -499,6 +537,8 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   private createReels(): void {
     const totalWidth = this.columns * this.symbolWidth + (this.columns - 1) * this.reelGap;
     const totalHeight = this.rows * this.symbolHeight + (this.rows - 1) * this.rowGap;
+    const maskHeight = this.maskHeight ?? this.symbolHeight;
+    const rowMasks = this.createRowSpinLayers();
 
     for (let column = 0; column < this.columns; column++) {
       this.reels[column] = [];
@@ -508,7 +548,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
           column,
           symbolWidth: this.symbolWidth,
           symbolHeight: this.symbolHeight,
-          maskHeight: this.maskHeight,
+          spinLayer: this.rowSpinLayers[row],
           landingOvershoot: this.landingOvershoot,
           onSymbolPlaced: () => this.raiseOversizedReels(),
           spinSpeedMultiplier: this.spinSpeedMultiplier,
@@ -520,13 +560,35 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
           totalHeight / 2 +
           this.symbolHeight / 2 +
           (this.rowOffsetsY?.[row] ?? 0);
+        // One window per cell, all in the row's single mask, so the reel gaps stay trimmed.
+        rowMasks[row].rect(reel.x - this.symbolWidth / 2, reel.y - maskHeight / 2, this.symbolWidth, maskHeight);
         reel.showSymbol(this.initialReel?.[column]?.[row] ?? BLANK_SYMBOL_NAME);
         this.reels[column][row] = reel;
         this.addChild(reel);
       }
     }
+    rowMasks.forEach((mask) => mask.fill(0xff0000));
     this.reelsBuilt = true;
     this.raiseOversizedReels();
+  }
+
+  // One masked layer per row, holding whichever of that row's strips are spinning right now - see
+  // HoldNWinReel.setSpinMasked. Returns each row's mask, still empty, for createReels to draw.
+  private createRowSpinLayers(): Graphics[] {
+    const masks: Graphics[] = [];
+    for (let row = 0; row < this.rows; row++) {
+      const layer = new Container();
+      layer.label = `rowSpinLayer${row}`;
+      layer.zIndex = SPIN_LAYER_DEPTH;
+      const mask = new Graphics();
+      mask.label = `rowSpinMask${row}`;
+      layer.addChild(mask);
+      layer.mask = mask;
+      this.rowSpinLayers[row] = layer;
+      this.addChild(layer);
+      masks.push(mask);
+    }
+    return masks;
   }
 
   private onSpinStart(): void {

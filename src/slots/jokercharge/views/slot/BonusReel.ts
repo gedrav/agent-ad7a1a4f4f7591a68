@@ -1,13 +1,12 @@
 import { Container, Ticker } from 'pixi.js';
-import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
-import { UIUtil } from '@core/utils/UIUtilService';
 import { getRandomBonusSymbolName } from '../../config/BonusSymbolsConfig';
 import BonusReelSymbol from './BonusReelSymbol';
 
 export interface BonusReelConfig {
   column: number;
-  symbolWidth: number;
   symbolHeight: number;
+  // The panel's shared masked layer, a sibling of this reel, that the strip moves into while spinning.
+  spinLayer: Container;
   symbolScale: number;
   initialSymbol: string;
   // Scales every speed except windUpDistance, so stopMinSpeed stays <= spinMaxSpeed. Defaults to 1.
@@ -24,7 +23,7 @@ export default class BonusReel extends Container {
   public readonly column: number;
   private readonly symbolHeight: number;
   private readonly spinContainer: Container;
-  private readonly maskShape: PixGraphics;
+  private readonly spinLayer: Container;
   private symbolView: BonusReelSymbol;
   private topSymbolView: BonusReelSymbol;
 
@@ -55,18 +54,7 @@ export default class BonusReel extends Container {
     this.spinContainer = new Container();
     this.spinContainer.label = 'bonusSpinContainer';
     this.addChild(this.spinContainer);
-
-    // Only applied while spinning - the blurred skins are taller and would bleed past the cell.
-    this.maskShape = UIUtil.getRectangle(
-      config.symbolWidth,
-      config.symbolHeight,
-      0xff0000,
-      -config.symbolWidth / 2,
-      -config.symbolHeight / 2,
-    );
-    this.maskShape.label = 'bonusSpinMask';
-    this.maskShape.alpha = 0;
-    this.spinContainer.addChild(this.maskShape);
+    this.spinLayer = config.spinLayer;
 
     this.symbolView = new BonusReelSymbol(config.initialSymbol, config.symbolScale);
     this.spinContainer.addChild(this.symbolView);
@@ -89,12 +77,27 @@ export default class BonusReel extends Container {
     this.symbolView.visible = true;
     this.topSymbolView.visible = false;
     this.topSymbolView.y = -this.symbolHeight;
-    this.spinContainer.mask = null;
+    this.setSpinMasked(false);
+  }
+
+  // Masked only while spinning - the blurred skins are taller and would bleed past the cell. The
+  // mask is shared by the whole panel, so the strip moves into its layer rather than carrying its
+  // own. See HoldNWinReel.setSpinMasked.
+  private setSpinMasked(flag: boolean): void {
+    if (flag) {
+      if (this.spinContainer.parent === this.spinLayer) return;
+      this.spinContainer.position.set(this.x, this.y);
+      this.spinLayer.addChild(this.spinContainer);
+      return;
+    }
+    if (this.spinContainer.parent === this) return;
+    this.spinContainer.position.set(0, 0);
+    this.addChild(this.spinContainer);
   }
 
   public spin(): void {
     if (this.phase !== 'idle') return;
-    this.spinContainer.mask = this.maskShape;
+    this.setSpinMasked(true);
     this.pendingFinalSymbolName = null;
     this.settlingSymbol = null;
     this.spinSpeed = 0;
@@ -183,7 +186,7 @@ export default class BonusReel extends Container {
     back.y = -this.symbolHeight;
     this.symbolView = front;
     this.topSymbolView = back;
-    this.spinContainer.mask = null;
+    this.setSpinMasked(false);
 
     front.y = 0;
     front.setBlurred(false);
@@ -195,7 +198,7 @@ export default class BonusReel extends Container {
 
   public destroy(options?: any): void {
     Ticker.shared.remove(this.onSpinTick, this);
-    this.spinContainer.mask = null;
+    this.setSpinMasked(false);
     this.spinContainer.removeChild(this.symbolView, this.topSymbolView);
     this.symbolView.destroy();
     this.topSymbolView.destroy();

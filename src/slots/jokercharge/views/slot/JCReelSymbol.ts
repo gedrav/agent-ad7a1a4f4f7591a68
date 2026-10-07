@@ -11,7 +11,7 @@ import { JCBonusSymbolModifier, ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModif
 import { JCMysterySymbolModifier, MysteryReelResult } from './JCMysterySymbolModifier';
 import { JCBlanksSymbolModifier } from './JCBlanksSymbolModifier';
 import { JCSymbolRigPool } from './JCSymbolRigPool';
-import { BLANK_SYMBOL_NAME, MYSTERY_SYMBOL_NAMES } from '../../config/SymbolsConfig';
+import { BLANK_SYMBOL_NAME, BOOST_SYMBOL_NAME, MYSTERY_SYMBOL_NAMES } from '../../config/SymbolsConfig';
 import { getCellValue } from '../../models/JCSpinData';
 import { MULTIPLIER_APPLY_COUNT_EASE } from '../../config/MultiplierBadgeConfig';
 
@@ -149,6 +149,23 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // In bet multiples: the backend's figure for the cell times whatever multiplier was spent on it.
   public getCollectValue(): number {
     return this.isBonusSymbol() ? this.bonusModifier.getValue() : this.labelValue;
+  }
+
+  // The boost's figure climbing by what one symbol gave it. No-op for anything without a figure.
+  public addCollectValue(amount: number, duration: number, onComplete?: () => void): void {
+    if (!this.isBonusSymbol()) {
+      onComplete?.();
+      return;
+    }
+    this.bonusModifier.addValue(amount, duration, onComplete);
+  }
+
+  // Fire and forget: trails arrive faster than it runs, and each one restarts it.
+  public showCollect(): void {
+    const collectAnim = this.configData.data.collectAnim;
+    if (!collectAnim) return;
+    this.spineAnimCompleteCallback = () => this.showIdle();
+    if (!this.playSpineAnimation(collectAnim, false)) this.spineAnimCompleteCallback = null;
   }
 
   // Blanks has no blurAnim, so the inherited blur path can't reach it - its rig carries blur skins
@@ -295,7 +312,9 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     if (this.isBonusSymbol()) {
       // reelNumber is the column - corelib writes it onto configData.data in setNewSymbol.
       const data = this.configData.data;
-      this.bonusModifier.create(data.name, data.multiplierTextConfig, getCellValue(data.reelNumber, data.row));
+      // A boost's figure is what it collects, worked out here rather than read from the backend.
+      const value = data.name === BOOST_SYMBOL_NAME ? 0 : getCellValue(data.reelNumber, data.row);
+      this.bonusModifier.create(data.name, data.multiplierTextConfig, value);
     } else if (this.isMysterySymbol()) {
       this.mysteryModifier.create(this.configData.data.animScale);
     }
