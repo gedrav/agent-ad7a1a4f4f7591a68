@@ -65,7 +65,7 @@ export class JackpotCard extends StandardView {
     this.cardGuideRect.interactive = false;
     this.cardStatus = CardStatus.OPEN;
     EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_CLICK');
-    this.playCardAnimation({ state: animationState.ROTATION, loop: false, reset: false });
+    this.playCardAnimation({ state: animationState.ROTATION, loop: false, reset: true });
   }
   public openStatic(skinName: string) {
     if (!this.isClosed()) return;
