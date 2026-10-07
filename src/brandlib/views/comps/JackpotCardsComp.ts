@@ -5,62 +5,105 @@ import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
+import { appModel } from '@core/models/services/AppModelService';
+import { MessageProxy } from '@brand/models/MessageServiceProxy';
+import { IJackpotPick, IJackpotRound, JACKPOT_SKINS, JACKPOT_TIERS, JackpotTier } from '@core/models/jackpot.types';
 
-const skinsName = {
-  BRONZE: 'bronze',
-  DIAMOND: 'diamond',
-  GOLD: 'gold',
-  SILVER: 'silver',
-};
-
-// dummy server response, one entry per card - replace with the real payload
-const dummyArray = [
-  'BRONZE',
-  'SILVER',
-  'DIAMOND',
-  'SILVER',
-  'GOLD',
-  'BRONZE',
-  'SILVER',
-  'DIAMOND',
-  'BRONZE',
-  'GOLD',
-  'SILVER',
-  'DIAMOND',
-];
+const REVEAL_HOLD_MS = 1500;
 
 export class JackpotCardsComp extends ResponsiveChildrenView {
   cardsContainer: PixView;
   cardsConfig: any;
   cardArray: JackpotCard[] = [];
-  cardClickCount: number;
+  protected pickInFlight = false;
+  protected finishAfterOpen = false;
+  protected finishTimeoutId: number;
   constructor(config) {
     super(config);
-    this.cardClickCount = 0;
     this.cardsConfig = this.configData.cardsConfig;
     this.cardsContainer = this.elementsList['cardsContainer'];
     this.createCards();
     this.cardsContainer.visible = false;
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_CARD_GAME, this.showJackPotCard.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
+    EventHandler.addEventListener(SlotEvents.JACKPOT_PICK_RESULT, this.onPickResult.bind(this));
+    EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
   }
   hideJPCards() {
     EventHandler.dispatchEvent('STOP_JACKPOT_BGM');
     EventHandler.dispatchEvent('RESUME_BG_SOUND');
+    clearTimeout(this.finishTimeoutId);
+    this.pickInFlight = false;
+    this.finishAfterOpen = false;
     this.resetCards();
     this.cardsContainer.visible = false;
   }
-  onCardClick() {
-    this.cardClickCount++;
-    if (dummyArray.length === this.cardClickCount) {
-      this.cardClickCount = 0;
-      StateManager.doNextStep();
+  protected onCardPressed(index: number) {
+    if (this.pickInFlight || !appModel.jackpotRound || appModel.jackpotRound.status === 'COMPLETED') return;
+    this.pickInFlight = true;
+    this.setAllLocked(true);
+    MessageProxy.requestJackpotPick(index);
+  }
+  protected onCardOpened() {
+    if (this.finishAfterOpen) {
+      this.finishAfterOpen = false;
+      this.finishReveal();
     }
+  }
+  protected onServerError() {
+    if (!this.pickInFlight) return;
+    this.pickInFlight = false;
+    this.setAllLocked(false);
+  }
+  protected onPickResult(round: IJackpotRound) {
+    if (!round) return;
+    this.pickInFlight = false;
+    const pick = round.pick;
+    round.picks.forEach((p) => {
+      if (p.position !== pick?.position) this.cardArray[p.position]?.openStatic(this.skinOf(p.tier));
+    });
+    const pickedCard = pick ? this.cardArray[pick.position] : null;
+    const animatePick = !!pickedCard?.isClosed();
+    if (round.status !== 'COMPLETED') {
+      if (animatePick) pickedCard.openAnimated(this.skinOf(pick.tier));
+      this.setAllLocked(false);
+      return;
+    }
+    this.setAllLocked(true);
+    if (animatePick) {
+      this.finishAfterOpen = true;
+      pickedCard.openAnimated(this.skinOf(pick.tier));
+    } else {
+      this.finishReveal();
+    }
+  }
+  protected finishReveal() {
+    const round = appModel.jackpotRound;
+    if (!round) return;
+    const rest = round.remaining ?? [];
+    rest.forEach((p) => this.cardArray[p.position]?.openStatic(this.skinOf(p.tier)));
+    const winning = [...round.picks, ...rest].filter((p) => p.tier === round.wonTier).map((p) => p.position);
+    this.highlightWinning(winning);
+    clearTimeout(this.finishTimeoutId);
+    this.finishTimeoutId = window.setTimeout(() => StateManager.doNextStep(), REVEAL_HOLD_MS);
+  }
+  /** Hook for the FE team: mark the cards of the won tier. */
+  protected highlightWinning(positions: number[]) {}
+  protected skinOf(tier: JackpotTier): string {
+    return JACKPOT_SKINS[JACKPOT_TIERS.indexOf(tier)];
+  }
+  protected setAllLocked(locked: boolean) {
+    this.cardArray.forEach((card) => card.setLocked(locked));
   }
   protected showJackPotCard() {
     EventHandler.dispatchEvent('STOP_BG_SOUND');
     EventHandler.dispatchEvent('PLAY_JACKPOT_BGM');
-    this.updateCards();
+    this.resetCards();
+    this.pickInFlight = false;
+    this.finishAfterOpen = false;
+    appModel.jackpotRound?.picks.forEach((p: IJackpotPick) =>
+      this.cardArray[p.position]?.openStatic(this.skinOf(p.tier)),
+    );
     this.cardsContainer.visible = true;
   }
   protected createCards() {
@@ -71,14 +114,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       const card = new JackpotCard(this.cardsConfig.cardConfig);
       this.cardsContainer.addChild(card);
       this.cardArray.push(card);
-      card.on('onCardClick', this.onCardClick.bind(this));
+      card.on('onCardPressed', () => this.onCardPressed(i));
+      card.on('onCardOpened', this.onCardOpened.bind(this));
     }
     this.layoutCards(this.cardsConfig.maxcCol);
-  }
-  updateCards(cardData: string[] = dummyArray) {
-    this.cardArray.forEach((card, index) => {
-      card.onSkinChange(skinsName[cardData[index]]); //show dummy cards
-    });
   }
   resetCards() {
     this.cardArray.forEach((card) => {
