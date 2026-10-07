@@ -11,6 +11,7 @@ import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 class StartAutoSpinStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
+    if (appModel.jackpotPending) return;
     if (appModel.getIsSpinStartPossible()) {
       WrapperProxy.postLifecycleEvent('GameBusy', { reason: 'autoplay' });
       appModel.setAutoplayInfo(data);

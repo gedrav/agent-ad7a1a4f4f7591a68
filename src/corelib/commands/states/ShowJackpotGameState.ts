@@ -10,6 +10,7 @@ class ShowJackpotGameStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     this.count = 0;
+    appModel.isBusy = true;
     appModel.freezeJackpotMeters();
     EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_INTRO_ANIM);
   }

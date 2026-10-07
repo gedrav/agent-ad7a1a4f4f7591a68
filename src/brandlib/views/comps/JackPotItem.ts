@@ -30,6 +30,7 @@ export class JackPotItem extends StandardView {
     this.updateJackpotValue(value);
   }
   public tweenToValue(value: number, duration: number) {
+    AnimationProxy.killTweensOf(this.counter);
     AnimationProxy.animateTween(this.counter, {
       current: value,
       duration,

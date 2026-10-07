@@ -391,16 +391,18 @@ class AppModelService {
 
     this.gameInfo.paytable = data.gameInfo.payTable;
     this.promoSpinInfo = data.promoInfo;
-    this.unfinishedData = data.unfinishedInfo;
+    const pendingJackpot = data.unfinishedInfo?.jackpot ?? null;
+    // A pending jackpot arrives as { roundId, jackpot } without spin data
+    this.unfinishedData = pendingJackpot ? null : data.unfinishedInfo;
     if (this.unfinishedData) {
       this.setUnfinishedInfo();
     }
     this.jackpotInfo = data.jackpotInfo ?? null;
-    this.jackpotMetersFrozen = false;
     this.latestJackpotTick = null;
     this.jackpotMeters = this.jackpotInfo ? this.jackpotInfo.tiers.map((t) => t.value) : [];
     this.jackpotMetersV = this.jackpotInfo?.v ?? 0;
-    this.jackpotRound = data.unfinishedInfo?.jackpot ?? null;
+    this.jackpotRound = pendingJackpot;
+    this.jackpotMetersFrozen = !!this.jackpotRound;
     EventHandler.dispatchEvent(SlotEvents.JACKPOT_INFO_READY, this.jackpotInfo);
   }
   public getBBMaxBet(): number {
