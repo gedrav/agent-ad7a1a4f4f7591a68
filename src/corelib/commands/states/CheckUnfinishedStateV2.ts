@@ -1,6 +1,7 @@
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { canShowJackpot } from '@core/commands/states/JackpotFlowHelper';
 import { STATES } from '@core/states/StateConstants';
 import { StateManager } from '@core/states/StateManagerService';
 import { CONSTANTS } from '@core/utils/CONSTANTS';
@@ -11,7 +12,7 @@ import { State } from 'pixi.js';
 class CheckUnfinishedStateCommandV2 extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (appModel.jackpotRound?.status === 'PENDING') {
+    if (appModel.jackpotRound?.status === 'PENDING' && canShowJackpot()) {
       appModel.freezeJackpotMeters();
       StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
     } else if (appModel.getIsUnfinishedGame()) {

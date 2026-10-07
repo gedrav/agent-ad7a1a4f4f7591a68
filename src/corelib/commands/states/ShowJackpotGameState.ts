@@ -1,9 +1,9 @@
 import { StateCommand } from '@core/commands/core/StateCommand';
 import { appModel } from '@core/models/services/AppModelService';
 import { StateManager } from '@core/states/StateManagerService';
-import { STATES } from '@core/states/StateConstants';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { getPostJackpotState } from '@core/commands/states/JackpotFlowHelper';
 
 class ShowJackpotGameStateCommand extends StateCommand {
   protected count: number;
@@ -26,7 +26,7 @@ class ShowJackpotGameStateCommand extends StateCommand {
       appModel.unfreezeJackpotMeters();
       EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
       // Config order puts CHECK_PROMOFS_STATE next, which would skip autospin handling
-      StateManager.goToState(appModel.getIsPromoFSSession() ? STATES.CHECK_PROMOFS_STATE : STATES.CHECK_AUTOSPIN_STATE);
+      StateManager.goToState(getPostJackpotState());
     }
   }
 }
