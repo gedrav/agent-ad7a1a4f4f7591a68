@@ -107,7 +107,7 @@ Rules the client relies on:
 - If the server auto-completed the reveal (timeout), any pick returns `status: 'COMPLETED'` with the final result; the client shows the end screen.
 - `closed: true` and `playerInfo.balance` arrive with the completing pick.
 
-### 3.4 Realtime (same `/sse/balance` stream, opt-in)
+### 3.4 Realtime (same stream, now `/sse/events`, opt-in)
 
 The client must append `?jp=1` to the stream URL. Without it the server never sends jackpot events (protects deployed builds).
 
@@ -116,7 +116,7 @@ event: jackpot_meters
 data: {"p":"<poolId>","v":88123401,"c":"CZK","t":[650.12,2800.40,10750.00,121000.55],"demo":false}
 
 event: jackpot_won
-data: {"p":"<poolId>","tier":"GRAND","amt":121000.55,"c":"CZK","brand":"Fortuna CZ"}
+data: {"p":"<poolId>","tier":"GRAND","amt":121000.55,"c":"CZK"}
 
 event: jackpot_pool_changed
 data: {"p":"<poolId>"}
@@ -134,7 +134,7 @@ data: {"p":"<poolId>"}
 | ----- | ------- | ------------- |
 | `JACKPOT_INFO_READY` | `IJackpotInfo \| null` | `AppModelService.storeGameInitData` |
 | `JACKPOT_METERS_UPDATE` | `{ values: number[], v: number }` | `RealtimeConnectionService` (after filtering, 4.3) |
-| `JACKPOT_WON` | `{ tier, amount, currency, brand }` | `RealtimeConnectionService` (hook only, no UI) |
+| `JACKPOT_WON` | `{ tier, amount, currency }` | `RealtimeConnectionService` (hook only, no UI) |
 | `JACKPOT_POOL_CHANGED` | `{ poolId }` | `RealtimeConnectionService` |
 | `JACKPOT_PICK_RESULT` | `IJackpotRound` | `MessageServiceProxy` after a pick response |
 
@@ -168,7 +168,7 @@ get jackpotPending(): boolean         // jackpotRound?.status === 'PENDING' or C
 
 ### 4.4 Realtime (`src/corelib/models/services/RealtimeConnectionService.ts`)
 
-- URL becomes `${VITE_REALTIME_URL}/sse/balance?jp=1`.
+- URL becomes `${VITE_REALTIME_URL}/sse/events?jp=1` (renamed from `/sse/balance`, which the server keeps as an alias for builds not yet updated; non-jackpot games move to `/sse/events` too).
 - `onmessage` routes by `msg.event`:
   - `balance_updated`: unchanged, `REALTIME_BALANCE_UPDATE`.
   - `jackpot_meters`: ignore if `appModel.jackpotInfo` is null or `p` differs from `jackpotInfo.poolId`; apply 4.3; dispatch `JACKPOT_METERS_UPDATE`.
