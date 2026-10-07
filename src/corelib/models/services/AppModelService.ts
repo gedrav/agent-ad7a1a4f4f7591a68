@@ -136,6 +136,7 @@ class AppModelService {
   public jackpotInfo: IJackpotInfo | null = null;
   public jackpotRound: IJackpotRound | null = null;
   public jackpotMetersFrozen: boolean = false;
+  public jackpotReinitPending: boolean = false;
   public jackpotMetersV: number = 0;
   public jackpotMeters: number[] = [];
   public latestJackpotTick: { values: number[]; v: number } | null = null;
