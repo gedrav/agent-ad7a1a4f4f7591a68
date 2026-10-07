@@ -13,6 +13,7 @@ export class JackPotItem extends StandardView {
   private valueQueue: number[] = [];
   private tweenDuration: number = 5;
   private isTweening: boolean = false;
+  private tween = null;
   constructor(config) {
     super(config);
     this.jackpotBg = this.elementsList['jackpotBg'];
@@ -28,6 +29,7 @@ export class JackPotItem extends StandardView {
   public setValue(value: number) {
     this.valueQueue = [];
     this.isTweening = false;
+    this.tween?.kill();
     AnimationProxy.killTweensOf(this.counter);
     this.counter.current = value;
     this.updateJackpotValue(value);
@@ -44,7 +46,8 @@ export class JackPotItem extends StandardView {
     const nextValue = this.valueQueue.shift();
     this.isTweening = true;
     AnimationProxy.killTweensOf(this.counter);
-    AnimationProxy.animateTween(this.counter, {
+    this.tween?.kill();
+    this.tween = AnimationProxy.animateTween(this.counter, {
       current: nextValue,
       delay: 0.5,
       duration: this.tweenDuration,
