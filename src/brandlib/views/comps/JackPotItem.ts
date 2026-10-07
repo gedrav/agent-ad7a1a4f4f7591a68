@@ -8,7 +8,6 @@ import { Util } from '@core/utils/UtilService';
 
 export class JackPotItem extends StandardView {
   private readonly jackpotBg: PixSpine;
-  private readonly txtRect: PixGraphics;
   private readonly value: PixText;
   private readonly currentValue: number = 1000;
   private readonly stackJackpotValues: number[] = [];
@@ -16,12 +15,12 @@ export class JackPotItem extends StandardView {
   constructor(config) {
     super(config);
     this.jackpotBg = this.elementsList['jackpotBg'];
-    this.txtRect = this.elementsList['txtRect'];
     this.value = this.elementsList['value'];
   }
   public initialView({ skinName, colorcode }) {
     this.jackpotBg.setSkin(skinName);
     UIUtil.updateTextColor(this.value, colorcode);
+    this.updateJackpotText();
   }
   public changeAnimation({ state, loop }) {
     this.jackpotBg.playAnimation({ state, loop, reset: false });
@@ -55,8 +54,8 @@ export class JackPotItem extends StandardView {
   public adjustTextSize() {
     const fontSize = this.value.configData.style.fontSize;
     this.value.style.fontSize = fontSize;
-    if (this.value.width > this.txtRect.width) {
-      const sc = (this.txtRect.width * 0.96) / this.value.width;
+    if (this.value.width > this.value.configData.maxWidth) {
+      const sc = (this.value.configData.maxWidth * 0.96) / this.value.width;
       this.value.style.fontSize = sc * fontSize;
     }
   }
