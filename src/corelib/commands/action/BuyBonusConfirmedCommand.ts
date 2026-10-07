@@ -13,6 +13,7 @@ import { WrapperProxy } from '@brand/models/WrapperServiceProxy';
 class BuyBonusConfirmedCmd extends ActionCommand {
   public async execute(data: any = null) {
     super.execute(data);
+    if (appModel.jackpotPending) return;
     EventHandler.dispatchEvent(SlotEvents.HIDE_BUY_BONUS_VIEW);
 
     if (appModel.getIsBBSpinStartPossible(GameProxy.config.selectedBB)) {
