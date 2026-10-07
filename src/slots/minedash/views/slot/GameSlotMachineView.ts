@@ -9,6 +9,7 @@ import { GemBoxesComp, BOX_STATE_KEYS, StoneStateData } from '@game/views/comps/
 import { StoneAnimationManager, StoneData, STONE_CONFIG } from '@game/views/slot/StoneAnimationManager';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { Sine } from 'gsap';
 
 export class GameSlotMachineView extends SlotMachineView {
@@ -50,6 +51,19 @@ export class GameSlotMachineView extends SlotMachineView {
     }, 100);
     // Ideally this timeout should be cleared on destroy, handled here briefly:
     (this as any)._initTimeout = initTimeout;
+  }
+
+  protected resizeView(): void {
+    super.resizeView();
+    const minerChara = this.elementsList?.['minerChara'];
+    if (!minerChara || !this.slotReel) return;
+
+    const reelIndex = this.getChildIndex(this.slotReel);
+    const isBehind = this.getChildIndex(minerChara) < reelIndex;
+    const shouldBeBehind = DeviceProxy.config.isPortrait;
+    if (isBehind !== shouldBeBehind) {
+      this.setChildIndex(minerChara, reelIndex);
+    }
   }
 
   public getStoneState(): StoneStateData {
@@ -390,7 +404,23 @@ export class GameSlotMachineView extends SlotMachineView {
               particle.destroy();
             }, false);
 
+            const winContainer = (this.slotReel as any).winController?.winSymbolsContainer;
+            const originalParent = symbol.parent;
+            const originalX = symbol.x;
+            const originalY = symbol.y;
+
+            if (winContainer) {
+              const globalPos = symbol.getGlobalPosition();
+              const localPos = winContainer.toLocal(globalPos);
+              symbol.position.set(localPos.x, localPos.y);
+              winContainer.addChild(symbol);
+            }
+
             symbol.showWinning(() => {
+              if (winContainer && originalParent) {
+                originalParent.addChild(symbol);
+                symbol.position.set(originalX, originalY);
+              }
               currentIndex++;
               processNext();
             }, false);
