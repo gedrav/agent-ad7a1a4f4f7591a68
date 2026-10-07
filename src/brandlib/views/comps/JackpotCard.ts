@@ -45,8 +45,8 @@ export class JackpotCard extends StandardView {
   public onSkinChange(skinName: string) {
     this.card.setSkin(skinName);
   }
-  private playCardAnimation({ state, loop }) {
-    this.card.playAnimation({ state, loop, reset: false });
+  private playCardAnimation({ state, loop, reset = false }) {
+    this.card.playAnimation({ state, loop, reset });
   }
   private onCardClick() {
     if (this.cardStatus === CardStatus.CLOSE) {
@@ -65,7 +65,7 @@ export class JackpotCard extends StandardView {
     this.cardGuideRect.interactive = false;
     this.cardStatus = CardStatus.OPEN;
     EventHandler.dispatchEvent('PLAY_JACKPOT_CARD_CLICK');
-    this.playCardAnimation({ state: animationState.ROTATION, loop: false });
+    this.playCardAnimation({ state: animationState.ROTATION, loop: false, reset: true });
   }
   public openStatic(skinName: string) {
     if (!this.isClosed()) return;
