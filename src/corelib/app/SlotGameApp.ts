@@ -477,6 +477,7 @@ class SlotGameApp {
       }
     } else {
       appModel.resetGameResult();
+      if (!appModel.jackpotRound) appModel.unfreezeJackpotMeters();
       const data: any = {};
       let isOfflineError = false;
       data.title = Util.getContent('infoText');

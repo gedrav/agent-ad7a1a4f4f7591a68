@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { StateManager } from '@core/states/StateManagerService';
 import { Util } from '@core/utils/UtilService';
 import { STATES } from '@core/states/StateConstants';
+import { AutoStopSpinCommand } from '@core/commands/action/AutoStopSpinCommand';
 
 class CompleteGameRoundStateCommand extends StateCommand {
   public async execute(data: any = null) {
@@ -14,6 +15,7 @@ class CompleteGameRoundStateCommand extends StateCommand {
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     if (appModel.jackpotPending) {
+      if (appModel.getIsAutoSession()) AutoStopSpinCommand.execute();
       StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
     } else if (appModel.getIsPromoFSSession()) {
       StateManager.goToState(STATES.CHECK_PROMOFS_STATE);

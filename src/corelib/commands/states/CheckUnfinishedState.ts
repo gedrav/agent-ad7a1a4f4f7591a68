@@ -9,7 +9,10 @@ import { STATES } from '@core/states/StateConstants';
 class CheckUnfinishedStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
-    if (appModel.getIsUnfinishedGame()) {
+    if (appModel.jackpotRound?.status === 'PENDING') {
+      appModel.freezeJackpotMeters();
+      StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
+    } else if (appModel.getIsUnfinishedGame()) {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
       if (appModel.getIsAnteBetOn()) {
         EventHandler.dispatchEvent(SlotEvents.UPDATE_UNFINISHED_ANTE_BET);
