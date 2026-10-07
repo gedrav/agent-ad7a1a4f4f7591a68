@@ -147,7 +147,7 @@ class AppModelService {
   public storeJackpotPick(data: IJackpotPickResponse): void {
     this.jackpotRound = data.jackpot;
     if (data.jackpot?.status === 'COMPLETED' && data.playerInfo?.balance !== undefined) {
-      this.setUpdatedBalance({ balance: data.playerInfo.balance });
+      this.gameInfo.balance = data.playerInfo.balance;
     }
   }
 
