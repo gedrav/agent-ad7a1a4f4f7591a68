@@ -84,6 +84,21 @@ export function getHoldField(): HoldFieldEntry[] {
   return featureData().holdField ?? [];
 }
 
+// In bet multiples. Undefined for a cell the feature is not holding.
+export function getHoldFieldValue(column: number, row: number): number | undefined {
+  return valueAt(getHoldField(), column, row);
+}
+
+// holdField covers every held cell; a cell still a mystery when the feature closed is named only
+// by its reveal, in the same units.
+export function getCellValue(column: number, row: number): number | undefined {
+  return getHoldFieldValue(column, row) ?? valueAt(getMysteryReveals(), column, row);
+}
+
+function valueAt(entries: { position: number[]; value?: number }[], column: number, row: number): number | undefined {
+  return entries.find(({ position }) => position[0] === column && position[1] === row)?.value;
+}
+
 // How many cells the feature is holding, which is what a respin round is judged on.
 export function getCollectedCount(): number {
   return getHoldField().length;
@@ -103,6 +118,11 @@ export function getModifierMultipliers(): ModifierMultiplier[] {
 export function getMetamorphicSymbols(): MetamorphicSymbol[] {
   if (!featureData().triggerAnimation?.metamorphic) return [];
   return featureData().metamorphicSymbolPosition ?? [];
+}
+
+// Flagged on the feature result itself, not inside its featureData.
+export function isFeatureClosed(): boolean {
+  return appModel.featureResult?.closed === true;
 }
 
 // Empty on every round but the one that closes the feature.

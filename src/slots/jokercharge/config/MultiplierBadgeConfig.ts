@@ -29,3 +29,14 @@ export const MULTIPLIER_BADGE_SCALE_DURATION = 0.35;
 export const MULTIPLIER_BADGE_MOVE_DURATION = 0.5;
 // The beat the badge holds at rest size, centred, before it sets off for the corner.
 export const MULTIPLIER_BADGE_MOVE_DELAY = 0.3;
+
+// The badge's last act - see HoldNWinReel.applyMultiplierToSymbol().
+export const MULTIPLIER_APPLY_MOVE_DURATION = 0.35;
+export const MULTIPLIER_APPLY_MOVE_EASE = 'power2.inOut';
+export const MULTIPLIER_APPLY_SHRINK_DURATION = 0.2;
+export const MULTIPLIER_APPLY_SHRINK_EASE = 'back.in(1.7)';
+export const MULTIPLIER_APPLY_COUNT_DURATION = 0.8;
+export const MULTIPLIER_APPLY_COUNT_EASE = 'power1.out';
+
+// One cell's share, counted up as its trail lands - see TotalWinCollectEffect.
+export const TOTAL_WIN_COUNT_DURATION = 0.3;

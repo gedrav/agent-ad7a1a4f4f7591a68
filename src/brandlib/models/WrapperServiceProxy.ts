@@ -101,7 +101,9 @@ class WrapperServiceProxy extends AbstractProxy {
   // util methods
   protected postDataToWrapper(data: any): void {
     const message = JSON.stringify(data);
-    console.log('[WrapperServiceProxy] ->', message);
+    if (import.meta.env.VITE_WRAPPER_LOG_ACTIVE === 'true') {
+      console.log('[WrapperServiceProxy] ->', message);
+    }
     window.parent.postMessage(message, '*');
   }
 

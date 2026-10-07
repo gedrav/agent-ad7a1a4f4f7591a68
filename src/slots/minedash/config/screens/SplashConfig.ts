@@ -9,12 +9,12 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 40 },
-  cs: { fontSize: 30 },
-  lt: { fontSize: 30 },
-  pl: { fontSize: 30 },
-  sk: { fontSize: 30 },
-  ro: { fontSize: 30 },
+  en: { fontSize: 45 },
+  cs: { fontSize: 35 },
+  lt: { fontSize: 35 },
+  pl: { fontSize: 35 },
+  sk: { fontSize: 35 },
+  ro: { fontSize: 35 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -31,7 +31,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen1',
       content: 'splash1',
-      textY: 490,
+      textY: 620,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -64,7 +64,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen2',
       content: 'splash2',
-      textY: 490,
+      textY: 620,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -97,7 +97,7 @@ export const SPLASH_CONFIG: any = {
       class: SplashItemComp,
       image: 'screen3',
       content: 'splash3',
-      textY: 490,
+      textY: 620,
       textAreaHeight: 220,
       textStyle: {
         name: 'contentTxt',
@@ -249,7 +249,7 @@ export const SPLASH_CONFIG: any = {
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 40,
+              fontSize: 80,
               mFontSize: 40,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {

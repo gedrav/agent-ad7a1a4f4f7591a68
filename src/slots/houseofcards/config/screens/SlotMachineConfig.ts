@@ -271,11 +271,27 @@ export const SLOT_MACHINE_CONFIG: any = {
       Elements: [
         JACKPOT_CONFIG,
         {
-          name: 'reelFrame1',
-          type: 'Sprite',
-          image: 'ReelFrame',
-          x: -62,
-          y: -62,
+          name: 'reelFrame',
+          type: 'Comp',
+          class: ReelFrameComp,
+          x: 0,
+          y: 0,
+          Elements: [
+            {
+              name: 'reelFrame',
+              type: 'Sprite',
+              image: 'reelFrame',
+              x: -62,
+              y: -62,
+            },
+            {
+              name: 'reelFrameFS',
+              type: 'Sprite',
+              image: 'reelFrameFS',
+              x: -62,
+              y: -62,
+            },
+          ],
         },
         { name: 'symbolsContainer', type: 'Container' },
         {

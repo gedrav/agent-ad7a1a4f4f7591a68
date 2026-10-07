@@ -9,6 +9,8 @@ export interface JCSymbolData {
   blurAnim?: string;
   winAnim?: string;
   landingAnim?: string;
+  // Only the mystery rigs have one: what plays as the symbol gives way to what it revealed.
+  hideAnim?: string;
   multiplierTextConfig?: any;
   // Static label on the rig's root_txt slot; unlike multiplierTextConfig it never changes.
   labelTextConfig?: any;
@@ -205,6 +207,7 @@ const MYSTERY_SYMBOL: JCSymbolData = {
   blurAnim: 'static_blur',
   winAnim: 'win',
   landingAnim: 'landing',
+  hideAnim: 'hide',
   cellScale: 0.33,
   labelTextConfig: labelTextConfig('MYSTERY', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
 };
@@ -217,6 +220,7 @@ const MYSTERY_JACKPOT_SYMBOL: JCSymbolData = {
   blurAnim: 'static_blur',
   winAnim: 'win',
   landingAnim: 'landing',
+  hideAnim: 'hide',
   cellScale: 0.33,
   labelTextConfig: labelTextConfig(`MYSTERY\nJACKPOT`, MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
 };

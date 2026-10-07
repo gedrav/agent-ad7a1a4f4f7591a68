@@ -1,7 +1,7 @@
 import { Point } from 'pixi.js';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
-import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
+import MDReelSymbol from '@game/views/slot/MDReelSymbol';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
@@ -155,6 +155,35 @@ export class StoneAnimationManager {
       },
     });
     this.activeTweens.push(removeTween);
+
+    this.holdRemovedSymbol(targetSymbol);
+  }
+
+  private holdRemovedSymbol(targetSymbol: any): void {
+    if (typeof targetSymbol.resetSymbol !== 'function' || typeof targetSymbol.setNewSymbol !== 'function') {
+      return;
+    }
+
+    const originalResetSymbol = targetSymbol.resetSymbol.bind(targetSymbol);
+    const originalSetNewSymbol = targetSymbol.setNewSymbol.bind(targetSymbol);
+
+    // Block the reel's automatic reset so the symbol stays hidden when spin starts.
+    targetSymbol.resetSymbol = () => {
+      // intentional no-op
+    };
+
+    // Once the reel actually recycles this symbol with a new result, let it land fresh.
+    targetSymbol.setNewSymbol = (data: any, reelno: number) => {
+      targetSymbol.resetSymbol = originalResetSymbol;
+      targetSymbol.setNewSymbol = originalSetNewSymbol;
+
+      const normalScale = this.getNormalSymbolScale();
+      targetSymbol.alpha = 1;
+      targetSymbol.scale.set(normalScale, normalScale);
+      this.setSymbolVisibility(targetSymbol, true);
+
+      originalSetNewSymbol(data, reelno);
+    };
   }
 
   private setSymbolVisibility(symbol: any, isVisible: boolean): void {
@@ -184,12 +213,7 @@ export class StoneAnimationManager {
     return this.view.toLocal(targetGlobalPos);
   }
 
-  private createMovingSymbol(
-    symbolName: string,
-    spineName: string,
-    symbolSkin: string,
-    startPos: Point,
-  ): ReelSymbolSpineExtended {
+  private createMovingSymbol(symbolName: string, spineName: string, symbolSkin: string, startPos: Point): MDReelSymbol {
     let cardSkin = symbolSkin;
     if (spineName === 'GoldCard' || symbolName === 'SG') {
       const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired');
@@ -202,7 +226,7 @@ export class StoneAnimationManager {
     const symbolConfig = GameProxy.config.reelSymbolsConfig?.[symbolName];
     const animScale = symbolConfig?.animScale;
 
-    const movingSymbol = new ReelSymbolSpineExtended({
+    const movingSymbol = new MDReelSymbol({
       data: {
         name: symbolName,
         spineName: spineName,
@@ -219,7 +243,7 @@ export class StoneAnimationManager {
   }
   // playing animation for stone
   private playStoneAnimation(
-    movingSymbol: ReelSymbolSpineExtended,
+    movingSymbol: MDReelSymbol,
     startPos: Point,
     endPos: Point,
     targetBox: any,
@@ -248,7 +272,7 @@ export class StoneAnimationManager {
   }
 
   private playDropAnimation(
-    movingSymbol: ReelSymbolSpineExtended,
+    movingSymbol: MDReelSymbol,
     endPos: Point,
     peakScale: number,
     targetDropScale: number,
@@ -356,16 +380,6 @@ export class StoneAnimationManager {
 
   private restoreAllHiddenSymbols(): void {
     if (this.hiddenReelSymbol) {
-      const normalScale = this.getNormalSymbolScale();
-      const sym = this.hiddenReelSymbol.symbol;
-      if (sym) {
-        sym.alpha = this.hiddenReelSymbol.alpha ?? 1;
-        sym.scale.set(normalScale, normalScale);
-        this.setSymbolVisibility(sym, true);
-        if (sym.spine && sym.configData?.data?.animScale) {
-          sym.spine.scale.set(sym.configData.data.animScale);
-        }
-      }
       this.hiddenReelSymbol = null;
     }
   }

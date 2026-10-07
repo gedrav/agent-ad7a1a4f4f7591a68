@@ -25,6 +25,16 @@ export const JCEvents = {
   MYSTERY_REEL_LANDED: 'MYSTERY_REEL_LANDED',
   // Data: { entries, hold, onComplete } - see MetamorphicRevealData.
   PLAY_METAMORPHIC_SYMBOLS: 'PLAY_METAMORPHIC_SYMBOLS',
+  // Data: { hold, onComplete } - see TotalWinPanelData. Brings up the panel that closes the
+  // feature, on the logo.
+  SHOW_TOTAL_WIN_PANEL: 'SHOW_TOTAL_WIN_PANEL',
+  // Data: { hold, onComplete } - see TotalWinPanelData. Takes the panel to the middle of the
+  // screen over a dim and hides it there, which closes the feature's presentation.
+  PRESENT_TOTAL_WIN_PANEL: 'PRESENT_TOTAL_WIN_PANEL',
+  // Data: { hold, onComplete } - see TotalWinCollectData. Pays every held cell into the panel.
+  PLAY_TOTAL_WIN_COLLECT: 'PLAY_TOTAL_WIN_COLLECT',
+  // The logo swallowing what a trail just brought it. No data.
+  PLAY_LOGO_COLLECT_ANIM: 'PLAY_LOGO_COLLECT_ANIM',
   // Data: { column, row } - runs the trail from that cell up to the logo.
   PLAY_TRAIL_ANIMATION: 'PLAY_TRAIL_ANIMATION',
 } as const;
