@@ -1,7 +1,7 @@
 # Shared Jackpot (Jackpot Cards): Game Frontend (feg_games_src) Design
 
 - Date: 2026-10-05
-- Status: Pending written-spec review
+- Status: Approved (2026-10-07)
 - Branch: `feature/shared-jackpot` (also in `feg_games_assets` for cheat entries)
 - Scope: plumbing only (data, events, API calls, state flow, cheats). Visual and UX polish stays with the FE team.
 - Development and test game: `carpathiantreasures` (already mounts the jackpot screens)
