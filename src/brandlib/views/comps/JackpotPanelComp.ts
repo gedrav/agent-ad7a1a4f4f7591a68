@@ -36,7 +36,6 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   protected jackPotsArr: JackPotItem[] = [];
   protected jackpotConfig: any;
   protected jackpotContainer: PixView;
-  protected ticker: Ticker;
   protected jackpotIntroAnimHor: PixSpine;
   protected jackpotIntroAnimVer: PixSpine;
   protected isJackpotIntroAnim: boolean;
@@ -68,8 +67,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     this.notifyWinDone();
     this.dummyNumber = 1000;
 
-    this.ticker = new Ticker();
-    this.ticker.add(this.updateJackpotValue.bind(this));
+    setInterval(this.updateJackpotValue.bind(this), 100);
     this.createJackPotElement();
     this.winTickerJP?.on('COUNTUP_COMPLETED', this.onCountUpUpdateBW.bind(this));
     this.winTickerJP?.on('COUNTUP_UPDATE', this.adjustTextSize.bind(this));
@@ -214,13 +212,12 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
         colorcode: this.jackpotConfig.jackpotTextColor[i],
       });
     }
-    this.ticker.start();
     this.resizeView();
   }
   updateJackpotValue() {
     this.dummyNumber += 0.1;
     this.jackPotsArr.forEach((item) => {
-      item.updateJackpotValue(this.dummyNumber); // replace with actual number;
+      item.stackJackpotValue(this.dummyNumber); // replace with actual number;
     });
   }
   protected resizeView() {
