@@ -48,12 +48,14 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.setAllLocked(true);
     MessageProxy.requestJackpotPick(index);
   }
-  protected onCardOpened() {
-    if (this.finishAfterOpen) {
-      this.clearOpenWait();
-      this.revealFinished = false;
-      this.finishReveal();
-    }
+  protected onCardOpened(index: number) {
+    if (this.expectedOpenPosition !== index) return;
+    this.clearOpenWait();
+    this.finishReveal();
+  }
+  protected clearOpenWait() {
+    clearTimeout(this.openFallbackId);
+    this.expectedOpenPosition = null;
   }
   protected onServerError() {
     if (!this.pickInFlight) return;
