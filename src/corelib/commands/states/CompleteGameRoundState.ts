@@ -13,7 +13,7 @@ class CompleteGameRoundStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_FS_TOTALWIN);
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
-    if (appModel.storeJackpotData) {
+    if (appModel.jackpotPending) {
       StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
     } else if (appModel.getIsPromoFSSession()) {
       StateManager.goToState(STATES.CHECK_PROMOFS_STATE);
