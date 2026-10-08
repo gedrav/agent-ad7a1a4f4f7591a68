@@ -59,7 +59,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
       this.jackPotsArr.push(item);
       item.x = this.jackpotConfig.xPos[i];
       item.y = this.jackpotConfig.yPos[i];
-      item.scale.set(0.5);
+      item.scale.set(this.jackpotConfig.items.scale);
       item.initialView({
         skinName: this.jackpotConfig.jackpotAnimSkin[i],
         colorcode: this.jackpotConfig.jackpotTextColor[i],

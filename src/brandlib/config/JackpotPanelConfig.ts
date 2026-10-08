@@ -25,6 +25,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
     items: {
       name: 'jackPotItem',
       type: 'Container',
+      scale: 0.5,
       Elements: [
         {
           name: 'jackpotBg',
