@@ -109,8 +109,12 @@ export default class HoldNWinReel extends Container {
   // Distinct from sticky: a cell already holding a symbol sits out the respin rounds, with no lock
   // animation - it just doesn't take part.
   private held = false;
+  // The strip is three symbols a cell apart: the one in the window, one above and one below. The
+  // one below covers the bottom of the window while the strip winds up before it starts down;
+  // with only two, that strip of the window showed empty.
   private symbolView: JCReelSymbol | null = null;
   private topSymbolView: JCReelSymbol | null = null;
+  private bottomSymbolView: JCReelSymbol | null = null;
 
   private readonly windUpSpeed: number;
   private readonly windUpDistance: number;
@@ -154,17 +158,26 @@ export default class HoldNWinReel extends Container {
     this.addChild(this.spinContainer);
     this.spinLayer = config.spinLayer;
 
-    // Offset by symbolHeight, not measured bounds - a mid-animation spine's bounds jitter.
-    const topSymbolName = getRandomSymbolName();
-    this.topSymbolView = JCReelSymbolPool.getInstance().acquire(topSymbolName, this.column, this.row);
-    this.applySymbolScale(
-      this.topSymbolView,
-      SYMBOLS_DATA[topSymbolName]?.cellScale,
-      SYMBOLS_DATA[topSymbolName]?.cellScaleY,
+    this.topSymbolView = this.createStripNeighbour(-this.symbolHeight);
+    this.bottomSymbolView = this.createStripNeighbour(this.symbolHeight);
+  }
+
+  // Offset by symbolHeight, not measured bounds - a mid-animation spine's bounds jitter. Hidden at
+  // rest: only the window's own symbol shows while the cell is still.
+  private createStripNeighbour(y: number): JCReelSymbol {
+    const name = getRandomSymbolName();
+    const symbol = JCReelSymbolPool.getInstance().acquire(name, this.column, this.row);
+    this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale, SYMBOLS_DATA[name]?.cellScaleY);
+    symbol.y = y;
+    symbol.visible = false;
+    this.spinContainer.addChild(symbol);
+    return symbol;
+  }
+
+  private stripSymbols(): JCReelSymbol[] {
+    return [this.symbolView, this.topSymbolView, this.bottomSymbolView].filter(
+      (symbol): symbol is JCReelSymbol => !!symbol,
     );
-    this.topSymbolView.y = -this.symbolHeight;
-    this.topSymbolView.visible = false;
-    this.spinContainer.addChild(this.topSymbolView);
   }
 
   // A cell's effects exist only while they play: each is borrowed from the rig pool when needed and
@@ -656,10 +669,9 @@ export default class HoldNWinReel extends Container {
     return this.symbolView?.getCollectValue() ?? 0;
   }
 
-  // Both are refreshed - topSymbolView can be visible mid-spin.
+  // The whole strip, not just the window's symbol - the neighbours are visible mid-spin.
   public refreshBlanksVisual(): void {
-    this.symbolView?.refreshBlanksVisual();
-    this.topSymbolView?.refreshBlanksVisual();
+    this.stripSymbols().forEach((symbol) => symbol.refreshBlanksVisual());
   }
 
   public showSymbol(name: string): void {
@@ -696,20 +708,22 @@ export default class HoldNWinReel extends Container {
   }
 
   public spin(): void {
-    if (this.sticky || this.held || this.phase !== 'idle' || !this.symbolView || !this.topSymbolView) return;
+    if (this.sticky || this.held || this.phase !== 'idle' || !this.symbolView) return;
     this.setSpinMasked(true);
     this.pendingFinalSymbolName = null;
     this.settlingSymbol = null;
     this.spinSpeed = 0;
     this.phase = 'windup';
     // A landing tween from the last stop would otherwise fight the strip.
-    AnimationProxy.killTweensOf(this.symbolView);
-    AnimationProxy.killTweensOf(this.symbolView.scale);
-    AnimationProxy.killTweensOf(this.topSymbolView);
-    AnimationProxy.killTweensOf(this.topSymbolView.scale);
-    this.setSpinningVisual(this.symbolView);
-    this.setSpinningVisual(this.topSymbolView);
-    this.topSymbolView.visible = true;
+    this.stripSymbols().forEach((symbol) => {
+      AnimationProxy.killTweensOf(symbol);
+      AnimationProxy.killTweensOf(symbol.scale);
+      this.setSpinningVisual(symbol);
+      symbol.visible = true;
+    });
+    // A spin cut into a landing dip leaves the window's symbol off zero, so the neighbours are
+    // squared up against it rather than left wherever the dip put them.
+    this.alignNeighbours(this.symbolView);
     Ticker.shared.add(this.onSpinTick, this);
   }
 
@@ -740,12 +754,11 @@ export default class HoldNWinReel extends Container {
   }
 
   private onSpinTick(ticker: Ticker): void {
-    if (!this.symbolView || !this.topSymbolView) return;
+    if (!this.symbolView) return;
     const delta = ticker.deltaTime;
     switch (this.phase) {
       case 'windup':
-        this.symbolView.y -= this.windUpSpeed * delta;
-        this.topSymbolView.y -= this.windUpSpeed * delta;
+        this.stripSymbols().forEach((symbol) => (symbol.y -= this.windUpSpeed * delta));
         if (this.symbolView.y <= -this.windUpDistance) {
           this.phase = 'spin';
         }
@@ -769,26 +782,29 @@ export default class HoldNWinReel extends Container {
   }
 
   private advance(distance: number): void {
-    this.symbolView.y += distance;
-    this.topSymbolView.y += distance;
-    this.recycleIfNeeded(this.symbolView);
-    this.recycleIfNeeded(this.topSymbolView);
+    const strip = this.stripSymbols();
+    strip.forEach((symbol) => (symbol.y += distance));
+    strip.forEach((symbol) => this.recycleIfNeeded(symbol));
   }
 
   // Wrapped by the strip's length rather than snapped to a fixed y: at these speeds a symbol
-  // crosses the threshold mid-step, and dropping that overshoot would change the gap between the
-  // two symbols on every wrap.
+  // crosses the threshold mid-step, and dropping that overshoot would change the spacing between
+  // the symbols on every wrap. Wrapped once it is half a cell past the slot below the window, so
+  // the strip always reaches at least half a cell beyond the window at both ends.
   private recycleIfNeeded(symbol: JCReelSymbol): void {
     if (symbol === this.settlingSymbol) return;
-    if (symbol.y < this.symbolHeight) return;
-    symbol.y -= this.symbolHeight * 2;
+    if (symbol.y < this.symbolHeight * 1.5) return;
+    symbol.y -= this.symbolHeight * 3;
     this.setSymbolContentForSpin(symbol, getRandomSymbolName());
   }
 
-  // Exactly one of the two symbols has y <= 0 at a time; that one takes the final result.
+  // The next one to arrive in the window - the lowest of those not yet past it - takes the final
+  // result. With the strip a cell apart there is exactly one in (-symbolHeight, 0].
   private checkSettle(): void {
     if (this.pendingFinalSymbolName && !this.settlingSymbol) {
-      const front = this.symbolView.y <= 0 ? this.symbolView : this.topSymbolView;
+      const front = this.stripSymbols()
+        .filter((symbol) => symbol.y <= 0)
+        .reduce((lowest, symbol) => (symbol.y > lowest.y ? symbol : lowest));
       this.setSymbolContentForSpin(front, this.pendingFinalSymbolName);
       this.settlingSymbol = front;
       this.pendingFinalSymbolName = null;
@@ -804,11 +820,15 @@ export default class HoldNWinReel extends Container {
     this.settlingSymbol = null;
     this.setAnticipating(false);
 
-    const back = front === this.symbolView ? this.topSymbolView : this.symbolView;
-    back.visible = false;
-    back.y = -this.symbolHeight;
+    // The other two become its neighbours, above and below by position. They stay visible for the
+    // landing dip - see playLanding - and are hidden once the cell is at rest.
+    const [above, below] = this.stripSymbols()
+      .filter((symbol) => symbol !== front)
+      .sort((a, b) => a.y - b.y);
     this.symbolView = front;
-    this.topSymbolView = back;
+    this.topSymbolView = above;
+    this.bottomSymbolView = below;
+    this.alignNeighbours(front);
     this.onSymbolPlaced?.();
 
     // Blanks has no landing animation to clear the blur for it.
@@ -822,29 +842,50 @@ export default class HoldNWinReel extends Container {
   // Carries on past the stop position and rides back up to it, rather than snapping to 0 from
   // wherever the symbol happened to cross it. The cell stays masked until it comes to rest, so the
   // dip reads as movement behind the window rather than a symbol hanging out of it.
+  //
+  // The neighbours ride the dip with it, so the symbol above fills the top of the window while the
+  // front is pushed down, rather than the window showing empty there.
   private playLanding(front: JCReelSymbol, onSettled: (() => void) | null): void {
     if (!this.landingOvershoot) {
       front.y = 0;
-      this.setSpinMasked(false);
+      this.restAtFront(front);
       front.showLanding(() => front.showIdle());
       onSettled?.();
       return;
     }
+    const follow = (): void => this.alignNeighbours(front);
     AnimationProxy.animateTween(front, {
       duration: LANDING_DIP_DURATION,
       y: this.landingOvershoot,
+      onUpdate: follow,
       onComplete: () => {
         front.showLanding(() => front.showIdle());
         AnimationProxy.animateTween(front, {
           duration: LANDING_RETURN_DURATION,
           y: 0,
+          onUpdate: follow,
           onComplete: () => {
-            this.setSpinMasked(false);
+            this.restAtFront(front);
             onSettled?.();
           },
         });
       },
     });
+  }
+
+  private alignNeighbours(front: JCReelSymbol | null): void {
+    if (!front) return;
+    if (this.topSymbolView) this.topSymbolView.y = front.y - this.symbolHeight;
+    if (this.bottomSymbolView) this.bottomSymbolView.y = front.y + this.symbolHeight;
+  }
+
+  // At rest only the window's symbol shows: the cell comes out of the mask, where a neighbour would
+  // otherwise draw outside it.
+  private restAtFront(front: JCReelSymbol): void {
+    this.alignNeighbours(front);
+    if (this.topSymbolView) this.topSymbolView.visible = false;
+    if (this.bottomSymbolView) this.bottomSymbolView.visible = false;
+    this.setSpinMasked(false);
   }
 
   // Turned on while the reel is still spinning, and cleared by finishSettle().
@@ -916,6 +957,10 @@ export default class HoldNWinReel extends Container {
     if (this.topSymbolView) {
       JCReelSymbolPool.getInstance().release(this.topSymbolView);
       this.topSymbolView = null;
+    }
+    if (this.bottomSymbolView) {
+      JCReelSymbolPool.getInstance().release(this.bottomSymbolView);
+      this.bottomSymbolView = null;
     }
     // Back under this cell, or a destroy() of the cell would leave it behind in the row layer.
     this.setSpinMasked(false);
