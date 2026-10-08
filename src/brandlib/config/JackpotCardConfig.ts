@@ -1,5 +1,5 @@
 import { JackpotCardsComp } from '@brand/views/comps/JackpotCardsComp';
-import { JACKPOT_GAME_BG_CONFIG } from './JackpotBGConfig';
+import { WinTicker } from '@core/views/comps/WinTicker';
 
 export const JACKPOT_CARD_CONFIG: any = {
   name: 'jackpotCardContainer',
@@ -25,11 +25,19 @@ export const JACKPOT_CARD_CONFIG: any = {
         x: 124,
         y: 174,
       },
-      guideRect: { name: 'cardRect', type: 'Graphics', width: 250, height: 350, color: 0x000000, x: 0, y: 0, alpha: 0 },
+      guideRect: {
+        name: 'cardRect',
+        type: 'Graphics',
+        width: 250,
+        height: 350,
+        color: 0x000000,
+        x: 0,
+        y: 0,
+        alpha: 0,
+      },
     },
   },
   Elements: [
-    JACKPOT_GAME_BG_CONFIG,
     {
       name: 'cardsContainer',
       type: 'Container',
@@ -60,7 +68,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           vPaddingPerc: 0.01,
           hPaddingPerc: 0,
         },
-        Portrait: { widthPerc: 0.98, heightPerc: 0.98, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.02 },
+        Portrait: { widthPerc: 1, height: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.02 },
         Landscape: {
           widthPerc: 0.7,
           heightPerc: 0.8,
@@ -77,6 +85,91 @@ export const JACKPOT_CARD_CONFIG: any = {
           vPaddingPerc: 0,
           hPaddingPerc: 0,
         },
+      },
+    },
+    {
+      name: 'overlayRect',
+      type: 'Graphics',
+      width: 100,
+      height: 100,
+      alpha: 0.3,
+      color: 0x000000,
+      layoutData: {
+        Desktop: { widthPercForce: 1, heightPercForce: 1 },
+      },
+    },
+    {
+      name: 'jackpotIntroAnimHor',
+      type: 'Spine',
+      spineName: 'jp_jackpots',
+      defaultState: '',
+      scale: 1,
+      x: 0,
+      y: 0,
+      boundingBox: { width: 1550, height: 1550 },
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
+      },
+    },
+    {
+      name: 'jackpotIntroAnimVer',
+      type: 'Spine',
+      spineName: 'jp_jackpots',
+      defaultState: 'idle_port',
+      scale: 1,
+      x: 0,
+      y: 0,
+      boundingBox: { width: 1550, height: 1550 },
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+      },
+    },
+    {
+      name: 'jackpotWinContainer',
+      type: 'Container',
+      Elements: [
+        {
+          name: 'jackPotOutroAnimation',
+          type: 'Spine',
+          boundingBox: { width: 402, height: 402 },
+          spineName: 'jp_wins',
+          defaultState: 'start_land',
+          scale: 2,
+        },
+        {
+          name: 'jpguideRect',
+          type: 'Graphics',
+          width: 775,
+          height: 775,
+          alpha: 0,
+        },
+        { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 228 },
+        {
+          name: 'winTickerJP',
+          type: 'Comp',
+          class: WinTicker,
+          x: 400,
+          y: 396,
+          Elements: [
+            {
+              name: 'valueText',
+              type: 'BitmapText',
+              contentText: 500,
+              anchor: { x: 0.5, y: 0.5 },
+              style: { fontFamily: 'bitmapFontJP', fontSize: 380, fill: 0xffffff },
+            },
+          ],
+        },
+      ],
+
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.01, hPaddingPerc: 0.02 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
       },
     },
   ],

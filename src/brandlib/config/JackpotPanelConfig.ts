@@ -1,6 +1,7 @@
 import { JackPotItem } from '@brand/views/comps/JackPotItem';
 import { JackpotPanelComp } from '@brand/views/comps/JackpotPanelComp';
 import { WinTicker } from '@core/views/comps/WinTicker';
+import { JACKPOT_GAME_BG_CONFIG } from './JackpotBGConfig';
 
 export const JACKPOT_PANEL_CONFIG: any = {
   name: 'jackpotContainer',
@@ -19,11 +20,12 @@ export const JACKPOT_PANEL_CONFIG: any = {
     yPos: [35, 35, 35, 35],
     lxPos: [102, 377, 652, 927],
     lyPos: [35, 35, 35, 35],
-    pxPos: [102, 377, 102, 377],
+    pxPos: [86, 390, 86, 390],
     pyPos: [35, 35, 115, 115],
     items: {
       name: 'jackPotItem',
       type: 'Container',
+      scale: 0.5,
       Elements: [
         {
           name: 'jackpotBg',
@@ -39,16 +41,17 @@ export const JACKPOT_PANEL_CONFIG: any = {
         {
           name: 'value',
           type: 'Text',
-          style: { fontFamily: 'commonFont', fontSize: 110, fill: 0x64cdff, fontWeight: 'bold' },
+          style: { fontFamily: 'commonFont', fontSize: 50, fill: 0x64cdff, fontWeight: 'bold' },
           content: '',
           maxWidth: 752,
-          x: 272,
+          x: 140,
           anchor: { x: 0.5, y: 0.5 },
         },
       ],
     },
   },
   Elements: [
+    JACKPOT_GAME_BG_CONFIG,
     {
       name: 'panelContainer',
       type: 'Container',
@@ -70,85 +73,6 @@ export const JACKPOT_PANEL_CONFIG: any = {
         Desktop: { hAlign: 'center', vAlign: 'top', widthPerc: 0.8, heightPerc: 0.08, vPaddingPerc: 0.01 },
         Landscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.75, vPaddingPerc: 0.01 },
         Portrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.94, vPaddingPerc: 0.08 },
-      },
-    },
-    { name: 'overlayRect', type: 'Graphics', width: 100, height: 100, alpha: 0.3, color: 0x000000 },
-    {
-      name: 'jackpotIntroAnimHor',
-      type: 'Spine',
-      spineName: 'jp_jackpots',
-      defaultState: '',
-      scale: 1,
-      x: 0,
-      y: 0,
-      boundingBox: { width: 1550, height: 1550 },
-      layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-      },
-    },
-    {
-      name: 'jackpotIntroAnimVer',
-      type: 'Spine',
-      spineName: 'jp_jackpots',
-      defaultState: 'idle_port',
-      scale: 1,
-      x: 0,
-      y: 0,
-      boundingBox: { width: 1550, height: 1550 },
-      layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-      },
-    },
-    {
-      name: 'jackpotWinContainer',
-      type: 'Container',
-      Elements: [
-        {
-          name: 'jpguideRect',
-          type: 'Graphics',
-          width: 1400,
-          height: 1200,
-          pWidth: 650,
-          pHeight: 1200,
-          lWidth: 1400,
-          lHeight: 1200,
-          alpha: 0,
-        },
-        {
-          name: 'jackPotOutroAnimation',
-          type: 'Spine',
-          spineName: 'jp_wins',
-          defaultState: 'start_land',
-          scale: 1,
-          x: 0,
-          y: 600,
-        },
-        { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, y: 448 },
-        {
-          name: 'winTickerJP',
-          type: 'Comp',
-          class: WinTicker,
-          x: 0,
-          y: 566,
-          Elements: [
-            {
-              name: 'valueText',
-              type: 'BitmapText',
-              contentText: 500,
-              anchor: { x: 0.5, y: 0.5 },
-              style: { fontFamily: 'bitmapFontJP', fontSize: 380, fill: 0xffffff },
-            },
-          ],
-        },
-      ],
-      layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 0.5, widthPerc: 1, vPaddingPerc: 0 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 0.5, widthPerc: 1, vPaddingPerc: 0 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', hPaddingPerc: 0.5, widthPerc: 1, vPaddingPerc: 0 },
       },
     },
   ],
