@@ -1,12 +1,32 @@
+import { MULTIPLIER_TEXT_STYLE } from '../SymbolsConfig';
+
 export const TRAIL_SPINE_NAME = 'line';
 export const TRAIL_ANIMATION = 'trail';
 export const TRAIL_ANIMATION_ALT = 'trail_2';
+
+// The collect's figure rides the trail head on this slot, whose bone grows in and shrinks away with
+// the head, so the text needs no timing of its own.
+export const TRAIL_VALUE_SLOT = 'TxtValue';
+// Same look as the figure on the cash symbol it leaves. TODO: tune the scale against the real trail.
+export const TRAIL_VALUE_TEXT_SCALE = 0.3;
+export const TRAIL_VALUE_TEXT_CONFIG = {
+  name: 'trailValueText',
+  type: 'Text',
+  contentText: '',
+  style: MULTIPLIER_TEXT_STYLE,
+};
 
 // When the head of the trail has reached its target, which is what anything waiting on a trail
 // actually waits for. Both animations run 1.2s, but the path travel is done by 0.37s and the last
 // bone settles at 0.63s; the rest is the tail dissolving, and holding a symbol back for it leaves
 // half a second of nothing after the trail has visibly landed.
 export const TRAIL_ARRIVAL_MS = 500;
+
+// The total-win collect's trails run 30% slower than the rest; arrival waits stretch to match.
+export const TRAIL_COLLECT_SPEED = 0.7;
+
+// The collect's trails all fly together, each setting off this long after the one before it.
+export const TRAIL_COLLECT_STAGGER_MS = 300;
 
 // Which way the trail reads. The spine only animates one way, start bone to finish bone, so the
 // other direction is the same animation placed, turned and flipped to run the opposite way: hence
@@ -55,6 +75,20 @@ export const TRAIL_PLACEMENTS: Record<TrailDirection, Record<string, TrailPlacem
   toLogo: TO_LOGO_PLACEMENTS,
   fromLogo: FROM_LOGO_PLACEMENTS,
 };
+
+// Symbol across to a boost, keyed "fromColumn,fromRow>toColumn,toRow". TODO: fill in per pair - until
+// a pair is here it borrows the symbol's own trail up to the logo, which only stands in for one.
+const TO_BOOST_PLACEMENTS: Record<string, TrailPlacement> = {};
+
+export function getBoostTrailPlacement(
+  from: { column: number; row: number },
+  to: { column: number; row: number },
+): TrailPlacement | undefined {
+  return (
+    TO_BOOST_PLACEMENTS[`${from.column},${from.row}>${to.column},${to.row}`] ??
+    getTrailPlacement(from.column, from.row, 'toLogo')
+  );
+}
 
 export function getTrailPlacement(
   column: number,

@@ -324,11 +324,12 @@ export class JCMysterySymbolModifier {
     return this.jackpotItem(names[Util.getRandomRange(0, names.length - 1)]);
   }
 
-  // Keyed by the backend's short code, labelled with the word the player reads.
+  // Keyed by the backend's short code, labelled with the word the player reads - resolved here
+  // rather than in the config, which is evaluated before the content files have loaded.
   private jackpotItem(name: string): ReelItem {
     const jackpot = JACKPOT_LABELS[name];
     return {
-      text: jackpot.text,
+      text: Util.getContent(jackpot.content, [], true),
       style: resolveTextStyle(jackpot.style, MYSTERY_REEL_CONFIG.jackpotFontSize),
     };
   }

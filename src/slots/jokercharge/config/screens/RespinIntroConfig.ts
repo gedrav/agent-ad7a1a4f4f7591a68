@@ -62,10 +62,11 @@ function badge(name: string, image: string, x: number, y: number): any {
   return { name, type: 'Sprite', image, anchor: { x: 0.5, y: 0.5 }, scale: BADGE_SCALE, x, y };
 }
 
-// toUpperCase is applied by UIUtil.getText(), so the strings stay readable here and every language
-// gets the same all-caps treatment without each one having to be written that way.
-function centeredText(name: string, contentText: string, y: number, style: any, x: number = CENTER_X): any {
-  return { name, type: 'Text', contentText, toUpperCase: true, anchor: { x: 0.5, y: 0.5 }, x, y, style };
+// content, not contentText: UIUtil.getText() resolves it against the loaded gameContent, so the
+// words are translatable. toUpperCase is applied after that, so every language gets the same
+// all-caps treatment without each one having to be written that way.
+function centeredText(name: string, content: string, y: number, style: any, x: number = CENTER_X): any {
+  return { name, type: 'Text', content, toUpperCase: true, anchor: { x: 0.5, y: 0.5 }, x, y, style };
 }
 
 export const RESPIN_INTRO_CONFIG: any = {
@@ -112,14 +113,14 @@ export const RESPIN_INTRO_CONFIG: any = {
           x: CENTER_X,
           y: 130,
         },
-        centeredText('heading', 'Extra Features can increase or multiply the winnings', 265, HEADING_STYLE),
+        centeredText('heading', 'respinIntroHeading', 265, HEADING_STYLE),
         badge('chargeSym', 'charge', LEFT_COLUMN_X, 430),
         badge('multiSym', 'multi', RIGHT_COLUMN_X, 430),
         badge('superChargeSym', 'superCharge', LEFT_COLUMN_X, 615),
         badge('superMultiSym', 'superMulti', RIGHT_COLUMN_X, 615),
-        centeredText('chargeCaption', 'Upgrade the Bonus symbols', 800, CAPTION_STYLE, LEFT_COLUMN_X),
-        centeredText('multiCaption', "Increase the symbols' multipliers", 800, CAPTION_STYLE, RIGHT_COLUMN_X),
-        centeredText('tapToContinue', 'TAP TO CONTINUE', 1000, TAP_STYLE),
+        centeredText('chargeCaption', 'respinIntroChargeCaption', 800, CAPTION_STYLE, LEFT_COLUMN_X),
+        centeredText('multiCaption', 'respinIntroMultiCaption', 800, CAPTION_STYLE, RIGHT_COLUMN_X),
+        centeredText('tapToContinue', 'respinIntroTapToContinue', 1000, TAP_STYLE),
       ],
     },
   ],

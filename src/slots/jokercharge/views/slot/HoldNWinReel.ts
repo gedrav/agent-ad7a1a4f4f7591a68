@@ -1,5 +1,4 @@
-import { Container, Ticker } from 'pixi.js';
-import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { ColorMatrixFilter, Container, Ticker } from 'pixi.js';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
@@ -26,6 +25,7 @@ import {
   MULTIPLIER_EFFECT_SPINE,
   MULTIPLIER_EFFECT_STATE,
 } from '../../config/MultiplierBadgeConfig';
+import { BOOST_BADGE_COPY_ALPHA } from '../../config/BoostConfig';
 import { MYSTERY_SYMBOL_NAMES, SYMBOLS_DATA, getRandomSymbolName } from '../../config/SymbolsConfig';
 import { appModel } from '@core/models/services/AppModelService';
 import { MysteryReelResult } from './JCMysterySymbolModifier';
@@ -57,13 +57,16 @@ const WIN_ANIMATION_PASSES = 2;
 const LANDING_DIP_DURATION = 0.09;
 const LANDING_RETURN_DURATION = 0.14;
 
+const DIM_BRIGHTNESS = 0.2;
+const DIM_FADE_DURATION = 0.2;
+
 export interface HoldNWinReelConfig {
   row: number;
   column: number;
   symbolWidth: number;
   symbolHeight: number;
-  // How much of the cell the spin mask shows. Defaults to symbolHeight.
-  maskHeight?: number;
+  // The row's shared masked layer, a sibling of this reel, that the strip moves into while spinning.
+  spinLayer: Container;
   // How far past its stop a landing symbol dips before settling back, in px. Defaults to 0.
   landingOvershoot?: number;
   // Called whenever the cell takes a new symbol, however it got there.
@@ -84,11 +87,16 @@ export default class HoldNWinReel extends Container {
   private readonly symbolWidth: number;
   private readonly symbolHeight: number;
   private readonly spinContainer: Container;
-  private readonly maskShape: PixGraphics;
+  private readonly spinLayer: Container;
   private readonly smallSquareAnim: PixSpine;
   private readonly chainLockAnim: PixSpine;
   private readonly multiplierEffect: PixSpine;
+  private readonly dimFilter = new ColorMatrixFilter();
+  private dimmed = false;
   private multiplierText: PixText | null = null;
+  // How much of the badge's multiplier the symbol's figure already carries. A boost spends it
+  // early, and the badge stays on, so what comes after multiplies only by what is left.
+  private spentMultiplier = 1;
   private multiplierEffectListener: any = null;
   private sticky = false;
   // Distinct from sticky: a cell already holding a symbol sits out the respin rounds, with no lock
@@ -130,22 +138,14 @@ export default class HoldNWinReel extends Container {
     this.landingOvershoot = config.landingOvershoot ?? 0;
     this.onSymbolPlaced = config.onSymbolPlaced;
 
+    // The filter's alpha mixes its effect in, so the dim fades rather than snapping.
+    this.dimFilter.brightness(DIM_BRIGHTNESS, false);
+    this.dimFilter.alpha = 0;
+
     this.spinContainer = new Container();
     this.spinContainer.label = 'spinContainer';
     this.addChild(this.spinContainer);
-
-    // Only applied while spinning - a spine's bbox can bleed past the cell mid-animation.
-    const maskHeight = config.maskHeight ?? this.symbolHeight;
-    this.maskShape = UIUtil.getRectangle(
-      this.symbolWidth,
-      maskHeight,
-      0xff0000,
-      -this.symbolWidth / 2,
-      -maskHeight / 2,
-    );
-    this.maskShape.label = 'spinMask';
-    this.maskShape.alpha = 0;
-    this.spinContainer.addChild(this.maskShape);
+    this.spinLayer = config.spinLayer;
 
     // Offset by symbolHeight, not measured bounds - a mid-animation spine's bounds jitter.
     const topSymbolName = getRandomSymbolName();
@@ -286,7 +286,7 @@ export default class HoldNWinReel extends Container {
   }
 
   // The badge spending itself on the symbol: in from the corner, down to nothing, and the cell's
-  // figure climbs to what it is now worth.
+  // figure climbs to what it is now worth - by whatever part of the multiplier is still unspent.
   public applyMultiplierToSymbol(onComplete?: () => void): void {
     const badge = this.multiplierText;
     const multiplier = this.getMultiplier();
@@ -294,6 +294,45 @@ export default class HoldNWinReel extends Container {
       onComplete?.();
       return;
     }
+    const factor = multiplier / this.spentMultiplier;
+    this.spendBadge(badge, () => {
+      this.clearMultiplier();
+      this.multiplySymbol(factor, onComplete);
+    });
+  }
+
+  // The same spend for a boost, except the badge leaves a faded copy behind it in its corner, which
+  // stays as the cell's badge - see settleBoostBadge. Straight through when nothing is left unspent.
+  public spendMultiplierForBoost(onComplete?: () => void): void {
+    const badge = this.multiplierText;
+    const multiplier = this.getMultiplier();
+    if (!badge || !multiplier || multiplier === this.spentMultiplier) {
+      onComplete?.();
+      return;
+    }
+    const factor = multiplier / this.spentMultiplier;
+    this.spentMultiplier = multiplier;
+
+    const copy = this.createBadgeText();
+    copy.text = badge.text;
+    copy.position.set(this.badgeRestX(), this.badgeRestY());
+    copy.alpha = BOOST_BADGE_COPY_ALPHA;
+    this.addChildAt(copy, this.getChildIndex(badge));
+    this.multiplierText = copy;
+
+    this.spendBadge(badge, () => {
+      this.removeChild(badge);
+      badge.destroy();
+      this.multiplySymbol(factor, onComplete);
+    });
+  }
+
+  // Once the boost has collected, the copy a spent badge left behind shows in full.
+  public settleBoostBadge(): void {
+    if (this.multiplierText) this.multiplierText.alpha = 1;
+  }
+
+  private spendBadge(badge: PixText, onSpent: () => void): void {
     AnimationProxy.killTweensOf(badge);
     AnimationProxy.killTweensOf(badge.scale);
     AnimationProxy.animateTween(badge, {
@@ -301,30 +340,42 @@ export default class HoldNWinReel extends Container {
       x: 0,
       y: 0,
       ease: MULTIPLIER_APPLY_MOVE_EASE,
-      onComplete: () => this.shrinkMultiplierIntoSymbol(badge, multiplier, onComplete),
+      onComplete: () =>
+        AnimationProxy.animateTween(badge.scale, {
+          duration: MULTIPLIER_APPLY_SHRINK_DURATION,
+          x: 0,
+          y: 0,
+          ease: MULTIPLIER_APPLY_SHRINK_EASE,
+          onComplete: onSpent,
+        }),
     });
   }
 
-  private shrinkMultiplierIntoSymbol(badge: PixText, multiplier: number, onComplete?: () => void): void {
-    AnimationProxy.animateTween(badge.scale, {
-      duration: MULTIPLIER_APPLY_SHRINK_DURATION,
-      x: 0,
-      y: 0,
-      ease: MULTIPLIER_APPLY_SHRINK_EASE,
-      onComplete: () => {
-        this.clearMultiplier();
-        const symbol = this.symbolView;
-        if (!symbol) {
-          onComplete?.();
-          return;
-        }
-        symbol.applyMultiplier(multiplier, MULTIPLIER_APPLY_COUNT_DURATION, onComplete);
-      },
-    });
+  private multiplySymbol(factor: number, onComplete?: () => void): void {
+    const symbol = this.symbolView;
+    if (!symbol) {
+      onComplete?.();
+      return;
+    }
+    symbol.applyMultiplier(factor, MULTIPLIER_APPLY_COUNT_DURATION, onComplete);
+  }
+
+  // A boost's figure climbing by what one collect trail brought it.
+  public addBoostValue(amount: number, duration: number, onComplete?: () => void): void {
+    if (!this.symbolView) {
+      onComplete?.();
+      return;
+    }
+    this.symbolView.addCollectValue(amount, duration, onComplete);
+  }
+
+  public playBoostCollect(): void {
+    this.symbolView?.showCollect();
   }
 
   // Runs when the feature ends and on destroy: no tween, spine listener or text left behind.
   public clearMultiplier(): void {
+    this.spentMultiplier = 1;
     this.releaseMultiplierEffectListener();
     this.multiplierEffect.stopAnimation();
     this.multiplierEffect.visible = false;
@@ -344,17 +395,22 @@ export default class HoldNWinReel extends Container {
 
   private ensureMultiplierText(): PixText {
     if (!this.multiplierText) {
-      this.multiplierText = UIUtil.getElement({
-        name: 'multiplierBadge',
-        type: 'Text',
-        contentText: '',
-        anchor: { x: 0.5, y: 0.5 },
-        style: MULTIPLIER_BADGE_STYLE,
-      });
-      this.multiplierText.label = 'multiplierBadge';
+      this.multiplierText = this.createBadgeText();
       this.addChild(this.multiplierText);
     }
     return this.multiplierText;
+  }
+
+  private createBadgeText(): PixText {
+    const badge: PixText = UIUtil.getElement({
+      name: 'multiplierBadge',
+      type: 'Text',
+      contentText: '',
+      anchor: { x: 0.5, y: 0.5 },
+      style: MULTIPLIER_BADGE_STYLE,
+    });
+    badge.label = 'multiplierBadge';
+    return badge;
   }
 
   // Centred on the cell unless a position is given, which an updating badge uses to keep the
@@ -518,6 +574,20 @@ export default class HoldNWinReel extends Container {
     return this.symbolView?.isMysteryReelSpinning() ?? false;
   }
 
+  // Off the filter list once fully faded back, so an undimmed cell costs no extra render pass.
+  public setDimmed(flag: boolean): void {
+    if (this.dimmed === flag) return;
+    this.dimmed = flag;
+    this.filters = [this.dimFilter];
+    AnimationProxy.animateTween(this.dimFilter, {
+      duration: DIM_FADE_DURATION,
+      alpha: flag ? 1 : 0,
+      onComplete: () => {
+        if (!this.dimmed) this.filters = [];
+      },
+    });
+  }
+
   public playWinAnimation(onComplete?: () => void): void {
     const symbol = this.symbolView;
     if (!symbol) {
@@ -548,7 +618,23 @@ export default class HoldNWinReel extends Container {
     this.held = flag;
     // Nothing is going to scroll through this cell, so the window that trims a symbol to the cell
     // has no reason to stay on.
-    if (flag) this.spinContainer.mask = null;
+    if (flag) this.setSpinMasked(false);
+  }
+
+  // A spinning strip is drawn in its row's shared masked layer, so a row needs one mask instead of
+  // one per cell. At rest it comes back into the cell unmasked, where an oversized symbol can spill
+  // past it. The layer is a sibling with no transform of its own, so the cell's position carries over.
+  private setSpinMasked(flag: boolean): void {
+    if (flag) {
+      if (this.spinContainer.parent === this.spinLayer) return;
+      this.spinContainer.position.set(this.x, this.y);
+      this.spinLayer.addChild(this.spinContainer);
+      return;
+    }
+    if (this.spinContainer.parent === this) return;
+    this.spinContainer.position.set(0, 0);
+    // Index 0: the cell's overlays were added after the strip and draw over it.
+    this.addChildAt(this.spinContainer, 0);
   }
 
   public setSticky(flag: boolean): void {
@@ -584,7 +670,7 @@ export default class HoldNWinReel extends Container {
     this.symbolView.y = 0;
     this.spinContainer.addChild(this.symbolView);
     this.symbolView.showIdle();
-    this.spinContainer.mask = null;
+    this.setSpinMasked(false);
     this.onSymbolPlaced?.();
   }
 
@@ -605,7 +691,7 @@ export default class HoldNWinReel extends Container {
 
   public spin(): void {
     if (this.sticky || this.held || this.phase !== 'idle' || !this.symbolView || !this.topSymbolView) return;
-    this.spinContainer.mask = this.maskShape;
+    this.setSpinMasked(true);
     this.pendingFinalSymbolName = null;
     this.settlingSymbol = null;
     this.spinSpeed = 0;
@@ -733,7 +819,7 @@ export default class HoldNWinReel extends Container {
   private playLanding(front: JCReelSymbol, onSettled: (() => void) | null): void {
     if (!this.landingOvershoot) {
       front.y = 0;
-      this.spinContainer.mask = null;
+      this.setSpinMasked(false);
       front.showLanding(() => front.showIdle());
       onSettled?.();
       return;
@@ -747,7 +833,7 @@ export default class HoldNWinReel extends Container {
           duration: LANDING_RETURN_DURATION,
           y: 0,
           onComplete: () => {
-            this.spinContainer.mask = null;
+            this.setSpinMasked(false);
             onSettled?.();
           },
         });
@@ -810,7 +896,8 @@ export default class HoldNWinReel extends Container {
       JCReelSymbolPool.getInstance().release(this.topSymbolView);
       this.topSymbolView = null;
     }
-    this.spinContainer.mask = null;
+    // Back under this cell, or a destroy() of the cell would leave it behind in the row layer.
+    this.setSpinMasked(false);
     super.destroy(options);
   }
 }

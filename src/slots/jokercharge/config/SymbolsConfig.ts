@@ -9,6 +9,8 @@ export interface JCSymbolData {
   blurAnim?: string;
   winAnim?: string;
   landingAnim?: string;
+  // Only the boost has one: what plays each time a collect trail reaches it.
+  collectAnim?: string;
   // Only the mystery rigs have one: what plays as the symbol gives way to what it revealed.
   hideAnim?: string;
   multiplierTextConfig?: any;
@@ -48,7 +50,7 @@ export const MULTIPLIER_TEXT_STYLE = {
 // The top tier, so it can't read as a paler version of the gold ones. Electric blue picks up the
 // charge the symbol is wrapped in, outranks gold rather than competing with it, and the cyan glow
 // carries it clear of the violet behind.
-const GRAND_TEXT_STYLE = {
+export const GRAND_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
   fontSize: 200,
   fill: ['0xFFFFFF', '0xB6F3FF', '0x45CBFF', '0x0E7BE0'],
@@ -157,14 +159,20 @@ const MYSTERY_JACKPOT_TEXT_STYLE = {
 // The jackpots a mystery symbol's mini reel can land on, keyed by the backend's own names. The
 // key is what the backend sends, the text is what the player reads: the two differ now that the
 // backend uses short codes.
-export const JACKPOT_LABELS: Record<string, { text: string; style: any }> = {
-  MN: { text: 'MINI', style: MINI_TEXT_STYLE },
-  MR: { text: 'MINOR', style: MINOR_TEXT_STYLE },
-  MJ: { text: 'MAJOR', style: MAJOR_TEXT_STYLE },
+// content is a key into the loaded content, not the words themselves - the three names live in
+// commonContent, which every game shares. Resolved where it is drawn rather than here: this module
+// is evaluated at import time, before the content files have loaded.
+export const JACKPOT_LABELS: Record<string, { content: string; style: any }> = {
+  MN: { content: 'miniTitle', style: MINI_TEXT_STYLE },
+  MR: { content: 'minorTitle', style: MINOR_TEXT_STYLE },
+  MJ: { content: 'majorTitle', style: MAJOR_TEXT_STYLE },
 };
 
+// content, not contentText: UIUtil.getText() resolves it against the loaded content, so the words
+// are translatable. toUpperCase is applied after that, so the content files can hold them written
+// normally and the symbol still reads in caps in every language.
 function labelTextConfig(
-  text: string,
+  content: string,
   style: any = MULTIPLIER_TEXT_STYLE,
   anchor: { x: number; y: number } = { x: 0.5, y: 0.25 },
 ): any {
@@ -172,7 +180,8 @@ function labelTextConfig(
     name: 'labelText',
     type: 'Text',
     anchor,
-    contentText: text,
+    content,
+    toUpperCase: true,
     style,
   };
 }
@@ -188,7 +197,7 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 0.75,
     multiplierTextConfig: {
       name: 'multiplierVal',
       type: 'Text',
@@ -209,7 +218,7 @@ const MYSTERY_SYMBOL: JCSymbolData = {
   landingAnim: 'landing',
   hideAnim: 'hide',
   cellScale: 0.33,
-  labelTextConfig: labelTextConfig('MYSTERY', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+  labelTextConfig: labelTextConfig('mysterySymbolLabel', MYSTERY_TEXT_STYLE, { x: 0.5, y: 0.5 }),
 };
 
 const MYSTERY_JACKPOT_SYMBOL: JCSymbolData = {
@@ -222,7 +231,7 @@ const MYSTERY_JACKPOT_SYMBOL: JCSymbolData = {
   landingAnim: 'landing',
   hideAnim: 'hide',
   cellScale: 0.33,
-  labelTextConfig: labelTextConfig(`MYSTERY\nJACKPOT`, MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
+  labelTextConfig: labelTextConfig('mysteryJackpotSymbolLabel', MYSTERY_JACKPOT_TEXT_STYLE, { x: 0.5, y: 0.5 }),
 };
 
 // An empty cell, as the backend names it in reelView/holdField.
@@ -243,7 +252,16 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'landing',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    collectAnim: 'collect',
+    cellScale: 0.75,
+    // The boost's running total, in C5's colours, on the rig's empty root_txt slot. It starts with
+    // nothing showing and fills as the boost collects. TODO: tune the anchor against the bag art.
+    multiplierTextConfig: {
+      name: 'multiplierVal',
+      type: 'Text',
+      anchor: { x: 0.5, y: 0.5 },
+      style: GRAND_TEXT_STYLE,
+    },
   },
   MN: {
     name: 'MN',
@@ -253,8 +271,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
-    labelTextConfig: labelTextConfig('MINI', MINI_TEXT_STYLE),
+    cellScale: 0.75,
+    labelTextConfig: labelTextConfig('miniTitle', MINI_TEXT_STYLE),
   },
   MR: {
     name: 'MR',
@@ -264,8 +282,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
-    labelTextConfig: labelTextConfig('MINOR', MINOR_TEXT_STYLE),
+    cellScale: 0.75,
+    labelTextConfig: labelTextConfig('minorTitle', MINOR_TEXT_STYLE),
   },
   MJ: {
     name: 'MJ',
@@ -275,8 +293,8 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
-    labelTextConfig: labelTextConfig('MAJOR', MAJOR_TEXT_STYLE),
+    cellScale: 0.75,
+    labelTextConfig: labelTextConfig('majorTitle', MAJOR_TEXT_STYLE),
   },
   MY: MYSTERY_SYMBOL,
   MJP: MYSTERY_JACKPOT_SYMBOL,
@@ -289,7 +307,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.6,
+    cellScale: 0.75,
   },
   SMY: { ...MYSTERY_SYMBOL, name: 'SMY' },
   SMJP: { ...MYSTERY_JACKPOT_SYMBOL, name: 'SMJP' },
@@ -300,6 +318,11 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     cellScaleY: 0.29,
   },
 };
+
+export const BOOST_SYMBOL_NAME = 'BST';
+// What a boost collects from: the bonus symbols and the jackpots. Never another boost, and never a
+// mystery that has not revealed yet - its name is not on this list until it has.
+export const BOOST_SOURCE_SYMBOL_NAMES = ['C1', 'C2', 'C3', 'C4', 'C5', 'MN', 'MR', 'MJ'];
 
 // Landing one of these on an active payline in the base game earns a trail up to the logo.
 export const TRAIL_SYMBOL_NAMES = ['C1', 'C2', 'C3', 'C4', 'C5', 'MN', 'MR', 'MJ'];

@@ -1,6 +1,10 @@
+import { Container, Matrix } from 'pixi.js';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { Util } from '@core/utils/UtilService';
+import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -10,8 +14,10 @@ import { resolveModifierSteps } from '@slots/jokercharge/views/effects/ModifierE
 import { resolveMysteryRevealSteps } from '@slots/jokercharge/views/effects/MysteryRevealEffect';
 import { resolveMultiplierApplySteps } from '@slots/jokercharge/views/effects/MultiplierApplyEffect';
 import { playTotalWinCollect, TotalWinCollectHost } from '@slots/jokercharge/views/effects/TotalWinCollectEffect';
+import { BoostCollectHost, resolveBoostCollectSteps } from '@slots/jokercharge/views/effects/BoostCollectEffect';
 
-type TrailCell = { column: number; row: number };
+// value, in bet multiples, is shown on the trail head; only the total-win collect sends one.
+type TrailCell = { column: number; row: number; value?: number };
 
 // EnterRespinState waits on onComplete, but only if a listener claims the request with hold.
 export interface TriggerWinData {
@@ -44,10 +50,16 @@ const COINS_ANIM_LOOP = true;
 import { BonusLayoutOverride, BONUS_TRIGGER_LAYOUT } from '@slots/jokercharge/config/screens/BonusTriggerLayoutConfig';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
 import {
+  getBoostTrailPlacement,
   getTrailPlacement,
   TRAIL_ANIMATION,
   TRAIL_ARRIVAL_MS,
+  TRAIL_COLLECT_SPEED,
+  TRAIL_COLLECT_STAGGER_MS,
   TRAIL_SPINE_NAME,
+  TRAIL_VALUE_SLOT,
+  TRAIL_VALUE_TEXT_CONFIG,
+  TRAIL_VALUE_TEXT_SCALE,
   TrailDirection,
   TrailPlacement,
 } from '@slots/jokercharge/config/screens/TrailAnimConfig';
@@ -55,7 +67,7 @@ import {
 import { LogoComp } from '@slots/jokercharge/views/comps/LogoComp';
 import { RespinCounterComp } from '@slots/jokercharge/views/comps/RespinCounterComp';
 import { BuyBonusLinesComp } from '@slots/jokercharge/views/comps/BuyBonusLinesComp';
-import { HoldNWinReelsContainer } from '@slots/jokercharge/views/slot/HoldNWinReelsContainer';
+import { HoldNWinPosition, HoldNWinReelsContainer } from '@slots/jokercharge/views/slot/HoldNWinReelsContainer';
 import { setRespinActive } from '@slots/jokercharge/models/JCLinesState';
 import {
   getModifierMultipliers,
@@ -64,7 +76,7 @@ import {
   ModifierMultiplier,
 } from '@slots/jokercharge/models/JCSpinData';
 
-export class GameSlotMachineView extends ResponsiveChildrenView implements TotalWinCollectHost {
+export class GameSlotMachineView extends ResponsiveChildrenView implements TotalWinCollectHost, BoostCollectHost {
   private readonly savedLayout: Record<string, BonusLayoutOverride> = {};
   private readonly respinCounterComp: RespinCounterComp;
   private readonly buyBonusLinesComp: BuyBonusLinesComp;
@@ -74,6 +86,12 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   private readonly lineAnim: PixSpine;
   // lineAnim plus however many extra trail spines a spin has needed at once.
   private readonly trailPool: PixSpine[] = [];
+  // Each trail's figure on its TxtValue slot, built the first time that trail carries one.
+  private readonly trailValueTexts = new Map<PixSpine, PixText>();
+  // Scratch matrices for keepTrailValueUpright, reused every frame.
+  private readonly viewMatrix = new Matrix();
+  private readonly holderMatrix = new Matrix();
+  private readonly uprightMatrix = new Matrix();
 
   constructor(config: any) {
     super(config);
@@ -105,24 +123,30 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   }
 
   // Every cell's trail runs at once, so onComplete fires when they have all arrived.
-  private playTrails(cells: TrailCell[], onComplete?: () => void, direction: TrailDirection = 'toLogo'): void {
-    const placements = cells
-      .map(({ column, row }) => getTrailPlacement(column, row, direction))
-      .filter((placement): placement is TrailPlacement => !!placement);
+  private playTrails(
+    cells: TrailCell[],
+    onComplete?: () => void,
+    direction: TrailDirection = 'toLogo',
+    speed = 1,
+  ): void {
+    const runs = cells
+      .map(({ column, row, value }) => ({ placement: getTrailPlacement(column, row, direction), value }))
+      .filter((run): run is { placement: TrailPlacement; value: number | undefined } => !!run.placement);
 
-    if (!placements.length) {
+    if (!runs.length) {
       onComplete?.();
       return;
     }
 
-    placements.forEach((placement) => this.playTrailOn(this.acquireTrail(), placement));
+    runs.forEach(({ placement, value }) => this.playTrailOn(this.acquireTrail(), placement, value, speed));
+    const arrivalMs = TRAIL_ARRIVAL_MS / speed;
     // Only the trails running up to the logo, never the ones it sends back down.
     if (direction === 'toLogo') {
-      setTimeout(() => EventHandler.dispatchEvent(JCEvents.PLAY_LOGO_COLLECT_ANIM), TRAIL_ARRIVAL_MS);
+      setTimeout(() => EventHandler.dispatchEvent(JCEvents.PLAY_LOGO_COLLECT_ANIM), arrivalMs);
     }
     // Off the arrival time, not the spine's 'complete': the trails all start together, and what
     // the caller is waiting for is the head landing, not the tail finishing dissolving.
-    if (onComplete) setTimeout(onComplete, TRAIL_ARRIVAL_MS);
+    if (onComplete) setTimeout(onComplete, arrivalMs);
   }
 
   // One spine per trail in flight, kept for reuse: a hidden one is free, and the grid caps how
@@ -147,12 +171,56 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
     });
   }
 
-  private playTrailOn(trail: PixSpine, placement: TrailPlacement): void {
+  private playTrailOn(trail: PixSpine, placement: TrailPlacement, value: number | undefined, speed: number): void {
     trail.position.set(placement.x, placement.y);
     trail.rotation = (placement.rotation * Math.PI) / 180;
     trail.scale.set(placement.scaleX, placement.scaleY);
+    this.setTrailValue(trail, value);
     trail.visible = true;
     trail.playAnimation({ state: placement.animation ?? TRAIL_ANIMATION, loop: false });
+    // After the play: playAnimation resets the speed to 1, which also keeps pooled reuse at normal speed.
+    trail.setAnimationSpeed(speed);
+  }
+
+  // Trails are pooled and shared with the ones that carry no figure, so those hide whatever the
+  // spine showed last.
+  private setTrailValue(trail: PixSpine, value?: number): void {
+    let text = this.trailValueTexts.get(trail);
+    if (value === undefined) {
+      if (text) text.visible = false;
+      return;
+    }
+    if (!text) {
+      text = UIUtil.getElement(TRAIL_VALUE_TEXT_CONFIG) as PixText;
+      text.anchor.set(0.5);
+      // Spine overwrites a slot object's whole transform every frame, so the text goes inside this.
+      const holder = new Container();
+      holder.label = 'trailValueHolder';
+      holder.addChild(text);
+      trail.addSlotObject(TRAIL_VALUE_SLOT, holder);
+      text.onRender = () => this.keepTrailValueUpright(holder, text);
+      this.trailValueTexts.set(trail, text);
+    }
+    // Formatted as the cash symbol formats it - see JCBonusSymbolModifier.
+    text.text = Util.formatCurrencyNoSymbol(value * appModel.getTotalBet());
+    text.visible = true;
+  }
+
+  // The slot hands the holder the bone's and the trail's rotation, scale, flip and skew. The text
+  // undoes all of it, so only the bone's position carries through and it reads level, at one size.
+  private keepTrailValueUpright(holder: Container, text: PixText): void {
+    if (!text.visible) return;
+    const view = this.getGlobalTransform(this.viewMatrix).invert();
+    const rel = view.append(holder.getGlobalTransform(this.holderMatrix));
+    const upright = this.uprightMatrix.set(rel.a, rel.b, rel.c, rel.d, 0, 0);
+    // A bone scaled to nothing has no inverse; the head is invisible then anyway.
+    if (Math.abs(upright.a * upright.d - upright.b * upright.c) < 1e-6) {
+      text.alpha = 0;
+      return;
+    }
+    text.alpha = 1;
+    upright.invert().scale(TRAIL_VALUE_TEXT_SCALE, TRAIL_VALUE_TEXT_SCALE);
+    text.setFromMatrix(upright);
   }
 
   public playTrail(column: number, row: number, direction: TrailDirection = 'toLogo'): void {
@@ -197,8 +265,11 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   // RespinSpinStartState's hook, once the player has dismissed the intro and before the first
   // round spins. The panel is already showing what the triggering spin landed, but nothing has
   // played it: the round animation only ever covers the round that just settled.
+  // Any boost the trigger landed collects first, before the top panel plays.
   private onPlayModifierEffects(request: ModifierEffectsData): void {
+    const container = this.holdNWinReelsContainer;
     const steps = [
+      ...resolveBoostCollectSteps(container, this, container.getBoostPositions()),
       ...resolveModifierSteps(this.holdNWinReelsContainer, getModifierRow() ?? []),
       ...this.resolveMultiplierSteps(getModifierMultipliers()),
     ];
@@ -215,8 +286,26 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   }
 
   // TotalWinCollectHost.
-  public sendTrailToLogo(column: number, row: number, onArrive: () => void): void {
-    this.playTrails([{ column, row }], onArrive, 'toLogo');
+  public sendTrailToLogo(
+    column: number,
+    row: number,
+    value: number,
+    onArrive: () => void,
+    onNextMayStart: () => void,
+  ): void {
+    this.playTrails([{ column, row, value }], onArrive, 'toLogo', TRAIL_COLLECT_SPEED);
+    setTimeout(onNextMayStart, TRAIL_COLLECT_STAGGER_MS);
+  }
+
+  // BoostCollectHost.
+  public sendTrailToBoost(from: HoldNWinPosition, to: HoldNWinPosition, onArrive: () => void): void {
+    const placement = getBoostTrailPlacement(from, to);
+    if (!placement) {
+      onArrive();
+      return;
+    }
+    this.playTrailOn(this.acquireTrail(), placement, undefined, 1);
+    setTimeout(onArrive, TRAIL_ARRIVAL_MS);
   }
 
   public resetTotalWin(): void {
