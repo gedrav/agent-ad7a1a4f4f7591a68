@@ -1,5 +1,5 @@
 import { Point, Graphics, Text, Container, BitmapText, FillGradient, TextStyle } from 'pixi.js';
-import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
+import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { StateManager } from '@core/states/StateManagerService';
@@ -388,7 +388,7 @@ export class GameSlotMachineView extends SlotMachineView {
             });
 
             // Play particle animation
-            const particle = new (ReelSymbolSpineExtended as any)({
+            const particle = new (ReelSymbolSpine as any)({
               data: {
                 name: 'particle',
                 spineName: 'particle_spine',
@@ -449,7 +449,7 @@ export class GameSlotMachineView extends SlotMachineView {
           winAnim = symbolConfig?.winAnim || 'Static';
         }
 
-        const movingGem = new (ReelSymbolSpineExtended as any)({
+        const movingGem = new (ReelSymbolSpine as any)({
           data: {
             name: movingName,
             spineName: spineName,
