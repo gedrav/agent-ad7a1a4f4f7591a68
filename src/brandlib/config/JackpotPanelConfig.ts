@@ -20,7 +20,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
     yPos: [35, 35, 35, 35],
     lxPos: [102, 377, 652, 927],
     lyPos: [35, 35, 35, 35],
-    pxPos: [102, 377, 102, 377],
+    pxPos: [86, 390, 86, 390],
     pyPos: [35, 35, 115, 115],
     items: {
       name: 'jackPotItem',

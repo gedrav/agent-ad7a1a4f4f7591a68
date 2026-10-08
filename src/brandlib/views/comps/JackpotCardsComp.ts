@@ -14,6 +14,7 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { IJackpotPick, IJackpotRound, JACKPOT_SKINS, JACKPOT_TIERS, JackpotTier } from '@core/models/jackpot.types';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 const REVEAL_HOLD_MS = 1500;
 const OPEN_FALLBACK_MS = 3000;
@@ -40,11 +41,13 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected youwinJPTextimg: PixSprite;
   protected winTickerJP: WinTicker;
   protected timeoutId: number;
+  protected cardGuideRect: PixGraphics;
   constructor(config) {
     super(config);
     this.cardsConfig = this.configData.cardsConfig;
     this.overlayRect = this.elementsList['overlayRect'];
     this.cardsContainer = this.elementsList['cardsContainer'];
+    this.cardGuideRect = this.cardsContainer.elementsList['guideRect'];
 
     this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
     this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
@@ -323,7 +326,6 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   /** Single row: items 0 and 2 anchor to the panel edges, the rest sit next to the previous item. */
   protected resizeJackpotWinAnimation() {
-    // UIUtil.adjustElement(this.jackpotWinContainer);
     if (!this.isJackpotIntroAnim) return;
 
     if (DeviceProxy.isDevice()) {
@@ -340,6 +342,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     }
   }
   protected resizeView(): void {
+    UIUtil.adjustElement(this.cardGuideRect);
     super.resizeView();
     this.resizeJackpotWinAnimation();
     // desktop keeps the layout it was built with; only devices reflow on orientation

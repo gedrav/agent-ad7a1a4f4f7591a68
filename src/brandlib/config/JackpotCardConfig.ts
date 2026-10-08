@@ -39,17 +39,6 @@ export const JACKPOT_CARD_CONFIG: any = {
   },
   Elements: [
     {
-      name: 'overlayRect',
-      type: 'Graphics',
-      width: 100,
-      height: 100,
-      alpha: 0.3,
-      color: 0x000000,
-      layoutData: {
-        Desktop: { widthPercForce: 1, heightPercForce: 1 },
-      },
-    },
-    {
       name: 'cardsContainer',
       type: 'Container',
       x: 0,
@@ -79,7 +68,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           vPaddingPerc: 0.01,
           hPaddingPerc: 0,
         },
-        Portrait: { widthPerc: 0.98, heightPerc: 0.98, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.02 },
+        Portrait: { widthPerc: 1, height: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.02 },
         Landscape: {
           widthPerc: 0.7,
           heightPerc: 0.8,
@@ -96,6 +85,17 @@ export const JACKPOT_CARD_CONFIG: any = {
           vPaddingPerc: 0,
           hPaddingPerc: 0,
         },
+      },
+    },
+    {
+      name: 'overlayRect',
+      type: 'Graphics',
+      width: 100,
+      height: 100,
+      alpha: 0.3,
+      color: 0x000000,
+      layoutData: {
+        Desktop: { widthPercForce: 1, heightPercForce: 1 },
       },
     },
     {
