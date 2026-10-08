@@ -240,7 +240,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, -16),
+            textOffset: new Point(0, -10),
           },
           textConfig: {
             content: 'playGameText',
@@ -250,8 +250,8 @@ export const SPLASH_CONFIG: any = {
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 90,
-              mFontSize: 70,
+              fontSize: 75,
+              mFontSize: 60,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {
                 angle: 0.5235987755982988,
