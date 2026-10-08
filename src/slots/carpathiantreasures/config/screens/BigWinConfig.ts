@@ -125,6 +125,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
+      hPaddingPerc: -0.015,
       vPaddingPerc: -0.03,
     },
     Landscape: {
