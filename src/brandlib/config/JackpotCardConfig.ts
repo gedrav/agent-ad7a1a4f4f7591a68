@@ -143,8 +143,8 @@ export const JACKPOT_CARD_CONFIG: any = {
         {
           name: 'jpguideRect',
           type: 'Graphics',
-          width: 385,
-          height: 385,
+          width: 775,
+          height: 775,
           alpha: 0,
         },
         { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 228 },

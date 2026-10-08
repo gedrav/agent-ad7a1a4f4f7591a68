@@ -96,7 +96,9 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   onCountUpUpdateBW() {
     clearTimeout(this.timeoutId);
-    this.adjustTextSize();
+    if (DeviceProxy.isDevice && DeviceProxy.config.isPortrait) {
+      this.adjustTextSize();
+    }
     // this.punchWinTickerJP();
     this.timeoutId = setTimeout(this.notifyWinDone.bind(this), 1000);
   }
