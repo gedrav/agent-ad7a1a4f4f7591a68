@@ -67,10 +67,6 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
         colorcode: this.jackpotConfig.jackpotTextColor[i],
       });
       item.visible = false;
-      if (DeviceProxy.isDesktop()) {
-        item.x = this.jackpotConfig.xPos[i];
-        item.y = this.jackpotConfig.yPos[i];
-      }
     });
     this.resizeView();
   }

@@ -16,8 +16,6 @@ export const JACKPOT_PANEL_CONFIG: any = {
       { state: 'idle', loop: true },
       { state: 'win', loop: true },
     ],
-    xPos: [102, 377, 652, 927],
-    yPos: [35, 35, 35, 35],
     lxPos: [102, 377, 652, 927],
     lyPos: [35, 35, 35, 35],
     pxPos: [86, 390, 86, 390],
@@ -46,6 +44,12 @@ export const JACKPOT_PANEL_CONFIG: any = {
           type: 'Comp',
           class: JackPotItem,
           scale: 0.5,
+          x: 102,
+          y: 35,
+          lx: 102,
+          ly: 35,
+          px: 86,
+          py: 35,
           Elements: [
             {
               name: 'jackpotBg',
@@ -74,6 +78,12 @@ export const JACKPOT_PANEL_CONFIG: any = {
           type: 'Comp',
           class: JackPotItem,
           scale: 0.5,
+          x: 377,
+          y: 35,
+          lx: 377,
+          ly: 35,
+          px: 390,
+          py: 35,
           Elements: [
             {
               name: 'jackpotBg',
@@ -102,6 +112,12 @@ export const JACKPOT_PANEL_CONFIG: any = {
           type: 'Comp',
           class: JackPotItem,
           scale: 0.5,
+          x: 652,
+          y: 35,
+          lx: 652,
+          ly: 35,
+          px: 86,
+          py: 115,
           Elements: [
             {
               name: 'jackpotBg',
@@ -130,6 +146,12 @@ export const JACKPOT_PANEL_CONFIG: any = {
           type: 'Comp',
           class: JackPotItem,
           scale: 0.5,
+          x: 927,
+          y: 35,
+          lx: 927,
+          ly: 35,
+          px: 390,
+          py: 115,
           Elements: [
             {
               name: 'jackpotBg',
