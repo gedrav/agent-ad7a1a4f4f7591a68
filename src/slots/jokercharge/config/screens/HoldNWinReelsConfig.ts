@@ -19,7 +19,7 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     symbolWidth: 448,
     symbolHeight: 292,
     maskHeight: 285,
-    landingOvershoot: 35,
+    landingOvershoot: 75,
     reelGap: 15,
     rowGap: 30,
     rowOffsetsY: [11, 0, -7],
