@@ -36,16 +36,19 @@ export class PigSlotReel extends SlotReelStandard {
   }
 
   protected measureSymbolHeight(rowCount: number): number {
-    return this.reelsData.reelHeight / rowCount;
+    return UIUtil.getTexture(`${this.getTileImage()}${rowCount}`).height * this.getSymbolScale() * 0.98;
+  }
+
+  protected getTileImage(): string {
+    return appModel.getIsFreeSpinsSession() ? this.reelsData.tileImageFS : this.reelsData.tileImage;
   }
 
   public cellCentre(reelno: number, row: number, rowCount: number): { x: number; y: number } {
     const scale = this.getSymbolScale();
-    const symbolMeasure = UIUtil.getTexture(`${this.reelsData.wildSymbol}${rowCount}`);
-    const height = this.measureSymbolHeight(rowCount);
+    const tile = UIUtil.getTexture(`${this.getTileImage()}${rowCount}`);
     return {
-      x: this.reelsData.reelPositionX[reelno] + (symbolMeasure.width * scale) / 2,
-      y: row * height + height / 2,
+      x: this.reelsData.reelPositionX[reelno] + (tile.width * scale) / 2,
+      y: row * this.measureSymbolHeight(rowCount) + (tile.height * scale) / 2,
     };
   }
 
@@ -61,7 +64,7 @@ export class PigSlotReel extends SlotReelStandard {
       skin = skin.replace('x', size.toString());
     }
 
-    return { ...data, rowCount, skin };
+    return { ...data, rowCount, skin, tileImage: this.getTileImage() };
   }
 
   public getSymbolScale(): number {
@@ -136,7 +139,7 @@ export class PigSlotReel extends SlotReelStandard {
       } else {
         this.finalSymbols[k] = [...this.defaultReel[k]];
       }
-      this.stopIndex[k] = this.finalSymbols[k].length - 1;
+      (this as any).stopIndex[k] = this.finalSymbols[k].length - 1;
     }
     this.applyWildPositions();
     this.wildsComp?.showStickyWilds(this.getWildEntries(), this.isStickyRound(), this);
@@ -204,18 +207,23 @@ export class PigSlotReel extends SlotReelStandard {
     this.moveSymbols(symbols, delta);
 
     const symbolHeight = this.getSymbolHeight(reelno);
+    const self = this as any; // Quick alias for cleaner code below
+
     for (let pass = 0; pass < symbols.length; pass++) {
       if (symbols[symbols.length - 1].y <= this.reelsData.reelHeight * 1.1) {
         break;
       }
-      if (this.stopIndex[reelno] < 0) {
+
+      if (self.stopIndex[reelno] < 0) {
         this.reelSpinningState[reelno] = 4;
         break;
       }
-      const data = this.getSymbolConfig(this.finalSymbols[reelno][this.stopIndex[reelno]--], reelno);
+
+      const data = this.getSymbolConfig(this.finalSymbols[reelno][self.stopIndex[reelno]--], reelno);
       if (data == null) {
         throw new Error('There is no new symbol to spin on the queue.');
       }
+
       const last = symbols[symbols.length - 1];
       last.setNormalTexture();
       last.setNewSymbol(data, reelno);
@@ -231,19 +239,21 @@ export class PigSlotReel extends SlotReelStandard {
     const len = symbols.length;
     const symbolHeight = this.getSymbolHeight(reelno);
     const rows = this.getRowCount(reelno);
+    const self = this as any;
 
     this.showLandinAnimation(reelno);
     for (let k = 0; k < len; k++) {
       if (k > 0 && k <= rows) {
         const symbolName = symbols[k].getSymbolName();
-        if (this.landingSymbolsCount[symbolName]) {
-          const count = this.landingSymbolsCount[symbolName][1];
-          this.landingSymbolsCount[symbolName][1]++;
+
+        if (self.landingSymbolsCount[symbolName]) {
+          const count = self.landingSymbolsCount[symbolName][1];
+          self.landingSymbolsCount[symbolName][1]++;
           EventHandler.dispatchEvent(`PLAY_SYMBOL_${symbolName}_LANDING_SOUND`, count + 1);
         }
       }
       AnimationProxy.animateTween(symbols[k], {
-        y: (k - 1) * symbolHeight + symbolHeight / 2,
+        y: (k - 1) * symbolHeight,
         duration: appModel.turboMode ? this.jerkDuration * 0.5 : this.jerkDuration,
         ease: customEase,
         ...(k === len - 1 ? { onComplete: this.onReelStripStopped.bind(this, reelno) } : {}),
@@ -299,6 +309,15 @@ export class PigSlotReel extends SlotReelStandard {
     }
   }
 
+  protected onFreeSpinsEnded(): void {
+    const tileImage = this.getTileImage();
+    for (const reel of this.symbolsArray) {
+      for (const symb of reel) {
+        (symb as PigReelSymbol).setTileImage(tileImage);
+      }
+    }
+  }
+
   protected showHideExtraSymbols(flag: boolean = false): void {
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       const rows = this.getRowCount(k);
@@ -314,7 +333,7 @@ export class PigSlotReel extends SlotReelStandard {
       this.symbolsArray[k].forEach((symb, j) => {
         symb.scale.set(scale);
         symb.x = this.reelsData.reelPositionX[k];
-        symb.y = (j - 1) * symbolHeight + symbolHeight / 2;
+        symb.y = (j - 1) * symbolHeight;
       });
     }
     const pos = this.reelsData.reelContainerPos;
