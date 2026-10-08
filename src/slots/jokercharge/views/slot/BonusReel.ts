@@ -88,11 +88,14 @@ export default class BonusReel extends Container {
       if (this.spinContainer.parent === this.spinLayer) return;
       this.spinContainer.position.set(this.x, this.y);
       this.spinLayer.addChild(this.spinContainer);
+      this.spinLayer.visible = true;
       return;
     }
     if (this.spinContainer.parent === this) return;
     this.spinContainer.position.set(0, 0);
     this.addChild(this.spinContainer);
+    // A layer holding only its mask still pushes and pops the stencil every frame.
+    this.spinLayer.visible = this.spinLayer.children.length > 1;
   }
 
   public spin(): void {
@@ -107,6 +110,18 @@ export default class BonusReel extends Container {
     this.topSymbolView.setBlurred(true);
     this.topSymbolView.visible = true;
     Ticker.shared.add(this.onSpinTick, this);
+  }
+
+  // For a round whose result never came (an error, or a row the backend left out): the reel comes
+  // to rest on what it shows rather than spinning on for good.
+  public reset(): void {
+    if (this.phase === 'idle') return;
+    Ticker.shared.remove(this.onSpinTick, this);
+    this.phase = 'idle';
+    this.pendingFinalSymbolName = null;
+    this.settlingSymbol = null;
+    this.onSettled = null;
+    this.showSymbol(this.symbolView.getSymbolName());
   }
 
   // onSettled fires once the symbol reaches rest, not when stopSpin() is called.

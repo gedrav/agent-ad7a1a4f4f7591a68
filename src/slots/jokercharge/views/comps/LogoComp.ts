@@ -8,6 +8,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
+import { writeCountText } from './sharedText';
 import {
   TOTAL_WIN_DIM_ALPHA,
   TOTAL_WIN_DIM_DURATION,
@@ -48,6 +49,8 @@ export class LogoComp extends ResponsiveView {
   private panelRestScale = 1;
   // Where this comp sits among its siblings, so the raise the dim needs can be undone.
   private restChildIndex = -1;
+  // The hold between presenting the panel and putting it away - cleared if it is put away sooner.
+  private presentHoldTimeoutId: any = null;
 
   constructor(config: any) {
     super(config);
@@ -55,6 +58,8 @@ export class LogoComp extends ResponsiveView {
     this.totalWinPanel = this.elementsList['totalWinPanel'];
     this.totalWinDim = this.elementsList['totalWinDim'];
     this.captureTotalWinRest();
+    // Hidden until a feature closes, and a hidden spine still ticks - see hideTotalWinPanel.
+    this.totalWinPanel?.setAutoUpdate(!!this.totalWinPanel.visible);
     this.logoAnim.addEventListener('complete', this.onAnimComplete.bind(this));
     EventHandler.addEventListener(JCEvents.PLAY_LOGO_COLLECT_ANIM, this.playCollect.bind(this));
     EventHandler.addEventListener(JCEvents.SHOW_TOTAL_WIN_PANEL, this.onShowTotalWinPanel.bind(this));
@@ -93,7 +98,7 @@ export class LogoComp extends ResponsiveView {
     AnimationProxy.animateTween(target, {
       duration,
       value: finalValue,
-      onUpdate: () => this.writeTotalWin(target.value),
+      onUpdate: () => this.writeTotalWin(target.value, false),
       onComplete: () => {
         this.totalWinCountTarget = null;
         // Set outright rather than left on the tween's last frame, which stops a hair short.
@@ -103,9 +108,9 @@ export class LogoComp extends ResponsiveView {
     });
   }
 
-  private writeTotalWin(value: number): void {
+  private writeTotalWin(value: number, final = true): void {
     if (!this.totalWinValueText) return;
-    this.totalWinValueText.text = Util.formatCurrencyNoSymbol(value * appModel.getTotalBet());
+    writeCountText(this.totalWinValueText, Util.formatCurrencyNoSymbol(value * appModel.getTotalBet()), final);
   }
 
   private killTotalWinCount(): void {
@@ -119,6 +124,7 @@ export class LogoComp extends ResponsiveView {
     request.hold = true;
     this.releaseTotalWinListener();
     this.totalWinPanel.visible = true;
+    this.totalWinPanel.setAutoUpdate(true);
     this.totalWinListener = this.totalWinPanel.addEventListener('complete', () => {
       this.releaseTotalWinListener();
       request.onComplete();
@@ -160,7 +166,12 @@ export class LogoComp extends ResponsiveView {
       x: presentScale,
       y: presentScale,
       ease: TOTAL_WIN_PRESENT_EASE,
-      onComplete: () => setTimeout(() => this.hideTotalWinPanelAnimated(onComplete), TOTAL_WIN_PRESENT_HOLD_MS),
+      onComplete: () => {
+        this.presentHoldTimeoutId = setTimeout(() => {
+          this.presentHoldTimeoutId = null;
+          this.hideTotalWinPanelAnimated(onComplete);
+        }, TOTAL_WIN_PRESENT_HOLD_MS);
+      },
     });
   }
 
@@ -219,10 +230,13 @@ export class LogoComp extends ResponsiveView {
   // Put away as the next feature opens, or it would still be on the logo from the last one.
   public hideTotalWinPanel(): void {
     if (!this.totalWinPanel) return;
+    clearTimeout(this.presentHoldTimeoutId);
+    this.presentHoldTimeoutId = null;
     this.releaseTotalWinListener();
     this.resetTotalWin();
     this.totalWinPanel.stopAnimation();
     this.totalWinPanel.visible = false;
+    this.totalWinPanel.setAutoUpdate(false);
     AnimationProxy.killTweensOf(this.totalWinPanel);
     AnimationProxy.killTweensOf(this.totalWinPanel.scale);
     this.totalWinPanel.position.set(this.panelRestX, this.panelRestY);

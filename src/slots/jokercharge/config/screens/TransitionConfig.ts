@@ -19,16 +19,9 @@ export const TRANSITION_CONFIG: any = {
       color: 0xff0000,
       alpha: 0,
     },
-    {
-      name: 'transitionAnim',
-      type: 'Spine',
-      spineName: 'transition',
-      x: 515,
-      y: 555,
-    },
     // Confirms the respin intro before the first feature request goes out - see TransitionComp
-    // and EnterRespinState. Listed after transitionAnim so it draws on top of it, and hidden
-    // until the transition animation finishes.
+    // and EnterRespinState. The wipe is put in under it, and this stays hidden until the wipe
+    // finishes.
     // TODO: placeholder art/placement - lines_btn (197x175) is the only button-shaped sprite in
     // the gameplay bundle. Swap for the real OK button asset and position once available.
     {

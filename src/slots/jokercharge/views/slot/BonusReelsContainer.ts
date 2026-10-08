@@ -43,6 +43,7 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
   private minDurationTimeoutId: any = null;
   private minDurationElapsed = false;
   private pendingFinalSymbols: string[] | null = null;
+  private readonly disposers: (() => void)[] = [];
 
   constructor(configData: any) {
     super(configData);
@@ -55,9 +56,24 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
     this.minSpinDuration = data.minSpinDuration ?? 2000;
     this.minSpinDurationTurbo = data.minSpinDurationTurbo ?? 750;
     this.createReels(data);
-    EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
-    EventHandler.addEventListener(JCEvents.TOP_REEL_RESULT_RECEIVED, this.onResultReceived.bind(this));
-    EventHandler.addEventListener(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedRow.bind(this));
+    this.disposers.push(
+      EventHandler.bind(SlotEvents.START_SPIN, this.onSpinStart.bind(this)),
+      EventHandler.bind(JCEvents.TOP_REEL_RESULT_RECEIVED, this.onResultReceived.bind(this)),
+      EventHandler.bind(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedRow.bind(this)),
+      // A failed round never sends its row, and nothing else would stop the reels.
+      EventHandler.bind(SlotEvents.RESET_REEL_FOR_ERROR, this.resetReels.bind(this)),
+      EventHandler.bind(JCEvents.SET_BONUS_TRIGGER_LAYOUT, (data: { active: boolean }) => {
+        if (!data?.active) this.resetReels();
+      }),
+    );
+  }
+
+  private resetReels(): void {
+    this.clearTimeouts(this.spinTimeoutIds);
+    this.clearTimeouts(this.stopTimeoutIds);
+    clearTimeout(this.minDurationTimeoutId);
+    this.pendingFinalSymbols = null;
+    this.forEachReel((reel) => reel.reset());
   }
 
   // Resume after a reconnect - see HoldNWinReelsContainer.renderUnfinishedGrid().
@@ -82,7 +98,12 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
   }
 
   private onResultReceived(modifierRow: string[]): void {
-    if (!modifierRow) return;
+    // A round with no row lands empty rather than spinning on - what the strip shows mid-spin is
+    // filler, and would read as modifiers the round never had.
+    if (!modifierRow) {
+      if (!isRespinActive()) return;
+      modifierRow = this.reels.map(() => BLANK_BONUS_SYMBOL_NAME);
+    }
     // The spin that triggers the feature already carries the round's opening row. The panel isn't
     // spinning yet and is still hidden, so it's placed outright and is there when the transition
     // reveals it.
@@ -115,6 +136,8 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
     spinMask.label = 'bonusSpinMask';
     spinLayer.addChild(spinMask);
     spinLayer.mask = spinMask;
+    // Shown only while a strip is in it - see BonusReel.setSpinMasked.
+    spinLayer.visible = false;
     this.addChild(spinLayer);
 
     for (let column = 0; column < this.columns; column++) {
@@ -182,6 +205,8 @@ export class BonusReelsContainer extends ResponsiveChildrenView {
   }
 
   public destroyView(): void {
+    this.disposers.forEach((dispose) => dispose());
+    this.disposers.length = 0;
     this.clearTimeouts(this.spinTimeoutIds);
     this.clearTimeouts(this.stopTimeoutIds);
     clearTimeout(this.minDurationTimeoutId);

@@ -4,6 +4,7 @@ import { HOLD_N_WIN_REELS_CONFIG } from './HoldNWinReelsConfig';
 import { BONUS_REELS_CONFIG } from './BonusReelsConfig';
 import { RESPIN_COUNTER_CONFIG } from './RespinCounterConfig';
 import { BUY_BONUS_LINES_CONFIG } from './BuyBonusLinesConfig';
+import { FS_AUTO_COUNTER_CONFIG, TICKER_COMP_CONFIG } from './TickerCompConfig';
 import { LogoComp } from '@slots/jokercharge/views/comps/LogoComp';
 
 export const SLOT_MACHINE_CONFIG: any = {
@@ -35,7 +36,7 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'reelsBgDark',
       type: 'Sprite',
-      image: 'reels_bg_light',
+      image: 'reels_bg_dark',
       layoutData: {
         Desktop: { scale: 0.65 },
         Portrait: { scale: 0.65 },
@@ -58,7 +59,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'topPanelBg',
       type: 'Sprite',
       image: 'top_panel_bg',
-      alpha: 0,
+      // Hidden, not alpha 0, which still draws - the bonus layout shows it.
+      visible: false,
       layoutData: {
         Desktop: { y: -72, scale: 0.65 },
         Portrait: { y: -72, scale: 0.65 },
@@ -72,13 +74,15 @@ export const SLOT_MACHINE_CONFIG: any = {
       name: 'topPanelFrame',
       type: 'Sprite',
       image: 'top_panel_frame',
-      alpha: 0,
+      visible: false,
       layoutData: {
         Desktop: { y: -72, scale: 0.65 },
         Portrait: { y: -72, scale: 0.65 },
         Landscape: { y: -72, scale: 0.65 },
       },
     },
+    TICKER_COMP_CONFIG,
+    FS_AUTO_COUNTER_CONFIG,
     HOLD_N_WIN_REELS_CONFIG,
     {
       name: 'logoComp',
@@ -138,17 +142,8 @@ export const SLOT_MACHINE_CONFIG: any = {
       x: 707,
       y: -140,
     },
-    // No defaultState: the shower is fired by JCEvents.PLAY_COINS_ANIMATION, and getSpineAnim
-    // would otherwise play it once at build time.
-    {
-      name: 'coinsAnim',
-      type: 'Spine',
-      spineName: 'coins',
-      visible: false,
-      scale: 0.8,
-      x: 666.5,
-      y: -167,
-    },
+    // The coin shower is feature art in SECONDARY, so GameSlotMachineView builds it when that
+    // arrives.
     JACKPOT_LABELS_CONFIG,
     RESPIN_COUNTER_CONFIG,
     BUY_BONUS_LINES_CONFIG,

@@ -4,18 +4,29 @@ import { StateManager } from '@core/states/StateManagerService';
 import { JCEvents } from '../events/JCEvents';
 import { startRespinSession, TOTAL_RESPINS } from '../models/JCRespinState';
 import { getGrantedRespins, getMetamorphicSymbols, MetamorphicSymbol } from '../models/JCSpinData';
-import { MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
+import { CoinsAnimationData, MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
 
 class JCEnterRespinStateCommand extends EnterRespinStateCommand {
-  // A metamorphic trigger showers coins and brings its symbols in one by one, then the active
-  // line celebrates - late enough that the symbols the shower just brought in join in.
+  // A metamorphic trigger showers coins and, halfway through the shower, brings its symbols in one
+  // by one from the logo. Then the active line celebrates - late enough that the symbols the
+  // shower just brought in join in.
   protected async playTriggerPresentation(): Promise<void> {
     const metamorphic: MetamorphicSymbol[] = getMetamorphicSymbols();
     if (metamorphic.length) {
-      EventHandler.dispatchEvent(JCEvents.PLAY_COINS_ANIMATION);
+      await this.playCoinsToHalfway();
       await this.revealMetamorphicSymbols(metamorphic);
     }
     await this.playTriggerWins();
+  }
+
+  // Resolves at the shower's halfway point; the shower itself carries on. Straight away if nothing
+  // is listening.
+  private playCoinsToHalfway(): Promise<void> {
+    return new Promise((resolve) => {
+      const request: CoinsAnimationData = { hold: false, onHalfway: () => resolve() };
+      EventHandler.dispatchEvent(JCEvents.PLAY_COINS_ANIMATION, request);
+      if (!request.hold) resolve();
+    });
   }
 
   // Both happen at the wipe's midpoint, hidden behind it: the layout swaps (which flips

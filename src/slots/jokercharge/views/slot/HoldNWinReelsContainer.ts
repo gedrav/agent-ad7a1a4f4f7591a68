@@ -140,6 +140,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   // createReels() places a symbol per cell as it goes, so the grid is only walkable once it ends.
   private reelsBuilt = false;
   private pendingFinalGrid: string[][] | null = null;
+  private readonly disposers: (() => void)[] = [];
 
   constructor(configData: any) {
     super(configData);
@@ -164,20 +165,30 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     this.sortableChildren = true;
     this.createReels();
     this.restoreStickyCells();
+    // START_SPIN fires before the BE round-trip; the result arrives later on SPIN_RESULT_RECEIVED.
+    this.disposers.push(
+      EventHandler.bind(SlotEvents.START_SPIN, this.onSpinStart.bind(this)),
+      EventHandler.bind(JCEvents.SPIN_RESULT_RECEIVED, this.onSpinResultReceived.bind(this)),
+      // Blanks already on the grid need re-checking on a line-count change, not just on placement.
+      EventHandler.bind(JCEvents.SELECTED_LINES, this.refreshBlanksVisuals.bind(this)),
+      // A cell is sticky for the bet and the line count it landed on, which is how the backend holds
+      // it too - progressData.stickyState carries both. Change either and the locks come off and the
+      // cells spin with the rest.
+      EventHandler.bind(JCEvents.SELECTED_LINES, this.onStickyContextEvent.bind(this)),
+      EventHandler.bind(SlotEvents.UPDATE_TOTALBET, this.onStickyContextEvent.bind(this)),
+      EventHandler.bind(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedGrid.bind(this)),
+    );
+  }
+
+  // The column, triangle and border effects are feature art, in SECONDARY, so they are built when it
+  // arrives. The feature waits for that, and playEffects runs straight through an empty pool.
+  protected onSecondaryAssetsLoaded(): void {
+    super.onSecondaryAssetsLoaded();
+    if (this.columnEffects.length) return;
+    const data: HoldNWinReelsContainerData = this.configData.data ?? {};
     this.createColumnEffects(data);
     this.createTriangleEffects(data);
     this.createBorderEffects(data);
-    // START_SPIN fires before the BE round-trip; the result arrives later on SPIN_RESULT_RECEIVED.
-    EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
-    EventHandler.addEventListener(JCEvents.SPIN_RESULT_RECEIVED, this.onSpinResultReceived.bind(this));
-    // Blanks already on the grid need re-checking on a line-count change, not just on placement.
-    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.refreshBlanksVisuals.bind(this));
-    // A cell is sticky for the bet and the line count it landed on, which is how the backend holds
-    // it too - progressData.stickyState carries both. Change either and the locks come off and the
-    // cells spin with the rest.
-    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.onStickyContextEvent.bind(this));
-    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.onStickyContextEvent.bind(this));
-    EventHandler.addEventListener(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedGrid.bind(this));
   }
 
   private createColumnEffects(data: HoldNWinReelsContainerData): void {
@@ -189,6 +200,8 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       effect.x = column * (this.symbolWidth + this.reelGap) - totalWidth / 2 + this.symbolWidth / 2;
       effect.y = data.columnEffectOffsetY ?? 0;
       effect.visible = false;
+      // Hidden spines still tick - playEffects turns it on for as long as it plays.
+      effect.setAutoUpdate(false);
       effect.label = 'Multi/SuperMultiEffect';
       effect.zIndex = EFFECT_DEPTH;
       this.columnEffects[column] = effect;
@@ -207,6 +220,8 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       effect.x = column * (this.symbolWidth + this.reelGap) - totalWidth / 2 + this.symbolWidth / 2;
       effect.y = data.triangleEffectOffsetY ?? 0;
       effect.visible = false;
+      // Hidden spines still tick - playEffects turns it on for as long as it plays.
+      effect.setAutoUpdate(false);
       effect.label = 'TriangleEffect';
       effect.zIndex = EFFECT_DEPTH;
       this.triangleEffects[column] = effect;
@@ -225,6 +240,8 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       effect.x = this.getBorderX(border, totalWidth);
       effect.y = data.borderEffectOffsetY ?? 0;
       effect.visible = false;
+      // Hidden spines still tick - playEffects turns it on for as long as it plays.
+      effect.setAutoUpdate(false);
       effect.label = 'Charged/SuperChargedEffect';
       effect.zIndex = EFFECT_DEPTH;
       this.borderEffects[border] = effect;
@@ -295,10 +312,12 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       const listener = effect.addEventListener('complete', () => {
         if (listener) effect.removeSpineEvent(listener);
         effect.visible = false;
+        effect.setAutoUpdate(false);
         finished++;
         if (finished === targets.length) onComplete?.();
       });
       effect.visible = true;
+      effect.setAutoUpdate(true);
       effect.playAnimation({ state, loop: false });
     });
   }
@@ -595,6 +614,8 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       mask.label = `rowSpinMask${row}`;
       layer.addChild(mask);
       layer.mask = mask;
+      // Shown only while a strip is in it - see HoldNWinReel.setSpinMasked.
+      layer.visible = false;
       this.rowSpinLayers[row] = layer;
       this.addChild(layer);
       masks.push(mask);
@@ -778,7 +799,10 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       pending.push({ reel, symbolName: finalGrid[column][row], column, row });
     });
 
+    // The spin loop starts on START_SPIN and only this stops it - corelib's SlotReel, which would,
+    // isn't used here. Sent as the last cell lands, as SlotReel does.
     if (pending.length === 0) {
+      EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
       onComplete?.();
       return;
     }
@@ -795,6 +819,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
             this.onRespinCellLanded(column, row);
             settledCount++;
             if (settledCount === pending.length) {
+              EventHandler.dispatchEvent(SlotEvents.STOP_REEL_SPIN_SOUND);
               onComplete?.();
             }
           });
@@ -841,7 +866,9 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
           break;
         }
       }
-      if (lineLive) positions.push({ column: lastColumn, row });
+      // A held cell never spins, so it never settles to clear the effect again.
+      const reel = this.getReel(lastColumn, row);
+      if (lineLive && !reel?.isSticky() && !reel?.isHeld()) positions.push({ column: lastColumn, row });
     }
     return positions;
   }
@@ -857,9 +884,17 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
   }
 
   public destroyView(): void {
+    this.disposers.forEach((dispose) => dispose());
+    this.disposers.length = 0;
     this.clearTimeouts(this.spinTimeoutIds);
     this.clearTimeouts(this.stopTimeoutIds);
     clearTimeout(this.minDurationTimeoutId);
+    // destroy() alone leaves a spine on the ticker.
+    [...this.columnEffects, ...this.triangleEffects, ...this.borderEffects].forEach((effect) => effect?.destroySpine());
+    // The layers go without their children, which the reels take back as they are destroyed, so
+    // the masks are destroyed by hand.
+    const masks = this.rowSpinLayers.map((layer) => layer.mask as Graphics | null);
     super.destroyView();
+    masks.forEach((mask) => mask?.destroy());
   }
 }

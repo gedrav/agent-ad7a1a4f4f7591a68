@@ -37,13 +37,28 @@ export interface TotalWinCollectData {
   onComplete: () => void;
 }
 
+// onHalfway fires halfway through the shower, which is the reveal's cue; the shower carries on.
+export interface CoinsAnimationData {
+  hold: boolean;
+  onHalfway: () => void;
+}
+
 export interface MetamorphicRevealData {
   entries: MetamorphicSymbol[];
   hold: boolean;
   onComplete: () => void;
 }
 
+const COINS_SPINE_NAME = 'coins';
+// In the slot machine's space, drawn just above the trails.
+const COINS_ANIM_PLACEMENT = { x: 666.5, y: -167, scale: 0.8 };
 const COINS_ANIM_STATE = 'all_animations';
+// coins.json's own length for that animation, used only if it can't be read off the skeleton.
+const COINS_FALLBACK_DURATION = 4;
+// How far into the shower the metamorphic symbols start arriving.
+const COINS_REVEAL_AT = 0.5;
+// One per cell of the 3x3 grid, the most the total win collect ever has in flight - see prewarmTrails.
+const TRAIL_PREWARM_COUNT = 9;
 // Runs under the whole metamorphic reveal, whose length depends on how many symbols land, so it
 // loops until hideCoinsAnimation ends it as the feature opens.
 const COINS_ANIM_LOOP = true;
@@ -83,7 +98,8 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   private readonly buyBonusLinesComp: BuyBonusLinesComp;
   private readonly holdNWinReelsContainer: HoldNWinReelsContainer;
   private readonly logoComp: LogoComp;
-  private readonly coinsAnim: PixSpine;
+  // Built once SECONDARY arrives - see onSecondaryAssetsLoaded.
+  private coinsAnim: PixSpine | null = null;
   private readonly lineAnim: PixSpine;
   // lineAnim plus however many extra trail spines a spin has needed at once.
   private readonly trailPool: PixSpine[] = [];
@@ -100,10 +116,10 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
     this.buyBonusLinesComp = this.elementsList['buyBonusLinesComp'];
     this.holdNWinReelsContainer = this.elementsList['holdNWinReelsContainer'];
     this.logoComp = this.elementsList['logoComp'];
-    this.coinsAnim = this.elementsList['coinsAnim'];
     this.lineAnim = this.elementsList['lineAnim'];
     this.trailPool.push(this.lineAnim);
     this.hookTrail(this.lineAnim);
+    this.lineAnim.setAutoUpdate(!!this.lineAnim.visible);
     EventHandler.addEventListener(JCEvents.PLAY_TRAIL_ANIMATION, this.onPlayTrail.bind(this));
     EventHandler.addEventListener(JCEvents.SET_BONUS_TRIGGER_LAYOUT, this.onSetBonusTriggerLayout.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_RESPIN_ROUND_ANIMATION, this.onRespinRoundAnimation.bind(this));
@@ -114,9 +130,37 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
     EventHandler.addEventListener(JCEvents.PLAY_TOTAL_WIN_COLLECT, this.onPlayTotalWinCollect.bind(this));
   }
 
-  private onPlayCoinsAnimation(): void {
+  // Built here rather than from config: the coins are feature art, in SECONDARY. No animation is
+  // set going - the shower is fired by JCEvents.PLAY_COINS_ANIMATION.
+  protected onSecondaryAssetsLoaded(): void {
+    super.onSecondaryAssetsLoaded();
+    if (this.coinsAnim) return;
+    const coins = UIUtil.getSpineAnim(COINS_SPINE_NAME, { spineName: COINS_SPINE_NAME });
+    coins.label = 'coinsAnim';
+    coins.visible = false;
+    // Off the ticker until it plays - see hideCoinsAnimation.
+    coins.setAutoUpdate(false);
+    coins.position.set(COINS_ANIM_PLACEMENT.x, COINS_ANIM_PLACEMENT.y);
+    coins.scale.set(COINS_ANIM_PLACEMENT.scale);
+    this.addChildAt(coins, this.getChildIndex(this.lineAnim) + 1);
+    this.coinsAnim = coins;
+    this.prewarmTrails();
+  }
+
+  private onPlayCoinsAnimation(request: CoinsAnimationData): void {
+    if (!this.coinsAnim) return;
+    request.hold = true;
     this.coinsAnim.visible = true;
+    this.coinsAnim.setAutoUpdate(true);
     this.coinsAnim.playAnimation({ state: COINS_ANIM_STATE, loop: COINS_ANIM_LOOP });
+    setTimeout(request.onHalfway, this.resolveCoinsDurationMs() * COINS_REVEAL_AT);
+  }
+
+  // PixSpine has no duration getter, so this reaches through to its Spine - see TransitionComp.
+  private resolveCoinsDurationMs(): number {
+    const spineAnim = (this.coinsAnim as any)?.spineAnim;
+    const duration = spineAnim?.skeleton?.data?.findAnimation?.(COINS_ANIM_STATE)?.duration;
+    return (duration || COINS_FALLBACK_DURATION) * 1000;
   }
 
   private onPlayTrail(data: { column: number; row: number; direction?: TrailDirection }): void {
@@ -153,22 +197,40 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   // One spine per trail in flight, kept for reuse: a hidden one is free, and the grid caps how
   // many can ever run at once.
   private acquireTrail(): PixSpine {
-    const free = this.trailPool.find((trail) => !trail.visible);
-    if (free) return free;
+    return this.trailPool.find((trail) => !trail.visible) ?? this.createTrail();
+  }
 
+  private createTrail(): PixSpine {
     const trail = UIUtil.getSpineAnim(TRAIL_SPINE_NAME, { spineName: TRAIL_SPINE_NAME });
     trail.label = 'lineAnim';
     trail.visible = false;
+    trail.setAutoUpdate(false);
     this.addChildAt(trail, this.getChildIndex(this.lineAnim) + 1);
     this.hookTrail(trail);
     this.trailPool.push(trail);
     return trail;
   }
 
+  // The total win collect sends one trail per cell, so the grid is the most ever in flight. Built,
+  // and their figures' Texts with them, while nothing is playing, rather than in the frames of the
+  // first collect.
+  private prewarmTrails(): void {
+    while (this.trailPool.length < TRAIL_PREWARM_COUNT) this.createTrail();
+    this.trailPool.forEach((trail) => {
+      this.setTrailValue(trail, 0);
+      this.setTrailValue(trail, undefined);
+    });
+  }
+
   // Hidden when the whole animation has run, tail and all, which frees it back to the pool.
   private hookTrail(trail: PixSpine): void {
     trail.addEventListener('complete', () => {
       trail.visible = false;
+      // A hidden spine still ticks; playTrailOn puts it back on.
+      trail.setAutoUpdate(false);
+      // Its text renders on its own hook, which runs whether or not the trail is visible.
+      const text = this.trailValueTexts.get(trail);
+      if (text) text.visible = false;
     });
   }
 
@@ -178,6 +240,7 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
     trail.scale.set(placement.scaleX, placement.scaleY);
     this.setTrailValue(trail, value);
     trail.visible = true;
+    trail.setAutoUpdate(true);
     trail.playAnimation({ state: placement.animation ?? TRAIL_ANIMATION, loop: false });
     // After the play: playAnimation resets the speed to 1, which also keeps pooled reuse at normal speed.
     trail.setAnimationSpeed(speed);
@@ -243,8 +306,11 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   }
 
   private hideCoinsAnimation(): void {
+    if (!this.coinsAnim) return;
     this.coinsAnim.stopAnimation();
     this.coinsAnim.visible = false;
+    // stopAnimation only pauses the track, which would leave a hidden skeleton ticking.
+    this.coinsAnim.setAutoUpdate(false);
   }
 
   // RespinPreWinState's hook, once a respin round's reels have settled. Claiming the round with

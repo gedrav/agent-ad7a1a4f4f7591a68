@@ -14,7 +14,8 @@ export const JCEvents = {
   SHOW_RESPIN_INTRO: 'SHOW_RESPIN_INTRO',
   // Opens the Buy Bonus screen - see BuyBonusScreenComp.
   SHOW_BUY_BONUS_SCREEN: 'SHOW_BUY_BONUS_SCREEN',
-  // The coin shower a metamorphic trigger plays before the wipe.
+  // Data: { hold, onHalfway } - see CoinsAnimationData. The coin shower a metamorphic trigger plays
+  // before the wipe; its symbols start arriving halfway through it.
   PLAY_COINS_ANIMATION: 'PLAY_COINS_ANIMATION',
   // Data: { hold, onComplete } - see TriggerWinData.
   PLAY_TRIGGER_WIN_ANIMATION: 'PLAY_TRIGGER_WIN_ANIMATION',

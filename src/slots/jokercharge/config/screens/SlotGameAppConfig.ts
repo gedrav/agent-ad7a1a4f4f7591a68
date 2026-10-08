@@ -13,6 +13,10 @@ import { PROMOFS_POPUP_CONFIG } from '@brand/config/PromoFSPopupConfig';
 import { TRANSITION_CONFIG } from './TransitionConfig';
 import { BUY_BONUS_SCREEN_CONFIG } from './BuyBonusScreenConfig';
 import { RESPIN_INTRO_CONFIG } from './RespinIntroConfig';
+import { JCBetPanelView } from '@slots/jokercharge/views/popups/JCBetPanelView';
+
+// brandlib's bet panel, with buttons that follow the bets the line count allows - see JCBetPanelView.
+const JC_BET_PANEL_CONFIG = { ...BET_PANEL_CONFIG, class: JCBetPanelView };
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
@@ -27,7 +31,7 @@ export const SLOT_GAME_APP_CONFIG: any = {
     MODAL_VIEW_CONFIG,
     MENU_CONFIG,
     MENU_CONFIG_MOBILE,
-    BET_PANEL_CONFIG,
+    JC_BET_PANEL_CONFIG,
     BUY_BONUS_CONFIG,
     AUTOPLAY_CONFIG,
     MESSAGE_POPUP_CONFIG,
