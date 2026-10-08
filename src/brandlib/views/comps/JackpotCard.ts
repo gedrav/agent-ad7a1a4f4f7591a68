@@ -3,6 +3,7 @@ import { StandardView } from '@core/pixiwrapper/StandardView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Graphics } from 'pixi.js';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 
 enum CardStatus {
   CLOSE = 'CLOSE',
@@ -34,6 +35,19 @@ export class JackpotCard extends StandardView {
     this.card.addEventListener('complete', this.onAnimationComplete.bind(this));
     this.cardGuideRect.interactive = true;
     UIUtil.addInteraction(this.cardGuideRect, this.onCardClick.bind(this));
+  }
+  public showWin(onComplete?: () => void) {
+    AnimationProxy.animateTween(this.card, {
+      scaleX: 1.3,
+      scaleY: 1.3,
+      yoyo: -1,
+      repeat: 3,
+      duration: 0.4,
+      onComplete,
+    });
+  }
+  public disableCard() {
+    this.card.tint = 0x333333;
   }
   private onAnimationComplete(e) {
     if (e.animation.name === animationState.ROTATION) {
@@ -75,6 +89,7 @@ export class JackpotCard extends StandardView {
     this.playCardAnimation({ state: animationState.STATIC, loop: false });
   }
   public reset() {
+    this.card.tint = 0xffffff;
     this.cardGuideRect.interactive = true;
     this.cardStatus = CardStatus.CLOSE;
     this.playCardAnimation({ state: animationState.BACK, loop: false });

@@ -33,7 +33,7 @@ export const JACKPOT_CARD_CONFIG: any = {
         color: 0x000000,
         x: 0,
         y: 0,
-        alpha: 0.3,
+        alpha: 0,
       },
     },
   },

@@ -16,20 +16,18 @@ class ShowJackpotGameStateCommand extends StateCommand {
   }
   doNextStep() {
     this.count++;
-    if (this.count == 1) {
-      EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_CARD_GAME);
-    } else if (this.count == 2) {
-      EventHandler.dispatchEvent(SlotEvents.JACKPOT_WIN_TICKER_ANIM);
-    } else {
-      EventHandler.dispatchEvent(SlotEvents.HIDE_JACKPOT_BG);
-      // Must clear, otherwise CompleteGameRoundState re-enters this state
-      appModel.jackpotRound = null;
-      appModel.unfreezeJackpotMeters();
-      EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
-      // Config order puts CHECK_PROMOFS_STATE next, which would skip autospin handling
-      StateManager.goToState(getPostJackpotState());
-    }
+    // if (this.count == 1) {
+    //   EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_CARD_GAME);
+    // }{
+    EventHandler.dispatchEvent(SlotEvents.HIDE_JACKPOT_BG);
+    // Must clear, otherwise CompleteGameRoundState re-enters this state
+    appModel.jackpotRound = null;
+    appModel.unfreezeJackpotMeters();
+    EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
+    // Config order puts CHECK_PROMOFS_STATE next, which would skip autospin handling
+    StateManager.goToState(getPostJackpotState());
   }
+  // }
 }
 
 export const ShowJackpotGameState = new ShowJackpotGameStateCommand();

@@ -70,7 +70,6 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_WIN_TICKER_ANIM, this.showJackpotWinAnimation.bind(this));
 
-    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_CARD_GAME, this.showJackPotCard.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_PICK_RESULT, this.onPickResult.bind(this));
     EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
@@ -145,9 +144,9 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.pulseJPWinText();
     this.jackPotOutroAnimation.playAnimation({ state: 'start_land', loop: false });
   }
-  playIntroAnimations({ state, stateP, loop, timeScale = 1 }) {
-    this.jackpotIntroAnimHor.playAnimation({ state, loop, reset: false, timeScale });
-    this.jackpotIntroAnimVer.playAnimation({ state: stateP, loop, reset: false, timeScale });
+  playIntroAnimations({ state, stateP, loop, timeScale = 1, reset = false }) {
+    this.jackpotIntroAnimHor.playAnimation({ state, loop, timeScale, reset });
+    this.jackpotIntroAnimVer.playAnimation({ state: stateP, loop, timeScale, reset });
   }
   protected pulseJPWinText() {
     AnimationProxy.killTweensOf(this.youwinJPTextimg);
@@ -190,7 +189,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimVer.stopAnimation();
     if (this.isJackpotIntroAnim) {
       this.isJackpotIntroAnim = false;
-      StateManager.doNextStep();
+      this.showJackPotCard();
     }
   }
   protected showJackpotIntroAnim() {
@@ -199,7 +198,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       this.jackpotIntroAnimHor.visible = true;
       this.jackpotIntroAnimVer.visible = true;
       this.resizeJackpotWinAnimation();
-      this.playIntroAnimations({ state: 'start_land', stateP: 'start_port', loop: false });
+      this.playIntroAnimations({ state: 'start_land', stateP: 'start_port', loop: false, reset: true });
     }
   }
   hideJPCards() {
@@ -253,7 +252,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.setAllLocked(true);
     if (animatePick) {
       this.expectedOpenPosition = pick.position;
-      this.openFallbackId = window.setTimeout(() => {
+      this.openFallbackId = setTimeout(() => {
         this.clearOpenWait();
         this.finishReveal();
       }, OPEN_FALLBACK_MS);
@@ -267,14 +266,38 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     if (!round || this.revealFinished) return;
     this.revealFinished = true;
     const rest = round.remaining ?? [];
-    rest.forEach((p) => this.cardArray[p.position]?.openStatic(this.skinOf(p.tier)));
     const winning = [...round.picks, ...rest].filter((p) => p.tier === round.wonTier).map((p) => p.position);
-    this.highlightWinning(winning);
-    clearTimeout(this.finishTimeoutId);
-    this.finishTimeoutId = window.setTimeout(() => StateManager.doNextStep(), REVEAL_HOLD_MS);
+
+    rest.forEach((p) => {
+      const card = this.cardArray[p.position];
+      if (card?.isClosed()) {
+        card.openAnimated(this.skinOf(p.tier));
+      }
+    });
+    setTimeout(() => this.highlightWinning(winning), 500);
   }
   /** Hook for the FE team: mark the cards of the won tier. */
-  protected highlightWinning(positions: number[]) {}
+  protected highlightWinning(positions: number[]) {
+    let pending = 0;
+    const onShowWinComplete = () => {
+      pending--;
+      if (pending === 0) {
+        this.showJackpotWinAnimation();
+      }
+    };
+    this.cardArray.forEach((card, index) => {
+      if (!positions.includes(index)) {
+        card.disableCard();
+      } else {
+        pending++;
+        card.showWin(onShowWinComplete);
+      }
+    });
+    if (pending === 0) {
+      clearTimeout(this.finishTimeoutId);
+      this.finishTimeoutId = setTimeout(() => StateManager.doNextStep(), REVEAL_HOLD_MS);
+    }
+  }
   protected skinOf(tier: JackpotTier): string {
     return JACKPOT_SKINS[JACKPOT_TIERS.indexOf(tier)];
   }
