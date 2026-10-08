@@ -348,7 +348,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0 },
-    Landscape: { widthPerc: 0.85, heightPerc: 0.9, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.04 },
+    Landscape: { widthPerc: 0.85, heightPerc: 0.9, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.06 },
     SmallLandscape: { widthPerc: 0.7, heightPerc: 0.78, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.09 },
   },
 };
