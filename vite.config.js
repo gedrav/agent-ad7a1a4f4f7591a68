@@ -6,18 +6,19 @@ import path from 'node:path';
 
 // Uncomment ONE game to run/build it:
 const defaultGameNames = [
-  //'royale81',
-  "empireofgold",
-  //'empireofgoldnewconquest',
-  //'sweetsalon',
+  // 'royale81',
+  // "empireofgold",
+  // 'empireofgoldnewconquest',
+  // 'sweetsalon',
   // 'frostedmarketbonanza',
-  //'bookofstorms',
-  //'meowmeowmeow',
+  // 'bookofstorms',
+  // 'meowmeowmeow',
   // 'bookofstormslightningwin',
-  //'carpathiantreasures',
+  // 'carpathiantreasures',
   // 'jokercharge',
-  //'houseofcards'
-  //'minedash'
+  // 'houseofcards'
+  // 'minedash',
+  // 'pigstyle'
 ];
 
 // SINGLE CONTROL POINT (with env override)
