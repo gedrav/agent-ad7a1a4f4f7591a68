@@ -3,7 +3,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { StateManager } from '@core/states/StateManagerService';
 import { JCEvents } from '../events/JCEvents';
 import { startRespinSession, TOTAL_RESPINS } from '../models/JCRespinState';
-import { getCollectedCount, getGrantedRespins, getMetamorphicSymbols, MetamorphicSymbol } from '../models/JCSpinData';
+import { getGrantedRespins, getMetamorphicSymbols, MetamorphicSymbol } from '../models/JCSpinData';
 import { MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
 
 class JCEnterRespinStateCommand extends EnterRespinStateCommand {
@@ -24,9 +24,8 @@ class JCEnterRespinStateCommand extends EnterRespinStateCommand {
     EventHandler.dispatchEvent(JCEvents.PLAY_TRANSITION, {
       onHalfway: () => {
         EventHandler.dispatchEvent(JCEvents.SET_BONUS_TRIGGER_LAYOUT, { active: true });
-        // The triggering spin carries the count the feature opens on, and whatever it already
-        // collected, so the first round can tell a new symbol from one that was already there.
-        const remaining = startRespinSession(getGrantedRespins() ?? TOTAL_RESPINS, getCollectedCount());
+        // The triggering spin carries the count the feature opens on.
+        const remaining = startRespinSession(getGrantedRespins() ?? TOTAL_RESPINS);
         EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, remaining);
         StateManager.next();
       },

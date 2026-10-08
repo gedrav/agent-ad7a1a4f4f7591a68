@@ -19,6 +19,7 @@ import {
 } from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
 import { getSelectedLines, isRespinActive, isRowActive } from '../../models/JCLinesState';
+import { resetRespins } from '../../models/JCRespinState';
 import {
   getHoldField,
   getModifierMultipliers,
@@ -791,6 +792,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
             // On this cell's own landing, not once the whole grid has settled: the reels stop
             // one after another, and a trail that waited would be seconds late.
             this.requestTrail(column, row);
+            this.onRespinCellLanded(column, row);
             settledCount++;
             if (settledCount === pending.length) {
               onComplete?.();
@@ -799,6 +801,15 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
         }, delay),
       );
     });
+  }
+
+  // Inside the feature only held cells sit out a round, so any symbol landing in a spinning cell is
+  // a new one, and it gives the counter its full count back as it lands.
+  private onRespinCellLanded(column: number, row: number): void {
+    if (!isRespinActive()) return;
+    const name = this.getReel(column, row)?.getSymbolName();
+    if (!name || name === BLANK_SYMBOL_NAME) return;
+    EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, resetRespins());
   }
 
   // Base game only, and only for a symbol that earns one on an active payline.

@@ -2,8 +2,7 @@ import { RespinSpinStartStateCommand } from '@core/commands/states/RespinSpinSta
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { Clock } from '@core/utils/Clock';
 import { JCEvents } from '../events/JCEvents';
-import { isFirstRespinRound, registerRespinRound } from '../models/JCRespinState';
-import { getCollectedCount } from '../models/JCSpinData';
+import { isFirstRespinRound, spendRespin } from '../models/JCRespinState';
 import { ModifierEffectsData } from '../views/slot/GameSlotMachineView';
 
 // Lets the round that just settled be read before the reels move again.
@@ -11,14 +10,13 @@ const ROUND_GAP = 500;
 
 class JCRespinSpinStartStateCommand extends RespinSpinStartStateCommand {
   protected async beforeSpin(): Promise<void> {
-    // Read before registerRespinRound below, which is what clears it.
-    const firstRound = isFirstRespinRound();
     await Clock.wait(ROUND_GAP);
-    // Judges the round that just finished, so the counter moves as this spin starts.
-    EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, registerRespinRound(getCollectedCount()));
     // The triggering spin's top-panel row has been on screen since the transition but has never
     // played. It runs here, once, after the intro and before the reels move.
-    if (firstRound) await this.playModifierEffects();
+    if (isFirstRespinRound()) await this.playModifierEffects();
+    // Last, so the count drops as the reels actually start rather than ahead of the effects above.
+    // A symbol landing gives it back - see HoldNWinReelsContainer.onRespinCellLanded.
+    EventHandler.dispatchEvent(JCEvents.UPDATE_RESPIN_COUNTER, spendRespin());
   }
 
   // Resolves once the last effect has finished, or straight away if nothing is listening.
