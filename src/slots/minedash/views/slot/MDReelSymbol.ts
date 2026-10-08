@@ -1,27 +1,57 @@
-import { Container, Text } from 'pixi.js';
-import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
+import { Container } from 'pixi.js';
+import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { appModel } from '@core/models/services/AppModelService';
+import { StoneFeature, StoneStateData } from '@game/views/comps/GemBoxesComp';
 
 const SPINE_TEXT_SLOT = 'Txt_Value';
 
-const STONE_TEXT_MAP: Record<string, string> = {
-  SM: 'MULTI',
-  SF: 'FREE SPIN\n',
-  SY: 'MYSTERY',
-  SW: 'WILD',
+const STONE_STATE_KEY_MAP: Record<string, keyof StoneStateData> = {
+  SM: 'multiStone',
+  SF: 'freespinsStone',
+  SY: 'mysteryStone',
+  SW: 'wildsStone',
 };
 
-const STONE_ANGLE_MAP: Record<string, number> = {
-  SM: -60, // MULTI
-  SF: 0, // FREE SPIN
-  SY: 0, // MYSTERY
-  SW: 55, // WILD
+const STONE_SUFFIX_MAP: Record<string, string> = {
+  SM: 'x',
+  SF: '',
+  SY: 'x',
+  SW: '',
 };
 
-export default class MDReelSymbol extends ReelSymbolSpineExtended {
+export default class MDReelSymbol extends ReelSymbolSpine {
+  private readonly slotObjects: Map<string, Container> = new Map();
+
   constructor(configData: any) {
     super(configData);
     this.updateStoneText();
+  }
+
+  public addSlotObject(slotName: string, container: Container, followAttachmentTimeline = false): void {
+    if (!this.spine) return;
+    this.removeSlotObject(slotName);
+    this.spine.addSlotObject(slotName, container, { followAttachmentTimeline });
+    this.slotObjects.set(slotName, container);
+  }
+
+  public removeSlotObject(slotName: string): void {
+    const container = this.slotObjects.get(slotName);
+    if (!container) return;
+    this.spine?.removeSlotObject(slotName);
+    container.destroy();
+    this.slotObjects.delete(slotName);
+  }
+
+  public getSlotObject(slotName: string): Container | undefined {
+    return this.slotObjects.get(slotName);
+  }
+
+  protected destroySpine(): void {
+    for (const slotName of Array.from(this.slotObjects.keys())) {
+      this.removeSlotObject(slotName);
+    }
+    super.destroySpine();
   }
 
   public setNewSymbol(data: any, reelno: number): void {
@@ -34,11 +64,28 @@ export default class MDReelSymbol extends ReelSymbolSpineExtended {
     this.updateStoneText();
   }
 
+  private getStoneValueText(symbolName: string): string {
+    const stateKey = STONE_STATE_KEY_MAP[symbolName];
+    if (!stateKey) return '';
+
+    const res = (appModel as any).gameResult;
+    const stoneState: StoneStateData | undefined =
+      res?.progressData?.stoneState || res?.stoneState || appModel.gameData?.progressData?.stoneState;
+
+    const feature: StoneFeature | undefined = stoneState?.[stateKey];
+    if (!feature) return '';
+
+    const val = feature.bankedValue ?? feature.drawnValue;
+    if (val === undefined || val === null || val === 0 || val === '0' || val === '') return '';
+
+    return `${val}${STONE_SUFFIX_MAP[symbolName] || ''}`;
+  }
+
   private updateStoneText(): void {
     if (!this.spine?.addSlotObject) return;
 
     const symbolName = this.configData?.data?.name;
-    const textContent = STONE_TEXT_MAP[symbolName];
+    const textContent = this.getStoneValueText(symbolName);
 
     if (!textContent) {
       this.clearLabelHolder();
@@ -64,24 +111,13 @@ export default class MDReelSymbol extends ReelSymbolSpineExtended {
     holder.label = 'stoneTextHolder';
     holder.labelKey = textContent;
 
-    let fillColors = ['0xFFFFFF', '0xCCCCCC'];
-    if (symbolName === 'SM')
-      fillColors = ['0xD2F09A', '0x3D9E27', '0x0A3A14']; // Green for Multi
-    else if (symbolName === 'SF')
-      fillColors = ['0xBFD9FF', '0x2A63D8', '0x081C5E']; // Blue for Free Spin
-    else if (symbolName === 'SY')
-      fillColors = ['0xF7A8DC', '0xB01F78', '0x3D0333']; // Pink/Purple for Mystery
-    else if (symbolName === 'SW') fillColors = ['0xFF7A5E', '0xE62B18', '0xB0130B']; // Red for Wild
-
-    let fontSize = 70;
-    if (symbolName === 'SY')
-      fontSize = 55; // Mystery is a longer word, needs to be much smaller to fit inside facets
-    else if (symbolName === 'SF') fontSize = 60; // Free spin is two lines
+    const fillColors = ['0xFFFFFF', '0xFFE9A8', '0xFFFFFF'];
+    const fontSize = 90;
 
     const config = {
       name: 'stoneText',
       type: 'Text',
-      contentText: STONE_TEXT_MAP[symbolName] === 'FREE SPIN\n' ? 'FREE\nSPIN' : textContent,
+      contentText: textContent,
       style: {
         fontFamily: 'gameFont1',
         fontSize: fontSize,
@@ -89,20 +125,18 @@ export default class MDReelSymbol extends ReelSymbolSpineExtended {
         fill: fillColors,
         fillGradientStops: [0, 0.5, 1],
         stroke: {
-          fill: ['0xFFD700', '0xE8890C'],
-          width: 14,
+          fill: '0x1A0B00',
+          width: 12,
           join: 'round',
         },
         dropShadow: {
-          alpha: 0.95,
+          alpha: 0.9,
           angle: Math.PI / 2,
-          blur: 1,
+          blur: 4,
           color: '0x000000',
-          distance: 5,
+          distance: 6,
         },
         align: 'center',
-        wordWrap: true,
-        wordWrapWidth: 350,
       },
     };
 
@@ -110,9 +144,6 @@ export default class MDReelSymbol extends ReelSymbolSpineExtended {
     label.anchor?.set(0.5);
     if (label.position) {
       label.position.set(0, 0);
-    }
-    if ('angle' in label) {
-      label.angle = STONE_ANGLE_MAP[symbolName] || 0;
     }
 
     holder.addChild(label);
