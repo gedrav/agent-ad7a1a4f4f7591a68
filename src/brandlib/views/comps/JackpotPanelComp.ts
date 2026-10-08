@@ -34,16 +34,24 @@ const GRID_COLUMNS = 2;
 export class JackpotPanelComp extends ResponsiveChildrenView {
   protected jackPotsArr: JackPotItem[] = [];
   protected jackpotConfig: any;
-  protected jackpotContainer: PixView;
+  // protected jackpotContainer: PixView;
   protected noticeText: Text;
   protected panelContainer: PixView;
+  protected bronzeJP: JackPotItem;
+  protected silverJP: JackPotItem;
+  protected goldJP: JackPotItem;
+  protected diamondJP: JackPotItem;
   constructor(config) {
     super(config);
     this.jackpotConfig = this.configData.jackpotConfig;
     this.guideRect = this.elementsList['guideRect'];
     this.panelContainer = this.elementsList['panelContainer'];
-    this.jackpotContainer = this.elementsList['jackpotContainer'];
-
+    this.panelContainer = this.elementsList['panelContainer'];
+    this.bronzeJP = this.panelContainer.elementsList['bronzeJackpot'];
+    this.silverJP = this.panelContainer.elementsList['silverJackpot'];
+    this.goldJP = this.panelContainer.elementsList['goldJackpot'];
+    this.diamondJP = this.panelContainer.elementsList['diamondJackpot'];
+    this.jackPotsArr = [this.bronzeJP, this.silverJP, this.goldJP, this.diamondJP];
     this.createJackPotElement();
     EventHandler.addEventListener(SlotEvents.JACKPOT_INFO_READY, this.onJackpotInfoReady.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_METERS_UPDATE, this.onMetersUpdate.bind(this));
@@ -53,19 +61,13 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   createJackPotElement() {
     const itemCount = this.jackpotConfig.noOfElement;
 
-    for (let i = 0; i < itemCount; i++) {
-      const item = new JackPotItem(this.jackpotConfig.items);
-      this.panelContainer.addChild(item);
-      this.jackPotsArr.push(item);
-      item.x = this.jackpotConfig.xPos[i];
-      item.y = this.jackpotConfig.yPos[i];
-      item.scale.set(this.jackpotConfig.items.scale);
+    this.jackPotsArr.forEach((item, i) => {
       item.initialView({
         skinName: this.jackpotConfig.jackpotAnimSkin[i],
         colorcode: this.jackpotConfig.jackpotTextColor[i],
       });
-    }
-    this.jackPotsArr.forEach((item) => (item.visible = false));
+      item.visible = false;
+    });
     this.resizeView();
   }
   protected onJackpotInfoReady(info: IJackpotInfo | null) {
