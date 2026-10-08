@@ -31,6 +31,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { MysteryReelResult } from './JCMysterySymbolModifier';
 import JCReelSymbol from './JCReelSymbol';
 import { JCReelSymbolPool } from './JCReelSymbolPool';
+import { JCSymbolRigPool } from './JCSymbolRigPool';
 
 // TODO: confirm 'animation' is the real state name in small_square's spine (guessed from transition's convention).
 const SMALL_SQUARE_SPINE_NAME = 'small_square';
@@ -41,6 +42,10 @@ const CHAIN_LOCK_SPINE_NAME = 'Chain_lock_sym';
 const CHAIN_LOCK_APPEARING_STATE = 'appearing';
 const CHAIN_LOCK_IDLE_STATE = 'idle';
 const CHAIN_LOCK_DISAPPEARING_STATE = 'disappearing';
+
+const ANTICIPATION_SCALE = 0.65;
+const ANTICIPATION_Y = -23;
+const CHAIN_LOCK_SCALE = 1.2;
 
 const METAMORPHIC_REVEAL_DURATION = 0.25;
 // Half the pop: it runs out and back.
@@ -88,9 +93,11 @@ export default class HoldNWinReel extends Container {
   private readonly symbolHeight: number;
   private readonly spinContainer: Container;
   private readonly spinLayer: Container;
-  private readonly smallSquareAnim: PixSpine;
-  private readonly chainLockAnim: PixSpine;
-  private readonly multiplierEffect: PixSpine;
+  // Borrowed from the rig pool only while they play, and handed back after - see acquireEffect.
+  private anticipationAnim: PixSpine | null = null;
+  private chainLockAnim: PixSpine | null = null;
+  private chainLockListener: any = null;
+  private multiplierEffect: PixSpine | null = null;
   private readonly dimFilter = new ColorMatrixFilter();
   private dimmed = false;
   private multiplierText: PixText | null = null;
@@ -158,27 +165,26 @@ export default class HoldNWinReel extends Container {
     this.topSymbolView.y = -this.symbolHeight;
     this.topSymbolView.visible = false;
     this.spinContainer.addChild(this.topSymbolView);
+  }
 
-    // Outside spinContainer so the spin mask never clips it.
-    this.smallSquareAnim = UIUtil.getSpineAnim(SMALL_SQUARE_SPINE_NAME, { spineName: SMALL_SQUARE_SPINE_NAME });
-    this.smallSquareAnim.label = 'anticipationAnim';
-    this.smallSquareAnim.visible = false;
-    this.smallSquareAnim.scale.set(0.65);
-    this.smallSquareAnim.y = -23;
-    this.addChild(this.smallSquareAnim);
+  // A cell's effects exist only while they play: each is borrowed from the rig pool when needed and
+  // handed back when done, so an idle cell carries none of them and nothing is rebuilt per use. On
+  // the cell itself, never in spinContainer, so the spin mask cannot clip them; below the badge,
+  // which the multiplier burst plays behind.
+  private acquireEffect(spineName: string, label: string, scale: number): PixSpine {
+    const effect = JCSymbolRigPool.getInstance().acquire({ spineName });
+    effect.label = label;
+    effect.scale.set(scale);
+    effect.position.set(0, 0);
+    const index = this.multiplierText ? this.getChildIndex(this.multiplierText) : this.children.length;
+    this.addChildAt(effect, index);
+    return effect;
+  }
 
-    this.chainLockAnim = UIUtil.getSpineAnim(CHAIN_LOCK_SPINE_NAME, { spineName: CHAIN_LOCK_SPINE_NAME });
-    this.chainLockAnim.label = 'chainLockAnim';
-    this.chainLockAnim.visible = false;
-    this.chainLockAnim.scale.set(1.2);
-    this.addChild(this.chainLockAnim);
-
-    this.multiplierEffect = UIUtil.getSpineAnim(MULTIPLIER_EFFECT_SPINE, { spineName: MULTIPLIER_EFFECT_SPINE });
-    this.multiplierEffect.label = 'multiplierEffect';
-    this.multiplierEffect.visible = false;
-    this.multiplierEffect.label = 'multiplierEffect';
-    this.multiplierEffect.scale.set(MULTIPLIER_EFFECT_SCALE);
-    this.addChild(this.multiplierEffect);
+  // The pool stops it, drops its listeners, takes it off the ticker and out of this cell.
+  private releaseEffect(effect: PixSpine | null): null {
+    if (effect) JCSymbolRigPool.getInstance().release(effect);
+    return null;
   }
 
   public getMultiplier(): number {
@@ -377,8 +383,7 @@ export default class HoldNWinReel extends Container {
   public clearMultiplier(): void {
     this.spentMultiplier = 1;
     this.releaseMultiplierEffectListener();
-    this.multiplierEffect.stopAnimation();
-    this.multiplierEffect.visible = false;
+    this.multiplierEffect = this.releaseEffect(this.multiplierEffect);
     if (!this.multiplierText) return;
     AnimationProxy.killTweensOf(this.multiplierText);
     AnimationProxy.killTweensOf(this.multiplierText.scale);
@@ -389,7 +394,7 @@ export default class HoldNWinReel extends Container {
 
   private releaseMultiplierEffectListener(): void {
     if (!this.multiplierEffectListener) return;
-    this.multiplierEffect.removeSpineEvent(this.multiplierEffectListener);
+    this.multiplierEffect?.removeSpineEvent(this.multiplierEffectListener);
     this.multiplierEffectListener = null;
   }
 
@@ -417,14 +422,15 @@ export default class HoldNWinReel extends Container {
   // burst behind itself.
   private playMultiplierEffect(at?: { x: number; y: number }, onComplete?: () => void): void {
     this.releaseMultiplierEffectListener();
-    this.multiplierEffectListener = this.multiplierEffect.addEventListener('complete', () => {
+    this.multiplierEffect ??= this.acquireEffect(MULTIPLIER_EFFECT_SPINE, 'multiplierEffect', MULTIPLIER_EFFECT_SCALE);
+    const effect = this.multiplierEffect;
+    this.multiplierEffectListener = effect.addEventListener('complete', () => {
       this.releaseMultiplierEffectListener();
-      this.multiplierEffect.visible = false;
+      this.multiplierEffect = this.releaseEffect(this.multiplierEffect);
       onComplete?.();
     });
-    this.multiplierEffect.position.set(at?.x ?? 0, at?.y ?? 0);
-    this.multiplierEffect.visible = true;
-    this.multiplierEffect.playAnimation({ state: MULTIPLIER_EFFECT_STATE, loop: false });
+    effect.position.set(at?.x ?? 0, at?.y ?? 0);
+    effect.playAnimation({ state: MULTIPLIER_EFFECT_STATE, loop: false });
   }
 
   // Swaps the cell to the symbol one step up the ladder and pops it, so the new face is what
@@ -852,19 +858,22 @@ export default class HoldNWinReel extends Container {
   }
 
   public setSmallSquareVisible(flag: boolean): void {
-    if (flag) {
-      this.smallSquareAnim.visible = true;
-      this.smallSquareAnim.playAnimation({ state: SMALL_SQUARE_ANIM_STATE, loop: true });
-    } else {
-      this.smallSquareAnim.stopAnimation();
-      this.smallSquareAnim.visible = false;
+    if (!flag) {
+      this.anticipationAnim = this.releaseEffect(this.anticipationAnim);
+      return;
     }
+    this.anticipationAnim ??= this.acquireEffect(SMALL_SQUARE_SPINE_NAME, 'anticipationAnim', ANTICIPATION_SCALE);
+    this.anticipationAnim.y = ANTICIPATION_Y;
+    this.anticipationAnim.playAnimation({ state: SMALL_SQUARE_ANIM_STATE, loop: true });
   }
 
   // nextState queues idle on the spine track, so no JS completion handling is needed here.
   public playChainLockAppear(): void {
     if (!this.sticky) return;
-    this.chainLockAnim.visible = true;
+    // A lock coming back before the last one finished coming apart keeps the same rig, so the
+    // pending hand-back is cancelled rather than letting it take the rig away mid-lock.
+    this.releaseChainLockListener();
+    this.chainLockAnim ??= this.acquireEffect(CHAIN_LOCK_SPINE_NAME, 'chainLockAnim', CHAIN_LOCK_SCALE);
     this.chainLockAnim.playAnimation({
       state: CHAIN_LOCK_APPEARING_STATE,
       loop: false,
@@ -878,16 +887,28 @@ export default class HoldNWinReel extends Container {
   // of it.
   public playChainLockDisappear(): void {
     this.setSticky(false);
-    const listener = this.chainLockAnim.addEventListener('complete', () => {
-      if (listener) this.chainLockAnim.removeSpineEvent(listener);
-      this.chainLockAnim.visible = false;
+    const lock = this.chainLockAnim;
+    if (!lock) return;
+    this.releaseChainLockListener();
+    this.chainLockListener = lock.addEventListener('complete', () => {
+      this.releaseChainLockListener();
+      this.chainLockAnim = this.releaseEffect(this.chainLockAnim);
     });
-    this.chainLockAnim.playAnimation({ state: CHAIN_LOCK_DISAPPEARING_STATE, loop: false });
+    lock.playAnimation({ state: CHAIN_LOCK_DISAPPEARING_STATE, loop: false });
+  }
+
+  private releaseChainLockListener(): void {
+    if (!this.chainLockListener) return;
+    this.chainLockAnim?.removeSpineEvent(this.chainLockListener);
+    this.chainLockListener = null;
   }
 
   public destroy(options?: any): void {
     Ticker.shared.remove(this.onSpinTick, this);
     this.clearMultiplier();
+    this.releaseChainLockListener();
+    this.chainLockAnim = this.releaseEffect(this.chainLockAnim);
+    this.anticipationAnim = this.releaseEffect(this.anticipationAnim);
     if (this.symbolView) {
       JCReelSymbolPool.getInstance().release(this.symbolView);
       this.symbolView = null;

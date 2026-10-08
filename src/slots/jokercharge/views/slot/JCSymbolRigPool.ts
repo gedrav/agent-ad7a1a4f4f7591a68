@@ -5,6 +5,9 @@ import { UIUtil } from '@core/utils/UIUtilService';
 // name: several symbols share a rig - C1 to C5 and SCR are all 'hat' - and a cell changes symbol
 // every few frames while the strip is moving.
 //
+// The cells' own effects - anticipation, chain lock, multiplier burst - come from here too, borrowed
+// only while they play (see HoldNWinReel.acquireEffect).
+//
 // Without this every change built one Spine and destroyed another. new PixSpine() parses a
 // skeleton and runs renderer.prepare.upload() on it, and at full spin speed the grid changes a
 // symbol roughly twice a frame.

@@ -28,6 +28,10 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   private labelCountTarget: { value: number } | null = null;
   // In bet multiples. The cash symbols keep their own, in the modifier that draws them.
   private labelValue = 0;
+  // The figure once a multiplier or a boost has changed it. corelib rebuilds the spine on its own
+  // (cleanUpSymbolWin, recreateAnimation and the like), and the rebuild would otherwise go back to
+  // the backend's figure - or to nothing, for a boost. Cleared when the instance takes a new symbol.
+  private heldValue: number | null = null;
 
   private get bonusModifier(): JCBonusSymbolModifier {
     return (this._bonusModifier ??= new JCBonusSymbolModifier(this));
@@ -96,9 +100,11 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   public applyMultiplier(multiplier: number, duration: number, onComplete?: () => void): void {
     if (this.isBonusSymbol()) {
       this.bonusModifier.applyMultiplier(multiplier, duration, onComplete);
-      return;
+    } else {
+      this.applyMultiplierToLabel(multiplier, duration, onComplete);
     }
-    this.applyMultiplierToLabel(multiplier, duration, onComplete);
+    // Both take the new figure up front and only animate towards it.
+    this.heldValue = this.getCollectValue();
   }
 
   // Written to every rig carrying the label, not just the visible one - see labelRigs.
@@ -158,6 +164,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       return;
     }
     this.bonusModifier.addValue(amount, duration, onComplete);
+    this.heldValue = this.getCollectValue();
   }
 
   // Fire and forget: trails arrive faster than it runs, and each one restarts it.
@@ -177,6 +184,8 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // The spine has to be rebuilt here too: a pooled instance reused for a different symbol needs
   // a different rig, and the inherited setNewSymbol() only swaps configData.
   public setNewSymbol(data: any, reelno: number): void {
+    // Before super: it builds the new symbol's spine, which reads this.
+    this.heldValue = null;
     super.setNewSymbol(data, reelno);
     this.createSymbol();
   }
@@ -308,12 +317,12 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   protected createExtraElements(): void {
     super.createExtraElements();
     if (!this.spine) return;
-    this.labelValue = getCellValue(this.configData.data.reelNumber, this.configData.data.row) ?? 0;
+    // reelNumber is the column - corelib writes it onto configData.data in setNewSymbol.
+    const data = this.configData.data;
+    // A boost's figure is what it collects, worked out here rather than read from the backend.
+    const value = this.heldValue ?? (data.name === BOOST_SYMBOL_NAME ? 0 : getCellValue(data.reelNumber, data.row));
+    this.labelValue = value ?? 0;
     if (this.isBonusSymbol()) {
-      // reelNumber is the column - corelib writes it onto configData.data in setNewSymbol.
-      const data = this.configData.data;
-      // A boost's figure is what it collects, worked out here rather than read from the backend.
-      const value = data.name === BOOST_SYMBOL_NAME ? 0 : getCellValue(data.reelNumber, data.row);
       this.bonusModifier.create(data.name, data.multiplierTextConfig, value);
     } else if (this.isMysterySymbol()) {
       this.mysteryModifier.create(this.configData.data.animScale);

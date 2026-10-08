@@ -1,7 +1,7 @@
 import { JackpotLabelsComp } from '@slots/jokercharge/views/comps/JackpotLabelsComp';
 
 const VALUE_TEXT_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fill: [0xffed54, 0xf5a100],
   stroke: { color: 0x000000, width: 4 },

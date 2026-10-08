@@ -41,10 +41,13 @@ const TRIANGLE_EFFECT_SPINE = 'triangle';
 const TRIANGLE_EFFECT_STATE = 'animation';
 // Below every reel, so a cell's own overlays still draw over its spinning strip.
 const SPIN_LAYER_DEPTH = -1;
-// Their art overflows the cell, so the reels holding them are lifted above their neighbours.
-const REEL_DEPTH_NORMAL = 0;
-const REEL_DEPTH_OVERSIZED = 1;
-const EFFECT_DEPTH = 2;
+// Every symbol draws over a blank beside it. The boost's art overflows its cell, so it draws over
+// the other symbols, and the mysteries over everything.
+const REEL_DEPTH_BLANK = 0;
+const REEL_DEPTH_SYMBOL = 1;
+const REEL_DEPTH_OVERSIZED = 2;
+const REEL_DEPTH_MYSTERY = 3;
+const EFFECT_DEPTH = 4;
 export interface HoldNWinPosition {
   column: number;
   row: number;
@@ -520,18 +523,25 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       const name = grid[column]?.[row];
       if (name) reel.showSymbol(name);
     });
-    this.raiseOversizedReels();
+    this.updateReelDepths();
   }
 
   // Reels are added column by column, so a cell's neighbours draw over whatever spills out of it.
   // Depth is held in zIndex rather than child order, so it survives anything that adds children
-  // later: an oversized symbol sits above every other reel, and the effects above all of them.
-  private raiseOversizedReels(): void {
+  // later - see the REEL_DEPTH tiers, with the effects above all of them.
+  private updateReelDepths(): void {
     if (!this.reelsBuilt) return;
     this.forEachReel((reel) => {
       if (!reel) return;
-      reel.zIndex = OVERSIZED_SYMBOL_NAMES.includes(reel.getSymbolName()) ? REEL_DEPTH_OVERSIZED : REEL_DEPTH_NORMAL;
+      reel.zIndex = this.getReelDepth(reel.getSymbolName());
     });
+  }
+
+  private getReelDepth(name: string | null): number {
+    if (!name || name === BLANK_SYMBOL_NAME) return REEL_DEPTH_BLANK;
+    if (MYSTERY_SYMBOL_NAMES.includes(name)) return REEL_DEPTH_MYSTERY;
+    if (OVERSIZED_SYMBOL_NAMES.includes(name)) return REEL_DEPTH_OVERSIZED;
+    return REEL_DEPTH_SYMBOL;
   }
 
   private createReels(): void {
@@ -550,7 +560,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
           symbolHeight: this.symbolHeight,
           spinLayer: this.rowSpinLayers[row],
           landingOvershoot: this.landingOvershoot,
-          onSymbolPlaced: () => this.raiseOversizedReels(),
+          onSymbolPlaced: () => this.updateReelDepths(),
           spinSpeedMultiplier: this.spinSpeedMultiplier,
           anticipationSpeedFactor: this.anticipationSpeedFactor,
         });
@@ -569,7 +579,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
     }
     rowMasks.forEach((mask) => mask.fill(0xff0000));
     this.reelsBuilt = true;
-    this.raiseOversizedReels();
+    this.updateReelDepths();
   }
 
   // One masked layer per row, holding whichever of that row's strips are spinning right now - see
@@ -702,7 +712,7 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       reel.setSticky(true);
       reel.playChainLockAppear();
     });
-    this.raiseOversizedReels();
+    this.updateReelDepths();
   }
 
   // Called on entering the respin, and whenever the bet or the line count changes. A cell is free

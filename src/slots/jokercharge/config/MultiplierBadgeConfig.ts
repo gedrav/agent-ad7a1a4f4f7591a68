@@ -4,7 +4,7 @@ export const MULTIPLIER_EFFECT_STATE = 'animation';
 export const MULTIPLIER_EFFECT_SCALE = 1;
 
 export const MULTIPLIER_BADGE_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fill: [0xffffff, 0xbfe2ff],
   stroke: { color: 0x17347d, width: 10 },

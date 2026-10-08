@@ -25,7 +25,7 @@ const GOLD_STROKE_STOPS = [0, 1];
 const TEXT_SHADOW = { color: 0x000000, alpha: 0.65, blur: 4, distance: 6, angle: Math.PI / 2 };
 
 const HEADING_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fontSize: 46,
   fill: GOLD_FILL,
@@ -48,7 +48,7 @@ const CAPTION_STYLE = {
 // White into gold rather than the gold ramp: this one sits lowest, furthest from the title, and
 // wants to read as quieter than everything above it without going dim.
 const TAP_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fontSize: 46,
   fill: [0xffffff, 0xffe9a8],
