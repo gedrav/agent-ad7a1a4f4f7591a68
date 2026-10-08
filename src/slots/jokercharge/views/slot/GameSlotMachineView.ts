@@ -50,6 +50,7 @@ const COINS_ANIM_LOOP = true;
 import { BonusLayoutOverride, BONUS_TRIGGER_LAYOUT } from '@slots/jokercharge/config/screens/BonusTriggerLayoutConfig';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
 import {
+  fitTrailPlacement,
   getBoostTrailPlacement,
   getTrailPlacement,
   TRAIL_ANIMATION,
@@ -299,13 +300,14 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
 
   // BoostCollectHost.
   public sendTrailToBoost(from: HoldNWinPosition, to: HoldNWinPosition, onArrive: () => void): void {
-    const placement = getBoostTrailPlacement(from, to);
-    if (!placement) {
-      onArrive();
-      return;
-    }
+    const placement = getBoostTrailPlacement(from, to) ?? fitTrailPlacement(this.cellCentre(from), this.cellCentre(to));
     this.playTrailOn(this.acquireTrail(), placement, undefined, 1);
     setTimeout(onArrive, TRAIL_ARRIVAL_MS);
+  }
+
+  // A cell's centre in this view's space, which is the space the trails are placed in.
+  private cellCentre({ column, row }: HoldNWinPosition): { x: number; y: number } {
+    return this.toLocal(this.holdNWinReelsContainer.getReel(column, row).getGlobalPosition());
   }
 
   public resetTotalWin(): void {

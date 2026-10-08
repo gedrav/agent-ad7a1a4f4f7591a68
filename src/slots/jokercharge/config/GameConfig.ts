@@ -29,6 +29,7 @@ export const GAME_CONFIG = {
     // AssetLoader.loadFont() registers the FontFace using the asset NAME verbatim (extension
     // included), so this must match 'Belwe-Condensed.ttf' exactly, not just the font's own name.
     belweCondensed: 'Belwe-Condensed.ttf',
+    sfProDisplayBlack: 'FontsFree-Net-SFProDisplay-Black.ttf',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',

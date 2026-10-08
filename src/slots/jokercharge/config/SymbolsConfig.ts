@@ -26,7 +26,7 @@ export interface JCSymbolData {
 
 // Gold-coin look. A bitmap font can't render any of this - its glyphs are pre-rendered flat.
 export const MULTIPLIER_TEXT_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: '900',
   fontSize: 200,
   fill: ['0xFFF9C4', '0xFFD700', '0xFFA000', '0xE8890C'],
@@ -68,6 +68,11 @@ export const GRAND_TEXT_STYLE = {
     angle: Math.PI / 2,
   },
 };
+
+// The cash symbols' figures keep Belwe; every other text is on SF Pro. Shared constants rather than
+// spread per symbol, so C1 to C4 still share one style - see JCBonusSymbolModifier.create.
+const CASH_TEXT_STYLE = { ...MULTIPLIER_TEXT_STYLE, fontFamily: 'belweCondensed' };
+const CASH_TOP_TEXT_STYLE = { ...GRAND_TEXT_STYLE, fontFamily: 'belweCondensed' };
 
 const MINOR_TEXT_STYLE = {
   ...MULTIPLIER_TEXT_STYLE,
@@ -197,12 +202,12 @@ function bonusSymbolData(multiplier: number): JCSymbolData {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.75,
+    cellScale: 0.7,
     multiplierTextConfig: {
       name: 'multiplierVal',
       type: 'Text',
       anchor: { x: 0.5, y: 0.75 },
-      style: multiplier === 5 ? GRAND_TEXT_STYLE : MULTIPLIER_TEXT_STYLE,
+      style: multiplier === 5 ? CASH_TOP_TEXT_STYLE : CASH_TEXT_STYLE,
     },
   };
 }
@@ -253,7 +258,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     winAnim: 'landing',
     landingAnim: 'landing',
     collectAnim: 'collect',
-    cellScale: 0.75,
+    cellScale: 0.7,
     // The boost's running total, in C5's colours, on the rig's empty root_txt slot. It starts with
     // nothing showing and fills as the boost collects. TODO: tune the anchor against the bag art.
     multiplierTextConfig: {
@@ -271,7 +276,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.75,
+    cellScale: 0.7,
     labelTextConfig: labelTextConfig('miniTitle', MINI_TEXT_STYLE),
   },
   MR: {
@@ -282,7 +287,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.75,
+    cellScale: 0.7,
     labelTextConfig: labelTextConfig('minorTitle', MINOR_TEXT_STYLE),
   },
   MJ: {
@@ -293,7 +298,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.75,
+    cellScale: 0.7,
     labelTextConfig: labelTextConfig('majorTitle', MAJOR_TEXT_STYLE),
   },
   MY: MYSTERY_SYMBOL,
@@ -307,7 +312,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     blurAnim: 'static_blur',
     winAnim: 'win',
     landingAnim: 'landing',
-    cellScale: 0.75,
+    cellScale: 0.7,
   },
   SMY: { ...MYSTERY_SYMBOL, name: 'SMY' },
   SMJP: { ...MYSTERY_JACKPOT_SYMBOL, name: 'SMJP' },

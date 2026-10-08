@@ -9,6 +9,7 @@ const PRELOADER: AssetBundle = {
     { TYPE: 'common', NAME: 'brandLogo', ASSETTYPE: 'png' },
     { TYPE: 'common', NAME: 'Mulish.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'Belwe-Condensed.ttf', ASSETTYPE: 'font' },
+    { TYPE: 'game', NAME: 'FontsFree-Net-SFProDisplay-Black.ttf', ASSETTYPE: 'font' },
   ],
 };
 const COMMON: AssetBundle = {

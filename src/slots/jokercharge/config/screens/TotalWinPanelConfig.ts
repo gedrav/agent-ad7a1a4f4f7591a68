@@ -30,7 +30,7 @@ export const TOTAL_WIN_LABEL_CONFIG = {
   toUpperCase: true,
   anchor: { x: 0.5, y: 0.5 },
   style: {
-    fontFamily: 'belweCondensed',
+    fontFamily: 'sfProDisplayBlack',
     fontWeight: 900,
     // The bar's attachment is 764x147 in the rig's own units, which the panel is placed at 1:1.
     fontSize: 78,
@@ -48,7 +48,7 @@ export const TOTAL_WIN_VALUE_CONFIG = {
   contentText: '',
   anchor: { x: 0.5, y: 0.5 },
   style: {
-    fontFamily: 'belweCondensed',
+    fontFamily: 'sfProDisplayBlack',
     fontWeight: 900,
     // The frame's attachment is 1019x325 in the rig's own units, which the panel is placed at 1:1.
     fontSize: 170,

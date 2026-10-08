@@ -76,18 +76,49 @@ export const TRAIL_PLACEMENTS: Record<TrailDirection, Record<string, TrailPlacem
   fromLogo: FROM_LOGO_PLACEMENTS,
 };
 
-// Symbol across to a boost, keyed "fromColumn,fromRow>toColumn,toRow". TODO: fill in per pair - until
-// a pair is here it borrows the symbol's own trail up to the logo, which only stands in for one.
+// Hand-made overrides for a symbol's trail across to a boost, keyed "fromColumn,fromRow>toColumn,toRow".
+// Any pair not here is fitted - see fitTrailPlacement.
 const TO_BOOST_PLACEMENTS: Record<string, TrailPlacement> = {};
 
 export function getBoostTrailPlacement(
   from: { column: number; row: number },
   to: { column: number; row: number },
 ): TrailPlacement | undefined {
-  return (
-    TO_BOOST_PLACEMENTS[`${from.column},${from.row}>${to.column},${to.row}`] ??
-    getTrailPlacement(from.column, from.row, 'toLogo')
-  );
+  return TO_BOOST_PLACEMENTS[`${from.column},${from.row}>${to.column},${to.row}`];
+}
+
+// Where the 'trail' animation's head first shows and where it comes to rest (by 0.4s), in the
+// spine's own space, y down. Measured from line.json with spine-core; remeasure if the art changes.
+const TRAIL_HEAD_START = { x: -2.3, y: -57.5 };
+const TRAIL_HEAD_END = { x: -302.1, y: -614.9 };
+
+// Fits the 'trail' animation so its head starts on `from` and lands on `to`, both in the slot
+// machine view's space. It is never drawn wider than it was made, only longer, so a long reach
+// stays slim and a short one shrinks evenly rather than flattening. It is mirrored when heading
+// right, which keeps the curve bowing the way the logo trails do.
+export function fitTrailPlacement(from: { x: number; y: number }, to: { x: number; y: number }): TrailPlacement {
+  const vx = TRAIL_HEAD_END.x - TRAIL_HEAD_START.x;
+  const vy = TRAIL_HEAD_END.y - TRAIL_HEAD_START.y;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const distance = Math.hypot(dx, dy);
+  const width = Math.min(1, distance / Math.hypot(vx, vy));
+  const length = Math.sqrt(Math.max(distance * distance - (width * vx) ** 2, 0)) / Math.abs(vy);
+  const scaleX = dx > 0 ? -width : width;
+  const scaleY = length;
+  const rotation = Math.atan2(dy, dx) - Math.atan2(scaleY * vy, scaleX * vx);
+  const cos = Math.cos(rotation);
+  const sin = Math.sin(rotation);
+  const startX = scaleX * TRAIL_HEAD_START.x;
+  const startY = scaleY * TRAIL_HEAD_START.y;
+  return {
+    x: from.x - (cos * startX - sin * startY),
+    y: from.y - (sin * startX + cos * startY),
+    rotation: (rotation * 180) / Math.PI,
+    scaleX,
+    scaleY,
+    animation: TRAIL_ANIMATION,
+  };
 }
 
 export function getTrailPlacement(

@@ -52,7 +52,7 @@ const CLOSE_SCALE = 200 / 393;
 export const BUY_BONUS_FEATURE_IDS = ['FG1', 'FG2', 'FG3'];
 
 const PRICE_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fill: [0xffffff, 0xd9f5c8],
   stroke: { color: 0x14400c, width: 10 },
@@ -61,7 +61,7 @@ const PRICE_STYLE = {
 };
 
 const BET_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fill: [0xffffff, 0xe6d4ff],
   stroke: { color: 0x2a0a45, width: 10 },
@@ -70,7 +70,7 @@ const BET_STYLE = {
 };
 
 const CLOSE_STYLE = {
-  fontFamily: 'belweCondensed',
+  fontFamily: 'sfProDisplayBlack',
   fontWeight: 900,
   fill: [0xffffff, 0xbfe2ff],
   stroke: { color: 0x17347d, width: 10 },
