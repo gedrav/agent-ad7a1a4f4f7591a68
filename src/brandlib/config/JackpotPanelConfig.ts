@@ -15,6 +15,12 @@ export const JACKPOT_PANEL_CONFIG: any = {
       { state: 'idle', loop: true },
       { state: 'win', loop: true },
     ],
+    xPos: [102, 377, 652, 927],
+    yPos: [35, 35, 35, 35],
+    lxPos: [102, 377, 652, 927],
+    lyPos: [35, 35, 35, 35],
+    pxPos: [102, 377, 102, 377],
+    pyPos: [35, 35, 115, 115],
     items: {
       name: 'jackPotItem',
       type: 'Container',
@@ -43,6 +49,29 @@ export const JACKPOT_PANEL_CONFIG: any = {
     },
   },
   Elements: [
+    {
+      name: 'panelContainer',
+      type: 'Container',
+      Elements: [
+        {
+          name: 'guideRect',
+          type: 'Graphics',
+          width: 1110,
+          height: 74,
+          lWidth: 1110,
+          lHeight: 74,
+          pWidth: 555,
+          pHeight: 150,
+          alpha: 0,
+          color: 0xff0000,
+        },
+      ],
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'top', widthPerc: 0.8, heightPerc: 0.08, vPaddingPerc: 0.01 },
+        Landscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.75, vPaddingPerc: 0.01 },
+        Portrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.94, vPaddingPerc: 0.08 },
+      },
+    },
     { name: 'overlayRect', type: 'Graphics', width: 100, height: 100, alpha: 0.3, color: 0x000000 },
     {
       name: 'jackpotIntroAnimHor',

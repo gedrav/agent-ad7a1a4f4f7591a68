@@ -9,7 +9,7 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 35 },
+  en: { fontSize: 50 },
   cs: { fontSize: 35 },
   lt: { fontSize: 35 },
   pl: { fontSize: 35 },
@@ -40,14 +40,14 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'commonFont',
+          fontFamily: 'gameFont1',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 60,
+          mFontSize: 60,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -73,14 +73,14 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'commonFont',
+          fontFamily: 'gameFont1',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 60,
+          mFontSize: 60,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -106,14 +106,14 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'commonFont',
+          fontFamily: 'gameFont1',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 60,
+          mFontSize: 60,
           anchor: { x: 0.5, y: 0.5 },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -245,13 +245,13 @@ export const SPLASH_CONFIG: any = {
           textConfig: {
             content: 'playGameText',
             style: {
-              fontFamily: 'commonFont',
+              fontFamily: 'gameFont1',
               fontWeight: 700,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
               fontSize: 90,
-              mFontSize: 40,
+              mFontSize: 70,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {
                 angle: 0.5235987755982988,

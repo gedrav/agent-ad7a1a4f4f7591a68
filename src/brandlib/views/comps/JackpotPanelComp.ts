@@ -3,7 +3,7 @@ import { JackPotItem } from './JackPotItem';
 import { PixView } from '@core/pixiwrapper/PixView';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
-import { Graphics, Text } from 'pixi.js';
+import { Container, Graphics, Text } from 'pixi.js';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -53,11 +53,13 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   protected winTickerJP: WinTicker;
   protected timeoutId: number;
   protected noticeText: Text;
+  protected panelContainer: PixView;
   constructor(config) {
     super(config);
     this.jackpotConfig = this.configData.jackpotConfig;
     this.overlayRect = this.elementsList['overlayRect'];
     this.guideRect = this.elementsList['guideRect'];
+    this.panelContainer = this.elementsList['panelContainer'];
     this.jackpotContainer = this.elementsList['jackpotContainer'];
     this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
     this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
@@ -213,8 +215,11 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
 
     for (let i = 0; i < itemCount; i++) {
       const item = new JackPotItem(this.jackpotConfig.items);
-      this.addChildAt(item, 0);
+      this.panelContainer.addChild(item);
       this.jackPotsArr.push(item);
+      item.x = this.jackpotConfig.xPos[i];
+      item.y = this.jackpotConfig.yPos[i];
+      item.scale.set(0.25);
       item.initialView({
         skinName: this.jackpotConfig.jackpotAnimSkin[i],
         colorcode: this.jackpotConfig.jackpotTextColor[i],
@@ -276,44 +281,26 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     if (this.noticeText) this.noticeText.x = UIUtil.getGameWidth() / 2;
     this.overlayRect.width = UIUtil.getGameWidth();
     this.overlayRect.height = UIUtil.getGameHeight();
-
-    if (!DeviceProxy.isDesktop() && DeviceProxy.config.isPortrait) {
-      this.jackPotsArr.forEach((item, index) => this.layoutAsGrid(item, index));
-      return;
+    if (DeviceProxy.isDevice()) {
+      UIUtil.adjustElement(this.panelContainer.elementsList['guideRect']);
+      if (DeviceProxy.config.isPortrait) {
+        const len = this.jackPotsArr.length;
+        for (let k = 0; k < len; k++) {
+          this.jackPotsArr[k].x = this.jackpotConfig.pxPos[k];
+          this.jackPotsArr[k].y = this.jackpotConfig.pyPos[k];
+        }
+      } else {
+        const len = this.jackPotsArr.length;
+        for (let k = 0; k < len; k++) {
+          this.jackPotsArr[k].x = this.jackpotConfig.lxPos[k];
+          this.jackPotsArr[k].y = this.jackpotConfig.lyPos[k];
+        }
+      }
     }
-    const layout = DeviceProxy.isDesktop() ? DESKTOP_ROW : LANDSCAPE_ROW;
-    this.jackPotsArr.forEach((item, index) => this.layoutAsRow(item, index, layout));
+    super.resizeView();
   }
 
   /** Single row: items 0 and 2 anchor to the panel edges, the rest sit next to the previous item. */
-  private layoutAsRow(item: JackPotItem, index: number, layout: RowLayout) {
-    UIUtil.setRelativeScale(item, layout.widthPerc, layout.heightPerc, null, layout.maxScale, layout.minScale);
-    item.y = item.height * ROW_Y_PERC;
-
-    if (index === 0) {
-      UIUtil.alignHorizontal(item, { hAlign: 'left', hPaddingPerc: layout.hPaddingPerc });
-    } else if (index === 2) {
-      UIUtil.alignHorizontal(item, { hAlign: 'right', hPaddingPerc: -layout.hPaddingPerc });
-    } else {
-      const prev = this.jackPotsArr[index - 1];
-      item.x = prev.x + prev.width;
-    }
-  }
-
-  /** Two columns: even indices go left, odd go right; each row hangs below the row above it. */
-  private layoutAsGrid(item: JackPotItem, index: number) {
-    UIUtil.setRelativeScale(item, 0.17, 0.17, null, 0.16, 0.2);
-
-    const isLeftColumn = index % GRID_COLUMNS === 0;
-    item.x = isLeftColumn ? item.width * 0.34 : UIUtil.getGameWidth() - item.width * 0.62;
-
-    if (index < GRID_COLUMNS) {
-      UIUtil.alignVertical(item, { vAlign: 'top', vPaddingPerc: 0.11 });
-    } else {
-      const above = this.jackPotsArr[index - GRID_COLUMNS];
-      item.y = above.y + item.height * 0.8;
-    }
-  }
   protected resizeJackpotWinAnimation() {
     UIUtil.adjustElement(this.jpguideRect);
     if (!this.isJackpotIntroAnim) return;

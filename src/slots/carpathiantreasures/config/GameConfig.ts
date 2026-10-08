@@ -28,7 +28,7 @@ export const GAME_CONFIG = {
     bitmapFontJP: 'bitmapFontJP',
     commonFont: 'Mulish',
     gameFont1: 'CarterOne',
-    commonFontBold: 'CarterOne',
+    commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
   },
