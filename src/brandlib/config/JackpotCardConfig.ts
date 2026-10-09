@@ -148,6 +148,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           alpha: 0,
         },
         { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 228 },
+        { name: 'typeOfJPTextimg', type: 'Sprite', image: 'gold_JP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 326 },
         {
           name: 'winTickerJP',
           type: 'Comp',
