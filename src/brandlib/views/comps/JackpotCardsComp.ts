@@ -18,6 +18,7 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 const REVEAL_HOLD_MS = 1500;
 const OPEN_FALLBACK_MS = 3000;
+const WINING_TIER = { MINI: 'bronze', MINOR: 'silver', MAJOR: 'gold', GRAND: 'diamond' };
 
 export class JackpotCardsComp extends ResponsiveChildrenView {
   cardsContainer: PixView;
@@ -39,6 +40,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected jackpotWinContainer: PixView;
   protected jpguideRect: PixView;
   protected youwinJPTextimg: PixSprite;
+  protected typeOfJPTextimg: PixSprite;
   protected winTickerJP: WinTicker;
   protected timeoutId: number;
   protected cardGuideRect: PixGraphics;
@@ -54,6 +56,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackpotWinContainer = this.elementsList['jackpotWinContainer'];
     this.jpguideRect = this.jackpotWinContainer.elementsList['jpguideRect'];
     this.youwinJPTextimg = this.jackpotWinContainer.elementsList['youwinJPTextimg'];
+    this.typeOfJPTextimg = this.jackpotWinContainer.elementsList['typeOfJPTextimg'];
     this.jackPotOutroAnimation = this.jackpotWinContainer.elementsList['jackPotOutroAnimation'];
     this.winTickerJP = this.jackpotWinContainer.elementsList['winTickerJP'];
 
@@ -68,7 +71,6 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackPotOutroAnimation.addEventListener('complete', this.onJackpotOutroAnimComplete.bind(this));
     this.jackpotIntroAnimHor.addEventListener('complete', this.onIntroAnimComplete.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
-    EventHandler.addEventListener(SlotEvents.JACKPOT_WIN_TICKER_ANIM, this.showJackpotWinAnimation.bind(this));
 
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_PICK_RESULT, this.onPickResult.bind(this));
@@ -115,8 +117,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   notifyWinDone() {
     this.adjustTextSize();
+    this.typeOfJPTextimg.visible = false;
     this.youwinJPTextimg.visible = false;
     AnimationProxy.killTweensOf(this.youwinJPTextimg);
+    AnimationProxy.killTweensOf(this.typeOfJPTextimg);
     this.winTickerJP.visible = false;
     AnimationProxy.killTweensOf(this.winTickerJP);
     this.overlayRect.visible = false;
@@ -134,17 +138,37 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     }
   }
   showJackpotWinAnimation() {
+    const round = appModel.jackpotRound;
+    if (!round) return;
+
     this.isJackpotOutroAnim = true;
     this.isJPSkipping = false;
-    const winValue = appModel.jackpotRound?.amount ?? 0;
+    const { amount: winAmount = 0, wonTier } = appModel.jackpotRound;
     this.winTickerJP.reset();
     this.winTickerJP.visible = true;
-    this.winTickerJP.countUpValue(winValue, 5000);
+    this.winTickerJP.countUpValue(winAmount, 5000);
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
     this.jackPotOutroAnimation.renderable = true;
+
+    this.youwinJPTextimg.scale.set(0.1);
+    this.typeOfJPTextimg.scale.set(0.1);
+
     this.youwinJPTextimg.visible = true;
-    this.pulseJPWinText();
+
+    this.typeOfJPTextimg.texture = UIUtil.getTexture(`${WINING_TIER[wonTier]}_JP`);
+    this.typeOfJPTextimg.visible = true;
+
+    this.showStartAnimation();
     this.jackPotOutroAnimation.playAnimation({ state: 'start_land', loop: false });
+  }
+  private showStartAnimation() {
+    AnimationProxy.animateTween(this.youwinJPTextimg, { scaleX: 1, scaleY: 1, duration: 0.3 });
+    AnimationProxy.animateTween(this.typeOfJPTextimg, {
+      scaleX: 1,
+      scaleY: 1,
+      duration: 0.3,
+      onComplete: this.pulseJPWinText.bind(this),
+    });
   }
   playIntroAnimations({ state, stateP, loop, timeScale = 1, reset = false }) {
     this.jackpotIntroAnimHor.playAnimation({ state, loop, timeScale, reset });
@@ -160,12 +184,24 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       yoyo: true,
       duration: 0.5,
     });
+
+    AnimationProxy.killTweensOf(this.typeOfJPTextimg);
+    this.typeOfJPTextimg.scale.set(1);
+    AnimationProxy.animateTween(this.typeOfJPTextimg, {
+      scaleX: 0.9,
+      scaleY: 0.9,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.5,
+    });
   }
   hideJackPotOutroAnim() {
+    this.typeOfJPTextimg.visible = false;
     this.youwinJPTextimg.visible = false;
     this.jackPotOutroAnimation.visible = false;
     this.jackPotOutroAnimation.stopAnimation();
     AnimationProxy.killTweensOf(this.youwinJPTextimg);
+    AnimationProxy.killTweensOf(this.typeOfJPTextimg);
   }
   onIntroAnimComplete(e) {
     const animationName = e.animation.name;
