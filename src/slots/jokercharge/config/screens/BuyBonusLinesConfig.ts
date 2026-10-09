@@ -23,7 +23,7 @@ export const BUY_BONUS_LINES_CONFIG: any = {
   layoutData: {
     Desktop: { x: -400, y: 420, scale: 0.3 },
     // Machine-space y 980 is just under the reels, which end near 950.
-    Portrait: { x: 0, y: 980, scale: 1 },
+    Portrait: { x: 0, y: 1050, scale: 1 },
     Landscape: { x: -400, y: 420, scale: 0.3 },
   },
   Elements: [

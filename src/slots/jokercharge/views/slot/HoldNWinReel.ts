@@ -1,4 +1,4 @@
-import { ColorMatrixFilter, Container, Ticker } from 'pixi.js';
+import { Container, Ticker } from 'pixi.js';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
@@ -26,6 +26,7 @@ import {
   MULTIPLIER_EFFECT_STATE,
 } from '../../config/MultiplierBadgeConfig';
 import { BOOST_BADGE_COPY_ALPHA } from '../../config/BoostConfig';
+import { isSecondaryAssetsReady } from '../../models/JCAssetsState';
 import { MYSTERY_SYMBOL_NAMES, SYMBOLS_DATA, getRandomSymbolName } from '../../config/SymbolsConfig';
 import { appModel } from '@core/models/services/AppModelService';
 import { MysteryReelResult } from './JCMysterySymbolModifier';
@@ -98,7 +99,10 @@ export default class HoldNWinReel extends Container {
   private chainLockAnim: PixSpine | null = null;
   private chainLockListener: any = null;
   private multiplierEffect: PixSpine | null = null;
-  private readonly dimFilter = new ColorMatrixFilter();
+  // 0 is the cell as drawn, 1 fully dimmed. A tint, not a filter: a filter is an offscreen pass per
+  // cell every frame, where a tint multiplies the colour in the same draw - a brightness filter does
+  // exactly that multiply. Spine and Text both honour a parent's tint.
+  private readonly dimLevel = { value: 0 };
   private dimmed = false;
   private multiplierText: PixText | null = null;
   // How much of the badge's multiplier the symbol's figure already carries. A boost spends it
@@ -149,10 +153,6 @@ export default class HoldNWinReel extends Container {
     this.landingOvershoot = config.landingOvershoot ?? 0;
     this.onSymbolPlaced = config.onSymbolPlaced;
 
-    // The filter's alpha mixes its effect in, so the dim fades rather than snapping.
-    this.dimFilter.brightness(DIM_BRIGHTNESS, false);
-    this.dimFilter.alpha = 0;
-
     this.spinContainer = new Container();
     this.spinContainer.label = 'spinContainer';
     this.addChild(this.spinContainer);
@@ -170,6 +170,7 @@ export default class HoldNWinReel extends Container {
     this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale, SYMBOLS_DATA[name]?.cellScaleY);
     symbol.y = y;
     symbol.visible = false;
+    symbol.pauseWhileHidden();
     this.spinContainer.addChild(symbol);
     return symbol;
   }
@@ -434,6 +435,11 @@ export default class HoldNWinReel extends Container {
   // Centred on the cell unless a position is given, which an updating badge uses to keep the
   // burst behind itself.
   private playMultiplierEffect(at?: { x: number; y: number }, onComplete?: () => void): void {
+    // Its spine is feature art in SECONDARY; without it the badge just arrives with no burst.
+    if (!isSecondaryAssetsReady()) {
+      onComplete?.();
+      return;
+    }
     this.releaseMultiplierEffectListener();
     this.multiplierEffect ??= this.acquireEffect(MULTIPLIER_EFFECT_SPINE, 'multiplierEffect', MULTIPLIER_EFFECT_SCALE);
     const effect = this.multiplierEffect;
@@ -593,18 +599,22 @@ export default class HoldNWinReel extends Container {
     return this.symbolView?.isMysteryReelSpinning() ?? false;
   }
 
-  // Off the filter list once fully faded back, so an undimmed cell costs no extra render pass.
   public setDimmed(flag: boolean): void {
     if (this.dimmed === flag) return;
     this.dimmed = flag;
-    this.filters = [this.dimFilter];
-    AnimationProxy.animateTween(this.dimFilter, {
+    const level = this.dimLevel;
+    AnimationProxy.animateTween(level, {
       duration: DIM_FADE_DURATION,
-      alpha: flag ? 1 : 0,
-      onComplete: () => {
-        if (!this.dimmed) this.filters = [];
-      },
+      value: flag ? 1 : 0,
+      onUpdate: () => this.applyDim(level.value),
+      onComplete: () => this.applyDim(level.value),
     });
+  }
+
+  // Grey, as tint takes it: each channel scaled the same, from 1 down to DIM_BRIGHTNESS.
+  private applyDim(level: number): void {
+    const channel = Math.round(255 * (1 - (1 - DIM_BRIGHTNESS) * level));
+    this.tint = (channel << 16) | (channel << 8) | channel;
   }
 
   public playWinAnimation(onComplete?: () => void): void {
@@ -648,12 +658,15 @@ export default class HoldNWinReel extends Container {
       if (this.spinContainer.parent === this.spinLayer) return;
       this.spinContainer.position.set(this.x, this.y);
       this.spinLayer.addChild(this.spinContainer);
+      this.spinLayer.visible = true;
       return;
     }
     if (this.spinContainer.parent === this) return;
     this.spinContainer.position.set(0, 0);
     // Index 0: the cell's overlays were added after the strip and draw over it.
     this.addChildAt(this.spinContainer, 0);
+    // A layer holding only its mask still pushes and pops the stencil every frame.
+    this.spinLayer.visible = this.spinLayer.children.length > 1;
   }
 
   public setSticky(flag: boolean): void {
@@ -746,11 +759,13 @@ export default class HoldNWinReel extends Container {
     symbol.setBlanksBlurred(true);
   }
 
-  // setNewSymbol() tears the spine down; setBlurredTexture() rebuilds it so the cell isn't blank.
+  // Every symbol on the strip was blurred as the spin started and keeps it through setNewSymbol(),
+  // which plays the blur pose itself - playing it a second time here was a second full pose a recycle.
   private setSymbolContentForSpin(symbol: JCReelSymbol, name: string): void {
     symbol.setNewSymbol({ ...SYMBOLS_DATA[name], row: this.row }, this.column);
     this.applySymbolScale(symbol, SYMBOLS_DATA[name]?.cellScale, SYMBOLS_DATA[name]?.cellScaleY);
-    symbol.setBlurredTexture();
+    // Blanks keeps its blur on a skin of its own, which placing a new symbol resets.
+    symbol.setBlanksBlurred(true);
   }
 
   private onSpinTick(ticker: Ticker): void {
@@ -883,8 +898,11 @@ export default class HoldNWinReel extends Container {
   // otherwise draw outside it.
   private restAtFront(front: JCReelSymbol): void {
     this.alignNeighbours(front);
-    if (this.topSymbolView) this.topSymbolView.visible = false;
-    if (this.bottomSymbolView) this.bottomSymbolView.visible = false;
+    [this.topSymbolView, this.bottomSymbolView].forEach((neighbour) => {
+      if (!neighbour) return;
+      neighbour.visible = false;
+      neighbour.pauseWhileHidden();
+    });
     this.setSpinMasked(false);
   }
 
@@ -950,18 +968,17 @@ export default class HoldNWinReel extends Container {
     this.releaseChainLockListener();
     this.chainLockAnim = this.releaseEffect(this.chainLockAnim);
     this.anticipationAnim = this.releaseEffect(this.anticipationAnim);
-    if (this.symbolView) {
-      JCReelSymbolPool.getInstance().release(this.symbolView);
-      this.symbolView = null;
-    }
-    if (this.topSymbolView) {
-      JCReelSymbolPool.getInstance().release(this.topSymbolView);
-      this.topSymbolView = null;
-    }
-    if (this.bottomSymbolView) {
-      JCReelSymbolPool.getInstance().release(this.bottomSymbolView);
-      this.bottomSymbolView = null;
-    }
+    // Killed before the symbols go back: a landing tween finishing later would move a symbol some
+    // other cell owns by then, and rest a reel that no longer exists.
+    this.stripSymbols().forEach((symbol) => {
+      AnimationProxy.killTweensOf(symbol);
+      AnimationProxy.killTweensOf(symbol.scale);
+      JCReelSymbolPool.getInstance().release(symbol);
+    });
+    this.symbolView = null;
+    this.topSymbolView = null;
+    this.bottomSymbolView = null;
+    AnimationProxy.killTweensOf(this.dimLevel);
     // Back under this cell, or a destroy() of the cell would leave it behind in the row layer.
     this.setSpinMasked(false);
     super.destroy(options);

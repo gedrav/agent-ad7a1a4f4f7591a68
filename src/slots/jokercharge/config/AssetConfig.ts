@@ -15,7 +15,6 @@ const PRELOADER: AssetBundle = {
 const COMMON: AssetBundle = {
   name: LOAD_CONSTANTS.COMMON,
   assets: [
-    { TYPE: 'game', NAME: 'bookosb.ttf', ASSETTYPE: 'font' },
     { TYPE: 'common', NAME: 'Oswald-Bold.ttf', ASSETTYPE: 'font' },
     { TYPE: 'game', NAME: 'controlPanelPrimaryAssets', ASSETTYPE: 'sprite' },
   ],
@@ -34,9 +33,6 @@ const PRIMARY: AssetBundle = {
   name: LOAD_CONSTANTS.PRIMARY,
   assets: [
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
-    { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
-    { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
-    { TYPE: 'game', NAME: 'Bitmap1.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bg', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'logo', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
@@ -44,7 +40,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'reelframes-0', ASSETTYPE: 'sprite' },
+    { TYPE: 'game', NAME: 'reelframes', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'hat', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mystery_front', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mystery_back', ASSETTYPE: 'spine' },
@@ -53,24 +49,27 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'boot', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'Chain_lock_sym', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'reel_sym_add', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'electr_effect', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'saber_down', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'multiplier_effect', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'triangle', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'mask', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'transition', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'small_square', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'big_square', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'line', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'coins', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'total_win_panel', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'respinCounter', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'BuyBonus-0', ASSETTYPE: 'sprite' },
   ],
 };
+// Respin feature art only, loaded once the game is on screen. Each view builds its piece when it
+// arrives, and the feature waits for it - see JCAssetsState.
 const SECONDARY: AssetBundle = {
   name: LOAD_CONSTANTS.SECONDARY,
-  assets: [],
+  assets: [
+    { TYPE: 'game', NAME: 'transition', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'electr_effect', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'saber_down', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'triangle', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'multiplier_effect', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'coins', ASSETTYPE: 'spine' },
+  ],
 };
 const FREESPIN: AssetBundle = {
   name: LOAD_CONSTANTS.FEATURES,

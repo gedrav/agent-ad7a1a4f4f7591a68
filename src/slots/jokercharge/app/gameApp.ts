@@ -11,6 +11,9 @@ import SlotGameApp from '@core/app/SlotGameApp';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { AppEvents } from '@core/events/AppEvents';
+import { setSecondaryAssetsReady } from '@slots/jokercharge/models/JCAssetsState';
+import { applyLineBets } from '@slots/jokercharge/models/JCBetsState';
 import { getSelectedLines, MAX_LINES, MIN_LINES, setSelectedLines } from '@slots/jokercharge/models/JCLinesState';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
 import { getStickyState } from '@slots/jokercharge/models/JCSpinData';
@@ -57,26 +60,39 @@ export class gameApp extends SlotGameApp {
     return true;
   }
 
+  // Set for the start-up announcement only: a session coming back with a bet of its own - sticky
+  // locks, or a round left unfinished - keeps it rather than taking the line count's.
+  private keepBetOnLines = false;
+
   async createView() {
-    // Everything the grid symbols need (bonus_sym, mystery_back/front, etc.) is now in
-    // PRIMARY, not SECONDARY - but ReelSymbolSpine's spine-creation path still gates on this
-    // global flag regardless of which bundle an asset actually lives in. Since jokerCharge
-    // has nothing left in SECONDARY, mark it satisfied before the grid builds so symbols
-    // actually create their spine on first construction instead of waiting on the (empty)
-    // lazy bundle to finish loading in the background.
+    // Everything the grid symbols need is in PRIMARY, but ReelSymbolSpine only builds a symbol's
+    // spine behind this global flag, whatever bundle the art is in - so it is set before the grid
+    // builds. SECONDARY holds only the feature's art, tracked separately in JCAssetsState.
     appModel.secondaryAssetsLoaded = true;
+    // Registered ahead of every view, so it runs first when SECONDARY arrives.
+    EventHandler.addEventListener(AppEvents.SECONDARY_ASSETS_LOADED, setSecondaryAssetsReady);
+    // Also ahead of every view: the bet list is narrowed for the new line count before anything
+    // answering the same announcement reads it - see JCBetsState.
+    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.onSelectedLines.bind(this));
     const restored = this.restoreStickySession();
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
     this.gameAppScreen.visible = false;
     this.appContainer.addChildAt(this.gameAppScreen, 0);
-    // Announced once the views exist, so anything that read the count while it was being built
-    // catches up. Safe for the locks: the grid releases them on a change of bet or line count,
-    // and this is the very value it recorded them at.
-    if (restored) {
-      EventHandler.dispatchEvent(JCEvents.SELECTED_LINES, getSelectedLines());
-    }
+    // Announced once the views exist, restored or not: anything that read the count while it was
+    // being built catches up, and the bet and its list are set for it - the default count included.
+    // A restored bet is kept, so the locks made at it hold.
+    this.keepBetOnLines = restored || appModel.getIsUnfinishedGame();
+    EventHandler.dispatchEvent(JCEvents.SELECTED_LINES, getSelectedLines());
+    this.keepBetOnLines = false;
     setTimeout(() => {
       this.gameAppScreen.visible = true;
     }, 10);
+  }
+
+  // The line count sets the bet - see JCBetsState. UPDATE_TOTALBET only when that moved it.
+  private onSelectedLines(): void {
+    if (applyLineBets(getSelectedLines(), this.keepBetOnLines)) {
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+    }
   }
 }

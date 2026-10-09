@@ -1,6 +1,3 @@
-import { BuyBonusClickCommand } from '@core/commands/action/BuyBonusClickCommand';
-import { Point } from 'pixi.js';
-import { CoreUIConfig } from '@brand/config/CoreUIConfig';
 import { UIConfig } from '@game/config/UIConfig';
 import { getSelectedLines } from '@slots/jokercharge/models/JCLinesState';
 
@@ -23,18 +20,12 @@ export const GAME_CONFIG = {
   FontFaces: {
     commonFont: 'Mulish',
     commonFontBold: 'Oswald Bold',
-    gameFont1: 'bookosb',
-    bitmapFont: 'bitmapFont',
-    bitmapFontBW: 'bitmapFontBW',
-    // AssetLoader.loadFont() registers the FontFace using the asset NAME verbatim (extension
-    // included), so this must match 'Belwe-Condensed.ttf' exactly, not just the font's own name.
+    gameFont1: 'FontsFree-Net-SFProDisplay-Black.ttf',
     belweCondensed: 'Belwe-Condensed.ttf',
     sfProDisplayBlack: 'FontsFree-Net-SFProDisplay-Black.ttf',
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  // Read by MessageServiceProxy on every spin, buy bonus included: the backend prices the round
-  // by how many lines the player is playing.
   getExtraSpinData: () => ({ activePaylines: getSelectedLines() }),
   bigWinValues: [25, 50, 100, 500],
 };

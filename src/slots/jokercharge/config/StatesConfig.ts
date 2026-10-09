@@ -1,11 +1,11 @@
 import { STATES } from '@core/states/StateConstants';
-import { CheckUnfinishedStateV2 } from '@core/commands/states/CheckUnfinishedStateV2';
+import { CheckUnfinishedState } from '../states/JCCheckUnfinishedState';
 import { GameIdleState } from '@core/commands/states/GameIdleState';
 import { SpinStartState } from '@core/commands/states/SpinStartState';
 import { JCSpinResponseReceivedState } from '../states/JCSpinResponseReceivedState';
 import { SpinStoppedState } from '@core/commands/states/SpinStoppedState';
 import { ShowSpinWinState } from '@core/commands/states/ShowSpinWinState';
-import { CheckFeatureStateV2 } from '@core/commands/states/CheckFeatureStateV2';
+import { CheckFeatureState } from '../states/JCCheckFeatureState';
 import { CheckAutoSpinState } from '@core/commands/states/CheckAutoSpinState';
 import { StartAutoSpinState } from '@core/commands/states/StartAutoSpinState';
 import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundState';
@@ -22,7 +22,7 @@ import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
-  { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedStateV2 },
+  { name: STATES.CHECK_UNFINISHED_STATE, state: CheckUnfinishedState },
 
   { name: STATES.IDLE_STATE, state: GameIdleState },
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
@@ -30,7 +30,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
 
-  { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureStateV2 },
+  { name: STATES.CHECK_FEATURE_STATE, state: CheckFeatureState },
   { name: STATES.ENTER_RESPIN_STATE, state: EnterRespinState },
   { name: STATES.RESPIN_INTRO_STATE, state: RespinIntroState },
   { name: STATES.RESPIN_SPIN_START_STATE, state: RespinSpinStartState },

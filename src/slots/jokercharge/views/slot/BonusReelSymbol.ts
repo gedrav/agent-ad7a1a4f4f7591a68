@@ -18,6 +18,9 @@ export default class BonusReelSymbol extends Container {
       defaultSkin: BONUS_SYMBOLS_DATA[symbolName]?.staticSkin,
     });
     this.spine.label = 'bonusSymbol';
+    // Its only animation is empty and setSkin() poses it by itself, as JCBlanksSymbolModifier relies
+    // on for the same rig - so it never needs a frame.
+    this.spine.setAutoUpdate(false);
     this.spine.scale.set(scale);
     this.addChild(this.spine);
   }

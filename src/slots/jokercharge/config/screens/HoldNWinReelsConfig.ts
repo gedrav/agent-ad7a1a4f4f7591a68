@@ -31,7 +31,7 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     triangleEffectOffsetY: 0,
     borderEffectScale: 1.55,
     borderEffectOffsetY: 0,
-    anticipationDelay: 1200,
+    anticipationDelay: 2000,
     anticipationSpeedFactor: 0.35,
     minSpinDuration: 1500,
     minSpinDurationTurbo: 750,

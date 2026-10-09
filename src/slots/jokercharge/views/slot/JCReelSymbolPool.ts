@@ -16,7 +16,10 @@ export class JCReelSymbolPool {
   private readonly temporarySymbols: Set<JCReelSymbol> = new Set();
 
   static readonly MIN_SIZE = 3;
-  static readonly MAX_SIZE = 15;
+  // The grid holds 27 instances at once: 9 cells, each its symbol and the one above and below on the
+  // strip. The strip renames instances in place without coming back here, so the instances the
+  // pool counts under one name can be every one of those 27 - in the feature, that name is BL.
+  static readonly MAX_SIZE = 27;
 
   private constructor() {}
 
@@ -62,6 +65,16 @@ export class JCReelSymbolPool {
       return entry.symbol;
     }
 
+    // Another name's spare instance before a new one: setNewSymbol() renames it in place, and every
+    // instance built stays reachable for good (corelib's PixView never drops its global listeners).
+    const spare = this.findFreeEntry();
+    if (spare) {
+      spare.inUse = true;
+      spare.symbol.setNewSymbol({ ...this.getData(name), row }, reelNumber);
+      spare.symbol.visible = true;
+      return spare.symbol;
+    }
+
     console.warn(`JCReelSymbolPool: pool exhausted for symbol "${name}", creating temporary symbol.`);
     const tempSymbol = this.createSymbol(name, reelNumber, row);
     this.temporarySymbols.add(tempSymbol);
@@ -75,18 +88,16 @@ export class JCReelSymbolPool {
 
     if (this.temporarySymbols.has(symbol)) {
       this.temporarySymbols.delete(symbol);
-      symbol.destroySymbol();
       // destroyView(), not destroy(): the APP_RESIZE binding ReelSymbolSpineExtended makes in its
-      // constructor is only disposed there, and would otherwise keep firing against a dead symbol.
+      // constructor is only disposed there, and JCReelSymbol hands back its spines and rigs there.
       symbol.destroyView();
-      symbol.destroy();
       return;
     }
 
     const entry = this.findEntry(symbol);
     if (!entry) return;
 
-    symbol.resetSymbol();
+    symbol.park();
     symbol.visible = false;
     entry.inUse = false;
   }
@@ -100,6 +111,14 @@ export class JCReelSymbolPool {
     for (const entries of this.pool.values()) {
       const found = entries.find((e) => e.symbol === symbol);
       if (found) return found;
+    }
+    return undefined;
+  }
+
+  private findFreeEntry(): PoolEntry | undefined {
+    for (const entries of this.pool.values()) {
+      const free = entries.find((e) => !e.inUse);
+      if (free) return free;
     }
     return undefined;
   }

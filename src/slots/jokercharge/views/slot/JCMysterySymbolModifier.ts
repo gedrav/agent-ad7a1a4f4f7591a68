@@ -9,6 +9,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { JACKPOT_LABELS, MULTIPLIER_TEXT_STYLE } from '../../config/SymbolsConfig';
 import { JCEvents } from '../../events/JCEvents';
+import { JCSymbolRigPool } from './JCSymbolRigPool';
 
 const FRONT_SPINE_NAME = 'mystery_front';
 
@@ -57,6 +58,10 @@ export const MYSTERY_REEL_CONFIG = {
   // Values get their own, larger size: they're short, where a jackpot label has to fit MINOR.
   valueFontSize: 400,
   jackpotFontSize: 320,
+  // The symbol is drawn at about a third of its rig's size, so at the renderer's own resolution
+  // these sizes rasterise roughly three times the pixels that reach the screen - and every wrap can
+  // redraw one. This brings the canvas down to about what is shown.
+  textResolution: 0.7,
 };
 
 interface ReelItem {
@@ -93,11 +98,19 @@ function resolveTextStyle(config: any, fontSize: number): any {
   return style;
 }
 
+// The styles above are shared and outlive every Text built on them, but a Text subscribes to its
+// style's updates and its destroy() never unsubscribes - each dead one would stay on the list.
+function destroySharingStyle(text: PixText): void {
+  text.style?.off('update', (text as any).onViewUpdate, text);
+  text.destroy();
+}
+
 type ReelPhase = 'idle' | 'spinUp' | 'fullSpeed';
 
 // mystery / mystery jackpot render as two spines: ReelSymbolSpine creates the "mystery_back"
-// layer, this adds "mystery_front" on top. Not pooled via SpinePool - that pool keys by symbol
-// name, and mixing back/front spines under the same name would hand out the wrong skeleton on reuse.
+// layer, this adds "mystery_front" on top. Borrowed from JCSymbolRigPool, which keys by spine name -
+// SpinePool keys by symbol name, and mixing back/front spines under one name would hand out the
+// wrong skeleton on reuse. The host rebuilds this every time it rebuilds its rig.
 //
 // It also owns the mini reel that spins inside the symbol's window when the result is revealed,
 // see spinReel().
@@ -131,12 +144,8 @@ export class JCMysterySymbolModifier {
 
   public create(animScale?: number): void {
     this.destroy();
-    this.frontSpine = UIUtil.getSpineAnim(FRONT_SPINE_NAME, { spineName: FRONT_SPINE_NAME });
+    this.frontSpine = JCSymbolRigPool.getInstance().acquire({ spineName: FRONT_SPINE_NAME, animScale });
     this.frontSpine.label = 'mysteryFront';
-    this.frontSpine.stopAnimation();
-    if (animScale) {
-      this.frontSpine.scale.set(animScale);
-    }
     this.host.addChild(this.frontSpine);
     this.setVisible(false);
   }
@@ -154,9 +163,11 @@ export class JCMysterySymbolModifier {
     this.frontSpine.playAnimation({ state, loop });
   }
 
+  // Off the ticker while hidden, as the host does for its own rig.
   public setVisible(flag: boolean): void {
     if (this.frontSpine) {
       this.frontSpine.visible = flag;
+      this.frontSpine.setAutoUpdate(flag);
     }
   }
 
@@ -194,6 +205,9 @@ export class JCMysterySymbolModifier {
   public landOn(result: MysteryReelResult): Promise<void> {
     this.result = result;
     this.endless = false;
+    // A start still pending would build a second strip over the result once it fired.
+    clearTimeout(this.startTimeoutId);
+    this.startTimeoutId = null;
 
     return new Promise((resolve) => {
       this.onLanded = resolve;
@@ -210,6 +224,13 @@ export class JCMysterySymbolModifier {
   }
 
   public stopReel(): void {
+    this.haltReel();
+    // Nothing of the reel's is left in the window now, so the symbol reads MYSTERY again - which
+    // is how it sits in the base game.
+    this.setSymbolLabelVisible(true);
+  }
+
+  private haltReel(): void {
     clearTimeout(this.startTimeoutId);
     this.startTimeoutId = null;
     Ticker.shared.remove(this.onTick, this);
@@ -222,9 +243,6 @@ export class JCMysterySymbolModifier {
     this.onLanded = null;
     onLanded?.();
     this.clearResultLabel();
-    // Nothing of the reel's is left in the window now, so the symbol reads MYSTERY again - which
-    // is how it sits in the base game.
-    this.setSymbolLabelVisible(true);
   }
 
   // The landed prize is drawn over the symbol, not through its rig, so no animation can take it
@@ -232,7 +250,7 @@ export class JCMysterySymbolModifier {
   public clearResultLabel(): void {
     if (!this.resultLabel) return;
     this.host.removeChild(this.resultLabel);
-    this.resultLabel.destroy();
+    destroySharingStyle(this.resultLabel);
     this.resultLabel = null;
   }
 
@@ -249,6 +267,7 @@ export class JCMysterySymbolModifier {
   }
 
   private buildReel(): void {
+    this.tearDownReel();
     this.setSymbolLabelVisible(false);
     const container = new Container();
     container.label = 'mysteryReel';
@@ -272,6 +291,7 @@ export class JCMysterySymbolModifier {
         {},
       );
       cell.anchor.set(0.5, 0.5);
+      cell.resolution = MYSTERY_REEL_CONFIG.textResolution;
       cell.label = 'mysteryReelCell';
       this.cells[i] = cell;
       this.cellY[i] = (i - (MYSTERY_REEL_CONFIG.cellPool - 1) / 2) * this.cellHeight;
@@ -349,6 +369,7 @@ export class JCMysterySymbolModifier {
   }
 
   private startReel(): void {
+    this.startTimeoutId = null;
     this.buildReel();
     this.phase = 'spinUp';
     this.phaseElapsed = 0;
@@ -518,8 +539,10 @@ export class JCMysterySymbolModifier {
   }
 
   private showStaticResult(item: ReelItem): void {
+    this.clearResultLabel();
     const label = new PixText({ text: item.text, style: item.style }, {});
     label.anchor.set(0.5, 0.5);
+    label.resolution = MYSTERY_REEL_CONFIG.textResolution;
     label.label = 'mysteryResult';
     this.resultLabel = label;
     this.host.addChild(label);
@@ -531,9 +554,12 @@ export class JCMysterySymbolModifier {
       AnimationProxy.killTweensOf(this.stopTarget);
       this.stopTarget = null;
     }
+    // Cut loose from the shared styles here, while the container still owns them - it destroys
+    // them below.
     this.cells.forEach((cell) => {
       AnimationProxy.killTweensOf(cell);
       AnimationProxy.killTweensOf(cell.scale);
+      cell.style?.off('update', (cell as any).onViewUpdate, cell);
     });
     this.cells = [];
     this.cellY = [];
@@ -554,12 +580,12 @@ export class JCMysterySymbolModifier {
     }
   }
 
+  // haltReel, not stopReel: the label stopReel puts back would only go onto a rig on its way out.
+  // The front rig keeps its label into the pool - the host's addLabel reuses or replaces it.
   public destroy(): void {
-    this.stopReel();
+    this.haltReel();
     if (!this.frontSpine) return;
-    this.frontSpine.stopAnimation();
-    this.frontSpine.removeEventListners();
-    this.frontSpine.destroySpine();
+    JCSymbolRigPool.getInstance().release(this.frontSpine);
     this.frontSpine = null;
   }
 }

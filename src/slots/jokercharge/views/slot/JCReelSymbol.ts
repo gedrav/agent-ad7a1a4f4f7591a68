@@ -14,6 +14,7 @@ import { JCSymbolRigPool } from './JCSymbolRigPool';
 import { BLANK_SYMBOL_NAME, BOOST_SYMBOL_NAME, MYSTERY_SYMBOL_NAMES } from '../../config/SymbolsConfig';
 import { getCellValue } from '../../models/JCSpinData';
 import { MULTIPLIER_APPLY_COUNT_EASE } from '../../config/MultiplierBadgeConfig';
+import { releaseSharedStyle, shareTextStyle, writeCountText } from '../comps/sharedText';
 
 // Spine-only reel symbol (Blanks aside), driven by per-symbol data in SymbolsConfig. Symbols
 // needing more than a single spine delegate to their own modifiers.
@@ -32,9 +33,11 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // (cleanUpSymbolWin, recreateAnimation and the like), and the rebuild would otherwise go back to
   // the backend's figure - or to nothing, for a boost. Cleared when the instance takes a new symbol.
   private heldValue: number | null = null;
+  // While the pool parks this instance: nothing it holds should start playing on the way in.
+  private parking = false;
 
   private get bonusModifier(): JCBonusSymbolModifier {
-    return (this._bonusModifier ??= new JCBonusSymbolModifier(this));
+    return (this._bonusModifier ??= new JCBonusSymbolModifier());
   }
 
   private get mysteryModifier(): JCMysterySymbolModifier {
@@ -119,11 +122,8 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
 
     const finalValue = value * multiplier;
     this.labelValue = finalValue;
-    const write = (amount: number): void => {
-      const text = Util.formatCurrencyNoSymbol(amount * appModel.getTotalBet());
-      labels.forEach((label) => (label.text = text));
-    };
-    write(value);
+    const write = (amount: number, final = false): void => this.writeLabelFigure(labels, amount, final);
+    write(value, true);
 
     const target = { value };
     this.labelCountTarget = target;
@@ -135,9 +135,19 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
       onComplete: () => {
         this.labelCountTarget = null;
         // Set outright rather than left on the tween's last frame, which stops a hair short.
-        write(finalValue);
+        write(finalValue, true);
         onComplete?.();
       },
+    });
+  }
+
+  // A label carrying a figure no longer reads as its config says, so its key is dropped: a pooled
+  // rig arriving with it is then rebuilt by addLabel rather than reused as is.
+  private writeLabelFigure(labels: PixText[], amount: number, final = true): void {
+    const text = Util.formatCurrencyNoSymbol(amount * appModel.getTotalBet());
+    labels.forEach((label) => {
+      writeCountText(label, text, final);
+      if (label.parent) (label.parent as any).labelKey = null;
     });
   }
 
@@ -186,8 +196,20 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   public setNewSymbol(data: any, reelno: number): void {
     // Before super: it builds the new symbol's spine, which reads this.
     this.heldValue = null;
+    this._bonusModifier?.reset();
     super.setNewSymbol(data, reelno);
     this.createSymbol();
+    // The rig is built after the spine super just set playing, so it would draw under it - and tick
+    // - until something else hid it.
+    if (this.spine?.visible) this.setSpineVisible(true);
+  }
+
+  // A strip neighbour hidden at rest: its looping pose and front rig would otherwise go on ticking
+  // unseen. The next spin's blur brings both back - see setSpineVisible.
+  public pauseWhileHidden(): void {
+    (this.spine as any)?.setAutoUpdate?.(false);
+    (this.symbol as any)?.setAutoUpdate?.(false);
+    this._mysteryModifier?.setVisible(false);
   }
 
   // this.symbol is spine-backed, though corelib types it as PixSprite. The inherited paths that
@@ -229,13 +251,15 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     const config = this.configData.data.labelTextConfig;
     if (!target?.addSlotObject) return;
     const existing: any = target.getSlotObject(ROOT_TEXT_SLOT_NAME);
-    if (existing && existing.labelKey === config?.contentText) return;
+    if (existing && existing.labelKey === config?.content) return;
     if (existing) this.clearLabel(target);
     if (!config) return;
     const holder: any = new Container();
     holder.label = 'labelHolder';
-    holder.labelKey = config.contentText;
-    holder.addChild(UIUtil.getElement(config));
+    holder.labelKey = config.content;
+    const label = UIUtil.getElement(config);
+    shareTextStyle(label, config.style);
+    holder.addChild(label);
     target.addSlotObject(ROOT_TEXT_SLOT_NAME, holder);
   }
 
@@ -243,6 +267,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     const holder: any = target?.getSlotObject?.(ROOT_TEXT_SLOT_NAME);
     if (!holder) return;
     target.removeSlotObject(ROOT_TEXT_SLOT_NAME);
+    holder.children.forEach((child: any) => releaseSharedStyle(child));
     // Detached, not destroyed, by the spine.
     holder.destroy({ children: true });
   }
@@ -272,12 +297,12 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   }
 
   // The rig goes back to the pool rather than being destroyed - see JCSymbolRigPool. Nulled first
-  // so the inherited destroySymbol(), which would destroy() it outright, leaves it alone.
+  // so the inherited destroySymbol(), which would destroy() it outright, leaves it alone. Its label
+  // goes with it: addLabel keeps it for the next symbol that reads the same, or replaces it.
   public destroySymbol(): void {
     this.killLabelCount();
     const symbol: any = this.symbol;
     if (symbol instanceof PixSpine) {
-      this.clearLabel(symbol);
       JCSymbolRigPool.getInstance().release(symbol);
       this.symbol = null;
     }
@@ -323,20 +348,53 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     const value = this.heldValue ?? (data.name === BOOST_SYMBOL_NAME ? 0 : getCellValue(data.reelNumber, data.row));
     this.labelValue = value ?? 0;
     if (this.isBonusSymbol()) {
-      this.bonusModifier.create(data.name, data.multiplierTextConfig, value);
+      this.bonusModifier.create(data.name, data.multiplierTextConfig, value, this.spine);
     } else if (this.isMysterySymbol()) {
       this.mysteryModifier.create(this.configData.data.animScale);
     }
     // Not an else: the mystery rigs carry a root_txt slot of their own, so their label rides the
     // same path as MN/MR/MJ, and on the front rig as well as the back, which covers it.
     this.labelRigs().forEach((rig) => this.addLabel(rig));
+    // A rebuilt rig's label reads as its config says, which a multiplier has since overtaken.
+    // Loose on purpose: the first build runs inside corelib's constructor, before this class's
+    // fields are initialised, so heldValue is still undefined there rather than null.
+    if (this.heldValue != null && !this.isBonusSymbol()) {
+      this.writeLabelFigure(this.labelTexts(), this.labelValue);
+    }
+  }
+
+  // The pool's release. resetSymbol() alone would pick a spine straight back up for showStatic and
+  // leave it looping on the ticker for as long as the instance waits, and a completion callback
+  // left by the last owner would answer for the next one.
+  public park(): void {
+    this.spineAnimCompleteCallback = null;
+    this.parking = true;
+    this.resetSymbol();
+    this.parking = false;
+    (this.symbol as any)?.setAutoUpdate?.(false);
+  }
+
+  public showStatic(): void {
+    if (this.parking) return;
+    super.showStatic();
+  }
+
+  // For an instance that is going for good (the pool's temporary ones): its pooled spine, its rig
+  // and its modifiers all go back or go away first, which destroy() on its own would skip.
+  public destroyView(): void {
+    this.park();
+    this.destroySymbol();
+    this._bonusModifier?.destroy();
+    this._blanksModifier?.destroy();
+    super.destroyView();
   }
 
   protected destroySpine(): void {
     this.killLabelCount();
     // Raw fields: destroying through the getters would build a modifier for every symbol only to
     // tear it straight down again.
-    this._bonusModifier?.destroy();
+    // Kept for the next rig, only taken off this one before it goes back to its pool.
+    this._bonusModifier?.detach();
     this._mysteryModifier?.destroy();
     super.destroySpine();
   }

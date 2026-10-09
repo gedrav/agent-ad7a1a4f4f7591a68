@@ -1,11 +1,12 @@
 import { Container } from 'pixi.js';
+import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
-import ReelSymbolSpineExtended from '@core/views/slotmachine/ReelSymbolSpineExtended';
 import { MULTIPLIER_APPLY_COUNT_EASE } from '../../config/MultiplierBadgeConfig';
+import { releaseSharedStyle, shareTextStyle, writeCountText } from '../comps/sharedText';
 
 const BONUS_SYMBOL_PREFIX = 'C';
 // Shared with JCReelSymbol's static label handling (MN/MR/MJ) - both hat and belt/boot/mask rigs
@@ -29,15 +30,16 @@ export class JCBonusSymbolModifier {
   // The style the current Text was built with. C1 to C4 share one, C5 has its own, so only that
   // boundary needs a rebuild.
   private styleRef: any = null;
-
-  constructor(private readonly host: ReelSymbolSpineExtended) {}
+  // The rig the holder rides on right now. The holder is put straight on the rig rather than through
+  // the host's slot map, which destroys whatever it holds whenever the host rebuilds its spine.
+  private rig: PixSpine | null = null;
 
   // value is the backend's figure for the cell and wins where there is one; the name is the
   // fallback, for a symbol belonging to no held cell.
   // Called again every time the host's rig is rebuilt, which on a moving strip is a few times a
   // second per cell, so the Text is kept and rewritten rather than built afresh - building one
-  // measures and rasterises a texture. Only the slot attachment is redone, the rig being new.
-  public create(symbolName: string, textConfig: any, value?: number): void {
+  // clones its config and makes new gradients. Only the slot attachment is redone, the rig being new.
+  public create(symbolName: string, textConfig: any, value: number | undefined, rig: PixSpine): void {
     if (!textConfig) {
       this.destroy();
       return;
@@ -45,24 +47,44 @@ export class JCBonusSymbolModifier {
     if (this.text && textConfig.style !== this.styleRef) {
       this.destroy();
     }
-    this.value = value ?? Number(symbolName.slice(BONUS_SYMBOL_PREFIX.length));
     if (!this.text) {
       const text = UIUtil.getElement(textConfig);
       text.anchor?.set(textConfig.anchor?.x ?? 0.5, textConfig.anchor?.y ?? 0.5);
+      shareTextStyle(text, textConfig.style);
       this.text = text;
       this.styleRef = textConfig.style;
       this.holder = new Container();
       this.holder.label = 'bonusValueHolder';
       this.holder.addChild(text);
     }
-    this.show(this.value);
-    this.host.addSlotObject(ROOT_TEXT_SLOT_NAME, this.holder);
+    // A count still running carries on into the new rig - it already holds the figure it ends on.
+    if (!this.countTarget) {
+      this.value = value ?? Number(symbolName.slice(BONUS_SYMBOL_PREFIX.length));
+      this.show(this.value);
+    }
+    this.detach();
+    rig.addSlotObject(ROOT_TEXT_SLOT_NAME, this.holder);
+    this.rig = rig;
+  }
+
+  // Off the rig, ahead of it going back to its pool. The Text is kept for the next rig.
+  public detach(): void {
+    if (!this.rig) return;
+    this.rig.removeSlotObject(ROOT_TEXT_SLOT_NAME);
+    this.rig = null;
+  }
+
+  // The instance is taking another symbol: whatever this one was counting no longer applies.
+  public reset(): void {
+    this.killCount();
+    this.detach();
+    this.value = 0;
   }
 
   // Nothing shows at zero: a boost starts empty and fills as it collects.
-  private show(value: number): void {
+  private show(value: number, final = true): void {
     if (!this.text) return;
-    this.text.text = this.format(value);
+    writeCountText(this.text, this.format(value), final);
     this.text.visible = value > 0;
   }
 
@@ -84,7 +106,7 @@ export class JCBonusSymbolModifier {
       duration,
       value: finalValue,
       ease: MULTIPLIER_APPLY_COUNT_EASE,
-      onUpdate: () => this.show(target.value),
+      onUpdate: () => this.show(target.value, false),
       onComplete: () => {
         this.countTarget = null;
         this.show(finalValue);
@@ -116,7 +138,7 @@ export class JCBonusSymbolModifier {
       duration,
       value: finalValue,
       ease: MULTIPLIER_APPLY_COUNT_EASE,
-      onUpdate: () => this.show(target.value),
+      onUpdate: () => this.show(target.value, false),
       onComplete: () => {
         this.countTarget = null;
         // Set outright rather than left on the tween's last frame, which stops a hair short.
@@ -130,21 +152,22 @@ export class JCBonusSymbolModifier {
     return Util.formatCurrencyNoSymbol(value * appModel.getTotalBet());
   }
 
-  public destroy(): void {
+  private killCount(): void {
     if (this.countTarget) {
       AnimationProxy.killTweensOf(this.countTarget);
       this.countTarget = null;
     }
     this.pendingAdds = [];
-    // removeSlotObject only detaches, so the Text has to be destroyed here or every placement
-    // leaves one behind.
     if (this.text) {
       AnimationProxy.killTweensOf(this.text);
       AnimationProxy.killTweensOf(this.text.scale);
     }
-    // removeSlotObject only detaches, so the holder has to be destroyed here or every placement
-    // leaves one behind.
-    this.host.removeSlotObject(ROOT_TEXT_SLOT_NAME);
+  }
+
+  public destroy(): void {
+    this.killCount();
+    this.detach();
+    if (this.text) releaseSharedStyle(this.text);
     this.holder?.destroy({ children: true });
     this.holder = null;
     this.text = null;
