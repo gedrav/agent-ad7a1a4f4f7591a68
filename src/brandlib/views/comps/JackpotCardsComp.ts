@@ -24,7 +24,6 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   cardsContainer: PixView;
   cardsConfig: any;
   cardArray: JackpotCard[] = [];
-
   protected pickInFlight = false;
   protected expectedOpenPosition: number | null = null;
   protected revealFinished = false;
@@ -44,9 +43,19 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected winTickerJP: WinTicker;
   protected timeoutId: number;
   protected cardGuideRect: PixGraphics;
+  protected pendingIntroAnim = false;
   constructor(config) {
     super(config);
     this.cardsConfig = this.configData.cardsConfig;
+
+    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
+    EventHandler.addEventListener(SlotEvents.JACKPOT_PICK_RESULT, this.onPickResult.bind(this));
+    EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
+  }
+
+  protected onViewCreated(): void {
+    super.onViewCreated();
     this.overlayRect = this.elementsList['overlayRect'];
     this.cardsContainer = this.elementsList['cardsContainer'];
     this.cardGuideRect = this.cardsContainer.elementsList['guideRect'];
@@ -70,14 +79,14 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.winTickerJP?.on('COUNTUP_UPDATE', this.adjustTextSize.bind(this));
     this.jackPotOutroAnimation.addEventListener('complete', this.onJackpotOutroAnimComplete.bind(this));
     this.jackpotIntroAnimHor.addEventListener('complete', this.onIntroAnimComplete.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showJackpotIntroAnim.bind(this));
-
-    EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.hideJPCards.bind(this));
-    EventHandler.addEventListener(SlotEvents.JACKPOT_PICK_RESULT, this.onPickResult.bind(this));
-    EventHandler.addEventListener(SlotEvents.HANDLE_SERVER_ERROR, this.onServerError.bind(this));
 
     UIUtil.addInteraction(this.overlayRect, this.onOverlayClicked.bind(this));
     UIUtil.setClickable(this.overlayRect, true);
+    this.viewCreated = true;
+    if (this.pendingIntroAnim) {
+      this.pendingIntroAnim = false;
+      this.showJackpotIntroAnim();
+    }
   }
 
   //jackpot win animation functionality
@@ -231,6 +240,11 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     }
   }
   protected showJackpotIntroAnim() {
+    if (!this.viewCreated) {
+      this.pendingIntroAnim = true;
+      return;
+    }
+    this.pendingIntroAnim = false;
     if (!this.isJackpotIntroAnim) {
       this.isJackpotIntroAnim = true;
       this.jackpotIntroAnimHor.visible = true;

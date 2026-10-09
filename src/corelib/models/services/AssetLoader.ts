@@ -8,7 +8,7 @@ import { SoundFactory } from '@core/sound/SoundServiceProxy';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 import { appModel } from '@core/models/services/AppModelService';
 import { preloadRulesPanel } from '@common/panel/ts/SlotRuleLoader';
-
+const commonV = import.meta.env.VITE_GAME_VERSION;
 class AssetLoaderClass {
   private commonFontPath: string;
   private soundConfig: any;
@@ -110,6 +110,10 @@ class AssetLoaderClass {
     await this.loadBundles(bundle);
   }
 
+  private withVersion(path: string): string {
+    return path + '?version=' + commonV + '_' + GameProxy.config.gameVersion;
+  }
+
   private createAssetsManifest() {
     const manifest: any = { bundles: [] };
     const pathMap = this.createPathMap();
@@ -128,23 +132,30 @@ class AssetLoaderClass {
               ASSETTYPE == 'webp'
             ) {
               if (TYPE == 'common') {
-                data.assets.push({ alias: NAME, src: [this.commonPath + NAME + '.' + ASSETTYPE] });
+                data.assets.push({ alias: NAME, src: [this.withVersion(this.commonPath + NAME + '.' + ASSETTYPE)] });
               } else if (TYPE == 'lang') {
-                data.assets.push({ alias: NAME, src: [this.langSpritePath + NAME + '.' + ASSETTYPE] });
+                data.assets.push({
+                  alias: NAME,
+                  src: [this.withVersion(this.langSpritePath + NAME + '.' + ASSETTYPE)],
+                });
               } else {
-                data.assets.push({ alias: NAME, src: [this.spritePath + NAME + '.' + ASSETTYPE] });
+                data.assets.push({ alias: NAME, src: [this.withVersion(this.spritePath + NAME + '.' + ASSETTYPE)] });
               }
             } else if (ASSETTYPE === 'spine') {
               // Load spine JSON data
               data.assets.push({
                 alias: NAME + 'Data',
-                src: TYPE == 'lang' ? this.langSpinePath + NAME + '.json' : this.spinePath + NAME + '.json',
+                src: this.withVersion(
+                  TYPE == 'lang' ? this.langSpinePath + NAME + '.json' : this.spinePath + NAME + '.json',
+                ),
               });
 
               // Load single atlas file
               data.assets.push({
                 alias: NAME + 'Atlas',
-                src: TYPE == 'lang' ? this.langSpinePath + NAME + '.atlas' : this.spinePath + NAME + '.atlas',
+                src: this.withVersion(
+                  TYPE == 'lang' ? this.langSpinePath + NAME + '.atlas' : this.spinePath + NAME + '.atlas',
+                ),
               });
               // Handle multiple texture images
               if (TEXTURES && Array.isArray(TEXTURES) && TEXTURES.length > 1) {
@@ -152,30 +163,35 @@ class AssetLoaderClass {
                 TEXTURES.forEach((textureIndex: string) => {
                   data.assets.push({
                     alias: textureIndex,
-                    src:
+                    src: this.withVersion(
                       TYPE == 'lang'
                         ? this.langSpinePath + NAME + (spineImageType ? '.' + spineImageType : '.png')
                         : this.spinePath + NAME + (spineImageType ? '.' + spineImageType : '.png'),
+                    ),
                   });
                 });
               } else {
                 // Single texture file (default behavior)
                 data.assets.push({
                   alias: NAME + 'Texture',
-                  src:
+                  src: this.withVersion(
                     TYPE == 'lang'
                       ? this.langSpinePath + NAME + (spineImageType ? '.' + spineImageType : '.png')
                       : this.spinePath + NAME + (spineImageType ? '.' + spineImageType : '.png'),
+                  ),
                 });
               }
             } else {
               const assetSrc = this.getAssetPath(TYPE, NAME, ASSETTYPE, file, pathMap);
+              const versionedSrc = Array.isArray(assetSrc)
+                ? assetSrc.map((src: string) => this.withVersion(src))
+                : this.withVersion(assetSrc);
               data.assets.push({
                 alias: NAME,
-                src: Array.isArray(assetSrc) ? assetSrc : [assetSrc],
+                src: Array.isArray(versionedSrc) ? versionedSrc : [versionedSrc],
               });
               if (item.ASSETTYPE === 'font') {
-                this.loadFont(NAME, assetSrc);
+                this.loadFont(NAME, Array.isArray(versionedSrc) ? versionedSrc[0] : versionedSrc);
               }
             }
           });
