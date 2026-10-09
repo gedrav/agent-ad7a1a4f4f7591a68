@@ -113,6 +113,7 @@ export default class SlotReel extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.STOP_SPIN_AFTER_RESPONSE, this.startStoppingSpin.bind(this));
     EventHandler.addEventListener(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedReel.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, this.restartIdleAnim.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION_LOOP, this.restartIdleAnimLoop.bind(this));
     EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onIdleStateEntry.bind(this));
     EventHandler.addEventListener(SlotEvents.CREATE_FINAL_REEL_SYMBOLS, this.createFinalReelSymbols.bind(this));
     EventHandler.addEventListener(SlotEvents.STOP_REEL_FOR_ERROR, this.stopReelForError.bind(this));
@@ -250,6 +251,9 @@ export default class SlotReel extends ResponsiveChildrenView {
   public restartIdleAnim(): void {
     this.showIdleAnim(true);
   }
+  public restartIdleAnimLoop(): void {
+    this.showIdleAnimLoop();
+  }
 
   protected showIdleAnim(flag: boolean = true): void {
     if (flag) {
@@ -275,6 +279,13 @@ export default class SlotReel extends ResponsiveChildrenView {
       this.symbolsArray[k][row].showIdle();
     }
     this.showIdleAnim(true);
+  }
+  protected showIdleAnimLoop(): void {
+    for (const reel of this.symbolsArray) {
+      for (const symbol of reel ?? []) {
+        symbol?.showIdleLoop();
+      }
+    }
   }
 
   protected renderUnfinishedReel(): void {
