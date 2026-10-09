@@ -70,6 +70,7 @@ import {
   getTrailPlacement,
   TRAIL_ANIMATION,
   TRAIL_ARRIVAL_MS,
+  TRAIL_HEAD_LANDED_MS,
   TRAIL_COLLECT_SPEED,
   TRAIL_COLLECT_STAGGER_MS,
   TRAIL_SPINE_NAME,
@@ -105,6 +106,8 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
   private readonly trailPool: PixSpine[] = [];
   // Each trail's figure on its TxtValue slot, built the first time that trail carries one.
   private readonly trailValueTexts = new Map<PixSpine, PixText>();
+  // The pending hide of each trail's figure - see playTrailOn.
+  private readonly trailValueHideIds = new Map<PixSpine, any>();
   // Scratch matrices for keepTrailValueUpright, reused every frame.
   private readonly viewMatrix = new Matrix();
   private readonly holderMatrix = new Matrix();
@@ -239,6 +242,19 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
     trail.rotation = (placement.rotation * Math.PI) / 180;
     trail.scale.set(placement.scaleX, placement.scaleY);
     this.setTrailValue(trail, value);
+    // Off as the head lands. The slot carrying it is never hidden by the animation itself, and the
+    // text cancels the bone's scale to stay level, so the head shrinking away does not take it too.
+    clearTimeout(this.trailValueHideIds.get(trail));
+    this.trailValueHideIds.delete(trail);
+    if (value !== undefined) {
+      this.trailValueHideIds.set(
+        trail,
+        setTimeout(() => {
+          this.trailValueHideIds.delete(trail);
+          this.setTrailValue(trail, undefined);
+        }, TRAIL_HEAD_LANDED_MS / speed),
+      );
+    }
     trail.visible = true;
     trail.setAutoUpdate(true);
     trail.playAnimation({ state: placement.animation ?? TRAIL_ANIMATION, loop: false });

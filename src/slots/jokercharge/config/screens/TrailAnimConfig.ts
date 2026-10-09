@@ -4,8 +4,8 @@ export const TRAIL_SPINE_NAME = 'line';
 export const TRAIL_ANIMATION = 'trail';
 export const TRAIL_ANIMATION_ALT = 'trail_2';
 
-// The collect's figure rides the trail head on this slot, whose bone grows in and shrinks away with
-// the head, so the text needs no timing of its own.
+// The collect's figure rides the trail head on this slot. The animation never hides the slot, so the
+// figure is taken off as the head lands - see GameSlotMachineView.playTrailOn.
 export const TRAIL_VALUE_SLOT = 'TxtValue';
 // Same look as the figure on the cash symbol it leaves. TODO: tune the scale against the real trail.
 export const TRAIL_VALUE_TEXT_SCALE = 0.3;
@@ -21,6 +21,11 @@ export const TRAIL_VALUE_TEXT_CONFIG = {
 // bone settles at 0.63s; the rest is the tail dissolving, and holding a symbol back for it leaves
 // half a second of nothing after the trail has visibly landed.
 export const TRAIL_ARRIVAL_MS = 500;
+
+// When the head's path ends (0.3667s in both animations): the head is at its target from here and
+// only shrinks away on the spot. The figure riding it goes now - it holds its size while the head
+// shrinks, so left to the end of the shrink it would sit on the target after the head had gone.
+export const TRAIL_HEAD_LANDED_MS = 367;
 
 // The total-win collect's trails run 30% slower than the rest; arrival waits stretch to match.
 export const TRAIL_COLLECT_SPEED = 0.7;

@@ -9,7 +9,7 @@ const TEXT_HEIGHT = 100;
 const PLATE_SCALE = { x: 1.6, y: 0.8 };
 
 const TEXT_STYLE = {
-  fontFamily: 'sfProDisplayBlack',
+  fontFamily: 'gameFont1',
   fontSize: 52,
   mFontSize: 60,
   fill: [0xfff4c4, 0xffc93d],
