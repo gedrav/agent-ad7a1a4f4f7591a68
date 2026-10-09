@@ -87,6 +87,9 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
     if (!appModel.secondaryAssetsLoaded) {
       return;
     }
+    if (this.configData.data.idleAnimLoop) {
+      return;
+    }
     if (this.configData.data.idleAnim) {
       if (this.configData.data.idleAnim === 'none') {
         // dont play idle anim for some reason
@@ -95,6 +98,13 @@ export default class ReelSymbolSpine extends ReelSymbolSprite {
       }
     } else {
       //super.showIdle();
+    }
+  }
+
+  public showIdleLoop(): void {
+    if (!appModel.secondaryAssetsLoaded) return;
+    if (this.configData.data.idleAnimLoop && this.configData.data.idleAnim) {
+      this.playSpineAnimation(this.configData.data.idleAnim, true);
     }
   }
 

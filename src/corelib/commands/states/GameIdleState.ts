@@ -38,6 +38,7 @@ class GameIdleStateCommand extends StateCommand {
     if (appModel.isCascadeGame()) {
       GameProxy.config.idleTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION_LOOP);
       }, 1000);
     } else if (winData?.length > 0) {
       if (GameProxy.config.checkToShowWinAfterFS) {
@@ -50,6 +51,7 @@ class GameIdleStateCommand extends StateCommand {
     } else {
       GameProxy.config.idleTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION_LOOP);
       }, 1000);
     }
   }
@@ -66,6 +68,7 @@ class GameIdleStateCommand extends StateCommand {
       EventHandler.dispatchEvent(SlotEvents.CLEAR_WINS);
       GameProxy.config.idleTimeoutId = setTimeout(() => {
         EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION);
+        EventHandler.dispatchEvent(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION_LOOP);
       }, 1000);
       return;
     }

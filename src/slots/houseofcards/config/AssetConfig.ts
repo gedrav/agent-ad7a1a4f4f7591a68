@@ -59,6 +59,10 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'J_Symbol', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: '10_Symbol', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: '9_Symbol', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'HH', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'H5', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'frames', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'BS', ASSETTYPE: 'spine', spineImageType: 'webp' },
   ],
 };
 const FREESPIN: AssetBundle = {

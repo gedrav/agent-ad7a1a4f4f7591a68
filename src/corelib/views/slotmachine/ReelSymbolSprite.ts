@@ -132,6 +132,8 @@ export default class ReelSymbolSprite extends ReelSymbol {
     });
   }
 
+  public showIdleLoop(): void {}
+
   public stopIdleAnim(): void {
     AnimationProxy.killTweensOf(this.symbol);
     this.resetSymbol();
