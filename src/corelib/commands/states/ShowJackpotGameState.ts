@@ -12,7 +12,13 @@ class ShowJackpotGameStateCommand extends StateCommand {
     this.count = 0;
     appModel.isBusy = true;
     appModel.freezeJackpotMeters();
-    EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_INTRO_ANIM);
+
+    if (appModel.secondaryAssetsLoaded) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_INTRO_ANIM);
+    } else {
+      appModel.waitingForFeature = true;
+      EventHandler.dispatchEvent(SlotEvents.SHOW_SECONDARY_LOADING_SCREEN);
+    }
   }
   doNextStep() {
     this.count++;

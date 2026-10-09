@@ -1,10 +1,12 @@
 import { JackpotCardsComp } from '@brand/views/comps/JackpotCardsComp';
 import { WinTicker } from '@core/views/comps/WinTicker';
+import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 export const JACKPOT_CARD_CONFIG: any = {
   name: 'jackpotCardContainer',
   type: 'Comp',
   class: JackpotCardsComp,
+  requiredBundle: LOAD_CONSTANTS.SECONDARY,
   cardsConfig: {
     maxRow: 2,
     maxcCol: 6,
