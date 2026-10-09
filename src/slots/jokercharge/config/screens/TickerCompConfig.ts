@@ -57,7 +57,7 @@ export const TICKER_COMP_CONFIG: any = {
   type: 'Comp',
   class: ReelTickerComp,
   tickerDelay: 4000,
-  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
+  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5', 'Ticker6'],
   contentYPadding: 0,
   ...POSITION,
   Elements: [

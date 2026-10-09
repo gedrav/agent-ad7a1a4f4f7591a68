@@ -34,6 +34,7 @@ const PRIMARY: AssetBundle = {
   assets: [
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
     { TYPE: 'game', NAME: 'bg', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Joker Charge', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'logo', ASSETTYPE: 'spine' },
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },

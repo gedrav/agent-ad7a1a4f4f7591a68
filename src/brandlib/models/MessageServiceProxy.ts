@@ -179,6 +179,7 @@ export class MessageServiceProxy extends AbstractProxy {
         finalObj.extraData.combination = cheatObj;
       }
     }
+    console.log('spinRequest', finalObj);
     return this.encryptObject(finalObj);
   }
 
