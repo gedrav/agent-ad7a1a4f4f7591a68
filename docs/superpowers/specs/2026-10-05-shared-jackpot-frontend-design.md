@@ -50,7 +50,7 @@ interface IJackpotInfo {
   rtp: number;              // jackpot RTP % (rules: base + this)
   minEligibleBet: number;   // bets below this do not take part
   eligibleBetTypes: ['BASE'];
-  tiers: { tier: JackpotTier; suit: string; value: number }[];
+  tiers: { tier: JackpotTier; value: number }[];
   v: number;                // meter version
 }
 type JackpotTier = 'BRONZE' | 'SILVER' | 'GOLD' | 'DIAMOND';
@@ -80,7 +80,7 @@ Request (encrypted like the others via `encryptObject`):
 Response:
 
 ```ts
-interface IJackpotPick { position: number; tier: JackpotTier; suit: string }
+interface IJackpotPick { position: number; tier: JackpotTier }
 
 interface IJackpotRound {
   status: 'PENDING' | 'COMPLETED';
