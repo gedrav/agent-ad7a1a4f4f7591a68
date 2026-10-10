@@ -36,7 +36,7 @@ Done means, on `carpathiantreasures` against a staging pool:
 
 ## 3. Backend contract consumed
 
-All amounts are in the player's currency, already rounded down by the server. Tier order is always `MINI, MINOR, MAJOR, GRAND`.
+All amounts are in the player's currency, already rounded down by the server. Tier order is always `BRONZE, SILVER, GOLD, DIAMOND`.
 
 ### 3.1 Init (`POST games/init`)
 
@@ -53,7 +53,7 @@ interface IJackpotInfo {
   tiers: { tier: JackpotTier; suit: string; value: number }[];
   v: number;                // meter version
 }
-type JackpotTier = 'MINI' | 'MINOR' | 'MAJOR' | 'GRAND';
+type JackpotTier = 'BRONZE' | 'SILVER' | 'GOLD' | 'DIAMOND';
 // init response: jackpotInfo: IJackpotInfo | null   (null = no jackpot UI)
 ```
 
@@ -116,7 +116,7 @@ event: jackpot_meters
 data: {"p":"<poolId>","v":88123401,"c":"CZK","t":[650.12,2800.40,10750.00,121000.55],"demo":false}
 
 event: jackpot_won
-data: {"p":"<poolId>","tier":"GRAND","amt":121000.55,"c":"CZK"}
+data: {"p":"<poolId>","tier":"DIAMOND","amt":121000.55,"c":"CZK"}
 
 event: jackpot_pool_changed
 data: {"p":"<poolId>"}
@@ -183,7 +183,7 @@ get jackpotPending(): boolean         // jackpotRound?.status === 'PENDING' or C
 - During the reveal show `jackpotRound.frozenMeters`.
 - `demo: true` or `available: false`: expose a flag on the panel (`setNotice('demo' | 'unavailable' | null)`) with a placeholder text; visuals are FE team work.
 - Win ticker (`showJackpotWinAnimation`) counts to `jackpotRound.amount` instead of 500.
-- Index mapping item `i` <-> tier: `0 MINI (bronze)`, `1 MINOR (silver)`, `2 MAJOR (gold)`, `3 GRAND (diamond)`, matching `jackpotAnimSkin`.
+- Index mapping item `i` <-> tier: `0 BRONZE (bronze)`, `1 SILVER (silver)`, `2 GOLD (gold)`, `3 DIAMOND (diamond)`, matching `jackpotAnimSkin`.
 
 ### 4.6 Message proxy (`src/brandlib/models/MessageServiceProxy.ts`)
 
@@ -218,10 +218,10 @@ No client code. Entries use the existing `extraData` path; game-core honours the
 
 ```json
 {
-  "JP Force MINI":  { "extraData": { "jpCheat": { "tier": "MINI" } } },
-  "JP Force MINOR": { "extraData": { "jpCheat": { "tier": "MINOR" } } },
-  "JP Force MAJOR": { "extraData": { "jpCheat": { "tier": "MAJOR" } } },
-  "JP Force GRAND": { "extraData": { "jpCheat": { "tier": "GRAND" } } }
+  "JP Force BRONZE":  { "extraData": { "jpCheat": { "tier": "BRONZE" } } },
+  "JP Force SILVER": { "extraData": { "jpCheat": { "tier": "SILVER" } } },
+  "JP Force GOLD": { "extraData": { "jpCheat": { "tier": "GOLD" } } },
+  "JP Force DIAMOND": { "extraData": { "jpCheat": { "tier": "DIAMOND" } } }
 }
 ```
 

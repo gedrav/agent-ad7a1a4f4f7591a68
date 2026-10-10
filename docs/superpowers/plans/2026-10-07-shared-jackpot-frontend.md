@@ -18,7 +18,7 @@
   - Pick: `POST games/jackpot/pick`, body DTO fields `gameId`, `token`, `roundId`, `position` (0..11), `epoch?` only. The spec also lists `playerId`; check the game-core validation pipe before sending extra fields (send `playerId` only if the existing request builders always send it and the server accepts unknown fields).
   - Cheat: game-core reads `extraData.jpCheat.tier` (dev mode only).
   - Realtime stream path is `/sse/events` (server keeps `/sse/balance` as an alias); jackpot events need `?jp=1`; `jackpot_won` payload is `{ p, tier, amt, c }` (no brand).
-- Tier order `MINI, MINOR, MAJOR, GRAND`; tier <-> panel index 0..3 <-> skins `bronze, silver, gold, diamond`.
+- Tier order `BRONZE, SILVER, GOLD, DIAMOND`; tier <-> panel index 0..3 <-> skins `bronze, silver, gold, diamond`.
 - Amounts arrive in player currency already rounded down; never recompute money client-side.
 - Games that do not mount jackpot screens must behave exactly as before (no `jackpotInfo` -> nothing shown, unknown realtime events ignored, balance events unchanged).
 - During implementation tasks do NOT run type-check, lint, build or tests (user rule); Task 6 runs them once. No new npm dependencies.
@@ -94,7 +94,7 @@
 **Files:**
 - Modify: `/Users/arghyac35/Documents/gitProject/pixentech/FEG/feg_fe/feg_games_assets/carpathiantreasures/panel/cheat.json`
 
-- [ ] **Step 1:** Read the file's existing structure and add four entries in the same format: "JP Force MINI|MINOR|MAJOR|GRAND" with `extraData: { jpCheat: { tier: "<TIER>" } }` (existing entries untouched).
+- [ ] **Step 1:** Read the file's existing structure and add four entries in the same format: "JP Force BRONZE|SILVER|GOLD|DIAMOND" with `extraData: { jpCheat: { tier: "<TIER>" } }` (existing entries untouched).
 - [ ] **Step 2:** Commit in feg_games_assets: `feat(jackpot): carpathiantreasures jackpot cheats`.
 
 ### Task 6: Verification
