@@ -2,6 +2,7 @@ import { JackPotItem } from '@brand/views/comps/JackPotItem';
 import { JackpotPanelComp } from '@brand/views/comps/JackpotPanelComp';
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { JACKPOT_GAME_BG_CONFIG } from './JackpotBGConfig';
+import { JPHitCelebrationComp } from '@brand/views/comps/JPHitCelebrationComp';
 
 export const JACKPOT_PANEL_CONFIG: any = {
   name: 'jackpotContainer',

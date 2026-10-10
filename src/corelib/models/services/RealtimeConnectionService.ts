@@ -90,7 +90,12 @@ class RealtimeConnectionService {
         break;
       }
       case 'jackpot_won':
-        EventHandler.dispatchEvent(SlotEvents.JACKPOT_WON, { tier: data.tier, amount: data.amt, currency: data.c });
+        EventHandler.dispatchEvent(SlotEvents.JACKPOT_WON, {
+          tier: data.tier,
+          amount: data.amt,
+          currency: data.c,
+          playerId: data.p,
+        });
         break;
       case 'jackpot_pool_changed':
         if (appModel.jackpotInfo) appModel.jackpotReinitPending = true;

@@ -56,8 +56,10 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.JACKPOT_INFO_READY, this.onJackpotInfoReady.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_METERS_UPDATE, this.onMetersUpdate.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.onRevealEnd.bind(this));
+
     this.onJackpotInfoReady(appModel.jackpotInfo);
   }
+
   createJackPotElement() {
     const itemCount = this.jackpotConfig.noOfElement;
 
