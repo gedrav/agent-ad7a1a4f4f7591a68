@@ -42,3 +42,25 @@ export interface IJackpotPickResponse {
   playerInfo: { playerId: string; balance?: number; endTime?: number };
   jackpot: IJackpotRound;
 }
+
+export interface JackpotMetersMessage {
+  poolId: string;
+  version: number;
+  currency: string;
+  meters: number[];
+  demo: boolean;
+}
+
+export interface JackpotWonMessage {
+  poolId: string;
+  tier: JackpotTier;
+  amount: number;
+  currency: string;
+  player: string;
+  gameName?: string;
+  gameAlias?: string;
+}
+
+export interface JackpotPoolChangedMessage {
+  poolId: string;
+}

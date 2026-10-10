@@ -2,6 +2,7 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { JackpotMetersMessage, JackpotPoolChangedMessage, JackpotWonMessage } from '@core/models/jackpot.types';
 
 const MIN_RETRY_MS = 1000;
 const MAX_RETRY_MS = 30000;
@@ -85,23 +86,30 @@ class RealtimeConnectionService {
         EventHandler.dispatchEvent(SlotEvents.REALTIME_BALANCE_UPDATE, { event, data: data as BalanceUpdatedData });
         break;
       case 'jackpot_meters': {
+        const meters = data as JackpotMetersMessage;
         const info = appModel.jackpotInfo;
-        if (!info || data.p !== info.poolId) return;
-        appModel.applyJackpotTick({ values: data.t, v: data.v });
+        if (meters.poolId !== info?.poolId) return;
+        appModel.applyJackpotTick({ values: meters.meters, v: meters.version });
         break;
       }
-      case 'jackpot_won':
+      case 'jackpot_won': {
+        const won = data as JackpotWonMessage;
         EventHandler.dispatchEvent(SlotEvents.JACKPOT_WON, {
-          tier: data.tier,
-          amount: data.amt,
-          currency: data.c,
-          playerId: data.p,
+          tier: won.tier,
+          amount: won.amount,
+          currency: won.currency,
+          playerId: won.player,
+          gameName: won.gameName,
+          gameAlias: won.gameAlias,
         });
         break;
-      case 'jackpot_pool_changed':
+      }
+      case 'jackpot_pool_changed': {
+        const changed = data as JackpotPoolChangedMessage;
         if (appModel.jackpotInfo) appModel.jackpotReinitPending = true;
-        EventHandler.dispatchEvent(SlotEvents.JACKPOT_POOL_CHANGED, { poolId: data.p });
+        EventHandler.dispatchEvent(SlotEvents.JACKPOT_POOL_CHANGED, { poolId: changed.poolId });
         break;
+      }
       default:
         break;
     }
