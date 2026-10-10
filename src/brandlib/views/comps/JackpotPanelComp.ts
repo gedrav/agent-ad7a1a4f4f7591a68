@@ -9,7 +9,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { IJackpotInfo } from '@core/models/jackpot.types';
 
-const METER_TWEEN_SECONDS = 1.5;
+const METER_TWEEN_SECONDS = 0.9;
 const NOTICE_TEXT = { demo: 'DEMO JACKPOT', unavailable: 'JACKPOT UNAVAILABLE' };
 
 interface RowLayout {
