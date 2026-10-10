@@ -113,16 +113,17 @@ The client must append `?jp=1` to the stream URL. Without it the server never se
 
 ```
 event: jackpot_meters
-data: {"p":"<poolId>","v":88123401,"c":"CZK","t":[650.12,2800.40,10750.00,121000.55],"demo":false}
+data: {"poolId":"<poolId>","version":88123401,"currency":"CZK","meters":[650.12,2800.40,10750.00,121000.55],"demo":false}
 
 event: jackpot_won
-data: {"p":"<poolId>","tier":"DIAMOND","amt":121000.55,"c":"CZK"}
+data: {"poolId":"<poolId>","tier":"DIAMOND","amount":121000.55,"currency":"CZK","player":"abc***","gameName":"<game name>","gameAlias":"<alias>"}
 
 event: jackpot_pool_changed
-data: {"p":"<poolId>"}
+data: {"poolId":"<poolId>"}
 ```
 
 - Payloads never contain `balance`.
+- `player` is masked server-side (first 3 characters of the external player id + `***`, never the full id).
 - The server suppresses `jackpot_meters` for the winner (all their tabs) during a reveal; the client still applies the freeze rule in 4.3 for the tab that spun.
 - Ticks arrive about once per second only when values change.
 
@@ -134,7 +135,7 @@ data: {"p":"<poolId>"}
 | ----- | ------- | ------------- |
 | `JACKPOT_INFO_READY` | `IJackpotInfo \| null` | `AppModelService.storeGameInitData` |
 | `JACKPOT_METERS_UPDATE` | `{ values: number[], v: number }` | `RealtimeConnectionService` (after filtering, 4.3) |
-| `JACKPOT_WON` | `{ tier, amount, currency }` | `RealtimeConnectionService` (hook only, no UI) |
+| `JACKPOT_WON` | `{ playerId, tier, amount, currency, gameName, gameAlias }` (`playerId` is the masked `player`) | `RealtimeConnectionService` (hook only, no UI) |
 | `JACKPOT_POOL_CHANGED` | `{ poolId }` | `RealtimeConnectionService` |
 | `JACKPOT_PICK_RESULT` | `IJackpotRound` | `MessageServiceProxy` after a pick response |
 
@@ -171,7 +172,7 @@ get jackpotPending(): boolean         // jackpotRound?.status === 'PENDING' or C
 - URL becomes `${VITE_REALTIME_URL}/sse/events?jp=1` (renamed from `/sse/balance`, which the server keeps as an alias for builds not yet updated; non-jackpot games move to `/sse/events` too).
 - `onmessage` routes by `msg.event`:
   - `balance_updated`: unchanged, `REALTIME_BALANCE_UPDATE`.
-  - `jackpot_meters`: ignore if `appModel.jackpotInfo` is null or `p` differs from `jackpotInfo.poolId`; apply 4.3; dispatch `JACKPOT_METERS_UPDATE`.
+  - `jackpot_meters`: ignore if `appModel.jackpotInfo` is null or `poolId` differs from `jackpotInfo.poolId`; apply 4.3; dispatch `JACKPOT_METERS_UPDATE`.
   - `jackpot_won`: dispatch `JACKPOT_WON`.
   - `jackpot_pool_changed`: dispatch `JACKPOT_POOL_CHANGED`; the game re-requests init when idle (next `GameIdleState`) to pick up the new `jackpotInfo`.
   - Unknown events: ignored (no longer forwarded as balance).
