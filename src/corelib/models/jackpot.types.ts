@@ -1,6 +1,6 @@
-export type JackpotTier = 'MINI' | 'MINOR' | 'MAJOR' | 'GRAND';
+export type JackpotTier = 'BRONZE' | 'SILVER' | 'GOLD' | 'DIAMOND';
 
-export const JACKPOT_TIERS: readonly JackpotTier[] = ['MINI', 'MINOR', 'MAJOR', 'GRAND'] as const;
+export const JACKPOT_TIERS: readonly JackpotTier[] = ['BRONZE', 'SILVER', 'GOLD', 'DIAMOND'] as const;
 
 export const JACKPOT_SKINS = ['bronze', 'silver', 'gold', 'diamond'] as const;
 

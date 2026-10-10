@@ -18,7 +18,6 @@ import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 
 const REVEAL_HOLD_MS = 1500;
 const OPEN_FALLBACK_MS = 3000;
-const WINING_TIER = { MINI: 'bronze', MINOR: 'silver', MAJOR: 'gold', GRAND: 'diamond' };
 
 export class JackpotCardsComp extends ResponsiveChildrenView {
   cardsContainer: PixView;
@@ -164,7 +163,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
 
     this.youwinJPTextimg.visible = true;
 
-    this.typeOfJPTextimg.texture = UIUtil.getTexture(`${WINING_TIER[wonTier]}_JP`);
+    this.typeOfJPTextimg.texture = UIUtil.getTexture(`${this.skinOf(wonTier)}_JP`);
     this.typeOfJPTextimg.visible = true;
 
     this.showStartAnimation();
