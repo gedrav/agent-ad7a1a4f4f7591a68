@@ -128,6 +128,35 @@ class UtilService {
     return str;
   }
 
+  public formatJPCurrency(num: number, currency: string, decimal = 2) {
+    if (num == undefined) {
+      num = 0;
+    }
+    let str = '';
+
+    if (Intl) {
+      if (appModel.funMode) {
+        str = new Intl.NumberFormat(appModel.language, {
+          minimumFractionDigits: decimal,
+          maximumFractionDigits: decimal,
+        }).format(num);
+      } else {
+        str = new Intl.NumberFormat(appModel.language, {
+          style: 'currency',
+          currencyDisplay: 'symbol',
+          currency: currency,
+          minimumFractionDigits: decimal,
+          maximumFractionDigits: decimal,
+          useGrouping: true,
+          //roundingMode: 'trunc',
+        }).format(num);
+      }
+    } else {
+      str = appModel.currency + num;
+    }
+    return str;
+  }
+
   public formatCurrencyNoSymbol(num: number, decimal = 2) {
     const lang = appModel.language ? appModel.language : 'en';
     const curr = appModel.currency ? appModel.currency : 'USD';

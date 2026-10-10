@@ -79,7 +79,7 @@ class RealtimeConnectionService {
   }
 
   private routeMessage(event: string, data: any): void {
-    console.log('route msg -- ', event, data);
+    //console.log('route msg -- ', event, data);
     switch (event) {
       case 'balance_updated':
         EventHandler.dispatchEvent(SlotEvents.REALTIME_BALANCE_UPDATE, { event, data: data as BalanceUpdatedData });
