@@ -31,10 +31,14 @@ export class JPHitCelebrationComp extends ResponsiveChildrenView {
     if (appModel.jackpotMetersFrozen) {
       return;
     }
+    if (appModel.opConfig.dontShowOtherPlayerJPHit) {
+      return;
+    }
     this.jpData = data;
     const str = Util.getContent('JPHitNotificationText');
+    const playerId = data.playerId.length > 6 ? `${data.playerId.slice(0, 6)}...` : data.playerId;
     const message = Util.parseMessage(str, [
-      data.playerId,
+      playerId,
       Util.formatJPCurrency(data.amount, data.currency),
       data.tier,
       data.gameName ? data.gameName : 'Carpathian Treasures',

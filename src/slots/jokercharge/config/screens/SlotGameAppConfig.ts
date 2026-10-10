@@ -10,6 +10,7 @@ import { MENU_CONFIG } from '@brand/config/MenuConfig';
 import { MENU_CONFIG_MOBILE } from '@brand/config/MenuConfigMobile';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 import { PROMOFS_POPUP_CONFIG } from '@brand/config/PromoFSPopupConfig';
+import { JP_HIT_NOTIFICATION_CONFIG } from '@brand/config/JPHItNotificationConfig';
 import { TRANSITION_CONFIG } from './TransitionConfig';
 import { BUY_BONUS_SCREEN_CONFIG } from './BuyBonusScreenConfig';
 import { RESPIN_INTRO_CONFIG } from './RespinIntroConfig';
@@ -37,5 +38,6 @@ export const SLOT_GAME_APP_CONFIG: any = {
     MESSAGE_POPUP_CONFIG,
     SECONDARY_WAITING_SCREEN_CONFIG,
     PROMOFS_POPUP_CONFIG,
+    JP_HIT_NOTIFICATION_CONFIG,
   ],
 };
