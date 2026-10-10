@@ -37,10 +37,10 @@ const PRIMARY: AssetBundle = {
 
     { TYPE: 'common', NAME: 'controlPanelAssets', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'commonLangAssets', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sequence', file: [2, 1] },
+    { TYPE: 'game', NAME: 'gameElements', ASSETTYPE: 'sequence', file: [3, 1] },
     { TYPE: 'game', NAME: 'symbols', ASSETTYPE: 'sequence', file: [3, 1] },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'antisipation', ASSETTYPE: 'spine' },
   ],
 };
 const SECONDARY: AssetBundle = {
@@ -54,16 +54,13 @@ const SECONDARY: AssetBundle = {
     { TYPE: 'game', NAME: 'corn', ASSETTYPE: 'spine' },
     { TYPE: 'game', NAME: 'low_symbols', ASSETTYPE: 'spine' },
     // wild animations
-    { TYPE: 'game', NAME: 'wild_x2_x3', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'wildStickyAnim', ASSETTYPE: 'sequence', file: [3, 1] },
+    { TYPE: 'game', NAME: 'multiplayers_wild', ASSETTYPE: 'spine' },
     // bigwin
     { TYPE: 'game', NAME: 'big_wins', ASSETTYPE: 'spine' },
     // popup
     { TYPE: 'game', NAME: 'popup_free_spins', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'popup', ASSETTYPE: 'spine' },
     // transition
-    { TYPE: 'game', NAME: 'transition_horisontal', ASSETTYPE: 'spine' },
-    { TYPE: 'game', NAME: 'transition_vertical', ASSETTYPE: 'spine' },
+    { TYPE: 'game', NAME: 'Transition', ASSETTYPE: 'spine' },
   ],
 };
 const FREESPIN: AssetBundle = {

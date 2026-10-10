@@ -26,9 +26,9 @@ export const BIG_WIN_CONFIG = {
     bigWinTextScales: [0.8, 0.9, 0.9, 0.9],
     bigWinTextStates: {
       BIG_WIN: 'bigWinText',
-      SUPER_WIN: 'superWinText',
-      MEGA_WIN: 'megaWinText',
-      EPIC_WIN: 'epicWinText',
+      SUPER_WIN: 'megaWinText',
+      MEGA_WIN: 'gigaWinText',
+      EPIC_WIN: 'unbWinText',
     },
   },
   Elements: [

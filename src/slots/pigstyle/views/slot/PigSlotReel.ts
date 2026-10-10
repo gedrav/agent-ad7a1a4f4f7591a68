@@ -155,7 +155,7 @@ export class PigSlotReel extends SlotReelStandard {
   }
 
   protected startStoppingSpin(): void {
-    const entries = this.getWildEntries();
+    const entries = this.getWildEntries(); // Checks gameResult.positionsModifiedWithWc or wildMultipliers
     if (this.isRainingRound() && entries.length) {
       this.wildsComp.showRainingWilds(entries, this, () => super.startStoppingSpin());
       return;

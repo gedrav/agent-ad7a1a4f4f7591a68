@@ -6,7 +6,7 @@ export const REEL_WIN_TICKER_CONFIG: any = {
   type: 'Comp',
   class: ReelWinTicker,
   x: 44,
-  y: 833,
+  y: 987,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1410, height: 80, color: 0xffff00, alpha: 0 },
     {
