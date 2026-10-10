@@ -13,14 +13,13 @@ export interface IJackpotInfo {
   rtp: number;
   minEligibleBet: number;
   eligibleBetTypes: ['BASE'];
-  tiers: { tier: JackpotTier; suit: string; value: number }[];
+  tiers: { tier: JackpotTier; value: number }[];
   v: number;
 }
 
 export interface IJackpotPick {
   position: number;
   tier: JackpotTier;
-  suit: string;
 }
 
 export interface IJackpotRound {
