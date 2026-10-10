@@ -13,10 +13,14 @@ export const JP_HIT_NOTIFICATION_CONFIG = {
       type: 'Graphics',
       width: 200,
       height: 60,
+      lHeight: 40,
+      pHeight: 40,
       color: 0x000000,
       alpha: 0.8,
       layoutData: {
         Desktop: { hAlign: 'left', vAlign: 'top', widthPercForce: 1 },
+        Landscape: { hAlign: 'left', vAlign: 'top', widthPercForce: 1, height: 40 },
+        Portrait: { hAlign: 'left', vAlign: 'top', widthPercForce: 1, height: 40 },
       },
     },
     {
@@ -30,16 +34,21 @@ export const JP_HIT_NOTIFICATION_CONFIG = {
         tagStyles: {
           jpUserColor: { fontSize: 24, fontWeight: 900 },
           jpNameColor: { fontSize: 30, fill: 0xffcc00 },
-          jpValueColor: { fontSize: 30, fill: 0x00ff00 },
+          jpValueColor: { fontSize: 30, fill: 0xffcc00 },
+          gameNameColor: { fontSize: 24, fontWeight: 900 },
         },
       },
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle' },
+        Desktop: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle', widthPerc: 0.9, heightPerc: 0.7 },
+        Landscape: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle', widthPerc: 0.9, heightPerc: 0.7 },
+        Portrait: { refComponent: 'guideRect', hAlign: 'center', vAlign: 'middle', widthPerc: 0.9, heightPerc: 0.7 },
       },
     },
   ],
   layoutData: {
     Desktop: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
+    Landscape: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
+    Portrait: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
   },
 };

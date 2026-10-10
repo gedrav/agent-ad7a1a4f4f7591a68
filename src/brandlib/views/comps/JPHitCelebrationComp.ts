@@ -23,13 +23,23 @@ export class JPHitCelebrationComp extends ResponsiveChildrenView {
   }
 
   protected onOtherPlayerJPWon(data: any): void {
+    if (appModel.jackpotMetersFrozen) {
+      return;
+    }
     const str = Util.getContent('JPHitNotificationText');
-    this.msgText.text = Util.parseMessage(str, [data.playerId, Util.formatCurrency(data.amount), data.tier]);
+    this.msgText.scale.set(1);
+    this.msgText.text = Util.parseMessage(str, [
+      data.playerId,
+      Util.formatCurrency(data.amount),
+      data.tier,
+      data.gameName ? data.gameName : 'Carpathian Treasures',
+    ]);
+    UIUtil.adjustElement(this.msgText);
     this.visible = true;
     AnimationProxy.fadeIn(this, 0.25, this.onFadedIn.bind(this));
   }
   protected onFadedIn(): void {
-    AnimationProxy.animateTween(this, { duration: 0.5, alpha: 0, delay: 4, onComplete: this.onFadedOut.bind(this) });
+    //AnimationProxy.animateTween(this, { duration: 0.5, alpha: 0, delay: 4, onComplete: this.onFadedOut.bind(this) });
   }
   protected onFadedOut(): void {
     this.visible = false;
