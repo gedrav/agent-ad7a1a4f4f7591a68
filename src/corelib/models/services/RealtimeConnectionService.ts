@@ -88,7 +88,8 @@ class RealtimeConnectionService {
       case 'jackpot_meters': {
         const meters = data as JackpotMetersMessage;
         const info = appModel.jackpotInfo;
-        if (meters.poolId !== info?.poolId) return;
+        if (!info) return;
+        if (meters.poolId !== info.poolId) return;
         appModel.applyJackpotTick({ values: meters.meters, v: meters.version });
         break;
       }
@@ -98,7 +99,7 @@ class RealtimeConnectionService {
           tier: won.tier,
           amount: won.amount,
           currency: won.currency,
-          playerId: won.player,
+          playerId: won.player ?? '***',
           gameName: won.gameName,
           gameAlias: won.gameAlias,
         });
