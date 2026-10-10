@@ -135,7 +135,7 @@ data: {"poolId":"<poolId>"}
 | ----- | ------- | ------------- |
 | `JACKPOT_INFO_READY` | `IJackpotInfo \| null` | `AppModelService.storeGameInitData` |
 | `JACKPOT_METERS_UPDATE` | `{ values: number[], v: number }` | `RealtimeConnectionService` (after filtering, 4.3) |
-| `JACKPOT_WON` | `{ playerId, tier, amount, currency, gameName, gameAlias }` (`playerId` is the masked `player`) | `RealtimeConnectionService` (hook only, no UI) |
+| `JACKPOT_WON` | `{ playerId, tier, amount, currency, gameName, gameAlias }` (`playerId` is the masked `player`) | `RealtimeConnectionService`, consumed by the FE team's `JPHitCelebrationComp` (win banner for other players) |
 | `JACKPOT_POOL_CHANGED` | `{ poolId }` | `RealtimeConnectionService` |
 | `JACKPOT_PICK_RESULT` | `IJackpotRound` | `MessageServiceProxy` after a pick response |
 
