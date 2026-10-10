@@ -20,7 +20,7 @@ export const JP_HIT_NOTIFICATION_CONFIG = {
       layoutData: {
         Desktop: { hAlign: 'left', vAlign: 'top', widthPercForce: 1 },
         Landscape: { hAlign: 'left', vAlign: 'top', widthPercForce: 1, height: 40 },
-        Portrait: { hAlign: 'left', vAlign: 'top', widthPercForce: 1, height: 40 },
+        Portrait: { hAlign: 'left', vAlign: 'top', widthPercForce: 1, height: 60 },
       },
     },
     {
@@ -31,11 +31,12 @@ export const JP_HIT_NOTIFICATION_CONFIG = {
         fontFamily: 'commonFont',
         fontSize: 24,
         fill: 0xffffff,
+        align: 'center',
         tagStyles: {
-          jpUserColor: { fontSize: 24, fontWeight: 900 },
-          jpNameColor: { fontSize: 30, fill: 0xffcc00 },
-          jpValueColor: { fontSize: 30, fill: 0xffcc00 },
-          gameNameColor: { fontSize: 24, fontWeight: 900 },
+          jpUserColor: { fontSize: 24, mFontSize: 20, fontWeight: 900 },
+          jpNameColor: { fontSize: 30, mFontSize: 25, fill: 0xffcc00 },
+          jpValueColor: { fontSize: 30, mFontSize: 25, fill: 0xffcc00 },
+          gameNameColor: { fontSize: 24, mFontSize: 20, fontWeight: 900 },
         },
       },
       anchor: { x: 0.5, y: 0.5 },
@@ -49,6 +50,6 @@ export const JP_HIT_NOTIFICATION_CONFIG = {
   layoutData: {
     Desktop: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
     Landscape: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
-    Portrait: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.1 },
+    Portrait: { hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.02 },
   },
 };
