@@ -29,23 +29,11 @@ export const TRANSITION_ANIM_CONFIG = {
     },
 
     {
-      name: 'transitionAnimHor',
+      name: 'transitionAnim',
       type: 'Spine',
-      spineName: 'transition_horisontal',
+      spineName: 'Transition',
       defaultSkin: 'default',
       boundingBox: { width: 3000, height: 1440 },
-      layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
-      },
-    },
-    {
-      name: 'transitionAnimVer',
-      type: 'Spine',
-      spineName: 'transition_vertical',
-      defaultSkin: 'default',
-      boundingBox: { width: 1440, height: 3000 },
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },

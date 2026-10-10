@@ -32,7 +32,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
       return;
     }
     this.multiplier = UIUtil.getElement(this.configData.data.multiplierSpine);
-    this.multiplier.playAnimation({ state: `X${multiplier}_idle`, loop: false });
+    this.multiplier.playAnimation({ state: `x${multiplier}_idle`, loop: false });
     this.addChild(this.multiplier);
     this.positionMultiplier();
   }

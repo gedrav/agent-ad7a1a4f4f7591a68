@@ -6,10 +6,7 @@ import { UIUtil } from '@core/utils/UIUtilService';
 import { Container } from 'pixi.js';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 
-const TICKS_PER_SECOND = 60;
 const MOVE_DURATION = 0.7;
-const MOVE_CLIP_DURATION = 0.8;
-const GAP_BETWEEN_WILDS = 500;
 const GAP_BEFORE_REELS_STOP = 600;
 
 interface WildPlacement {
@@ -63,10 +60,82 @@ export class WildsComp extends ResponsiveChildrenView {
   }
 
   protected showNextRainingWild(): void {
-    const [reelno, row, multiplier] = this.rainingEntries[this.rainingIndex];
-    this.createWild(reelno, { row, rowCount: this.slotReel.getRowCount(reelno), multiplier });
-    EventHandler.dispatchEvent(`PLAY_SYMBOL_${this.slotReel.getWildConfig().name}_LANDING_SOUND`, this.wilds.length);
-    setTimeout(this.onRainingWildLanded.bind(this), GAP_BETWEEN_WILDS);
+    const entry = this.rainingEntries[this.rainingIndex];
+    if (!entry) {
+      this.onAllLanded();
+      return;
+    }
+
+    const [reelno, row, multiplier] = entry;
+    const at: WildPlacement = { row, rowCount: this.slotReel.getRowCount(reelno), multiplier };
+
+    const configName = this.slotReel.reelsData.wildSymbol;
+    const config = this.slotReel.getSymbolConfig(configName, reelno) || this.slotReel.getWildConfig();
+
+    const group = this.createWild(reelno, at, false, config);
+    const targetScale = this.slotReel.getSymbolScale();
+    const popScale = targetScale * 1.4;
+
+    group.alpha = 1;
+    group.scale.set(targetScale * 0.9);
+
+    EventHandler.dispatchEvent(
+      `PLAY_SYMBOL_${config.name}_LANDING_SOUND`,
+      this.rainingIndex < 6 ? this.rainingIndex + 1 : 6,
+    );
+
+    const scaleProxy = { val: targetScale * 0.9 };
+    AnimationProxy.animateTween(scaleProxy, {
+      val: popScale,
+      duration: 0.4,
+      onUpdate: () => {
+        // CRITICAL FIX: Prevent quick-stop crash by checking if destroyed
+        if (group && !group.destroyed && group.scale) {
+          group.scale.set(scaleProxy.val);
+        }
+      },
+      onComplete: () => {
+        // Stop sequence immediately if quick stop destroyed the wild
+        if (group && !group.destroyed) {
+          this.attachMultiplierBadge(group, at, config);
+
+          AnimationProxy.animateTween(scaleProxy, {
+            val: targetScale,
+            duration: 0.4,
+            onUpdate: () => {
+              if (group && !group.destroyed && group.scale) {
+                group.scale.set(scaleProxy.val);
+              }
+            },
+            onComplete: () => {
+              if (group && !group.destroyed) {
+                this.onRainingWildLanded();
+              }
+            },
+          });
+        }
+      },
+    });
+  }
+
+  protected attachMultiplierBadge(container: Container, at: WildPlacement, config: any): PixSpine | null {
+    if (!at.multiplier || at.multiplier < 2) return null;
+
+    const badge: PixSpine = UIUtil.getElement(config.multiplierSpine);
+
+    // CRITICAL FIX: Add '_idle' to match the states available in the new 'multiplayers_wild' Spine
+    const animState = `x${at.multiplier}_idle`;
+
+    badge.playAnimation({ state: animState, loop: false });
+
+    // Use the exact multiplierScale configured for the new assets
+    badge.scale.set(config.multiplierScale);
+
+    container.addChild(badge);
+
+    EventHandler.dispatchEvent('PLAY_MULTIPLIER_ANIM_SOUND');
+
+    return badge;
   }
 
   protected onRainingWildLanded(): void {
@@ -78,33 +147,60 @@ export class WildsComp extends ResponsiveChildrenView {
     setTimeout(this.onAllLanded, GAP_BEFORE_REELS_STOP);
   }
 
-  protected createWild(reelno: number, at: WildPlacement): Container {
-    // Clone the config to safely modify the skin without mutating the base data
-    const config = { ...this.slotReel.getWildConfig() };
-    const size = at.rowCount - 1;
-
-    if (config.sized && config.skin?.includes('x')) {
-      config.skin = config.skin.replace('x', size.toString());
+  protected createWild(
+    reelno: number,
+    at: WildPlacement,
+    addBadge: boolean = true,
+    providedConfig: any = null,
+  ): Container {
+    // Fallback if not provided by showNextRainingWild (e.g. Sticky Wilds)
+    let config = providedConfig;
+    if (!config) {
+      config = { ...this.slotReel.getWildConfig() };
+      const size = at.rowCount - 1;
+      if (config.sized && config.skin?.includes('x')) {
+        config.skin = config.skin.replace('x', size.toString());
+      }
     }
 
     const group = new Container();
-
     const wild: PixSpine = UIUtil.getSpineAnim(config.spineName, config);
-    wild.scale.set(config.animScale);
 
-    // Fix: Play the base landing animation without appending the size
+    // 2. CRITICAL FIX: Force the skin to apply directly to the skeleton.
+    // If the core UIUtil wrapper misses the custom skin override, this forces it to render.
+    if (config.skin) {
+      const spineAny: any = wild;
+      if (spineAny.spineAnim?.skeleton) {
+        spineAny.spineAnim.skeleton.setSkinByName(config.skin);
+        spineAny.spineAnim.skeleton.setSlotsToSetupPose();
+      }
+    }
+
+    // Safely extract the responsive fit scale based on row count
+    const animScaleObj = config.animFitScale;
+    const animScale = animScaleObj ? (animScaleObj[at.rowCount] ?? animScaleObj.default ?? 1) : 1;
+    wild.scale.set(animScale);
+
+    // Safely extract and apply responsive offsets
+    const offsetXObj = config.animOffsetX;
+    const offsetX = offsetXObj ? (offsetXObj[at.rowCount] ?? offsetXObj.default ?? 0) : 0;
+
+    const offsetYObj = config.animOffsetY;
+    const offsetY = offsetYObj ? (offsetYObj[at.rowCount] ?? offsetYObj.default ?? 0) : 0;
+
+    wild.position.set(offsetX, offsetY);
+
+    // Play the exact landingAnim string from config
     wild.playAnimation({ state: config.landingAnim, loop: false });
 
     if (config.hidePlate) {
-      wild.spineAnim.skeleton.findSlot(config.hidePlate)?.setAttachment(null);
+      const spineContainer: any = wild;
+      spineContainer.spineAnim?.skeleton?.findSlot(config.hidePlate)?.setAttachment(null);
     }
     group.addChild(wild);
 
-    if (at.multiplier >= 2) {
-      const badge: PixSpine = UIUtil.getElement(config.multiplierSpine);
-      badge.playAnimation({ state: `X${at.multiplier}_idle`, loop: false });
-      badge.scale.set(wild.scale.x * config.multiplierScale);
-      group.addChild(badge);
+    if (addBadge) {
+      this.attachMultiplierBadge(group, at, config);
     }
 
     group.scale.set(this.slotReel.getSymbolScale());
@@ -114,41 +210,55 @@ export class WildsComp extends ResponsiveChildrenView {
     return group;
   }
 
-  protected moveWild(reelno: number, wild: Container, from: WildPlacement, to: WildPlacement): void {
+  protected moveWild(reelno: number, wildGroup: Container, from: WildPlacement, to: WildPlacement): void {
     const start = this.slotReel.cellCentre(reelno, from.row, from.rowCount);
     const end = this.slotReel.cellCentre(reelno, to.row, to.rowCount);
-    wild.position.copyFrom(start);
 
-    const clip = this.createMoveClip(from.rowCount, to.rowCount);
-    if (clip) {
-      wild.visible = false;
-      clip.position.copyFrom(start);
-      this.addChild(clip);
-      clip.playAnimation({ loop: false });
-      AnimationProxy.animateTween(clip, {
-        ...end,
-        duration: MOVE_DURATION,
-        onComplete: () => {
-          clip.destroy();
-          wild.visible = true;
-        },
-      });
+    // Start at the current cell position
+    wildGroup.position.copyFrom(start);
+
+    // 1. Get the target config and calculate the new skin size
+    const config = this.slotReel.getWildConfig();
+    const newSize = to.rowCount - 1;
+    let newSkin = config.skin;
+
+    if (config.sized && newSkin?.includes('x')) {
+      newSkin = newSkin.replace('x', newSize.toString());
     }
-    AnimationProxy.animateTween(wild, { ...end, duration: MOVE_DURATION });
-  }
 
-  protected createMoveClip(fromRowCount: number, toRowCount: number): any {
-    const frames = this.slotReel.getSlideFrames();
-    const clip = UIUtil.getElement({
-      ...frames,
-      animation: { ...frames.animation, prefix: `${fromRowCount} to ${toRowCount}_` },
+    // 2. Find the base Wild Spine inside this group (it's the first child we added)
+    const wildSpine: any = wildGroup.children.find((child: any) => child.spineAnim?.skeleton);
+
+    if (wildSpine) {
+      // 3. Update the Spine skin to match the new reel layout
+      if (newSkin) {
+        wildSpine.spineAnim.skeleton.setSkinByName(newSkin);
+        wildSpine.spineAnim.skeleton.setSlotsToSetupPose();
+      }
+
+      // 4. Safely extract and apply the new responsive fit scale
+      const animScaleObj = config.animFitScale;
+      const animScale = animScaleObj ? (animScaleObj[to.rowCount] ?? animScaleObj.default ?? 1) : 1;
+
+      // 5. Safely extract and apply the new responsive offsets
+      const offsetXObj = config.animOffsetX;
+      const offsetX = offsetXObj ? (offsetXObj[to.rowCount] ?? offsetXObj.default ?? 0) : 0;
+
+      const offsetYObj = config.animOffsetY;
+      const offsetY = offsetYObj ? (offsetYObj[to.rowCount] ?? offsetYObj.default ?? 0) : 0;
+
+      // Apply the internal sizes before the slide happens
+      wildSpine.scale.set(animScale);
+      wildSpine.position.set(offsetX, offsetY);
+    }
+
+    // 6. Smoothly slide the entire container (Spine + Multiplier Badge) to the new cell
+    AnimationProxy.animateTween(wildGroup, {
+      x: end.x,
+      y: end.y,
+      duration: MOVE_DURATION,
+      ease: 'sine.inOut', // Adds a nice smooth acceleration/deceleration to the slide
     });
-    if (!clip.totalFrames) {
-      return null;
-    }
-    clip.scale.set(this.slotReel.getSymbolScale());
-    clip.setAnimationSpeed(clip.totalFrames / (MOVE_CLIP_DURATION * TICKS_PER_SECOND));
-    return clip;
   }
 
   public clearWilds(): void {
