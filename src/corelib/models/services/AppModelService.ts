@@ -505,7 +505,6 @@ class AppModelService {
   public storeSpinResult(data: any): void {
     this.jackpotRound = data.jackpot ?? null;
     if (!this.jackpotRound) this.unfreezeJackpotMeters();
-    else if (this.jackpotRound.status === 'PENDING') EventHandler.dispatchEvent(SlotEvents.JACKPOT_ROUND_STARTED);
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
@@ -531,7 +530,6 @@ class AppModelService {
   public storeFeatureResult(data: any): void {
     this.jackpotRound = data.jackpot ?? null;
     if (!this.jackpotRound) this.unfreezeJackpotMeters();
-    else if (this.jackpotRound.status === 'PENDING') EventHandler.dispatchEvent(SlotEvents.JACKPOT_ROUND_STARTED);
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
