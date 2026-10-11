@@ -15,6 +15,7 @@ import { appModel } from '@core/models/services/AppModelService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
 import { IJackpotPick, IJackpotRound, JACKPOT_SKINS, JACKPOT_TIERS, JackpotTier } from '@core/models/jackpot.types';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { PixText } from '@core/pixiwrapper/PixText';
 
 const REVEAL_HOLD_MS = 1500;
 const OPEN_FALLBACK_MS = 3000;
@@ -43,6 +44,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected timeoutId: number;
   protected cardGuideRect: PixGraphics;
   protected pendingIntroAnim = false;
+  private instructionText: PixText;
   constructor(config) {
     super(config);
     this.cardsConfig = this.configData.cardsConfig;
@@ -58,6 +60,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.overlayRect = this.elementsList['overlayRect'];
     this.cardsContainer = this.elementsList['cardsContainer'];
     this.cardGuideRect = this.cardsContainer.elementsList['guideRect'];
+    this.instructionText = this.cardsContainer.elementsList['instructionText'];
 
     this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
     this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
@@ -421,6 +424,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.resizeJackpotWinAnimation();
     // desktop keeps the layout it was built with; only devices reflow on orientation
     if (DeviceProxy.isDevice()) {
+      UIUtil.adjustElement(this.instructionText);
       const col = DeviceProxy.config.isPortrait ? this.cardsConfig.pCol : this.cardsConfig.maxcCol;
       this.layoutCards(col);
     }

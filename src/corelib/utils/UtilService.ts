@@ -148,7 +148,7 @@ class UtilService {
           minimumFractionDigits: decimal,
           maximumFractionDigits: decimal,
           useGrouping: true,
-          //roundingMode: 'trunc',
+          roundingMode: 'trunc',
         }).format(num);
       }
     } else {

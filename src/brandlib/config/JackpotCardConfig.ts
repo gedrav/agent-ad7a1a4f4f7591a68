@@ -58,7 +58,28 @@ export const JACKPOT_CARD_CONFIG: any = {
           lHeight: 752,
           pWidth: 1150,
           pHeight: 1168,
-          alpha: 0,
+          alpha: 1,
+        },
+        {
+          name: 'instructionText',
+          type: 'Text',
+          content: 'JackpotIntroText',
+          x: 876,
+          y: -80,
+          px: 575,
+          py: -100,
+          lx: 876,
+          ly: -100,
+          anchor: { x: 0.5, y: 0.5 },
+          style: {
+            fontFamily: 'commonFontBold',
+            fontSize: 60,
+            fill: 0xffd200,
+            fontWeight: 'bold',
+          },
+          layoutData: {
+            Desktop: { refComponent: 'guideRect', widthPerc: 1, hAlign: 'center', maxScale: 1 },
+          },
         },
       ],
       layoutData: {
@@ -70,7 +91,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           vPaddingPerc: 0.01,
           hPaddingPerc: 0,
         },
-        Portrait: { widthPerc: 1, height: 1, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.02 },
+        Portrait: { widthPerc: 0.9, height: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.08 },
         Landscape: {
           widthPerc: 0.7,
           heightPerc: 0.8,
