@@ -120,6 +120,7 @@ class UtilService {
           maximumFractionDigits: decimal,
           useGrouping: true,
           roundingMode: 'trunc',
+          //roundingMode: 'halfExpand',
         }).format(num);
       }
     } else {
