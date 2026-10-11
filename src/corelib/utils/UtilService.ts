@@ -99,10 +99,19 @@ class UtilService {
     return value.toString();
   }
 
-  public formatCurrency(num: number, decimal = 2) {
+  public roundMoney(value: number, decimals = appModel.moneyDecimals): number {
+    if (!Number.isFinite(value)) return value;
+    const sign = value < 0 ? -1 : 1;
+    const clean = Number(Math.abs(value).toFixed(8));
+    if (clean < 0.5 / 10 ** decimals) return 0;
+    return sign * Number(`${Math.round(Number(`${clean}e${decimals}`))}e-${decimals}`);
+  }
+
+  public formatCurrency(num: number, decimal = appModel.moneyDecimals) {
     if (num == undefined) {
       num = 0;
     }
+    num = this.roundMoney(num, decimal);
     let str = '';
 
     if (Intl) {
@@ -119,7 +128,6 @@ class UtilService {
           minimumFractionDigits: decimal,
           maximumFractionDigits: decimal,
           useGrouping: true,
-          roundingMode: 'trunc',
         }).format(num);
       }
     } else {
@@ -128,10 +136,11 @@ class UtilService {
     return str;
   }
 
-  public formatJPCurrency(num: number, currency: string, decimal = 2) {
+  public formatJPCurrency(num: number, currency: string, decimal = appModel.moneyDecimals) {
     if (num == undefined) {
       num = 0;
     }
+    num = this.roundMoney(num, decimal);
     let str = '';
 
     if (Intl) {
@@ -157,7 +166,8 @@ class UtilService {
     return str;
   }
 
-  public formatCurrencyNoSymbol(num: number, decimal = 2) {
+  public formatCurrencyNoSymbol(num: number, decimal = appModel.moneyDecimals) {
+    num = this.roundMoney(num, decimal);
     const lang = appModel.language ? appModel.language : 'en';
     const curr = appModel.currency ? appModel.currency : 'USD';
     let str = '';
@@ -167,7 +177,6 @@ class UtilService {
         minimumFractionDigits: decimal,
         maximumFractionDigits: decimal,
         useGrouping: true,
-        roundingMode: 'trunc',
       }).format(num);
     } else {
       str = appModel.currency + num;
