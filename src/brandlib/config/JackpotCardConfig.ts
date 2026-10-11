@@ -97,7 +97,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           heightPerc: 0.8,
           hAlign: 'center',
           vAlign: 'middle',
-          vPaddingPerc: 0,
+          vPaddingPerc: 0.08,
           hPaddingPerc: 0,
         },
         SmallLandscape: {
@@ -105,7 +105,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           heightPerc: 0.8,
           hAlign: 'center',
           vAlign: 'middle',
-          vPaddingPerc: 0,
+          vPaddingPerc: 0.08,
           hPaddingPerc: 0,
         },
       },
