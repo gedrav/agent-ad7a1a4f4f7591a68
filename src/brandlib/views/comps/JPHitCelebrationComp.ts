@@ -36,12 +36,12 @@ export class JPHitCelebrationComp extends ResponsiveChildrenView {
     }
     this.jpData = data;
     const str = Util.getContent('JPHitNotificationText');
-    const playerId = data.playerId.length > 6 ? `${data.playerId.slice(0, 6)}...` : data.playerId;
+    const playerId = data.playerId.length > 9 ? `${data.playerId.slice(0, 6)}...` : data.playerId;
     const message = Util.parseMessage(str, [
       playerId,
       Util.formatJPCurrency(data.amount, data.currency),
       data.tier,
-      data.gameName ? data.gameName : 'Carpathian Treasures',
+      data.gameName,
     ]);
     this.msgText.scale.set(1);
     UIUtil.adjustElement(this.guideRect);
