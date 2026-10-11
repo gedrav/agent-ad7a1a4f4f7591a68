@@ -38,10 +38,10 @@ export class JackpotCard extends StandardView {
   }
   public showWin(onComplete?: () => void) {
     AnimationProxy.animateTween(this.card, {
-      scaleX: 1.3,
-      scaleY: 1.3,
+      scaleX: 1.15,
+      scaleY: 1.15,
       yoyo: -1,
-      repeat: 3,
+      repeat: 2,
       duration: 0.4,
       onComplete,
     });

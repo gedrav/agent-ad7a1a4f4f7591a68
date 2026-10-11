@@ -58,7 +58,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           lHeight: 752,
           pWidth: 1150,
           pHeight: 1168,
-          alpha: 1,
+          alpha: 0,
         },
         {
           name: 'instructionText',
@@ -167,17 +167,17 @@ export const JACKPOT_CARD_CONFIG: any = {
           name: 'jpguideRect',
           type: 'Graphics',
           width: 775,
-          height: 775,
+          height: 500,
           alpha: 0,
         },
         { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 228 },
-        { name: 'typeOfJPTextimg', type: 'Sprite', image: 'gold_JP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 326 },
+        { name: 'typeOfJPTextimg', type: 'Sprite', image: 'gold_JP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 374 },
         {
           name: 'winTickerJP',
           type: 'Comp',
           class: WinTicker,
           x: 400,
-          y: 396,
+          y: 474,
           Elements: [
             {
               name: 'valueText',
@@ -189,10 +189,9 @@ export const JACKPOT_CARD_CONFIG: any = {
           ],
         },
       ],
-
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.01, hPaddingPerc: 0.02 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.7, vPaddingPerc: 0.01, hPaddingPerc: 0.02 },
         Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
       },
     },
