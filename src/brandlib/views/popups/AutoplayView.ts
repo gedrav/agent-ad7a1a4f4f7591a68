@@ -102,7 +102,7 @@ export class AutoplayView extends ResponsiveChildrenView {
       const parsed = parseFloat(text);
 
       if (!isNaN(parsed) && this.spendingLimitSlider) {
-        let value = Number(parsed.toFixed(2));
+        let value = Util.roundMoney(parsed, appModel.moneyDecimals);
 
         // clamp ONLY to max and reflect in input
         if (value > max) {
@@ -124,8 +124,10 @@ export class AutoplayView extends ResponsiveChildrenView {
       const min = this.spendingLimitSlider?.min ?? 0;
       const max = this.spendingLimitSlider?.max ?? 0;
       const parsed = parseFloat(text);
-      const clamped = isNaN(parsed) ? min : Math.min(Math.max(parseFloat(parsed.toFixed(2)), min), max);
-      this.spendingLimitInput.value = clamped === min ? '' : clamped.toFixed(2);
+      const clamped = isNaN(parsed)
+        ? min
+        : Math.min(Math.max(Util.roundMoney(parsed, appModel.moneyDecimals), min), max);
+      this.spendingLimitInput.value = clamped === min ? '' : clamped.toFixed(appModel.moneyDecimals);
       this._sliderUpdating = true;
       if (this.spendingLimitSlider) this.spendingLimitSlider.value = clamped;
       this._sliderUpdating = false;

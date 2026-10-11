@@ -96,6 +96,14 @@ class AppModelService {
     this._opConfig = value;
   }
   private _opConfig: any;
+
+  get moneyRounding(): { decimals: number; mode: string } {
+    return this._opConfig?.moneyRounding ?? { decimals: 2, mode: 'half-up' };
+  }
+
+  get moneyDecimals(): number {
+    return this.moneyRounding.decimals;
+  }
   get waitingForFeature(): boolean {
     return this._waitingForFeature;
   }
@@ -433,8 +441,8 @@ class AppModelService {
       this.gameInfo.betPos = this.gameInfo.betsArray.indexOf(bet);
     }
   }
-  insertSorted2dp(nums, value, decimals = 2) {
-    const scale = 100 ** decimals;
+  insertSorted2dp(nums, value, decimals = this.moneyDecimals) {
+    const scale = 10 ** decimals;
     const v = Math.round(value * scale);
 
     const idx = nums.findIndex((n) => Math.round(n * scale) > v);
@@ -638,7 +646,7 @@ class AppModelService {
 
   public getAnteBetValue(): number {
     const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
-    return Math.round(bet * GameProxy.config.anteBetMultiplier * 100) / 100;
+    return Util.roundMoney(bet * GameProxy.config.anteBetMultiplier, this.moneyDecimals);
   }
 
   public getTotalBetWithoutAnte(): number {
@@ -646,7 +654,7 @@ class AppModelService {
   }
   public getTotalBetForPaytable(): number {
     const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
-    return Math.round(bet * 100) / 100;
+    return Util.roundMoney(bet, this.moneyDecimals);
   }
   public getTotalBet(): number {
     const isAnte = GameProxy.config.isAnteEnabled;
@@ -654,11 +662,11 @@ class AppModelService {
       if (isAnte) {
         if (this.gameInfo.betsArray.length > 0) {
           const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
-          return Math.round(bet * this.gameInfo?.anteBet * 100) / 100;
+          return Util.roundMoney(bet * this.gameInfo?.anteBet, this.moneyDecimals);
         }
       } else {
         const bet = this.gameInfo?.betsArray[this.gameInfo.betPos];
-        return Math.round(bet * 100) / 100;
+        return Util.roundMoney(bet, this.moneyDecimals);
       }
     } else {
       return 0;
