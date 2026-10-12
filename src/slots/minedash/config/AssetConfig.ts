@@ -43,11 +43,11 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'goldcards', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
 
-    { TYPE: 'game', NAME: 'lowpayingsymbols', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'lowpay_symbols', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'H1', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'H2', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'H3', ASSETTYPE: 'spine', spineImageType: 'webp' },
-    { TYPE: 'game', NAME: 'wild', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'WD', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'gems', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'GoldCard', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'MD_FeaturePopUP', ASSETTYPE: 'spine', spineImageType: 'webp' },
