@@ -172,6 +172,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.winTickerJP.visible = true;
     this.winTickerJP.countUpValue(winAmount, 5000);
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
+    AnimationProxy.fadeOut(this.instructionText, 0.2);
     this.jackPotOutroAnimation.renderable = true;
     this.adjustJackpotTextScale();
 
@@ -376,6 +377,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     EventHandler.dispatchEvent('STOP_BG_SOUND');
     EventHandler.dispatchEvent('PLAY_JACKPOT_BGM');
     this.resetCards();
+    this.instructionText.alpha = 1;
     this.pickInFlight = false;
     this.clearOpenWait();
     this.revealFinished = false;

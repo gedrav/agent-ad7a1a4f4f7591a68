@@ -88,7 +88,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           heightPerc: 0.8,
           hAlign: 'center',
           vAlign: 'middle',
-          vPaddingPerc: 0.01,
+          vPaddingPerc: 0.05,
           hPaddingPerc: 0,
         },
         Portrait: { widthPerc: 0.9, height: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.08 },
