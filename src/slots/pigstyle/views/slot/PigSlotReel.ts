@@ -363,4 +363,37 @@ export class PigSlotReel extends SlotReelStandard {
       view?.position.set(pos.x, pos.y);
     }
   }
+
+  // Add this method to PigSlotReel class
+  protected createScatterAnticipationArray(): void {
+    const reels = appModel.gameResult?.reelView;
+    if (!reels) {
+      super.createScatterAnticipationArray();
+      return;
+    }
+
+    let totalScatters = 0;
+    this.scatterAnticipArray = [];
+    this.scatterAnticipArray[0] = [0];
+
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      if (k > 0) {
+        const prevReel = reels[k - 1];
+        if (prevReel) {
+          const scattersLen = this.reelsData.anticipationSymbols?.length;
+          if (scattersLen) {
+            // Count exact visible symbols without skipping edges
+            for (let i = 0; i < prevReel.length; i++) {
+              for (let j = 0; j < scattersLen; j++) {
+                if (prevReel[i] === this.reelsData.anticipationSymbols[j]) {
+                  totalScatters++;
+                }
+              }
+            }
+          }
+        }
+      }
+      this.scatterAnticipArray[k] = [totalScatters];
+    }
+  }
 }
