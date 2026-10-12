@@ -106,7 +106,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         {
           name: 'logoAnim',
           type: 'Spine',
-          spineName: 'Joker Charge',
+          spineName: 'Joker_Charge',
           defaultState: 'idle',
           loop: true,
           scale: 1.3,
