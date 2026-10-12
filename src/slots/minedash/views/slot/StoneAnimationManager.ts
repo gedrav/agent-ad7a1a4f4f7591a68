@@ -27,7 +27,6 @@ export const SYMBOL_TO_GOLDCARD_SKIN: Record<string, string> = {
   H1: 'HELMATE',
   H2: 'LANTERN',
   H3: 'PICKAXE',
-  H4: 'HELMATE',
   H5: 'LANTERN',
   L1: 'A',
   L2: 'K',
