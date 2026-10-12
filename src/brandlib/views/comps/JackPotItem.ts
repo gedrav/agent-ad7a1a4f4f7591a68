@@ -26,8 +26,8 @@ export class JackPotItem extends StandardView {
   public setValue(value: number) {
     this.tween?.kill();
     AnimationProxy.killTweensOf(this.counter);
-    this.counter.current = value;
-    this.updateJackpotValue(value);
+    // this.counter.current = value;
+    this.tweenToValue(value, 0.9);
   }
   public tweenToValue(value: number, duration: number) {
     AnimationProxy.killTweensOf(this.counter);
