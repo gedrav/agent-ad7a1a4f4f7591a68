@@ -1,10 +1,10 @@
 import { CoreUIConfig } from '@brand/config/CoreUIConfig';
-import { FSPopupComp } from '@brand/views/popups/FSPopupComp';
+import { GameFSPopupComp } from '@game/views/comps/GameFSPopupComp';
 
 export const FS_POPUP_CONFIG = {
   name: 'popupComp',
   type: 'Comp',
-  class: FSPopupComp,
+  class: GameFSPopupComp,
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 906, height: 1050, color: 0xff0000, alpha: 0 },
     {
@@ -24,7 +24,7 @@ export const FS_POPUP_CONFIG = {
       style: { fontFamily: 'gameFont1', fontSize: 70, fill: 0xffff00, wordWrap: true, wordWrapWidth: 1000 },
       anchor: { x: 0.5, y: 0.5 },
       x: 450,
-      y: 160,
+      y: 337,
     },
     {
       name: 'messageText1',
@@ -32,13 +32,13 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       anchor: { x: 0.5, y: 0.5 },
       x: 450,
-      y: 270,
+      y: 540,
       style: {
         fontFamily: 'gameFont1',
-        fontSize: 50,
+        fontSize: 65,
         fill: 0xffffff,
         wordWrap: true,
-        wordWrapWidth: 800,
+        wordWrapWidth: 500,
         letterSpacing: 2,
         align: 'center',
       },
@@ -49,7 +49,7 @@ export const FS_POPUP_CONFIG = {
       contentText: '',
       anchor: { x: 0.5, y: 0.5 },
       x: 450,
-      y: 842,
+      y: 746,
       style: {
         fontFamily: 'gameFont1',
         fontSize: 50,
@@ -77,7 +77,7 @@ export const FS_POPUP_CONFIG = {
         content: 'okBtnText',
         style: {
           fontFamily: 'gameFont1',
-          fontSize: 60,
+          fontSize: 80,
           fill: ['0x864201', '0xffc100', '0xffec43', '0xffff9e', '0xffff34', '0xffdf0b', '0xffb800', '0xf99900'],
           stroke: '0x792819',
           strokeThickness: 4,
@@ -90,7 +90,7 @@ export const FS_POPUP_CONFIG = {
         toUpperCase: true,
       },
       x: 450,
-      y: 994,
+      y: 937,
     },
   ],
   layoutData: {

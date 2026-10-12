@@ -21,9 +21,6 @@ class PigCheckUnfinishedStateCommand extends StateCommand {
     }
 
     EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
-    if (appModel.getIsAnteBetOn()) {
-      EventHandler.dispatchEvent(SlotEvents.UPDATE_UNFINISHED_ANTE_BET);
-    }
     EventHandler.dispatchEvent(SlotEvents.RENDER_UNFINISHED_REEL);
     EventHandler.dispatchEvent(SlotEvents.DISALBE_ANTE_BB_BUTTON);
 
