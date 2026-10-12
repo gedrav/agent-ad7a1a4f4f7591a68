@@ -88,7 +88,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           heightPerc: 0.8,
           hAlign: 'center',
           vAlign: 'middle',
-          vPaddingPerc: 0.01,
+          vPaddingPerc: 0.05,
           hPaddingPerc: 0,
         },
         Portrait: { widthPerc: 0.9, height: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.08 },
@@ -132,7 +132,6 @@ export const JACKPOT_CARD_CONFIG: any = {
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
         Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
       },
     },
@@ -146,9 +145,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       y: 0,
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, vPaddingPerc: 0.05 },
       },
     },
     {
@@ -171,7 +168,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           alpha: 0,
         },
         { name: 'youwinJPTextimg', type: 'Sprite', image: 'YouwinJP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 228 },
-        { name: 'typeOfJPTextimg', type: 'Sprite', image: 'gold_JP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 374 },
+        { name: 'typeOfJPTextimg', type: 'Sprite', image: 'diamond_JP', anchor: { x: 0.5, y: 0.5 }, x: 394, y: 374 },
         {
           name: 'winTickerJP',
           type: 'Comp',
@@ -191,7 +188,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       ],
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.7, vPaddingPerc: 0.01, hPaddingPerc: 0.02 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.01, hPaddingPerc: 0.02 },
         Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
       },
     },

@@ -92,6 +92,8 @@ export class JackpotCard extends StandardView {
     this.card.tint = 0xffffff;
     this.cardGuideRect.interactive = true;
     this.cardStatus = CardStatus.CLOSE;
+    AnimationProxy.killTweensOf(this.card);
+    this.card.scale.set(1);
     this.playCardAnimation({ state: animationState.BACK, loop: false });
   }
 }

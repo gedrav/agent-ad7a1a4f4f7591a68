@@ -45,6 +45,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected cardGuideRect: PixGraphics;
   protected pendingIntroAnim = false;
   private instructionText: PixText;
+  private jackpotTextScale: number = 1;
   constructor(config) {
     super(config);
     this.cardsConfig = this.configData.cardsConfig;
@@ -148,6 +149,18 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       this.jackPotOutroAnimation.playAnimation({ state: 'idle_land', loop: true });
     }
   }
+  adjustJackpotTextScale() {
+    this.typeOfJPTextimg.scale.set(1);
+    this.jackpotTextScale = 1;
+    if (DeviceProxy.isDevice()) {
+      if (DeviceProxy.config.isPortrait) {
+        if (this.typeOfJPTextimg.width > this.jpguideRect.width) {
+          this.jackpotTextScale = (this.jpguideRect.width * 0.9) / this.typeOfJPTextimg.width;
+          this.typeOfJPTextimg.scale.set(this.jackpotTextScale);
+        }
+      }
+    }
+  }
   showJackpotWinAnimation() {
     const round = appModel.jackpotRound;
     if (!round) return;
@@ -159,7 +172,9 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.winTickerJP.visible = true;
     this.winTickerJP.countUpValue(winAmount, 5000);
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
+    AnimationProxy.fadeOut(this.instructionText, 0.2);
     this.jackPotOutroAnimation.renderable = true;
+    this.adjustJackpotTextScale();
 
     this.youwinJPTextimg.scale.set(0.1);
     this.typeOfJPTextimg.scale.set(0.1);
@@ -175,8 +190,8 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   private showStartAnimation() {
     AnimationProxy.animateTween(this.youwinJPTextimg, { scaleX: 1, scaleY: 1, duration: 0.3 });
     AnimationProxy.animateTween(this.typeOfJPTextimg, {
-      scaleX: 1,
-      scaleY: 1,
+      scaleX: this.jackpotTextScale,
+      scaleY: this.jackpotTextScale,
       duration: 0.3,
       onComplete: this.pulseJPWinText.bind(this),
     });
@@ -197,10 +212,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     });
 
     AnimationProxy.killTweensOf(this.typeOfJPTextimg);
-    this.typeOfJPTextimg.scale.set(1);
+    this.typeOfJPTextimg.scale.set(this.jackpotTextScale);
     AnimationProxy.animateTween(this.typeOfJPTextimg, {
-      scaleX: 0.9,
-      scaleY: 0.9,
+      scaleX: this.jackpotTextScale * 0.9,
+      scaleY: this.jackpotTextScale * 0.9,
       repeat: -1,
       yoyo: true,
       duration: 0.5,
@@ -362,6 +377,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     EventHandler.dispatchEvent('STOP_BG_SOUND');
     EventHandler.dispatchEvent('PLAY_JACKPOT_BGM');
     this.resetCards();
+    this.instructionText.alpha = 1;
     this.pickInFlight = false;
     this.clearOpenWait();
     this.revealFinished = false;
