@@ -155,7 +155,7 @@ export class PigSlotReel extends SlotReelStandard {
   }
 
   protected startStoppingSpin(): void {
-    const entries = this.getWildEntries(); // Checks gameResult.positionsModifiedWithWc or wildMultipliers
+    const entries = this.getWildEntries();
     if (this.isRainingRound() && entries.length) {
       this.wildsComp.showRainingWilds(entries, this, () => super.startStoppingSpin());
       return;
@@ -207,7 +207,7 @@ export class PigSlotReel extends SlotReelStandard {
     this.moveSymbols(symbols, delta);
 
     const symbolHeight = this.getSymbolHeight(reelno);
-    const self = this as any; // Quick alias for cleaner code below
+    const self = this as any;
 
     for (let pass = 0; pass < symbols.length; pass++) {
       if (symbols[symbols.length - 1].y <= this.reelsData.reelHeight * 1.1) {
@@ -340,8 +340,6 @@ export class PigSlotReel extends SlotReelStandard {
         this.symbolHeights[k] = this.measureSymbolHeight(this.getRowCount(k));
       }
       const newSymbolHeight = this.getSymbolHeight(k);
-
-      // Check if this specific reel is currently spinning
       const isSpinning = this.reelSpinningState && this.reelSpinningState[k] > 0;
 
       this.symbolsArray[k].forEach((symb, j) => {
@@ -349,10 +347,8 @@ export class PigSlotReel extends SlotReelStandard {
         symb.x = this.reelsData.reelPositionX[k];
 
         if (isSpinning) {
-          // Proportional scaling preserves smooth spinning midway through the animation
           symb.y = (symb.y / oldSymbolHeight) * newSymbolHeight;
         } else {
-          // Snap to exact grid positions for initial load and stopped state
           symb.y = (j - 1) * newSymbolHeight;
         }
       });
@@ -364,7 +360,6 @@ export class PigSlotReel extends SlotReelStandard {
     }
   }
 
-  // Add this method to PigSlotReel class
   protected createScatterAnticipationArray(): void {
     const reels = appModel.gameResult?.reelView;
     if (!reels) {
@@ -382,7 +377,6 @@ export class PigSlotReel extends SlotReelStandard {
         if (prevReel) {
           const scattersLen = this.reelsData.anticipationSymbols?.length;
           if (scattersLen) {
-            // Count exact visible symbols without skipping edges
             for (let i = 0; i < prevReel.length; i++) {
               for (let j = 0; j < scattersLen; j++) {
                 if (prevReel[i] === this.reelsData.anticipationSymbols[j]) {
