@@ -434,8 +434,15 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       this.jackpotIntroAnimVer.renderable = false;
     }
   }
+  protected resizeJackpotoutroTextAnim() {
+    AnimationProxy.killTweensOf(this.youwinJPTextimg);
+    AnimationProxy.killTweensOf(this.typeOfJPTextimg);
+    this.adjustJackpotTextScale();
+    this.pulseJPWinText();
+  }
   protected resizeView(): void {
     UIUtil.adjustElement(this.cardGuideRect);
+    this.resizeJackpotoutroTextAnim();
     super.resizeView();
     this.resizeJackpotWinAnimation();
     // desktop keeps the layout it was built with; only devices reflow on orientation
