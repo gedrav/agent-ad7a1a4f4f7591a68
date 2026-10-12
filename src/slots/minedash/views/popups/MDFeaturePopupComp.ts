@@ -35,7 +35,7 @@ export class MDFeaturePopupComp extends ResponsiveChildrenView {
 
   protected showPopup(data: any = {}): void {
     GameProxy.config.isPopupOpened = true;
-    EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
+    // EventHandler.dispatchEvent(SlotEvents.SHOW_MODAL_VIEW);
     clearTimeout(this.timeoutId);
 
     if (data.entryPopUp) {
@@ -48,7 +48,7 @@ export class MDFeaturePopupComp extends ResponsiveChildrenView {
       data = {
         ...data,
         title: Util.getContent('totalWinHeading') || 'TOTAL WIN',
-        tickerValue: appModel.getTotalFreespinWinAmount(),
+        message1: String(appModel.getTotalFreespinWinAmount()),
       };
     }
 
@@ -86,7 +86,7 @@ export class MDFeaturePopupComp extends ResponsiveChildrenView {
 
   protected onAutoClose(): void {
     GameProxy.config.isPopupOpened = false;
-    EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
+    // EventHandler.dispatchEvent(SlotEvents.HIDE_MODAL_VIEW);
     this.visible = false;
     if (this.callbackFunction) {
       this.callbackFunction();

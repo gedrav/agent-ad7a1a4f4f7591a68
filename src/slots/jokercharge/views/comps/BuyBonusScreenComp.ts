@@ -5,6 +5,8 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { BuyBonusConfirmedCommand } from '@core/commands/action/BuyBonusConfirmedCommand';
+import { getFullBets, holdBet, releaseHeldBet } from '@slots/jokercharge/models/JCBetsState';
 import { Util } from '@core/utils/UtilService';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
@@ -29,6 +31,9 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
   private readonly content: any;
   private readonly cards: any[] = [];
   private readonly betValue: PixText;
+  // Into getFullBets(): the bonus is priced on the backend's whole list, whatever the lines in play,
+  // so this has a bet of its own rather than moving the game's.
+  private betIndex = 0;
 
   constructor(config: any) {
     super(config);
@@ -61,6 +66,8 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
 
   public show(): void {
     if (this.visible) return;
+    // Opens on the game's bet, a member of the full list too.
+    this.betIndex = Math.max(getFullBets().indexOf(appModel.getTotalBet()), 0);
     this.refresh();
     this.visible = true;
 
@@ -97,9 +104,13 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
     });
   }
 
+  private getBet(): number {
+    return getFullBets()[this.betIndex];
+  }
+
   // Prices follow the bet, at each card's own multiplier from bbBetMultiplierSettings.
   private refresh(): void {
-    const bet = appModel.getTotalBet();
+    const bet = this.getBet();
     this.betValue.text = Util.formatCurrencyNoSymbol(bet);
     this.cards.forEach((card, index) => {
       const multiplier = appModel.getBuyBonusMultiplier(BUY_BONUS_FEATURE_IDS[index]);
@@ -108,19 +119,29 @@ export class BuyBonusScreenComp extends ResponsiveChildrenView {
   }
 
   private changeBet(step: number): void {
-    const bets = appModel.getAllBets();
-    const position = Math.min(Math.max(appModel.getBetPos() + step, 0), bets.length - 1);
-    if (position === appModel.getBetPos()) return;
-    appModel.gameInfo.betPos = position;
-    EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+    const position = Math.min(Math.max(this.betIndex + step, 0), getFullBets().length - 1);
+    if (position === this.betIndex) return;
+    this.betIndex = position;
     this.refresh();
   }
 
-  // BBSpinStartState copies selectedBB into the request's buyBonus.feature and looks its
-  // multiplier up from the same id, so the backend is told which of the three was bought.
-  // TODO: start the buy-bonus round once the backend's buy bonus is in.
+  // The same path brandlib's own Buy Bonus popup takes: BuyBonusConfirmedCommand checks the balance
+  // covers bet x the card's multiplier (or shows the low-balance popup), then BBSpinStartState copies
+  // selectedBB into the request's buyBonus.feature and its multiplier from bbBetMultiplierSettings,
+  // so the backend is told which of the three was bought, and spins.
+  //
+  // corelib reads the bet off appModel for all of that, so this screen's bet is held in play for
+  // the bought round - see JCBetsState - and the game's own comes back once it is over. The command
+  // checks the held bet, so it goes back only after: when the balance falls short (the command shows
+  // its popup) or a jackpot is pending (it does nothing), no round starts to give it back at its end.
   private buy(index: number): void {
-    GameProxy.config.selectedBB = BUY_BONUS_FEATURE_IDS[index];
+    const featureId = BUY_BONUS_FEATURE_IDS[index];
+    GameProxy.config.selectedBB = featureId;
     this.hide();
+    holdBet(this.getBet());
+    const starts = !appModel.jackpotPending && appModel.getIsBBSpinStartPossible(featureId);
+    if (starts) EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+    BuyBonusConfirmedCommand.execute();
+    if (!starts) releaseHeldBet();
   }
 }

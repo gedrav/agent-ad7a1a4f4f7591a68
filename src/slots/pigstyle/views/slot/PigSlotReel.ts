@@ -233,6 +233,7 @@ export class PigSlotReel extends SlotReelStandard {
 
   protected showFinalJerk(reelno: number): void {
     this.destroyAnticipation(reelno);
+    this.anticipationRunning[reelno] = false;
     this.reelSpinningState[reelno] = 0;
 
     const symbols = this.symbolsArray[reelno];
@@ -266,6 +267,9 @@ export class PigSlotReel extends SlotReelStandard {
   }
 
   protected stopReelQuick(reelno: number): void {
+    this.destroyAnticipation(reelno);
+    this.anticipationRunning[reelno] = false;
+
     EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     this.reelSpinningState[reelno] = 0;
 
@@ -328,14 +332,32 @@ export class PigSlotReel extends SlotReelStandard {
   protected repositionView(): void {
     this.setDeviceWisePositionData();
     const scale = this.reelsData.symbolScale;
+
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
-      const symbolHeight = this.getSymbolHeight(k);
+      const oldSymbolHeight = this.getSymbolHeight(k);
+
+      if (this.symbolHeights) {
+        this.symbolHeights[k] = this.measureSymbolHeight(this.getRowCount(k));
+      }
+      const newSymbolHeight = this.getSymbolHeight(k);
+
+      // Check if this specific reel is currently spinning
+      const isSpinning = this.reelSpinningState && this.reelSpinningState[k] > 0;
+
       this.symbolsArray[k].forEach((symb, j) => {
         symb.scale.set(scale);
         symb.x = this.reelsData.reelPositionX[k];
-        symb.y = (j - 1) * symbolHeight;
+
+        if (isSpinning) {
+          // Proportional scaling preserves smooth spinning midway through the animation
+          symb.y = (symb.y / oldSymbolHeight) * newSymbolHeight;
+        } else {
+          // Snap to exact grid positions for initial load and stopped state
+          symb.y = (j - 1) * newSymbolHeight;
+        }
       });
     }
+
     const pos = this.reelsData.reelContainerPos;
     for (const view of [this.symbolsContainer, this.winSymbolsContainer, this.anticipationContainer, this.wildsComp]) {
       view?.position.set(pos.x, pos.y);

@@ -19,6 +19,7 @@ import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTrig
 import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';
 import { ResumePromoFSState } from '@core/commands/states/ResumePromoFSState';
 import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
+import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
@@ -46,4 +47,7 @@ export const STATES_CONFIG: any = [
 
   { name: STATES.CHECK_AUTOSPIN_STATE, state: CheckAutoSpinState },
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
+
+  // Entered by BuyBonusConfirmedCommand, from the Buy Bonus screen - see BuyBonusScreenComp.
+  { name: STATES.BB_SPIN_START_STATE, state: BBSpinStartState },
 ];

@@ -258,7 +258,7 @@ export const SYMBOLS_DATA: Record<string, JCSymbolData> = {
     winAnim: 'landing',
     landingAnim: 'landing',
     collectAnim: 'collect',
-    cellScale: 0.7,
+    cellScale: 1,
     // The boost's running total, in C5's colours, on the rig's empty root_txt slot. It starts with
     // nothing showing and fills as the boost collects. TODO: tune the anchor against the bag art.
     multiplierTextConfig: {

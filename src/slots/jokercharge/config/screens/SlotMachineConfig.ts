@@ -90,10 +90,23 @@ export const SLOT_MACHINE_CONFIG: any = {
       class: LogoComp,
       Elements: [
         { name: 'guideRect', type: 'Graphics', width: 560, height: 200, color: 0xff0000, alpha: 0 },
+        // Listed first so it draws behind the Joker Charge title, centred on the same point.
+        // TODO: logo.json also has Level_2..4 idles, hits and level-up transitions - wire them up
+        // once it is known what drives the level.
+        {
+          name: 'logoBgAnim',
+          type: 'Spine',
+          spineName: 'logo',
+          defaultState: 'Level_1_idle',
+          loop: true,
+          scale: 1.3,
+          x: 700,
+          y: -98,
+        },
         {
           name: 'logoAnim',
           type: 'Spine',
-          spineName: 'logo',
+          spineName: 'Joker_Charge',
           defaultState: 'idle',
           loop: true,
           scale: 1.3,

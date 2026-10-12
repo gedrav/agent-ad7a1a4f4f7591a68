@@ -33,6 +33,7 @@ export class TransitionAnimComp extends ResponsiveChildrenView {
   }
 
   private playTransitionAnim(): void {
+    this.transitionAnim.renderable = true;
     this.transitionAnim.playAnimation({ state: 'all', loop: false, defaultMix: 0 });
   }
 

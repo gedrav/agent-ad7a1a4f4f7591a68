@@ -2,6 +2,7 @@ import { BetPanelView } from '@brand/views/popups/BetPanelView';
 import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { JCEvents } from '../../events/JCEvents';
@@ -12,8 +13,10 @@ import { JCEvents } from '../../events/JCEvents';
 export class JCBetPanelView extends BetPanelView {
   constructor(config: any) {
     super(config);
-    // After gameApp's own SELECTED_LINES listener, which narrows the list this reads.
+    // After gameApp's own SELECTED_LINES listener, which narrows the list this reads. And on every
+    // bet change, which is how a bet held for one round announces itself and its giving way.
     EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.syncBetButtons.bind(this));
+    EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.syncBetButtons.bind(this));
   }
 
   // BetPanelView keeps these private; reached into here rather than copying its button config.
