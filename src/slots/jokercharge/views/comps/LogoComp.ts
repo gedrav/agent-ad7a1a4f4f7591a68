@@ -7,7 +7,9 @@ import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
+import { SlotEvents } from '@core/events/SlotEvents';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
+import { isRespinActive } from '@slots/jokercharge/models/JCLinesState';
 import { writeCountText } from './sharedText';
 import {
   TOTAL_WIN_DIM_ALPHA,
@@ -33,8 +35,39 @@ export interface TotalWinPanelData {
 const TOTAL_WIN_SHOW_STATE = 'show';
 const TOTAL_WIN_HIDE_STATE = 'hide';
 
+// Same shape as the feature's other requests: the state waits only if a listener claims it.
+export interface LogoHeapData {
+  hold: boolean;
+  onComplete: () => void;
+}
+
+// The coin heap behind the logo grows a level every few base-game spins, but stops short of the
+// top: the full heap is kept for a metamorphic trigger, which fills it right before the coins pour
+// out. Every feature trigger empties it back to the first level.
+const HEAP_FIRST_LEVEL = 1;
+const HEAP_GROWN_MAX_LEVEL = 3;
+const HEAP_FULL_LEVEL = 4;
+const HEAP_SPINS_MIN = 5;
+const HEAP_SPINS_MAX = 10;
+
+function heapIdle(level: number): string {
+  return `Level_${level}_idle`;
+}
+
+function heapTransition(from: number): string {
+  return `Level_${from}_to_Level_${from + 1}_Transition`;
+}
+
 export class LogoComp extends ResponsiveView {
   private readonly logoAnim: PixSpine;
+  private readonly heapAnim: PixSpine;
+  private heapLevel = HEAP_FIRST_LEVEL;
+  // Where the heap is headed: one above where it is when spins grow it, the top when a trigger fills it.
+  private heapTarget = HEAP_FIRST_LEVEL;
+  private spinsUntilHeapGrows = 0;
+  // Set while a transition plays; the heap only ever moves one level at a time.
+  private heapListener: any = null;
+  private onHeapFull: (() => void) | null = null;
   private readonly totalWinPanel: PixSpine;
   private totalWinListener: any = null;
   private totalWinValueText: PixText | null = null;
@@ -55,6 +88,7 @@ export class LogoComp extends ResponsiveView {
   constructor(config: any) {
     super(config);
     this.logoAnim = this.elementsList['logoAnim'];
+    this.heapAnim = this.elementsList['logoBgAnim'];
     this.totalWinPanel = this.elementsList['totalWinPanel'];
     this.totalWinDim = this.elementsList['totalWinDim'];
     this.captureTotalWinRest();
@@ -64,9 +98,67 @@ export class LogoComp extends ResponsiveView {
     EventHandler.addEventListener(JCEvents.PLAY_LOGO_COLLECT_ANIM, this.playCollect.bind(this));
     EventHandler.addEventListener(JCEvents.SHOW_TOTAL_WIN_PANEL, this.onShowTotalWinPanel.bind(this));
     EventHandler.addEventListener(JCEvents.PRESENT_TOTAL_WIN_PANEL, this.onPresentTotalWinPanel.bind(this));
+    EventHandler.addEventListener(SlotEvents.START_SPIN, this.onSpinStart.bind(this));
+    EventHandler.addEventListener(JCEvents.FILL_LOGO_HEAP, this.onFillHeap.bind(this));
+    EventHandler.addEventListener(JCEvents.RESET_LOGO_HEAP, this.resetHeap.bind(this));
     this.createTotalWinLabel();
     this.createTotalWinValue();
     this.playIdle();
+    this.resetHeap();
+  }
+
+  // Base-game spins only: START_SPIN also opens every respin round.
+  private onSpinStart(): void {
+    if (isRespinActive() || this.heapLevel >= HEAP_GROWN_MAX_LEVEL) return;
+    this.spinsUntilHeapGrows--;
+    if (this.spinsUntilHeapGrows > 0) return;
+    this.spinsUntilHeapGrows = Util.getRandomRange(HEAP_SPINS_MIN, HEAP_SPINS_MAX);
+    this.heapTarget = Math.max(this.heapTarget, this.heapLevel + 1);
+    this.stepHeap();
+  }
+
+  private onFillHeap(request: LogoHeapData): void {
+    if (this.heapLevel >= HEAP_FULL_LEVEL) return;
+    request.hold = true;
+    this.heapTarget = HEAP_FULL_LEVEL;
+    this.onHeapFull = request.onComplete;
+    this.stepHeap();
+  }
+
+  // One transition at a time, each into the next level's idle, until the target is reached. A
+  // transition already playing carries on, and this picks up again when it lands.
+  private stepHeap(): void {
+    if (this.heapListener) return;
+    if (this.heapLevel >= this.heapTarget) {
+      const onFull = this.onHeapFull;
+      this.onHeapFull = null;
+      onFull?.();
+      return;
+    }
+    const from = this.heapLevel;
+    const transition = heapTransition(from);
+    this.heapListener = this.heapAnim.addEventListener('complete', (entry: any) => {
+      if (entry?.animation?.name !== transition) return;
+      this.releaseHeapListener();
+      this.heapLevel = from + 1;
+      this.stepHeap();
+    });
+    this.heapAnim.playAnimation({ state: transition, loop: false, nextState: heapIdle(from + 1), nextLoop: true });
+  }
+
+  public resetHeap(): void {
+    this.releaseHeapListener();
+    this.heapLevel = HEAP_FIRST_LEVEL;
+    this.heapTarget = HEAP_FIRST_LEVEL;
+    this.onHeapFull = null;
+    this.spinsUntilHeapGrows = Util.getRandomRange(HEAP_SPINS_MIN, HEAP_SPINS_MAX);
+    this.heapAnim.playAnimation({ state: heapIdle(HEAP_FIRST_LEVEL), loop: true });
+  }
+
+  private releaseHeapListener(): void {
+    if (!this.heapListener) return;
+    this.heapAnim.removeSpineEvent(this.heapListener);
+    this.heapListener = null;
   }
 
   // Built once with the rig: the panel is a single long-lived spine, nothing to tear down.

@@ -13,7 +13,7 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { AppEvents } from '@core/events/AppEvents';
 import { setSecondaryAssetsReady } from '@slots/jokercharge/models/JCAssetsState';
-import { applyLineBets } from '@slots/jokercharge/models/JCBetsState';
+import { applyLineBets, releaseHeldBet } from '@slots/jokercharge/models/JCBetsState';
 import { getSelectedLines, MAX_LINES, MIN_LINES, setSelectedLines } from '@slots/jokercharge/models/JCLinesState';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
 import { getStickyState } from '@slots/jokercharge/models/JCSpinData';
@@ -74,6 +74,8 @@ export class gameApp extends SlotGameApp {
     // Also ahead of every view: the bet list is narrowed for the new line count before anything
     // answering the same announcement reads it - see JCBetsState.
     EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.onSelectedLines.bind(this));
+    // A bet held for one round - a bought bonus, or a resumed round - gives way once it is over.
+    EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, this.onIdle.bind(this));
     const restored = this.restoreStickySession();
     this.gameAppScreen = new GameAppScreen(SLOT_GAME_APP_CONFIG);
     this.gameAppScreen.visible = false;
@@ -87,6 +89,12 @@ export class gameApp extends SlotGameApp {
     setTimeout(() => {
       this.gameAppScreen.visible = true;
     }, 10);
+  }
+
+  private onIdle(): void {
+    if (releaseHeldBet()) {
+      EventHandler.dispatchEvent(SlotEvents.UPDATE_TOTALBET);
+    }
   }
 
   // The line count sets the bet - see JCBetsState. UPDATE_TOTALBET only when that moved it.

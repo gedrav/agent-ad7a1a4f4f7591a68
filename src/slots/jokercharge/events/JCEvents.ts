@@ -38,6 +38,11 @@ export const JCEvents = {
   PLAY_LOGO_COLLECT_ANIM: 'PLAY_LOGO_COLLECT_ANIM',
   // Data: { column, row } - runs the trail from that cell up to the logo.
   PLAY_TRAIL_ANIMATION: 'PLAY_TRAIL_ANIMATION',
+  // Data: { hold, onComplete } - see LogoHeapData. Fills the coin heap behind the logo to its top
+  // level, for the metamorphic trigger it announces.
+  FILL_LOGO_HEAP: 'FILL_LOGO_HEAP',
+  // The coin heap back to its first level, once a feature has triggered. No data.
+  RESET_LOGO_HEAP: 'RESET_LOGO_HEAP',
 } as const;
 
 export type JCEvent = keyof typeof JCEvents;

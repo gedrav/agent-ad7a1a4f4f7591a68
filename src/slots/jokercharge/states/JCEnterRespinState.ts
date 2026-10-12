@@ -5,18 +5,31 @@ import { JCEvents } from '../events/JCEvents';
 import { startRespinSession, TOTAL_RESPINS } from '../models/JCRespinState';
 import { getGrantedRespins, getMetamorphicSymbols, MetamorphicSymbol } from '../models/JCSpinData';
 import { CoinsAnimationData, MetamorphicRevealData, TriggerWinData } from '../views/slot/GameSlotMachineView';
+import { LogoHeapData } from '../views/comps/LogoComp';
 
 class JCEnterRespinStateCommand extends EnterRespinStateCommand {
-  // A metamorphic trigger showers coins and, halfway through the shower, brings its symbols in one
-  // by one from the logo. Then the active line celebrates - late enough that the symbols the
-  // shower just brought in join in.
+  // A metamorphic trigger fills the coin heap behind the logo to the top, showers coins and, halfway
+  // through the shower, brings its symbols in one by one from the logo. Then the active line
+  // celebrates - late enough that the symbols the shower just brought in join in. Every trigger,
+  // metamorphic or not, empties the heap back to its first level.
   protected async playTriggerPresentation(): Promise<void> {
     const metamorphic: MetamorphicSymbol[] = getMetamorphicSymbols();
     if (metamorphic.length) {
+      await this.fillLogoHeap();
       await this.playCoinsToHalfway();
       await this.revealMetamorphicSymbols(metamorphic);
     }
+    EventHandler.dispatchEvent(JCEvents.RESET_LOGO_HEAP);
     await this.playTriggerWins();
+  }
+
+  // Resolves once the heap is at the top, or straight away if it already is.
+  private fillLogoHeap(): Promise<void> {
+    return new Promise((resolve) => {
+      const request: LogoHeapData = { hold: false, onComplete: () => resolve() };
+      EventHandler.dispatchEvent(JCEvents.FILL_LOGO_HEAP, request);
+      if (!request.hold) resolve();
+    });
   }
 
   // Resolves at the shower's halfway point; the shower itself carries on. Straight away if nothing
