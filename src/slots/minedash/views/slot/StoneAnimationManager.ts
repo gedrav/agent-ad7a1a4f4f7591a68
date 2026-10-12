@@ -1,4 +1,4 @@
-import { Point } from 'pixi.js';
+import { Point, Graphics } from 'pixi.js';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { getBezierPoint, lerp } from '@core/utils/MathUtils';
 import MDReelSymbol from '@game/views/slot/MDReelSymbol';
@@ -37,12 +37,16 @@ export const SYMBOL_TO_GOLDCARD_SKIN: Record<string, string> = {
 };
 
 export const STONE_CONFIG: Record<string, StoneMapping> = {
-  SM: { boxName: 'box1', spineName: 'gems', skin: 'Crystal' },
-  SF: { boxName: 'box2', spineName: 'gems', skin: 'Triangle' },
-  SY: { boxName: 'box3', spineName: 'gems', skin: 'Drop' },
-  SW: { boxName: 'box4', spineName: 'gems', skin: 'Eye' },
+  SM: { boxName: 'box1', spineName: 'gems', skin: 'SM' },
+  SF: { boxName: 'box2', spineName: 'gems', skin: 'SF' },
+  SY: { boxName: 'box3', spineName: 'gems', skin: 'SY' },
+  SW: { boxName: 'box4', spineName: 'gems', skin: 'SW' },
   SG: { boxName: 'box5', spineName: 'GoldCard' },
 };
+
+const STONE_HOLD_MS = 300;
+const STONE_DROP_ROTATION = 0.35;
+const STONE_POP_SCALE_MULTIPLIER = 1.4;
 
 export class StoneAnimationManager {
   private readonly view: GameSlotMachineView;
@@ -61,13 +65,13 @@ export class StoneAnimationManager {
 
   public playStonesSequence(stones: StoneData[], onComplete: () => void): void {
     if (stones.length > 0) {
-      this.animateStoneToCartBox(stones[0], onComplete);
+      this.flyStoneToBox(stones[0], onComplete);
     } else {
       onComplete();
     }
   }
 
-  private animateStoneToCartBox(stone: StoneData, onComplete: () => void): void {
+  private flyStoneToBox(stone: StoneData, onComplete: () => void): void {
     const { col, row, symbol, boxName, spineName, skin } = stone;
     const reel: any = this.view.slotReel;
     if (!reel || typeof reel.getSymbolPosition !== 'function') {
@@ -167,12 +171,8 @@ export class StoneAnimationManager {
     const originalResetSymbol = targetSymbol.resetSymbol.bind(targetSymbol);
     const originalSetNewSymbol = targetSymbol.setNewSymbol.bind(targetSymbol);
 
-    // Block the reel's automatic reset so the symbol stays hidden when spin starts.
-    targetSymbol.resetSymbol = () => {
-      // intentional no-op
-    };
+    targetSymbol.resetSymbol = () => {};
 
-    // Once the reel actually recycles this symbol with a new result, let it land fresh.
     targetSymbol.setNewSymbol = (data: any, reelno: number) => {
       targetSymbol.resetSymbol = originalResetSymbol;
       targetSymbol.setNewSymbol = originalSetNewSymbol;
@@ -238,10 +238,11 @@ export class StoneAnimationManager {
     });
     movingSymbol.showWinning(null, false);
     movingSymbol.position.copyFrom(startPos);
+    movingSymbol.scale.set(this.getNormalSymbolScale());
 
     return movingSymbol;
   }
-  // playing animation for stone
+
   private playStoneAnimation(
     movingSymbol: MDReelSymbol,
     startPos: Point,
@@ -251,9 +252,18 @@ export class StoneAnimationManager {
     onComplete: () => void,
   ): void {
     const peakY = startPos.y - 30;
+    const peakScale = this.getNormalSymbolScale() * STONE_POP_SCALE_MULTIPLIER;
     const targetDropScale = 0.2;
 
-    // Step 1: Popout (no extra scaling, spine handles it)
+    const scalePopTween = AnimationProxy.animateTween(movingSymbol.scale, {
+      duration: 0.25,
+      x: peakScale,
+      y: peakScale,
+      ease: 'back.out(2)',
+      onComplete: () => this.removeActiveTween(scalePopTween),
+    });
+    this.activeTweens.push(scalePopTween);
+
     const popTween = AnimationProxy.animateTween(movingSymbol, {
       duration: 0.25,
       y: peakY,
@@ -261,10 +271,9 @@ export class StoneAnimationManager {
       onComplete: () => {
         this.removeActiveTween(popTween);
 
-        // Step 2: Hold briefly, then drop
         this.stoneAnimationTimeout = setTimeout(() => {
-          this.playDropAnimation(movingSymbol, endPos, 1, targetDropScale, targetBox, boxName, onComplete);
-        }, 600);
+          this.playDropAnimation(movingSymbol, endPos, peakScale, targetDropScale, targetBox, boxName, onComplete);
+        }, STONE_HOLD_MS);
       },
     });
 
@@ -286,14 +295,24 @@ export class StoneAnimationManager {
     const c1 = new Point(dropStartPos.x, midY);
     const c2 = new Point(midX, endPos.y - 30);
 
-    const dropTween = AnimationProxy.animateTween(movingSymbol, {
-      duration: 0.25,
+    const dropProgress = { t: 0 };
+    let lastTrailT = 0;
+
+    const dropTween = AnimationProxy.animateTween(dropProgress, {
+      duration: 0.4,
+      t: 1,
       ease: 'power2.in',
       onUpdate: () => {
-        const t = dropTween.progress();
+        const t = dropProgress.t;
         const bezierPoint = getBezierPoint(t, dropStartPos, c1, c2, endPos);
         movingSymbol.position.copyFrom(bezierPoint);
         movingSymbol.scale.set(lerp(peakScale, targetDropScale, t));
+        movingSymbol.rotation = STONE_DROP_ROTATION * t;
+
+        if (t - lastTrailT >= 0.1) {
+          lastTrailT = t;
+          this.spawnTrailDot(bezierPoint);
+        }
       },
       onComplete: () => {
         this.removeActiveTween(dropTween);
@@ -301,14 +320,38 @@ export class StoneAnimationManager {
         movingSymbol.destroy();
 
         EventHandler.dispatchEvent('PLAY_GENERIC_BUTTON_SOUND');
-        this.pulseCartBox(targetBox, boxName, onComplete);
+        this.pulseBox(targetBox, boxName, onComplete);
       },
     });
 
     this.activeTweens.push(dropTween);
   }
-  // box
-  private pulseCartBox(targetBox: any, boxName: string, onComplete?: () => void): void {
+
+  public spawnTrailDot(position: Point): void {
+    const dot = new Graphics();
+    dot.circle(0, 0, 10);
+    dot.fill({ color: 0xff2d2d, alpha: 0.85 });
+    dot.blendMode = 'add';
+    dot.position.copyFrom(position);
+    this.view.addChild(dot);
+
+    const trailTween = AnimationProxy.animateTween(dot.scale, {
+      duration: 0.25,
+      x: 0,
+      y: 0,
+      ease: 'power1.out',
+      onComplete: () => {
+        this.removeActiveTween(trailTween);
+        if (dot.parent) dot.parent.removeChild(dot);
+        dot.destroy();
+      },
+    });
+    AnimationProxy.animateTween(dot, { duration: 0.25, alpha: 0, ease: 'power1.out' }, false);
+
+    this.activeTweens.push(trailTween);
+  }
+
+  private pulseBox(targetBox: any, boxName: string, onComplete?: () => void): void {
     if (!targetBox) {
       if (onComplete) onComplete();
       return;
@@ -323,15 +366,15 @@ export class StoneAnimationManager {
     }
 
     (this.view as any).applyBoxState(boxName, true, 5, false);
-
-    this.stoneAnimationTimeout = setTimeout(() => {
-      (this.view as any).boxesComp?.playWin(boxName);
-
-      this.stoneAnimationTimeout = setTimeout(() => {
+    if ((this.view as any).boxesComp && typeof (this.view as any).boxesComp.playWin === 'function') {
+      (this.view as any).boxesComp.playWin(boxName, () => {
         (this.view as any).applyBoxState(boxName, true);
         if (onComplete) onComplete();
-      }, 300);
-    }, 100);
+      });
+    } else {
+      (this.view as any).applyBoxState(boxName, true);
+      if (onComplete) onComplete();
+    }
   }
 
   private getNormalSymbolScale(): number {
