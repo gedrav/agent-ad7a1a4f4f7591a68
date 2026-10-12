@@ -16,7 +16,7 @@ class CompleteGameRoundStateCommand extends StateCommand {
     }
     EventHandler.dispatchEvent(SlotEvents.UPDATE_BALANCE);
     if (canShowJackpot()) {
-      if (appModel.getIsAutoSession()) AutoStopSpinCommand.execute();
+      // if (appModel.getIsAutoSession()) AutoStopSpinCommand.execute();
       StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
     } else {
       StateManager.goToState(getPostJackpotState());
