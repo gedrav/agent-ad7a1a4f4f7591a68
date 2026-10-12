@@ -123,10 +123,8 @@ export class GameSlotMachineView extends SlotMachineView {
     const nextState =
       state || res?.progressData?.stoneState || res?.stoneState || appModel.gameData?.progressData?.stoneState;
 
-    if (nextState) {
-      this.currentStoneState = { ...this.currentStoneState, ...nextState };
-      this.updateBoxLabels();
-    }
+    this.currentStoneState = { ...this.currentStoneState, ...nextState };
+    this.updateBoxLabels();
   }
 
   // Stone animation

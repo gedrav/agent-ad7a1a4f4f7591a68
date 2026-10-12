@@ -45,9 +45,12 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 65,
+          mFontSize: 50,
           anchor: { x: 0.5, y: 0.5 },
+          tagStyles: {
+            big: { fill: 0x3bc6f0, fontSize: 65 },
+          },
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -78,9 +81,12 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 65,
+          mFontSize: 50,
           anchor: { x: 0.5, y: 0.5 },
+          tagStyles: {
+            big: { fill: 0x3bc6f0, fontSize: 65 },
+          },
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -111,9 +117,12 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 50,
-          mFontSize: 40,
+          fontSize: 65,
+          mFontSize: 50,
           anchor: { x: 0.5, y: 0.5 },
+          tagStyles: {
+            big: { fill: 0x3bc6f0, fontSize: 65 },
+          },
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -243,14 +252,15 @@ export const SPLASH_CONFIG: any = {
           },
           textConfig: {
             content: 'playGameText',
+            toUpperCase: true,
             style: {
               fontFamily: 'gameFont1',
               fontWeight: 700,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 80,
-              mFontSize: 40,
+              fontSize: 110,
+              mFontSize: 55,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {
                 angle: 0.5235987755982988,
