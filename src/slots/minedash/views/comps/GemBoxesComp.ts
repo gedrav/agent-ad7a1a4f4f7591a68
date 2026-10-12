@@ -214,10 +214,18 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     }
   }
 
-  public playWin(boxName: string): void {
+  public playWin(boxName: string, onComplete?: () => void): void {
     const box = this.getBox(boxName);
     if (box && typeof box.playAnimation === 'function') {
       box.playAnimation({ state: 'Normal/Win', loop: false });
+      setTimeout(() => {
+        box.playAnimation({ state: 'Normal/Win', loop: false });
+        if (onComplete) {
+          setTimeout(onComplete, 1000);
+        }
+      }, 1000);
+    } else if (onComplete) {
+      onComplete();
     }
   }
 }
