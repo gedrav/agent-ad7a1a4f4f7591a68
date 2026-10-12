@@ -39,8 +39,8 @@ export const BIG_WIN_CONFIG = {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 694,
-      y: 360,
+      x: 705,
+      y: 299,
       Elements: [
         {
           name: 'valueText',
