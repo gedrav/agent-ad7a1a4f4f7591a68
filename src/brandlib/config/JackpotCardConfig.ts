@@ -94,10 +94,10 @@ export const JACKPOT_CARD_CONFIG: any = {
         Portrait: { widthPerc: 0.9, height: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.08 },
         Landscape: {
           widthPerc: 0.7,
-          heightPerc: 0.8,
+          heightPerc: 0.7,
           hAlign: 'center',
           vAlign: 'middle',
-          vPaddingPerc: 0.08,
+          vPaddingPerc: 0.09,
           hPaddingPerc: 0,
         },
         SmallLandscape: {
@@ -132,7 +132,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.09 },
       },
     },
     {
@@ -187,9 +187,9 @@ export const JACKPOT_CARD_CONFIG: any = {
         },
       ],
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
+        Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.08, vPaddingPerc: 0.08 },
         Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.01, hPaddingPerc: 0.02 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.01, vPaddingPerc: 0.08 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0.08, vPaddingPerc: 0.08 },
       },
     },
   ],
