@@ -11,6 +11,7 @@ class CheckUnfinishedStateCommand extends StateCommand {
   public async execute(data: any = null) {
     super.execute(data);
     if (appModel.jackpotRound?.status === 'PENDING' && canShowJackpot()) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_FINAL_VALUE);
       appModel.freezeJackpotMeters();
       StateManager.goToState(STATES.SHOW_JACKPOT_GAME_STATE);
     } else if (appModel.getIsUnfinishedGame()) {

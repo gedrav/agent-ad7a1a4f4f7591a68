@@ -12,6 +12,9 @@ class SpinResponseReceivedStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SHOW_STOPSPIN_BUTTON);
     EventHandler.dispatchEvent(SlotEvents.MULTIPLIER_SET_TO_LEVEL, 1); // reset multiplier to lvl1 after each spin
     EventHandler.dispatchEvent(SlotEvents.STOP_SPIN_AFTER_RESPONSE);
+    if (appModel.jackpotRound) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_JACKPOT_FINAL_VALUE);
+    }
     if (appModel.getIsPromoFSSession()) {
       EventHandler.dispatchEvent(SlotEvents.UPDATE_PROMO_FS_COUNT);
     }
