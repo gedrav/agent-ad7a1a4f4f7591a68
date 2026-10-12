@@ -4,7 +4,7 @@ export const TRANSITION_ANIM_CONFIG = {
   name: 'transitionAnimComp',
   type: 'Comp',
   class: TransitionAnimComp,
-  coverDelay: 700,
+  coverDelay: 1300,
   Elements: [
     {
       name: 'modalRect',
