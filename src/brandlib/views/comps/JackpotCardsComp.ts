@@ -66,10 +66,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
     this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
     this.jackpotWinContainer = this.elementsList['jackpotWinContainer'];
-    this.jpguideRect = this.jackpotWinContainer.elementsList['jpguideRect'];
+    this.jpguideRect = this.jackpotWinContainer.elementsList['guideRect'];
     this.youwinJPTextimg = this.jackpotWinContainer.elementsList['youwinJPTextimg'];
     this.typeOfJPTextimg = this.jackpotWinContainer.elementsList['typeOfJPTextimg'];
-    this.jackPotOutroAnimation = this.jackpotWinContainer.elementsList['jackPotOutroAnimation'];
+    this.jackPotOutroAnimation = this.elementsList['jackPotOutroAnimation'];
     this.winTickerJP = this.jackpotWinContainer.elementsList['winTickerJP'];
 
     this.hideJackpotIntroAnim();
@@ -442,6 +442,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   }
   protected resizeView(): void {
     UIUtil.adjustElement(this.cardGuideRect);
+    UIUtil.adjustElement(this.jpguideRect);
+    UIUtil.adjustElement(this.youwinJPTextimg);
+    UIUtil.adjustElement(this.typeOfJPTextimg);
+    UIUtil.adjustElement(this.winTickerJP);
     this.resizeJackpotoutroTextAnim();
     super.resizeView();
     this.resizeJackpotWinAnimation();
