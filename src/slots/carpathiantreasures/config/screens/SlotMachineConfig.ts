@@ -233,14 +233,16 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'symbolPayoutComp',
               type: 'Comp',
               class: SymbolPayoutComp,
-              scale: 1.08,
+              scale: 1.06,
               xPadding: 0.04,
               textXPadding: 0.08,
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
                   name: 'infoText',
-                  type: 'Text',
+                  type: 'AdjustableText',
+                  maxWidth: 260,
+                  maxHeight: 250,
                   style: {
                     fontFamily: 'commonFontBold',
                     fontSize: 36,
@@ -249,7 +251,7 @@ export const SLOT_MACHINE_CONFIG: any = {
                     stroke: 0x3d1800,
                     strokeThickness: 4,
                     wordWrap: true,
-                    wordWrapWidth: 210,
+                    wordWrapWidth: 260,
                   },
                 },
               ],
