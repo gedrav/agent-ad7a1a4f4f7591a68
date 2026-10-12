@@ -25,13 +25,18 @@ class MDStoneFeatureStateCommand extends StateCommand {
         }
         break;
 
-      case 'mysteryStone':
+      case 'mysteryStone': {
+        const mysteryTotalWin = appModel.gameResult?.totalWin ?? 0;
+        if (appModel.gameResult) {
+          appModel.gameResult.spinWin = mysteryTotalWin;
+        }
         EventHandler.dispatchEvent(SlotEvents.SHOW_FS_POPUP, {
           title: Util.getContent('mysteryHeading') || 'MYSTERY',
-          tickerValue: firedStone.value ?? 0,
+          tickerValue: mysteryTotalWin,
           callbackFunction: () => StateManager.doNextStep(),
         });
         break;
+      }
 
       case 'multiStone':
         if (appModel.gameResult) {

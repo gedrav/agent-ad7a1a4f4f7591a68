@@ -93,7 +93,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             idleAnim: 'Idle',
             winAnim: 'Win',
             scale: 0.5,
-            animScale: 1,
+            animScale: 0.5,
           },
           H1: {
             name: 'H1',
@@ -108,7 +108,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'H2',
             idleAnim: 'Idle',
             winAnim: 'Win',
-            scale: 0.49,
+            scale: 0.5,
             animScale: 0.5,
           },
           H3: {
@@ -116,16 +116,8 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'H3',
             idleAnim: 'Idle',
             winAnim: 'Win',
-            scale: 0.49,
-            animScale: 0.5,
-          },
-          H4: {
-            name: 'H4',
-            spineName: 'H1',
-            idleAnim: 'Idle',
-            winAnim: 'Win',
             scale: 0.5,
-            animScale: 1,
+            animScale: 0.5,
           },
           L1: {
             name: 'L1',
@@ -330,12 +322,12 @@ export const SLOT_MACHINE_CONFIG: any = {
           layoutData: {
             Desktop: {
               scale: 0.5,
-              x: 685,
+              x: 675,
               y: -70,
             },
             Landscape: {
               scale: 0.5,
-              x: 685,
+              x: 675,
               y: -70,
             },
             Portrait: { scale: 0.5, x: 688, y: -64 },
@@ -359,7 +351,8 @@ export const SLOT_MACHINE_CONFIG: any = {
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
                   name: 'infoText',
-                  type: 'Text',
+                  type: 'AdjustableText',
+                  maxWidth: 245,
                   style: {
                     fontFamily: 'gameFont1',
                     fontSize: 40,
@@ -413,6 +406,14 @@ export const SLOT_MACHINE_CONFIG: any = {
       vPaddingPerc: 0.02,
       hPaddingPerc: 0,
     },
-    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.88, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.002 },
+    SmallLandscape: {
+      widthPerc: 0.85,
+      heightPerc: 0.9,
+      hAlign: 'center',
+      vAlign: 'middle',
+      maxScale: 1,
+      vPaddingPerc: 0.02,
+      hPaddingPerc: 0,
+    },
   },
 };
