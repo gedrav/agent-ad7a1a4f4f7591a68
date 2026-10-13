@@ -390,4 +390,32 @@ export class PigSlotReel extends SlotReelStandard {
       this.scatterAnticipArray[k] = [totalScatters];
     }
   }
+
+  public showSpinWin(): void {
+    this.applyStickyMultipliersToReels();
+    super.showSpinWin();
+  }
+
+  public showLineWin(): void {
+    this.applyStickyMultipliersToReels();
+    super.showLineWin();
+  }
+
+  public showTumbleWin(): void {
+    this.applyStickyMultipliersToReels();
+    super.showTumbleWin();
+  }
+
+  protected applyStickyMultipliersToReels(): void {
+    if (this.isStickyRound()) {
+      for (const [wildReel, row, multiplier] of this.getWildEntries()) {
+        const symb = this.symbolsArray[wildReel]?.[row + 1] as PigReelSymbol;
+        if (symb && symb.getSymbolName() === this.reelsData.wildSymbol) {
+          if (!(symb as any).multiplier) {
+            symb.setRewardData(multiplier);
+          }
+        }
+      }
+    }
+  }
 }

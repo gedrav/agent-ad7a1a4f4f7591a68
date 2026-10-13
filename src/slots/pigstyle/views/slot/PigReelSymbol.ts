@@ -26,6 +26,22 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     this.handleGameProp();
   }
 
+  protected sortZIndex(): void {
+    if (this.symbol?.parent !== this) return;
+
+    let targetIndex = this.getChildIndex(this.symbol);
+
+    if (this.spine?.parent === this) {
+      targetIndex++;
+      this.addChildAt(this.spine, targetIndex);
+    }
+
+    if (this.multiplier?.parent === this) {
+      targetIndex++;
+      this.addChildAt(this.multiplier, targetIndex);
+    }
+  }
+
   public setRewardData(multiplier: number): void {
     this.clearRewardData();
     if (multiplier < 2 || !appModel.secondaryAssetsLoaded) {
@@ -35,6 +51,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     this.multiplier.playAnimation({ state: `x${multiplier}_idle`, loop: false });
     this.addChild(this.multiplier);
     this.positionMultiplier();
+    this.sortZIndex();
   }
 
   public clearRewardData(): void {
@@ -65,6 +82,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
   protected createExtraElements(): void {
     super.createExtraElements();
     this.centreSpine();
+    this.sortZIndex();
   }
 
   public setNewSymbol(data: any, reelno: number): void {
@@ -86,7 +104,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
 
   public resetSymbol(): void {
     super.resetSymbol();
-    this.refreshTile();
+    this.restoreMultiplierBrightness();
   }
 
   protected resolveTexture(): Texture {
@@ -148,11 +166,46 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     return this.isBlurred ? `${name}_blur` : name;
   }
 
+  public showFaded(): void {
+    super.showFaded();
+    if (this.multiplier) {
+      const source: any = this.spine || this.symbol;
+      if (source) {
+        this.multiplier.alpha = source.alpha;
+        if (source.tint !== undefined) {
+          (this.multiplier as any).tint = source.tint;
+        }
+      } else {
+        this.multiplier.alpha = 0.5;
+        (this.multiplier as any).tint = 0x555555;
+      }
+    }
+  }
+
+  public showWinning(onComplete?: () => void, loop: boolean = false): void {
+    super.showWinning(onComplete, loop);
+    this.restoreMultiplierBrightness();
+  }
+
+  protected restoreMultiplierBrightness(): void {
+    if (this.multiplier) {
+      this.multiplier.alpha = 1;
+      if ((this.multiplier as any).tint !== undefined) {
+        (this.multiplier as any).tint = 0xffffff;
+      }
+    }
+  }
+
   protected playSpineAnimation(state: string, loop: boolean): boolean {
     const played = super.playSpineAnimation(this.resolveAnimName(state), loop);
     if (played) {
       this.hidePlate();
       this.fitSpineToTile();
+
+      if (this.multiplier?.parent === this && this.spine?.parent === this) {
+        const spineIndex = this.getChildIndex(this.spine);
+        this.addChildAt(this.multiplier, spineIndex + 1);
+      }
     }
     return played;
   }
