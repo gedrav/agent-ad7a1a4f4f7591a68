@@ -13,6 +13,8 @@ export class WinTicker extends StandardView {
   private startValue: number;
   private tickerActive: boolean;
   private showCurrency: boolean;
+  private lastTextUpdate: number;
+  private textUpdateInterval: number;
   constructor(config) {
     super(config);
     this.valueText = this.elementsList['valueText'];
@@ -23,6 +25,8 @@ export class WinTicker extends StandardView {
     this.startTime = null;
     this.startValue = this.currentValue;
     this.tickerActive = false;
+    this.lastTextUpdate = 0;
+    this.textUpdateInterval = 0;
   }
 
   public setPosition(x: number, y: number): void {
@@ -51,11 +55,17 @@ export class WinTicker extends StandardView {
     }
   }
 
-  public countUpValue(newValue: number, duration: number = 2000, showCurrency: boolean = false): void {
+  public countUpValue(
+    newValue: number,
+    duration: number = 2000,
+    showCurrency: boolean = false,
+    textUpdateInterval: number = 0,
+  ): void {
     this.visible = true;
     this.showCurrency = showCurrency;
     this.targetValue = newValue;
     this.duration = duration;
+    this.textUpdateInterval = textUpdateInterval;
     this.startTime = null;
     this.startValue = this.currentValue;
     EventHandler.dispatchEvent(SlotEvents.PLAY_COUNT_UP_SOUND);
@@ -87,15 +97,18 @@ export class WinTicker extends StandardView {
 
     this.currentValue = this.startValue + (this.targetValue - this.startValue) * clamped;
 
-    // update text display
-    if (this.showCurrency) {
-      this.valueText.text = Util.formatCurrency(this.currentValue);
-    } else {
-      this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
-    }
-    if (this.configData.maxWidth != undefined) {
-      if (this.valueText.width > this.configData.maxWidth) {
-        this.valueText.scale.set(this.configData.maxWidth / this.valueText.width);
+    // update text display, throttled so the decimal portion doesn't flicker every frame
+    if (clamped >= 1 || timestamp - this.lastTextUpdate >= this.textUpdateInterval) {
+      this.lastTextUpdate = timestamp;
+      if (this.showCurrency) {
+        this.valueText.text = Util.formatCurrency(this.currentValue);
+      } else {
+        this.valueText.text = Util.formatCurrencyNoSymbol(this.currentValue);
+      }
+      if (this.configData.maxWidth != undefined) {
+        if (this.valueText.width > this.configData.maxWidth) {
+          this.valueText.scale.set(this.configData.maxWidth / this.valueText.width);
+        }
       }
     }
     this.emit('COUNTUP_UPDATE');

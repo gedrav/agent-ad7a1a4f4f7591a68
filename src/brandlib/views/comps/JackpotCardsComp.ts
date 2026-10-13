@@ -177,7 +177,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     const { amount: winAmount = 0, wonTier } = appModel.jackpotRound;
     this.winTickerJP.reset();
     this.winTickerJP.visible = true;
-    this.winTickerJP.countUpValue(winAmount, JACKPOT_WIN_DURATION[JACKPOT_TIERS.indexOf(wonTier)]);
+    this.winTickerJP.countUpValue(winAmount, JACKPOT_WIN_DURATION[JACKPOT_TIERS.indexOf(wonTier)], false, 50);
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
     AnimationProxy.fadeOut(this.instructionText, 0.2);
     this.jackPotOutroAnimation.renderable = true;
