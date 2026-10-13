@@ -93,17 +93,17 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
       if (data.values[i] !== undefined) item.tweenToValue(data.values[i], METER_TWEEN_SECONDS);
     });
   }
-  protected showFrozenFromRound() {
+  protected showFrozenFromRound(showValue = false) {
     const frozen = appModel.jackpotRound?.frozenMeters;
-    if (frozen?.length) this.showFrozen(frozen);
+    if (frozen?.length) this.showFrozen(frozen, showValue);
   }
   protected onRevealEnd() {
     // tweening from the frozen value to the live one; a buffered tick may follow right after
     this.onMetersUpdate({ values: appModel.jackpotMeters, v: appModel.jackpotMetersV });
   }
-  public showFrozen(values: number[]) {
+  public showFrozen(values: number[], showValue = false) {
     this.jackPotsArr.forEach((item, i) => {
-      if (values[i] !== undefined) item.setValue(values[i]);
+      if (values[i] !== undefined) item.setValue(values[i], showValue);
     });
   }
   public setNotice(kind: 'demo' | 'unavailable' | null) {

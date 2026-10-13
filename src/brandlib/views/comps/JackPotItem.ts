@@ -23,11 +23,15 @@ export class JackPotItem extends StandardView {
   public changeAnimation({ state, loop }) {
     this.jackpotBg.playAnimation({ state, loop, reset: false });
   }
-  public setValue(value: number) {
+  public setValue(value: number, showValue = false) {
     this.tween?.kill();
     AnimationProxy.killTweensOf(this.counter);
-    // this.counter.current = value;
-    this.tweenToValue(value, 0.9);
+    if (showValue) {
+      this.counter.current = value;
+      this.updateJackpotValue(value);
+    } else {
+      this.tweenToValue(value, 0.9);
+    }
   }
   public tweenToValue(value: number, duration: number) {
     AnimationProxy.killTweensOf(this.counter);
