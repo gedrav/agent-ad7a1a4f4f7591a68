@@ -16,6 +16,7 @@ const fontMLProps = {
   sk: { fontSize: 45 },
   ro: { fontSize: 45 },
   hr: { fontSize: 45 },
+  cnr: { fontSize: 45 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -240,7 +241,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, 0),
+            textOffset: new Point(0, -10),
           },
           textConfig: {
             content: 'playGameText',
