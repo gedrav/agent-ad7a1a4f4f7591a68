@@ -126,10 +126,13 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     if (DeviceProxy.isDevice()) {
       UIUtil.adjustElement(this.panelContainer.elementsList['guideRect']);
       if (DeviceProxy.config.isPortrait) {
+        const useTabletPos = DeviceProxy.config.isTablet && this.jackpotConfig.tpxPos && this.jackpotConfig.tpyPos;
+        const xPos = useTabletPos ? this.jackpotConfig.tpxPos : this.jackpotConfig.pxPos;
+        const yPos = useTabletPos ? this.jackpotConfig.tpyPos : this.jackpotConfig.pyPos;
         const len = this.jackPotsArr.length;
         for (let k = 0; k < len; k++) {
-          this.jackPotsArr[k].x = this.jackpotConfig.pxPos[k];
-          this.jackPotsArr[k].y = this.jackpotConfig.pyPos[k];
+          this.jackPotsArr[k].x = xPos[k];
+          this.jackPotsArr[k].y = yPos[k];
         }
       } else {
         const len = this.jackPotsArr.length;
