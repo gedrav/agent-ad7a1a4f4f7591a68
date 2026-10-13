@@ -1,6 +1,7 @@
 export type JackpotTier = 'BRONZE' | 'SILVER' | 'GOLD' | 'DIAMOND';
 
 export const JACKPOT_TIERS: readonly JackpotTier[] = ['BRONZE', 'SILVER', 'GOLD', 'DIAMOND'] as const;
+export const JACKPOT_WIN_DURATION: readonly number[] = [4000, 6000, 8000, 10000] as const;
 
 export const JACKPOT_SKINS = ['bronze', 'silver', 'gold', 'diamond'] as const;
 

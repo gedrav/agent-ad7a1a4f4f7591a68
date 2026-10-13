@@ -132,7 +132,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       boundingBox: { width: 1550, height: 1550 },
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.09 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.8, vPaddingPerc: 0.09 },
       },
     },
     {
@@ -157,7 +157,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       layoutData: {
         Portrait: { hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.05 },
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 1 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.09 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.05 },
       },
     },
     {
@@ -185,7 +185,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           px: 384,
           py: 100,
           lx: 596,
-          ly: 46,
+          ly: 90,
         },
         {
           name: 'typeOfJPTextimg',
@@ -208,7 +208,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           px: 384,
           py: 320,
           lx: 596,
-          ly: 390,
+          ly: 342,
           Elements: [
             {
               name: 'valueText',
@@ -223,7 +223,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0, vPaddingPerc: 0 },
         Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0, hPaddingPerc: 0 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0, vPaddingPerc: 0.08 },
+        Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0, vPaddingPerc: 0 },
       },
     },
   ],
