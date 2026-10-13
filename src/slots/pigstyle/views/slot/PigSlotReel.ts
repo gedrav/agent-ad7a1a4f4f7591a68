@@ -20,6 +20,7 @@ export class PigSlotReel extends SlotReelStandard {
     super(configData);
     EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_BG, this.swapToMainGameTiles.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FREEGAME_BG, this.swapToFreeGameTiles.bind(this));
+    EventHandler.addEventListener('PLAY_SCATTER_TRIGGER_ANIM', this.playScatterTriggerAnim.bind(this));
   }
 
   protected swapToMainGameTiles(): void {
@@ -38,6 +39,40 @@ export class PigSlotReel extends SlotReelStandard {
           (symb as PigReelSymbol).setTileImage(tileImage);
         }
       }
+    }
+  }
+
+  protected playScatterTriggerAnim(): void {
+    const positions = appModel.gameResult?.featureTriggerPositions;
+
+    if (positions && positions.length > 0) {
+      for (let i = 0; i < this.symbolsArray.length; i++) {
+        for (let j = 0; j < this.symbolsArray[i].length; j++) {
+          this.symbolsArray[i][j].showFaded();
+        }
+      }
+
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions.length);
+
+      positions.forEach((p: number[]) => {
+        const reel = p[0];
+        const row = this.reelsData.isFixedSymbol ? p[1] : p[1] + 1;
+        const symb = this.symbolsArray[reel][row];
+
+        if (symb) {
+          symb.alpha = 1;
+          if ((symb as any).symbol) {
+            (symb as any).symbol.alpha = 1;
+            if ((symb as any).symbol.tint !== undefined) {
+              (symb as any).symbol.tint = 0xffffff;
+            }
+          }
+
+          this.winSymbolsContainer.addChild(symb);
+
+          symb.showWinning(undefined, true);
+        }
+      });
     }
   }
 

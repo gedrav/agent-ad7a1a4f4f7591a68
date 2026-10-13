@@ -38,6 +38,20 @@ class PigCheckFeatureStateCommand extends StateCommand {
   };
 
   protected enterFeature(): void {
+    const positions = appModel.gameResult?.featureTriggerPositions;
+
+    if (positions && positions.length > 0) {
+      EventHandler.dispatchEvent('PLAY_SCATTER_TRIGGER_ANIM');
+
+      setTimeout(() => {
+        this.routeToNextState();
+      }, 2500);
+    } else {
+      this.routeToNextState();
+    }
+  }
+
+  private routeToNextState(): void {
     if (appModel.getFeatureType() === CONSTANTS.FEATURE_TYPE_PICK) {
       StateManager.goToState(STATES.ENTER_PICK_FEATURE_STATE);
       return;
