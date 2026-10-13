@@ -38,9 +38,15 @@ export class TransitionAnimComp extends ResponsiveChildrenView {
   }
 
   private onScreenCovered(): void {
-    EventHandler.dispatchEvent(
-      appModel.getIsFreeSpinsSession() ? SlotEvents.SHOW_FREEGAME_BG : SlotEvents.SHOW_MAINGAME_BG,
-    );
+    if (appModel.getIsFreeSpinsSession()) {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_FREEGAME_BG);
+    } else {
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_BG);
+      EventHandler.dispatchEvent(SlotEvents.SHOW_MAINGAME_ELEMENTS);
+      EventHandler.dispatchEvent(SlotEvents.FREESPINS_UPDATE_UI_END);
+      EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, true);
+      EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, false);
+    }
   }
 
   private onTransitionComplete(): void {
