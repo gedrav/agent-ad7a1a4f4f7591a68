@@ -201,6 +201,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimVer.playAnimation({ state: stateP, loop, timeScale, reset });
   }
   protected pulseJPWinText() {
+    if (!this.isJackpotOutroAnim) return;
     AnimationProxy.killTweensOf(this.youwinJPTextimg);
     this.youwinJPTextimg.scale.set(1);
     AnimationProxy.animateTween(this.youwinJPTextimg, {

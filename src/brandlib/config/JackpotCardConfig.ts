@@ -222,7 +222,7 @@ export const JACKPOT_CARD_CONFIG: any = {
       ],
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0, vPaddingPerc: 0 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0.01, hPaddingPerc: 0 },
+        Portrait: { hAlign: 'center', vAlign: 'middle', widthPerc: 1, vPaddingPerc: 0, hPaddingPerc: 0 },
         Landscape: { hAlign: 'center', vAlign: 'middle', widthPerc: 0.6, hPaddingPerc: 0, vPaddingPerc: 0.08 },
       },
     },
