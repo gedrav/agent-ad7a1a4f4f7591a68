@@ -1,4 +1,5 @@
 import { STATES } from '@core/states/StateConstants';
+import { GAMESTATES } from '@game/states/GameStateConstants';
 import { CheckUnfinishedState } from '@core/commands/states/CheckUnfinishedState';
 import { GameIdleState } from '@core/commands/states/GameIdleState';
 import { SpinStartState } from '@core/commands/states/SpinStartState';
@@ -14,6 +15,7 @@ import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
 import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
+import { UpdateFrameBoardState } from '@game/states/UpdateFrameBoardState';
 import { BookShowSymbolExpansionState } from '@game/states/BookShowSymbolExpansionState';
 import { BookShowSymbolAfterExpansionState } from '@game/states/BookShowSymbolAfterExpansionState';
 import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTriggerState';
@@ -29,6 +31,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SPIN_START_STATE, state: SpinStartState },
   { name: STATES.SPIN_RESPONSE_RECEIVED_STATE, state: SpinResponseReceivedState },
   { name: STATES.SPIN_STOPPED_STATE, state: SpinStoppedState },
+  { name: GAMESTATES.UPDATE_FRAME_BOARD_STATE, state: UpdateFrameBoardState },
   { name: STATES.SHOW_SPIN_WIN_STATE, state: ShowSpinWinState },
   { name: STATES.SHOW_SYMBOL_EXPANSION_STATE, state: BookShowSymbolExpansionState },
   { name: STATES.SHOW_POST_EXPANSION_WIN_STATE, state: BookShowSymbolAfterExpansionState },
@@ -44,6 +47,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.START_AUTOSPIN_STATE, state: StartAutoSpinState },
 
   { name: STATES.ENTER_FREESPINS_STATE, state: EnterFreespinsState },
+  { name: GAMESTATES.UPDATE_FRAME_BOARD_STATE, state: UpdateFrameBoardState },
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
   { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
