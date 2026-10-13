@@ -4,7 +4,7 @@ export const JACKPOT_TIERS: readonly JackpotTier[] = ['BRONZE', 'SILVER', 'GOLD'
 export const JACKPOT_WIN_DURATION: readonly number[] = [2000, 3000, 4000, 5000] as const;
 
 export const JACKPOT_SKINS = ['bronze', 'silver', 'gold', 'diamond'] as const;
-export const TEXT_UPDATE_INTERVAL = 5;
+export const TEXT_UPDATE_INTERVAL = 30;
 
 export interface IJackpotInfo {
   poolId: string;

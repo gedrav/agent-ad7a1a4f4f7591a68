@@ -20,6 +20,7 @@ import {
   JACKPOT_TIERS,
   JackpotTier,
   JACKPOT_WIN_DURATION,
+  TEXT_UPDATE_INTERVAL,
 } from '@core/models/jackpot.types';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
@@ -177,7 +178,12 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     const { amount: winAmount = 0, wonTier } = appModel.jackpotRound;
     this.winTickerJP.reset();
     this.winTickerJP.visible = true;
-    this.winTickerJP.countUpValue(winAmount, JACKPOT_WIN_DURATION[JACKPOT_TIERS.indexOf(wonTier)], false, 50);
+    this.winTickerJP.countUpValue(
+      winAmount,
+      JACKPOT_WIN_DURATION[JACKPOT_TIERS.indexOf(wonTier)],
+      false,
+      TEXT_UPDATE_INTERVAL,
+    );
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
     AnimationProxy.fadeOut(this.instructionText, 0.2);
     this.jackPotOutroAnimation.renderable = true;
