@@ -1,9 +1,10 @@
 import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { AdjustableTextBox } from '@core/pixiwrapper/AdjustableTextBox';
+import { JCEvents } from '../../events/JCEvents';
+import { getLineBet } from '../../models/JCLinesState';
 
 const MULTIPLIERS = {
   mini: 10,
@@ -26,11 +27,12 @@ export class JackpotLabelsComp extends ResponsiveView {
     this.miniValueText = this.elementsList['miniValueText'];
 
     EventHandler.addEventListener(SlotEvents.UPDATE_TOTALBET, this.updateValues.bind(this));
+    EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.updateValues.bind(this));
     this.updateValues();
   }
 
   private updateValues(): void {
-    const bet = appModel.getTotalBet();
+    const bet = getLineBet();
     this.grandValueText.text = Util.formatCurrency(bet * MULTIPLIERS.grand);
     this.majorValueText.text = Util.formatCurrency(bet * MULTIPLIERS.major);
     this.minorValueText.text = Util.formatCurrency(bet * MULTIPLIERS.minor);

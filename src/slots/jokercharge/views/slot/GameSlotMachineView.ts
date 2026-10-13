@@ -4,7 +4,7 @@ import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
-import { appModel } from '@core/models/services/AppModelService';
+
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { SlotEvents } from '@core/events/SlotEvents';
@@ -85,7 +85,7 @@ import { LogoComp } from '@slots/jokercharge/views/comps/LogoComp';
 import { RespinCounterComp } from '@slots/jokercharge/views/comps/RespinCounterComp';
 import { BuyBonusLinesComp } from '@slots/jokercharge/views/comps/BuyBonusLinesComp';
 import { HoldNWinPosition, HoldNWinReelsContainer } from '@slots/jokercharge/views/slot/HoldNWinReelsContainer';
-import { setRespinActive } from '@slots/jokercharge/models/JCLinesState';
+import { getLineBet, setRespinActive } from '@slots/jokercharge/models/JCLinesState';
 import {
   getModifierMultipliers,
   getModifierRow,
@@ -282,7 +282,7 @@ export class GameSlotMachineView extends ResponsiveChildrenView implements Total
       this.trailValueTexts.set(trail, text);
     }
     // Formatted as the cash symbol formats it - see JCBonusSymbolModifier.
-    text.text = Util.formatCurrencyNoSymbol(value * appModel.getTotalBet());
+    text.text = Util.formatCurrencyNoSymbol(value * getLineBet());
     text.visible = true;
   }
 

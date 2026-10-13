@@ -177,7 +177,13 @@ export class HoldNWinReelsContainer extends ResponsiveChildrenView {
       EventHandler.bind(JCEvents.SELECTED_LINES, this.onStickyContextEvent.bind(this)),
       EventHandler.bind(SlotEvents.UPDATE_TOTALBET, this.onStickyContextEvent.bind(this)),
       EventHandler.bind(SlotEvents.RENDER_UNFINISHED_REEL, this.renderUnfinishedGrid.bind(this)),
+      EventHandler.bind(JCEvents.SELECTED_LINES, this.refreshFigures.bind(this)),
+      EventHandler.bind(SlotEvents.UPDATE_TOTALBET, this.refreshFigures.bind(this)),
     );
+  }
+
+  private refreshFigures(): void {
+    this.forEachReel((reel) => reel.refreshFigures());
   }
 
   // The column, triangle and border effects are feature art, in SECONDARY, so they are built when it

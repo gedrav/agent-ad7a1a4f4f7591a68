@@ -4,12 +4,12 @@ import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { appModel } from '@core/models/services/AppModelService';
+
 import { PixText } from '@core/pixiwrapper/PixText';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
-import { isRespinActive } from '@slots/jokercharge/models/JCLinesState';
+import { getLineBet, isRespinActive } from '@slots/jokercharge/models/JCLinesState';
 import { writeCountText } from './sharedText';
 import {
   TOTAL_WIN_DIM_ALPHA,
@@ -202,7 +202,7 @@ export class LogoComp extends ResponsiveView {
 
   private writeTotalWin(value: number, final = true): void {
     if (!this.totalWinValueText) return;
-    writeCountText(this.totalWinValueText, Util.formatCurrencyNoSymbol(value * appModel.getTotalBet()), final);
+    writeCountText(this.totalWinValueText, Util.formatCurrencyNoSymbol(value * getLineBet()), final);
   }
 
   private killTotalWinCount(): void {
