@@ -16,6 +16,31 @@ export class PigSlotReel extends SlotReelStandard {
   protected reelRows: number[];
   protected symbolHeights: number[];
 
+  constructor(configData: any) {
+    super(configData);
+    EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_BG, this.swapToMainGameTiles.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_FREEGAME_BG, this.swapToFreeGameTiles.bind(this));
+  }
+
+  protected swapToMainGameTiles(): void {
+    this.updateTiles(this.reelsData.tileImage);
+  }
+
+  protected swapToFreeGameTiles(): void {
+    this.updateTiles(this.reelsData.tileImageFS);
+  }
+
+  protected updateTiles(tileImage: string): void {
+    if (!this.symbolsArray) return;
+    for (const reel of this.symbolsArray) {
+      for (const symb of reel) {
+        if (symb) {
+          (symb as PigReelSymbol).setTileImage(tileImage);
+        }
+      }
+    }
+  }
+
   protected get wildsComp(): WildsComp {
     return this.elementsList['wildsComp'];
   }
@@ -310,15 +335,6 @@ export class PigSlotReel extends SlotReelStandard {
     super.onReelStripStopped(reelno);
     if (this.isRainingRound() && this.numberOfStoppedReels === this.reelsData.noOfReels) {
       this.wildsComp?.clearWilds();
-    }
-  }
-
-  protected onFreeSpinsEnded(): void {
-    const tileImage = this.getTileImage();
-    for (const reel of this.symbolsArray) {
-      for (const symb of reel) {
-        (symb as PigReelSymbol).setTileImage(tileImage);
-      }
     }
   }
 
