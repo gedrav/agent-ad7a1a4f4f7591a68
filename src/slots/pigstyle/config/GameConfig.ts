@@ -12,7 +12,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.100',
+  gameVersion: '0.00',
   gameId: 'pigstyle',
   gameName: 'Pig Style',
   uiConfig: UIConfig,
