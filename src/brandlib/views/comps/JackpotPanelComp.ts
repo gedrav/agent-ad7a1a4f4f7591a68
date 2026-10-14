@@ -56,7 +56,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.JACKPOT_INFO_READY, this.onJackpotInfoReady.bind(this));
     EventHandler.addEventListener(SlotEvents.JACKPOT_METERS_UPDATE, this.onMetersUpdate.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.onRevealEnd.bind(this));
-    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_INTRO_ANIM, this.showFrozenFromRound.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_FINAL_VALUE, this.showFrozenFromRound.bind(this));
 
     this.onJackpotInfoReady(appModel.jackpotInfo);
   }
@@ -93,17 +93,17 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
       if (data.values[i] !== undefined) item.tweenToValue(data.values[i], METER_TWEEN_SECONDS);
     });
   }
-  protected showFrozenFromRound() {
+  protected showFrozenFromRound(showValue = false) {
     const frozen = appModel.jackpotRound?.frozenMeters;
-    if (frozen?.length) this.showFrozen(frozen);
+    if (frozen?.length) this.showFrozen(frozen, showValue);
   }
   protected onRevealEnd() {
     // tweening from the frozen value to the live one; a buffered tick may follow right after
     this.onMetersUpdate({ values: appModel.jackpotMeters, v: appModel.jackpotMetersV });
   }
-  public showFrozen(values: number[]) {
+  public showFrozen(values: number[], showValue = false) {
     this.jackPotsArr.forEach((item, i) => {
-      if (values[i] !== undefined) item.setValue(values[i]);
+      if (values[i] !== undefined) item.setValue(values[i], showValue);
     });
   }
   public setNotice(kind: 'demo' | 'unavailable' | null) {
@@ -126,10 +126,13 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     if (DeviceProxy.isDevice()) {
       UIUtil.adjustElement(this.panelContainer.elementsList['guideRect']);
       if (DeviceProxy.config.isPortrait) {
+        const useTabletPos = DeviceProxy.config.isTablet && this.jackpotConfig.tpxPos && this.jackpotConfig.tpyPos;
+        const xPos = useTabletPos ? this.jackpotConfig.tpxPos : this.jackpotConfig.pxPos;
+        const yPos = useTabletPos ? this.jackpotConfig.tpyPos : this.jackpotConfig.pyPos;
         const len = this.jackPotsArr.length;
         for (let k = 0; k < len; k++) {
-          this.jackPotsArr[k].x = this.jackpotConfig.pxPos[k];
-          this.jackPotsArr[k].y = this.jackpotConfig.pyPos[k];
+          this.jackPotsArr[k].x = xPos[k];
+          this.jackPotsArr[k].y = yPos[k];
         }
       } else {
         const len = this.jackPotsArr.length;

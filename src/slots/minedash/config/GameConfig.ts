@@ -26,8 +26,7 @@ export const GAME_CONFIG = {
   dontShowWinAfterFS: true,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Caudex',
-    gameFont2: 'vincendo.ttf',
+    gameFont1: 'motion-control.ttf',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',

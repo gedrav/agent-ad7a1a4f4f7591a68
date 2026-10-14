@@ -89,13 +89,11 @@ export class WildsComp extends ResponsiveChildrenView {
       val: popScale,
       duration: 0.4,
       onUpdate: () => {
-        // CRITICAL FIX: Prevent quick-stop crash by checking if destroyed
         if (group && !group.destroyed && group.scale) {
           group.scale.set(scaleProxy.val);
         }
       },
       onComplete: () => {
-        // Stop sequence immediately if quick stop destroyed the wild
         if (group && !group.destroyed) {
           this.attachMultiplierBadge(group, at, config);
 
@@ -123,12 +121,10 @@ export class WildsComp extends ResponsiveChildrenView {
 
     const badge: PixSpine = UIUtil.getElement(config.multiplierSpine);
 
-    // CRITICAL FIX: Add '_idle' to match the states available in the new 'multiplayers_wild' Spine
     const animState = `x${at.multiplier}_idle`;
 
     badge.playAnimation({ state: animState, loop: false });
 
-    // Use the exact multiplierScale configured for the new assets
     badge.scale.set(config.multiplierScale);
 
     container.addChild(badge);
@@ -153,7 +149,6 @@ export class WildsComp extends ResponsiveChildrenView {
     addBadge: boolean = true,
     providedConfig: any = null,
   ): Container {
-    // Fallback if not provided by showNextRainingWild (e.g. Sticky Wilds)
     let config = providedConfig;
     if (!config) {
       config = { ...this.slotReel.getWildConfig() };
@@ -166,8 +161,6 @@ export class WildsComp extends ResponsiveChildrenView {
     const group = new Container();
     const wild: PixSpine = UIUtil.getSpineAnim(config.spineName, config);
 
-    // 2. CRITICAL FIX: Force the skin to apply directly to the skeleton.
-    // If the core UIUtil wrapper misses the custom skin override, this forces it to render.
     if (config.skin) {
       const spineAny: any = wild;
       if (spineAny.spineAnim?.skeleton) {
@@ -176,12 +169,10 @@ export class WildsComp extends ResponsiveChildrenView {
       }
     }
 
-    // Safely extract the responsive fit scale based on row count
     const animScaleObj = config.animFitScale;
     const animScale = animScaleObj ? (animScaleObj[at.rowCount] ?? animScaleObj.default ?? 1) : 1;
     wild.scale.set(animScale);
 
-    // Safely extract and apply responsive offsets
     const offsetXObj = config.animOffsetX;
     const offsetX = offsetXObj ? (offsetXObj[at.rowCount] ?? offsetXObj.default ?? 0) : 0;
 
@@ -190,7 +181,6 @@ export class WildsComp extends ResponsiveChildrenView {
 
     wild.position.set(offsetX, offsetY);
 
-    // Play the exact landingAnim string from config
     wild.playAnimation({ state: config.landingAnim, loop: false });
 
     if (config.hidePlate) {
@@ -214,10 +204,8 @@ export class WildsComp extends ResponsiveChildrenView {
     const start = this.slotReel.cellCentre(reelno, from.row, from.rowCount);
     const end = this.slotReel.cellCentre(reelno, to.row, to.rowCount);
 
-    // Start at the current cell position
     wildGroup.position.copyFrom(start);
 
-    // 1. Get the target config and calculate the new skin size
     const config = this.slotReel.getWildConfig();
     const newSize = to.rowCount - 1;
     let newSkin = config.skin;
@@ -226,38 +214,32 @@ export class WildsComp extends ResponsiveChildrenView {
       newSkin = newSkin.replace('x', newSize.toString());
     }
 
-    // 2. Find the base Wild Spine inside this group (it's the first child we added)
     const wildSpine: any = wildGroup.children.find((child: any) => child.spineAnim?.skeleton);
 
     if (wildSpine) {
-      // 3. Update the Spine skin to match the new reel layout
       if (newSkin) {
         wildSpine.spineAnim.skeleton.setSkinByName(newSkin);
         wildSpine.spineAnim.skeleton.setSlotsToSetupPose();
       }
 
-      // 4. Safely extract and apply the new responsive fit scale
       const animScaleObj = config.animFitScale;
       const animScale = animScaleObj ? (animScaleObj[to.rowCount] ?? animScaleObj.default ?? 1) : 1;
 
-      // 5. Safely extract and apply the new responsive offsets
       const offsetXObj = config.animOffsetX;
       const offsetX = offsetXObj ? (offsetXObj[to.rowCount] ?? offsetXObj.default ?? 0) : 0;
 
       const offsetYObj = config.animOffsetY;
       const offsetY = offsetYObj ? (offsetYObj[to.rowCount] ?? offsetYObj.default ?? 0) : 0;
 
-      // Apply the internal sizes before the slide happens
       wildSpine.scale.set(animScale);
       wildSpine.position.set(offsetX, offsetY);
     }
 
-    // 6. Smoothly slide the entire container (Spine + Multiplier Badge) to the new cell
     AnimationProxy.animateTween(wildGroup, {
       x: end.x,
       y: end.y,
       duration: MOVE_DURATION,
-      ease: 'sine.inOut', // Adds a nice smooth acceleration/deceleration to the slide
+      ease: 'sine.inOut',
     });
   }
 

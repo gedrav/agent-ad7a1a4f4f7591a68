@@ -1,5 +1,6 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { PixText } from '@core/pixiwrapper/PixText';
+import { FillGradient } from 'pixi.js';
 
 import { WinTicker } from '@core/views/comps/WinTicker';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -11,6 +12,19 @@ import { Util } from '@core/utils/UtilService';
 const DEFAULT_AUTO_CLOSE_DELAY = 4500;
 const TICKER_COUNT_DURATION = 1500;
 const TICKER_HOLD_DELAY = 3000;
+
+function titleGradient(colors: number[], stops: number[]): FillGradient {
+  return new FillGradient({
+    type: 'linear',
+    textureSpace: 'local',
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 1 },
+    colorStops: colors.map((color, i) => ({ offset: stops[i], color })),
+  });
+}
+
+const FREESPINS_TITLE_FILL = titleGradient([0xfffbe0, 0xffe14d, 0xffb01f, 0xe06a00], [0, 0.35, 0.65, 1]);
+const MYSTERY_TITLE_FILL = titleGradient([0xffe3f6, 0xff8fd6, 0xe0399b, 0x9c1468], [0, 0.35, 0.65, 1]);
 
 export class MDFeaturePopupComp extends ResponsiveChildrenView {
   protected titleText: PixText;
@@ -57,6 +71,7 @@ export class MDFeaturePopupComp extends ResponsiveChildrenView {
     this.visible = true;
 
     const isMystery = data.entryPopUp === undefined;
+    this.titleText.style.fill = isMystery ? MYSTERY_TITLE_FILL : FREESPINS_TITLE_FILL;
     const animState = isMystery ? 'Mystery_Ideal' : 'FreeSpin_Ideal';
     if (this.panelBG?.playAnimation) {
       this.panelBG.playAnimation({ state: animState, loop: true });

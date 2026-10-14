@@ -39,7 +39,6 @@ const CART_SYMBOL_TO_SKIN: Record<string, string> = {
   H1: 'Helmate',
   H2: 'Lantern',
   H3: 'Pickaxe',
-  H4: 'Helmate',
   H5: 'Lantern',
   L1: 'A',
   L2: 'K',

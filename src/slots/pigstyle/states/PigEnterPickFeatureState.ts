@@ -17,6 +17,12 @@ class PigEnterPickFeatureStateCommand extends StateCommand {
     EventHandler.dispatchEvent(SlotEvents.SET_MG_MULTIPLIERS_VISIBLITY, false);
     EventHandler.dispatchEvent(SlotEvents.SET_FS_MULTIPLIERS_VISIBLITY, true);
     EventHandler.dispatchEvent(SlotEvents.RESET_MULTIPLIER);
+
+    if (appModel.getIsUnfinishedGame()) {
+      this.doNextStep();
+      return;
+    }
+
     EventHandler.dispatchEvent(SlotEvents.SHOW_PICK_FEATURE_POPUP);
   }
 

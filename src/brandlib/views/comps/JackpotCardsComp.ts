@@ -13,7 +13,15 @@ import { WinTicker } from '@core/views/comps/WinTicker';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { appModel } from '@core/models/services/AppModelService';
 import { MessageProxy } from '@brand/models/MessageServiceProxy';
-import { IJackpotPick, IJackpotRound, JACKPOT_SKINS, JACKPOT_TIERS, JackpotTier } from '@core/models/jackpot.types';
+import {
+  IJackpotPick,
+  IJackpotRound,
+  JACKPOT_SKINS,
+  JACKPOT_TIERS,
+  JackpotTier,
+  JACKPOT_WIN_DURATION,
+  TEXT_UPDATE_INTERVAL,
+} from '@core/models/jackpot.types';
 import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { PixText } from '@core/pixiwrapper/PixText';
 
@@ -66,10 +74,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimHor = this.elementsList['jackpotIntroAnimHor'];
     this.jackpotIntroAnimVer = this.elementsList['jackpotIntroAnimVer'];
     this.jackpotWinContainer = this.elementsList['jackpotWinContainer'];
-    this.jpguideRect = this.jackpotWinContainer.elementsList['jpguideRect'];
+    this.jpguideRect = this.jackpotWinContainer.elementsList['guideRect'];
     this.youwinJPTextimg = this.jackpotWinContainer.elementsList['youwinJPTextimg'];
     this.typeOfJPTextimg = this.jackpotWinContainer.elementsList['typeOfJPTextimg'];
-    this.jackPotOutroAnimation = this.jackpotWinContainer.elementsList['jackPotOutroAnimation'];
+    this.jackPotOutroAnimation = this.elementsList['jackPotOutroAnimation'];
     this.winTickerJP = this.jackpotWinContainer.elementsList['winTickerJP'];
 
     this.hideJackpotIntroAnim();
@@ -170,7 +178,12 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     const { amount: winAmount = 0, wonTier } = appModel.jackpotRound;
     this.winTickerJP.reset();
     this.winTickerJP.visible = true;
-    this.winTickerJP.countUpValue(winAmount, 5000);
+    this.winTickerJP.countUpValue(
+      winAmount,
+      JACKPOT_WIN_DURATION[JACKPOT_TIERS.indexOf(wonTier)],
+      false,
+      TEXT_UPDATE_INTERVAL,
+    );
     AnimationProxy.fadeIn(this.overlayRect, 0.2, null, 0.35);
     AnimationProxy.fadeOut(this.instructionText, 0.2);
     this.jackPotOutroAnimation.renderable = true;
@@ -201,6 +214,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackpotIntroAnimVer.playAnimation({ state: stateP, loop, timeScale, reset });
   }
   protected pulseJPWinText() {
+    if (!this.isJackpotOutroAnim) return;
     AnimationProxy.killTweensOf(this.youwinJPTextimg);
     this.youwinJPTextimg.scale.set(1);
     AnimationProxy.animateTween(this.youwinJPTextimg, {
@@ -434,8 +448,19 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
       this.jackpotIntroAnimVer.renderable = false;
     }
   }
+  protected resizeJackpotoutroTextAnim() {
+    AnimationProxy.killTweensOf(this.youwinJPTextimg);
+    AnimationProxy.killTweensOf(this.typeOfJPTextimg);
+    this.adjustJackpotTextScale();
+    this.pulseJPWinText();
+  }
   protected resizeView(): void {
     UIUtil.adjustElement(this.cardGuideRect);
+    UIUtil.adjustElement(this.jpguideRect);
+    UIUtil.adjustElement(this.youwinJPTextimg);
+    UIUtil.adjustElement(this.typeOfJPTextimg);
+    UIUtil.adjustElement(this.winTickerJP);
+    this.resizeJackpotoutroTextAnim();
     super.resizeView();
     this.resizeJackpotWinAnimation();
     // desktop keeps the layout it was built with; only devices reflow on orientation

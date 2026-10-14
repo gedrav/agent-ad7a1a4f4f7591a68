@@ -10,7 +10,6 @@ import { CompleteGameRoundState } from '@core/commands/states/CompleteGameRoundS
 import { BBSpinStartState } from '@core/commands/states/BBSpinStartState';
 import { CheckFSState } from '@core/commands/states/CheckFSState';
 import { EnterFreespinsState } from '@core/commands/states/EnterFreespinsState';
-import { ExitFreespinsState } from '@core/commands/states/ExitFreespinsState';
 import { FSSpinStartState } from '@core/commands/states/FSSpinStartState';
 import { PigCheckUnfinishedState } from '@game/states/PigCheckUnfinishedState';
 import { PigCheckFeatureState } from '@game/states/PigCheckFeatureState';
@@ -21,6 +20,7 @@ import { CheckPromoFSTriggerState } from '@core/commands/states/CheckPromoFSTrig
 import { CheckPromoFSState } from '@core/commands/states/CheckPromoFSState';
 import { ResumePromoFSState } from '@core/commands/states/ResumePromoFSState';
 import { ExitPromoFSState } from '@core/commands/states/ExitPromoFSState';
+import { PigExitFreespinsState } from '@game/states/PigExitFreespinsStateCommand';
 
 export const STATES_CONFIG: any = [
   { name: STATES.CHECK_PROMOFS_TRIGGER_STATE, state: CheckPromoFSTriggerState },
@@ -47,7 +47,7 @@ export const STATES_CONFIG: any = [
   { name: STATES.SHOW_FS_ENTRY_TRANSITION_ANIM, state: ShowFSEnterTransitionState },
   { name: STATES.FS_SPIN_START_STATE, state: FSSpinStartState },
   { name: STATES.CHECK_FS_STATE, state: CheckFSState },
-  { name: STATES.EXIT_FREESPINS_STATE, state: ExitFreespinsState },
+  { name: STATES.EXIT_FREESPINS_STATE, state: PigExitFreespinsState },
   { name: STATES.SHOW_FS_EXIT_TRANSITION_ANIM, state: ShowFSExitTransitionState },
   { name: STATES.COMPLETE_GAMEROUND_STATE, state: CompleteGameRoundState },
 

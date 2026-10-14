@@ -18,17 +18,17 @@ export const GEM_BOXES_CONFIG: any = {
       box5: -4, // MEGA (no label drawn)
     },
     title: {
-      fontFamily: 'gameFont2',
+      fontFamily: 'gameFont1',
       fontWeight: 'bold',
       fill: 0xffffff,
       stroke: { color: 0x110500, width: 8 },
-      fontSize: 80,
+      fontSize: 105,
       y: 15,
     },
     value: {
-      fontFamily: 'gameFont2',
+      fontFamily: 'gameFont1',
       fontWeight: 'bold',
-      fontSize: 60,
+      fontSize: 80,
       fill: 0xffea00,
       stroke: { color: 0x110500, width: 8 },
       y: 115,
