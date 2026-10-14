@@ -163,7 +163,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     if (DeviceProxy.isDevice()) {
       if (DeviceProxy.config.isPortrait) {
         if (this.typeOfJPTextimg.width > this.jpguideRect.width) {
-          this.jackpotTextScale = (this.jpguideRect.width * 0.9) / this.typeOfJPTextimg.width;
+          this.jackpotTextScale = (this.jpguideRect.width * 1) / this.typeOfJPTextimg.width;
           this.typeOfJPTextimg.scale.set(this.jackpotTextScale);
         }
       }
