@@ -5,6 +5,7 @@ import { SlotEvents } from '@core/events/SlotEvents';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Container } from 'pixi.js';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
+import { appModel } from '@core/models/services/AppModelService';
 
 const MOVE_DURATION = 0.7;
 const GAP_BEFORE_REELS_STOP = 600;
@@ -37,17 +38,33 @@ export class WildsComp extends ResponsiveChildrenView {
 
     const previous = this.previousPlacements;
     this.previousPlacements = [];
-    this.clearWilds();
+
+    const oldWilds = [...this.wilds];
+    this.wilds = [];
 
     for (const [reelno, row, multiplier] of entries) {
       const to: WildPlacement = { row, rowCount: slotReel.getRowCount(reelno), multiplier };
-      const wild = this.createWild(reelno, to);
       const from = previous[reelno];
+      const oldGroup = oldWilds.find((w: any) => w.reelno === reelno);
+
+      if (from && oldGroup && from.multiplier === multiplier && from.row === row && from.rowCount === to.rowCount) {
+        this.wilds.push(oldGroup);
+        this.previousPlacements[reelno] = to;
+
+        const idx = oldWilds.indexOf(oldGroup);
+        if (idx > -1) oldWilds.splice(idx, 1);
+        continue;
+      }
+
+      const wild = this.createWild(reelno, to);
+
       if (from?.multiplier === multiplier && (from.row !== row || from.rowCount !== to.rowCount)) {
         this.moveWild(reelno, wild, from, to);
       }
       this.previousPlacements[reelno] = to;
     }
+
+    oldWilds.forEach((wild) => wild.destroy());
   }
 
   public showRainingWilds(entries: number[][], slotReel: any, onAllLanded: () => void): void {
@@ -196,7 +213,10 @@ export class WildsComp extends ResponsiveChildrenView {
     group.scale.set(this.slotReel.getSymbolScale());
     group.position.copyFrom(this.slotReel.cellCentre(reelno, at.row, at.rowCount));
     this.addChild(group);
+
+    (group as any).reelno = reelno;
     this.wilds.push(group);
+
     return group;
   }
 
@@ -235,10 +255,12 @@ export class WildsComp extends ResponsiveChildrenView {
       wildSpine.position.set(offsetX, offsetY);
     }
 
+    const duration = appModel.turboMode ? MOVE_DURATION * 0.5 : MOVE_DURATION;
+
     AnimationProxy.animateTween(wildGroup, {
       x: end.x,
       y: end.y,
-      duration: MOVE_DURATION,
+      duration: duration,
       ease: 'sine.inOut',
     });
   }
