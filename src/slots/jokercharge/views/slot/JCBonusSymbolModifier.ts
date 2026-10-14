@@ -4,7 +4,7 @@ import { PixText } from '@core/pixiwrapper/PixText';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
-import { appModel } from '@core/models/services/AppModelService';
+import { getLineBet } from '../../models/JCLinesState';
 import { MULTIPLIER_APPLY_COUNT_EASE } from '../../config/MultiplierBadgeConfig';
 import { releaseSharedStyle, shareTextStyle, writeCountText } from '../comps/sharedText';
 
@@ -88,6 +88,11 @@ export class JCBonusSymbolModifier {
     this.text.visible = value > 0;
   }
 
+  // The same value at the current bet. A count still running writes its own figures.
+  public refresh(): void {
+    if (!this.countTarget) this.show(this.value);
+  }
+
   // The figure climbs by amount from whatever it is showing, so adds that overlap all land.
   public addValue(amount: number, duration: number, onComplete?: () => void): void {
     if (!this.text) {
@@ -149,7 +154,7 @@ export class JCBonusSymbolModifier {
   }
 
   private format(value: number): string {
-    return Util.formatCurrencyNoSymbol(value * appModel.getTotalBet());
+    return Util.formatCurrencyNoSymbol(value * getLineBet());
   }
 
   private killCount(): void {

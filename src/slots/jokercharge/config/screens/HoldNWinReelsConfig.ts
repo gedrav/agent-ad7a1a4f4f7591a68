@@ -35,7 +35,7 @@ export const HOLD_N_WIN_REELS_CONFIG: any = {
     anticipationSpeedFactor: 0.35,
     minSpinDuration: 1500,
     minSpinDurationTurbo: 750,
-    spinSpeedMultiplier: 0.45,
+    spinSpeedMultiplier: 0.75,
     initialReel: INITIAL_REEL,
   },
 };

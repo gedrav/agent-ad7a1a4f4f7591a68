@@ -28,7 +28,7 @@ import {
 import { BOOST_BADGE_COPY_ALPHA } from '../../config/BoostConfig';
 import { isSecondaryAssetsReady } from '../../models/JCAssetsState';
 import { MYSTERY_SYMBOL_NAMES, SYMBOLS_DATA, getRandomSymbolName } from '../../config/SymbolsConfig';
-import { appModel } from '@core/models/services/AppModelService';
+import { getLineBet } from '../../models/JCLinesState';
 import { MysteryReelResult } from './JCMysterySymbolModifier';
 import JCReelSymbol from './JCReelSymbol';
 import { JCReelSymbolPool } from './JCReelSymbolPool';
@@ -173,6 +173,10 @@ export default class HoldNWinReel extends Container {
     symbol.pauseWhileHidden();
     this.spinContainer.addChild(symbol);
     return symbol;
+  }
+
+  public refreshFigures(): void {
+    this.stripSymbols().forEach((symbol) => symbol.refreshFigure());
   }
 
   private stripSymbols(): JCReelSymbol[] {
@@ -584,11 +588,11 @@ export default class HoldNWinReel extends Container {
   // The bet comes from the model rather than the caller, so every cell formats against the same
   // one. No-op unless the cell holds a mystery symbol.
   public spinMysteryReel(result: MysteryReelResult, delayMs = 0): Promise<void> {
-    return this.symbolView?.spinMysteryReel(result, appModel.getTotalBet(), delayMs) ?? Promise.resolve();
+    return this.symbolView?.spinMysteryReel(result, getLineBet(), delayMs) ?? Promise.resolve();
   }
 
   public startMysteryReel(delayMs = 0): void {
-    this.symbolView?.startMysteryReel(appModel.getTotalBet(), delayMs);
+    this.symbolView?.startMysteryReel(getLineBet(), delayMs);
   }
 
   public stopMysteryReel(): void {
