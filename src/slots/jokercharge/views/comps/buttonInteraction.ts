@@ -8,6 +8,8 @@ const HOVER_SCALE = 1.06;
 const PRESS_SCALE = 0.92;
 const TWEEN_DURATION = 0.12;
 const PRESS_DURATION = 0.08;
+const DISABLED_ALPHA = 0.5;
+const restores = new WeakMap<Container, () => void>();
 
 // Uses PixiJS's unified pointer events directly rather than UIUtil's addHoverInteraction/
 // addDownInteraction/etc. - those bind 'touchstart' for both hover and press (and 'touchend' for
@@ -47,11 +49,14 @@ export function setupButtonInteraction(btn: Container, onClick: () => void): voi
     btn.tint = TINT_HOVER;
     scaleTo(HOVER_SCALE, TWEEN_DURATION);
   });
-  btn.on('pointerout', () => {
+  const rest = () => {
     btn.tint = TINT_REST;
-    scaleTo(1, TWEEN_DURATION);
+    if (engaged) scaleTo(1, TWEEN_DURATION);
     engaged = false;
-  });
+  };
+  restores.set(btn, rest);
+
+  btn.on('pointerout', rest);
   btn.on('pointerdown', () => {
     engage();
     btn.tint = TINT_PRESS;
@@ -68,4 +73,11 @@ export function setupButtonInteraction(btn: Container, onClick: () => void): voi
     engaged = false;
   });
   btn.on('pointertap', onClick);
+}
+
+export function setButtonEnabled(btn: Container, enabled: boolean): void {
+  if (!enabled) restores.get(btn)?.();
+  btn.eventMode = enabled ? 'static' : 'none';
+  btn.cursor = enabled ? 'pointer' : 'default';
+  btn.alpha = enabled ? 1 : DISABLED_ALPHA;
 }

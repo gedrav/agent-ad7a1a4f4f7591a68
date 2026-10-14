@@ -1,17 +1,13 @@
 import { ResponsiveView } from '@core/pixiwrapper/ResponsiveView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
+import { appModel } from '@core/models/services/AppModelService';
 import { Util } from '@core/utils/UtilService';
 import { AdjustableTextBox } from '@core/pixiwrapper/AdjustableTextBox';
 import { JCEvents } from '../../events/JCEvents';
 import { getLineBet } from '../../models/JCLinesState';
 
-const MULTIPLIERS = {
-  mini: 10,
-  minor: 20,
-  major: 30,
-  grand: 500,
-};
+const DEFAULT_MULTIPLIERS = { Grand: 500, Major: 50, Minor: 20, Mini: 10 };
 
 export class JackpotLabelsComp extends ResponsiveView {
   private readonly grandValueText: AdjustableTextBox;
@@ -33,9 +29,10 @@ export class JackpotLabelsComp extends ResponsiveView {
 
   private updateValues(): void {
     const bet = getLineBet();
-    this.grandValueText.text = Util.formatCurrency(bet * MULTIPLIERS.grand);
-    this.majorValueText.text = Util.formatCurrency(bet * MULTIPLIERS.major);
-    this.minorValueText.text = Util.formatCurrency(bet * MULTIPLIERS.minor);
-    this.miniValueText.text = Util.formatCurrency(bet * MULTIPLIERS.mini);
+    const multipliers = { ...DEFAULT_MULTIPLIERS, ...appModel.gameData?.jackpotMultiplier };
+    this.grandValueText.text = Util.formatCurrency(bet * multipliers.Grand);
+    this.majorValueText.text = Util.formatCurrency(bet * multipliers.Major);
+    this.minorValueText.text = Util.formatCurrency(bet * multipliers.Minor);
+    this.miniValueText.text = Util.formatCurrency(bet * multipliers.Mini);
   }
 }
