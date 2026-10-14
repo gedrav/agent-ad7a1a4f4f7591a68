@@ -12,7 +12,7 @@ export const GAME_CONFIG = {
   debugMode: false,
   configPath: '/',
   gamePath: '/',
-  gameVersion: '0.093',
+  gameVersion: '0.094',
   gameId: 'carpathiantreasures',
   gameName: 'Carpathian Treasures',
   uiConfig: UIConfig,
