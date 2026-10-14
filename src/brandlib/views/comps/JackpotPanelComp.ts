@@ -58,7 +58,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.onRevealEnd.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_FINAL_VALUE, this.showFrozenFromRound.bind(this));
 
-    this.onJackpotInfoReady(appModel.jackpotInfo);
+    this.onJackpotInfoReady(appModel.jackpotInfo, true);
   }
 
   createJackPotElement() {
@@ -73,7 +73,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     });
     this.resizeView();
   }
-  protected onJackpotInfoReady(info: IJackpotInfo | null) {
+  protected onJackpotInfoReady(info: IJackpotInfo | null, showValue) {
     const hasInfo = !!info;
     this.jackPotsArr.forEach((item) => (item.visible = hasInfo));
     if (!info) {
@@ -83,7 +83,7 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     if (appModel.jackpotRound) {
       this.showFrozenFromRound();
     } else {
-      this.showFrozen(appModel.jackpotMeters);
+      this.showFrozen(appModel.jackpotMeters, showValue);
     }
     this.setNotice(info.demo ? 'demo' : !info.available ? 'unavailable' : null);
   }
