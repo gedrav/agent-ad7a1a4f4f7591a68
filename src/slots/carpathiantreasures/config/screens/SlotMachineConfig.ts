@@ -244,7 +244,7 @@ export const SLOT_MACHINE_CONFIG: any = {
                   type: 'AdjustableText',
                   style: {
                     fontFamily: 'commonFontBold',
-                    fontSize: 36,
+                    fontSize: 30,
                     fill: 0xfce16e,
                     fontWeight: 'bold',
                     stroke: 0x3d1800,
@@ -267,7 +267,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'valueText',
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
-              style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
+              style: { fontFamily: 'bitmapFont', fontSize: 110, fill: 0xffffff },
             },
           ],
         },
