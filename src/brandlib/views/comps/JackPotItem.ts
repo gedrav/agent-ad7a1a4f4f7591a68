@@ -10,6 +10,9 @@ export class JackPotItem extends StandardView {
   private readonly jackpotBg: PixSpine;
   private readonly value: PixText;
   private readonly counter = { current: 0 };
+  private valueQueue: number[] = [];
+  private tweenDuration: number;
+  private isTweening: boolean = false;
   private tween = null;
   constructor(config) {
     super(config);
@@ -26,6 +29,8 @@ export class JackPotItem extends StandardView {
   public setValue(value: number, showValue = false) {
     this.tween?.kill();
     AnimationProxy.killTweensOf(this.counter);
+    this.isTweening = false;
+    this.valueQueue = [];
     if (showValue) {
       this.counter.current = value;
       this.updateJackpotValue(value);
@@ -34,13 +39,28 @@ export class JackPotItem extends StandardView {
     }
   }
   public tweenToValue(value: number, duration: number) {
+    this.tweenDuration = duration;
+    this.valueQueue.push(value);
+    this.processValueQueue();
+  }
+  private processValueQueue() {
+    if (this.isTweening || this.valueQueue.length === 0) {
+      return;
+    }
+    const nextValue = this.valueQueue.shift();
+    this.isTweening = true;
     AnimationProxy.killTweensOf(this.counter);
     this.tween?.kill();
     this.tween = AnimationProxy.animateTween(this.counter, {
-      current: value,
-      duration,
+      current: nextValue,
+      delay: 0.2,
+      duration: this.tweenDuration,
       ease: 'none',
       onUpdate: () => this.updateJackpotValue(this.counter.current),
+      onComplete: () => {
+        this.isTweening = false;
+        this.processValueQueue();
+      },
     });
   }
   public updateJackpotValue(value: number) {
