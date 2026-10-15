@@ -10,7 +10,7 @@ export class JackPotItem extends StandardView {
   private readonly jackpotBg: PixSpine;
   private readonly value: PixText;
   private readonly counter = { current: 0 };
-  private readonly valueQueue: number[] = [];
+  private valueQueue: number[] = [];
   private tweenDuration: number;
   private isTweening: boolean = false;
   private tween = null;
@@ -29,6 +29,8 @@ export class JackPotItem extends StandardView {
   public setValue(value: number, showValue = false) {
     this.tween?.kill();
     AnimationProxy.killTweensOf(this.counter);
+    this.isTweening = false;
+    this.valueQueue = [];
     if (showValue) {
       this.counter.current = value;
       this.updateJackpotValue(value);
