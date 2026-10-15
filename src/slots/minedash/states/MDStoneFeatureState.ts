@@ -46,9 +46,9 @@ class MDStoneFeatureStateCommand extends StateCommand {
         break;
 
       case 'megawinStone':
-        if (firedStone.positions && firedStone.positions.length > 0) {
-          EventHandler.dispatchEvent('SHOW_MEGA_WIN', {
-            positions: firedStone.positions,
+        if (firedStone.redirectedDrops && firedStone.redirectedDrops.length > 0) {
+          EventHandler.dispatchEvent('SHOW_MEGAWIN', {
+            redirectedDrops: firedStone.redirectedDrops,
             symbol: firedStone.value,
             triggerPosition: firedStone.triggerPosition,
           });
