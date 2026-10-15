@@ -48,7 +48,7 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD', 'SC', 'BN'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 187, y: 250 },
+            reelContainerPos: { x: 187, y: 248 },
             reelPositionX: [0, 292, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
@@ -68,10 +68,10 @@ export const SLOT_MACHINE_CONFIG: any = {
           landingSymbols: ['WD'],
         },
         initialReel: [
-          ['H1', 'H1', 'H1'],
+          ['H1', 'H3', 'H2'],
           ['L2', 'L4', 'L2'],
           ['L5', 'L4', 'L1'],
-          ['SC', 'SC', 'SC'],
+          ['SC', 'L1', 'H4'],
           ['L3', 'WD', 'H3'],
         ],
         symbolsData: {
@@ -235,17 +235,13 @@ export const SLOT_MACHINE_CONFIG: any = {
               class: SymbolPayoutComp,
               scale: 1.06,
               xPadding: 0.04,
-              yPadding: -0.0104,
-              textXPadding: 0.08,
-              textYPadding: 0.0167,
-              centerText: true,
+              yPadding: 0,
+              centerText: false,
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
                   name: 'infoText',
                   type: 'AdjustableText',
-                  maxWidth: 260,
-                  maxHeight: 250,
                   style: {
                     fontFamily: 'commonFontBold',
                     fontSize: 36,
@@ -255,7 +251,6 @@ export const SLOT_MACHINE_CONFIG: any = {
                     strokeThickness: 4,
                     align: 'center',
                     wordWrap: true,
-                    wordWrapWidth: 260,
                   },
                 },
               ],

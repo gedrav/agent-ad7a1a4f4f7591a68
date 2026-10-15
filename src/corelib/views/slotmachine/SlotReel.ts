@@ -885,10 +885,18 @@ export default class SlotReel extends ResponsiveChildrenView {
     this.symbolPayoutComp.visible = true;
     this.winSymbolsContainer.addChild(this.symbolPayoutComp);
     this.winSymbolsContainer.addChild(symb);
-    const reelno = symb.getReelNumber();
-    this.symbolPayoutComp.showComp(symb.getSymbolNameForPayout(), reelno < this.reelsData.noOfReels - 2);
+    this.symbolPayoutComp.showComp(symb.getSymbolNameForPayout(), this.isSymbolAtLeft(symb.getReelNumber()));
     this.currentPayoutSymbol = symb;
-    if (reelno < this.reelsData.noOfReels - 2) {
+    this.positionPayoutComp(symb);
+    clearTimeout(this.payoutTimeoutId);
+    this.payoutTimeoutId = setTimeout(this.hidePayout.bind(this), 2000);
+  }
+  protected isSymbolAtLeft(reelno: number): boolean {
+    return reelno < Math.ceil(this.reelsData.noOfReels / 2);
+  }
+
+  protected positionPayoutComp(symb: ReelSymbolSprite): void {
+    if (this.isSymbolAtLeft(symb.getReelNumber())) {
       this.symbolPayoutComp.x =
         symb.x - this.reelsData.symbolHeight / 2 - this.symbolPayoutComp.width * this.symbolPayoutComp.getXPadding();
     } else {
@@ -898,13 +906,9 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.symbolPayoutComp.width * (1 - this.symbolPayoutComp.getXPadding() * 0.65);
     }
     this.symbolPayoutComp.y =
-      symb.y -
-      this.reelsData.symbolHeight / 2 -
-      (this.symbolPayoutComp.height - this.reelsData.symbolHeight) / 2 +
-      this.symbolPayoutComp.height * this.symbolPayoutComp.getYPadding();
-    clearTimeout(this.payoutTimeoutId);
-    this.payoutTimeoutId = setTimeout(this.hidePayout.bind(this), 2000);
+      symb.y - this.symbolPayoutComp.height / 2 + this.symbolPayoutComp.height * this.symbolPayoutComp.getYPadding();
   }
+
   protected hidePayout(): void {
     clearTimeout(this.payoutTimeoutId);
     this.symbolPayoutComp.visible = false;
@@ -1030,6 +1034,9 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.anticipationContainer.x = this.reelsData.reelContainerPos.x;
         this.anticipationContainer.y = this.reelsData.reelContainerPos.y;
       }
+    }
+    if (this.symbolPayoutComp?.visible && this.currentPayoutSymbol) {
+      this.positionPayoutComp(this.currentPayoutSymbol);
     }
   }
 
