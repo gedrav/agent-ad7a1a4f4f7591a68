@@ -48,19 +48,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD', 'SC', 'BN'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 292, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 293, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 293, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
@@ -68,10 +68,10 @@ export const SLOT_MACHINE_CONFIG: any = {
           landingSymbols: ['WD'],
         },
         initialReel: [
-          ['H1', 'H3', 'H2'],
+          ['H1', 'H1', 'H1'],
           ['L2', 'L4', 'L2'],
           ['L5', 'L4', 'L1'],
-          ['SC', 'L1', 'H4'],
+          ['SC', 'SC', 'SC'],
           ['L3', 'WD', 'H3'],
         ],
         symbolsData: {
@@ -235,7 +235,10 @@ export const SLOT_MACHINE_CONFIG: any = {
               class: SymbolPayoutComp,
               scale: 1.06,
               xPadding: 0.04,
+              yPadding: -0.0104,
               textXPadding: 0.08,
+              textYPadding: 0.0167,
+              centerText: true,
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
@@ -250,6 +253,7 @@ export const SLOT_MACHINE_CONFIG: any = {
                     fontWeight: 'bold',
                     stroke: 0x3d1800,
                     strokeThickness: 4,
+                    align: 'center',
                     wordWrap: true,
                     wordWrapWidth: 260,
                   },

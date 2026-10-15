@@ -44,7 +44,6 @@ export class SymbolPayoutComp extends StandardView {
       }
       this.infoText.style.wordWrap = false;
       this.infoText.text = result;
-      this.fitInfoText();
     } else {
       let str = Util.getContent(symbol + 'payoutContent');
       if (str === symbol + 'payoutContent') {
@@ -53,9 +52,7 @@ export class SymbolPayoutComp extends StandardView {
 
       if (str && str.length > 0) {
         EventHandler.dispatchEvent(SlotEvents.PLAY_GENERIC_SYMB_PAYOUT_SOUND);
-        this.infoText.style.fontSize = this.infoText.style.fontSize;
         this.infoText.style.wordWrap = true;
-        this.infoText.style.wordWrapWidth = this.infoText.style.wordWrapWidth;
         this.infoText.text = str;
       } else {
         this.visible = false;
@@ -63,33 +60,25 @@ export class SymbolPayoutComp extends StandardView {
       }
     }
 
-    if (symbolAtLeft) {
+    if (this.configData.centerText) {
+      // The symbol covers one half of the bg, so centre the text in the half it leaves free.
+      const freeHalfCenter = symbolAtLeft ? this.bg.width * 0.75 : this.bg.width * 0.25;
+      this.infoText.x = freeHalfCenter - this.infoText.width / 2;
+    } else if (symbolAtLeft) {
       this.infoText.x = this.bg.width - this.infoText.width - this.bg.width * this.configData.textXPadding;
     } else {
       this.infoText.x = this.bg.width * this.configData.textXPadding * 1.15;
     }
-    this.infoText.y = (this.bg.height - this.infoText.height) / 2;
+    this.infoText.y =
+      (this.bg.height - this.infoText.height) / 2 +
+      this.bg.height * Util.getDefaultValue(this.configData.textYPadding, 0);
   }
 
   public getXPadding(): number {
     return this.configData.xPadding;
   }
 
-  private fitInfoText(): void {
-    const baseFontSize = this.infoText.style.fontSize;
-
-    const minFontSize = 16;
-
-    const padding = this.bg.width * this.configData.textXPadding;
-
-    const maxWidth = this.bg.width * 0.5 - padding;
-
-    if (this.infoText.width > maxWidth) {
-      const ratio = maxWidth / this.infoText.width;
-
-      const newFontSize = Math.max(minFontSize, Math.floor(baseFontSize * ratio));
-
-      this.infoText.style.fontSize = newFontSize;
-    }
+  public getYPadding(): number {
+    return Util.getDefaultValue(this.configData.yPadding, 0);
   }
 }

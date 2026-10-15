@@ -898,7 +898,10 @@ export default class SlotReel extends ResponsiveChildrenView {
         this.symbolPayoutComp.width * (1 - this.symbolPayoutComp.getXPadding() * 0.65);
     }
     this.symbolPayoutComp.y =
-      symb.y - this.reelsData.symbolHeight / 2 - (this.symbolPayoutComp.height - this.reelsData.symbolHeight) / 2;
+      symb.y -
+      this.reelsData.symbolHeight / 2 -
+      (this.symbolPayoutComp.height - this.reelsData.symbolHeight) / 2 +
+      this.symbolPayoutComp.height * this.symbolPayoutComp.getYPadding();
     clearTimeout(this.payoutTimeoutId);
     this.payoutTimeoutId = setTimeout(this.hidePayout.bind(this), 2000);
   }
