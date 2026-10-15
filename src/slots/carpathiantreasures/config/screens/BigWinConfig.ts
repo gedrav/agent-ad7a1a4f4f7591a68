@@ -106,13 +106,13 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 774,
-      y: 760,
+      y: 790,
       Elements: [
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'bitmapFontBW', fontSize: 150, fill: 0xffffff },
+          style: { fontFamily: 'bitmapFontBW', fontSize: 65, fill: 0xffffff },
         },
       ],
     },
