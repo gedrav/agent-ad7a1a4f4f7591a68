@@ -27,7 +27,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       pHeight: 1375,
       lWidth: 1780,
       lHeight: 1140,
-      alpha: 1,
+      alpha: 0,
     },
     {
       name: 'slotReel',
