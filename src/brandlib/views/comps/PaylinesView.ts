@@ -11,6 +11,8 @@ export class PaylinesView extends ResponsiveView {
     EventHandler.addEventListener(SlotEvents.SHOW_SPIN_WIN, this.showSpinWinLines.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_LINE_WIN, this.showLineWin.bind(this));
     EventHandler.addEventListener(SlotEvents.CLEAR_WINS, this.hideAllPaylines.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_PAYLINES, this.showAllLines.bind(this));
+    EventHandler.addEventListener(SlotEvents.HIDE_PAYLINES, this.hideAllPaylines.bind(this));
   }
   hideAllPaylines(): void {
     if (this.configData.totalLines) {
@@ -21,6 +23,14 @@ export class PaylinesView extends ResponsiveView {
     this.visible = false;
   }
 
+  protected showAllLines(): void {
+    if (this.configData.totalLines) {
+      for (let k = 1; k <= this.configData.totalLines; k++) {
+        this.elementsList['payline' + k].visible = true;
+      }
+    }
+    this.visible = true;
+  }
   protected showSpinWinLines(): void {
     const winLines = appModel.getWinData();
     if (!winLines?.length) {
