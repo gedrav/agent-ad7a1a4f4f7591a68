@@ -36,6 +36,7 @@ export const SLOT_MACHINE_CONFIG: any = {
       type: 'Comp',
       class: GameSlotReel,
       winController: GameWinController,
+      visible: true,
       x: 0,
       y: 210,
       px: -65,
