@@ -37,6 +37,7 @@ const PRIMARY: AssetBundle = {
     // jackpot panel assets end
 
     { TYPE: 'common', NAME: 'loader_anim', ASSETTYPE: 'gif' },
+    { TYPE: 'common', NAME: 'paylines0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'bitmapFont.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'bitmapFontBW.fnt', ASSETTYPE: 'bmpfont' },
     { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine' },
