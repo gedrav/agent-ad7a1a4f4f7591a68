@@ -41,7 +41,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gameElements0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'symbols0', ASSETTYPE: 'sprite' },
     { TYPE: 'game', NAME: 'transitionScreen', ASSETTYPE: 'sprite' },
-    { TYPE: 'game', NAME: 'jackpot', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'jackpot', ASSETTYPE: 'spine', spineImageType: 'webp', spineSkelType: 'skel' },
     { TYPE: 'game', NAME: 'wheel', ASSETTYPE: 'spine', spineImageType: 'webp' },
     // { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
     // { TYPE: 'game', NAME: 'reelFrame', ASSETTYPE: 'spine' },
