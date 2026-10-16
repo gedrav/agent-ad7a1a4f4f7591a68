@@ -12,12 +12,14 @@ import { FS_POPUP_CONFIG } from './FSPopupConfig';
 import { SECONDARY_WAITING_SCREEN_CONFIG } from '@brand/config/SecondaryWaitingScreenConfig';
 import { PROMOFS_POPUP_CONFIG } from '@brand/config/PromoFSPopupConfig';
 import { JP_HIT_NOTIFICATION_CONFIG } from '@brand/config/JPHItNotificationConfig';
+import { WHEEL_FEATURE_CONFIG } from '@game/config/screens/WheelFeatureConfig';
 
 export const SLOT_GAME_APP_CONFIG: any = {
   name: 'SLOT_GAME_APP_CONFIG',
   Elements: [
     GAME_BG_CONFIG,
     SLOT_MACHINE_CONFIG,
+    WHEEL_FEATURE_CONFIG,
     createControlPanelConfig(null),
     MODAL_VIEW_CONFIG,
     MENU_CONFIG,
