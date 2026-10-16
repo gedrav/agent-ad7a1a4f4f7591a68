@@ -123,7 +123,7 @@ class AssetLoaderClass {
         const data: any = { name: this.assetConfig[i].name, assets: [] };
         if (this.assetConfig[i]?.assets?.length > 0) {
           this.assetConfig[i].assets.forEach((item: any) => {
-            const { TYPE, NAME, ASSETTYPE, file, TEXTURES, spineImageType } = item;
+            const { TYPE, NAME, ASSETTYPE, file, TEXTURES, spineImageType, spineSkelType } = item;
             if (
               ASSETTYPE === 'svg' ||
               ASSETTYPE === 'png' ||
@@ -143,10 +143,11 @@ class AssetLoaderClass {
               }
             } else if (ASSETTYPE === 'spine') {
               // Load spine JSON data
+              const skelType = '.' + (spineSkelType || 'json');
               data.assets.push({
                 alias: NAME + 'Data',
                 src: this.withVersion(
-                  TYPE == 'lang' ? this.langSpinePath + NAME + '.json' : this.spinePath + NAME + '.json',
+                  TYPE == 'lang' ? this.langSpinePath + NAME + skelType : this.spinePath + NAME + skelType,
                 ),
               });
 

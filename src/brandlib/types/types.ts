@@ -5,6 +5,7 @@ export type AssetEntry = {
   file?: [number, number];
   TEXTURES?: number[];
   spineImageType?: string;
+  spineSkelType?: string;
 };
 
 export type AssetBundle = {
