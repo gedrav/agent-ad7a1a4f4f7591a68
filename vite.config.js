@@ -17,7 +17,7 @@ const defaultGameNames = [
   'carpathiantreasures',
   // 'jokercharge',
   // 'houseofcards'
-  // 'minedash',
+   //'minedash',
   // 'pigstyle'
 ];
 
