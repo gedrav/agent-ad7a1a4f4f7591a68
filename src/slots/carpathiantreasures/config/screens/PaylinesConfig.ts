@@ -20,4 +20,9 @@ export const PAYLINES_CONFIG: any = {
     { name: 'payline9', type: 'Comp', class: PaylineComp, x: 0, y: 70, image: 'Winline9' },
     { name: 'payline10', type: 'Comp', class: PaylineComp, x: 0, y: 60, image: 'Winline10' },
   ],
+  layoutData: {
+    Desktop: { scale: 1 },
+    Landscape: { scale: 1, x: -81, y: 110 },
+    Portrait: { scale: 0.9, x: 0, y: 160 },
+  },
 };
