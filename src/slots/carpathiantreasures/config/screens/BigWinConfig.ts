@@ -90,14 +90,14 @@ export const BIG_WIN_CONFIG = {
       name: 'winTicker',
       type: 'Comp',
       class: WinTicker,
-      x: 740,
-      y: 360,
+      x: 754,
+      y: 430,
       Elements: [
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'bitmapFont', fontSize: 400, fill: 0xffffff },
+          style: { fontFamily: 'bitmapFont', fontSize: 200, fill: 0xffffff },
         },
       ],
     },
@@ -106,13 +106,13 @@ export const BIG_WIN_CONFIG = {
       type: 'Comp',
       class: WinTicker,
       x: 774,
-      y: 760,
+      y: 790,
       Elements: [
         {
           name: 'valueText',
           type: 'BitmapText',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'bitmapFontBW', fontSize: 150, fill: 0xffffff },
+          style: { fontFamily: 'bitmapFontBW', fontSize: 65, fill: 0xffffff },
         },
       ],
     },

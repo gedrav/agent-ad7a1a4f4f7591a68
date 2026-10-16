@@ -54,6 +54,7 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected pendingIntroAnim = false;
   private instructionText: PixText;
   private jackpotTextScale: number = 1;
+  private youwinJPTextScale: number = 1;
   constructor(config) {
     super(config);
     this.cardsConfig = this.configData.cardsConfig;
@@ -160,11 +161,17 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   adjustJackpotTextScale() {
     this.typeOfJPTextimg.scale.set(1);
     this.jackpotTextScale = 1;
+    this.youwinJPTextimg.scale.set(1);
+    this.youwinJPTextScale = 1;
     if (DeviceProxy.isDevice()) {
       if (DeviceProxy.config.isPortrait) {
         if (this.typeOfJPTextimg.width > this.jpguideRect.width) {
-          this.jackpotTextScale = (this.jpguideRect.width * 0.9) / this.typeOfJPTextimg.width;
+          this.jackpotTextScale = (this.jpguideRect.width * 1) / this.typeOfJPTextimg.width;
           this.typeOfJPTextimg.scale.set(this.jackpotTextScale);
+        }
+        if (this.youwinJPTextimg.width > this.jpguideRect.width) {
+          this.youwinJPTextScale = (this.jpguideRect.width * 1) / this.youwinJPTextimg.width;
+          this.youwinJPTextimg.scale.set(this.youwinJPTextScale);
         }
       }
     }
@@ -201,7 +208,11 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
     this.jackPotOutroAnimation.playAnimation({ state: 'start_land', loop: false });
   }
   private showStartAnimation() {
-    AnimationProxy.animateTween(this.youwinJPTextimg, { scaleX: 1, scaleY: 1, duration: 0.3 });
+    AnimationProxy.animateTween(this.youwinJPTextimg, {
+      scaleX: this.youwinJPTextScale,
+      scaleY: this.youwinJPTextScale,
+      duration: 0.3,
+    });
     AnimationProxy.animateTween(this.typeOfJPTextimg, {
       scaleX: this.jackpotTextScale,
       scaleY: this.jackpotTextScale,
@@ -216,10 +227,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   protected pulseJPWinText() {
     if (!this.isJackpotOutroAnim) return;
     AnimationProxy.killTweensOf(this.youwinJPTextimg);
-    this.youwinJPTextimg.scale.set(1);
+    this.youwinJPTextimg.scale.set(this.youwinJPTextScale);
     AnimationProxy.animateTween(this.youwinJPTextimg, {
-      scaleX: 0.9,
-      scaleY: 0.9,
+      scaleX: this.youwinJPTextScale * 0.9,
+      scaleY: this.youwinJPTextScale * 0.9,
       repeat: -1,
       yoyo: true,
       duration: 0.5,

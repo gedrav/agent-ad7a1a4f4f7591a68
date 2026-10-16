@@ -11,10 +11,12 @@ import SlotGameApp from '@core/app/SlotGameApp';
 import { appModel } from '@core/models/services/AppModelService';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
-import { TransitionAnimComp } from '@game/views/comps/TransitionAnimComp';
-import { TRANSITION_ANIM_CONFIG } from '@game/config/screens/TransitionAnimConfig';
+import { TransitionComp } from '@game/views/comps/TransitionComp';
+import { TRANSITION_CONFIG } from '@game/config/screens/TransitionConfig';
 
 export class gameApp extends SlotGameApp {
+  protected transitionComp: TransitionComp;
+
   constructor() {
     super();
     this.init();
@@ -48,7 +50,7 @@ export class gameApp extends SlotGameApp {
     }, 10);
   }
   protected createTransitionView() {
-    /*this.transitionAnimComp = new TransitionAnimComp(TRANSITION_ANIM_CONFIG);
-    this.gameAppScreen.addChild(this.transitionAnimComp);*/
+    this.transitionComp = new TransitionComp(TRANSITION_CONFIG);
+    this.gameAppScreen.addChild(this.transitionComp);
   }
 }
