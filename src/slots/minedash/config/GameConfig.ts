@@ -17,7 +17,7 @@ export const GAME_CONFIG = {
   gameName: 'Mine Dash',
   uiConfig: UIConfig,
   creditValue: 5,
-  totalLines: 17,
+  totalLines: 1,
   anteBetMultiplier: 1.25,
   unloadAssets: ['splashAssets'],
   showWinInReelView: true,
@@ -26,8 +26,7 @@ export const GAME_CONFIG = {
   dontShowWinAfterFS: true,
   FontFaces: {
     commonFont: 'Mulish',
-    gameFont1: 'Caudex',
-    gameFont2: 'vincendo.ttf',
+    gameFont1: 'motion-control.ttf',
     commonFontBold: 'Oswald Bold',
     bitmapFont: 'bitmapFont',
     bitmapFontBW: 'bitmapFontBW',
@@ -40,7 +39,7 @@ export const GAME_CONFIG = {
   },
   LANGUAGES_SUPPORTED: ['en', 'cs', 'sk', 'ro', 'hr', 'cnr', 'pl', 'lt'],
   bbImage: 'screen1',
-  bigWinValues: [25, 50, 100, 500],
+  bigWinValues: [25, 50, 100, 200],
   buyBonusData: {
     features: [
       {

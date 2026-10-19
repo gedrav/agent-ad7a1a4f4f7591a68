@@ -637,10 +637,12 @@ class AppModelService {
   }
 
   public getMinBet(): number {
-    return this.gameInfo.betsArray[0];
+    return this.gameInfo.minBet;
+    //return this.gameInfo.betsArray[0];
   }
   public getMaxBet(): number {
-    return this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1];
+    return this.gameInfo.maxBet;
+    //return this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1];
   }
   public setAnteBet(value: number): void {
     this.gameInfo.anteBet = value;

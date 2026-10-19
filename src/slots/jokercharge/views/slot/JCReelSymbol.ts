@@ -5,6 +5,7 @@ import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { PixSpine } from '@core/pixiwrapper/PixSpine';
 import { appModel } from '@core/models/services/AppModelService';
+import { getLineBet } from '../../models/JCLinesState';
 import { Util } from '@core/utils/UtilService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { JCBonusSymbolModifier, ROOT_TEXT_SLOT_NAME } from './JCBonusSymbolModifier';
@@ -52,6 +53,12 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // symbol rather than of its name - so this survives the backend renaming them.
   private isBonusSymbol(): boolean {
     return !!this.configData.data.multiplierTextConfig;
+  }
+
+  private initialValue(data: any): number | undefined {
+    if (data.name === BOOST_SYMBOL_NAME) return 0;
+    if (this.isBonusSymbol()) return undefined;
+    return getCellValue(data.reelNumber, data.row);
   }
 
   private isMysterySymbol(): boolean {
@@ -144,7 +151,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // A label carrying a figure no longer reads as its config says, so its key is dropped: a pooled
   // rig arriving with it is then rebuilt by addLabel rather than reused as is.
   private writeLabelFigure(labels: PixText[], amount: number, final = true): void {
-    const text = Util.formatCurrencyNoSymbol(amount * appModel.getTotalBet());
+    const text = Util.formatCurrencyNoSymbol(amount * getLineBet());
     labels.forEach((label) => {
       writeCountText(label, text, final);
       if (label.parent) (label.parent as any).labelKey = null;
@@ -165,6 +172,14 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
   // In bet multiples: the backend's figure for the cell times whatever multiplier was spent on it.
   public getCollectValue(): number {
     return this.isBonusSymbol() ? this.bonusModifier.getValue() : this.labelValue;
+  }
+
+  public refreshFigure(): void {
+    if (this.isBonusSymbol()) {
+      this._bonusModifier?.refresh();
+    } else if (this.heldValue != null && !this.labelCountTarget) {
+      this.writeLabelFigure(this.labelTexts(), this.labelValue);
+    }
   }
 
   // The boost's figure climbing by what one symbol gave it. No-op for anything without a figure.
@@ -344,8 +359,7 @@ export default class JCReelSymbol extends ReelSymbolSpineExtended {
     if (!this.spine) return;
     // reelNumber is the column - corelib writes it onto configData.data in setNewSymbol.
     const data = this.configData.data;
-    // A boost's figure is what it collects, worked out here rather than read from the backend.
-    const value = this.heldValue ?? (data.name === BOOST_SYMBOL_NAME ? 0 : getCellValue(data.reelNumber, data.row));
+    const value = this.heldValue ?? this.initialValue(data);
     this.labelValue = value ?? 0;
     if (this.isBonusSymbol()) {
       this.bonusModifier.create(data.name, data.multiplierTextConfig, value, this.spine);

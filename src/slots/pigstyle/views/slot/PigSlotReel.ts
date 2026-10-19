@@ -16,6 +16,66 @@ export class PigSlotReel extends SlotReelStandard {
   protected reelRows: number[];
   protected symbolHeights: number[];
 
+  constructor(configData: any) {
+    super(configData);
+    EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_BG, this.swapToMainGameTiles.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_FREEGAME_BG, this.swapToFreeGameTiles.bind(this));
+    EventHandler.addEventListener('PLAY_SCATTER_TRIGGER_ANIM', this.playScatterTriggerAnim.bind(this));
+  }
+
+  protected swapToMainGameTiles(): void {
+    this.updateTiles(this.reelsData.tileImage);
+  }
+
+  protected swapToFreeGameTiles(): void {
+    this.updateTiles(this.reelsData.tileImageFS);
+  }
+
+  protected updateTiles(tileImage: string): void {
+    if (!this.symbolsArray) return;
+    for (const reel of this.symbolsArray) {
+      for (const symb of reel) {
+        if (symb) {
+          (symb as PigReelSymbol).setTileImage(tileImage);
+        }
+      }
+    }
+  }
+
+  protected playScatterTriggerAnim(): void {
+    const positions = appModel.gameResult?.featureTriggerPositions;
+
+    if (positions && positions.length > 0) {
+      for (let i = 0; i < this.symbolsArray.length; i++) {
+        for (let j = 0; j < this.symbolsArray[i].length; j++) {
+          this.symbolsArray[i][j].showFaded();
+        }
+      }
+
+      EventHandler.dispatchEvent(SlotEvents.PLAY_FEATURE_TRIGGER_SOUND, positions.length);
+
+      positions.forEach((p: number[]) => {
+        const reel = p[0];
+        const row = this.reelsData.isFixedSymbol ? p[1] : p[1] + 1;
+        const symb = this.symbolsArray[reel][row];
+
+        if (symb) {
+          symb.alpha = 1;
+          if ((symb as any).symbol) {
+            (symb as any).symbol.alpha = 1;
+            if ((symb as any).symbol.tint !== undefined) {
+              (symb as any).symbol.tint = 0xffffff;
+            }
+          }
+
+          this.winSymbolsContainer.addChild(symb);
+
+          symb.showWinning(undefined, true);
+        }
+      });
+    }
+  }
+
   protected get wildsComp(): WildsComp {
     return this.elementsList['wildsComp'];
   }
@@ -155,7 +215,7 @@ export class PigSlotReel extends SlotReelStandard {
   }
 
   protected startStoppingSpin(): void {
-    const entries = this.getWildEntries(); // Checks gameResult.positionsModifiedWithWc or wildMultipliers
+    const entries = this.getWildEntries();
     if (this.isRainingRound() && entries.length) {
       this.wildsComp.showRainingWilds(entries, this, () => super.startStoppingSpin());
       return;
@@ -207,7 +267,7 @@ export class PigSlotReel extends SlotReelStandard {
     this.moveSymbols(symbols, delta);
 
     const symbolHeight = this.getSymbolHeight(reelno);
-    const self = this as any; // Quick alias for cleaner code below
+    const self = this as any;
 
     for (let pass = 0; pass < symbols.length; pass++) {
       if (symbols[symbols.length - 1].y <= this.reelsData.reelHeight * 1.1) {
@@ -313,15 +373,6 @@ export class PigSlotReel extends SlotReelStandard {
     }
   }
 
-  protected onFreeSpinsEnded(): void {
-    const tileImage = this.getTileImage();
-    for (const reel of this.symbolsArray) {
-      for (const symb of reel) {
-        (symb as PigReelSymbol).setTileImage(tileImage);
-      }
-    }
-  }
-
   protected showHideExtraSymbols(flag: boolean = false): void {
     for (let k = 0; k < this.reelsData.noOfReels; k++) {
       const rows = this.getRowCount(k);
@@ -340,8 +391,6 @@ export class PigSlotReel extends SlotReelStandard {
         this.symbolHeights[k] = this.measureSymbolHeight(this.getRowCount(k));
       }
       const newSymbolHeight = this.getSymbolHeight(k);
-
-      // Check if this specific reel is currently spinning
       const isSpinning = this.reelSpinningState && this.reelSpinningState[k] > 0;
 
       this.symbolsArray[k].forEach((symb, j) => {
@@ -349,10 +398,8 @@ export class PigSlotReel extends SlotReelStandard {
         symb.x = this.reelsData.reelPositionX[k];
 
         if (isSpinning) {
-          // Proportional scaling preserves smooth spinning midway through the animation
           symb.y = (symb.y / oldSymbolHeight) * newSymbolHeight;
         } else {
-          // Snap to exact grid positions for initial load and stopped state
           symb.y = (j - 1) * newSymbolHeight;
         }
       });
@@ -361,6 +408,65 @@ export class PigSlotReel extends SlotReelStandard {
     const pos = this.reelsData.reelContainerPos;
     for (const view of [this.symbolsContainer, this.winSymbolsContainer, this.anticipationContainer, this.wildsComp]) {
       view?.position.set(pos.x, pos.y);
+    }
+  }
+
+  protected createScatterAnticipationArray(): void {
+    const reels = appModel.gameResult?.reelView;
+    if (!reels) {
+      super.createScatterAnticipationArray();
+      return;
+    }
+
+    let totalScatters = 0;
+    this.scatterAnticipArray = [];
+    this.scatterAnticipArray[0] = [0];
+
+    for (let k = 0; k < this.reelsData.noOfReels; k++) {
+      if (k > 0) {
+        const prevReel = reels[k - 1];
+        if (prevReel) {
+          const scattersLen = this.reelsData.anticipationSymbols?.length;
+          if (scattersLen) {
+            for (let i = 0; i < prevReel.length; i++) {
+              for (let j = 0; j < scattersLen; j++) {
+                if (prevReel[i] === this.reelsData.anticipationSymbols[j]) {
+                  totalScatters++;
+                }
+              }
+            }
+          }
+        }
+      }
+      this.scatterAnticipArray[k] = [totalScatters];
+    }
+  }
+
+  public showSpinWin(): void {
+    this.applyStickyMultipliersToReels();
+    super.showSpinWin();
+  }
+
+  public showLineWin(): void {
+    this.applyStickyMultipliersToReels();
+    super.showLineWin();
+  }
+
+  public showTumbleWin(): void {
+    this.applyStickyMultipliersToReels();
+    super.showTumbleWin();
+  }
+
+  protected applyStickyMultipliersToReels(): void {
+    if (this.isStickyRound()) {
+      for (const [wildReel, row, multiplier] of this.getWildEntries()) {
+        const symb = this.symbolsArray[wildReel]?.[row + 1] as PigReelSymbol;
+        if (symb && symb.getSymbolName() === this.reelsData.wildSymbol) {
+          if (!(symb as any).multiplier) {
+            symb.setRewardData(multiplier);
+          }
+        }
+      }
     }
   }
 }

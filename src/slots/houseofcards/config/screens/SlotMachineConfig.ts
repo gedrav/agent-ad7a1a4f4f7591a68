@@ -9,8 +9,9 @@ import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig'
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
 import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
-import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 import { JACKPOT_CONFIG } from '@game/config/screens/JackpotConfig';
+import { SymbolsFrameContainer } from '@game/views/comps/SymbolsFrameContainer';
+import GameSlotReel from '@game/views/slot/GameSlotReel';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -33,8 +34,9 @@ export const SLOT_MACHINE_CONFIG: any = {
     {
       name: 'slotReel',
       type: 'Comp',
-      class: SlotReelStandard,
+      class: GameSlotReel,
       winController: GameWinController,
+      visible: true,
       x: 0,
       y: 210,
       px: -65,
@@ -297,6 +299,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           ],
         },
         { name: 'symbolsContainer', type: 'Container' },
+        { name: 'symbolsFrameContainer', type: 'Comp', class: SymbolsFrameContainer },
         {
           name: 'modalRect',
           type: 'Graphics',

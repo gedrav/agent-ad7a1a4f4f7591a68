@@ -454,7 +454,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'valueText',
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
-              style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
+              style: { fontFamily: 'bitmapFont', fontSize: 150, fill: 0xffffff },
             },
           ],
         },

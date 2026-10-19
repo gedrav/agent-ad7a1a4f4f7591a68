@@ -9,13 +9,14 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 50 },
-  cs: { fontSize: 35 },
-  lt: { fontSize: 35 },
-  pl: { fontSize: 35 },
-  sk: { fontSize: 35 },
-  ro: { fontSize: 35 },
-  hr: { fontSize: 35 },
+  en: { fontSize: 45 },
+  cs: { fontSize: 45 },
+  lt: { fontSize: 45 },
+  pl: { fontSize: 45 },
+  sk: { fontSize: 45 },
+  ro: { fontSize: 45 },
+  hr: { fontSize: 45 },
+  cnr: { fontSize: 45 },
 };
 
 export const SPLASH_CONFIG: any = {
@@ -40,7 +41,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'gameFont1',
+          fontFamily: 'commonFontBold',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
@@ -73,7 +74,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'gameFont1',
+          fontFamily: 'commonFontBold',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
@@ -106,7 +107,7 @@ export const SPLASH_CONFIG: any = {
         destroy: true,
         fontMLProps: fontMLProps,
         style: {
-          fontFamily: 'gameFont1',
+          fontFamily: 'commonFontBold',
           fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
@@ -245,7 +246,7 @@ export const SPLASH_CONFIG: any = {
           textConfig: {
             content: 'playGameText',
             style: {
-              fontFamily: 'gameFont1',
+              fontFamily: 'commonFontBold',
               fontWeight: 700,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
@@ -262,7 +263,7 @@ export const SPLASH_CONFIG: any = {
               },
             },
             anchor: { x: 0.5, y: 0.5 },
-            fontMLProps: { lt: { fontSize: 36 } },
+            fontMLProps: { lt: { fontSize: 60 } },
           },
           layoutData: {
             Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 1, maxScale: 1.2 },
@@ -304,7 +305,7 @@ export const SPLASH_CONFIG: any = {
             y: 0,
             content: 'dontShowMessage',
             style: {
-              fontFamily: 'commonFont',
+              fontFamily: 'commonFontBold',
               fontWeight: 400,
               fill: 0xffffff,
               fontSize: 40,

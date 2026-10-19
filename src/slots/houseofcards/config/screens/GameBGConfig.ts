@@ -26,5 +26,17 @@ export const GAME_BG_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
       },
     },
+    {
+      name: 'wheelBG',
+      type: 'Sprite',
+      image: 'wheelBG',
+      unload: true,
+      visible: false,
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'top', fitToScreen: true },
+      },
+    },
   ],
 };

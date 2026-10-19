@@ -26,6 +26,22 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     this.handleGameProp();
   }
 
+  protected sortZIndex(): void {
+    if (this.symbol?.parent !== this) return;
+
+    let targetIndex = this.getChildIndex(this.symbol);
+
+    if (this.spine?.parent === this) {
+      targetIndex++;
+      this.addChildAt(this.spine, targetIndex);
+    }
+
+    if (this.multiplier?.parent === this) {
+      targetIndex++;
+      this.addChildAt(this.multiplier, targetIndex);
+    }
+  }
+
   public setRewardData(multiplier: number): void {
     this.clearRewardData();
     if (multiplier < 2 || !appModel.secondaryAssetsLoaded) {
@@ -35,6 +51,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     this.multiplier.playAnimation({ state: `x${multiplier}_idle`, loop: false });
     this.addChild(this.multiplier);
     this.positionMultiplier();
+    this.sortZIndex();
   }
 
   public clearRewardData(): void {
@@ -65,6 +82,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
   protected createExtraElements(): void {
     super.createExtraElements();
     this.centreSpine();
+    this.sortZIndex();
   }
 
   public setNewSymbol(data: any, reelno: number): void {
@@ -86,7 +104,7 @@ export default class PigReelSymbol extends ReelSymbolSpine {
 
   public resetSymbol(): void {
     super.resetSymbol();
-    this.refreshTile();
+    this.restoreMultiplierBrightness();
   }
 
   protected resolveTexture(): Texture {
@@ -112,7 +130,6 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     this.positionMultiplier();
   }
 
-  // --- NEW: Unified helper to read scales AND positions from config ---
   protected getConfigValue(configKey: string, defaultValue: number = 0): number {
     const data = this.configData.data[configKey];
     if (data === undefined) {
@@ -129,13 +146,11 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     if (!this.symbol || !this.tile) return;
     this.symbol.scale.set(1);
 
-    // 1. Static Symbol Scaling
     const scaleFactor = Math.min(this.tile.height / this.symbol.height, this.tile.width / this.symbol.width);
     const customScale = this.getConfigValue('fitScale', 1);
 
     this.symbol.scale.set(scaleFactor * customScale);
 
-    // 2. Static Symbol Positioning (Centered + Config Offsets)
     const offsetX = this.getConfigValue('fitOffsetX', 0);
     const offsetY = this.getConfigValue('fitOffsetY', 0);
 
@@ -151,11 +166,46 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     return this.isBlurred ? `${name}_blur` : name;
   }
 
+  public showFaded(): void {
+    super.showFaded();
+    if (this.multiplier) {
+      const source: any = this.spine || this.symbol;
+      if (source) {
+        this.multiplier.alpha = source.alpha;
+        if (source.tint !== undefined) {
+          (this.multiplier as any).tint = source.tint;
+        }
+      } else {
+        this.multiplier.alpha = 0.5;
+        (this.multiplier as any).tint = 0x555555;
+      }
+    }
+  }
+
+  public showWinning(onComplete?: () => void, loop: boolean = false): void {
+    super.showWinning(onComplete, loop);
+    this.restoreMultiplierBrightness();
+  }
+
+  protected restoreMultiplierBrightness(): void {
+    if (this.multiplier) {
+      this.multiplier.alpha = 1;
+      if ((this.multiplier as any).tint !== undefined) {
+        (this.multiplier as any).tint = 0xffffff;
+      }
+    }
+  }
+
   protected playSpineAnimation(state: string, loop: boolean): boolean {
     const played = super.playSpineAnimation(this.resolveAnimName(state), loop);
     if (played) {
       this.hidePlate();
       this.fitSpineToTile();
+
+      if (this.multiplier?.parent === this && this.spine?.parent === this) {
+        const spineIndex = this.getChildIndex(this.spine);
+        this.addChildAt(this.multiplier, spineIndex + 1);
+      }
     }
     return played;
   }
@@ -163,22 +213,17 @@ export default class PigReelSymbol extends ReelSymbolSpine {
   protected fitSpineToTile(): void {
     if (!this.spine || !this.tile) return;
 
-    // 1. Spine Positioning (Centered + Config Offsets)
     const offsetX = this.getConfigValue('animOffsetX', 0);
     const offsetY = this.getConfigValue('animOffsetY', 0);
 
     this.spine.x = this.tile.width / 2 + offsetX;
     this.spine.y = this.tile.height / 2 + offsetY;
 
-    // 2. Spine Scaling
-    // Reads animFitScale. If missing, falls back to the base animScale from your old config, defaulting to 1
     const customScale = this.getConfigValue('animFitScale', this.configData.data.animScale ?? 1);
 
     if (this.configData.data.sized) {
-      // Sized symbols (like 'AA') are already authored for the tile size, just apply the exact scale config
       this.spine.scale.set(customScale);
     } else {
-      // Unsized symbols fit to bounds first, then scale
       const bounds = this.spine.getLocalBounds();
       if (bounds.width && bounds.height) {
         const scaleFactor = Math.min(this.tile.height / bounds.height, this.tile.width / bounds.width);

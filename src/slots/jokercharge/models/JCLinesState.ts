@@ -1,3 +1,5 @@
+import { appModel } from '@core/models/services/AppModelService';
+
 export const MIN_LINES = 1;
 export const MAX_LINES = 3;
 // Row 1 (middle) is always active - MIN_LINES is 1, and line 1 alone activates it. Row 2 (bottom)
@@ -18,6 +20,10 @@ export function setSelectedLines(lines: number): void {
 
 export function getSelectedLines(): number {
   return selectedLines;
+}
+
+export function getLineBet(): number {
+  return appModel.getTotalBet() / selectedLines;
 }
 
 export function setRespinActive(flag: boolean): void {

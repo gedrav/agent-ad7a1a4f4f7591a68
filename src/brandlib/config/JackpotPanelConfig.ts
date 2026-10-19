@@ -21,6 +21,8 @@ export const JACKPOT_PANEL_CONFIG: any = {
     lyPos: [38, 38, 38, 38],
     pxPos: [127, 431, 127, 431],
     pyPos: [38, 38, 118, 118],
+    tpxPos: [40, 436, 40, 436],
+    tpyPos: [34, 34, 99, 99],
   },
   Elements: [
     JACKPOT_GAME_BG_CONFIG,
@@ -180,7 +182,10 @@ export const JACKPOT_PANEL_CONFIG: any = {
       layoutData: {
         Desktop: { hAlign: 'center', vAlign: 'top', widthPerc: 0.8, heightPerc: 0.08, vPaddingPerc: 0.01 },
         Landscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.75, vPaddingPerc: 0.01 },
+        SmallLandscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.68, vPaddingPerc: 0 },
+        TLandscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.8, heightPerc: 0.1, vPaddingPerc: 0.08 },
         Portrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.94, vPaddingPerc: 0.08 },
+        TPortrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.7, heightPerc: 0.3, vPaddingPerc: 0.1 },
       },
     },
   ],

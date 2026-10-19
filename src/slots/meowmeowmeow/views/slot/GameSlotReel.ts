@@ -133,8 +133,8 @@ export class GameSlotReel extends SlotReelStandard {
     this.createReel();
   }
 
-  protected onSymbolClicked(symb: ReelSymbolSprite): void {
-    super.onSymbolClicked(symb);
+  protected positionPayoutComp(symb: ReelSymbolSprite): void {
+    super.positionPayoutComp(symb);
     this.symbolPayoutComp.y -= 3;
   }
 }

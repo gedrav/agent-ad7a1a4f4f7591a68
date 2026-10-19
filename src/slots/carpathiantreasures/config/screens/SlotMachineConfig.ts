@@ -10,6 +10,7 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { CTSlotReel } from '@game/views/slot/CTSloReel';
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
+import { PAYLINES_CONFIG } from '@game/config/screens/PaylinesConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -48,19 +49,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD', 'SC', 'BN'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 248 },
             reelPositionX: [0, 292, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 293, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 293, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
@@ -190,7 +191,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
-
+        PAYLINES_CONFIG,
         {
           name: 'modalRect',
           type: 'Graphics',
@@ -221,7 +222,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               x: 780,
               y: 58,
             },
-            Portrait: { scale: 0.85, x: 775, y: 56 },
+            Portrait: { scale: 0.85, x: 775, y: 50 },
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1470, height: 860, x: 38, y: 105, color: 0xffff00 },
@@ -233,23 +234,24 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'symbolPayoutComp',
               type: 'Comp',
               class: SymbolPayoutComp,
-              scale: 1.08,
+              scale: 1.06,
               xPadding: 0.04,
-              textXPadding: 0.08,
+              yPadding: 0,
+              centerText: false,
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
                   name: 'infoText',
-                  type: 'Text',
+                  type: 'AdjustableText',
                   style: {
                     fontFamily: 'commonFontBold',
-                    fontSize: 36,
+                    fontSize: 30,
                     fill: 0xfce16e,
                     fontWeight: 'bold',
                     stroke: 0x3d1800,
-                    strokeThickness: 4,
+                    strokeThickness: 3,
+                    align: 'left',
                     wordWrap: true,
-                    wordWrapWidth: 210,
                   },
                 },
               ],
@@ -266,7 +268,7 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'valueText',
               type: 'BitmapText',
               anchor: { x: 0.5, y: 0.5 },
-              style: { fontFamily: 'bitmapFont', fontSize: 180, fill: 0xffffff },
+              style: { fontFamily: 'bitmapFont', fontSize: 110, fill: 0xffffff },
             },
           ],
         },
@@ -348,7 +350,23 @@ export const SLOT_MACHINE_CONFIG: any = {
       hPaddingPerc: 0,
     },
     Portrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0 },
+    TPortrait: { widthPerc: 1, heightPerc: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0 },
     Landscape: { widthPerc: 0.85, heightPerc: 0.9, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.06 },
-    SmallLandscape: { widthPerc: 0.7, heightPerc: 0.78, hAlign: 'center', vAlign: 'top', vPaddingPerc: 0.09 },
+    TLandscape: {
+      widthPerc: 0.85,
+      heightPerc: 0.9,
+      hAlign: 'center',
+      vAlign: 'middle',
+      vPaddingPerc: 0.05,
+      hPaddingPerc: -0.005,
+    },
+    SmallLandscape: {
+      widthPerc: 0.85,
+      heightPerc: 0.88,
+      hAlign: 'center',
+      vAlign: 'middle',
+      vPaddingPerc: 0.05,
+      hPaddingPerc: -0.002,
+    },
   },
 };

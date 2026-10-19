@@ -2,14 +2,16 @@ import { PixSprite } from '@core/pixiwrapper/PixSprite';
 import { PixText } from '@core/pixiwrapper/PixText';
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
+import { SlotEvents } from '@core/events/SlotEvents';
 import { JCEvents } from '@slots/jokercharge/events/JCEvents';
 import { MIN_LINES, MAX_LINES, getSelectedLines, setSelectedLines } from '@slots/jokercharge/models/JCLinesState';
-import { setupButtonInteraction } from '@slots/jokercharge/views/comps/buttonInteraction';
+import { setButtonEnabled, setupButtonInteraction } from '@slots/jokercharge/views/comps/buttonInteraction';
 
 // Buy Bonus button + Lines selector, positioned inside SlotMachineConfig.ts's Elements array.
 // ResponsiveChildrenView, not ResponsiveView: the latter only adjusts the comp itself, so the
 // per-orientation layoutData on bonusBtnGroup and linesGroup would never be read.
 export class BuyBonusLinesComp extends ResponsiveChildrenView {
+  private readonly bonusBtnGroup: any;
   private readonly linesMinusBtn: PixSprite;
   private readonly linesPlusBtn: PixSprite;
   private readonly linesValueText: PixText;
@@ -19,6 +21,7 @@ export class BuyBonusLinesComp extends ResponsiveChildrenView {
   constructor(configData: any) {
     super(configData);
     const bonusBtnGroup = this.elementsList['bonusBtnGroup'];
+    this.bonusBtnGroup = bonusBtnGroup;
     const linesGroup = this.elementsList['linesGroup'];
     this.linesMinusBtn = linesGroup.elementsList['linesMinusBtn'];
     this.linesPlusBtn = linesGroup.elementsList['linesPlusBtn'];
@@ -32,7 +35,16 @@ export class BuyBonusLinesComp extends ResponsiveChildrenView {
     // Also listened to, not just dispatched: a restored sticky session sets the count before any
     // of this exists, and the announcement that follows is what this catches up on.
     EventHandler.addEventListener(JCEvents.SELECTED_LINES, this.onSelectedLines.bind(this));
+    EventHandler.addEventListener(SlotEvents.START_SPIN, () => this.setButtonsEnabled(false));
+    EventHandler.addEventListener(SlotEvents.IDLE_STATE_ENTRY, () => this.setButtonsEnabled(true));
+    EventHandler.addEventListener(JCEvents.SET_BONUS_TRIGGER_LAYOUT, (data: { active: boolean }) => {
+      if (data?.active) this.setButtonsEnabled(false);
+    });
     this.updateLinesText();
+  }
+
+  private setButtonsEnabled(enabled: boolean): void {
+    [this.bonusBtnGroup, this.linesMinusBtn, this.linesPlusBtn].forEach((btn) => setButtonEnabled(btn, enabled));
   }
 
   // From the state rather than the payload, and no re-dispatch: this is the same event this comp

@@ -15,23 +15,23 @@ export const GEM_BOXES_CONFIG: any = {
       box2: -30, // FREESPIN
       box3: 10, // MYSTERY
       box4: 20, // WILD
-      box5: -4, // MEGA (no label drawn)
+      box5: 15, // MEGA (no label drawn)
     },
     title: {
-      fontFamily: 'gameFont2',
+      fontFamily: 'gameFont1',
       fontWeight: 'bold',
       fill: 0xffffff,
       stroke: { color: 0x110500, width: 8 },
-      fontSize: 80,
-      y: 15,
+      fontSize: 125,
+      y: -90,
     },
     value: {
-      fontFamily: 'gameFont2',
+      fontFamily: 'gameFont1',
       fontWeight: 'bold',
-      fontSize: 60,
+      fontSize: 200,
       fill: 0xffea00,
       stroke: { color: 0x110500, width: 8 },
-      y: 115,
+      y: 90,
     },
   },
 
