@@ -512,11 +512,7 @@ class AppModelService {
   }
   public storeSpinResult(data: any): void {
     this.jackpotRound = data.jackpot ?? null;
-    if (this.jackpotRound) {
-      this.jackpotMeters = this.jackpotRound.frozenMeters;
-    } else {
-      this.unfreezeJackpotMeters();
-    }
+    if (!this.jackpotRound) this.unfreezeJackpotMeters();
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
@@ -541,11 +537,7 @@ class AppModelService {
   }
   public storeFeatureResult(data: any): void {
     this.jackpotRound = data.jackpot ?? null;
-    if (this.jackpotRound) {
-      this.jackpotMeters = this.jackpotRound.frozenMeters;
-    } else {
-      this.unfreezeJackpotMeters();
-    }
+    if (!this.jackpotRound) this.unfreezeJackpotMeters();
     this.lineWinIndex = 0;
     this.tumbleIndex = 0;
     this.gameInfo.balance = data.playerInfo.balance;
@@ -637,12 +629,10 @@ class AppModelService {
   }
 
   public getMinBet(): number {
-    return this.gameInfo.minBet;
-    //return this.gameInfo.betsArray[0];
+    return this.gameInfo.betsArray[0];
   }
   public getMaxBet(): number {
-    return this.gameInfo.maxBet;
-    //return this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1];
+    return this.gameInfo.betsArray[this.gameInfo.betsArray.length - 1];
   }
   public setAnteBet(value: number): void {
     this.gameInfo.anteBet = value;
