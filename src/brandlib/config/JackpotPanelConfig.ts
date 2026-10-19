@@ -21,8 +21,8 @@ export const JACKPOT_PANEL_CONFIG: any = {
     lyPos: [38, 38, 38, 38],
     pxPos: [127, 431, 127, 431],
     pyPos: [38, 38, 118, 118],
-    tpxPos: [40, 436, 40, 436],
-    tpyPos: [34, 34, 99, 99],
+    tpxPos: [80, 476, 80, 476],
+    tpyPos: [37, 37, 102, 102],
   },
   Elements: [
     JACKPOT_GAME_BG_CONFIG,
