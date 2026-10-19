@@ -24,5 +24,6 @@ export const PAYLINES_CONFIG: any = {
     Desktop: { scale: 1 },
     Landscape: { scale: 1, x: -81, y: 110 },
     Portrait: { scale: 0.9, x: 0, y: 160 },
+    TPortrait: { scale: 1, x: -81, y: 160 },
   },
 };
