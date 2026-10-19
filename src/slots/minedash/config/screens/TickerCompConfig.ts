@@ -21,8 +21,8 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 36,
-            mFontSize: 44,
+            fontSize: 44,
+            mFontSize: 54,
             fill: 0xffd200,
             fontWeight: 'bold',
           },
@@ -33,8 +33,8 @@ export const TICKER_COMP_CONFIG: any = {
           anchor: { x: 0.5, y: 0.5 },
           style: {
             fontFamily: 'gameFont1',
-            fontSize: 36,
-            mFontSize: 44,
+            fontSize: 44,
+            mFontSize: 54,
             fill: 0xffd200,
             fontWeight: 'bold',
           },
