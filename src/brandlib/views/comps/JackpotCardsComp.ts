@@ -373,6 +373,10 @@ export class JackpotCardsComp extends ResponsiveChildrenView {
   /** Hook for the FE team: mark the cards of the won tier. */
   protected highlightWinning(positions: number[]) {
     let pending = 0;
+    EventHandler.dispatchEvent(
+      SlotEvents.SHOW_JACKPOT_OUTRO_ANIMATION,
+      JACKPOT_TIERS.indexOf(appModel.jackpotRound?.wonTier),
+    );
     const onShowWinComplete = () => {
       pending--;
       if (pending === 0) {
