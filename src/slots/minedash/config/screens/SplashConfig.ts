@@ -9,7 +9,7 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 45 },
+  en: { fontSize: 50 },
   cs: { fontSize: 35 },
   lt: { fontSize: 35 },
   pl: { fontSize: 35 },
@@ -45,11 +45,11 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 65,
-          mFontSize: 50,
+          fontSize: 70,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           tagStyles: {
-            big: { fill: 0x3bc6f0, fontSize: 65 },
+            big: { fill: 0x3bc6f0, fontSize: 70 },
           },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -81,11 +81,11 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 65,
-          mFontSize: 50,
+          fontSize: 68,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           tagStyles: {
-            big: { fill: 0x3bc6f0, fontSize: 65 },
+            big: { fill: 0x3bc6f0, fontSize: 68 },
           },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -117,11 +117,11 @@ export const SPLASH_CONFIG: any = {
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
-          fontSize: 65,
-          mFontSize: 50,
+          fontSize: 70,
+          mFontSize: 55,
           anchor: { x: 0.5, y: 0.5 },
           tagStyles: {
-            big: { fill: 0x3bc6f0, fontSize: 65 },
+            big: { fill: 0x3bc6f0, fontSize: 70 },
           },
           dropShadow: {
             angle: 0.5235987755982988,
@@ -248,7 +248,7 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, -2),
+            textOffset: new Point(0, -10),
           },
           textConfig: {
             content: 'playGameText',
@@ -259,8 +259,8 @@ export const SPLASH_CONFIG: any = {
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 110,
-              mFontSize: 55,
+              fontSize: 180,
+              mFontSize: 65,
               anchor: { x: 0.5, y: 0.5 },
               dropShadow: {
                 angle: 0.5235987755982988,
@@ -276,7 +276,7 @@ export const SPLASH_CONFIG: any = {
           x: 274,
           y: 85,
           layoutData: {
-            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.7, maxScale: 1 },
+            Desktop: { refComponent: 'guideRect', vAlign: 'top', widthPerc: 1, heightPerc: 0.7, maxScale: 1.3 },
           },
         },
         {
@@ -358,7 +358,7 @@ export const SPLASH_CONFIG: any = {
       image: 'gamelogo',
       anchor: { x: 0.5, y: 0.5 },
       layoutData: {
-        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.06 },
+        Desktop: { widthPerc: 0.5, heightPerc: 0.1, maxScale: 1, hAlign: 'center', vPosition: 0.1 },
         Portrait: {
           widthPerc: 0.6,
           heightPerc: 0.12,

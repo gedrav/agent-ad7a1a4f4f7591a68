@@ -343,8 +343,8 @@ export const SLOT_MACHINE_CONFIG: any = {
               name: 'symbolPayoutComp',
               type: 'Comp',
               class: SymbolPayoutComp,
-              scale: 0.8,
-              xPadding: 0.05,
+              scale: { x: 0.92, y: 0.85 },
+              xPadding: 0.07,
               vPadding: 3,
               textXPadding: 0.08,
               Elements: [

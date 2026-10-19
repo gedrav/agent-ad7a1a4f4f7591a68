@@ -1,11 +1,13 @@
-import { Point, Graphics, Text, Container, FillGradient, TextStyle } from 'pixi.js';
+import { Point, Graphics, Container } from 'pixi.js';
 import { SlotMachineView } from '@core/views/slotmachine/SlotMachineView';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { StateManager } from '@core/states/StateManagerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { appModel } from '@core/models/services/AppModelService';
+import { UIUtil } from '@core/utils/UIUtilService';
 import { GemBoxesComp, BOX_STATE_KEYS, StoneStateData } from '@game/views/comps/GemBoxesComp';
 import { StoneAnimationManager, StoneData, STONE_CONFIG } from '@game/views/slot/StoneAnimationManager';
+import { MULTIPLIER_BADGE_CONFIG, MULTIPLIER_BADGE_TEXT_STYLE } from '@game/config/screens/StoneTextConfig';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { Sine } from 'gsap';
@@ -377,51 +379,33 @@ export class GameSlotMachineView extends SlotMachineView {
   }
 
   private createMultiplierBadge(position: Point, value: number): Container {
-    const container = new Container();
+    const { height: h, padX, minWidth, shadow, rim, face, text: textPos } = MULTIPLIER_BADGE_CONFIG;
+
+    const label: any = UIUtil.getElement({
+      name: 'multiplierBadgeText',
+      type: 'Text',
+      contentText: `x${value}`,
+      style: MULTIPLIER_BADGE_TEXT_STYLE,
+    });
+    label.anchor?.set(0.5);
+    label.position.set(textPos.x, textPos.y);
+
+    const w = Math.max(minWidth, label.width + padX * 2);
+    const r = h / 2;
+
+    const bg = new Graphics()
+      .roundRect(-w / 2, -r + shadow.offsetY, w, h, r)
+      .fill({ color: shadow.color, alpha: shadow.alpha })
+      .roundRect(-w / 2, -r, w, h, r)
+      .fill(face.color)
+      .stroke({ color: rim.color, width: rim.width, alignment: 1 })
+      .roundRect(-w / 2 - rim.width, -r - rim.width, w + rim.width * 2, h + rim.width * 2, r + rim.width)
+      .stroke({ color: rim.edge, width: 1.5 })
+      .roundRect(-w / 2 + 10, -r + 5, w - 20, h * 0.35, h * 0.2)
+      .fill({ color: 0xffffff, alpha: face.gloss });
+
+    const container = new Container({ children: [bg, label] });
     container.name = 'multiBadge';
-
-    const shadow = new Graphics();
-    shadow.beginFill(0x000000, 0.75);
-    shadow.drawRoundedRect(-44, -24, 96, 56, 28);
-    shadow.endFill();
-    container.addChild(shadow);
-
-    const bg = new Graphics();
-    bg.beginFill(0x990000, 1);
-    bg.lineStyle(4, 0xffd700, 1);
-    bg.drawRoundedRect(-48, -28, 96, 56, 28);
-    bg.endFill();
-
-    bg.lineStyle(2, 0x4a0000, 1);
-    bg.drawRoundedRect(-42, -22, 84, 44, 22);
-
-    container.addChild(bg);
-
-    const goldGradient = new FillGradient(0, 0, 0, 50);
-    goldGradient.addColorStop(0, '#FFFBE0');
-    goldGradient.addColorStop(0.35, '#FFE14D');
-    goldGradient.addColorStop(0.65, '#FFB01F');
-    goldGradient.addColorStop(1, '#E06A00');
-
-    const multiplierStyle = new TextStyle({
-      fontFamily: ['Oswald-Bold', 'Arial Black', 'sans-serif'],
-      fontSize: 42,
-      fill: goldGradient,
-      stroke: { color: '#3A0F00', width: 8, join: 'round' },
-      dropShadow: { color: '#000000', alpha: 0.7, blur: 4, angle: Math.PI / 2, distance: 4 },
-      letterSpacing: 1,
-      padding: 12,
-    });
-
-    const text = new Text({
-      text: `x${value}`,
-      style: multiplierStyle,
-      resolution: 2,
-    });
-    text.anchor.set(0.5);
-    text.position.set(0, -2);
-
-    container.addChild(text);
 
     container.position.set(position.x, position.y + 35);
     this.addChild(container);

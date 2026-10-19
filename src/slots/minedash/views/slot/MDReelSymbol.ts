@@ -3,6 +3,7 @@ import ReelSymbolSpine from '@core/views/slotmachine/ReelSymbolSpine';
 import { UIUtil } from '@core/utils/UIUtilService';
 import { appModel } from '@core/models/services/AppModelService';
 import { StoneFeature, StoneStateData } from '@game/views/comps/GemBoxesComp';
+import { STONE_TEXT_STYLES } from '@game/config/screens/StoneTextConfig';
 
 const SPINE_TEXT_SLOT = 'Txt_Value';
 
@@ -18,6 +19,13 @@ const STONE_SUFFIX_MAP: Record<string, string> = {
   SF: '',
   SY: 'x',
   SW: '',
+};
+
+const STONE_COLOR_MAP: Record<string, keyof typeof STONE_TEXT_STYLES> = {
+  SM: 'green',
+  SF: 'orange',
+  SY: 'purple',
+  SW: 'red',
 };
 
 export default class MDReelSymbol extends ReelSymbolSpine {
@@ -73,9 +81,13 @@ export default class MDReelSymbol extends ReelSymbolSpine {
       res?.progressData?.stoneState || res?.stoneState || appModel.gameData?.progressData?.stoneState;
 
     const feature: StoneFeature | undefined = stoneState?.[stateKey];
-    if (!feature) return '';
+    let val = feature?.bankedValue ?? feature?.drawnValue;
 
-    const val = feature.bankedValue ?? feature.drawnValue;
+    if (val === undefined || val === null || val === 0 || val === '0' || val === '') {
+      const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired' && m.stone === stateKey);
+      val = firedStone?.value;
+    }
+
     if (val === undefined || val === null || val === 0 || val === '0' || val === '') return '';
 
     return `${val}${STONE_SUFFIX_MAP[symbolName] || ''}`;
@@ -111,33 +123,12 @@ export default class MDReelSymbol extends ReelSymbolSpine {
     holder.label = 'stoneTextHolder';
     holder.labelKey = textContent;
 
-    const fillColors = ['0xFFFFFF', '0xFFE9A8', '0xFFFFFF'];
-    const fontSize = 90;
-
+    const color = STONE_COLOR_MAP[symbolName];
     const config = {
       name: 'stoneText',
       type: 'Text',
       contentText: textContent,
-      style: {
-        fontFamily: 'gameFont1',
-        fontSize: fontSize,
-        fontWeight: '900',
-        fill: fillColors,
-        fillGradientStops: [0, 0.5, 1],
-        stroke: {
-          fill: '0x1A0B00',
-          width: 12,
-          join: 'round',
-        },
-        dropShadow: {
-          alpha: 0.9,
-          angle: Math.PI / 2,
-          blur: 4,
-          color: '0x000000',
-          distance: 6,
-        },
-        align: 'center',
-      },
+      style: STONE_TEXT_STYLES[color],
     };
 
     const label = UIUtil.getElement(config);
