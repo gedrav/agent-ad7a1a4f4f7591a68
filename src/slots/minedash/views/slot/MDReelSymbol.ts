@@ -28,6 +28,13 @@ const STONE_COLOR_MAP: Record<string, keyof typeof STONE_TEXT_STYLES> = {
   SW: 'red',
 };
 
+const STONE_TEXT_POSITION_MAP: Record<string, { x: number; y: number }> = {
+  SM: { x: 0, y: 0 },
+  SF: { x: 0, y: 50 },
+  SY: { x: 0, y: 50 },
+  SW: { x: 0, y: 0 },
+};
+
 export default class MDReelSymbol extends ReelSymbolSpine {
   private readonly slotObjects: Map<string, Container> = new Map();
 
@@ -81,7 +88,7 @@ export default class MDReelSymbol extends ReelSymbolSpine {
       res?.progressData?.stoneState || res?.stoneState || appModel.gameData?.progressData?.stoneState;
 
     const feature: StoneFeature | undefined = stoneState?.[stateKey];
-    let val = feature?.bankedValue ?? feature?.drawnValue;
+    let val = feature?.drawnValue ?? feature?.bankedValue;
 
     if (val === undefined || val === null || val === 0 || val === '0' || val === '') {
       const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired' && m.stone === stateKey);
@@ -134,7 +141,8 @@ export default class MDReelSymbol extends ReelSymbolSpine {
     const label = UIUtil.getElement(config);
     label.anchor?.set(0.5);
     if (label.position) {
-      label.position.set(0, 0);
+      const pos = STONE_TEXT_POSITION_MAP[symbolName] || { x: 0, y: 0 };
+      label.position.set(pos.x, pos.y);
     }
 
     holder.addChild(label);
