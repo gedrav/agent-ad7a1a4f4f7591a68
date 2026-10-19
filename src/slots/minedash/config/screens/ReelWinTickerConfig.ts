@@ -20,7 +20,7 @@ export const REEL_WIN_TICKER_CONFIG: any = {
           name: 'valueText',
           type: 'Text',
           anchor: { x: 0.5, y: 0.5 },
-          style: { fontFamily: 'gameFont1', fontSize: 36, mFontSize: 50, fill: 0xffd200, fontWeight: 'bold' },
+          style: { fontFamily: 'gameFont1', fontSize: 44, mFontSize: 58, fill: 0xffd200, fontWeight: 'bold' },
         },
       ],
     },

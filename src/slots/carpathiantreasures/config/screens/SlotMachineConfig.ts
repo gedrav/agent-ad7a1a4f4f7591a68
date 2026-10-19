@@ -49,19 +49,19 @@ export const SLOT_MACHINE_CONFIG: any = {
         landingSymbols: ['WD', 'SC', 'BN'],
         deviceLayout: {
           Desktop: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 248 },
             reelPositionX: [0, 292, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
           },
           Portrait: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 293, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
           },
           Landscape: {
-            reelContainerPos: { x: 187, y: 258 },
+            reelContainerPos: { x: 187, y: 250 },
             reelPositionX: [0, 293, 588, 884, 1182],
             symbolHeight: 285,
             symbolScale: 1,
@@ -175,7 +175,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           y: 50,
         },
         { name: 'symbolsContainer', type: 'Container' },
-
         {
           name: 'reelFrame',
           type: 'Comp',
@@ -237,23 +236,22 @@ export const SLOT_MACHINE_CONFIG: any = {
               class: SymbolPayoutComp,
               scale: 1.06,
               xPadding: 0.04,
-              textXPadding: 0.08,
+              yPadding: 0,
+              centerText: false,
               Elements: [
                 { name: 'bg', type: 'Sprite', image: 'symbolPaytableBG' },
                 {
                   name: 'infoText',
                   type: 'AdjustableText',
-                  maxWidth: 260,
-                  maxHeight: 250,
                   style: {
                     fontFamily: 'commonFontBold',
                     fontSize: 30,
                     fill: 0xfce16e,
                     fontWeight: 'bold',
                     stroke: 0x3d1800,
-                    strokeThickness: 4,
+                    strokeThickness: 3,
+                    align: 'left',
                     wordWrap: true,
-                    wordWrapWidth: 270,
                   },
                 },
               ],

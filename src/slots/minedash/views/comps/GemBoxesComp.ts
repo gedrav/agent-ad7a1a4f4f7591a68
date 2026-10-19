@@ -1,5 +1,6 @@
 import { ResponsiveChildrenView } from '@core/pixiwrapper/ResponsiveChildrenView';
 import { GameProxy } from '@core/models/GameConfigProxy';
+import { appModel } from '@core/models/services/AppModelService';
 import { Text } from 'pixi.js';
 
 export interface StoneFeature {
@@ -135,9 +136,14 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     this.boxLabels[boxName] = { titleLabel, valueLabel };
   }
 
-  private formatBoxValue(feature?: StoneFeature, suffix: string = ''): string {
-    if (!feature) return '';
-    const val = feature.bankedValue ?? feature.drawnValue;
+  private formatBoxValue(feature?: StoneFeature, suffix: string = '', stoneKey?: keyof StoneStateData): string {
+    let val = feature?.bankedValue ?? feature?.drawnValue;
+
+    if ((val === undefined || val === null || val === 0 || val === '0' || val === '') && stoneKey) {
+      const firedStone = appModel.getReelModifiers()?.find((m: any) => m.type === 'stoneFired' && m.stone === stoneKey);
+      val = firedStone?.value;
+    }
+
     if (val !== undefined && val !== null && val !== 0 && val !== '0' && val !== '') {
       return `${val}${suffix}`;
     }
@@ -149,14 +155,14 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     const group = this.boxLabels[boxName];
     if (!group) return;
 
-    const valStr = this.formatBoxValue(feature, suffix);
+    const valStr = this.formatBoxValue(feature, suffix, BOX_STATE_KEYS[boxName]?.key);
     const box = this.getBox(boxName);
     const isSpine = typeof box?.playAnimation === 'function';
 
     if (boxName === 'box5') {
       const rawVal = feature?.bankedValue ?? feature?.drawnValue;
       group.valueLabel.text = '';
-      group.titleLabel.text = rawVal ? '' : BOX_STATE_KEYS[boxName].title;
+      group.titleLabel.text = BOX_STATE_KEYS[boxName].title;
 
       if (isSpine && typeof box.setSkin === 'function') {
         const skinName = rawVal ? CART_SYMBOL_TO_SKIN[String(rawVal)] || 'default' : 'default';
