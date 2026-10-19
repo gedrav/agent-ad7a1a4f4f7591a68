@@ -10,7 +10,6 @@ import { ReelFrameComp } from '@core/views/comps/ReelFrameComp';
 import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import { CTSlotReel } from '@game/views/slot/CTSloReel';
 import { GameSlotMachineView } from '@game/views/slot/GameSlotMachineView';
-import { PAYLINES_CONFIG } from '@game/config/screens/PaylinesConfig';
 
 export const SLOT_MACHINE_CONFIG: any = {
   name: 'slotMachineView',
@@ -175,7 +174,6 @@ export const SLOT_MACHINE_CONFIG: any = {
           y: 50,
         },
         { name: 'symbolsContainer', type: 'Container' },
-
         {
           name: 'reelFrame',
           type: 'Comp',
@@ -192,7 +190,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             },
           ],
         },
-        PAYLINES_CONFIG,
+
         {
           name: 'modalRect',
           type: 'Graphics',
@@ -250,8 +248,8 @@ export const SLOT_MACHINE_CONFIG: any = {
                     fill: 0xfce16e,
                     fontWeight: 'bold',
                     stroke: 0x3d1800,
-                    strokeThickness: 4,
-                    align: 'center',
+                    strokeThickness: 3,
+                    align: 'left',
                     wordWrap: true,
                   },
                 },
