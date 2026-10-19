@@ -9,7 +9,7 @@ import { PixToggleButton } from '@core/pixiwrapper/PixToggleButton';
 import { LOAD_CONSTANTS } from '@core/models/LoadConstants';
 
 const fontMLProps = {
-  en: { fontSize: 50 },
+  en: { fontSize: 55 },
   cs: { fontSize: 35 },
   lt: { fontSize: 35 },
   pl: { fontSize: 35 },

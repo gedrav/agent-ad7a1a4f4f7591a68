@@ -162,7 +162,7 @@ export class GemBoxesComp extends ResponsiveChildrenView {
     if (boxName === 'box5') {
       const rawVal = feature?.bankedValue ?? feature?.drawnValue;
       group.valueLabel.text = '';
-      group.titleLabel.text = rawVal ? '' : BOX_STATE_KEYS[boxName].title;
+      group.titleLabel.text = BOX_STATE_KEYS[boxName].title;
 
       if (isSpine && typeof box.setSkin === 'function') {
         const skinName = rawVal ? CART_SYMBOL_TO_SKIN[String(rawVal)] || 'default' : 'default';

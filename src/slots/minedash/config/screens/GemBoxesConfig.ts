@@ -15,7 +15,7 @@ export const GEM_BOXES_CONFIG: any = {
       box2: -30, // FREESPIN
       box3: 10, // MYSTERY
       box4: 20, // WILD
-      box5: -4, // MEGA (no label drawn)
+      box5: 15, // MEGA (no label drawn)
     },
     title: {
       fontFamily: 'gameFont1',
