@@ -12,26 +12,28 @@ export const GEM_BOXES_CONFIG: any = {
   labelStyle: {
     xOffsets: {
       box1: -20, // MULTI
-      box2: -30, // FREESPIN
-      box3: 10, // MYSTERY
-      box4: 20, // WILD
-      box5: 15, // MEGA (no label drawn)
+      box2: -20, // FREESPIN
+      box3: 16, // MYSTERY
+      box4: 50, // WILD
+      box5: 40, // MEGA
     },
     title: {
       fontFamily: 'gameFont1',
-      fontWeight: 'bold',
-      fill: 0xffffff,
-      stroke: { color: 0x110500, width: 8 },
+      fontWeight: '900',
       fontSize: 125,
-      y: -90,
+      y: -120,
+      align: 'center',
+      stroke: { color: '#1a0b00', width: 10, join: 'round' },
+      dropShadow: { alpha: 0.95, angle: Math.PI / 2, blur: 1, color: '#000000', distance: 5 },
     },
     value: {
       fontFamily: 'gameFont1',
-      fontWeight: 'bold',
-      fontSize: 200,
-      fill: 0xffea00,
-      stroke: { color: 0x110500, width: 8 },
-      y: 90,
+      fontWeight: '900',
+      fontSize: 240,
+      y: 60,
+      align: 'center',
+      stroke: { color: '#1a0b00', width: 8, join: 'round' },
+      dropShadow: { alpha: 0.9, angle: Math.PI / 2, blur: 2, color: '#000000', distance: 4 },
     },
   },
 
@@ -39,7 +41,7 @@ export const GEM_BOXES_CONFIG: any = {
     {
       name: 'box1',
       type: 'Spine',
-      spineName: 'Minecart',
+      spineName: 'MD_minecarts',
       defaultSkin: '1_Green',
       defaultState: 'Normal/Gem0',
       loop: false,
@@ -49,7 +51,7 @@ export const GEM_BOXES_CONFIG: any = {
     {
       name: 'box2',
       type: 'Spine',
-      spineName: 'Minecart',
+      spineName: 'MD_minecarts',
       defaultSkin: '2_Yellow',
       defaultState: 'Normal/Gem0',
       loop: false,
@@ -59,7 +61,7 @@ export const GEM_BOXES_CONFIG: any = {
     {
       name: 'box3',
       type: 'Spine',
-      spineName: 'Minecart',
+      spineName: 'MD_minecarts',
       defaultSkin: '3_Pink',
       defaultState: 'Normal/Gem0',
       loop: false,
@@ -69,7 +71,7 @@ export const GEM_BOXES_CONFIG: any = {
     {
       name: 'box4',
       type: 'Spine',
-      spineName: 'Minecart',
+      spineName: 'MD_minecarts',
       defaultSkin: '4_Red',
       defaultState: 'Normal/Gem0',
       loop: false,
@@ -79,7 +81,7 @@ export const GEM_BOXES_CONFIG: any = {
     {
       name: 'box5',
       type: 'Spine',
-      spineName: 'MinecartGoldCard',
+      spineName: 'MD_minecarts_goldcart',
       defaultSkin: 'default',
       defaultState: 'Normal/Gem0',
       loop: false,

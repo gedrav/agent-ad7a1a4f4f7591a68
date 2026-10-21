@@ -42,6 +42,7 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'goldcards', ASSETTYPE: 'sprite' },
     { TYPE: 'lang', NAME: 'langImages', ASSETTYPE: 'sprite' },
 
+    { TYPE: 'game', NAME: 'BG', ASSETTYPE: 'spine', spineImageType: 'webp', spineSkelType: 'skel' },
     { TYPE: 'game', NAME: 'lowpay_symbols', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'H1', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'H2', ASSETTYPE: 'spine', spineImageType: 'webp' },
@@ -50,8 +51,8 @@ const PRIMARY: AssetBundle = {
     { TYPE: 'game', NAME: 'gems', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'GoldCard', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'MD_FeaturePopUP', ASSETTYPE: 'spine', spineImageType: 'webp' },
-    { TYPE: 'game', NAME: 'Minecart', ASSETTYPE: 'spine', spineImageType: 'webp' },
-    { TYPE: 'game', NAME: 'MinecartGoldCard', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'MD_minecarts', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'MD_minecarts_goldcart', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'bigWins', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'particle_spine', ASSETTYPE: 'spine', spineImageType: 'webp' },
   ],
