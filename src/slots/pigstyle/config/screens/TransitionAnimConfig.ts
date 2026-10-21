@@ -35,9 +35,9 @@ export const TRANSITION_ANIM_CONFIG = {
       defaultSkin: 'default',
       boundingBox: { width: 3000, height: 1440 },
       layoutData: {
-        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
-        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
-        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true, fullScreenScale: 1.1 },
+        Desktop: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
+        Portrait: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
   ],
