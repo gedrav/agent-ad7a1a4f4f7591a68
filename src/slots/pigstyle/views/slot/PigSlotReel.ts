@@ -1,11 +1,14 @@
 import { Elastic } from 'gsap/gsap-core';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
+import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import PigReelSymbol from '@game/views/slot/PigReelSymbol';
+import { PaytableComp } from '@game/views/comps/PaytableComp';
 import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
 import { SlotEvents } from '@core/events/SlotEvents';
 import { UIUtil } from '@core/utils/UIUtilService';
+import { PixGraphics } from '@core/pixiwrapper/PixGraphics';
 import { WildsComp } from '@game/views/comps/WildsComp';
 
 const customEase = Elastic.easeOut.config(1.4, 0.6);
@@ -15,12 +18,21 @@ const QUICK_STOP_DURATION = 0.15;
 export class PigSlotReel extends SlotReelStandard {
   protected reelRows: number[];
   protected symbolHeights: number[];
+  private _payoutSymbol: ReelSymbolSprite | null = null;
+  private _payoutTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private _winsShowing = false;
 
   constructor(configData: any) {
     super(configData);
     EventHandler.addEventListener(SlotEvents.SHOW_MAINGAME_BG, this.swapToMainGameTiles.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_FREEGAME_BG, this.swapToFreeGameTiles.bind(this));
     EventHandler.addEventListener('PLAY_SCATTER_TRIGGER_ANIM', this.playScatterTriggerAnim.bind(this));
+    EventHandler.addEventListener(SlotEvents.SHOW_LINE_WIN, () => {
+      this._winsShowing = true;
+    });
+    EventHandler.addEventListener(SlotEvents.SHOW_SYMBOL_IDLE_ANIMATION, () => {
+      this._winsShowing = false;
+    });
   }
 
   protected swapToMainGameTiles(): void {
@@ -78,6 +90,104 @@ export class PigSlotReel extends SlotReelStandard {
 
   protected get wildsComp(): WildsComp {
     return this.elementsList['wildsComp'];
+  }
+
+  protected get dimRect(): PixGraphics {
+    return this.elementsList['dimRect'];
+  }
+
+  protected get payoutModalRect(): PixGraphics {
+    return this.elementsList['modalRect'];
+  }
+
+  protected get paytableComp(): PaytableComp {
+    return this.symbolPayoutComp as unknown as PaytableComp;
+  }
+
+  protected getSymbolWidth(reelno: number): number {
+    const positions = this.reelsData.reelPositionX;
+    const last = positions.length - 1;
+    return reelno < last ? positions[reelno + 1] - positions[reelno] : positions[last] - positions[last - 1];
+  }
+
+  protected getPaytableMaxSize(): { width: number; height: number } {
+    const positions = this.reelsData.reelPositionX;
+    const totalReelWidth =
+      positions[positions.length - 1] - positions[0] + this.getSymbolWidth(this.reelsData.noOfReels - 1);
+
+    return {
+      width: this.reelsData.paytableMaxWidth ?? totalReelWidth / 2,
+      height: this.reelsData.paytableMaxHeight ?? this.reelsData.reelHeight,
+    };
+  }
+
+  protected onSymbolClicked(symb: ReelSymbolSprite): void {
+    if (this._winsShowing) return;
+
+    if (this._payoutSymbol) {
+      this.symbolsContainer.addChild(this._payoutSymbol);
+    }
+
+    UIUtil.setClickable(this.payoutModalRect, true);
+    this.payoutModalRect.visible = true;
+    this.paytableComp.visible = true;
+    this.winSymbolsContainer.addChild(this.paytableComp);
+    this.winSymbolsContainer.addChild(symb);
+
+    const reelno = symb.getReelNumber();
+    const noOfReels = this.reelsData.noOfReels;
+    const splitReel = this.reelsData.paytableSplitReel ?? Math.ceil(noOfReels / 2);
+    const symbolAtLeft = reelno < splitReel;
+    const symbolWidth = this.getSymbolWidth(reelno);
+    const symbolHeight = this.getSymbolHeight(reelno);
+
+    this.paytableComp.showComp(symb.getSymbolNameForPayout(), symbolAtLeft, this.getRowCount(reelno), {
+      reservedSize: { width: symbolWidth, height: symbolHeight },
+      maxSize: this.getPaytableMaxSize(),
+    });
+    this._payoutSymbol = symb;
+
+    const gap = this.paytableComp.getSymbolGap();
+    this.paytableComp.x = symbolAtLeft ? symb.x - gap : symb.x + symbolWidth - this.paytableComp.width + gap;
+    this.paytableComp.y = symb.y + symbolHeight / 2 - this.paytableComp.height / 2;
+
+    clearTimeout(this._payoutTimeoutId);
+    this._payoutTimeoutId = setTimeout(this.hidePayout.bind(this), 2000);
+
+    this.showPaytableDim();
+  }
+
+  protected hidePayout(): void {
+    clearTimeout(this._payoutTimeoutId);
+    this.paytableComp.visible = false;
+    if (this._payoutSymbol) {
+      this.symbolsContainer.addChild(this._payoutSymbol);
+      this._payoutSymbol = null;
+    }
+    UIUtil.setClickable(this.payoutModalRect, false);
+    this.payoutModalRect.visible = false;
+    this.hidePaytableDim();
+  }
+
+  protected showPaytableDim(): void {
+    const rect = this.dimRect;
+    if (!rect) return;
+    AnimationProxy.killTweensOf(rect);
+    rect.visible = true;
+    AnimationProxy.animateTween(rect, { alpha: 0.7, duration: 0.2 });
+  }
+
+  protected hidePaytableDim(): void {
+    const rect = this.dimRect;
+    if (!rect) return;
+    AnimationProxy.killTweensOf(rect);
+    AnimationProxy.animateTween(rect, {
+      alpha: 0,
+      duration: 0.2,
+      onComplete: () => {
+        rect.visible = false;
+      },
+    });
   }
 
   public getRowCount(reelno: number): number {
@@ -295,6 +405,7 @@ export class PigSlotReel extends SlotReelStandard {
     this.destroyAnticipation(reelno);
     this.anticipationRunning[reelno] = false;
     this.reelSpinningState[reelno] = 0;
+    this.updateWaysCount(reelno);
 
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
@@ -332,6 +443,7 @@ export class PigSlotReel extends SlotReelStandard {
 
     EventHandler.dispatchEvent(SlotEvents.PLAY_STRIP_JERK_SOUND);
     this.reelSpinningState[reelno] = 0;
+    this.updateWaysCount(reelno);
 
     const symbols = this.symbolsArray[reelno];
     const len = symbols.length;
@@ -371,6 +483,19 @@ export class PigSlotReel extends SlotReelStandard {
     if (this.isRainingRound() && this.numberOfStoppedReels === this.reelsData.noOfReels) {
       this.wildsComp?.clearWilds();
     }
+  }
+
+  protected updateWaysCount(uptoReel: number): void {
+    let ways = 1;
+    for (let k = 0; k <= uptoReel; k++) {
+      ways *= this.getRowCount(k);
+    }
+    EventHandler.dispatchEvent('WAYS_COUNT_UPDATE', ways);
+  }
+
+  protected startSpin(): void {
+    super.startSpin();
+    EventHandler.dispatchEvent('WAYS_COUNT_RESET');
   }
 
   protected showHideExtraSymbols(flag: boolean = false): void {

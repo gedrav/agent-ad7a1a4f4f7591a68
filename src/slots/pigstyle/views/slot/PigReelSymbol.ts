@@ -196,6 +196,11 @@ export default class PigReelSymbol extends ReelSymbolSpine {
     }
   }
 
+  public cleanUpSymbolWin(): void {
+    super.cleanUpSymbolWin();
+    this.restoreMultiplierBrightness();
+  }
+
   protected playSpineAnimation(state: string, loop: boolean): boolean {
     const played = super.playSpineAnimation(this.resolveAnimName(state), loop);
     if (played) {

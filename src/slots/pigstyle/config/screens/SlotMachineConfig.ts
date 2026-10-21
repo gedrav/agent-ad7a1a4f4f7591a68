@@ -3,7 +3,8 @@ import { GameReelFrameComp } from '@game/views/comps/GameReelFrameComp';
 import GameWinController from '@game/views/slot/GameWinController';
 import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
-import { SymbolPayoutComp } from '@brand/views/comps/SymbolPayoutComp';
+import { PaytableComp } from '@game/views/comps/PaytableComp';
+import { WAYS_TEXT_CONFIG } from '@game/config/screens/WaysTextConfig';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
 import { REEL_WIN_TICKER_CONFIG } from '@game/config/screens/ReelWinTickerConfig';
@@ -11,6 +12,14 @@ import { LineWinAmountComp } from '@core/views/comps/LineWinAmountComp';
 import PigReelSymbol from '@game/views/slot/PigReelSymbol';
 import { PigSlotReel } from '@game/views/slot/PigSlotReel';
 import { WildsComp } from '@game/views/comps/WildsComp';
+
+const PAYTABLE_TIGHT_LAYOUT = {
+  rowHeight: 40,
+  valueGap: 14,
+  bgPaddingX: 24,
+  bgPaddingY: 18,
+  symbolGap: 24,
+};
 
 const STICKY_WILD_SLIDE = {
   name: 'stickyWildSlide',
@@ -400,6 +409,7 @@ export const SLOT_MACHINE_CONFIG: any = {
           visible: false,
         },
         { name: 'tickerbg', type: 'Sprite', image: 'winPanel', x: -61, y: 962, scale: 1.08 },
+        WAYS_TEXT_CONFIG,
         TICKER_COMP_CONFIG,
         REEL_WIN_TICKER_CONFIG,
         FSAUTO_COUNTER_CONFIG,
@@ -415,6 +425,17 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
         },
         { name: 'maskRect', type: 'Graphics', width: 1403, height: 749, x: 49, y: 203, color: 0xffff00 },
+        {
+          name: 'dimRect',
+          type: 'Graphics',
+          width: 1403,
+          height: 749,
+          x: 49,
+          y: 203,
+          color: 0x000000,
+          alpha: 0,
+          visible: false,
+        },
         { name: 'anticipationContainer', type: 'Container' },
         {
           name: 'winSymbolsContainer',
@@ -423,24 +444,41 @@ export const SLOT_MACHINE_CONFIG: any = {
             {
               name: 'symbolPayoutComp',
               type: 'Comp',
-              class: SymbolPayoutComp,
-              xPadding: 0.02,
-              textXPadding: 0.08,
-              Elements: [
-                { name: 'bg', type: 'Sprite', image: 'paytableBG_2', scale: 0.5 },
-                {
-                  name: 'infoText',
-                  type: 'Text',
-                  style: {
-                    fontFamily: 'gameFont1',
-                    fontSize: 32,
-                    fill: 0xffc21a,
-                    fontWeight: 'bold',
-                    wordWrap: true,
-                    wordWrapWidth: 210,
-                  },
-                },
-              ],
+              class: PaytableComp,
+              rowHeight: 33,
+              valueGap: 18,
+              bgPaddingX: 40,
+              bgPaddingY: 30,
+              bgBaseScale: 0.5,
+              bgBySize: {
+                2: 'paytableBG_2',
+                3: 'paytableBG_3',
+                4: 'paytableBG_4',
+                5: 'paytableBG_5',
+                6: 'paytableBG_5',
+                7: 'paytableBG_5',
+                default: 'paytableBG_2',
+              },
+              layoutBySize: {
+                5: PAYTABLE_TIGHT_LAYOUT,
+                6: PAYTABLE_TIGHT_LAYOUT,
+                7: PAYTABLE_TIGHT_LAYOUT,
+              },
+              fallbackContent: {
+                WC: 'wildPayoutText',
+                BN: 'scatterPayoutText',
+              },
+              keyTextStyle: { fontFamily: 'gameFont1', fontSize: 32, fill: 0x2b1700, fontWeight: 'bold' },
+              valueTextStyle: { fontFamily: 'gameFont1', fontSize: 32, fill: 0x2b1700, fontWeight: 'bold' },
+              contentTextStyle: {
+                fontFamily: 'gameFont1',
+                fontSize: 32,
+                fill: 0x2b1700,
+                fontWeight: 'bold',
+                wordWrap: true,
+                wordWrapWidth: 210,
+              },
+              Elements: [{ name: 'bg', type: 'Sprite', image: 'paytableBG_2' }],
             },
           ],
         },

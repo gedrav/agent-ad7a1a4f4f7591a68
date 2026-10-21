@@ -30,7 +30,7 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
     {
       name: 'selectionTxt',
       type: 'Text',
-      contentText: 'CHOOSE YOUR FEATURE',
+      content: 'chooseYourOwnText',
       style: { fontFamily: 'gameFont1', fontSize: 80, fill: 0xffc21a, align: 'center' },
       anchor: { x: 0.5, y: 0.5 },
       x: 600,
@@ -56,8 +56,8 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
         {
           name: 'titleText',
           type: 'Text',
-          contentText: 'STICKY WILDS',
-          style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0xffc21a, align: 'center' },
+          content: 'stickyWildText',
+          style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0x0fa100, align: 'center' },
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
           y: -120,
@@ -65,7 +65,7 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
         {
           name: 'message1',
           type: 'Text',
-          contentText: '10',
+          contentText: '',
           style: { fontFamily: 'gameFont1', fontSize: 120, fill: 0xffffff, align: 'center' },
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
@@ -74,7 +74,7 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
         {
           name: 'message2',
           type: 'Text',
-          contentText: 'FREE SPINS',
+          content: 'freeSpinsHeading',
           style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0xffffff, align: 'center' },
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
@@ -102,7 +102,7 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
         {
           name: 'titleText',
           type: 'Text',
-          contentText: 'RAINING WILDS',
+          content: 'rainingWildText',
           style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0xffc21a, align: 'center' },
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
@@ -111,7 +111,7 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
         {
           name: 'message1',
           type: 'Text',
-          contentText: '15',
+          contentText: '',
           style: { fontFamily: 'gameFont1', fontSize: 120, fill: 0xffffff, align: 'center' },
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
@@ -120,7 +120,7 @@ export const FEATURE_INTRO_POPUP_CONFIG = {
         {
           name: 'message2',
           type: 'Text',
-          contentText: 'FREE SPINS',
+          content: 'freeSpinsHeading',
           style: { fontFamily: 'gameFont1', fontSize: 50, fill: 0xffffff, align: 'center' },
           anchor: { x: 0.5, y: 0.5 },
           x: 0,
