@@ -34,7 +34,7 @@ export const BIG_WIN_CONFIG = {
   Elements: [
     { name: 'guideRect', type: 'Graphics', width: 1340, height: 830, color: 0x000000, x: 0, y: 0, alpha: 0 },
     { name: 'skipRect', type: 'Graphics', width: 5000, height: 5000, color: 0xff0000, x: -2500, y: -2500, alpha: 0 },
-    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 676, y: 580, scale: 0.4 },
+    { name: 'bigWinText', type: 'Sprite', image: 'bigWinText', anchor: { x: 0.5, y: 0.5 }, x: 662, y: 580, scale: 0.4 },
     {
       name: 'winTicker',
       type: 'Comp',
@@ -74,7 +74,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      hPaddingPerc: 0.09,
+      hPaddingPerc: 0,
       vPaddingPerc: -0.05,
     },
     Landscape: {
@@ -83,7 +83,7 @@ export const BIG_WIN_CONFIG = {
       maxScale: 1,
       hAlign: 'center',
       vAlign: 'middle',
-      hPaddingPerc: 0.09,
+      hPaddingPerc: 0,
       vPaddingPerc: -0.05,
     },
     Portrait: {
