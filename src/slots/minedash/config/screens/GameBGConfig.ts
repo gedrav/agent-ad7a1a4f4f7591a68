@@ -25,5 +25,18 @@ export const GAME_BG_CONFIG: any = {
         Landscape: { hAlign: 'center', vAlign: 'middle', fitToScreen: true },
       },
     },
+    {
+      name: 'bgAnim',
+      type: 'Spine',
+      spineName: 'BG',
+      defaultState: 'bg_animation',
+      loop: true,
+      anchor: { x: 0.5, y: 0.5 },
+      layoutData: {
+        Desktop: { hAlign: 'center', vAlign: 'middle' },
+        Portrait: { hAlign: 'center', vAlign: 'middle' },
+        Landscape: { hAlign: 'center', vAlign: 'middle' },
+      },
+    },
   ],
 };
