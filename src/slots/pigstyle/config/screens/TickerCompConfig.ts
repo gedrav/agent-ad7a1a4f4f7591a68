@@ -24,7 +24,7 @@ export const TICKER_COMP_CONFIG: any = {
             fontSize: 40,
             mFontSize: 44,
             fill: 0xc0e3fb,
-            fontWeight: 'bold',
+            letterSpacing: 2,
           },
         },
         {
@@ -36,7 +36,7 @@ export const TICKER_COMP_CONFIG: any = {
             fontSize: 40,
             mFontSize: 44,
             fill: 0xc0e3fb,
-            fontWeight: 'bold',
+            letterSpacing: 2,
           },
         },
       ],

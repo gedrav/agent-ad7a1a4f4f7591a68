@@ -40,11 +40,11 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
-          fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
           strokeThickness: 2,
+          letterSpacing: 2,
           fontSize: 50,
           mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
@@ -73,7 +73,6 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
-          fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -81,6 +80,7 @@ export const SPLASH_CONFIG: any = {
           fontSize: 50,
           mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
+          letterSpacing: 2,
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -106,7 +106,6 @@ export const SPLASH_CONFIG: any = {
         fontMLProps: fontMLProps,
         style: {
           fontFamily: 'gameFont1',
-          fontWeight: 700,
           breakWords: true,
           fill: [0xffed54, 0xf5a100],
           stroke: 0x000000,
@@ -114,6 +113,7 @@ export const SPLASH_CONFIG: any = {
           fontSize: 50,
           mFontSize: 40,
           anchor: { x: 0.5, y: 0.5 },
+          letterSpacing: 2,
           dropShadow: {
             angle: 0.5235987755982988,
             blur: 4, // use 0 or a positive value in v8
@@ -232,22 +232,22 @@ export const SPLASH_CONFIG: any = {
             pressedView: 'splashBtn',
             disabledView: 'splashBtn',
             animations: CoreUIConfig.noScalebuttonStates,
-            textOffset: new Point(0, -2),
+            textOffset: new Point(0, -8),
           },
           textConfig: {
             content: 'playGameText',
             style: {
               fontFamily: 'gameFont1',
-              fontWeight: 700,
               fill: [0xffed54, 0xf5a100],
               stroke: 0x000000,
               strokeThickness: 2,
-              fontSize: 40,
-              mFontSize: 40,
+              fontSize: 75,
+              mFontSize: 75,
               anchor: { x: 0.5, y: 0.5 },
+              letterSpacing: 2,
               dropShadow: {
                 angle: 0.5235987755982988,
-                blur: 4, // use 0 or a positive value in v8
+                blur: 4,
                 color: '0x000000',
                 distance: 3,
                 alpha: 1,
@@ -297,7 +297,6 @@ export const SPLASH_CONFIG: any = {
             content: 'dontShowMessage',
             style: {
               fontFamily: 'commonFont',
-              fontWeight: 400,
               fill: 0xffffff,
               fontSize: 40,
               anchor: { x: 0, y: 0.5 },
