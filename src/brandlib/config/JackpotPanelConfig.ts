@@ -185,7 +185,7 @@ export const JACKPOT_PANEL_CONFIG: any = {
         SmallLandscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.68, vPaddingPerc: 0 },
         TLandscape: { hAlign: 'center', vAlign: 'top', widthPerc: 0.8, heightPerc: 0.1, vPaddingPerc: 0.08 },
         Portrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.94, vPaddingPerc: 0.08 },
-        TPortrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.7, heightPerc: 0.3, vPaddingPerc: 0.1 },
+        TPortrait: { hAlign: 'center', vAlign: 'top', widthPerc: 0.7, heightPerc: 0.3, vPaddingPerc: 0.09 },
       },
     },
   ],

@@ -108,6 +108,7 @@ export const JACKPOT_CARD_CONFIG: any = {
           vPaddingPerc: 0.09,
           hPaddingPerc: 0,
         },
+        TPortrait: { widthPerc: 0.8, height: 0.6, hAlign: 'center', vAlign: 'middle', vPaddingPerc: 0.14 },
       },
     },
     {
