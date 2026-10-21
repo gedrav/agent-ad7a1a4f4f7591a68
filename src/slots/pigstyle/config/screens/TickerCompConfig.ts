@@ -7,7 +7,7 @@ export const TICKER_COMP_CONFIG: any = {
   tickerDelay: 3000,
   x: 42,
   y: 990,
-  content: ['Ticker1', 'Ticker2', 'Ticker3', 'Ticker4', 'Ticker5'],
+  content: ['splash1', 'splash2', 'splash3'],
   contentYPadding: 0,
   Elements: [
     { name: 'bg', type: 'Graphics', width: 1410, height: 70, alpha: 0 },
