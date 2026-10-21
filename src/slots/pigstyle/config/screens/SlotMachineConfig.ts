@@ -3,7 +3,7 @@ import { GameReelFrameComp } from '@game/views/comps/GameReelFrameComp';
 import GameWinController from '@game/views/slot/GameWinController';
 import { ReelsConfig } from '@game/config/ReelsConfig';
 import { BIG_WIN_CONFIG } from '@game/config/screens/BigWinConfig';
-import { PaytableComp } from '@game/views/comps/PaytableComp';
+import { MWSymbolPayoutComp } from '@brand/views/comps/MWSymbolPayoutComp';
 import { WAYS_TEXT_CONFIG } from '@game/config/screens/WaysTextConfig';
 import { TICKER_COMP_CONFIG } from '@game/config/screens/TickerCompConfig';
 import { FSAUTO_COUNTER_CONFIG } from '@game/config/screens/FSAutoCounterConfig';
@@ -176,7 +176,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             sized: true,
             spineName: 'wild',
             skin: 'sizex',
-            idleAnim: 'idle',
+            idleAnim: '',
             landingAnim: 'landing',
             winAnim: 'win',
             fitScale: { default: 1, 2: 1.2, 3: 1.2, 4: 1.15, 5: 1.2, 6: 1.2, 7: 1.3 },
@@ -199,7 +199,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'pigs',
             skin: 'boar_sizex',
             winAnim: 'win',
-            idleAnim: 'idle',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1, 2: 1.2, 3: 1.2, 4: 1.15, 5: 1.2, 6: 1.2, 7: 1.3 },
             fitOffsetX: { default: 0, 3: 5, 7: 5 },
@@ -214,7 +214,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'pigs',
             skin: 'piggy_sizex',
             winAnim: 'win',
-            idleAnim: 'idle',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1, 2: 1.2, 3: 1.2, 4: 1.15, 5: 1.2, 6: 1.2, 7: 1.3 },
             fitOffsetX: { default: 0, 3: 5, 7: 5 },
@@ -229,7 +229,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'pigs',
             skin: 'pig2_sizex',
             winAnim: 'win',
-            idleAnim: 'idle',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1, 2: 1.2, 3: 1.2, 4: 1.15, 5: 1.2, 6: 1.2, 7: 1.3 },
             fitOffsetX: { default: 0, 3: 5, 7: 5 },
@@ -244,7 +244,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'pigs',
             skin: 'sleeping_sizex',
             winAnim: 'win',
-            idleAnim: 'idle',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1, 2: 1.2, 3: 1.2, 4: 1.15, 5: 1.2, 6: 1.2, 7: 1.3 },
             fitOffsetX: { default: 0, 3: 5, 7: 5 },
@@ -258,7 +258,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'boots',
             skin: 'default',
             winAnim: 'win',
-            idleAnim: 'animation',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1.06 },
             fitOffsetX: { default: 0 },
@@ -272,7 +272,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             spineName: 'corn',
             skin: 'default',
             winAnim: 'win',
-            idleAnim: 'animation',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1.06 },
             fitOffsetX: { default: 0 },
@@ -353,9 +353,9 @@ export const SLOT_MACHINE_CONFIG: any = {
           },
           BN: {
             name: 'BN',
-            spineName: 'bonus',
+            spineName: 'Bonus',
             winAnim: 'win',
-            idleAnim: 'idle',
+            idleAnim: '',
             landingAnim: 'landing',
             fitScale: { default: 1.2 },
             fitOffsetX: { default: 0 },
@@ -444,7 +444,7 @@ export const SLOT_MACHINE_CONFIG: any = {
             {
               name: 'symbolPayoutComp',
               type: 'Comp',
-              class: PaytableComp,
+              class: MWSymbolPayoutComp,
               rowHeight: 33,
               valueGap: 18,
               bgPaddingX: 40,

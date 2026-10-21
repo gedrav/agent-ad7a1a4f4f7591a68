@@ -2,7 +2,7 @@ import { Elastic } from 'gsap/gsap-core';
 import SlotReelStandard from '@core/views/slotmachine/SlotReelStandard';
 import ReelSymbolSprite from '@core/views/slotmachine/ReelSymbolSprite';
 import PigReelSymbol from '@game/views/slot/PigReelSymbol';
-import { PaytableComp } from '@game/views/comps/PaytableComp';
+import { MWSymbolPayoutComp } from '@brand/views/comps/MWSymbolPayoutComp';
 import { appModel } from '@core/models/services/AppModelService';
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { EventHandler } from '@core/pixiwrapper/EventHandlerService';
@@ -100,8 +100,8 @@ export class PigSlotReel extends SlotReelStandard {
     return this.elementsList['modalRect'];
   }
 
-  protected get paytableComp(): PaytableComp {
-    return this.symbolPayoutComp as unknown as PaytableComp;
+  protected get paytableComp(): MWSymbolPayoutComp {
+    return this.symbolPayoutComp as unknown as MWSymbolPayoutComp;
   }
 
   protected getSymbolWidth(reelno: number): number {

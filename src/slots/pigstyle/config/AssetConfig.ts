@@ -50,7 +50,7 @@ const SECONDARY: AssetBundle = {
   assets: [
     // symbol animations
     { TYPE: 'game', NAME: 'wild', ASSETTYPE: 'spine', spineImageType: 'webp' },
-    { TYPE: 'game', NAME: 'bonus', ASSETTYPE: 'spine', spineImageType: 'webp' },
+    { TYPE: 'game', NAME: 'Bonus', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'pigs', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'boots', ASSETTYPE: 'spine', spineImageType: 'webp' },
     { TYPE: 'game', NAME: 'corn', ASSETTYPE: 'spine', spineImageType: 'webp' },

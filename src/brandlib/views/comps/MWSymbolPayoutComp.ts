@@ -35,7 +35,7 @@ const NO_RESERVED_SIZE: SymbolSize = { width: 0, height: 0 };
 const NO_MAX_SIZE: SymbolSize = { width: Infinity, height: Infinity };
 const MIN_FONT_SIZE = 16;
 
-export class PaytableComp extends StandardView {
+export class MWSymbolPayoutComp extends StandardView {
   private readonly bg: PixSprite;
   private readonly rowsContainer: Container = new Container();
   private currentSymbol: string | null = null;
