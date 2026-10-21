@@ -26,6 +26,22 @@ export class JackPotItem extends StandardView {
   public changeAnimation({ state, loop }) {
     this.jackpotBg.playAnimation({ state, loop, reset: false });
   }
+  public showWin() {
+    const scale = this.configData.scale;
+    console.log(scale * 1.1);
+    AnimationProxy.animateTween(this, {
+      duration: 0.5,
+      scaleX: scale * 1.05,
+      scaleY: scale * 1.05,
+      repeat: -1,
+      yoyo: true,
+    });
+  }
+  public clearWin() {
+    AnimationProxy.killTweensOf(this);
+    const scale = this.configData.scale;
+    this.scale.set(scale);
+  }
   public setValue(value: number, showValue = false) {
     this.tween?.kill();
     AnimationProxy.killTweensOf(this.counter);

@@ -46,7 +46,6 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     this.jackpotConfig = this.configData.jackpotConfig;
     this.guideRect = this.elementsList['guideRect'];
     this.panelContainer = this.elementsList['panelContainer'];
-    this.panelContainer = this.elementsList['panelContainer'];
     this.bronzeJP = this.panelContainer.elementsList['bronzeJackpot'];
     this.silverJP = this.panelContainer.elementsList['silverJackpot'];
     this.goldJP = this.panelContainer.elementsList['goldJackpot'];
@@ -57,8 +56,13 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
     EventHandler.addEventListener(SlotEvents.JACKPOT_METERS_UPDATE, this.onMetersUpdate.bind(this));
     EventHandler.addEventListener(SlotEvents.HIDE_JACKPOT_BG, this.onRevealEnd.bind(this));
     EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_FINAL_VALUE, this.showFrozenFromRound.bind(this));
-
+    EventHandler.addEventListener(SlotEvents.SHOW_JACKPOT_OUTRO_ANIMATION, this.showJackpotWinAnimtion.bind(this));
     this.onJackpotInfoReady(appModel.jackpotInfo, true);
+  }
+  showJackpotWinAnimtion(index: number) {
+    this.panelContainer.addChild(this.jackPotsArr[index]);
+    this.jackPotsArr[index].showWin();
+    this.jackPotsArr[index].changeAnimation({ state: 'win', loop: true });
   }
 
   createJackPotElement() {
@@ -70,6 +74,8 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
         colorcode: this.jackpotConfig.jackpotTextColor[i],
       });
       item.visible = false;
+      const bounds = item.getLocalBounds(); // Force recalculation of bounds
+      item.pivot.set(bounds.x + bounds.width * 0.5, bounds.y + bounds.height * 0.5);
     });
     this.resizeView();
   }
@@ -100,6 +106,10 @@ export class JackpotPanelComp extends ResponsiveChildrenView {
   protected onRevealEnd() {
     // tweening from the frozen value to the live one; a buffered tick may follow right after
     this.onMetersUpdate({ values: appModel.jackpotMeters, v: appModel.jackpotMetersV });
+    this.jackPotsArr.forEach((item) => {
+      item.changeAnimation({ state: 'idle', loop: true });
+      item.clearWin();
+    });
   }
   public showFrozen(values: number[], showValue = false) {
     this.jackPotsArr.forEach((item, i) => {
