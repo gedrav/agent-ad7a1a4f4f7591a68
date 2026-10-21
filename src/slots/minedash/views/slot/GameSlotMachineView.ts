@@ -11,11 +11,13 @@ import { MULTIPLIER_BADGE_CONFIG, MULTIPLIER_BADGE_TEXT_STYLE } from '@game/conf
 import { AnimationProxy } from '@core/models/AnimationServiceProxy';
 import { DeviceProxy } from '@core/models/DeviceConfigProxy';
 import { Sine } from 'gsap';
+import { PixSprite } from '@core/pixiwrapper/PixSprite';
 
 export class GameSlotMachineView extends SlotMachineView {
   private readonly stoneAnimationManager: StoneAnimationManager;
   private currentStoneState: StoneStateData = {};
   public pendingCollectionBoxes: Set<string> = new Set();
+  private readonly minerChar: PixSprite;
 
   public get boxesComp(): GemBoxesComp | undefined {
     return (this.slotReel as any)?.elementsList?.['boxesContainer'];
@@ -23,6 +25,7 @@ export class GameSlotMachineView extends SlotMachineView {
 
   constructor(config: any) {
     super(config);
+    this.minerChar = this.elementsList['minerChar'];
     this.stoneAnimationManager = new StoneAnimationManager(this);
 
     EventHandler.addEventListener('SHOW_STONE_TRANSITION', () => this.showStoneTransition());
@@ -52,14 +55,15 @@ export class GameSlotMachineView extends SlotMachineView {
 
   protected resizeView(): void {
     super.resizeView();
-    const minerChara = this.elementsList?.['minerChara'];
-    if (!minerChara || !this.slotReel) return;
+    if (!this.minerChar || !this.slotReel) return;
+
+    console.log('here -- ', this.x);
 
     const reelIndex = this.getChildIndex(this.slotReel);
-    const isBehind = this.getChildIndex(minerChara) < reelIndex;
+    const isBehind = this.getChildIndex(this.minerChar) < reelIndex;
     const shouldBeBehind = DeviceProxy.config.isPortrait;
     if (isBehind !== shouldBeBehind) {
-      this.setChildIndex(minerChara, reelIndex);
+      this.setChildIndex(this.minerChar, reelIndex);
     }
   }
 
